@@ -1,0 +1,17 @@
+* {
+	box-sizing : border-box;
+	margin : 0;
+}
+
+.page-header {
+	margin : 0;
+	border : 0;
+}
+
+.wrapper {
+    position: absolute;
+    left: 0;
+    top: 45px;
+    right: 0;
+    bottom: 0;
+}

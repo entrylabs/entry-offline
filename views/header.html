@@ -1,0 +1,39 @@
+<div data-ng-controller='HeaderController' data-ng-init="init()" class="page-header">
+    <div class="logo">
+        <a class="" href="#"><img src="./images/workspace_header_logo_white.png"></a>
+    </div>
+    <div class="workspaceProjectNameWrapper">
+        <span class="workspace_name_wrapper">
+        <input type="text" data-ng-model="project.name" id="project_name" class="normal workspace_project_name" data-ng-focus="focus()" data-ng-enter="blur()" ng-blur="blur()"/></span>
+    </div>
+    <div class="workspace_language">
+        <ul class="language_wrapper">
+            <li class="dropdown">
+                <a href class="dropdown-toggle" data-toggle="dropdown">
+                    <span class="menu">global.user.language | text <b class="caret"></b></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href data-ng-click="setLanguage('ko')">'ko' | text</a></li>
+                    <li><a href data-ng-click="setLanguage('en')">'en' | text</a></li>
+                    <li><a href data-ng-click="setLanguage('vn')">'vn' | text</a></li>
+                    <li><a href data-ng-click="setLanguage('code')">'code' | text</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    
+    <div class="workspace_button_group">
+    	<div class="workspace_divider"></div>
+   	 		<div class="btn-group" dropdown is-open="false">
+	        <a class="btn dropdown-toggle">
+	            <img src="./images/top_icon_new_b_nor.png" />
+	            <span class="drop"><b class="caret"></b></span>
+	        </a>
+	        <ul class="dropdown-menu" role="menu">
+	            <li ng-click="goPath('ws')"><a href="">'Workspace.file_new' | text</a></li>
+	            <li data-ng-show="global.authenticated"><a href="/global.user.username">'Workspace.file_open' | text</a></li>
+	        </ul>
+	    </div>
+	    <div class="workspace_divider"></div>
+	</div>
+</div>

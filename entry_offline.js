@@ -1,5 +1,6 @@
 //var context = {};
 
+
 $(function () {
 	var workspace = document.getElementById("workspace");
 	var initOptions = {
@@ -9,3 +10,9 @@ $(function () {
 	Entry.playground.setBlockMenu();
 	Entry.loadProject();
 });
+
+
+
+var app = angular.module('workspace', ['ngCookies']);
+
+
