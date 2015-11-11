@@ -1,19 +1,20 @@
 <!DOCTYPE html>
-<html ng-app="mean.workspace">
+<html ng-app="workspace">
 	<head>
 		<meta charset="utf-8">
 		<title>
 			Entry
 		</title>
-		<style>
-			* {
-				box-sizing : "border-box";
-				margin : 0;
-			}
-		</style>
 		<link rel='stylesheet'  href='./bower_components/entryjs/dist/entry.css' />
+		<link rel='stylesheet'  href='./bower_components/bootstrap/dist/css/bootstrap.min.css' />
+		<link rel='stylesheet'  href='./css/workspace_header.css' />
+		<link rel='stylesheet'  href='./css/workspace.css' />
 		<script type='text/javascript' src='./bower_components/jquery/dist/jquery.min.js'></script>
 		<script type='text/javascript' src='./bower_components/jquery-ui/jquery-ui.min.js'></script>
+		<script type='text/javascript' src='./bower_components/angular/angular.min.js'></script>
+		<script type='text/javascript' src='./bower_components/angular-cookies/angular-cookies.min.js'></script>
+		<script type='text/javascript' src='./bower_components/angular-filters/dist/angular-filters.min.js'></script>
+		<script type='text/javascript' src='./bower_components/bootstrap/dist/js/bootstrap.min.js'></script>
 		<script type='text/javascript' src='./bower_components/underscore/underscore-min.js'></script>
 		<script type='text/javascript' src='./bower_components/PreloadJS/lib/preloadjs-0.6.0.min.js'></script>
 		<script type='text/javascript' src='./bower_components/EaselJS/lib/easeljs-0.8.0.min.js'></script>
@@ -30,8 +31,13 @@
 		
 		<script type='text/javascript' src='./context.js'></script>
 	</head>
-	<body>
-		<div id="workspace" ng-controller="aaa"></div>
+	<body >
+		<div class="workspaceHeader" data-ng-include="'./views/header.html'" data-role="navigation"></div>
+		<section class="wrapper">
+			<div id="workspace"></div>
+		</section>
+		
 		<script type="text/javascript" src="./entry_offline.js"></script>
+		<script type="text/javascript" src="./controllers/header.js"></script>
 	</body>
 </html>
