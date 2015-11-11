@@ -4,7 +4,8 @@
 $(function () {
 	var workspace = document.getElementById("workspace");
 	var initOptions = {
-		type: 'workspace'
+		type: 'workspace',
+		libDir : './bower_components'
 	};
 	Entry.init(workspace, initOptions);
 	Entry.playground.setBlockMenu();
