@@ -1,0 +1,27 @@
+{
+  "name": "entry-offline",
+  "description": "entry-offline version",
+  "main": "",
+  "moduleType": [
+    "node"
+  ],
+  "dependencies": {
+    "entryjs": "https://github.com/boolgom/entryjs.git#feature/opensource",
+    "jquery": "~1.11.3",
+    "jquery-ui": "~1.11.x",
+    "underscore": "~1.8.x",
+    "PreloadJS": "0.6.0",
+    "EaselJS": "0.8.0",
+    "SoundJS": "0.6.0",
+    "webfontloader": "1.5.18"
+  },
+  "license": "MIT",
+  "homepage": "http://play-entry.com",
+  "ignore": [
+    "**/*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
