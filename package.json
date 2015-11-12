@@ -12,6 +12,10 @@
   }, 
   "version": "0.0.1", 
   "window": {
-    "toolbar": true
+    "toolbar": true,
+    "width": 1024,
+    "height": 550,
+    "min_width": 1024,
+    "min_height": 550
   }
 }

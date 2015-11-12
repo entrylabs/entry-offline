@@ -33,11 +33,11 @@
 	</head>
 	<body >
 		<div class="workspaceHeader" data-ng-include="'./views/header.html'" data-role="navigation"></div>
-		<section class="wrapper">
+		<section class="wrapper" ng-controller="WorkspaceController" ng-init="initWorkspace()">
 			<div id="workspace"></div>
 		</section>
 		
-		<script type="text/javascript" src="./entry_offline.js"></script>
+		<script type="text/javascript" src="./controllers/workspace.js"></script>
 		<script type="text/javascript" src="./controllers/header.js"></script>
 	</body>
 </html>
