@@ -1,5 +1,6 @@
-//var context = {};
-angular.module('workspace', ['ngCookies']).controller("WorkspaceController", 
+'use strict';
+
+angular.module('workspace').controller("WorkspaceController", 
 	['$scope', function ($scope) {
 		$scope.initWorkspace = function () {
 			var workspace = document.getElementById("workspace");
