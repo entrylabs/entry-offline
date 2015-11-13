@@ -3,7 +3,7 @@
 angular.module('workspace').controller('HeaderController',
     ['$scope', '$cookies',
     function ($scope, $cookies) {
-        $scope.language = localStorage.getItem("language") || {"lang" : "ko", "title" : "한국어"};
+        $scope.user_language = localStorage.getItem('lang') || 'ko';
     	var Global = {};
         $scope.global = Global;
 
@@ -113,21 +113,8 @@ angular.module('workspace').controller('HeaderController',
         }
 
         $scope.setLanguage = function(language) {
-            var url = $location.absUrl();
-            var idx = url.lastIndexOf('/');
-            var len = url.length;
-
-            var reloadUrl = '/ws?lang='+language+'#!/';
-            var projectId = null;
-            if (len > idx+1) {
-                projectId = url.substring(idx+1, len);
-                reloadUrl += projectId;
-            }
-
             storage.setItem("lang", language);
-            Entry.dispatchEvent('saveLocalStorageProject');
-
-            window.location.href = reloadUrl;
+            location.reload(true);
         };
 
         $scope.blockHelperOn = function(){
