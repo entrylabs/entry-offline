@@ -15,3 +15,7 @@
     right: 0;
     bottom: 0;
 }
+
+.hide_contents {
+	display: none !important;
+}

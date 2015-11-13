@@ -17,7 +17,8 @@
     "width": 1024,
     "height": 550,
     "min_width": 1024,
-    "min_height": 550
+    "min_height": 550,
+    "icon": "./app.png"
   },
   "nodejs": "true",
   "webkit": {

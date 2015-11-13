@@ -1,73 +1,66 @@
 'use strict';
 
 angular.module('workspace').controller('HeaderController',
-    ['$scope', '$cookies',
-    function ($scope, $cookies) {
+    ['$scope', '$rootScope', '$cookies', 'myProject',
+    function ($scope, $rootScope, $cookies, myProject) {
         $scope.user_language = localStorage.getItem('lang') || 'ko';
-    	var Global = {};
-        $scope.global = Global;
-
+        $scope.project = myProject;
         var supported = !(typeof storage == 'undefined' || typeof window.JSON == 'undefined');
         var storage = (typeof window.localStorage === 'undefined') ? undefined : window.localStorage;
 
-        $scope.init = function() {
-            $('.dropdown-menu').find('form').click(function (e) {
-                e.stopPropagation();
-            });
+        // $scope.init = function() {
+        //     $('.dropdown-menu').find('form').click(function (e) {
+        //         e.stopPropagation();
+        //     });
 
-            if (!$scope.global.user)
-                $scope.global.user = {};
-           // $scope.global.user.language = $cookies.get("lang");
+        //     if (!$scope.global.user)
+        //         $scope.global.user = {};
+        //    // $scope.global.user.language = $cookies.get("lang");
 
-            if (!$scope.global.user.language)
-                $scope.global.user.language = 'ko';
+        //     if (!$scope.global.user.language)
+        //         $scope.global.user.language = 'ko';
 
-            $(".page-header").find('a').on("touchstart", function(event) {
-                var dropdown = $(this).attr("class");
-                if (dropdown.indexOf("dropdown-toggle") > -1) {
-                    var display = $(this).next('ul.dropdown-menu').css("display");
-                    if (display != 'none')
-                        $(this).next('ul.dropdown-menu').css("display", "none");
-                    else
-                        $(this).next('ul.dropdown-menu').css("display", "block");
-                } else {
-                    var href = $(this).attr("href");
-                    if (href && href != '')
-                        window.location.href = $(this).attr("href");
-                }
+        //     $(".page-header").find('a').on("touchstart", function(event) {
+        //         var dropdown = $(this).attr("class");
+        //         if (dropdown.indexOf("dropdown-toggle") > -1) {
+        //             var display = $(this).next('ul.dropdown-menu').css("display");
+        //             if (display != 'none')
+        //                 $(this).next('ul.dropdown-menu').css("display", "none");
+        //             else
+        //                 $(this).next('ul.dropdown-menu').css("display", "block");
+        //         } else {
+        //             var href = $(this).attr("href");
+        //             if (href && href != '')
+        //                 window.location.href = $(this).attr("href");
+        //         }
 
-                e.stopPropagation();
-            });
+        //         e.stopPropagation();
+        //     });
 
-        };
+        // };
 
+        $rootScope.$on('loadProject', function(event, data) {
+            $scope.loadProject(data);
+        });
+
+        // 저장
         $scope.saveWorkspace = function() {
             Entry.dispatchEvent('saveWorkspace');
         };
 
+        // 새이름으로 저장
         $scope.saveAsWorkspace = function() {
             Entry.dispatchEvent('saveAsWorkspace')
+        };
+
+        // 불러오
+        $scope.loadWorkspace = function() {
+            Entry.dispatchEvent('loadWorkspace')
         };
 
         $scope.stopPropagation = function (e) {
             e.stopPropagation();
         }
-
-        $scope.project = {};
-
-        $scope.loadWorkspace = function() {
-            var modalInstance = $modal.open({
-                templateUrl: '../views/workspace/modal/load.html',
-                controller: WorkspaceLoadCtrl,
-                backdrop: false,
-                keyboard: false
-            });
-            modalInstance.result.then(function (project) {
-
-
-            });
-
-        };
 
         var WorkspaceSaveCtrl = function($scope, $modalInstance) {
             $scope.name = myProject.name;
@@ -121,12 +114,6 @@ angular.module('workspace').controller('HeaderController',
             Entry.helper.blockHelperOn();
         };
 
-        $scope.showLogin = function (target) {
-            $.event.trigger({
-                type: 'showLogin'
-            });
-        };
-
         $scope.showPopup = function (target) {
             var popup = $('#' + target);
             var body = $('body').eq(0);
@@ -142,69 +129,14 @@ angular.module('workspace').controller('HeaderController',
             popup.css('display', 'none');
         };
 
-        $scope.sendBug = function () {
-            var $content = $('#bugContent');
-            var $email = $('#bugEmail');
-            var email = $email.val().trim();
-            var content = $content.val().trim();
-            if (!content || content.length==0) {
-                alert('내용을 입력해주세요.');
-                $content.val('');
-                $content.focus();
-                return;
-            }
+        //새 프로젝트
+        $scope.newProject = function () {
+            location.reload(true);
+        }
 
-
-            var project = new Projects({});
-            project.name = document.getElementById('project_name').value;
-            //project.thumbnail = document.getElementById('entryCanvas').toDataURL('image/jpeg', 0.1);
-            project.objects = Entry.container.toJSON();
-            project.scenes = Entry.scene.toJSON();
-            project.variables = Entry.variableContainer.getVariableJSON();
-            project.messages = Entry.variableContainer.getMessageJSON();
-            project.functions = Entry.variableContainer.getFunctionJSON();
-            project.scenes = Entry.scene.toJSON();
-            project.speed = Entry.FPS;
-
-
-            $http.post('/api/feedbackProject', project).
-                success(function(project) {
-                    var feedbackProjectId = project._id;
-                    $http.post('/api/project/thumbnail/'+project._id, {
-                        "thumbnail": document.getElementById('entryCanvas').toDataURL('image/jpeg', 0.1)
-                    }).success(function() {
-                        $http.post('/api/feedback', {
-                            title: 'workspace bug',
-                            content: content,
-                            email:email,
-                            category: 'workspace',
-                            project:{
-                                _id: feedbackProjectId,
-                                username: 'entry'
-                            }}).
-                            success(function(result, status) {
-                                $content.val('');
-                                $email.val('');
-                                alert('소중한 의견 감사합니다.');
-                                $scope.hidePopup('bugReport');
-                            }).
-                            error(function(result, status) {
-                                alert('에러가 발생했습니다.');
-                            });
-                    });
-            }).error(function(result, status){
-                console.log(result);
-                console.log(status);
-            });
-        };
-
-        $scope.showSignUp = function () {
-            $.event.trigger({
-                type: 'showSignUp'
-            });
-        };
-
-        $scope.goPath = function(path) {
-            $window.location.href= '/' + path;
-        };
+        // 프로젝트 불러오기
+        $scope.loadProject = function (data) {
+            storage.setItem('nativeLoadProject', data);
+            location.reload(true);
+        }
     }]);

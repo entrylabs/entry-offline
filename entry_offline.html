@@ -34,16 +34,16 @@
 		<script type='text/javascript' src='./bower_components/entryjs/extern/util/ndgmr.Collision.js'></script>
 		<script type='text/javascript' src='./bower_components/entryjs/dist/entry.js'></script>
 		
-        <script type='text/javascript' src='./app.js'></script>
-    	<script type='text/javascript' src='./context.js'></script>
-        <script type="text/javascript" src="./filters.js"></script>
+        <script type='text/javascript' src='./controllers/app.js'></script>
+    	<script type='text/javascript' src='./controllers/context.js'></script>
+        <script type="text/javascript" src="./controllers/filters.js"></script>
+        <script type="text/javascript" src="./controllers/native_controll.js"></script>
 	</head>
 	<body >
 		<div class="workspaceHeader" data-ng-include="'./views/header.html'" data-role="navigation"></div>
 		<section class="wrapper" ng-controller="WorkspaceController" ng-init="initWorkspace()">
 			<div id="workspace"></div>
 		</section>
-		
 		<script type="text/javascript" src="./controllers/workspace.js"></script>
 		<script type="text/javascript" src="./controllers/header.js"></script>
 	</body>

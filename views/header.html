@@ -4,7 +4,8 @@
     </div>
     <div class="workspaceProjectNameWrapper">
         <span class="workspace_name_wrapper">
-        <input type="text" data-ng-model="project.name" id="project_name" class="normal workspace_project_name" data-ng-focus="focus()" data-ng-enter="blur()" ng-blur="blur()"/></span>
+            <input type="text" data-ng-model="project.name" id="project_name" class="normal workspace_project_name" data-ng-focus="focus()" data-ng-enter="blur()" ng-blur="blur()"/>
+        </span>
     </div>
     <div class="workspace_language">
         <ul class="language_wrapper">
@@ -23,17 +24,40 @@
     </div>
     
     <div class="workspace_button_group">
-    	<!-- <div class="workspace_divider"></div> -->
  		<div class="btn-group" dropdown is-open="false">
-	        <a class="btn dropdown-toggle">
+	        <a class="btn dropdown-toggle" data-toggle="dropdown">
 	            <img src="./images/top_icon_new_b_nor.png" />
 	            <span class="drop"><b class="caret"></b></span>
 	        </a>
 	        <ul class="dropdown-menu" role="menu">
-	            <li ng-click="goPath('ws')"><a href="">'Workspace.file_new' | text</a></li>
-	            <li data-ng-show="global.authenticated"><a href="/global.user.username">'Workspace.file_open' | text</a></li>
+	            <li ng-click="newProject()">
+                    <a id="btnFileNew" href="">{{'Workspace.file_new' | text}}</a>
+                </li>
+	            <li>
+                    <a href ng-click="loadWorkspace()">{{'Workspace.file_open' | text}}</a>
+                </li>
 	        </ul>
 	    </div>
+        <div class="btn-group" dropdown is-open="false">
+            <a class="btn dropdown-toggle" data-toggle="dropdown">
+                <img src="./images/top_icon_save_b_nor.png" />
+                <span class="drop"><b class="caret"></b></span>
+            </a>
+            <ul class="dropdown-menu" role="menu">
+                <li>
+                    <a href ng-click="saveWorkspace()">{{'Workspace.file_save' | text}}</a>
+                </li>
+                <li>
+                    <a href ng-click="saveAsWorkspace()">{{'Workspace.file_save_as' | text}}</a>
+                </li>
+            </ul>
+        </div>
 	    <div class="workspace_divider"></div>
 	</div>
+    <div class="hide_contents">
+        <!-- 파일 열기를 위해 존재하는 DOM  nwworkingdir-->
+        <input id="load_project" type="file" load-project  accept=".json"/>
+        <!-- 파일 저장을 위해 존재하는 DOM -->
+        <input id="save_as_project" type="file" save-as-project nwsaveas="{{project.name}}" accept=".json"/>
+    </div>
 </div>
