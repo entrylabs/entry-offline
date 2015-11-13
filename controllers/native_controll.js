@@ -57,7 +57,7 @@ if (process.platform === 'darwin') {
 var fileMenu = new gui.Menu();
 
 fileMenu.append(new gui.MenuItem({
-	label : '새로 만들기',
+	label : Lang.Workspace.file_new,
 	click : function () {
 		angular.element('[data-ng-controller="HeaderController"]').scope().newProject();
 	},
@@ -65,7 +65,7 @@ fileMenu.append(new gui.MenuItem({
   	modifiers: shortCutObj.newProject.modifiers
 }));
 fileMenu.append(new gui.MenuItem({
-	label : '불러오기',
+	label : Lang.Workspace.file_open,
 	click : function () {
 		angular.element('[data-ng-controller="HeaderController"]').scope().loadWorkspace();
 	},
@@ -76,7 +76,7 @@ fileMenu.append(new gui.MenuItem({
 	type : 'separator'
 }));
 fileMenu.append(new gui.MenuItem({
-	label : '저장하기',
+	label : Lang.Workspace.file_save,
 	click : function () {
 		angular.element('[data-ng-controller="HeaderController"]').scope().saveWorkspace();
 	},
@@ -84,7 +84,7 @@ fileMenu.append(new gui.MenuItem({
   	modifiers: shortCutObj.saveWorkspace.modifiers
 }));
 fileMenu.append(new gui.MenuItem({
-	label : '다른 이름으로 저장하기',
+	label : Lang.Workspace.file_save_as,
 	click : function () {
 		angular.element('[data-ng-controller="HeaderController"]').scope().saveAsWorkspace();
 	},
