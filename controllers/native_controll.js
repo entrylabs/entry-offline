@@ -2,6 +2,7 @@
 
 var fs = require('fs');
 var gui = require('nw.gui');
+var isOsx = false;
 
 // Create menu
 var menu = new gui.Menu({
@@ -10,6 +11,7 @@ var menu = new gui.Menu({
 
 var shortCutObj = {};
 if (process.platform === 'darwin') {
+	isOsx = true;
 	// create MacBuiltin
 	menu.createMacBuiltin('Entry', {
 		hideEdit : true,
@@ -31,30 +33,53 @@ if (process.platform === 'darwin') {
 		'saveAsWorkspace' : {
 			'key' : 's',
 			'modifiers' : 'cmd + shift'
+		},
+		'undo' : {
+			'key' : 'z',
+			'modifiers' : 'cmd'
+		},
+		'redo' : {
+			'key' : 'z',
+			'modifiers' : 'cmd + shift'
 		}
 	}
 } else {
+	isOsx = false;
 	shortCutObj = {
 		'newProject' : {
 			'key' : 'n',
-			'modifiers' : 'cmd'
+			'modifiers' : 'ctrl'
 		},
 		'loadWorkspace' : {
 			'key' : 'o',
-			'modifiers' : 'cmd'
+			'modifiers' : 'ctrl'
 		},
 		'saveWorkspace' : {
 			'key' : 's',
-			'modifiers' : 'cmd'
+			'modifiers' : 'ctrl'
 		},
 		'saveAsWorkspace' : {
 			'key' : 's',
-			'modifiers' : 'cmd + shift'
+			'modifiers' : 'ctrl + shift'
+		},
+		'undo' : {
+			'key' : 'z',
+			'modifiers' : 'ctrl'
+		},
+		'redo' : {
+			'key' : 'y',
+			'modifiers' : 'ctrl'
+		},
+		'quit' : {
+			'key' : 'x',
+			'modifiers' : 'ctrl'
 		}
 	}
 }
 // Create file-menu
 var fileMenu = new gui.Menu();
+// Create edit-menu
+var editMenu = new gui.Menu();
 
 fileMenu.append(new gui.MenuItem({
 	label : Lang.Workspace.file_new,
@@ -91,15 +116,46 @@ fileMenu.append(new gui.MenuItem({
 	key: shortCutObj.saveAsWorkspace.key,
   	modifiers: shortCutObj.saveAsWorkspace.modifiers
 }));
-fileMenu.append(new gui.MenuItem({
-	type : 'separator'
+if(!isOsx) {
+	fileMenu.append(new gui.MenuItem({
+		type : 'separator'
+	}));
+	fileMenu.append(new gui.MenuItem({
+		label : '종료',
+		click : function () {
+			gui.App.quit();
+		},
+		key: shortCutObj.quit.key,
+	  	modifiers: shortCutObj.quit.modifiers
+	}));
+}
+
+editMenu.append(new gui.MenuItem({
+	label : '되돌리기',
+	click : function () {
+		Entry.dispatchEvent('undo');
+	},
+	key: shortCutObj.undo.key,
+  	modifiers: shortCutObj.undo.modifiers
+}));
+
+editMenu.append(new gui.MenuItem({
+	label : '다시실행',
+	click : function () {
+		Entry.dispatchEvent('redo');
+	},
+	key: shortCutObj.redo.key,
+  	modifiers: shortCutObj.redo.modifiers
 }));
 
 // Append MenuItem as a Submenu
 menu.append(new gui.MenuItem({
 	label : '파일',
 	submenu : fileMenu
-// menu elements from fileMenu object
+}));
+menu.append(new gui.MenuItem({
+	label : '편집',
+	submenu : editMenu
 }));
 
 // Append Menu to Window
