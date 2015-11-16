@@ -2,6 +2,19 @@
 
 var common = angular.module('common');
 
+
+common.filter('makeThumbnail', function() {
+    return function(picture) {
+        if (picture) {
+            var t =  './images/thumb/'+picture.filename+'.png';
+            console.log(t);
+            return t;
+        }
+        else
+            return '/img/assets/text_icon.png';
+    };
+});
+
 common.filter('text', function() {
     return function(input) {
         var array = input.split('.')

@@ -3,6 +3,10 @@
 	margin : 0;
 }
 
+body {
+	font-family: 'Nanum Gothic';
+}
+
 .page-header {
 	margin : 0;
 	border : 0;

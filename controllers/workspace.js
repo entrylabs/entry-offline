@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('workspace').controller("WorkspaceController", 
-	['$scope', '$rootScope', 'myProject', function ($scope, $rootScope, myProject) {
+	['$scope', '$rootScope', '$modal', 'myProject', function ($scope, $rootScope, $modal, myProject) {
 		$scope.saveFileName = '';
 		$scope.isSaved = false;
 		$scope.isSavedPath = '';
@@ -43,14 +43,14 @@ angular.module('workspace').controller("WorkspaceController",
 			Entry.addEventListener('saveWorkspace', $scope.saveWorkspace);
             Entry.addEventListener('saveAsWorkspace', $scope.saveAsWorkspace);
             Entry.addEventListener('loadWorkspace', $scope.loadWorkspace);
-   //          Entry.addEventListener('openSpriteManager', $scope.openSpriteManager);
-   //          Entry.addEventListener('openPictureManager', $scope.openPictureManager);
-   //          Entry.addEventListener('openSoundManager', $scope.openSoundManager);
-   //          Entry.addEventListener('changeVariableName', $scope.changeVariableName);
-   //          Entry.addEventListener('deleteMessage', $scope.deleteMessage);
-   //          Entry.addEventListener('saveCanvasImage', $scope.saveCanvasData);
-   //          Entry.addEventListener('openPictureImport', $scope.openPictureImport);
-   //          Entry.addEventListener('saveLocalStorageProject', saveLocalStorageProject);
+            Entry.addEventListener('openSpriteManager', $scope.openSpriteManager);
+            Entry.addEventListener('openPictureManager', $scope.openPictureManager);
+            Entry.addEventListener('openSoundManager', $scope.openSoundManager);
+            Entry.addEventListener('changeVariableName', $scope.changeVariableName);
+            Entry.addEventListener('deleteMessage', $scope.deleteMessage);
+            Entry.addEventListener('saveCanvasImage', $scope.saveCanvasData);
+            Entry.addEventListener('openPictureImport', $scope.openPictureImport);
+            // Entry.addEventListener('saveLocalStorageProject', saveLocalStorageProject);
 		};
 
 		// 프로젝트 세팅
@@ -99,6 +99,151 @@ angular.module('workspace').controller("WorkspaceController",
         $scope.loadWorkspace = function() {
             $('#load_project').trigger('click');
         };
+
+        // 스프라이트 매니저 오픈.
+        $scope.openSpriteManager = function() {
+        	console.log('openSpriteManager');
+            if (!Entry.engine.isState('stop')) {
+                alert(Lang.Workspace.cannot_add_object);
+                return false;
+            }
+
+            var modalInstance = $modal.open({
+                templateUrl: './views/modal/sprite.html',
+                controller: 'SpriteController',
+                backdrop: false,
+                keyboard: false,
+                resolve: {
+                    parent: function() {
+                        return "workspace";
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (selectedItems) {
+                if (selectedItems.target === 'newSprite') {
+                    var object = {
+                        id: Entry.generateHash(),
+                        objectType: 'sprite'
+                    };
+                    object.sprite = {};
+                    object.sprite.name = Lang.Workspace.new_object+(Entry.container.getAllObjects().length+1);
+                    object.sprite.pictures = [];
+                    object.sprite.pictures.push({
+                        dimension: {
+                            height: 1,
+                            width: 1
+                        },
+                        filename: "_1x1",
+                        name: Lang.Workspace.new_picture,
+                        type: "_system_"
+                    });
+                    object.sprite.sounds = [];
+                    object.sprite.category = {};
+                    object.sprite.category.main = 'new';
+
+                    object = Entry.container.addObject(object, 0);
+                    Entry.playground.changeViewMode('picture');
+                } else if (selectedItems.target === 'sprite') {
+                    selectedItems.data.forEach(function(item) {
+                        var object = {
+                            id: Entry.generateHash(),
+                            objectType: 'sprite',
+                            sprite: item // 스프라이트 정보
+                        };
+                        object = Entry.container.addObject(object, 0);
+                    });
+                } else if (selectedItems.target === 'upload') {
+                    selectedItems.data.forEach(function(item, index, array) {
+                        if (!item.id) {
+                            item.id = Entry.generateHash();
+                        }
+                        var object = {
+                            id: Entry.generateHash(),
+                            objectType: 'sprite',
+                            sprite: {
+                                name: item.name,
+                                pictures: [item],
+                                sounds: [],
+                                category: {}
+                            }
+                        };
+                        Entry.container.addObject(object, 0);
+                    });
+                } else if (selectedItems.target=='textBox') {
+                    var text = selectedItems.data ? selectedItems.data : Lang.Blocks.TEXT;
+                    var options = selectedItems.options;
+                    var object = {
+                        id: Entry.generateHash(),
+                        name: Lang.Workspace.textbox,
+                        text: text,
+                        options: options,
+                        objectType: 'textBox',
+                        sprite: {sounds:[], pictures:[]}
+                    };
+                    Entry.container.addObject(object, 0);
+                } else {
+                    console.log('no sprite found');
+                }
+            });
+        };
+
+        $scope.openPictureManager = function () {
+        	console.log('openPictureManager');
+
+        	if (!Entry.engine.isState('stop')) {
+	            alert(Lang.Workspace.cannot_add_picture);
+	            return false;
+	        }
+
+	        var modalInstance = $modal.open({	
+	            templateUrl: './views/modal/picture.html',
+	            controller: 'PictureController',
+	            backdrop: false,
+	            keyboard: false,
+	            resolve: {
+	                parent: function() {
+	                    return "workspace";
+	                }
+	            }
+	        });
+
+	        modalInstance.result.then(function (selectedItems) {
+	            if (selectedItems.target === 'new') {
+	                selectedItems.data = [];
+	                selectedItems.data.push({
+	                    dimension: {
+	                        height: 1,
+	                        width: 1
+	                    },
+	                    filename: "_1x1",
+	                    name: Lang.Workspace.new_picture,
+	                });
+	            }
+
+	            selectedItems.data.forEach(function(item) {
+	                item.id = Entry.generateHash();
+	                Entry.playground.addPicture(item, true);
+	            });
+
+	        });
+        };
+        $scope.openSoundManager = function () {
+        	console.log('openSoundManager');
+        };
+        $scope.changeVariableName = function () {
+        	console.log('changeVariableName');
+        };
+        $scope.deleteMessage = function () {
+        	console.log('deleteMessage');
+        };
+        $scope.saveCanvasData = function () {
+        	console.log('saveCanvasData');
+        };
+        $scope.openPictureImport = function () {
+        	console.log('openPictureImport');
+        };
+
 
 	}]).service('myProject', function () {
 		this.name = "";

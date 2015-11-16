@@ -1,0 +1,60 @@
+<div class="row">
+    <div class="wrap">
+        <div class="textProperties">
+            <span class="dropdown fontDropdown" on-toggle="toggle(open)">
+                <a href class="dropdown-toggle">
+                    {{fontData.font.name}} <span class="down_arrow"></span>
+                </a>
+                <ul class="dropdown-menu fontDropdownList">
+                    <li>
+                        <a ng-repeat="font in fonts"
+                            ng-click="changeTextFont(font)">
+                            {{font.name}}
+                        </a>
+                    </li>
+                </ul>
+            </span>
+            <div class="text_buttons">
+                <a href ng-click="toggleFontOption('bold')"><img ng-src="{{getFontOption('bold')}}"></a>
+                <a href ng-click="toggleFontOption('underline')"><img ng-src="{{getFontOption('underline')}}"></a>
+                <a href ng-click="toggleFontOption('italic')"><img ng-src="{{getFontOption('italic')}}"></a>
+                <a href ng-click="toggleFontOption('strike')"><img ng-src="{{getFontOption('strike')}}"></a>
+                <a href ng-click="toggleColorChooser('foreground')"><img ng-src="/img/assets/text_button_color_true.png"></a>
+                <a href ng-click="toggleColorChooser('background')"><img ng-src="/img/assets/text_button_background_true.png"></a>
+            </div>
+            <div class="fgColorDiv" ng-style="fgColor"></div>
+            <div class="bgColorDiv" ng-style="bgColor"></div>
+        </div>
+        <div class="linebreakWrapper">
+            <hr class="linebreakHorizontal"/>
+            <div class="linebreakButtons">
+                <img ng-click="setLinebreak(false)" ng-src="/img/assets/text-linebreak-off-{{!linebreak}}.png">
+                <img ng-click="setLinebreak(true)" ng-src="/img/assets/text-linebreak-on-{{linebreak}}.png">
+            </div>
+            <div class="linebreakDescription" ng-show="linebreak">
+                <p>글상자의 크기가 글자가 쓰일 수 있는 영역을 결정합니다.</p>
+                <ul>
+                    <li>내용 작성시 엔터키로 줄바꿈을 할 수 있습니다.</li>
+                    <li>내용을 작성하시거나 새로운 글자를 추가시 길이가 글상자의 가로 영역을 넘어서면 자동으로 줄이 바뀝니다.</li>
+                </ul>
+            </div>
+            <div class="linebreakDescription" ng-show="!linebreak">
+                <p>글상자의 크기가 글자의 크기를 결정합니다.</p>
+                <ul>
+                    <li>내용을 한 줄로만 작성할 수 있습니다.</li>
+                    <li>새로운 글자가 추가되면 글상자의 좌우 길이가 길어집니다.</li>
+                </ul>
+            </div>
+        </div>
+
+        <input type="text" ng-hide="linebreak" class="modal_textBox" placeholder="{{'Workspace.textbox_input'|text}}" value="" ng-style="{color: fontData.colour}"/>
+        <textarea class="modal_textBox" ng-show="linebreak" placeholder="{{'Workspace.textbox_input'|text}}" value="" ng-style="{color: fontData.colour}"></textarea>
+        <div class="coloursWrapper" ng-show="foreground">
+            <div class="modal_colour" ng-repeat="colour in colours" ng-style="{backgroundColor: colour}" ng-click="changeTextColour(colour)" ng-class="{modalColourTrans : colours.indexOf(colour)==0, colourSelected: colour === fontData.colour}"></div>
+        </div>
+        <div class="backgroundsWrapper" ng-show="background">
+            <div class="modal_colour" ng-repeat="colour in colours" ng-style="{backgroundColor: colour}" ng-click="changeBackgroundColour(colour)" ng-class="{modalColourTrans : colours.indexOf(colour)==0, colourSelected: colour === fontData.background}"></div>
+        </div>
+    </div>
+</div>
+
