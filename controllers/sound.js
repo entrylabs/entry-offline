@@ -76,18 +76,40 @@ angular.module('common').controller('SoundController',
 //                 $scope.status = status;
 //             });
 
-        var soundResourceMap = '/resource_map' + '/sounds.json'; 
+        var soundResourceMap = 'resource_map/' + 'sounds.json'; 
         
+        if (fs.existsSync(soundResourceMap)) {
+            var data = fs.readFileSync(soundResourceMap, "utf8");
+        }  
+        console.log(data);
         $scope.systemSounds = [];
         
-        var fs = require("fs");
-
-        fs.readFile(soundResourceMap, "utf8", function(error, data) {
-            console.log(data);
-        });
-
+        data = JSON.parse(data); 
+        for (var i in data) {
+            var sound = data[i];
+            //console.log(sound);
+            //console.log(sound.filename);
         
-        //var soundFilePath = '/uploads/' + sound.filename.substring(0,2)+'/'+sound.filename.substring(2,4)+'/'+sound.filename+sound.ext;
+            var path = '/uploads/' + sound.filename.substring(0,2)+'/'+sound.filename.substring(2,4)+'/'+sound.filename+sound.ext;
+        
+            console.log(path);
+
+            Entry.soundQueue.loadFile({
+                id: sound._id,
+                src: path,
+                type: createjs.LoadQueue.SOUND
+            });
+
+            sound.selected = 'boxOuter';
+            for (var j in $scope.selectedSystem) {
+                if ($scope.selectedSystem[j]._id === sound._id) {
+                    sound.selected = 'boxOuter selected';
+                    break;
+                }
+            }
+
+            $scope.systemSounds.push(sound);
+        }
 
     };
 
