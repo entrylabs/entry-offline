@@ -228,9 +228,31 @@ angular.module('workspace').controller("WorkspaceController",
 
 	        });
         };
+        
+        //Adding Sound
         $scope.openSoundManager = function () {
         	console.log('openSoundManager');
+            
+            if (!Entry.engine.isState('stop')) {
+                alert(Lang.Workspace.cannot_add_object);
+                return false;
+            }
+            
+            var modalInstance = $modal.open({	
+	            templateUrl: './views/modal/sound.html',
+	            controller: 'SoundController',
+	            backdrop: false,
+	            keyboard: false,
+	            resolve: {
+	                parent: function() {
+	                    return "workspace";
+	                }
+	            }
+	        });
+           
         };
+        
+        
         $scope.changeVariableName = function () {
         	console.log('changeVariableName');
         };
