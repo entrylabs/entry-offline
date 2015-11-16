@@ -57,11 +57,15 @@ angular.module('workspace').controller("WorkspaceController",
 		$scope.setWorkspace = function(project) {
 			Entry.loadProject(project);
 
+
 			var project_name = "";
 			if($.isPlainObject(project)) {
 				project_name = project.name;
 				$scope.isSaved = true;
 				$scope.isSavedPath = project.path;
+			} else {
+				var i = Math.floor(Math.random() * Lang.Workspace.PROJECTDEFAULTNAME.length);
+                project_name = Lang.Workspace.PROJECTDEFAULTNAME[i] + ' ' + Lang.Workspace.project;
 			}
 
 			$scope.project.name = project_name || '새 프로젝트';
