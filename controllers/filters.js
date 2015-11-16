@@ -6,12 +6,12 @@ var common = angular.module('common');
 common.filter('makeThumbnail', function() {
     return function(picture) {
         if (picture) {
-            var t =  './images/thumb/'+picture.filename+'.png';
+            var t = '/uploads/' + picture.filename.substring(0,2)+'/'+picture.filename.substring(2,4)+'/thumb/'+picture.filename+'.png';
             console.log(t);
             return t;
         }
         else
-            return '/img/assets/text_icon.png';
+            return '/images/text_icon.png';
     };
 });
 

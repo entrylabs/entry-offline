@@ -239,6 +239,41 @@ angular.module('workspace').controller("WorkspaceController",
         };
         $scope.saveCanvasData = function () {
         	console.log('saveCanvasData');
+
+        	var file = data.file;
+		    var formData = new FormData();
+		    formData.append("data", data.image);
+		    $.ajax({
+		        url: '/api/picture/canvas',
+		        data: formData,
+		        cache: false,
+		        contentType: false,
+		        processData: false,
+		        type: 'POST',
+		        success: function(picture, status) {
+		            if (file.mode === 'new') {
+		                picture.name = Lang.Workspace.new_picture;
+		                Entry.playground.addPicture(picture, true);
+		                Entry.playground.setPicture(picture);
+		            } else { //edit
+		                picture.id = file.id;
+		                picture.name = file.name;
+		                Entry.playground.setPicture(picture);
+		            }
+
+		            var image = new Image();
+		            var fileName = picture.filename;
+		            image.src = '/uploads/' + fileName.substring(0, 2) + '/' +
+		                fileName.substring(2, 4) + '/image/' + fileName + '.png';
+		            image.onload = function(e) {
+		                Entry.container.cachePicture(picture.id, image);
+		                Entry.playground.selectPicture(picture);
+		            };
+		        },
+		        error : function(data, status) {
+		            console.log('error data:', data);
+		        }
+		    });
         };
         $scope.openPictureImport = function () {
         	console.log('openPictureImport');

@@ -11,7 +11,7 @@
             <form>
                 <div class="image-upload boxOuter">
                     <label for="uploadFile">
-                        <img src="/img/assets/fileadd.png"/>
+                        <img src="/images/fileadd.png"/>
                         <span class="workspace_upload_span"></span>
                     </label>
 
@@ -26,7 +26,7 @@
         <div class="box" data-ng-repeat="picture in uploadPictures">
             <div id="{{picture._id}}" class="boxOuter" data-ng-click="selectUpload(picture)" data-ng-dblclick="applyUpload(picture)">
                 <div class="boxInner" style="background-image: url('{{picture|makeThumbnail}}');"></div>
-                <img class="overlay" src="/img/assets/check_inside_new.png"/>
+                <img class="overlay" src="/images/check_inside_new.png"/>
             </div>
             <div class="titleBox">{{picture.name}}</div>
         </div>
