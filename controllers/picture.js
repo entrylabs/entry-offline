@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('common').controller('PictureController', 
-	['$scope', '$modalInstance', '$routeParams', 'parent', function ($scope, $modalInstance, $routeParams, parent) {
+	['$scope', '$modalInstance', '$routeParams', '$http', 'parent', function ($scope, $modalInstance, $routeParams, $http, parent) {
 		$scope.systemPictures = [];
 		$scope.uploadPictures = [];
 
@@ -16,6 +16,9 @@ angular.module('common').controller('PictureController',
 	    $scope.selectedPictures = [];
 	    $scope.selectedUpload = [];
 	    $scope.currentIndex = 0;
+
+
+    	$scope.pictureData = {};
 
 		var calcInnerHeight = function() {
 	        var height = $(".tab-right").height();
@@ -33,28 +36,45 @@ angular.module('common').controller('PictureController',
 	    };
 
 
-	    $scope.findPictures = function(type, main, sub) {
+	    var makePictureData = function (items) {
+	        $scope.pictureData = {};
+	        items.forEach(function (item, index) {
 
-	        calcInnerHeight();
+	        	var category = '';
+	        	if('category' in  item) {
+		        	category = item.category.main;
+	        	} else {
+	        		category = 'default';
+	        	}
 
-	        var url = '/api/picture/browse';
-	        if (!type)
-	            type = 'default';
+				if(!Array.isArray($scope.pictureData[category])) {
+					$scope.pictureData[category] = [];
+				}
 
-	        url += ('/' + type);
+				$scope.pictureData[category].push(item);
+	        });
 
-	        if (main) {
-	            $scope.main_menu = main;
-	            url += ('/' + encodeURIComponent(main));
-	            if (sub) {
-	                $scope.menu = sub;
-	                url += ('/' + encodeURIComponent(sub));
-	            } else {
-	                $scope.menu = '';
-	            }
-	        }
+	        console.log($scope.pictureData );
+	    }
 
-	        var data = [{"_id":"55c45ea28650a40b0088cfd8","filename":"a8268fd79a48fd9b92c7b47406b95393","name":"엔트리봇_걷기1","user":"5458c25ad9c27d816141f8d5","__v":0,"created":"2015-08-07T07:30:42.467Z","specials":[],"type":"_system_","dimension":{"width":284,"height":350},"category":{"main":"entrybot_friends"},"label":{"vn":"엔트리봇_걷기1","en":"엔트리봇_걷기1","ko":"엔트리봇_걷기1"}},{"_id":"55c45ea18650a40b0088cfd7","filename":"44cbd5953180e91751e82837bdff91ac","name":"엔트리봇_걷기2","user":"5458c25ad9c27d816141f8d5","__v":0,"created":"2015-08-07T07:30:41.643Z","specials":[],"type":"_system_","dimension":{"width":284,"height":350},"category":{"main":"entrybot_friends"},"label":{"vn":"엔트리봇_걷기2","en":"엔트리봇_걷기2","ko":"엔트리봇_걷기2"}},{"_id":"557fe7fd77e7209c349937a4","filename":"91299d08433dd918bb41d23ba991eb1c","name":"엔트리봇_옆모습","user":"53eef21dce8dd2c54f0cb721","__v":0,"created":"2015-06-16T09:10:21.411Z","specials":[],"type":"_system_","dimension":{"width":220,"height":350},"category":{"main":"entrybot_friends"},"label":{"vn":"엔트리봇_stand","en":"엔트리봇_stand","ko":"엔트리봇_stand"}},{"_id":"557fe7ea77e7209c3499379e","filename":"10cdf0111db739524011613efcde4a9c","name":"엔트리봇_정면","user":"53eef21dce8dd2c54f0cb721","__v":0,"created":"2015-06-16T09:10:02.038Z","specials":[],"type":"_system_","dimension":{"width":220,"height":350},"category":{"main":"entrybot_friends"},"label":{"vn":"엔트리봇_stand","en":"엔트리봇_stand","ko":"엔트리봇_stand"}}];
+	    var getPictureData = function (main, sub) {
+	    	var datas = $scope.pictureData[main];
+	    	var data = [];
+	    	if(sub) {
+	    		datas.forEach(function (item, index) {
+	    			if(item.category.sub === sub) {
+	    				data.push(item);
+	    			}
+	    		});
+	    	} else {
+	    		data = datas;
+	    	}
+
+	    	return data;
+	    }
+
+	    var setSystemPictures = function (type, main, sub) {
+	    	var data = getPictureData(main, sub);
             $scope.systemPictures = [];
             for (var i in data) {
                 var picture = data[i];
@@ -67,8 +87,33 @@ angular.module('common').controller('PictureController',
                 }
 
                 $scope.systemPictures.push(picture);
-//                    console.log(picture.name + ' ' + picture.selected);
             }
+	    }
+
+
+	    $scope.findPictures = function(type, main, sub) {
+	        calcInnerHeight();
+
+			if (main) {
+	            $scope.main_menu = main;
+	            if (sub) {
+	                $scope.menu = sub;
+	            } else {
+	                $scope.menu = '';
+	            }
+	        }
+	        if($.isEmptyObject($scope.pictureData)) {
+		        $http.get('/resource_map/pictures.json').success(function(response) {
+			        makePictureData(response);
+			        setSystemPictures(type, main, sub);
+			    });
+	        } else {
+	        	setSystemPictures(type, main, sub);
+	        }
+
+		    return;
+
+	        
 
 	    };
 
