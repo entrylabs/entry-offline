@@ -6,9 +6,7 @@ var common = angular.module('common');
 common.filter('makeThumbnail', function() {
     return function(picture) {
         if (picture) {
-            var t = '/uploads/' + picture.filename.substring(0,2)+'/'+picture.filename.substring(2,4)+'/thumb/'+picture.filename+'.png';
-            console.log(t);
-            return t;
+            return '/uploads/' + picture.filename.substring(0,2)+'/'+picture.filename.substring(2,4)+'/thumb/'+picture.filename+'.png';;
         }
         else
             return '/images/text_icon.png';
