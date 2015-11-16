@@ -110,11 +110,6 @@ angular.module('common').controller('PictureController',
 	        } else {
 	        	setSystemPictures(type, main, sub);
 	        }
-
-		    return;
-
-	        
-
 	    };
 
 
