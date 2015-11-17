@@ -237,7 +237,7 @@ angular.module('workspace').controller("WorkspaceController",
         
         //Adding Sound
         $scope.openSoundManager = function () {
-        	console.log('openSoundManager');
+        	//console.log('openSoundManager');
             
             if (!Entry.engine.isState('stop')) {
                 alert(Lang.Workspace.cannot_add_object);
@@ -255,9 +255,15 @@ angular.module('workspace').controller("WorkspaceController",
 	                }
 	            }
 	        });
-           
+            
+            modalInstance.result.then(function (selectedItems) {
+                selectedItems.data.forEach(function(item) {
+                    item.id = Entry.generateHash();
+                    console.log("item : " + JSON.stringify(item));
+                    Entry.playground.addSound(item, true);
+                });
+            }); 
         };
-        
         
         $scope.changeVariableName = function () {
         	console.log('changeVariableName');

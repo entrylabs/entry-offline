@@ -2,9 +2,11 @@
 
 angular.module('common').directive('ngEnter', function() {
     return function(scope, element, attrs) {
-        element.bind("keydown", function(event) {
+        element.bind("keydown keypress", function(event) {
             if(event.which === 13) {
-                scope.$eval(attrs.ngEnter, {'event': event});
+				scope.$apply(function() {
+                	scope.$eval(attrs.ngEnter);
+				});
             }
             else {
                 if (attrs.ngAutocomplete) {

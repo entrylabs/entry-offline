@@ -9,8 +9,8 @@
         </div>
         <div class="modal-body">
             <input id="searchWord" class='searchWord' ng-model="searchWord" ng-enter="search()" ng-show="currentTab == 'system'"/>
-            <tabset>
-                <tab select="changeTab('system')">
+            <uib-tabset>
+                <uib-tab select="changeTab('system')">
                     <tab-heading>
                         {{'Workspace.select_sound'|text}}
                         <div class='modal_tab_bottom'></div>
@@ -109,8 +109,8 @@
                             </div>
                         </div>
                     </div>
-                </tab>
-                <tab select="changeTab('upload')">
+                </uib-tab>
+                <uib-tab select="changeTab('upload')">
                     <tab-heading>
                         {{'Workspace.upload'|text}}
                         <div class='modal_tab_bottom'></div>
@@ -149,8 +149,8 @@
                             </div>
                         </div>
                     </div>
-                </tab>
-            </tabset>
+                </uib-tab>
+            </uib-tabset>
 
         <div class="modal_choosen">
             <div class='modal_selected_arrow modal_selected_left_arrow' ng-click='moveContainer("right")'></div>

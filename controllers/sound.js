@@ -15,13 +15,23 @@ angular.module('common').controller('SoundController',
     $scope.isCollapsed4 = true;
     $scope.isCollapsed5 = true;
     $scope.isCollapsed6 = true;
-    
+  
     $scope.main_menu = "사람";
     $scope.menu = "";
 
     $scope.searchWord = '';
+    var data;
     
     $scope.init = function() {
+        var soundMapFile = 'resource_map/' + 'sounds.json'; 
+        
+        if (fs.existsSync(soundMapFile)) {
+            var soundMapData = fs.readFileSync(soundMapFile, "utf8");
+        }  
+        //console.log(soundMapData);
+        
+        data = JSON.parse(soundMapData); 
+        
         $routeParams.type = 'default';
         $routeParams.main = '사람';
 
@@ -49,35 +59,26 @@ angular.module('common').controller('SoundController',
         }
 
         $scope.systemSounds = [];
-        
-        var soundMapFile = 'resource_map/' + 'sounds.json'; 
-        
-        if (fs.existsSync(soundMapFile)) {
-            var soundMapData = fs.readFileSync(soundMapFile, "utf8");
-        }  
-        //console.log(soundMapData);
-        
-        var data = JSON.parse(soundMapData); 
-        
-        var categoriedData = [];
+
+        var categorizedData = [];
         
         for(var i in data) {
             if($scope.menu === '') {
                 if($scope.main_menu === data[i].category.main) {
-                    categoriedData.push(data[i]); 
-                    console.log("All : " + $scope.main_menu + " " + data[i].category.main);
-                }        
+                    categorizedData.push(data[i]); 
+                    //console.log("All : " + $scope.main_menu + " " + data[i].category.main);
+                }       
             }
             else {
                 if($scope.menu === data[i].category.sub && $scope.main_menu === data[i].category.main) {
-                    categoriedData.push(data[i]);
-                    console.log("Sub : " + data[i].category.sub);
+                    categorizedData.push(data[i]);
+                    //console.log("Sub : " + data[i].category.sub);
                 }
             }
         }        
         
-        for (var i in categoriedData) {
-            var sound = categoriedData[i];
+        for (var i in categorizedData) {
+            var sound = categorizedData[i];
           
             var path = '/uploads/' + sound.filename.substring(0,2)+'/'+sound.filename.substring(2,4)+'/'+sound.filename+sound.ext;
         
@@ -102,45 +103,43 @@ angular.module('common').controller('SoundController',
 
     $scope.search = function() {
         $scope.searchWord = $('#searchWord').val();
-        console.log($scope.searchWord);
+        //console.log($scope.searchWord);
         if (!$scope.searchWord || $scope.searchWord == '') {
             alert('검색어를 입력하세요.');
             return false;
         }
 
-        var url = '/api/sound/search/'+$scope.searchWord;
-        $http({method: 'GET', url: url}).
-            success(function(data,status) {
-                $scope.systemSounds = [];
-                for (var i in data) {
-                    var sound = data[i];
-                    var path = '/uploads/' + sound.filename.substring(0,2)+'/'+sound.filename.substring(2,4)+'/'+sound.filename+sound.ext;
-
-                    Entry.soundQueue.loadFile({
-                        id: sound._id,
-                        src: path,
-                        type: createjs.LoadQueue.SOUND
-                    });
-
-                    sound.selected = 'boxOuter';
-                    for (var j in $scope.selectedSystem) {
-                        if ($scope.selectedSystem[j]._id === sound._id) {
-                            sound.selected = 'boxOuter selected';
-                            break;
-                        }
+        $scope.systemSounds = [];
+        
+        for (var i in data) {
+            var sound = data[i];
+            var originalFileName = sound.name;
+                        
+            if(originalFileName.includes($scope.searchWord)) {
+                var path = '/uploads/' + sound.filename.substring(0,2)+'/'+sound.filename.substring(2,4)+'/'+sound.filename+sound.ext;
+        
+                Entry.soundQueue.loadFile({
+                    id: sound._id,
+                    src: path,
+                    type: createjs.LoadQueue.SOUND
+                });
+       
+                sound.selected = 'boxOuter';
+                for (var j in $scope.selectedSystem) {
+                    if ($scope.selectedSystem[j]._id === sound._id) {
+                        sound.selected = 'boxOuter selected';
+                        break;
                     }
-
-                    $scope.systemSounds.push(sound);
-
                 }
-
-                $scope.collapse(0);
-                $scope.main_menu = '';
-            }).
-            error(function(data, status) {
-                $scope.status = status;
-            });
-
+        
+                $scope.systemSounds.push(sound);
+                console.log("sound : " + sound + "==>" + $scope.searchWord);
+            }
+        }
+    
+        $scope.collapse(0);
+        $scope.main_menu = '';
+       
     };
 
 
@@ -388,6 +387,7 @@ angular.module('common').controller('SoundController',
         if (!$scope.currentSelected()) {
             alert(Lang.Workspace.select_sprite);
         } else {
+            //console.log(JSON.stringify($scope.currentSelected()));
             $modalInstance.close({
                 target: $scope.currentTab,
                 data: $scope.currentSelected()
