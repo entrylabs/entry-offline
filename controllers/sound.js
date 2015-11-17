@@ -26,7 +26,7 @@ angular.module('common').controller('SoundController',
         $routeParams.main = '사람';
 
         $scope.findSounds($routeParams.type, $routeParams.main, $routeParams.sub);
-        console.log("collapse " + $scope.isCollapsed1);       
+        //console.log("collapse " + $scope.isCollapsed1);       
     };
     
     $scope.findSounds = function(type, main, sub) {
@@ -55,7 +55,7 @@ angular.module('common').controller('SoundController',
         if (fs.existsSync(soundMapFile)) {
             var soundMapData = fs.readFileSync(soundMapFile, "utf8");
         }  
-        console.log(soundMapData);
+        //console.log(soundMapData);
         
         var data = JSON.parse(soundMapData); 
         
@@ -102,6 +102,7 @@ angular.module('common').controller('SoundController',
 
     $scope.search = function() {
         $scope.searchWord = $('#searchWord').val();
+        console.log($scope.searchWord);
         if (!$scope.searchWord || $scope.searchWord == '') {
             alert('검색어를 입력하세요.');
             return false;
