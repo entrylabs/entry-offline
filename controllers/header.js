@@ -131,7 +131,9 @@ angular.module('workspace').controller('HeaderController',
 
         //새 프로젝트
         $scope.newProject = function () {
-            location.reload(true);
+            Entry.plugin.initProjectFolder(function () {
+                location.reload(true);
+            });
         }
 
         // 프로젝트 불러오기

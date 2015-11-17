@@ -74,16 +74,22 @@ angular.module('workspace').controller("WorkspaceController",
 		// 저장하기
 		$scope.saveWorkspace = function() {
 			if($scope.isSaved) {
-	            Entry.stage.handle.setVisible(false);
-	            Entry.stage.update();
-
-	            $scope.project_name = document.getElementById('project_name').value;
-	            var project = Entry.exportProject();
-	            project.name = $scope.project_name;
-
-	            Entry.plugin.writeFile($scope.isSavedPath, JSON.stringify(project), function () {
+				$scope.project.saveProject($scope.isSavedPath, function () {
 	            	Entry.toast.success(Lang.Workspace.saved, $scope.project_name + ' ' + Lang.Workspace.saved_msg)
 	            });
+
+	            // Entry.stage.handle.setVisible(false);
+	            // Entry.stage.update();
+
+	            var project = Entry.exportProject();
+
+	            // Entry.plugin.saveFile(, JSON.stringify(project), function () {
+	            // 	Entry.toast.success(Lang.Workspace.saved, $scope.project_name + ' ' + Lang.Workspace.saved_msg)
+	            // });
+
+	            // Entry.plugin.writeFile($scope.isSavedPath, JSON.stringify(project), function () {
+	            // 	Entry.toast.success(Lang.Workspace.saved, $scope.project_name + ' ' + Lang.Workspace.saved_msg)
+	            // });
 
 			} else {
 				$('#save_as_project').trigger('click');				
@@ -259,78 +265,119 @@ angular.module('workspace').controller("WorkspaceController",
         $scope.deleteMessage = function () {
         	console.log('deleteMessage');
         };
+
+        function cropImageFromCanvas(image_data) {
+        	var defer = $.Deferred();
+
+        	var image = new Image();
+
+        	image.src = image_data;
+        	image.onload = function () {
+        		var canvas = document.createElement('canvas');
+        		canvas.width = image.width;
+        		canvas.height = image.height;
+		    	var ctx = canvas.getContext("2d");
+		    	ctx.drawImage(this, 0, 0, canvas.width, canvas.height);
+
+        		var w = canvas.width,
+				h = canvas.height,
+				pix = {x:[], y:[]},
+				imageData = ctx.getImageData(0,0,canvas.width,canvas.height),
+				x, y, index;
+
+				for (y = 0; y < h; y++) {
+				    for (x = 0; x < w; x++) {
+				        index = (y * w + x) * 4;
+				        if (imageData.data[index+3] > 0) {
+				            pix.x.push(x);
+				            pix.y.push(y);
+				        }   
+				    }
+				}
+				pix.x.sort(function(a,b){return a-b});
+				pix.y.sort(function(a,b){return a-b});
+				var n = pix.x.length-1;
+
+				w = pix.x[n] - pix.x[0];
+				h = pix.y[n] - pix.y[0];
+				var cut = ctx.getImageData(pix.x[0], pix.y[0], w, h);
+
+				canvas.width = w;
+				canvas.height = h;
+				ctx.putImageData(cut, 0, 0);
+
+				defer.resolve(canvas.toDataURL());
+        	}			
+
+			return defer;
+		}
+
+        var getResizeImageFromBase64 = function (image, canvas, max_size) {
+	        var tempW = image.width;
+	        var tempH = image.height;
+	        if (tempW > tempH) {
+	            if (tempW > max_size) {
+	               tempH *= max_size / tempW;
+	               tempW = max_size;
+	            }
+	        } else {
+	            if (tempH > max_size) {
+	               tempW *= max_size / tempH;
+	               tempH = max_size;
+	            }
+	        }
+	        
+	        canvas.width = tempW;
+	        canvas.height = tempH;
+	        var ctx = canvas.getContext("2d");
+	        ctx.drawImage(image, 0, 0, tempW, tempH);
+	        
+	        return canvas.toDataURL().split(',')[1];
+        }
+
+
+		var TARGET_SIZE = 960;
+		var THUMB_SIZE = 96;
+
         $scope.saveCanvasData = function (data) {
         	console.log('saveCanvasData');
-
         	var file = data.file;
-		    var formData = new FormData();
-		    formData.append("data", data.image);
 
-		    var image_data = data.image.split(',')[1];
-		    var picture = {};
-		    var fileurl = './temp/images/' + file.name + '.png';
-		    
+        	cropImageFromCanvas(data.image).then(function(trim_image_data) {
+        		var tempImg = new Image();
+			    tempImg.src = trim_image_data;
+			    tempImg.onload = function() {
+			    	var canvas = document.createElement('canvas');
+			    	var ctx = canvas.getContext("2d");
+			    	ctx.drawImage(this, 0, 0, canvas.width, canvas.height);
+		    	
+			    	// 이미지 TRIM
+			    	var image_data_url = {};
+			    	//일반 이미지
+					image_data_url.org = getResizeImageFromBase64(tempImg, canvas, TARGET_SIZE);
+			    	//섬네일 이미지
+		            image_data_url.thumb = getResizeImageFromBase64(tempImg, canvas, THUMB_SIZE);
 
-            
+	            	Entry.plugin.saveTempImageFile(image_data_url, function (picture) {
+				    	if (file.mode === 'new') {
+			                picture.name = Lang.Workspace.new_picture;
+			                Entry.playground.addPicture(picture, true);
+			                Entry.playground.setPicture(picture);
+			            } else { //edit
+			                picture.id = file.id;
+			                picture.name = file.name;
+			                Entry.playground.setPicture(picture);
+			            }
 
-		    Entry.plugin.saveTempImageFile(fileurl, image_data, function (dimensions) {
-		    	console.log('이후 작업');
-		    	picture.dimension = dimensions;
-		    	picture.fileurl = fileurl;
-
-		    	if (file.mode === 'new') {
-	                picture.name = Lang.Workspace.new_picture;
-	                Entry.playground.addPicture(picture, true);
-	                Entry.playground.setPicture(picture);
-	            } else { //edit
-	                picture.id = file.id;
-	                picture.name = file.name;
-	                Entry.playground.setPicture(picture);
-	            }
-
-		    	var image = new Image();
-	            var fileName = picture.filename;
-	            picture.fileurl = '/temp/images/' + file.name + '.png';
-	            image.src = '/temp/images/' + file.name + '.png';
-	            image.onload = function(e) {
-	                Entry.container.cachePicture(picture.id, image);
-	                Entry.playground.selectPicture(picture);
-	            };
-		    });
-
-		    return;
-
-		    $.ajax({
-		        url: '/api/picture/canvas',
-		        data: formData,
-		        cache: false,
-		        contentType: false,
-		        processData: false,
-		        type: 'POST',
-		        success: function(picture, status) {
-		            if (file.mode === 'new') {
-		                picture.name = Lang.Workspace.new_picture;
-		                Entry.playground.addPicture(picture, true);
-		                Entry.playground.setPicture(picture);
-		            } else { //edit
-		                picture.id = file.id;
-		                picture.name = file.name;
-		                Entry.playground.setPicture(picture);
-		            }
-
-		            var image = new Image();
-		            var fileName = picture.filename;
-		            image.src = '/uploads/' + fileName.substring(0, 2) + '/' +
-		                fileName.substring(2, 4) + '/image/' + fileName + '.png';
-		            image.onload = function(e) {
-		                Entry.container.cachePicture(picture.id, image);
-		                Entry.playground.selectPicture(picture);
-		            };
-		        },
-		        error : function(data, status) {
-		            console.log('error data:', data);
-		        }
-		    });
+				    	var image = new Image();
+			            image.src = picture.fileurl;
+			            image.onload = function(e) {
+			                Entry.container.cachePicture(picture.id, image);
+			                Entry.playground.selectPicture(picture);
+			            };
+		            });
+			    };
+        	});
         };
         $scope.openPictureImport = function () {
         	console.log('openPictureImport');
@@ -339,7 +386,22 @@ angular.module('workspace').controller("WorkspaceController",
 
 	}]).service('myProject', function () {
 		this.name = "";
-	}).directive('saveAsProject', function (){
+		this.saveProject = function (path, cb) {
+			var project_name = this.name;
+			//저장 수행
+    		Entry.stage.handle.setVisible(false);
+            Entry.stage.update();
+
+            var project = Entry.exportProject();
+            project.name = this.name;
+
+            Entry.plugin.saveProject(path, project, function () {
+            	if($.isFunction(cb)) {
+            		cb(project_name);
+            	};
+            });
+		};
+	}).directive('saveAsProject', ['myProject', function(myProject){
 		return {
 		    controller: function($parse, $element, $attrs, $scope){
 		    	var supported = !(typeof storage == 'undefined' || typeof window.JSON == 'undefined');
@@ -352,18 +414,11 @@ angular.module('workspace').controller("WorkspaceController",
 		        		var pathArr = path.split('/');
 		        		pathArr.pop();
 		        		storage.setItem('defaultPath', pathArr.join('/'));
-		        		//저장 수행
-		        		Entry.stage.handle.setVisible(false);
-			            Entry.stage.update();
-
-			            $scope.project_name = document.getElementById('project_name').value;
-			            var project = Entry.exportProject();
-			            project.name = $scope.project_name;
-
-			            Entry.plugin.writeFile(path, JSON.stringify(project), function () {
+		        		
+		        		myProject.saveProject(path, function (project_name) {
 			            	$scope.isSaved = true;
 			            	$scope.isSavedPath = path;
-			            	Entry.toast.success(Lang.Workspace.saved, $scope.project_name + ' ' + Lang.Workspace.saved_msg)
+			            	Entry.toast.success(Lang.Workspace.saved, project_name + ' ' + Lang.Workspace.saved_msg)
 			            });
 
 			            this.value = '';
@@ -373,7 +428,7 @@ angular.module('workspace').controller("WorkspaceController",
 		        });
 		    }
 	    };
-	}).directive('loadProject', function (){
+	}]).directive('loadProject', function (){
 		return {
 		    controller: function($parse, $element, $attrs, $scope){
 		    	var supported = !(typeof storage == 'undefined' || typeof window.JSON == 'undefined');
@@ -387,11 +442,11 @@ angular.module('workspace').controller("WorkspaceController",
 		        		pathArr.pop();
 		        		storage.setItem('defaultPath', pathArr.join('/'));
 
-		        		Entry.plugin.readFile(path, function (data) {
+		        		Entry.plugin.loadProject(path, function (data) {
 		        			var jsonObj = JSON.parse(data);
 		        			jsonObj.path = path;
 		        			$scope.$root.$emit('loadProject', JSON.stringify(jsonObj));
-			            });
+		        		});
 
 			            this.value = '';
 		        	}

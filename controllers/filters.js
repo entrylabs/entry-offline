@@ -6,6 +6,7 @@ var common = angular.module('common');
 common.filter('makeThumbnail', function() {
     return function(picture) {
         if (picture) {
+            // return picture.filename.substring(0,2)+'/'+picture.filename.substring(2,4)+'/thumb/'+picture.filename+'.png';
             return '/uploads/' + picture.filename.substring(0,2)+'/'+picture.filename.substring(2,4)+'/thumb/'+picture.filename+'.png';;
         }
         else
@@ -15,8 +16,7 @@ common.filter('makeThumbnail', function() {
 
 common.filter('text', function() {
     return function(input) {
-        var array = input.split('.')
-        console.log(input);
+        var array = input.split('.');
         if (array.length > 1) {
             var middle = array[0];
             var key = array[1];
