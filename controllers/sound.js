@@ -2,8 +2,10 @@
 
 angular.module('common').controller('SoundController', 
 	['$scope', '$modalInstance', '$routeParams', '$http', 
-                     function ($scope, $modalInstance, $routeParams, $http) {
+                     function ($scope, $modalInstance, $routeParams, Global, $http, parent) {
 	
+    $scope.global = Global;
+    $scope.parent = parent;
 	$scope.systemSounds = [];
     $scope.uploadSounds = [];
 
@@ -23,7 +25,8 @@ angular.module('common').controller('SoundController',
         $routeParams.type = 'default';
         $routeParams.main = '사람';
 
-        $scope.systemSounds = $scope.findSounds($routeParams.type, $routeParams.main, $routeParams.sub);
+        $scope.findSounds($routeParams.type, $routeParams.main, $routeParams.sub);
+        console.log("collapse " + $scope.isCollapsed1);       
     };
     
     $scope.findSounds = function(type, main, sub) {
@@ -45,54 +48,40 @@ angular.module('common').controller('SoundController',
             }
         }
 
-        //console.log("Sound URL : " + url);
-        //alert("Sound URL : " + url);
-//         $http({method: 'GET', url: url}).
-//             success(function(data,status) {
-//                 $scope.systemSounds = [];
-//                 for (var i in data) {
-//                     var sound = data[i];
-//                     var path = '/uploads/' + sound.filename.substring(0,2)+'/'+sound.filename.substring(2,4)+'/'+sound.filename+sound.ext;
-// 
-//                     Entry.soundQueue.loadFile({
-//                         id: sound._id,
-//                         src: path,
-//                         type: createjs.LoadQueue.SOUND
-//                     });
-// 
-//                     sound.selected = 'boxOuter';
-//                     for (var j in $scope.selectedSystem) {
-//                         if ($scope.selectedSystem[j]._id === sound._id) {
-//                             sound.selected = 'boxOuter selected';
-//                             break;
-//                         }
-//                     }
-// 
-//                     $scope.systemSounds.push(sound);
-// 
-//                 }
-//             }).
-//             error(function(data, status) {
-//                 $scope.status = status;
-//             });
-
-        var soundResourceMap = 'resource_map/' + 'sounds.json'; 
-        
-        if (fs.existsSync(soundResourceMap)) {
-            var data = fs.readFileSync(soundResourceMap, "utf8");
-        }  
-        console.log(data);
         $scope.systemSounds = [];
         
-        data = JSON.parse(data); 
-        for (var i in data) {
-            var sound = data[i];
-            //console.log(sound);
-            //console.log(sound.filename);
+        var soundMapFile = 'resource_map/' + 'sounds.json'; 
         
+        if (fs.existsSync(soundMapFile)) {
+            var soundMapData = fs.readFileSync(soundMapFile, "utf8");
+        }  
+        console.log(soundMapData);
+        
+        var data = JSON.parse(soundMapData); 
+        
+        var categoriedData = [];
+        
+        for(var i in data) {
+            if($scope.menu === '') {
+                if($scope.main_menu === data[i].category.main) {
+                    categoriedData.push(data[i]); 
+                    console.log("All : " + $scope.main_menu + " " + data[i].category.main);
+                }        
+            }
+            else {
+                if($scope.menu === data[i].category.sub && $scope.main_menu === data[i].category.main) {
+                    categoriedData.push(data[i]);
+                    console.log("Sub : " + data[i].category.sub);
+                }
+            }
+        }        
+        
+        for (var i in categoriedData) {
+            var sound = categoriedData[i];
+          
             var path = '/uploads/' + sound.filename.substring(0,2)+'/'+sound.filename.substring(2,4)+'/'+sound.filename+sound.ext;
         
-            console.log(path);
+            //console.log(path);
 
             Entry.soundQueue.loadFile({
                 id: sound._id,
@@ -107,10 +96,8 @@ angular.module('common').controller('SoundController',
                     break;
                 }
             }
-
             $scope.systemSounds.push(sound);
         }
-
     };
 
     $scope.search = function() {
