@@ -102,7 +102,7 @@
                                     <div id="{{sound._id}}" class="{{sound.selected}}" data-ng-click="selectSystem(sound)" data-ng-dblclick="applySystem(sound)">
                                         <div class="boxInner" style="background-image: url('/images/soundimage.png');">
                                         </div>
-                                        <img class="overlay" src="/images/check_inside_new.png"/>
+                                        <img class="overlay" src="./images/check_inside_new.png"/>
                                     </div>
                                     <div class="titleBox">{{sound.name}}</div>
                                 </div>
@@ -128,7 +128,7 @@
                                 <form>
                                     <div class="image-upload boxOuter">
                                         <label for="uploadFile">
-                                            <img src="/images/fileadd.png"/>
+                                            <img src="./images/fileadd.png"/>
                                             <span class="workspace_upload_span"></span>
                                         </label>
 
@@ -143,7 +143,7 @@
                             <div class="box" data-ng-repeat="sound in uploadSounds">
                                 <div id="{{sound._id}}" class="boxOuter" data-ng-click="selectUpload(sound)" data-ng-dblclick="applyUpload(sound)">
                                     <div class="boxInner" style="background-image: url('/images/soundimage.png');"></div>
-                                    <img class="overlay" src="/images/check_inside_new.png"/>
+                                    <img class="overlay" src="./images/check_inside_new.png"/>
                                 </div>
                                 <div class="titleBox">{{sound.name}}</div>
                             </div>
@@ -159,14 +159,14 @@
                 <div class="modal_selected_container_moving">
                     <div class="box" data-ng-repeat="sound in selectedSystem" ng-if="currentTab == 'system'">
                         <div id="{{sound._id}}" class="{{sound.selected}} boxOuterChoosen">
-                            <img class="modal_choosen_cancel" src="/images/modal_choosen_cancel.png" data-ng-click="selectSystem(sound)"/>
+                            <img class="modal_choosen_cancel" src="./images/modal_choosen_cancel.png" data-ng-click="selectSystem(sound)"/>
                             <div class="boxInner" style="background-image: url('/images/soundimage.png');"></div>
                         </div>
                         <div class="titleBox titleBoxChoosen">{{sound.name}}</div>
                     </div>
                     <div class="box" data-ng-repeat="sound in selectedUpload" ng-if="currentTab == 'upload'">
                         <div id="{{sound._id}}" class="boxOuter boxOuterChoosen">
-                            <img class="modal_choosen_cancel" src="/images/modal_choosen_cancel.png" data-ng-click="selectSystem(sound)"/>
+                            <img class="modal_choosen_cancel" src="./images/modal_choosen_cancel.png" data-ng-click="selectSystem(sound)"/>
                             <div class="boxInner" style="background-image: url('/images/soundimage.png');"></div>
                         </div>
                         <div class="titleBox titleBoxChoosen">{{sound.name}}</div>

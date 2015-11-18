@@ -24,14 +24,14 @@
                     <div class="modal_selected_container_moving">
                         <div class="box" data-ng-repeat="sprite in currentSelected()" ng-if="currentTab == 'sprite'">
                             <div id="{{sprite._id}}" class="{{sprite.selected}}  boxOuterChoosen">
-                                <img class="modal_choosen_cancel" src="/images/modal_choosen_cancel.png" ng-click='selectSprite(sprite)'/>
+                                <img class="modal_choosen_cancel" src="./images/modal_choosen_cancel.png" ng-click='selectSprite(sprite)'/>
                                 <div class="boxInner" style="background-image: url('{{sprite.pictures[0]|makeThumbnail}}');" ng-if="currentTab == 'sprite'"></div>
                             </div>
                             <div class="titleBox titleBoxChoosen">{{sprite.name}}</div>
                         </div>
                         <div class="box" data-ng-repeat="picture in selectedPictures" ng-if="currentTab == 'upload'">
                             <div id="{{picture._id}}" class="boxOuter  boxOuterChoosen">
-                                <img class="modal_choosen_cancel" src="/images/modal_choosen_cancel.png" ng-click='selectPicture(picture)'/>
+                                <img class="modal_choosen_cancel" src="./images/modal_choosen_cancel.png" ng-click='selectPicture(picture)'/>
                                 <div class="boxInner" style="background-image: url('{{picture|makeUploadThumbnail}}');"></div>
                             </div>
                             <div class="titleBox titleBoxChoosen">{{picture.name}}</div>
