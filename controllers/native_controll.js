@@ -454,5 +454,20 @@ Entry.plugin = (function () {
 		});
 	};
 
+	that.getRealPath = function (path, cb) {
+		var cache = {};
+		fs.realpath(path, function (err, resolvedPath) {
+			if (err) throw err;
+			console.log(resolvedPath);
+			if($.isFunction(cb)) {
+			  	cb(resolvedPath);
+			}
+		});
+	}
+
+	that.testPath = function() {
+		that.getRealPath('./');
+	}
+
 	return that;
 })();
