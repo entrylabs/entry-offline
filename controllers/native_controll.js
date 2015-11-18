@@ -199,14 +199,10 @@ Entry.plugin = (function () {
 			fs.mkdirSync(path.join(uploadDir, 'sound'));
 
 	    //Path of upload folder where you want to upload fies/
-<<<<<<< HEAD
 	    var thumbPath = path.join(uploadDir, 'thumb', fileId + '.png'); // thumbnail
 	    var imagePath = path.join(uploadDir, 'image', fileId + '.png'); // main image
-		var soundPath = path.join(uploadDir, 'image', fileId + '.png'); // for sound file
-=======
-	    var thumbPath = path.join(uploadDir, 'thumb', fileId); // thumbnail
-	    var imagePath = path.join(uploadDir, 'image', fileId); // main image
->>>>>>> 6c7da47fb8c839a8e184ba2021d5842d4a61ea55
+		var soundPath = path.join(uploadDir, 'sound', fileId + '.png'); // for sound file
+
 
 	    var baseUrl = path.join(fileId.substr(0,2) + '/' + fileId.substr(2,2)); // uploads/xx/yy/[tmp/thumb/image]/[hashkey].png
 
@@ -381,7 +377,6 @@ Entry.plugin = (function () {
 				});
 			});
 		});
-<<<<<<< HEAD
 	}
 	
 	//사운드 파일 저장
@@ -414,7 +409,6 @@ Entry.plugin = (function () {
 				
 		});
 	}
-=======
 	};
 
 	that.getResizeImageFromBase64 = function (image, canvas, max_size) {
@@ -498,7 +492,6 @@ Entry.plugin = (function () {
 
 		});
 	};
->>>>>>> 6c7da47fb8c839a8e184ba2021d5842d4a61ea55
 
 	return that;
 })();
