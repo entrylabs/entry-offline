@@ -233,23 +233,23 @@ Entry.plugin = (function () {
 					throw err;
 				}
 
-				var fstream_obj = fstream.Reader({ 'path': 'temp/', 'type': 'Directory' });
+				var fs_reader = fstream.Reader({ 'path': 'temp/', 'type': 'Directory' });
 
-				var w = fstream.Writer({ 'path': path, 'type': 'File' });
+				var fs_writer = fstream.Writer({ 'path': path, 'type': 'File' });
 
-				w.on('entry', function () {
+				fs_writer.on('entry', function () {
 					// console.log('entry');
 				});
-				w.on('end', function () {
+				fs_writer.on('end', function () {
 					
 					if($.isFunction(cb)){
 						cb();
 					}
 				});
 
-				fstream_obj.pipe(tar.Pack()) 
+				fs_reader.pipe(tar.Pack()) 
 					.pipe(zlib.Gzip())
-					.pipe(w)
+					.pipe(fs_writer)
 
 			});
 		});		
@@ -259,13 +259,13 @@ Entry.plugin = (function () {
 	that.loadProject = function(path, cb, enc) {
 		deleteFolderRecursive('temp/');
 
-		var fstream_obj = fstream.Reader({ 'path': path, 'type': 'File' });
-		var w = fstream.Writer({ 'path': '.', 'type': 'Directory' });
+		var fs_reader = fstream.Reader({ 'path': path, 'type': 'File' });
+		var fs_writer = fstream.Writer({ 'path': '.', 'type': 'Directory' });
 
-		w.on('entry', function () {
+		fs_writer.on('entry', function () {
 			// console.log('entry');
 		});
-		w.on('end', function () {
+		fs_writer.on('end', function () {
 			fs.readFile('./temp/project.json', enc || 'utf8', function (err, data) {
 				if(err) {
 					throw err;
@@ -277,9 +277,9 @@ Entry.plugin = (function () {
 			});
 		});
 
-		fstream_obj.pipe(zlib.Gunzip())
+		fs_reader.pipe(zlib.Gunzip())
 			.pipe(tar.Parse())
-			.pipe(w);
+			.pipe(fs_writer);
 	}
 
 	that.initProjectFolder = function (cb) {

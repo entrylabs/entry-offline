@@ -52,6 +52,20 @@
                 </li>
             </ul>
         </div>
+        <div class="btn-group" dropdown is-open="false">
+            <a class="btn dropdown-toggle" data-toggle="dropdown">
+                <img src="./images/block_help.png" />
+                <span class="drop"><b class="caret"></b></span>
+            </a>
+            <ul class="dropdown-menu" role="menu">
+                <li>
+                    <a href ng-click="blockHelperOn()">{{'Workspace.blocks_reference' | text}}</a>
+                </li>
+                <li>
+                    <a href='#'>{{'Workspace.hardware_guide' | text}}</a>
+                </li>
+            </ul>
+        </div>
         <div class="btn-group btn_undo_workspace">
             <button type="button" class="btn" onclick="Entry.dispatchEvent('undo')">
                 <img src="/images/top_icon_left_b_nor.png">
