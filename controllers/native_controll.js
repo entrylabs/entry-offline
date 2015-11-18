@@ -4,7 +4,6 @@ var fs = require('fs');
 var sizeOf = require('image-size');
 var path = require('path');
 var Q = require('q');
-var gm = require('gm');
 var gui = require('nw.gui');
 var isOsx = false;
 var fstream = require('fstream');
