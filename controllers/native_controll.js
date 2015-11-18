@@ -196,8 +196,8 @@ Entry.plugin = (function () {
 	        fs.mkdirSync(path.join(uploadDir, 'image'));
 
 	    //Path of upload folder where you want to upload fies/
-	    var thumbPath = path.join(uploadDir, 'thumb', fileId + '.png'); // thumbnail
-	    var imagePath = path.join(uploadDir, 'image', fileId + '.png'); // main image
+	    var thumbPath = path.join(uploadDir, 'thumb', fileId); // thumbnail
+	    var imagePath = path.join(uploadDir, 'image', fileId); // main image
 
 	    var baseUrl = path.join(fileId.substr(0,2) + '/' + fileId.substr(2,2)); // uploads/xx/yy/[tmp/thumb/image]/[hashkey].png
 
@@ -222,6 +222,11 @@ Entry.plugin = (function () {
 		    });
 		    fs.rmdirSync(path);
 		}
+	};
+
+	var createFileId = function() {
+		var randomStr = (Math.random().toString(16)+"000000000").substr(2,8);
+	    return require('crypto').createHash('md5').update(randomStr).digest("hex");
 	};
 
 	// 프로젝트 저장 
@@ -340,16 +345,12 @@ Entry.plugin = (function () {
 
 	//임시 이미지 저장
 	that.saveTempImageFile = function (data, cb) {
-	    var randomStr = (Math.random().toString(16)+"000000000").substr(2,8);
-	    var fileId = require('crypto').createHash('md5').update(randomStr).digest("hex");
-
-		var image = new Buffer(data, 'base64');
+	    var fileId = createFileId();
 		var dest = getUploadPath(fileId);
-
 		that.mkdir(dest.uploadDir + '/image', function () {
-			fs.writeFile(dest.imagePath, data.org, { encoding: 'base64' }, function (err) {
+			fs.writeFile(dest.imagePath + '.png', data.org, { encoding: 'base64' }, function (err) {
 				that.mkdir(dest.uploadDir + '/thumb', function () {
-					fs.writeFile(dest.thumbPath, data.thumb, { encoding: 'base64' }, function (err) {
+					fs.writeFile(dest.thumbPath + '.png', data.thumb, { encoding: 'base64' }, function (err) {
 						if(err) {
 							throw err;
 						}
@@ -370,7 +371,89 @@ Entry.plugin = (function () {
 				});
 			});
 		});
-	}
+	};
+
+	that.getResizeImageFromBase64 = function (image, canvas, max_size) {
+        var tempW = image.width;
+        var tempH = image.height;
+        if (tempW > tempH) {
+            if (tempW > max_size) {
+               tempH *= max_size / tempW;
+               tempW = max_size;
+            }
+        } else {
+            if (tempH > max_size) {
+               tempW *= max_size / tempH;
+               tempH = max_size;
+            }
+        }
+        
+        canvas.width = tempW;
+        canvas.height = tempH;
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(image, 0, 0, tempW, tempH);
+        
+        return canvas.toDataURL().split(',')[1];
+    }
+
+	that.uploadTempImageFile = function (images, cb) {
+		var images_cnt = images.length;
+		var run_cnt = 0;
+		var pictures = [];
+		images.forEach(function (url, index) {
+			var fileId = createFileId();
+			var dest = getUploadPath(fileId);
+			var url_split = url.split('/');
+			var extension = '.' + url_split[url_split.length-1].split('.')[1];
+			var file_name = url_split[url_split.length-1].split('.')[0];
+			var imagePath = dest.imagePath + extension;
+			var fs_reader = fs.createReadStream(url);
+			var fs_writer = fs.createWriteStream(imagePath);
+			
+			that.mkdir(dest.uploadDir + '/image', function () {
+				fs.readFile(url, function (err, stream) {
+					fs.writeFile(imagePath, stream, function (err) {
+						if(err) {
+							throw err;
+						}
+						var image = new Image();
+						image.src = imagePath;
+						image.onload = function () {
+							var canvas = document.createElement('canvas');
+			        		canvas.width = image.width;
+			        		canvas.height = image.height;
+					    	var ctx = canvas.getContext("2d");
+					    	ctx.drawImage(this, 0, 0, canvas.width, canvas.height);
+					    	var thumb = that.getResizeImageFromBase64(image, canvas, THUMB_SIZE);
+
+					    	fs.writeFile(dest.thumbPath + extension, thumb, { encoding: 'base64' }, function (err) {
+								if(err) {
+									throw err;
+								}
+
+								var dimensions = sizeOf(imagePath);
+								var picture = {
+									_id : Entry.generateHash(),
+									type : 'user',
+									name : file_name,
+									filename : fileId,
+									fileurl : imagePath,
+									dimension : dimensions
+								}
+
+								pictures.push(picture);
+
+								if($.isFunction(cb) && ++run_cnt === images_cnt) {
+									cb(pictures);
+								}
+							});
+						};
+					});
+				});
+			});
+
+		});
+	};
 
 	return that;
 })();
