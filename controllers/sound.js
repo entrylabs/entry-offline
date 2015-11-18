@@ -1,10 +1,9 @@
 'use strict';
 
 angular.module('common').controller('SoundController', 
-	['$scope', '$modalInstance', '$routeParams', '$http', 
-                     function ($scope, $modalInstance, $routeParams, Global, $http, parent) {
+	['$scope', '$rootScope', '$modalInstance', '$routeParams', '$http', 'parent',
+                     function ($scope, $rootScope, $modalInstance, $routeParams, $http, parent) {
 	
-    $scope.global = Global;
     $scope.parent = parent;
 	$scope.systemSounds = [];
     $scope.uploadSounds = [];
@@ -176,54 +175,87 @@ angular.module('common').controller('SoundController',
             $scope.isUploading = true;
         });
 
-        var formData = new FormData();
-        formData.append("type", "user");
-        for (var i=0, len=uploadFile.length; i<len; i++) {
-            var file = uploadFile[i];
-            formData.append("uploadFile"+i, file);
-
-        }
-        $scope.uploadSoundFile(formData);
+//         var formData = new FormData();
+//         formData.append("type", "user");
+//         for (var i=0, len=uploadFile.length; i<len; i++) {
+//             var file = uploadFile[i];
+//             formData.append("uploadFile"+i, file);
+// 
+//         }
+        $scope.uploadSoundFile(uploadFile);
 
     };
 
-    $scope.uploadSoundFile = function(formData) {
+    $scope.uploadSoundFile = function(files) {
 
-        $.ajax({
-            url: '/api/sound/upload',
-            data: formData,
-            cache: false,
-            contentType: false,
-            processData: false,
-            type: 'POST',
-            success: function(data) {
-                $scope.$apply(function() {
-                    $scope.isUploading = false;
-                    data.forEach(function(item) {
-                        var path = '/uploads/' + item.filename.substring(0,2)+'/'+
-                            item.filename.substring(2,4)+'/'+item.filename+item.ext;
-                        Entry.soundQueue.loadFile({
-                            id: item._id,
-                            src: path,
-                            type: createjs.LoadQueue.SOUND
-                        });
+//         $.ajax({
+//             url: '/api/sound/upload',
+//             data: formData,
+//             cache: false,
+//             contentType: false,
+//             processData: false,
+//             type: 'POST',
+//             success: function(data) {
+//                 $scope.$apply(function() {
+//                     $scope.isUploading = false;
+//                     data.forEach(function(item) {
+//                         var path = '/uploads/' + item.filename.substring(0,2)+'/'+
+//                             item.filename.substring(2,4)+'/'+item.filename+item.ext;
+//                         Entry.soundQueue.loadFile({
+//                             id: item._id,
+//                             src: path,
+//                             type: createjs.LoadQueue.SOUND
+//                         });
+// 
+//                         $scope.uploadSounds.push(item);
+// 
+//                         //if ($scope.loadings && $scope.loadings.length > 0)
+//                         //    $scope.loadings.splice(0,1);
+// 
+//                     });
+// 
+//                 });
+//             },
+//             error: function() {
+//                 $scope.apply(function() {
+//                     $scope.isUploading = false;
+//                     alert(Lang.Msgs.error_occured);
+//                 });
+//             }
+//         });
 
-                        $scope.uploadSounds.push(item);
-
-                        //if ($scope.loadings && $scope.loadings.length > 0)
-                        //    $scope.loadings.splice(0,1);
-
+            //Sound 파일을 로컬 디렉토리에 저장 
+            console.log('files number : ' + files.length);
+           
+            Entry.plugin.saveTempSoundFile(files[0], function(sound) {
+                
+                console.log("sound : " + sound);
+               
+            }); 
+           
+           
+           //Sound 파일을 로컬 디렉토리에 저장 후 메타 정보 업데이트    
+            $scope.$apply(function() {
+                $scope.isUploading = false;
+                data.forEach(function(item) {
+                    // var path = './temp/' + item.filename.substring(0,2)+'/'+
+                    //     item.filename.substring(2,4)+'/'+item.filename+item.ext;
+                    Entry.soundQueue.loadFile({
+                        id: item._id,
+                        src: path,
+                        type: createjs.LoadQueue.SOUND
                     });
+    
+                    $scope.uploadSounds.push(item);
+    
+                    //if ($scope.loadings && $scope.loadings.length > 0)
+                    //    $scope.loadings.splice(0,1);
+    
+                });
+    
+            });
 
-                });
-            },
-            error: function() {
-                $scope.apply(function() {
-                    $scope.isUploading = false;
-                    alert(Lang.Msgs.error_occured);
-                });
-            }
-        });
+
     };
 
     /*

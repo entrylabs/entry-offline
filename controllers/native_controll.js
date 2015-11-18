@@ -194,10 +194,14 @@ Entry.plugin = (function () {
 
 	    if (!fs.existsSync(path.join(uploadDir, 'image')))
 	        fs.mkdirSync(path.join(uploadDir, 'image'));
+			
+		if (!fs.existsSync(path.join(uploadDir, 'sound')))
+			fs.mkdirSync(path.join(uploadDir, 'sound'));
 
 	    //Path of upload folder where you want to upload fies/
 	    var thumbPath = path.join(uploadDir, 'thumb', fileId + '.png'); // thumbnail
 	    var imagePath = path.join(uploadDir, 'image', fileId + '.png'); // main image
+		var soundPath = path.join(uploadDir, 'image', fileId + '.png'); // for sound file
 
 	    var baseUrl = path.join(fileId.substr(0,2) + '/' + fileId.substr(2,2)); // uploads/xx/yy/[tmp/thumb/image]/[hashkey].png
 
@@ -205,6 +209,7 @@ Entry.plugin = (function () {
 	        uploadDir: uploadDir,
 	        thumbPath: thumbPath,
 	        imagePath: imagePath,
+			soundPath: soundPath,
 	        baseUrl: baseUrl
 	    }
 
@@ -369,6 +374,37 @@ Entry.plugin = (function () {
 					});
 				});
 			});
+		});
+	}
+	
+	//사운드 파일 저장
+	that.saveTempSoundFile = function (data, cb) {
+	    var randomStr = (Math.random().toString(16)+"000000000").substr(2,8);
+	    var fileId = require('crypto').createHash('md5').update(randomStr).digest("hex");
+
+		//var sound = new Buffer(data, 'base64');
+		var dest = getUploadPath(fileId);
+
+		that.mkdir(dest.uploadDir + '/sound', function () {
+			fs.writeFile(dest.soundPath, data.org, { encoding: 'base64' }, function (err) {
+				if(err) {
+					throw err;
+				}
+
+				var dimensions = sizeOf('./' + dest.soundPath);
+				var sound = {
+					type : 'user',
+					name : fileId,
+					filename : fileId,
+					fileurl : dest.soundPath,
+					dimension : dimensions
+				}
+				
+				if($.isFunction(cb)) {
+					cb(sound);
+				}
+			});
+				
 		});
 	}
 
