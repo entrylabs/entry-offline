@@ -1,8 +1,8 @@
 <div class="row">
     <div class="wrap">
         <div class="textProperties">
-            <span class="dropdown fontDropdown" on-toggle="toggle(open)">
-                <a href class="dropdown-toggle">
+            <span class="dropdown fontDropdown">
+                <a href class="dropdown-toggle" data-toggle="dropdown">
                     {{fontData.font.name}} <span class="down_arrow"></span>
                 </a>
                 <ul class="dropdown-menu fontDropdownList">
@@ -19,8 +19,8 @@
                 <a href ng-click="toggleFontOption('underline')"><img ng-src="{{getFontOption('underline')}}"></a>
                 <a href ng-click="toggleFontOption('italic')"><img ng-src="{{getFontOption('italic')}}"></a>
                 <a href ng-click="toggleFontOption('strike')"><img ng-src="{{getFontOption('strike')}}"></a>
-                <a href ng-click="toggleColorChooser('foreground')"><img ng-src="/img/assets/text_button_color_true.png"></a>
-                <a href ng-click="toggleColorChooser('background')"><img ng-src="/img/assets/text_button_background_true.png"></a>
+                <a href ng-click="toggleColorChooser('foreground')"><img ng-src="/images/text_button_color_true.png"></a>
+                <a href ng-click="toggleColorChooser('background')"><img ng-src="/images/text_button_background_true.png"></a>
             </div>
             <div class="fgColorDiv" ng-style="fgColor"></div>
             <div class="bgColorDiv" ng-style="bgColor"></div>
@@ -28,8 +28,8 @@
         <div class="linebreakWrapper">
             <hr class="linebreakHorizontal"/>
             <div class="linebreakButtons">
-                <img ng-click="setLinebreak(false)" ng-src="/img/assets/text-linebreak-off-{{!linebreak}}.png">
-                <img ng-click="setLinebreak(true)" ng-src="/img/assets/text-linebreak-on-{{linebreak}}.png">
+                <img ng-click="setLinebreak(false)" ng-src="/images/text-linebreak-off-{{!linebreak}}.png">
+                <img ng-click="setLinebreak(true)" ng-src="/images/text-linebreak-on-{{linebreak}}.png">
             </div>
             <div class="linebreakDescription" ng-show="linebreak">
                 <p>글상자의 크기가 글자가 쓰일 수 있는 영역을 결정합니다.</p>

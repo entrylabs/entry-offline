@@ -223,6 +223,7 @@ angular.module('workspace').controller("WorkspaceController",
 	            if (selectedItems.target === 'new') {
 	                selectedItems.data = [];
 	                selectedItems.data.push({
+	                	fileurl : './bower_components/entryjs/images/_1x1.png',
 	                    dimension: {
 	                        height: 1,
 	                        width: 1
