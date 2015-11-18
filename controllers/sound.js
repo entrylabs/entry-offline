@@ -1,4 +1,5 @@
 'use strict';
+var fs = require('fs');
 
 angular.module('common').controller('SoundController', 
 	['$scope', '$rootScope', '$modalInstance', '$routeParams', '$http', 'parent',
@@ -21,15 +22,19 @@ angular.module('common').controller('SoundController',
     $scope.searchWord = '';
     var data;
     
-    $scope.init = function() {
-        var soundMapFile = 'resource_map/' + 'sounds.json'; 
-        
+    var readSoundMeta = function(soundMapFile) {
         if (fs.existsSync(soundMapFile)) {
             var soundMapData = fs.readFileSync(soundMapFile, "utf8");
         }  
-        //console.log(soundMapData);
+        //console.log("sound meta : " + soundMapData);
         
-        data = JSON.parse(soundMapData); 
+        data = JSON.parse(soundMapData);
+    } 
+        
+    $scope.init = function() {
+        var soundMapFile = 'resource_map/' + 'sounds.json'; 
+        
+        readSoundMeta(soundMapFile);
         
         $routeParams.type = 'default';
         $routeParams.main = '사람';
@@ -144,6 +149,7 @@ angular.module('common').controller('SoundController',
 
     $scope.upload = function() {
         var uploadFile = document.getElementById("uploadFile").files;
+        console.log("upload file : " + uploadFile);
 
         if (!uploadFile) {
             alert('파일은 필수입력 항목입니다.');
@@ -169,6 +175,7 @@ angular.module('common').controller('SoundController',
                 alert('10MB 이하만 업로드가 가능합니다.');
                 return false;
             }
+            
         }
 
         $scope.$apply(function() {
@@ -225,37 +232,37 @@ angular.module('common').controller('SoundController',
 //         });
 
             //Sound 파일을 로컬 디렉토리에 저장 
-            console.log('files number : ' + files.length);
+            console.log('files number : ' + JSON.stringify(files));
            
-            Entry.plugin.saveTempSoundFile(files[0], function(sound) {
+            Entry.plugin.uploadTempSoundFile(files, function(soundList) {
                 
-                console.log("sound : " + sound);
+                console.log("sound : " + JSON.stringify(soundList));
+                
+                //Sound 파일을 로컬 디렉토리에 저장 후 메타 정보 업데이트    
+                $scope.$apply(function() {
+                    soundList.forEach(function(item) {
+                        console.log("item check : " + JSON.stringify(item));
+                        var path = '/temp/' + item.filename.substring(0,2)+'/'+
+                            item.filename.substring(2,4)+'/'+'sound'+'/'+item.filename+'.'+item.ext;
+                        
+                                                
+                        Entry.soundQueue.loadFile({
+                            id: item._id,
+                            src: path,
+                            type: createjs.LoadQueue.SOUND
+                        });
+        
+                        $scope.uploadSounds.push(item);
+        
+                        //if ($scope.loadings && $scope.loadings.length > 0)
+                        //    $scope.loadings.splice(0,1);
+        
+                    });
+                    $scope.isUploading = false;
+        
+                });
                
             }); 
-           
-           
-           //Sound 파일을 로컬 디렉토리에 저장 후 메타 정보 업데이트    
-            $scope.$apply(function() {
-                $scope.isUploading = false;
-                data.forEach(function(item) {
-                    // var path = './temp/' + item.filename.substring(0,2)+'/'+
-                    //     item.filename.substring(2,4)+'/'+item.filename+item.ext;
-                    Entry.soundQueue.loadFile({
-                        id: item._id,
-                        src: path,
-                        type: createjs.LoadQueue.SOUND
-                    });
-    
-                    $scope.uploadSounds.push(item);
-    
-                    //if ($scope.loadings && $scope.loadings.length > 0)
-                    //    $scope.loadings.splice(0,1);
-    
-                });
-    
-            });
-
-
     };
 
     /*
@@ -352,7 +359,7 @@ angular.module('common').controller('SoundController',
     };
 
     $scope.selectUpload = function(sound) {
-        var path = '/uploads/' + sound.filename.substring(0,2)+'/'+sound.filename.substring(2,4)+'/'+sound.filename+sound.ext;
+        var path = '/temp/' + sound.filename.substring(0,2)+'/'+sound.filename.substring(2,4)+'/'+sound.filename+'.'+sound.ext;
 
         var selected = true;
         for (var i in $scope.selectedUpload) {

@@ -10,6 +10,7 @@ var isOsx = false;
 var fstream = require('fstream');
 var tar = require('tar');
 var zlib = require('zlib');
+var probe = require('node-ffprobe');
 
 // Create menu
 var menu = new gui.Menu({
@@ -177,7 +178,13 @@ Entry.plugin = (function () {
 	var TARGET_SIZE = 960;
 	var THUMB_SIZE = 96;
 
-	var getUploadPath = function(fileId) {
+	var getUploadPath = function(fileId, option) {
+		
+		console.log('file id : ' + fileId);
+		if(option === undefined) {
+			option = 'image';
+			console.log("option : " + option);
+		} 
 
 	    // prepare upload directory
 	    var baseDir = './temp';
@@ -193,16 +200,18 @@ Entry.plugin = (function () {
 	        fs.mkdirSync(path.join(uploadDir, 'thumb'));
 
 	    if (!fs.existsSync(path.join(uploadDir, 'image')))
-	        fs.mkdirSync(path.join(uploadDir, 'image'));
-			
-		if (!fs.existsSync(path.join(uploadDir, 'sound')))
-			fs.mkdirSync(path.join(uploadDir, 'sound'));
+	        fs.mkdirSync(path.join(uploadDir, 'image'));	
 
 	    //Path of upload folder where you want to upload fies/
-	    var thumbPath = path.join(uploadDir, 'thumb', fileId + '.png'); // thumbnail
-	    var imagePath = path.join(uploadDir, 'image', fileId + '.png'); // main image
-		var soundPath = path.join(uploadDir, 'sound', fileId + '.png'); // for sound file
-
+	    if(option === 'image') {
+			var thumbPath = path.join(uploadDir, 'thumb', fileId + '.png'); // thumbnail
+	    	var imagePath = path.join(uploadDir, 'image', fileId + '.png'); // main image
+		} else if(option === 'sound') {
+			if (!fs.existsSync(path.join(uploadDir, 'sound')))
+				fs.mkdirSync(path.join(uploadDir, 'sound'));
+			
+			var soundPath = path.join(uploadDir, 'sound'); // for sound file
+		}
 
 	    var baseUrl = path.join(fileId.substr(0,2) + '/' + fileId.substr(2,2)); // uploads/xx/yy/[tmp/thumb/image]/[hashkey].png
 
@@ -378,38 +387,6 @@ Entry.plugin = (function () {
 			});
 		});
 	}
-	
-	//사운드 파일 저장
-	that.saveTempSoundFile = function (data, cb) {
-	    var randomStr = (Math.random().toString(16)+"000000000").substr(2,8);
-	    var fileId = require('crypto').createHash('md5').update(randomStr).digest("hex");
-
-		//var sound = new Buffer(data, 'base64');
-		var dest = getUploadPath(fileId);
-
-		that.mkdir(dest.uploadDir + '/sound', function () {
-			fs.writeFile(dest.soundPath, data.org, { encoding: 'base64' }, function (err) {
-				if(err) {
-					throw err;
-				}
-
-				var dimensions = sizeOf('./' + dest.soundPath);
-				var sound = {
-					type : 'user',
-					name : fileId,
-					filename : fileId,
-					fileurl : dest.soundPath,
-					dimension : dimensions
-				}
-				
-				if($.isFunction(cb)) {
-					cb(sound);
-				}
-			});
-				
-		});
-	}
-	};
 
 	that.getResizeImageFromBase64 = function (image, canvas, max_size) {
         var tempW = image.width;
@@ -492,6 +469,71 @@ Entry.plugin = (function () {
 
 		});
 	};
-
+	
+	//사운드 파일 로컬 업로드
+	that.uploadTempSoundFile = function (files, cb) {
+	    var sounds_cnt = files.length;
+		var run_cnt = 0;
+		var soundList = [];
+		console.log("file list : " + JSON.stringify(files));
+		for(var key in files) {
+			console.log("index : " + key);
+			if(key === 'length')
+				break;
+			console.log("file length : " + files.length);
+			if(files.hasOwnProperty(key)) {
+				var data = files[key];
+				var src = data.path;
+				var fileId = createFileId();
+				var dest = getUploadPath(fileId, 'sound');
+				var name = data.name;
+				
+				console.log("name : " + name);
+				var fileName = fileId;
+				var extension = name.split('.')[1];
+				var dirPath = dest.soundPath;
+				var soundPath = dirPath + '/' + fileName + "." + extension;
+				
+				console.log("dest sound path : " + dest.soundPath);
+				//var fs_reader = fs.createReadStream(url);
+				//var fs_writer = fs.createWriteStream(soundPath);
+				
+				that.mkdir(dest.uploadDir + '/sound', function () {
+					fs.readFile(src, function (err, stream) {
+						fs.writeFile(soundPath, stream, 
+						 'utf8', function (err) {
+							if(err) {
+								throw err;
+							}
+																										
+							var sound = {
+								_id : Entry.generateHash(),
+								type : 'user',
+								name : name.split('.')[0],
+								filename : fileName,
+								ext : extension,
+								path : soundPath,
+								fileurl : '/'+soundPath
+							}
+							
+							probe(soundPath, function(err, probeData) {
+   								var probeDuration = (probeData.streams[0].duration).toFixed(1).toString();
+								console.log("duration info inside : " +  probeDuration);
+								sound.duration = probeDuration;
+								
+							});	
+	
+							soundList.push(sound);
+	
+							if($.isFunction(cb) && ++run_cnt === sounds_cnt) {
+									cb(soundList);
+							}
+						});
+					});
+				});
+			}
+		}
+	}
+	
 	return that;
 })();

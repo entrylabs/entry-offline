@@ -264,7 +264,7 @@ angular.module('workspace').controller("WorkspaceController",
             modalInstance.result.then(function (selectedItems) {
                 selectedItems.data.forEach(function(item) {
                     item.id = Entry.generateHash();
-                    console.log("item : " + JSON.stringify(item));
+                    console.log("item duration ws: " + JSON.stringify(item.duration));
                     Entry.playground.addSound(item, true);
                 });
             }); 
