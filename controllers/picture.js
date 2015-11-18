@@ -17,7 +17,6 @@ angular.module('common').controller('PictureController',
 	    $scope.selectedUpload = [];
 	    $scope.currentIndex = 0;
 
-
     	$scope.pictureData = {};
     	$scope.orgPictureData = {};
 
@@ -376,6 +375,12 @@ angular.module('common').controller('PictureController',
 	    // 취소
 	    $scope.cancel = function () {
 	        $modalInstance.dismiss('cancel');
+	    };
+
+	    $scope.addNewPicture = function() {
+	        $modalInstance.close({
+	            target: 'new'
+	        });
 	    };
 
 	    $scope.loadMore = function() {

@@ -4,7 +4,6 @@ var fs = require('fs');
 var sizeOf = require('image-size');
 var path = require('path');
 var Q = require('q');
-var gm = require('gm');
 var gui = require('nw.gui');
 var isOsx = false;
 var fstream = require('fstream');
@@ -533,6 +532,22 @@ Entry.plugin = (function () {
 				});
 			}
 		}
+	}
+	
+
+	that.getRealPath = function (path, cb) {
+		var cache = {};
+		fs.realpath(path, function (err, resolvedPath) {
+			if (err) throw err;
+			console.log(resolvedPath);
+			if($.isFunction(cb)) {
+			  	cb(resolvedPath);
+			}
+		});
+	}
+
+	that.testPath = function() {
+		that.getRealPath('./');
 	}
 	
 	return that;

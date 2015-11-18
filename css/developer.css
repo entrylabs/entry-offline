@@ -23,3 +23,10 @@ body {
 .hide_contents {
 	display: none !important;
 }
+
+.entryTextFontSelecter {
+    display: inline-block;
+    width: 96px;
+    height: 32px;
+    float: left;
+}
