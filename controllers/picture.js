@@ -19,6 +19,7 @@ angular.module('common').controller('PictureController',
 
 
     	$scope.pictureData = {};
+    	$scope.orgPictureData = {};
 
 		var calcInnerHeight = function() {
 	        var height = $(".tab-right").height();
@@ -37,6 +38,7 @@ angular.module('common').controller('PictureController',
 
 
 	    var makePictureData = function (items) {
+	    	$scope.orgPictureData = items;
 	        $scope.pictureData = {};
 	        items.forEach(function (item, index) {
 
@@ -54,7 +56,6 @@ angular.module('common').controller('PictureController',
 				$scope.pictureData[category].push(item);
 	        });
 
-	        console.log($scope.pictureData );
 	    }
 
 	    var getPictureData = function (main, sub) {
@@ -112,6 +113,17 @@ angular.module('common').controller('PictureController',
 	        }
 	    };
 
+	    var filterPictureData = function (keyword, cb) {
+	    	var filtered_data = $scope.orgPictureData.filter(function (item) {
+	    		return Object.keys(keyword).every(function (key) {
+	    			return item[key].indexOf(keyword[key]) >= 0;
+	    		});
+	    	});
+
+	    	if($.isFunction(cb)) {
+	    		cb(filtered_data);
+	    	}
+	    }
 
 	    $scope.search = function() {
 	        calcInnerHeight();
@@ -121,27 +133,22 @@ angular.module('common').controller('PictureController',
 	            return false;
 	        }
 
-	        var url = '/api/picture/search/'+$scope.searchWord;
-	        $http({method: 'GET', url: url}).
-	            success(function(data,status) {
-	                $scope.systemPictures = [];
-	                for (var i in data) {
-	                    var picture = data[i];
-	                    picture.selected = 'boxOuter';
-	                    for (var j in $scope.selectedPictures) {
-	                        if ($scope.selectedPictures[j]._id === picture._id) {
-	                            picture.selected = 'boxOuter selected';
-	                            break;
-	                        }
-	                    }
-	                    $scope.systemPictures.push(picture);
-	                }
-	                $scope.collapse(0);
-	                $scope.main_menu = '';
-	            }).
-	            error(function(data, status) {
-	                $scope.status = status;
-	            });
+	        filterPictureData({name:$scope.searchWord}, function (filtered_data) {
+	        	$scope.systemPictures = [];
+                for (var i in filtered_data) {
+                    var picture = filtered_data[i];
+                    picture.selected = 'boxOuter';
+                    for (var j in $scope.selectedPictures) {
+                        if ($scope.selectedPictures[j]._id === picture._id) {
+                            picture.selected = 'boxOuter selected';
+                            break;
+                        }
+                    }
+                    $scope.systemPictures.push(picture);
+                }
+                $scope.collapse(0);
+                $scope.main_menu = '';
+	        });
 	    };
 
 
@@ -177,27 +184,19 @@ angular.module('common').controller('PictureController',
 	            $scope.isUploading = true;
 	        });
 
-	        var formData = new FormData();
-	        formData.append("type", "user");
-	        for (var i=0, len=uploadFile.length; i<len; i++) {
-	            var file = uploadFile[i];
-	            formData.append("uploadFile"+i, file);
+	        var images = [];
+	        for(var i = 0; i < uploadFile.length; i++) {
+	        	images.push(uploadFile[i].path);
+
 	        }
 
-	        $scope.uploadPictureFile(formData);
+	        $scope.uploadPictureFile(images);
 	    };
 
-	    $scope.uploadPictureFile = function(formData) {
-	        //console.log('picture.js:upload $.ajax called');
-	        $.ajax({
-	            url: '/api/picture/upload',
-	            data: formData,
-	            cache: false,
-	            contentType: false,
-	            processData: false,
-	            type: 'POST',
-	            success: function(data){
-	                if (data && data.length > 0) {
+	    $scope.uploadPictureFile = function(images) {
+	    	try{
+		    	Entry.plugin.uploadTempImageFile(images, function (data) {
+		    		if (data && data.length > 0) {
 	                    $scope.$apply(function() {
 	                        $scope.isUploading = false;
 	                        if (!$scope.uploadPictures)
@@ -206,17 +205,15 @@ angular.module('common').controller('PictureController',
 	                        data.forEach(function(item) {
 	                            $scope.uploadPictures.push(item);
 	                        });
-
 	                    });
 	                }
-	            },
-	            error: function() {
-	                $scope.apply(function() {
-	                    $scope.isUploading = false;
-	                    alert(Lang.Msgs.error_occured);
-	                });
-	            }
-	        });
+		    	});	    		
+	    	} catch(e) {
+	    		 $scope.$apply(function() {
+                    $scope.isUploading = false;
+                    alert(Lang.Msgs.error_occured);
+                });
+	    	}
 	    };
 
 

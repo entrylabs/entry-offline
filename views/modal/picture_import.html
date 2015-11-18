@@ -211,24 +211,7 @@
                     </div>
                 </tab>
             </tabset>
-            <!--
-            <div class="modal_choosen" ng-show="currentTab == 'system'">
-                <div class='modal_selected_arrow modal_selected_left_arrow' ng-click='moveContainer("right")'></div>
-                <div class='modal_selected_arrow modal_selected_right_arrow' ng-click='moveContainer("left")'></div>
-                <div class="modal_selected_container">
-                    <div class="modal_selected_container_moving">
-                            <div class="box" data-ng-repeat="picture in selectedPictures">
-                                <div id="{{picture._id}}" class="{{picture.selected}}" data-ng-click="selectSystem(picture)" data-ng-dblclick="applySystem(picture)">
-                                    <div class="boxInner" style="background-image: url('{{picture|makeThumbnail}}');">
-                                    </div>
-                                </div>
-                                <div class="titleBox">{{picture.name}}</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            -->
+          
             <div class="modal-footer">
                 <button type="button" class="btn btn_confirm_modal" data-ng-click="ok()">적용하기 ({{currentSelected().length}})</button>
                 <button type="button" class="btn btn_cancel_modal" data-ng-click="cancel()">취소</button>

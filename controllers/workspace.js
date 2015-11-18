@@ -10,6 +10,11 @@ angular.module('workspace').controller("WorkspaceController",
         var storage = (typeof window.localStorage === 'undefined') ? undefined : window.localStorage;
 
 		$scope.initWorkspace = function () {
+			if(!sessionStorage.getItem('isFirst')) {
+				Entry.plugin.initProjectFolder(function() {
+					sessionStorage.setItem('isFirst', true);
+				});
+			}
 			$scope.isSavedPath = storage.getItem('defaultPath') || '';
 			var workspace = document.getElementById("workspace");
 			var initOptions = {
@@ -75,7 +80,7 @@ angular.module('workspace').controller("WorkspaceController",
 		$scope.saveWorkspace = function() {
 			if($scope.isSaved) {
 				$scope.project.saveProject($scope.isSavedPath, function () {
-	            	Entry.toast.success(Lang.Workspace.saved, $scope.project_name + ' ' + Lang.Workspace.saved_msg)
+	            	Entry.toast.success(Lang.Workspace.saved, $scope.project.name + ' ' + Lang.Workspace.saved_msg)
 	            });
 
 	            // Entry.stage.handle.setVisible(false);
@@ -318,30 +323,6 @@ angular.module('workspace').controller("WorkspaceController",
 			return defer;
 		}
 
-        var getResizeImageFromBase64 = function (image, canvas, max_size) {
-	        var tempW = image.width;
-	        var tempH = image.height;
-	        if (tempW > tempH) {
-	            if (tempW > max_size) {
-	               tempH *= max_size / tempW;
-	               tempW = max_size;
-	            }
-	        } else {
-	            if (tempH > max_size) {
-	               tempW *= max_size / tempH;
-	               tempH = max_size;
-	            }
-	        }
-	        
-	        canvas.width = tempW;
-	        canvas.height = tempH;
-	        var ctx = canvas.getContext("2d");
-	        ctx.drawImage(image, 0, 0, tempW, tempH);
-	        
-	        return canvas.toDataURL().split(',')[1];
-        }
-
-
 		var TARGET_SIZE = 960;
 		var THUMB_SIZE = 96;
 
@@ -360,9 +341,9 @@ angular.module('workspace').controller("WorkspaceController",
 			    	// 이미지 TRIM
 			    	var image_data_url = {};
 			    	//일반 이미지
-					image_data_url.org = getResizeImageFromBase64(tempImg, canvas, TARGET_SIZE);
+					image_data_url.org = Entry.plugin.getResizeImageFromBase64(tempImg, canvas, TARGET_SIZE);
 			    	//섬네일 이미지
-		            image_data_url.thumb = getResizeImageFromBase64(tempImg, canvas, THUMB_SIZE);
+		            image_data_url.thumb = Entry.plugin.getResizeImageFromBase64(tempImg, canvas, THUMB_SIZE);
 
 	            	Entry.plugin.saveTempImageFile(image_data_url, function (picture) {
 				    	if (file.mode === 'new') {

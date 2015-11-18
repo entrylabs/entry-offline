@@ -32,7 +32,7 @@
                         <div class="box" data-ng-repeat="picture in selectedUpload" ng-if='currentTab == "upload"'>
                             <div id="{{picture._id}}" class="boxOuter boxOuterChoosen">
                                 <img class="modal_choosen_cancel" src="/images/modal_choosen_cancel.png" ng-click='selectSystem(picture)'/>
-                                <div class="boxInner" style="background-image: url('{{picture|makeThumbnail}}');"></div>
+                                <div class="boxInner" style="background-image: url('{{picture|makeUploadThumbnail}}');"></div>
                             </div>
                             <div class="titleBox">{{picture.name}}</div>
                         </div>
