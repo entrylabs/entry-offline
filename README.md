@@ -1,6 +1,6 @@
 ## Entry-Offline
  This Program is Entry Offline version for Windows OS and MAC OS Environment
 
-## How to Build
+## 1.How to Build
 
-## How to Run
+## 2.How to Run
