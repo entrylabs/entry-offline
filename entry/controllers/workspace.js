@@ -3,8 +3,6 @@
 angular.module('workspace').controller("WorkspaceController", 
 	['$scope', '$rootScope', '$modal', 'myProject', function ($scope, $rootScope, $modal, myProject) {
 		$scope.saveFileName = '';
-		$scope.isSaved = false;
-		$scope.isSavedPath = '';
 		$scope.project = myProject;
 		var supported = !(typeof storage == 'undefined' || typeof window.JSON == 'undefined');
         var storage = (typeof window.localStorage === 'undefined') ? undefined : window.localStorage;
@@ -15,7 +13,7 @@ angular.module('workspace').controller("WorkspaceController",
 					sessionStorage.setItem('isFirst', true);
 				});
 			}
-			$scope.isSavedPath = storage.getItem('defaultPath') || '';
+			myProject.isSavedPath = storage.getItem('defaultPath') || '';
 			var workspace = document.getElementById("workspace");
 			var initOptions = {
 				type: 'workspace',
@@ -66,8 +64,8 @@ angular.module('workspace').controller("WorkspaceController",
 			var project_name = "";
 			if($.isPlainObject(project)) {
 				project_name = project.name;
-				$scope.isSaved = true;
-				$scope.isSavedPath = project.path;
+				myProject.isSaved = true;
+				myProject.isSavedPath = project.path;
 			} else {
 				var i = Math.floor(Math.random() * Lang.Workspace.PROJECTDEFAULTNAME.length);
                 project_name = Lang.Workspace.PROJECTDEFAULTNAME[i] + ' ' + Lang.Workspace.project;
@@ -78,32 +76,25 @@ angular.module('workspace').controller("WorkspaceController",
 
 		// 저장하기
 		$scope.saveWorkspace = function() {
-			if($scope.isSaved) {
-				$scope.project.saveProject($scope.isSavedPath, function () {
-	            	Entry.toast.success(Lang.Workspace.saved, $scope.project.name + ' ' + Lang.Workspace.saved_msg)
+			if(myProject.isSaved) {
+				$scope.project.saveProject(myProject.isSavedPath, function () {
+	            	Entry.toast.success(Lang.Workspace.saved, myProject.name + ' ' + Lang.Workspace.saved_msg)
 	            });
-
-	            // Entry.stage.handle.setVisible(false);
-	            // Entry.stage.update();
 
 	            var project = Entry.exportProject();
 
-	            // Entry.plugin.saveFile(, JSON.stringify(project), function () {
-	            // 	Entry.toast.success(Lang.Workspace.saved, $scope.project_name + ' ' + Lang.Workspace.saved_msg)
-	            // });
-
-	            // Entry.plugin.writeFile($scope.isSavedPath, JSON.stringify(project), function () {
-	            // 	Entry.toast.success(Lang.Workspace.saved, $scope.project_name + ' ' + Lang.Workspace.saved_msg)
-	            // });
-
 			} else {
-				$('#save_as_project').trigger('click');				
+				var default_path = storage.getItem('defaultPath') || '';
+
+            	$('#save_as_project').attr('nwworkingdir', default_path).trigger('click');		
 			}
         };
 
         // 새 이름으로 저장하기
 		$scope.saveAsWorkspace = function() {
-            $('#save_as_project').trigger('click');
+			var default_path = storage.getItem('defaultPath') || '';
+
+            $('#save_as_project').attr('nwworkingdir', default_path).trigger('click');
         };
 
         // 불러오기
@@ -373,7 +364,9 @@ angular.module('workspace').controller("WorkspaceController",
 
 
 	}]).service('myProject', function () {
-		this.name = "";
+		this.name = '';
+		this.isSaved = false;
+		this.isSavedPath = '';
 		this.saveProject = function (path, cb) {
 			var project_name = this.name;
 			//저장 수행
@@ -404,8 +397,8 @@ angular.module('workspace').controller("WorkspaceController",
 		        		storage.setItem('defaultPath', pathArr.join('/'));
 		        		
 		        		myProject.saveProject(path, function (project_name) {
-			            	$scope.isSaved = true;
-			            	$scope.isSavedPath = path;
+			            	myProject.isSaved = true;
+			            	myProject.isSavedPath = path;
 			            	Entry.toast.success(Lang.Workspace.saved, project_name + ' ' + Lang.Workspace.saved_msg)
 			            });
 
