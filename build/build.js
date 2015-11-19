@@ -2,7 +2,7 @@ var NwBuilder = require('nw-builder');
 var nw = new NwBuilder({
 	version: '0.12.3',
     files: '../entry/**', // use the glob format
-    platforms: ['osx64'],
+    platforms: ['osx64', 'win64'],
     winIco: '../entry/icon/app.png',
     macIcns: '../entry/icon/app.icns',
 });

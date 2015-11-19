@@ -9,7 +9,6 @@ var isOsx = false;
 var fstream = require('fstream');
 var tar = require('tar');
 var zlib = require('zlib');
-var probe = require('node-ffprobe');
 
 // Create menu
 var menu = new gui.Menu({
@@ -169,6 +168,21 @@ menu.append(new gui.MenuItem({
 gui.Window.get().menu = menu;
 
 
+var _real_path = '.';
+var _real_path_with_protocol = '';
+
+console.log = function () {};
+console.debug = function () {};
+console.warn = function () {};
+console.error = function () {};
+
+// {
+// 	var _app_path = process.execPath.split('.app')[0];
+// 	var _path_set = _app_path.split('/');
+// 	_path_set.pop();
+// 	_real_path = _path_set.join('/');
+// 	_real_path_with_protocol = 'file://' + _real_path;
+// }
 
 // plugin
 Entry.plugin = (function () {
@@ -186,7 +200,7 @@ Entry.plugin = (function () {
 		} 
 
 	    // prepare upload directory
-	    var baseDir = './temp';
+	    var baseDir = _real_path + '/temp';
 	    var uploadDir = path.join(baseDir, fileId.substr(0,2), fileId.substr(2,2));
 
 	    if (!fs.existsSync(path.join(baseDir, fileId.substr(0,2))))
@@ -203,8 +217,8 @@ Entry.plugin = (function () {
 
 	    //Path of upload folder where you want to upload fies/
 	    if(option === 'image') {
-			var thumbPath = path.join(uploadDir, 'thumb', fileId + '.png'); // thumbnail
-	    	var imagePath = path.join(uploadDir, 'image', fileId + '.png'); // main image
+			var thumbPath = path.join(uploadDir, 'thumb', fileId); // thumbnail
+	    	var imagePath = path.join(uploadDir, 'image', fileId); // main image
 		} else if(option === 'sound') {
 			if (!fs.existsSync(path.join(uploadDir, 'sound')))
 				fs.mkdirSync(path.join(uploadDir, 'sound'));
@@ -246,13 +260,13 @@ Entry.plugin = (function () {
 	// 프로젝트 저장 
 	that.saveProject = function(path, data, cb, enc) {
 		var string_data = JSON.stringify(data);
-		that.mkdir('./temp', function () {
-			fs.writeFile('./temp/project.json', string_data, enc || 'utf8', function (err) {
+		that.mkdir(_real_path + '/temp', function () {
+			fs.writeFile(_real_path + '/temp/project.json', string_data, enc || 'utf8', function (err) {
 				if(err) {
 					throw err;
 				}
 
-				var fs_reader = fstream.Reader({ 'path': 'temp/', 'type': 'Directory' });
+				var fs_reader = fstream.Reader({ 'path': _real_path + '/temp/', 'type': 'Directory' });
 
 				var fs_writer = fstream.Writer({ 'path': path, 'type': 'File' });
 
@@ -276,16 +290,16 @@ Entry.plugin = (function () {
 
 	// 프로젝트 불러오기
 	that.loadProject = function(path, cb, enc) {
-		deleteFolderRecursive('temp/');
+		deleteFolderRecursive(_real_path + '/temp/');
 
 		var fs_reader = fstream.Reader({ 'path': path, 'type': 'File' });
-		var fs_writer = fstream.Writer({ 'path': '.', 'type': 'Directory' });
+		var fs_writer = fstream.Writer({ 'path': _real_path, 'type': 'Directory' });
 
 		fs_writer.on('entry', function () {
 			// console.log('entry');
 		});
 		fs_writer.on('end', function () {
-			fs.readFile('./temp/project.json', enc || 'utf8', function (err, data) {
+			fs.readFile(_real_path + '/temp/project.json', enc || 'utf8', function (err, data) {
 				if(err) {
 					throw err;
 				}
@@ -302,8 +316,8 @@ Entry.plugin = (function () {
 	}
 
 	that.initProjectFolder = function (cb) {
-		deleteFolderRecursive('./temp/');
-		that.mkdir('./temp/', function () {
+		deleteFolderRecursive(_real_path + '/temp/');
+		that.mkdir(_real_path + '/temp/', function () {
 			if($.isFunction(cb)) {
 				cb();
 			};
@@ -374,7 +388,7 @@ Entry.plugin = (function () {
 							type : 'user',
 							name : fileId,
 							filename : fileId,
-							fileurl : dest.imagePath,
+							fileurl : encodeURI(dest.imagePath + '.png'),
 							dimension : dimensions
 						}
 						
@@ -451,7 +465,7 @@ Entry.plugin = (function () {
 									type : 'user',
 									name : file_name,
 									filename : fileId,
-									fileurl : imagePath,
+									fileurl : encodeURI(imagePath),
 									dimension : dimensions
 								}
 
@@ -499,34 +513,40 @@ Entry.plugin = (function () {
 				
 				that.mkdir(dest.uploadDir + '/sound', function () {
 					fs.readFile(src, function (err, stream) {
-						fs.writeFile(soundPath, stream, 
-						 'utf8', function (err) {
+						fs.writeFile(soundPath, stream, 'utf8', function (err) {
 							if(err) {
 								throw err;
 							}
-																										
-							var sound = {
-								_id : Entry.generateHash(),
-								type : 'user',
-								name : name.split('.')[0],
-								filename : fileName,
-								ext : extension,
-								path : soundPath,
-								fileurl : '/'+soundPath
-							}
-							
-							probe(soundPath, function(err, probeData) {
-   								var probeDuration = (probeData.streams[0].duration).toFixed(1).toString();
-								console.log("duration info inside : " +  probeDuration);
-								sound.duration = probeDuration;
+
+
+							var audio = new Audio();
+							audio.src = soundPath;
+							audio.addEventListener('canplaythrough', function() { 
+							   console.log(audio);
+								var sound = {
+									_id : Entry.generateHash(),
+									type : 'user',
+									name : name.split('.')[0],
+									filename : fileName,
+									ext : extension,
+									path : soundPath,
+									fileurl : soundPath,
+									duration : Math.round(audio.duration * 10) / 10
+								}
 								
-							});	
-	
-							soundList.push(sound);
-	
-							if($.isFunction(cb) && ++run_cnt === sounds_cnt) {
-									cb(soundList);
-							}
+								// probe(soundPath, function(err, probeData) {
+	   				// 				var probeDuration = (probeData.streams[0].duration).toFixed(1).toString();
+								// 	console.log("duration info inside : " +  probeDuration);
+								// 	sound.duration = probeDuration;
+									
+								// });	
+		
+								soundList.push(sound);
+		
+								if($.isFunction(cb) && ++run_cnt === sounds_cnt) {
+										cb(soundList);
+								}
+							}, false);
 						});
 					});
 				});

@@ -242,13 +242,13 @@ angular.module('common').controller('SoundController',
                 $scope.$apply(function() {
                     soundList.forEach(function(item) {
                         console.log("item check : " + JSON.stringify(item));
-                        var path = '/temp/' + item.filename.substring(0,2)+'/'+
-                            item.filename.substring(2,4)+'/'+'sound'+'/'+item.filename+'.'+item.ext;
+                        // var path = '/temp/' + item.filename.substring(0,2)+'/'+
+                        //     item.filename.substring(2,4)+'/'+'sound'+'/'+item.filename+'.'+item.ext;
                         
                                                 
                         Entry.soundQueue.loadFile({
                             id: item._id,
-                            src: path,
+                            src: item.path,
                             type: createjs.LoadQueue.SOUND
                         });
         
@@ -291,7 +291,7 @@ angular.module('common').controller('SoundController',
     $scope.currentIndex = 0;
     // 선택
     $scope.selectSystem = function(sound) {
-        var path = '/uploads/' + sound.filename.substring(0,2)+'/'+sound.filename.substring(2,4)+'/'+sound.filename+sound.ext;
+        // var path = '/uploads/' + sound.filename.substring(0,2)+'/'+sound.filename.substring(2,4)+'/'+sound.filename+sound.ext;
 
         var selected = true;
         for (var i in $scope.selectedSystem) {
@@ -359,7 +359,7 @@ angular.module('common').controller('SoundController',
     };
 
     $scope.selectUpload = function(sound) {
-        var path = '/temp/' + sound.filename.substring(0,2)+'/'+sound.filename.substring(2,4)+'/'+sound.filename+'.'+sound.ext;
+        // var path = '/temp/' + sound.filename.substring(0,2)+'/'+sound.filename.substring(2,4)+'/'+sound.filename+'.'+sound.ext;
 
         var selected = true;
         for (var i in $scope.selectedUpload) {
@@ -426,7 +426,6 @@ angular.module('common').controller('SoundController',
         if (!$scope.currentSelected()) {
             alert(Lang.Workspace.select_sprite);
         } else {
-            //console.log(JSON.stringify($scope.currentSelected()));
             $modalInstance.close({
                 target: $scope.currentTab,
                 data: $scope.currentSelected()
