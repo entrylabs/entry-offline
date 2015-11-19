@@ -1,9 +1,11 @@
 var NwBuilder = require('nw-builder');
 var nw = new NwBuilder({
+	appName: '엔트리',
+	appVersion: '0.1.0',
 	version: '0.12.3',
     files: '../entry/**', // use the glob format
     platforms: ['osx64', 'win64'],
-    winIco: '../entry/icon/app.png',
+    winIco: '../entry/icon/app.ico',
     macIcns: '../entry/icon/app.icns',
 });
 
