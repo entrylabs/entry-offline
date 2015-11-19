@@ -1,0 +1,32 @@
+* {
+	box-sizing : border-box;
+	margin : 0;
+}
+
+body {
+	font-family: 'Nanum Gothic';
+}
+
+.page-header {
+	margin : 0;
+	border : 0;
+}
+
+.wrapper {
+    position: absolute;
+    left: 0;
+    top: 45px;
+    right: 0;
+    bottom: 0;
+}
+
+.hide_contents {
+	display: none !important;
+}
+
+.entryTextFontSelecter {
+    display: inline-block;
+    width: 96px;
+    height: 32px;
+    float: left;
+}

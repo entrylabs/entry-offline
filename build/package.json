@@ -1,0 +1,7 @@
+{
+  "name": "entry-build",
+  "version": "0.0.1",
+  "dependencies": {
+    "nw-builder": "^2.0.2"
+  }
+}

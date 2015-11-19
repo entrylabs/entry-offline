@@ -1,0 +1,162 @@
+
+<div class="row">
+    <div class="col-md-3" style="position: fixed">
+        <div class="list-wrapper">
+            <div class="list-group">
+                <div class="list-group-item">
+                    <div data-ng-class='{"active":main_menu === "entrybot_friends"}' data-ng-click="collapse(1);findSprites('default','entrybot_friends')" class="list-group-item-heading">
+                        <a href data-ng-click="findSprites('default','entrybot_friends')">{{'Category.entrybot_friends'|text}}</a>
+                    </div>
+                    <div class="list-group-item-text" collapse="isCollapsed1">
+                        <ul>
+                            <a href data-ng-click="findSprites('default','entrybot_friends')"><li data-ng-class='{"active":main_menu === "entrybot_friends" && menu === ""}'>{{'Workspace.all'|text}}</li></a>
+                        </ul>
+                    </div>
+                </div>
+                <div class="list-group-item">
+                    <div data-ng-class='{"active":main_menu === "people"}' data-ng-click="collapse(2);findSprites('default','people')" class="list-group-item-heading">
+                        <a href data-ng-click="findSprites('default','people')">{{'Category.people'|text}}</a></div>
+                    <div class="list-group-item-text" collapse="isCollapsed2">
+                        <ul>
+                            <a href data-ng-click="findSprites('default','people')"><li data-ng-class='{"active":main_menu === "people" && menu === ""}'>{{'Workspace.all'|text}}</li></a>
+                        </ul>
+                    </div>
+                </div>
+                <div class="list-group-item">
+                    <div data-ng-class='{"active":main_menu === "animal"}' data-ng-click="collapse(3);findSprites('default','animal')" class="list-group-item-heading">
+                        <a href data-ng-click="findSprites('default','animal')">{{'Category.animal'|text}}</a>
+                    </div>
+                    <div class="list-group-item-text" collapse="isCollapsed3">
+                        <ul>
+                            <a href data-ng-click="findSprites('default','animal')"><li data-ng-class='{"active":main_menu === "animal" && menu === ""}'>{{'Workspace.all'|text}}</li></a>
+                            <a href data-ng-click="findSprites('default','animal','animal_flying')"><li data-ng-class='{"active":menu === "animal_flying"}'>{{'Category.animal_flying'|text}}</li></a>
+                            <a href data-ng-click="findSprites('default','animal','animal_land')"><li data-ng-class='{"active":menu === "animal_land"}'>{{'Category.animal_land'|text}}</li></a>
+                            <a href data-ng-click="findSprites('default','animal','animal_water')"><li data-ng-class='{"active":menu === "animal_water"}'>{{'Category.animal_water'|text}}</li></a>
+                            <a href data-ng-click="findSprites('default','animal','animal_others')"><li data-ng-class='{"active":menu === "animal_others"}'>{{'Category.animal_others'|text}}</li></a>
+                        </ul>
+                    </div>
+                </div>
+                <div class="list-group-item">
+                    <div data-ng-class='{"active":main_menu === "plant"}' data-ng-click="collapse(4);findSprites('default','plant')" class="list-group-item-heading">
+                        <a href data-ng-click="findSprites('default','plant')">{{'Category.plant'|text}}</a></div>
+                    <div class="list-group-item-text" collapse="isCollapsed4">
+                        <ul>
+                            <a href data-ng-click="findSprites('default','plant')"><li data-ng-class='{"active":main_menu === "plant" && menu === ""}'>{{'Workspace.all'|text}}</li></a>
+                            <a href data-ng-click="findSprites('default','plant','plant_flower')"><li data-ng-class='{"active":menu === "plant_flower"}'>{{'Category.plant_flower'|text}}</li></a>
+                            <a href data-ng-click="findSprites('default','plant','plant_grass')"><li data-ng-class='{"active":menu === "plant_grass"}'>{{'Category.plant_grass'|text}}</li></a>
+                            <a href data-ng-click="findSprites('default','plant','plant_tree')"><li data-ng-class='{"active":menu === "plant_tree"}'>{{'Category.plant_tree'|text}}</li></a>
+                            <a href data-ng-click="findSprites('default','plant','plant_others')"><li data-ng-class='{"active":menu === "plant_others"}'>{{'Category.plant_others'|text}}</li></a>
+                        </ul>
+                    </div>
+                </div>
+                <div class="list-group-item">
+                    <div data-ng-class='{"active":main_menu === "vehicles"}' data-ng-click="collapse(5);findSprites('default','vehicles')" class="list-group-item-heading">
+                        <a href data-ng-click="findSprites('default','vehicles')">{{'Category.vehicles'|text}}</a></div>
+                    <div class="list-group-item-text" collapse="isCollapsed5">
+                        <ul>
+                            <a href data-ng-click="findSprites('default','vehicles')"><li data-ng-class='{"active":main_menu === "vehicles" && menu === ""}'>{{'Workspace.all'|text}}</li></a>
+                            <a href data-ng-click="findSprites('default','vehicles','vehicles_flying')"><li data-ng-class='{"active":main_menu === "vehicles" && menu === "vehicles_flying"}'>{{'Category.vehicles_flying'|text}}</li></a>
+                            <a href data-ng-click="findSprites('default','vehicles','vehicles_land')"><li data-ng-class='{"active":main_menu === "vehicles" && menu === "vehicles_land"}'>{{'Category.vehicles_land'|text}}</li></a>
+                            <a href data-ng-click="findSprites('default','vehicles','vehicles_water')"><li data-ng-class='{"active":main_menu === "vehicles" && menu === "vehicles_water"}'>{{'Category.vehicles_water'|text}}</li></a>
+                            <a href data-ng-click="findSprites('default','vehicles','vehicles_others')"><li data-ng-class='{"active":main_menu === "vehicles" && menu === "vehicles_others"}'>{{'Category.vehicles_others'|text}}</li></a>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="list-group-item">
+                    <div data-ng-class='{"active":main_menu === "architect"}' data-ng-click="collapse(6);findSprites('default','architect')" class="list-group-item-heading">
+                        <a href data-ng-click="findSprites('default','architect')">{{'Category.architect'|text}}</a></div>
+                    <div class="list-group-item-text" collapse="isCollapsed6">
+                        <ul>
+                            <a href data-ng-click="findSprites('default','architect')"><li data-ng-class='{"active":main_menu === "architect" && menu === ""}'>{{'Workspace.all'|text}}</li></a>
+                            <a href data-ng-click="findSprites('default','architect','architect_building')"><li data-ng-class='{"active":main_menu === "architect" && menu === "architect_building"}'>{{'Category.architect_building'|text}}</li></a>
+                            <a href data-ng-click="findSprites('default','architect','architect_monument')"><li data-ng-class='{"active":main_menu === "architect" && menu === "architect_monument"}'>{{'Category.architect_monument'|text}}</li></a>
+                            <a href data-ng-click="findSprites('default','architect','architect_others')"><li data-ng-class='{"active":main_menu === "architect" && menu === "architect_others"}'>{{'Category.architect_others'|text}}</li></a>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="list-group-item">
+                    <div data-ng-class='{"active":main_menu === "food"}' data-ng-click="collapse(7);findSprites('default','food')" class="list-group-item-heading">
+                        <a href data-ng-click="findSprites('default','food')">{{'Category.food'|text}}</a></div>
+                    <div class="list-group-item-text" collapse="isCollapsed7">
+                        <ul>
+                            <a href data-ng-click="findSprites('default','food')"><li data-ng-class='{"active":main_menu === "food" && menu === ""}'>{{'Workspace.all'|text}}</li></a>
+                            <a href data-ng-click="findSprites('default','food','food_vegetables')"><li data-ng-class='{"active":main_menu === "food" && menu === "food_vegetables"}'>{{'Category.food_vegetables'|text}}</li></a>
+                            <a href data-ng-click="findSprites('default','food','food_meat')"><li data-ng-class='{"active":main_menu === "food" && menu === "food_meat"}'>{{'Category.food_meat'|text}}</li></a>
+                            <a href data-ng-click="findSprites('default','food','food_drink')"><li data-ng-class='{"active":main_menu === "food" && menu === "food_drink"}'>{{'Category.food_drink'|text}}</li></a>
+                            <a href data-ng-click="findSprites('default','food','food_others')"><li data-ng-class='{"active":main_menu === "food" && menu === "food_others"}'>{{'Category.food_others'|text}}</li></a>
+                        </ul>
+                    </div>
+                </div>
+                <div class="list-group-item">
+                    <div data-ng-class='{"active":main_menu === "environment"}' data-ng-click="collapse(8);findSprites('default','environment')" class="list-group-item-heading">
+                        <a href data-ng-click="findSprites('default','environment')">{{'Category.environment'|text}}</a></div>
+                    <div class="list-group-item-text" collapse="isCollapsed8">
+                        <ul>
+                            <a href data-ng-click="findSprites('default','environment')"><li data-ng-class='{"active":main_menu === "environment" && menu === ""}'>{{'Workspace.all'|text}}</li></a>
+                            <a href data-ng-click="findSprites('default','environment')"><li data-ng-class='{"active":main_menu === "environment" && menu === "environment_nature"}'>{{'Category.environment_nature'|text}}</li></a>
+                            <a href data-ng-click="findSprites('default','environment')"><li data-ng-class='{"active":main_menu === "environment" && menu === "environment_space"}'>{{'Category.environment_space'|text}}</li></a>
+                            <a href data-ng-click="findSprites('default','environment')"><li data-ng-class='{"active":main_menu === "environment" && menu === "environment_others"}'>{{'Category.environment_others'|text}}</li></a>
+                        </ul>
+                    </div>
+                </div>
+                <div class="list-group-item">
+                    <div data-ng-class='{"active":main_menu === "stuff"}' data-ng-click="collapse(9);findSprites('default','stuff')" class="list-group-item-heading">
+                        <a href data-ng-click="findSprites('default','stuff')">{{'Category.stuff'|text}}</a></div>
+                    <div class="list-group-item-text" collapse="isCollapsed9">
+                        <ul>
+                            <a href data-ng-click="findSprites('default','stuff')"><li data-ng-class='{"active":main_menu === "stuff" && menu === ""}'>{{'Workspace.all'|text}}</li></a>
+                            <a href data-ng-click="findSprites('default','stuff','stuff_living')"><li data-ng-class='{"active":main_menu === "stuff" && menu === "stuff_living"}'>{{'Category.stuff_living'|text}}</li></a>
+                            <a href data-ng-click="findSprites('default','stuff','stuff_hobby')"><li data-ng-class='{"active":main_menu === "stuff" && menu === "stuff_hobby"}'>{{'Category.stuff_hobby'|text}}</li></a>
+                            <a href data-ng-click="findSprites('default','stuff','stuff_others')"><li data-ng-class='{"active":main_menu === "stuff" && menu === "stuff_others"}'>{{'Category.stuff_others'|text}}</li></a>
+                        </ul>
+                    </div>
+                </div>
+                <div class="list-group-item">
+                    <div data-ng-class='{"active":main_menu === "fantasy"}' data-ng-click="collapse(10);findSprites('default','fantasy')" class="list-group-item-heading">
+                        <a href data-ng-click="findSprites('default','fantasy')">{{'Category.fantasy'|text}}</a></div>
+                    <div class="list-group-item-text" collapse="isCollapsed10">
+                        <ul>
+                            <a href data-ng-click="findSprites('default','fantasy')"><li data-ng-class='{"active":main_menu === "fantasy" && menu === ""}'>{{'Workspace.all'|text}}</li></a>
+                        </ul>
+                    </div>
+                </div>
+                <div class="list-group-item">
+                    <div data-ng-class='{"active":main_menu === "interface"}' data-ng-click="collapse(11);findSprites('default','interface')" class="list-group-item-heading">
+                        <a href data-ng-click="findSprites('default','interface')">{{'Category.interface'|text}}</a></div>
+                    <div class="list-group-item-text" collapse="isCollapsed11">
+                        <ul>
+                            <a href data-ng-click="findSprites('default','interface')"><li data-ng-class='{"active":main_menu === "interface" && menu === ""}'>{{'Workspace.all'|text}}</li></a>
+                        </ul>
+                    </div>
+                </div>
+                <div class="list-group-item">
+                    <div data-ng-class='{"active":main_menu === "background"}' data-ng-click="collapse(12);findSprites('default','background')" class="list-group-item-heading">
+                        <a href data-ng-click="findSprites('default','background')">{{'Category.background'|text}}</a></div>
+                    <div class="list-group-item-text" collapse="isCollapsed12">
+                        <ul>
+                            <a href data-ng-click="findSprites('default','background')"><li data-ng-class='{"active":main_menu === "background" && menu === ""}'>{{'Workspace.all'|text}}</li></a>
+                            <a href data-ng-click="findSprites('default','background','background_outdoor')"><li data-ng-class='{"active":main_menu === "background" && menu === "background_outdoor"}'>{{'Category.background_outdoor'|text}}</li></a>
+                            <a href data-ng-click="findSprites('default','background','background_indoor')"><li data-ng-class='{"active":main_menu === "background" && menu === "background_indoor"}'>{{'Category.background_indoor'|text}}</li></a>
+                            <a href data-ng-click="findSprites('default','background','background_nature')"><li data-ng-class='{"active":main_menu === "background" && menu === "background_nature"}'>{{'Category.background_nature'|text}}</li></a>
+                            <a href data-ng-click="findSprites('default','background','background_others')"><li data-ng-class='{"active":main_menu === "background" && menu === "background_others"}'>{{'Category.background_others'|text}}</li></a>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-9 tab-right" style="margin-left:145px; padding-right: 0">
+        <div class="wrap wrap_sprite" when-scrolled="loadMore()">
+            <div class="box" data-ng-repeat="sprite in systemSprites | limitTo : showCount">
+                <div id="{{sprite._id}}" class="{{sprite.selected}}" data-ng-click="selectSprite(sprite)" data-ng-dblclick="applySprite(sprite)">
+                    <div class="boxInner" style="background-image: url('{{sprite.pictures[0]|makeThumbnail}}');"></div>
+                    <img class="overlay" src="./images/check_inside_new.png"/>
+                </div>
+                <div class="titleBox">{{sprite.name}}</div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -3,3 +3,5 @@ libs/
 node_modules/
 temp/
 nwjs.app/
+build/build/
+build/cache/
