@@ -6,7 +6,7 @@
 ## 1. How to Build 
     * cd entry
     * bower install 
-      (if you need root authorization, use --root-allow (on mac) or run after acquiring root authorization (on windows)
+      # if you need root authorization, use --root-allow (on mac) or run after acquiring root authorization (on windows)
     * cd build
     * npm install 
     * node build.js
