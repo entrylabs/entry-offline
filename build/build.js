@@ -1,6 +1,6 @@
 var NwBuilder = require('nw-builder');
 var nw = new NwBuilder({
-	appName: '엔트리',
+	appName: 'Entry',
 	appVersion: '0.1.0',
 	version: '0.12.3',
     files: '../entry/**', // use the glob format
