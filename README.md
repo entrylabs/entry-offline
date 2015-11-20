@@ -4,6 +4,9 @@
  You can do the program and use the same feature in the environment where network access is impossible like the Entry web based  service.
 
 ## 1. How to Build 
+    * cd entry
+    * bower install 
+      (if you need root authorization, use --root-allow (on mac) or run after acquiring root authorization (on windows)
     * cd build
     * npm install 
     * node build.js
