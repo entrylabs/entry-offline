@@ -1,6 +1,7 @@
 * {
 	box-sizing : border-box;
 	margin : 0;
+    font-family: nanumBarunRegular !important;
 }
 
 body {

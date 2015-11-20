@@ -19,13 +19,29 @@ angular.module('workspace').controller("WorkspaceController",
 				type: 'workspace',
 				libDir: './bower_components',
 				fonts: [{
-				    name: '나눔바른고딕',
-				    family: 'Nanum Barun Gothic',
-				    url: './css/nanumbarungothic.css'
+				    name: '바탕체',
+				    family: 'KoPub Batang',
+				    url: './css/kopubbatang.css'
 			    }, {
-				    name: '나눔고딕',
+				    name: '명조체',
+				    family: 'Nanum Myeongjo',
+				    url: './css/nanummyeongjo.css'
+			    }, {
+				    name: '고딕체',
 				    family: 'Nanum Gothic',
 				    url: './css/nanumgothic.css'
+			    }, {
+				    name: '필기체',
+				    family: 'Nanum Pen Script',
+				    url: './css/nanumpenscript.css'
+			    }, {
+				    name: '한라산체',
+				    family: 'Jeju Hallasan',
+				    url: './css/jejuhallasan.css'
+			    }, {
+				    name: '코딩고딕체',
+				    family: 'Nanum Gothic Coding',
+				    url: './css/nanumgothiccoding.css'
 			    }]
 			};
 			Entry.init(workspace, initOptions);
