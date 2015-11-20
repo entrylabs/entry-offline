@@ -127,7 +127,7 @@ if(!isOsx) {
 		type : 'separator'
 	}));
 	fileMenu.append(new gui.MenuItem({
-		label : '종료',
+		label : Lang.Menus.offline_quit,
 		click : function () {
 			gui.App.quit();
 		},
@@ -137,7 +137,7 @@ if(!isOsx) {
 }
 
 editMenu.append(new gui.MenuItem({
-	label : '되돌리기',
+	label : Lang.Menus.offline_undo,
 	click : function () {
 		Entry.dispatchEvent('undo');
 	},
@@ -146,7 +146,7 @@ editMenu.append(new gui.MenuItem({
 }));
 
 editMenu.append(new gui.MenuItem({
-	label : '다시실행',
+	label : Lang.Menus.offline_redo,
 	click : function () {
 		Entry.dispatchEvent('redo');
 	},
@@ -156,11 +156,11 @@ editMenu.append(new gui.MenuItem({
 
 // Append MenuItem as a Submenu
 menu.append(new gui.MenuItem({
-	label : '파일',
+	label : Lang.Menus.offline_file,
 	submenu : fileMenu
 }));
 menu.append(new gui.MenuItem({
-	label : '편집',
+	label : Lang.Menus.offline_edit,
 	submenu : editMenu
 }));
 
