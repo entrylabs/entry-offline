@@ -383,7 +383,7 @@ Entry.plugin = (function () {
 							throw err;
 						}
 
-						var dimensions = sizeOf('./' + dest.imagePath);
+						var dimensions = sizeOf(dest.imagePath + '.png');
 						var picture = {
 							type : 'user',
 							name : fileId,
