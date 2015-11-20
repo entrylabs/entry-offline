@@ -3,7 +3,7 @@
  This has two version of application, Windows and MAC system.
  You can do the program and use the same feature in the environment where network access is impossible like the Entry web based  service.
 
-## 1. How to Build 
+## 1. Build 
     * cd entry
     * bower install 
       # if you need root authorization, use --root-allow (on mac) or run after acquiring root authorization (on windows)
@@ -16,10 +16,10 @@
     * You can see two version of app directory
       (osx64 for MAC, win64 for Windows)
 
-## 2. How to Run
+## 2. Run
     * Widnows 
-      - copy 'win64' directory to path on target window based computer
-      - Run entry-offline.exe 
+      - copy 'win64' directory within 'build/엔트리' to path on the target window based computer
+      - Run 엔트리.exe 
     * MAC
-      - copy 'osx64' directory to path on target mac based computer
-      - 
+      - copy 'osx64' directory within 'build/엔트리' to path on the target mac based computer
+      - Run 엔트리.app
