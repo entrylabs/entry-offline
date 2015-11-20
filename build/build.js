@@ -11,13 +11,8 @@ var nw = new NwBuilder({
 
 //Log stuff you want
 
-var max = 0;
 nw.on('log',  function (log) {
-	if(max < log.length) {
-		max = log.length;
-		console.log(max);
-		console.log(log);
-	}
+	// console.log(log);
 });
 
 // Build returns a promise
