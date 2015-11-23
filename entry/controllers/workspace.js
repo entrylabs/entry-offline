@@ -8,15 +8,8 @@ angular.module('workspace').controller("WorkspaceController",
         var storage = (typeof window.localStorage === 'undefined') ? undefined : window.localStorage;
 
 		$scope.initWorkspace = function () {
-			// NanumBarunGothic 폰트 로딩 시간까지 기다린다.
-			var font = new FontFace("nanumBarunRegular", "url(./fonts/NanumBarunGothic.woff2)");
-			font.load();
-			font.loaded.then(function() {
-				if(!sessionStorage.getItem('isFirst')) {
-					Entry.plugin.initProjectFolder(function() {
-						sessionStorage.setItem('isFirst', true);
-					});
-				}
+			// 기본 초기화를 수행수 동작한다.
+			Entry.plugin.init(function () {
 				myProject.isSavedPath = storage.getItem('defaultPath') || '';
 				var workspace = document.getElementById("workspace");
 				var initOptions = {
@@ -60,6 +53,7 @@ angular.module('workspace').controller("WorkspaceController",
 					project = JSON.parse(project);
 					storage.removeItem('nativeLoadProject');
 				}
+				
 				// Entry.loadProject(project);
 				$scope.setWorkspace(project);
 
@@ -152,7 +146,6 @@ angular.module('workspace').controller("WorkspaceController",
 		$scope.setWorkspace = function(project) {
 			Entry.loadProject(project);
 
-
 			var project_name = "";
 			if($.isPlainObject(project)) {
 				project_name = project.name;
@@ -163,8 +156,12 @@ angular.module('workspace').controller("WorkspaceController",
                 project_name = Lang.Workspace.PROJECTDEFAULTNAME[i] + ' ' + Lang.Workspace.project;
 			}
 
+<<<<<<< .merge_file_uhNWki
 			$scope.project.name = project_name || '새 프로젝트';
 			
+=======
+			myProject.name = project_name || '새 프로젝트';
+>>>>>>> .merge_file_a7rdQw
 		}
 
 		// 저장하기
@@ -467,7 +464,7 @@ angular.module('workspace').controller("WorkspaceController",
             Entry.stage.update();
 
             var project = Entry.exportProject();
-            project.name = this.name;
+            project.name = project_name;
 
             Entry.plugin.saveProject(path, project, function () {
             	if($.isFunction(cb)) {
