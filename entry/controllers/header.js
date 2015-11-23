@@ -113,6 +113,14 @@ angular.module('workspace').controller('HeaderController',
         $scope.blockHelperOn = function(){
             Entry.helper.blockHelperOn();
         };
+        
+        $scope.startHWManual = function(url, title, options) {
+            gui.Window.open(url, {
+                position: 'center',
+                width: 1200,
+                height:800
+            });
+        }
 
         $scope.showPopup = function (target) {
             var popup = $('#' + target);

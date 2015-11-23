@@ -58,7 +58,6 @@ angular.module('workspace').controller("WorkspaceController",
 					project = JSON.parse(project);
 					storage.removeItem('nativeLoadProject');
 				}
-
 				// Entry.loadProject(project);
 				$scope.setWorkspace(project);
 
