@@ -11,6 +11,8 @@ var tar = require('tar');
 var zlib = require('zlib');
 var child_process = require('child_process');
 
+
+
 // Create menu
 var menu = new gui.Menu({
 	type : 'menubar'
@@ -257,6 +259,47 @@ Entry.plugin = (function () {
 		var randomStr = (Math.random().toString(16)+"000000000").substr(2,8);
 	    return require('crypto').createHash('md5').update(randomStr).digest("hex");
 	};
+
+	that.init = function (cb) {
+		// NanumBarunGothic 폰트 로딩 시간까지 기다린다.
+		var font = new FontFace("nanumBarunRegular", "url(./fonts/NanumBarunGothic.woff2)");
+		font.load();
+		font.loaded.then(function() {
+			var isNotFirst = sessionStorage.getItem('isNotFirst');
+				if(!isNotFirst) {
+					that.initProjectFolder(function() {
+						sessionStorage.setItem('isNotFirst', true);
+					});
+				}
+			if(gui.App.argv.length > 0 && !isNotFirst) {
+				if(gui.App.argv[0] !== '.') {
+					var load_path = gui.App.argv[0];
+					var pathArr = load_path.split('/');
+					pathArr.pop();
+					localStorage.setItem('defaultPath', pathArr.join('/'));
+
+					that.loadProject(load_path, function (data) {
+						console.log(data);
+						var jsonObj = JSON.parse(data);
+						jsonObj.path = load_path;
+						localStorage.setItem('nativeLoadProject', JSON.stringify(jsonObj));
+						if($.isFunction(cb)) {
+							cb();
+						}
+					});
+				} else {
+					if($.isFunction(cb)) {
+						cb();
+					}
+				}
+			} else {
+				if($.isFunction(cb)) {
+					cb();
+				}
+			}
+		});
+		
+	}
 
 	// 프로젝트 저장 
 	that.saveProject = function(path, data, cb, enc) {
