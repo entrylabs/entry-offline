@@ -156,12 +156,12 @@ angular.module('workspace').controller("WorkspaceController",
                 project_name = Lang.Workspace.PROJECTDEFAULTNAME[i] + ' ' + Lang.Workspace.project;
 			}
 
-<<<<<<< .merge_file_uhNWki
+
 			$scope.project.name = project_name || '새 프로젝트';
 			
-=======
+
 			myProject.name = project_name || '새 프로젝트';
->>>>>>> .merge_file_a7rdQw
+
 		}
 
 		// 저장하기
