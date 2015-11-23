@@ -13,6 +13,7 @@ angular.module('workspace').controller("WorkspaceController",
 					sessionStorage.setItem('isFirst', true);
 				});
 			}
+        
 			myProject.isSavedPath = storage.getItem('defaultPath') || '';
 			var workspace = document.getElementById("workspace");
 			var initOptions = {
@@ -70,6 +71,7 @@ angular.module('workspace').controller("WorkspaceController",
             Entry.addEventListener('saveCanvasImage', $scope.saveCanvasData);
             Entry.addEventListener('openPictureImport', $scope.openPictureImport);
             // Entry.addEventListener('saveLocalStorageProject', saveLocalStorageProject);
+            
 		};
 
 		// 프로젝트 세팅
