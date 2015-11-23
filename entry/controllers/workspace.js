@@ -77,12 +77,6 @@ angular.module('workspace').controller("WorkspaceController",
 			$('#entryCategoryarduino').mouseup(function() {
 					
 					Entry.HW.prototype.downloadConnector = function() {
-						// gui.Window.open('app://entry/hardware/plugin/entry_plugin_hw/package/index.html', {
-						// 	position: 'center',
-						// 	width: 800,
-						// 	height:600
-						// });
-						
 						var child = child_process.execFile("app://entry/hardware/plugin/entry_plugin_hw/nw.exe", function(error, stdout, stderr) {
 							if (error) {
 								console.log(error.stack); 
