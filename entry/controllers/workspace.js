@@ -8,10 +8,8 @@ angular.module('workspace').controller("WorkspaceController",
         var storage = (typeof window.localStorage === 'undefined') ? undefined : window.localStorage;
 
 		$scope.initWorkspace = function () {
-			// NanumBarunGothic 폰트 로딩 시간까지 기다린다.
-			var font = new FontFace("nanumBarunRegular", "url(./fonts/NanumBarunGothic.woff2)");
-			font.load();
-			font.loaded.then(function() {
+			// 기본 초기화를 수행수 동작한다.
+			Entry.plugin.init(function () {
 				if(!sessionStorage.getItem('isFirst')) {
 					Entry.plugin.initProjectFolder(function() {
 						sessionStorage.setItem('isFirst', true);
