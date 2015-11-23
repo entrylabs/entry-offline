@@ -264,18 +264,24 @@ Entry.plugin = (function () {
 		var font = new FontFace("nanumBarunRegular", "url(./fonts/NanumBarunGothic.woff2)");
 		font.load();
 		font.loaded.then(function() {
-			console.log(gui.App.argv);
-			if(gui.App.argv.length > 0) {
+			var isNotFirst = sessionStorage.getItem('isNotFirst');
+				if(!isNotFirst) {
+					that.initProjectFolder(function() {
+						sessionStorage.setItem('isNotFirst', true);
+					});
+				}
+			if(gui.App.argv.length > 0 && !isNotFirst) {
 				if(gui.App.argv[0] !== '.') {
 					var load_path = gui.App.argv[0];
 					var pathArr = load_path.split('/');
 					pathArr.pop();
 					localStorage.setItem('defaultPath', pathArr.join('/'));
 
-					that.loadProject(path, function (data) {
+					that.loadProject(load_path, function (data) {
+						console.log(data);
 						var jsonObj = JSON.parse(data);
-						jsonObj.path = path;
-						localStorage.setItem('nativeLoadProject', JSON.stringify(data));
+						jsonObj.path = load_path;
+						localStorage.setItem('nativeLoadProject', JSON.stringify(jsonObj));
 						if($.isFunction(cb)) {
 							cb();
 						}

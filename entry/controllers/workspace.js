@@ -10,11 +10,6 @@ angular.module('workspace').controller("WorkspaceController",
 		$scope.initWorkspace = function () {
 			// 기본 초기화를 수행수 동작한다.
 			Entry.plugin.init(function () {
-				if(!sessionStorage.getItem('isFirst')) {
-					Entry.plugin.initProjectFolder(function() {
-						sessionStorage.setItem('isFirst', true);
-					});
-				}
 				myProject.isSavedPath = storage.getItem('defaultPath') || '';
 				var workspace = document.getElementById("workspace");
 				var initOptions = {
@@ -58,6 +53,7 @@ angular.module('workspace').controller("WorkspaceController",
 					project = JSON.parse(project);
 					storage.removeItem('nativeLoadProject');
 				}
+				
 				// Entry.loadProject(project);
 				$scope.setWorkspace(project);
 
@@ -79,7 +75,6 @@ angular.module('workspace').controller("WorkspaceController",
 		$scope.setWorkspace = function(project) {
 			Entry.loadProject(project);
 
-
 			var project_name = "";
 			if($.isPlainObject(project)) {
 				project_name = project.name;
@@ -90,7 +85,7 @@ angular.module('workspace').controller("WorkspaceController",
                 project_name = Lang.Workspace.PROJECTDEFAULTNAME[i] + ' ' + Lang.Workspace.project;
 			}
 
-			$scope.project.name = project_name || '새 프로젝트';
+			myProject.name = project_name || '새 프로젝트';
 		}
 
 		// 저장하기
@@ -393,7 +388,7 @@ angular.module('workspace').controller("WorkspaceController",
             Entry.stage.update();
 
             var project = Entry.exportProject();
-            project.name = this.name;
+            project.name = project_name;
 
             Entry.plugin.saveProject(path, project, function () {
             	if($.isFunction(cb)) {
