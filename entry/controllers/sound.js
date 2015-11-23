@@ -107,7 +107,6 @@ angular.module('common').controller('SoundController',
 
     $scope.search = function() {
         $scope.searchWord = $('#searchWord').val();
-        //console.log($scope.searchWord);
         if (!$scope.searchWord || $scope.searchWord == '') {
             alert('검색어를 입력하세요.');
             return false;

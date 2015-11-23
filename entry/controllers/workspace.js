@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('workspace').controller("WorkspaceController", 
-	['$scope', '$rootScope', '$modal', 'myProject', function ($scope, $rootScope, $modal, myProject) {
+	['$scope', '$rootScope', '$modal', '$http', 'myProject', function ($scope, $rootScope, $modal, $http, myProject) {
 		$scope.saveFileName = '';
 		$scope.project = myProject;
 		var supported = !(typeof storage == 'undefined' || typeof window.JSON == 'undefined');
@@ -48,7 +48,7 @@ angular.module('workspace').controller("WorkspaceController",
 						url: './css/nanumgothiccoding.css'
 					}]
 				};
-				
+								
 				Entry.init(workspace, initOptions);
 				Entry.playground.setBlockMenu();
 				//아두이노 사용 (웹소켓이용)
@@ -74,8 +74,79 @@ angular.module('workspace').controller("WorkspaceController",
 				Entry.addEventListener('saveCanvasImage', $scope.saveCanvasData);
 				Entry.addEventListener('openPictureImport', $scope.openPictureImport);
 				// Entry.addEventListener('saveLocalStorageProject', saveLocalStorageProject);
+				
+				$scope.setOfflineHW();
 			});
 		};
+		
+		$scope.setOfflineHW = function() {
+			$('#entryCategoryarduino').mouseup(function() {
+					
+					Entry.HW.prototype.downloadConnector = function() {
+						// gui.Window.open('app://entry/hardware/plugin/entry_plugin_hw/package/index.html', {
+						// 	position: 'center',
+						// 	width: 800,
+						// 	height:600
+						// });
+						
+						var child = child_process.execFile("app://entry/hardware/plugin/entry_plugin_hw/nw.exe", function(error, stdout, stderr) {
+							if (error) {
+								console.log(error.stack); 
+								console.log('Error code: '+ error.code); 
+								console.log('Signal received: '+ 
+										error.signal);
+								} 
+								console.log('Child Process stdout: '+ stdout);
+								console.log('Child Process stderr: '+ stderr);
+						});
+						
+						child.on('exit', function (code) { 
+							console.log('Child process exited '+
+								'with exit code '+ code);
+						});	
+					};	
+							
+					
+					Entry.HW.prototype.downloadSource = function() {
+						
+						 $('#saveArduino').attr('nwsaveas', 'entry.ino').attr('nwworkingdir', './'). trigger('click');
+						 $("#saveArduino").on("change", function () {
+							var filePath = $(this).val();
+							
+							if (filePath !== "") {
+								var fs = require("fs");
+								fs.writeFile(filePath, "entry.ino", function (err) {
+								if (err) 
+									alert("Unable to save file");
+								else 
+									console.log("File Saved");
+								});
+							}
+							else {
+								// User cancelled 
+							}
+       				 });
+						
+					};
+					
+					var user_lang = localStorage.getItem('lang');
+															
+					if(user_lang === 'ko' || null) {
+						Lang.Blocks.ARDUINO_download_connector = "하드웨어 플러그인 실행 ";
+						Lang.Blocks.ARDUINO_download_source = "아두이노 소스코드";
+						Lang.Blocks.ARDUINO_reconnect = "하드웨어에 연결하기";
+					} else if(user_lang === 'en') {
+						Lang.Blocks.ARDUINO_download_connector = "Hardware Plugin Start";
+						Lang.Blocks.ARDUINO_download_source = "Arduino Code";
+						Lang.Blocks.ARDUINO_reconnect = "Connect To Hardware";
+					} else if(user_lang === 'vn') {
+						Lang.Blocks.ARDUINO_download_connector = "Hardware Plugin Start";
+						Lang.Blocks.ARDUINO_download_source = "Arduino Code";
+						Lang.Blocks.ARDUINO_reconnect = "Connect To Hardware";
+					}
+					
+			});
+	    };
 
 		// 프로젝트 세팅
 		$scope.setWorkspace = function(project) {
@@ -93,6 +164,7 @@ angular.module('workspace').controller("WorkspaceController",
 			}
 
 			$scope.project.name = project_name || '새 프로젝트';
+			
 		}
 
 		// 저장하기

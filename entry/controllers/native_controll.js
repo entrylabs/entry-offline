@@ -9,6 +9,7 @@ var isOsx = false;
 var fstream = require('fstream');
 var tar = require('tar');
 var zlib = require('zlib');
+var child_process = require('child_process');
 
 // Create menu
 var menu = new gui.Menu({

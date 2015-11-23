@@ -114,7 +114,7 @@ angular.module('workspace').controller('HeaderController',
             Entry.helper.blockHelperOn();
         };
         
-        $scope.startHWManual = function(url, title, options) {
+        $scope.startHWGuide = function(url, title, options) {
             gui.Window.open(url, {
                 position: 'center',
                 width: 1200,

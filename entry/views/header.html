@@ -62,7 +62,7 @@
                     <a href ng-click="blockHelperOn()">{{'Workspace.blocks_reference' | text}}</a>
                 </li>
                 <li>
-                    <a href ng-click="startHWManual('./hardware/guide/hwguide.html', '엔트리 하드웨어 메뉴얼')">{{'Workspace.hardware_guide' | text}}</a>
+                    <a href ng-click="startHWGuide('./hardware/guide/hwguide.html', '엔트리 하드웨어 메뉴얼')">{{'Workspace.hardware_guide' | text}}</a>
                 </li>
             </ul>
         </div>
@@ -84,5 +84,8 @@
         <input id="load_project" type="file" load-project  accept=".ent"/>
         <!-- 파일 저장을 위해 존재하는 DOM -->
         <input id="save_as_project" type="file" save-as-project nwsaveas="{{project.name}}" accept=".ent"/>
+    </div>
+    <div hidden>
+        <input id="saveArduino" type="file" nwworkingdir nwsaveas />
     </div>
 </div>

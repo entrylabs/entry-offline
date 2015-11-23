@@ -1,0 +1,27 @@
+{
+	"id": "030101",
+	"name": {
+		"en": "bitBrick",
+		"ko": "비트브릭"
+	},
+	"description": {
+		"connection": {
+			"en": "Plug the bitBrick into your PC's USB port and turn its power switch on.",
+			"ko": "비트브릭을 PC의 USB 단자에 연결하고 전원을 켜주세요."
+		}
+	},
+	"icon" : "bitbrick.png",
+	"module": "bitbrick.js",
+	"driver": {
+		"win32-ia32": "arduino/dpinst-x86.exe",
+		"win32-x64": "arduino/dpinst-amd64.exe"
+	},
+	"protocol": "json",
+	"buffersize": 17,
+	"type": "serial",
+	"options": {
+		"vendor": "Silicon Lab",
+		"baudRate": 38400,
+		"duration": 20
+	}
+}
