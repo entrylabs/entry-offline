@@ -8,54 +8,60 @@ angular.module('workspace').controller("WorkspaceController",
         var storage = (typeof window.localStorage === 'undefined') ? undefined : window.localStorage;
 
 		$scope.initWorkspace = function () {
-			if(!sessionStorage.getItem('isFirst')) {
-				Entry.plugin.initProjectFolder(function() {
-					sessionStorage.setItem('isFirst', true);
-				});
-			}
-			myProject.isSavedPath = storage.getItem('defaultPath') || '';
-			var workspace = document.getElementById("workspace");
-			var initOptions = {
-				type: 'workspace',
-				libDir: './bower_components',
-				fonts: [{
-				    name: '바탕체',
-				    family: 'KoPub Batang',
-				    url: './css/kopubbatang.css'
-			    }, {
-				    name: '명조체',
-				    family: 'Nanum Myeongjo',
-				    url: './css/nanummyeongjo.css'
-			    }, {
-				    name: '고딕체',
-				    family: 'Nanum Gothic',
-				    url: './css/nanumgothic.css'
-			    }, {
-				    name: '필기체',
-				    family: 'Nanum Pen Script',
-				    url: './css/nanumpenscript.css'
-			    }, {
-				    name: '한라산체',
-				    family: 'Jeju Hallasan',
-				    url: './css/jejuhallasan.css'
-			    }, {
-				    name: '코딩고딕체',
-				    family: 'Nanum Gothic Coding',
-				    url: './css/nanumgothiccoding.css'
-			    }]
-			};
-			Entry.init(workspace, initOptions);
-			Entry.playground.setBlockMenu();
-			//아두이노 사용 (웹소켓이용)
-			Entry.enableArduino();
+			// NanumBarunGothic 폰트 로딩 시간까지 기다린다.
+			var font = new FontFace("nanumBarunRegular", "url(./fonts/NanumBarunGothic.woff2)");
+			font.load();
+			font.loaded.then(function() {
+				if(!sessionStorage.getItem('isFirst')) {
+					Entry.plugin.initProjectFolder(function() {
+						sessionStorage.setItem('isFirst', true);
+					});
+				}
+				myProject.isSavedPath = storage.getItem('defaultPath') || '';
+				var workspace = document.getElementById("workspace");
+				var initOptions = {
+					type: 'workspace',
+					libDir: './bower_components',
+					fonts: [{
+						name: '바탕체',
+						family: 'KoPub Batang',
+						url: './css/kopubbatang.css'
+					}, {
+						name: '명조체',
+						family: 'Nanum Myeongjo',
+						url: './css/nanummyeongjo.css'
+					}, {
+						name: '고딕체',
+						family: 'Nanum Gothic',
+						url: './css/nanumgothic.css'
+					}, {
+						name: '필기체',
+						family: 'Nanum Pen Script',
+						url: './css/nanumpenscript.css'
+					}, {
+						name: '한라산체',
+						family: 'Jeju Hallasan',
+						url: './css/jejuhallasan.css'
+					}, {
+						name: '코딩고딕체',
+						family: 'Nanum Gothic Coding',
+						url: './css/nanumgothiccoding.css'
+					}]
+				};
+				
+				Entry.init(workspace, initOptions);
+				Entry.playground.setBlockMenu();
+				//아두이노 사용 (웹소켓이용)
+				Entry.enableArduino();
 
-			var project = storage.getItem('nativeLoadProject');
+				var project = storage.getItem('nativeLoadProject');
 
-			if(project) {
-				project = JSON.parse(project);
-				storage.removeItem('nativeLoadProject');
-			}
+				if(project) {
+					project = JSON.parse(project);
+					storage.removeItem('nativeLoadProject');
+				}
 
+<<<<<<< HEAD
 			// Entry.loadProject(project);
 			$scope.setWorkspace(project);
 
@@ -70,6 +76,23 @@ angular.module('workspace').controller("WorkspaceController",
             Entry.addEventListener('saveCanvasImage', $scope.saveCanvasData);
             Entry.addEventListener('openPictureImport', $scope.openPictureImport);
             // Entry.addEventListener('saveLocalStorageProject', saveLocalStorageProject);    
+=======
+				// Entry.loadProject(project);
+				$scope.setWorkspace(project);
+
+				Entry.addEventListener('saveWorkspace', $scope.saveWorkspace);
+				Entry.addEventListener('saveAsWorkspace', $scope.saveAsWorkspace);
+				Entry.addEventListener('loadWorkspace', $scope.loadWorkspace);
+				Entry.addEventListener('openSpriteManager', $scope.openSpriteManager);
+				Entry.addEventListener('openPictureManager', $scope.openPictureManager);
+				Entry.addEventListener('openSoundManager', $scope.openSoundManager);
+				Entry.addEventListener('changeVariableName', $scope.changeVariableName);
+				Entry.addEventListener('deleteMessage', $scope.deleteMessage);
+				Entry.addEventListener('saveCanvasImage', $scope.saveCanvasData);
+				Entry.addEventListener('openPictureImport', $scope.openPictureImport);
+				// Entry.addEventListener('saveLocalStorageProject', saveLocalStorageProject);
+			});
+>>>>>>> 0a9995afaac9d0c21195c6c5d5ff1d5ccb3224f2
 		};
 
 		// 프로젝트 세팅
