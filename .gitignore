@@ -5,3 +5,13 @@ temp/
 nwjs.app/
 build/build/
 build/cache/
+locales/
+ffmpegsumo.dll
+icudtl.dat
+libEGL.dll
+libGLESv2.dll
+nw.exe
+nw.pak
+nwjc.exe
+pdf.dll
+build/Setup.exe
