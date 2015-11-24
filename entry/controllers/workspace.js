@@ -74,62 +74,66 @@ angular.module('workspace').controller("WorkspaceController",
 		};
 		
 		$scope.setOfflineHW = function() {
-			$('#entryCategoryarduino').mouseup(function() {
-					
+			$('#entryCategoryarduino').mouseup(function() {	
 					Entry.HW.prototype.downloadConnector = function() {
-						var child = child_process.execFile("app://entry/hardware/plugin/entry_plugin_hw/Entry.lnk", function(error, stdout, stderr) {
-							if (error) {
-								console.log(error.stack); 
-								console.log('Error code: '+ error.code); 
-								console.log('Signal received: '+ 
-										error.signal);
-								} 
-								console.log('Child Process stdout: '+ stdout);
-								console.log('Child Process stderr: '+ stderr);
-						});
-						
-						child.on('exit', function (code) { 
-							console.log('Child process exited '+
-								'with exit code '+ code);
-						});	
-					};	
-							
-					
-					Entry.HW.prototype.downloadSource = function() {
-						
-						 $('#saveArduino').attr('nwsaveas', 'entry_arduino.ino').attr('nwworkingdir', '/'). trigger('click');
-						 $("#saveArduino").on("change", function () {
-							var filePath = $(this).val();
-							
+						$('#saveArduinoPlugin').attr('nwsaveas', 'entry_plugin_hw.zip').trigger('click');
+						$("#saveArduinoPlugin").on("change", function () {
+							var filePath = $('#saveArduinoPlugin').val();
+							//alert("File Path : " + filePath);
 							if (filePath !== "") {
 								var fs = require("fs");
-								fs.writeFile(filePath, "entry.ino", function (err) {
-								if (err) 
-									alert("Unable to save file");
-								else 
-									console.log("File Saved");
-								});
+									fs.readFile("./hardware/plugin/entry_plugin_hw.zip", function (err, stream) {
+										fs.writeFile(filePath, stream, 'utf8', function (err) {
+											if (err) 
+												alert("Unable to save file");
+											else 
+												console.log("File Saved");
+										});
+										
+									});
 							}
 							else {
 								// User cancelled 
 							}
-       				 });
-						
+       					 });
+					};	
+							
+					
+					Entry.HW.prototype.downloadSource = function() {
+						 $('#saveArduinoCode').attr('nwsaveas', 'entry_arduino.ino').trigger('click');
+						 $("#saveArduinoCode").on("change", function () {
+							var filePath = $('#saveArduinoCode').val();
+							//alert("File Path : " + filePath);
+							if (filePath !== "") {
+								var fs = require("fs");
+									fs.readFile("./hardware/source/entry_arduino.ino", function (err, stream) {
+										fs.writeFile(filePath, stream, 'utf8', function (err) {
+											if (err) 
+												alert("Unable to save file");
+											else 
+												console.log("File Saved");
+											});
+									});
+							}
+							else {
+								// User cancelled 
+							}
+       					 });
 					};
 					
 					var user_lang = localStorage.getItem('lang');
 															
 					if(user_lang === 'ko' || null) {
-						Lang.Blocks.ARDUINO_download_connector = "하드웨어 플러그인 실행 ";
-						Lang.Blocks.ARDUINO_download_source = "아두이노 소스코드";
+						Lang.Blocks.ARDUINO_download_connector = "하드웨어 플러그인 받기";
+						Lang.Blocks.ARDUINO_download_source = "아두이노 소스코드 받기";
 						Lang.Blocks.ARDUINO_reconnect = "하드웨어에 연결하기";
 					} else if(user_lang === 'en') {
-						Lang.Blocks.ARDUINO_download_connector = "Hardware Plugin Start";
-						Lang.Blocks.ARDUINO_download_source = "Arduino Code";
+						Lang.Blocks.ARDUINO_download_connector = "Get Hardware Plugin";
+						Lang.Blocks.ARDUINO_download_source = "Get Arduino Code";
 						Lang.Blocks.ARDUINO_reconnect = "Connect To Hardware";
 					} else if(user_lang === 'vn') {
-						Lang.Blocks.ARDUINO_download_connector = "Hardware Plugin Start";
-						Lang.Blocks.ARDUINO_download_source = "Arduino Code";
+						Lang.Blocks.ARDUINO_download_connector = "Get Hardware Plugin";
+						Lang.Blocks.ARDUINO_download_source = "Get Arduino Code";
 						Lang.Blocks.ARDUINO_reconnect = "Connect To Hardware";
 					}
 					
@@ -153,13 +157,10 @@ angular.module('workspace').controller("WorkspaceController",
 
 			$scope.project.name = project_name || '새 프로젝트';
 			
-
 			myProject.name = project_name || '새 프로젝트';
-<<<<<<< HEAD
 
-=======
 			angular.element('#project_name').trigger('blur');
->>>>>>> 6bd8338088810d92b3111d297391750349f95254
+
 		}
 
 		// 저장하기

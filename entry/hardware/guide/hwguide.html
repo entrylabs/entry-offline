@@ -25,6 +25,42 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+	
+	<style type="text/css">
+		.centered {
+			position: relative;
+			display: inline-block;
+
+			width: 100%;
+			height: 100%;
+			padding: 1em;
+			color: white;
+		}
+	</style>
+
+	<style type="text/css">
+		.centered_50 {
+			position: relative;
+			display: inline-block;
+
+			width: 50%;
+			height: 50%;
+			padding: 1em;
+			color: white;
+		}
+	</style>
+
+	<style type="text/css">
+		.centered_30 {
+			position: relative;
+			display: inline-block;
+
+			width: 30%;
+			height: 30%;
+			padding: 1em;
+			color: white;
+		}
+	</style>
 
 </head>
 
@@ -180,17 +216,53 @@
                             	<p>1)엔트리를 시작한다</p>
 		  	    </div>		
 		            <div>		
-                            	<p>2)[블록]탬에서 [하드웨어]를 선택한다</p>
+                            	<p>2)[블록]탭에서 [하드웨어]를 선택한후 [하드웨어 플러그인 받기] 버튼을 누른다</p>
+				<div>	
+					<h5>
+					주의) - MAC OS를 지원하지 않습니다.<br/>
+					 &nbsp;&nbsp;- 윈도우 7이상을 권장합니다 <br/>
+					  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;- 크롬 브라우저에서만 사용 가능합니다<br/> 
+					</h5>
+				</div>
+				<img class="centered" src="./hwguide/img/step_image/step2.png"></img>
 		  	    </div>		
+		     	    <div>		
+				<p>entry_plugin_hw.zip 파일을 저장한후 압축파일을 푼다</p>
+			    </div>
 		            <div>		
-                            	<p>3)엔트리 서버를 시작한다</p>
+                            	<p>3)entry_plugin_hw 디렉토리에서 Entry 파일을 실행한다</p>
+				<img class="centered_30" src="./hwguide/img/step_image/step3.png"></img>
 		  	    </div>		
 		            <div>		
                             	<p>4)연결하고자 하는 하드웨어를 클릭한다</p>
-                            	<p>&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; *본 메뉴얼에서는 엔트리 센서보드를 기준으로 설명합니다</p>
+                            	<h5>(본 메뉴얼에서는 엔트리 센서보드를 기준으로 설명합니다)</h5>
+				<img class="centered" src="./hwguide/img/step_image/step4.png"></img>
 		  	    </div>		
 		            <div>		
                             	<p>5)아두이노 기반의 하드웨어(아두이노, 엔트리 센서보드)는 드라이버와 펌웨어를, 나머지 하드웨어는 드라이버를 설치해야 합니다. 드라이버 설치 버튼을 클릭하면 엔트리 센서보드의 드라이버가 설치됩니다</p>
+				<h5> 주의사항) 이미 드라이버를 설치한 적이 있는 컴퓨터에서는 이 과정을 생략합니다</h5>
+				<img class="centered" src="./hwguide/img/step_image/step5.png"></img>
+				
+		  	    </div>		
+		            <div>		
+                            	<p>6)인스톨 버튼을 누른후 Driver Install Succes 메시지가 뜰때까지 기다립니다</p>
+				<img class="centered_50" src="./hwguide/img/step_image/step6.png"></img>
+		  	    </div>		
+		            <div>		
+                            	<p>7)엔트리센서보드를 컴퓨터의 USB포트에 연결한 후 펌웨어 설치 버튼을 클릭하여 펌웨어를 설치합니다</p>
+				<img class="centered" src="./hwguide/img/step_image/step7.png"></img>
+		  	    </div>		
+		            <div>		
+                            	<p>8)엔트리 플러그인 연동 화면에서 [하드웨어>>연결중]에서 [하드웨어>>연결 성공]으로 바뀌면 엔트리보드(하드웨어)가 성공적으로 연결된 것입니다</p>
+				<img class="centered" src="./hwguide/img/step_image/step8.png"></img>
+		  	    </div>		
+		            <div>		
+                            	<p>9)엔트리에서 [블록>>하드웨어>>하드웨어에 연결하기]버튼을 클릭합니다</p>
+				<img class="centered" src="./hwguide/img/step_image/step9.png"></img>
+		  	    </div>		
+		            <div>		
+                            	<p>10)엔트리에서 엔트리보드(하드웨어)를 제어할 수 있는 블록들을 확인할 수 있습니다</p>
+				<img class="centered" src="./hwguide/img/step_image/step10.png"></img>
 		  	    </div>		
                             <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
                         </div>
@@ -214,14 +286,28 @@
                             <h2>기존에 연결한 적이 있는 경우</h2>
                             <hr class="star-primary">
 		            <div>		
-                            	<p>1)엔트리 서버를 실행합니다</p>
+                            	<p>1)entry_plugin_hw 디렉토리에서 Entry 파일을 실행한다</p>
+				<img class="centered_30" src="./hwguide/img/step_image/step3.png"></img>
 		  	    </div>		
 		            <div>		
-                            	<p>2)[하드웨어-> 연결중]에서 [하드웨어 -> 연결성공]으로 바뀌면 엔트리 센서보드(하드웨어)가 성공적으로 연결된 것입니다</p>
+                            	<p>2)연결하고자 하는 하드웨어를 클릭한다</p>
+                            	<h5>(본 메뉴얼에서는 엔트리 센서보드를 기준으로 설명합니다)</h5>
+				<img class="centered" src="./hwguide/img/step_image/step4.png"></img>
 		  	    </div>		
 		            <div>		
-                            	<p>3)엔트리 화면의 [블록] >> [하드웨어]탭에서 [하드웨어 연결] 버튼을 클릭하면 엔트리 센서보드(하드웨어)를 제어할 수 있는 블록들을 확인할 수 있습니다.</p>
+		            <div>		
+                            	<p>3)엔트리 플러그인 연동 화면에서 [하드웨어>>연결중]에서 [하드웨어>>연결 성공]으로 바뀌면 엔트리보드(하드웨어)가 성공적으로 연결된 것입니다</p>
+				<img class="centered" src="./hwguide/img/step_image/step8.png"></img>
 		  	    </div>		
+		            <div>		
+                            	<p>4)엔트리에서 [블록>>하드웨어>>하드웨어에 연결하기]버튼을 클릭합니다</p>
+				<img class="centered" src="./hwguide/img/step_image/step9.png"></img>
+		  	    </div>		
+		            <div>		
+                            	<p>5)엔트리에서 엔트리보드(하드웨어)를 제어할 수 있는 블록들을 확인할 수 있습니다</p>
+				<img class="centered" src="./hwguide/img/step_image/step10.png"></img>
+		  	    </div>		
+
                             <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
                         </div>
                     </div>
