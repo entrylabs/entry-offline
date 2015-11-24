@@ -9,8 +9,8 @@
 
 
 ; MUI Settings / Icons
-!define MUI_ICON "..\icon.ico"
-!define MUI_UNICON "..\icon.ico"
+!define MUI_ICON "icon.ico"
+!define MUI_UNICON "icon.ico"
  
 ; MUI Settings / Header
 ;!define MUI_HEADERIMAGE
@@ -82,18 +82,20 @@ Section $(TEXT_ENTRY_TITLE) SectionEntry
   SectionIn RO
   
   ; Set output path to the installation directory.
-  SetOutPath $INSTDIR
+  ;SetOutPath $INSTDIR
   
 
   ; Put file there
   SetOutPath "$INSTDIR\locales"
   File "..\locales\*.*"
   
-  ;SetOutPath "$INSTDIR\entry"
+  SetOutPath "$INSTDIR\entry"
   File /r "..\entry\*.*"
   
-  ;SetOutPath "$INSTDIR"
+  SetOutPath "$INSTDIR"
   File "..\*.*"
+  File "icon.ico"
+  File "Entry.vbs"
   
   WriteRegStr HKCR ".ent" "" "Entry"
   WriteRegStr HKCR ".ent" "Content Type" "application/x-entryapp"
