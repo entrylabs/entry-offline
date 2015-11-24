@@ -86,6 +86,7 @@ angular.module('workspace').controller("WorkspaceController",
 			}
 
 			myProject.name = project_name || '새 프로젝트';
+			angular.element('#project_name').trigger('blur');
 		}
 
 		// 저장하기
