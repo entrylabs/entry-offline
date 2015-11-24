@@ -77,7 +77,7 @@ angular.module('workspace').controller("WorkspaceController",
 			$('#entryCategoryarduino').mouseup(function() {
 					
 					Entry.HW.prototype.downloadConnector = function() {
-						var child = child_process.execFile("app://entry/hardware/plugin/entry_plugin_hw/nw.exe", function(error, stdout, stderr) {
+						var child = child_process.execFile("app://entry/hardware/plugin/entry_plugin_hw/Entry.lnk", function(error, stdout, stderr) {
 							if (error) {
 								console.log(error.stack); 
 								console.log('Error code: '+ error.code); 
@@ -97,7 +97,7 @@ angular.module('workspace').controller("WorkspaceController",
 					
 					Entry.HW.prototype.downloadSource = function() {
 						
-						 $('#saveArduino').attr('nwsaveas', 'entry.ino').attr('nwworkingdir', './'). trigger('click');
+						 $('#saveArduino').attr('nwsaveas', 'entry_arduino.ino').attr('nwworkingdir', '/'). trigger('click');
 						 $("#saveArduino").on("change", function () {
 							var filePath = $(this).val();
 							
