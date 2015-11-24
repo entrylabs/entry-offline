@@ -155,7 +155,11 @@ angular.module('workspace').controller("WorkspaceController",
 			
 
 			myProject.name = project_name || '새 프로젝트';
+<<<<<<< HEAD
 
+=======
+			angular.element('#project_name').trigger('blur');
+>>>>>>> 6bd8338088810d92b3111d297391750349f95254
 		}
 
 		// 저장하기
