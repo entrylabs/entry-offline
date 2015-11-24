@@ -5,6 +5,23 @@
 ; prompts the user asking them where to install, and drops a copy of example1.nsi
 ; there. 
 
+!include MUI2.nsh
+
+
+; MUI Settings / Icons
+!define MUI_ICON "..\icon.ico"
+!define MUI_UNICON "..\icon.ico"
+ 
+; MUI Settings / Header
+;!define MUI_HEADERIMAGE
+;!define MUI_HEADERIMAGE_RIGHT
+;!define MUI_HEADERIMAGE_BITMAP "${NSISDIR}\Contrib\Graphics\Header\orange-r-nsis.bmp"
+;!define MUI_HEADERIMAGE_UNBITMAP "${NSISDIR}\Contrib\Graphics\Header\orange-uninstall-r-nsis.bmp"
+ 
+; MUI Settings / Wizard
+;!define MUI_WELCOMEFINISHPAGE_BITMAP "${NSISDIR}\Contrib\Graphics\Wizard\orange-nsis.bmp"
+;!define MUI_UNWELCOMEFINISHPAGE_BITMAP "${NSISDIR}\Contrib\Graphics\Wizard\orange-uninstall-nsis.bmp"
+
 ;--------------------------------
 
 ; The name of the installer
@@ -14,7 +31,7 @@ Name "Entry"
 OutFile "Setup.exe"
 
 ; The default installation directory
-InstallDir c:\Entry
+InstallDir "C:\Entry"
 
 ; Registry key to check for directory (so if you install again, it will 
 ; overwrite the old one automatically)
@@ -28,33 +45,55 @@ RequestExecutionLevel admin
 
 ; Pages
 
-Page components
-Page directory
-Page instfiles
+!insertmacro MUI_PAGE_COMPONENTS
+!insertmacro MUI_PAGE_DIRECTORY
+!insertmacro MUI_PAGE_INSTFILES
 
-UninstPage uninstConfirm
-UninstPage instfiles
-
+!insertmacro MUI_UNPAGE_CONFIRM
+!insertmacro MUI_UNPAGE_INSTFILES
 ;--------------------------------
+
+; 다국어 설정
+!insertmacro MUI_LANGUAGE "Korean" ;first language is the default language
+
+LangString TEXT_ENTRY_TITLE ${LANG_KOREAN} "엔트리 (필수)"
+LangString TEXT_START_MENU_TITLE ${LANG_KOREAN} "시작메뉴에 바로가기"
+LangString TEXT_DESKTOP_TITLE ${LANG_KOREAN} "바탕화면에 바로가기"
+LangString DESC_ENTRY ${LANG_KOREAN} "엔트리 기본 프로그램"
+LangString DESC_START_MENU ${LANG_KOREAN} "시작메뉴에 바로가기 아이콘이 생성됩니다."
+LangString DESC_DESKTOP ${LANG_KOREAN} "바탕화면에 바로가기 아이콘이 생성됩니다."
+
+
+!insertmacro MUI_LANGUAGE "English"
+
+LangString TEXT_ENTRY_TITLE ${LANG_ENGLISTH} "Entry (required)"
+LangString TEXT_START_MENU_TITLE ${LANG_ENGLISTH} "Start menu shortcut"
+LangString TEXT_DESKTOP_TITLE ${LANG_ENGLISTH} "Desktop shortcut"
+LangString DESC_ENTRY ${LANG_ENGLISTH} "Entry Program"
+LangString DESC_START_MENU ${LANG_ENGLISTH} "Create shortcut on start menu"
+LangString DESC_DESKTOP ${LANG_ENGLISTH} "Create shortcut on desktop"
+
 
 
 
 ; The stuff to install
-Section "Entry (required)"
+Section $(TEXT_ENTRY_TITLE) SectionEntry
 
   SectionIn RO
   
   ; Set output path to the installation directory.
   SetOutPath $INSTDIR
   
+
   ; Put file there
-  File "..\*.*"
-  
   SetOutPath "$INSTDIR\locales"
   File "..\locales\*.*"
   
-  SetOutPath "$INSTDIR\entry"
+  ;SetOutPath "$INSTDIR\entry"
   File /r "..\entry\*.*"
+  
+  ;SetOutPath "$INSTDIR"
+  File "..\*.*"
   
   WriteRegStr HKCR ".ent" "" "Entry"
   WriteRegStr HKCR ".ent" "Content Type" "application/x-entryapp"
@@ -77,7 +116,7 @@ Section "Entry (required)"
 SectionEnd
 
 ; Optional section (can be disabled by the user)
-Section "Start Menu Shortcuts"
+Section $(TEXT_START_MENU_TITLE) SectionStartMenu
 
   CreateDirectory "$SMPROGRAMS\Entry"
   CreateShortCut "$SMPROGRAMS\Entry\Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
@@ -88,11 +127,17 @@ SectionEnd
 ;--------------------------------
 
 ; Optional section (can be disabled by the user)
-Section "Desktop Shortcuts"
+Section $(TEXT_DESKTOP_TITLE) SectionDesktop
 
   CreateShortCut "$DESKTOP\Entry.lnk" "$INSTDIR\Entry.vbs" "" "$INSTDIR\icon.ico" 0
   
 SectionEnd
+
+!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
+	!insertmacro MUI_DESCRIPTION_TEXT ${SectionEntry} $(DESC_ENTRY)
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionStartMenu} $(DESC_START_MENU)
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionDesktop} $(DESC_DESKTOP)
+!insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 ;--------------------------------
 
@@ -112,6 +157,8 @@ Section "Uninstall"
 
   ; Remove shortcuts, if any
   Delete "$SMPROGRAMS\Entry\*.*"
+  
+  Delete "$DESKTOP\Entry.lnk"
 
   ; Remove directories used
   RMDir "$SMPROGRAMS\Entry"
