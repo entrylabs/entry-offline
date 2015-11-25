@@ -9,12 +9,9 @@ var isOsx = false;
 var fstream = require('fstream');
 var tar = require('tar');
 var zlib = require('zlib');
-var child_process = require('child_process');
-
-
 
 // Create menu
-var menu = new gui.Menu({
+var native_menu = new gui.Menu({
 	type : 'menubar'
 });
 
@@ -22,153 +19,174 @@ var shortCutObj = {};
 if (process.platform === 'darwin') {
 	isOsx = true;
 	// create MacBuiltin
-	menu.createMacBuiltin('Entry', {
+	native_menu.createMacBuiltin('Entry', {
 		hideEdit : true,
 		hideWindow : true
 	});
-	shortCutObj = {
-		'newProject' : {
-			'key' : 'n',
-			'modifiers' : 'cmd'
-		},
-		'loadWorkspace' : {
-			'key' : 'o',
-			'modifiers' : 'cmd'
-		},
-		'saveWorkspace' : {
-			'key' : 's',
-			'modifiers' : 'cmd'
-		},
-		'saveAsWorkspace' : {
-			'key' : 's',
-			'modifiers' : 'cmd + shift'
-		},
-		'undo' : {
-			'key' : 'z',
-			'modifiers' : 'cmd'
-		},
-		'redo' : {
-			'key' : 'z',
-			'modifiers' : 'cmd + shift'
-		}
-	}
 } else {
 	isOsx = false;
-	shortCutObj = {
-		'newProject' : {
-			'key' : 'n',
-			'modifiers' : 'ctrl'
-		},
-		'loadWorkspace' : {
-			'key' : 'o',
-			'modifiers' : 'ctrl'
-		},
-		'saveWorkspace' : {
-			'key' : 's',
-			'modifiers' : 'ctrl'
-		},
-		'saveAsWorkspace' : {
-			'key' : 's',
-			'modifiers' : 'ctrl + shift'
-		},
-		'undo' : {
-			'key' : 'z',
-			'modifiers' : 'ctrl'
-		},
-		'redo' : {
-			'key' : 'y',
-			'modifiers' : 'ctrl'
-		},
-		'quit' : {
-			'key' : 'x',
-			'modifiers' : 'ctrl'
-		}
-	}
+	
 }
-// Create file-menu
-var fileMenu = new gui.Menu();
-// Create edit-menu
-var editMenu = new gui.Menu();
 
-fileMenu.append(new gui.MenuItem({
-	label : Lang.Workspace.file_new,
-	click : function () {
-		angular.element('[data-ng-controller="HeaderController"]').scope().newProject();
-	},
-	key: shortCutObj.newProject.key,
-  	modifiers: shortCutObj.newProject.modifiers
-}));
-fileMenu.append(new gui.MenuItem({
-	label : Lang.Workspace.file_open,
-	click : function () {
-		angular.element('[data-ng-controller="HeaderController"]').scope().loadWorkspace();
-	},
-	key: shortCutObj.loadWorkspace.key,
-  	modifiers: shortCutObj.loadWorkspace.modifiers
-}));
-fileMenu.append(new gui.MenuItem({
-	type : 'separator'
-}));
-fileMenu.append(new gui.MenuItem({
-	label : Lang.Workspace.file_save,
-	click : function () {
-		angular.element('[data-ng-controller="HeaderController"]').scope().saveWorkspace();
-	},
-	key: shortCutObj.saveWorkspace.key,
-  	modifiers: shortCutObj.saveWorkspace.modifiers
-}));
-fileMenu.append(new gui.MenuItem({
-	label : Lang.Workspace.file_save_as,
-	click : function () {
-		angular.element('[data-ng-controller="HeaderController"]').scope().saveAsWorkspace();
-	},
-	key: shortCutObj.saveAsWorkspace.key,
-  	modifiers: shortCutObj.saveAsWorkspace.modifiers
-}));
+function makeNativeMenu(menus) {
+	menus.forEach(function (menu, index) {
+		var sub_menu = new gui.Menu();
+		menu.sub.forEach(function (menu_item, index) {
+			var shortcut = {};
+			if('shortcut' in menu_item) {
+				$.each(Object.keys(menu_item.shortcut), function (idx, key) {
+					if(isOsx && key === 'osx') {
+						shortcut = menu_item.shortcut[key];
+						return false;
+					} else if(isOsx && key === 'win') {
+						shortct = menu_item.shortcut[key];
+						return false;
+					}
+				});
+			}
+
+			var menu_scheme = {
+				label : menu_item.label,
+				click : menu_item.click,
+				key: shortcut.key,
+			  	modifiers: shortcut.modifiers
+			};
+			if(menu_item.type) {
+				menu_scheme.type = menu_item.type;
+			}
+			sub_menu.append(new gui.MenuItem(menu_scheme));
+		});
+		native_menu.append(new gui.MenuItem({
+			label: menu.label,
+			submenu: sub_menu
+		}));
+	});
+}
+
+var menu_set = [{
+	'label': Lang.Menus.offline_file,
+	'sub': [{
+		'label': Lang.Workspace.file_new,
+		'click': function () {
+			angular.element('[data-ng-controller="HeaderController"]').scope().newProject();
+		},
+		'shortcut' : {
+			'osx' : {
+				'key' : 'n',
+				'modifiers' : 'cmd'	
+			},
+			'win' : {
+				'key' : 'n',
+				'modifiers' : 'ctrl'	
+			}
+		}
+	}, {
+		'label': Lang.Workspace.file_open,
+		'click': function () {
+			Entry.dispatchEvent('loadWorkspace');
+		},
+		'shortcut' : {
+			'osx' : {
+				'key' : 'o',
+				'modifiers' : 'cmd'
+			},
+			'win' : {
+				'key' : 'o',
+				'modifiers' : 'ctrl'	
+			}
+		}
+	}, {
+		'type': 'separator'
+	}, {
+		'label': Lang.Workspace.file_save,
+		'click': function () {
+			Entry.dispatchEvent('saveWorkspace');
+		},
+		'shortcut' : {
+			'osx' : {
+				'key' : 's',
+				'modifiers' : 'cmd'
+			},
+			'win' : {
+				'key' : 's',
+				'modifiers' : 'ctrl'	
+			}
+		}
+	}, {
+		'label': Lang.Workspace.file_save_as,
+		'click': function () {
+			Entry.dispatchEvent('saveAsWorkspace');
+		},
+		'shortcut' : {
+			'osx' : {
+				'key' : 's',
+				'modifiers' : 'cmd + shift'
+			},
+			'win' : {
+				'key' : 's',
+				'modifiers' : 'ctrl + shift'	
+			}
+		}
+	}]		
+}, {
+	'label': Lang.Menus.offline_edit,
+	'sub': [{
+		'label': Lang.Menus.offline_undo,
+		'click': function () {
+			Entry.dispatchEvent('undo');
+		},
+		'shortcut' : {
+			'osx' : {
+				'key' : 'z',
+				'modifiers' : 'cmd'	
+			},
+			'win' : {
+				'key' : 'z',
+				'modifiers' : 'ctrl'	
+			}
+		}
+	}, {
+		'label': Lang.Menus.offline_redo,
+		'click': function () {
+			Entry.dispatchEvent('redo');
+		},
+		'shortcut' : {
+			'osx' : {
+				'key' : 'z',
+				'modifiers' : 'cmd + shift'
+			},
+			'win' : {
+				'key' : 'y',
+				'modifiers' : 'ctrl'	
+			}
+		}
+		
+	}]		
+}];
+
 if(!isOsx) {
-	fileMenu.append(new gui.MenuItem({
-		type : 'separator'
-	}));
-	fileMenu.append(new gui.MenuItem({
-		label : Lang.Menus.offline_quit,
-		click : function () {
+	var window_menu = [{
+		'type': 'separator'
+	}, {
+		'label': Lang.Menus.offline_quit,
+		'click': function () {
 			gui.App.quit();
 		},
-		key: shortCutObj.quit.key,
-	  	modifiers: shortCutObj.quit.modifiers
-	}));
+		'shortcut' : {
+			'win' : {
+				'key' : 'x',
+				'modifiers' : 'ctrl'
+			}
+		}
+		
+	}];
+
+	menu_set[0].sub = menu_set[0].sub.concat(window_menu);
 }
 
-editMenu.append(new gui.MenuItem({
-	label : Lang.Menus.offline_undo,
-	click : function () {
-		Entry.dispatchEvent('undo');
-	},
-	key: shortCutObj.undo.key,
-  	modifiers: shortCutObj.undo.modifiers
-}));
-
-editMenu.append(new gui.MenuItem({
-	label : Lang.Menus.offline_redo,
-	click : function () {
-		Entry.dispatchEvent('redo');
-	},
-	key: shortCutObj.redo.key,
-  	modifiers: shortCutObj.redo.modifiers
-}));
-
-// Append MenuItem as a Submenu
-menu.append(new gui.MenuItem({
-	label : Lang.Menus.offline_file,
-	submenu : fileMenu
-}));
-menu.append(new gui.MenuItem({
-	label : Lang.Menus.offline_edit,
-	submenu : editMenu
-}));
-
+makeNativeMenu(menu_set);
 // Append Menu to Window
-gui.Window.get().menu = menu;
+gui.Window.get().menu = native_menu;
 
 
 var _real_path = '.';
@@ -178,14 +196,6 @@ console.log = function () {};
 console.debug = function () {};
 console.warn = function () {};
 console.error = function () {};
-
-// {
-// 	var _app_path = process.execPath.split('.app')[0];
-// 	var _path_set = _app_path.split('/');
-// 	_path_set.pop();
-// 	_real_path = _path_set.join('/');
-// 	_real_path_with_protocol = 'file://' + _real_path;
-// }
 
 // plugin
 Entry.plugin = (function () {
@@ -258,6 +268,22 @@ Entry.plugin = (function () {
 	var createFileId = function() {
 		var randomStr = (Math.random().toString(16)+"000000000").substr(2,8);
 	    return require('crypto').createHash('md5').update(randomStr).digest("hex");
+	};
+
+	that.findObject = function (object, key) {
+		var r = [];
+		Object.keys(object).forEach(function (item_key) {
+			if($.isPlainObject(object[item_key])) {
+				r = r.concat(that.findObject(object[item_key], key));
+			} else {
+				if(object[item_key].indexOf(key) >= 0) {
+					var a = {};
+					a[item_key] = object[item_key];
+					r.push(a);
+				}
+			}
+		});
+		return r;
 	};
 
 	that.init = function (cb) {
@@ -562,7 +588,6 @@ Entry.plugin = (function () {
 								throw err;
 							}
 
-
 							var audio = new Audio();
 							audio.src = soundPath;
 							audio.addEventListener('canplaythrough', function() { 
@@ -577,13 +602,6 @@ Entry.plugin = (function () {
 									fileurl : soundPath,
 									duration : Math.round(audio.duration * 10) / 10
 								}
-								
-								// probe(soundPath, function(err, probeData) {
-	   				// 				var probeDuration = (probeData.streams[0].duration).toFixed(1).toString();
-								// 	console.log("duration info inside : " +  probeDuration);
-								// 	sound.duration = probeDuration;
-									
-								// });	
 		
 								soundList.push(sound);
 		
@@ -597,7 +615,6 @@ Entry.plugin = (function () {
 			}
 		}
 	}
-	
 
 	that.getRealPath = function (path, cb) {
 		var cache = {};
