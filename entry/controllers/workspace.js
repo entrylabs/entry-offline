@@ -47,11 +47,12 @@ angular.module('workspace').controller("WorkspaceController",
 				//아두이노 사용 (웹소켓이용)
 				Entry.enableArduino();
 
-				var project = storage.getItem('nativeLoadProject');
+				var project = storage.getItem('nativeLoadProject') || storage.getItem('localStorageProject');
 
 				if(project) {
 					project = JSON.parse(project);
 					storage.removeItem('nativeLoadProject');
+					storage.removeItem('localStorageProject');
 				}
 				
 				// Entry.loadProject(project);

@@ -106,7 +106,10 @@ angular.module('workspace').controller('HeaderController',
         }
 
         $scope.setLanguage = function(language) {
-            storage.setItem("lang", language);
+            storage.setItem('lang', language);
+            var project = Entry.exportProject();
+            project.name = myProject.name;
+            storage.setItem('localStorageProject', JSON.stringify(project));
             location.reload(true);
         };
 
