@@ -15,6 +15,17 @@ var native_menu = new gui.Menu({
 	type : 'menubar'
 });
 
+nwWindow.on('close', function () {
+	var canLoad = false;
+	if(!Entry.stateManager.isSaved()) {
+		canLoad = !confirm(Lang.Menus.save_dismiss);
+	}
+
+	if(!canLoad) {
+		this.close(true);
+	}
+});
+
 var shortCutObj = {};
 if (process.platform === 'darwin') {
 	isOsx = true;

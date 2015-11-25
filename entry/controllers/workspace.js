@@ -189,7 +189,7 @@ angular.module('workspace').controller("WorkspaceController",
 
         // 불러오기
         $scope.loadWorkspace = function() {
-        	var canLoad = true;
+        	var canLoad = false;
         	if(!Entry.stateManager.isSaved()) {
         		canLoad = !confirm(Lang.Menus.save_dismiss);
         	}

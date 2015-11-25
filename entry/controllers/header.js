@@ -117,7 +117,7 @@ angular.module('workspace').controller('HeaderController',
 
         //새 프로젝트
         $scope.newProject = function () {
-            var canLoad = true;
+            var canLoad = false;
             if(!Entry.stateManager.isSaved()) {
                 canLoad = !confirm(Lang.Menus.save_dismiss);
             }
