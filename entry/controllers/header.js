@@ -8,36 +8,10 @@ angular.module('workspace').controller('HeaderController',
         var supported = !(typeof storage == 'undefined' || typeof window.JSON == 'undefined');
         var storage = (typeof window.localStorage === 'undefined') ? undefined : window.localStorage;
 
-        // $scope.init = function() {
-        //     $('.dropdown-menu').find('form').click(function (e) {
-        //         e.stopPropagation();
-        //     });
+        $scope.init = function() {
+            
 
-        //     if (!$scope.global.user)
-        //         $scope.global.user = {};
-        //    // $scope.global.user.language = $cookies.get("lang");
-
-        //     if (!$scope.global.user.language)
-        //         $scope.global.user.language = 'ko';
-
-        //     $(".page-header").find('a').on("touchstart", function(event) {
-        //         var dropdown = $(this).attr("class");
-        //         if (dropdown.indexOf("dropdown-toggle") > -1) {
-        //             var display = $(this).next('ul.dropdown-menu').css("display");
-        //             if (display != 'none')
-        //                 $(this).next('ul.dropdown-menu').css("display", "none");
-        //             else
-        //                 $(this).next('ul.dropdown-menu').css("display", "block");
-        //         } else {
-        //             var href = $(this).attr("href");
-        //             if (href && href != '')
-        //                 window.location.href = $(this).attr("href");
-        //         }
-
-        //         e.stopPropagation();
-        //     });
-
-        // };
+        };
 
         $rootScope.$on('loadProject', function(event, data) {
             $scope.loadProject(data);
@@ -110,7 +84,8 @@ angular.module('workspace').controller('HeaderController',
             var project = Entry.exportProject();
             project.name = myProject.name;
             storage.setItem('localStorageProject', JSON.stringify(project));
-            location.reload(true);
+            // location.reload(true);
+            nwWindow.reloadDev();
         };
 
         $scope.blockHelperOn = function(){
@@ -143,13 +118,15 @@ angular.module('workspace').controller('HeaderController',
         //새 프로젝트
         $scope.newProject = function () {
             Entry.plugin.initProjectFolder(function () {
-                location.reload(true);
+                // location.reload(true);
+                nwWindow.reloadDev();
             });
         }
 
         // 프로젝트 불러오기
         $scope.loadProject = function (data) {
             storage.setItem('nativeLoadProject', data);
-            location.reload(true);
+            // location.reload(true);
+            nwWindow.reloadDev();
         }
     }]);

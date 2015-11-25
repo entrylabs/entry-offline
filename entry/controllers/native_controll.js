@@ -9,7 +9,7 @@ var isOsx = false;
 var fstream = require('fstream');
 var tar = require('tar');
 var zlib = require('zlib');
-
+var nwWindow = gui.Window.get();
 // Create menu
 var native_menu = new gui.Menu({
 	type : 'menubar'
