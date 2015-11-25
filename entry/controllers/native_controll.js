@@ -31,33 +31,41 @@ if (process.platform === 'darwin') {
 function makeNativeMenu(menus) {
 	menus.forEach(function (menu, index) {
 		var sub_menu = new gui.Menu();
-		menu.sub.forEach(function (menu_item, index) {
-			var shortcut = {};
-			if('shortcut' in menu_item) {
-				$.each(Object.keys(menu_item.shortcut), function (idx, key) {
-					if(isOsx && key === 'osx') {
-						shortcut = menu_item.shortcut[key];
-						return false;
-					} else if(isOsx && key === 'win') {
-						shortct = menu_item.shortcut[key];
-						return false;
-					}
-				});
-			}
+		if(menu.sub) {
+			menu.sub.forEach(function (menu_item, index) {
+				var shortcut = {};
+				if('shortcut' in menu_item) {
+					$.each(Object.keys(menu_item.shortcut), function (idx, key) {
+						if(isOsx && key === 'osx') {
+							shortcut = menu_item.shortcut[key];
+							return false;
+						} else if(isOsx && key === 'win') {
+							shortcut = menu_item.shortcut[key];
+							return false;
+						}
+					});
+				}
 
-			var menu_scheme = {
-				label : menu_item.label,
-				click : menu_item.click,
-				key: shortcut.key,
-			  	modifiers: shortcut.modifiers
-			};
-			if(menu_item.type) {
-				menu_scheme.type = menu_item.type;
-			}
-			sub_menu.append(new gui.MenuItem(menu_scheme));
-		});
+				var menu_scheme = {
+					label : menu_item.label,
+					click : menu_item.click,
+					key: shortcut.key,
+				  	modifiers: shortcut.modifiers
+				};
+				if(menu_item.type) {
+					menu_scheme.type = menu_item.type;
+				}
+				sub_menu.append(new gui.MenuItem(menu_scheme));
+			});
+		}
+
+		var click_fn = function () {};
+		if($.isFunction(menu.click)) {
+			click_fn = menu.click;
+		}
 		native_menu.append(new gui.MenuItem({
 			label: menu.label,
+			click : click_fn,
 			submenu: sub_menu
 		}));
 	});
@@ -181,6 +189,17 @@ if(!isOsx) {
 		
 	}];
 
+	var about_menu = {
+		'label': '도움말',
+		'sub': [{
+			'label': 'about',
+			'click': function () {
+				Entry.plugin.openAboutPage();
+			}
+		}]
+	};
+	menu_set.push(about_menu);
+
 	menu_set[0].sub = menu_set[0].sub.concat(window_menu);
 }
 
@@ -285,6 +304,41 @@ Entry.plugin = (function () {
 		});
 		return r;
 	};
+
+	var popup = null;
+	that.openAboutPage = function () {
+		if(popup)
+			popup.close(true);
+		popup = gui.Window.open('./views/about.html', {
+			toolbar: false,
+			width: 300,
+			height: 180,
+			max_width: 300,
+			max_height: 180,
+			min_width: 300,
+			min_height: 180,
+		});
+
+		popup.setAlwaysOnTop(true);
+
+		// Release the 'win' object here after the new window is closed.
+		popup.on('closed', function() {
+		    popup = null;
+		});
+
+		  // Listen to main window's close event
+		gui.Window.get().on('close', function() {
+		    // Hide the window to give user the feeling of closing immediately
+		    this.hide();
+
+		    // If the new window is still open then close it.
+		    if (popup != null)
+		        popup.close(true);
+
+		    // After closing the new window, close the main window.
+		    this.close(true);
+		});
+	}
 
 	that.init = function (cb) {
 		// NanumBarunGothic 폰트 로딩 시간까지 기다린다.
