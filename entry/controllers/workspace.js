@@ -57,7 +57,7 @@ angular.module('workspace').controller("WorkspaceController",
 				
 				// Entry.loadProject(project);
 				$scope.setWorkspace(project);
-
+				
 				Entry.addEventListener('saveWorkspace', $scope.saveWorkspace);
 				Entry.addEventListener('saveAsWorkspace', $scope.saveAsWorkspace);
 				Entry.addEventListener('loadWorkspace', $scope.loadWorkspace);
@@ -183,13 +183,20 @@ angular.module('workspace').controller("WorkspaceController",
         // 새 이름으로 저장하기
 		$scope.saveAsWorkspace = function() {
 			var default_path = storage.getItem('defaultPath') || '';
-
+			Entry.stateManager.addStamp();
             $('#save_as_project').attr('nwworkingdir', default_path).trigger('click');
         };
 
         // 불러오기
         $scope.loadWorkspace = function() {
-            $('#load_project').trigger('click');
+        	var canLoad = true;
+        	if(!Entry.stateManager.isSaved()) {
+        		canLoad = !confirm(Lang.Menus.save_dismiss);
+        	}
+
+        	if(!canLoad) {
+	            $('#load_project').trigger('click');
+        	}
         };
 
         // 스프라이트 매니저 오픈.

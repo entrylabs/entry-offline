@@ -117,10 +117,18 @@ angular.module('workspace').controller('HeaderController',
 
         //새 프로젝트
         $scope.newProject = function () {
-            Entry.plugin.initProjectFolder(function () {
+            var canLoad = true;
+            if(!Entry.stateManager.isSaved()) {
+                canLoad = !confirm(Lang.Menus.save_dismiss);
+            }
+
+            if(!canLoad) {
+                Entry.plugin.initProjectFolder(function () {
                 // location.reload(true);
                 nwWindow.reloadDev();
             });
+            }
+           
         }
 
         // 프로젝트 불러오기
