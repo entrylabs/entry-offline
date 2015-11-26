@@ -203,7 +203,7 @@ if(!isOsx) {
 	var about_menu = {
 		'label': '도움말',
 		'sub': [{
-			'label': 'about',
+			'label': '엔트리 정보',
 			'click': function () {
 				Entry.plugin.openAboutPage();
 			}
@@ -328,6 +328,8 @@ Entry.plugin = (function () {
 			max_height: 180,
 			min_width: 300,
 			min_height: 180,
+			fullscreen: false,
+			resizable: false
 		});
 
 		popup.setAlwaysOnTop(true);
