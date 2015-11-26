@@ -1,5 +1,7 @@
 * {
     font-family: nanumBarunRegular !important;
+    -webkit-user-select: none;
+    cursor: default;
 }
 
 .container {
@@ -23,6 +25,7 @@
 a {
 	text-decoration: initial;
 	color:#47CD65;
+	cursor:pointer !important;
 }
 
 img {
