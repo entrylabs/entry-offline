@@ -182,10 +182,10 @@ var menu_set = [{
 
 	}]
 },  {
-	'label': '보기',
+	'label': Lang.Menus.view,
 	'sub': [{
 		'key': 'actual',
-		'label': '실제크기', //Actual Size
+		'label': Lang.Menus.actual_size, //Actual Size
 		'click': function () {
 			Entry.plugin.setZoomLevel(0);
 		},
@@ -201,7 +201,7 @@ var menu_set = [{
 		}
 	}, {
 		'key': 'zoomin',
-		'label': '확대', //Zoom In
+		'label': Lang.Menus.zoom_in, //Zoom In
 		'click': function () {
 			var zoomLevel = localStorage.getItem('window_zoomlevel') || 0;
 			zoomLevel = (++zoomLevel > 5) ? 5 : zoomLevel;
@@ -219,7 +219,7 @@ var menu_set = [{
 		}
 	}, {
 		'key': 'zoomout',
-		'label': '축소', //Zoom Out
+		'label': Lang.Menus.zoom_out, //Zoom Out
 		'click': function () {
 			var zoomLevel = localStorage.getItem('window_zoomlevel') || 0;
 			zoomLevel = (--zoomLevel < -2) ? -2 : zoomLevel;
@@ -256,9 +256,9 @@ if(!isOsx) {
 	}];
 
 	var about_menu = {
-		'label': '도움말',
+		'label': Lang.Menus.help,
 		'sub': [{
-			'label': '엔트리 정보',
+			'label': Lang.Menus.entry_info,
 			'click': function () {
 				Entry.plugin.openAboutPage();
 			}
