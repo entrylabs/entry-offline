@@ -11,8 +11,6 @@ var tar = require('tar');
 var zlib = require('zlib');
 var nwWindow = gui.Window.get();
 
-// 기존 키 이벤트 제거
-document.onkeydown = function () {}
 // Create menu
 var native_menu = new gui.Menu({
 	type : 'menubar'
@@ -53,7 +51,7 @@ function makeNativeMenu(menus) {
 						if(isOsx && key === 'osx') {
 							shortcut = menu_item.shortcut[key];
 							return false;
-						} else if(isOsx && key === 'win') {
+						} else if(!isOsx && key === 'win') {
 							shortcut = menu_item.shortcut[key];
 							return false;
 						}
@@ -216,7 +214,7 @@ var menu_set = [{
 				'modifiers' : 'cmd'
 			},
 			'win' : {
-				'key' : '+',
+				'key' : '=',
 				'modifiers' : 'ctrl'
 			}
 		}
@@ -462,6 +460,7 @@ Entry.plugin = (function () {
 	}
 
 	that.init = function (cb) {
+		
 		// NanumBarunGothic 폰트 로딩 시간까지 기다린다.
 		var font = new FontFace("nanumBarunRegular", "url(./fonts/NanumBarunGothic.woff2)");
 		font.load();
