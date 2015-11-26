@@ -12,7 +12,7 @@ var zlib = require('zlib');
 var nwWindow = gui.Window.get();
 
 // 기존 키 이벤트 제거
-Entry.Engine.prototype.captureKeyEvent = function () {}
+document.onkeydown = function () {}
 // Create menu
 var native_menu = new gui.Menu({
 	type : 'menubar'
@@ -374,8 +374,15 @@ Entry.plugin = (function () {
 		return r;
 	};
 
-	var view_menus = nwWindow.menu.items[3].submenu.items;
+	var view_menus;
 	that.setZoomMenuState = function (state) {
+		if(!view_menus) {
+			if(isOsx) {
+				view_menus = nwWindow.menu.items[3].submenu.items;
+			} else {
+				view_menus = nwWindow.menu.items[2].submenu.items;
+			}
+		}
 
 		switch(state) {
 			case 'default':
@@ -429,7 +436,8 @@ Entry.plugin = (function () {
 			min_width: 300,
 			min_height: 180,
 			fullscreen: false,
-			resizable: false
+			resizable: false,
+			icon: './icon/app.png'
 		});
 
 		popup.setAlwaysOnTop(true);
@@ -458,12 +466,14 @@ Entry.plugin = (function () {
 		var font = new FontFace("nanumBarunRegular", "url(./fonts/NanumBarunGothic.woff2)");
 		font.load();
 		font.loaded.then(function() {
+			var zoom_level = localStorage.getItem("window_zoomlevel") || 0;
+			that.setZoomLevel(zoom_level);
 			var isNotFirst = sessionStorage.getItem('isNotFirst');
-				if(!isNotFirst) {
-					that.initProjectFolder(function() {
-						sessionStorage.setItem('isNotFirst', true);
-					});
-				}
+			if(!isNotFirst) {
+				that.initProjectFolder(function() {
+					sessionStorage.setItem('isNotFirst', true);
+				});
+			}
 			if(gui.App.argv.length > 0 && !isNotFirst) {
 				if(gui.App.argv[0] !== '.') {
 					var load_path = gui.App.argv[0];
