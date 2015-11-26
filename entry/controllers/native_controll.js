@@ -36,7 +36,7 @@ if (process.platform === 'darwin') {
 	});
 } else {
 	isOsx = false;
-	
+
 }
 
 function makeNativeMenu(menus) {
@@ -92,11 +92,11 @@ var menu_set = [{
 		'shortcut' : {
 			'osx' : {
 				'key' : 'n',
-				'modifiers' : 'cmd'	
+				'modifiers' : 'cmd'
 			},
 			'win' : {
 				'key' : 'n',
-				'modifiers' : 'ctrl'	
+				'modifiers' : 'ctrl'
 			}
 		}
 	}, {
@@ -111,7 +111,7 @@ var menu_set = [{
 			},
 			'win' : {
 				'key' : 'o',
-				'modifiers' : 'ctrl'	
+				'modifiers' : 'ctrl'
 			}
 		}
 	}, {
@@ -128,7 +128,7 @@ var menu_set = [{
 			},
 			'win' : {
 				'key' : 's',
-				'modifiers' : 'ctrl'	
+				'modifiers' : 'ctrl'
 			}
 		}
 	}, {
@@ -143,10 +143,10 @@ var menu_set = [{
 			},
 			'win' : {
 				'key' : 's',
-				'modifiers' : 'ctrl + shift'	
+				'modifiers' : 'ctrl + shift'
 			}
 		}
-	}]		
+	}]
 }, {
 	'label': Lang.Menus.offline_edit,
 	'sub': [{
@@ -157,11 +157,11 @@ var menu_set = [{
 		'shortcut' : {
 			'osx' : {
 				'key' : 'z',
-				'modifiers' : 'cmd'	
+				'modifiers' : 'cmd'
 			},
 			'win' : {
 				'key' : 'z',
-				'modifiers' : 'ctrl'	
+				'modifiers' : 'ctrl'
 			}
 		}
 	}, {
@@ -176,11 +176,66 @@ var menu_set = [{
 			},
 			'win' : {
 				'key' : 'y',
-				'modifiers' : 'ctrl'	
+				'modifiers' : 'ctrl'
 			}
 		}
-		
-	}]		
+
+	}]
+},  {
+	'label': '보기',
+	'sub': [{
+		'key': 'actual',
+		'label': '실제크기', //Actual Size
+		'click': function () {
+			Entry.plugin.setZoomLevel(0);
+		},
+		'shortcut' : {
+			'osx' : {
+				'key' : '0',
+				'modifiers' : 'cmd'
+			},
+			'win' : {
+				'key' : '0',
+				'modifiers' : 'ctrl'
+			}
+		}
+	}, {
+		'key': 'zoomin',
+		'label': '확대', //Zoom In
+		'click': function () {
+			var zoomLevel = localStorage.getItem('window_zoomlevel') || 0;
+			zoomLevel = (++zoomLevel > 5) ? 5 : zoomLevel;
+			Entry.plugin.setZoomLevel(zoomLevel);
+		},
+		'shortcut' : {
+			'osx' : {
+				'key' : '+',
+				'modifiers' : 'cmd'
+			},
+			'win' : {
+				'key' : '+',
+				'modifiers' : 'ctrl'
+			}
+		}
+	}, {
+		'key': 'zoomout',
+		'label': '축소', //Zoom Out
+		'click': function () {
+			var zoomLevel = localStorage.getItem('window_zoomlevel') || 0;
+			zoomLevel = (--zoomLevel < -2) ? -2 : zoomLevel;
+			Entry.plugin.setZoomLevel(zoomLevel);
+		},
+		'shortcut' : {
+			'osx' : {
+				'key' : '-',
+				'modifiers' : 'cmd'
+			},
+			'win' : {
+				'key' : '-',
+				'modifiers' : 'ctrl'
+			}
+		}
+	}]
 }];
 
 if(!isOsx) {
@@ -197,7 +252,7 @@ if(!isOsx) {
 				'modifiers' : 'ctrl'
 			}
 		}
-		
+
 	}];
 
 	var about_menu = {
@@ -235,12 +290,12 @@ Entry.plugin = (function () {
 	var THUMB_SIZE = 96;
 
 	var getUploadPath = function(fileId, option) {
-		
+
 		console.log('file id : ' + fileId);
 		if(option === undefined) {
 			option = 'image';
 			console.log("option : " + option);
-		} 
+		}
 
 	    // prepare upload directory
 	    var baseDir = _real_path + '/temp';
@@ -256,7 +311,7 @@ Entry.plugin = (function () {
 	        fs.mkdirSync(path.join(uploadDir, 'thumb'));
 
 	    if (!fs.existsSync(path.join(uploadDir, 'image')))
-	        fs.mkdirSync(path.join(uploadDir, 'image'));	
+	        fs.mkdirSync(path.join(uploadDir, 'image'));
 
 	    //Path of upload folder where you want to upload fies/
 	    if(option === 'image') {
@@ -265,7 +320,7 @@ Entry.plugin = (function () {
 		} else if(option === 'sound') {
 			if (!fs.existsSync(path.join(uploadDir, 'sound')))
 				fs.mkdirSync(path.join(uploadDir, 'sound'));
-			
+
 			var soundPath = path.join(uploadDir, 'sound'); // for sound file
 		}
 
@@ -316,11 +371,53 @@ Entry.plugin = (function () {
 		return r;
 	};
 
+	var view_menus = nwWindow.menu.items[3].submenu.items;
+	that.setZoomMenuState = function (state) {
+
+		switch(state) {
+			case 'default':
+				view_menus[0].enabled = false;
+			break;
+			case 'min':
+				view_menus[2].enabled = false;
+			break;
+			case 'max':
+				view_menus[1].enabled = false;
+			break;
+			default:
+				view_menus[0].enabled = true;
+				view_menus[1].enabled = true;
+				view_menus[2].enabled = true;
+			break;
+		}
+	}
+
+	that.setZoomLevel = function (level) {
+		localStorage.setItem('window_zoomlevel', level);
+		nwWindow.zoomLevel = level;
+
+		var state = '';
+		switch (level) {
+			case 0:
+				state = 'default'
+				break;
+			case -2:
+				state = 'min'
+				break;
+			case 5:
+				state = 'max'
+				break;
+			default:
+
+		}
+		that.setZoomMenuState(state);
+	}
+
 	var popup = null;
 	that.openAboutPage = function () {
 		if(popup)
 			popup.close(true);
-		popup = gui.Window.open('./views/about.html', {
+		popup = gui.Window.open('./views/about.html',{
 			toolbar: false,
 			width: 300,
 			height: 180,
@@ -391,10 +488,10 @@ Entry.plugin = (function () {
 				}
 			}
 		});
-		
+
 	}
 
-	// 프로젝트 저장 
+	// 프로젝트 저장
 	that.saveProject = function(path, data, cb, enc) {
 		var string_data = JSON.stringify(data);
 		that.mkdir(_real_path + '/temp', function () {
@@ -411,18 +508,18 @@ Entry.plugin = (function () {
 					// console.log('entry');
 				});
 				fs_writer.on('end', function () {
-					
+
 					if($.isFunction(cb)){
 						cb();
 					}
 				});
 
-				fs_reader.pipe(tar.Pack()) 
+				fs_reader.pipe(tar.Pack())
 					.pipe(zlib.Gzip())
 					.pipe(fs_writer)
 
 			});
-		});		
+		});
 	}
 
 	// 프로젝트 불러오기
@@ -528,7 +625,7 @@ Entry.plugin = (function () {
 							fileurl : encodeURI(dest.imagePath + '.png'),
 							dimension : dimensions
 						}
-						
+
 						if($.isFunction(cb)) {
 							cb(picture);
 						}
@@ -552,12 +649,12 @@ Entry.plugin = (function () {
                tempH = max_size;
             }
         }
-        
+
         canvas.width = tempW;
         canvas.height = tempH;
         var ctx = canvas.getContext("2d");
         ctx.drawImage(image, 0, 0, tempW, tempH);
-        
+
         return canvas.toDataURL().split(',')[1];
     }
 
@@ -574,7 +671,7 @@ Entry.plugin = (function () {
 			var imagePath = dest.imagePath + extension;
 			var fs_reader = fs.createReadStream(url);
 			var fs_writer = fs.createWriteStream(imagePath);
-			
+
 			that.mkdir(dest.uploadDir + '/image', function () {
 				fs.readFile(url, function (err, stream) {
 					fs.writeFile(imagePath, stream, function (err) {
@@ -619,7 +716,7 @@ Entry.plugin = (function () {
 
 		});
 	};
-	
+
 	//사운드 파일 로컬 업로드
 	that.uploadTempSoundFile = function (files, cb) {
 	    var sounds_cnt = files.length;
@@ -637,17 +734,17 @@ Entry.plugin = (function () {
 				var fileId = createFileId();
 				var dest = getUploadPath(fileId, 'sound');
 				var name = data.name;
-				
+
 				console.log("name : " + name);
 				var fileName = fileId;
 				var extension = name.split('.')[1];
 				var dirPath = dest.soundPath;
 				var soundPath = dirPath + '/' + fileName + "." + extension;
-				
+
 				console.log("dest sound path : " + dest.soundPath);
 				//var fs_reader = fs.createReadStream(url);
 				//var fs_writer = fs.createWriteStream(soundPath);
-				
+
 				that.mkdir(dest.uploadDir + '/sound', function () {
 					fs.readFile(src, function (err, stream) {
 						fs.writeFile(soundPath, stream, 'utf8', function (err) {
@@ -657,7 +754,7 @@ Entry.plugin = (function () {
 
 							var audio = new Audio();
 							audio.src = soundPath;
-							audio.addEventListener('canplaythrough', function() { 
+							audio.addEventListener('canplaythrough', function() {
 							   console.log(audio);
 								var sound = {
 									_id : Entry.generateHash(),
@@ -669,9 +766,9 @@ Entry.plugin = (function () {
 									fileurl : soundPath,
 									duration : Math.round(audio.duration * 10) / 10
 								}
-		
+
 								soundList.push(sound);
-		
+
 								if($.isFunction(cb) && ++run_cnt === sounds_cnt) {
 										cb(soundList);
 								}
@@ -697,6 +794,6 @@ Entry.plugin = (function () {
 	that.testPath = function() {
 		that.getRealPath('./');
 	}
-	
+
 	return that;
 })();
