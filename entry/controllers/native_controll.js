@@ -405,7 +405,7 @@ Entry.plugin = (function () {
 		nwWindow.zoomLevel = level;
 
 		var state = '';
-		switch (level) {
+		switch (Number(level)) {
 			case 0:
 				state = 'default'
 				break;
