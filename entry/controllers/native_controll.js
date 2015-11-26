@@ -385,12 +385,18 @@ Entry.plugin = (function () {
 		switch(state) {
 			case 'default':
 				view_menus[0].enabled = false;
+				view_menus[1].enabled = true;
+				view_menus[2].enabled = true;
 			break;
 			case 'min':
+				view_menus[0].enabled = true;
+				view_menus[1].enabled = true;
 				view_menus[2].enabled = false;
 			break;
 			case 'max':
+				view_menus[0].enabled = true;
 				view_menus[1].enabled = false;
+				view_menus[2].enabled = true;
 			break;
 			default:
 				view_menus[0].enabled = true;
