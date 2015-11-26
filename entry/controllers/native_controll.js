@@ -452,7 +452,7 @@ Entry.plugin = (function () {
 		});
 
 		  // Listen to main window's close event
-		gui.Window.get().on('close', function() {
+		popup.on('close', function() {
 		    // Hide the window to give user the feeling of closing immediately
 		    this.hide();
 
@@ -466,7 +466,7 @@ Entry.plugin = (function () {
 	}
 
 	that.init = function (cb) {
-		
+
 		// NanumBarunGothic 폰트 로딩 시간까지 기다린다.
 		var font = new FontFace("nanumBarunRegular", "url(./fonts/NanumBarunGothic.woff2)");
 		font.load();
