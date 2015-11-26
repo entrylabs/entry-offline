@@ -10,6 +10,9 @@ var fstream = require('fstream');
 var tar = require('tar');
 var zlib = require('zlib');
 var nwWindow = gui.Window.get();
+
+// 기존 키 이벤트 제거
+Entry.Engine.prototype.captureKeyEvent = function () {}
 // Create menu
 var native_menu = new gui.Menu({
 	type : 'menubar'
