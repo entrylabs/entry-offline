@@ -11,7 +11,7 @@
     "jquery-ui": "~1.11.x",
     "underscore": "~1.8.x",
     "PreloadJS": "0.6.0",
-    "EaselJS": "0.8.0",
+    "EaselJS": "https://github.com/boolgom/EaselJS.git",
     "SoundJS": "0.6.0",
     "webfontloader": "1.5.18",
     "angular": "angularjs#~1.4.7",
