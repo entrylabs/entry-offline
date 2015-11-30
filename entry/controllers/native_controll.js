@@ -577,7 +577,7 @@ Entry.plugin = (function () {
     			var fileName = fileId;
     			var extension = name.split('.')[1];
     			var dirPath = dest.soundPath;
-    			var soundPath = _real_path + '\\' + dirPath + '\\' + fileName + "." + extension;
+    			var soundPath = _real_path + path.sep + dirPath + path.sep + fileName + "." + extension;
 
     			console.log("dest sound path : " + dest.soundPath);
     			//var fs_reader = fs.createReadStream(url);
