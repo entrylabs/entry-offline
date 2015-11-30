@@ -12,9 +12,89 @@ var _real_path = '.';
 var _real_path_with_protocol = '';
 
 console.log = function () {};
+console.fslog = function (text) {
+    // var data = fs.readFileSync(_real_path + '/debug.log', 'utf8');
+    // data += '\n\r' + new Date() + ' : ' + text;
+    // fs.writeFileSync(_real_path + '/debug.log', data, 'utf8');
+};
 console.debug = function () {};
 console.warn = function () {};
 console.error = function () {};
+
+// 16진수 little Endian 을 16진수 Big Endian으로 변환
+function getLittleToBigEndian(hex_string) {
+    var big_endian = '';
+    for(var i = 0; i < hex_string.length; i+=2) {
+        big_endian = hex_string.substr(i, 2) + big_endian;
+    }
+    return big_endian;
+}
+
+//wav의 헤더를 판단하여 duration을 구한다.
+function calcDurationForWav(audioHex) {
+    var header = audioHex.substr(44,28);
+    var channel = parseInt(getLittleToBigEndian(header.substr(0, 4)), 16);
+    var sample_rate = parseInt(getLittleToBigEndian(header.substr(4, 8)), 16);
+    var bit_per_sample = parseInt(getLittleToBigEndian(header.substr(24, 4)), 16);
+
+    return (audioHex.length * 4) / (channel * sample_rate * bit_per_sample);
+}
+
+//mp3의 헤더를 판단하여 duration을 구한다.
+function calcDurationForMp3(audioHex) {
+    var index = audioHex.indexOf('00fffb');
+    if(index < 0) {
+        index = audioHex.indexOf('00fff3');
+    }
+    var header = audioHex.substr(index + 2, 8)
+
+    var mpeg1 = {
+        '1' : 32,
+        '2' : 40,
+        '3' : 48,
+        '4' : 56,
+        '5' : 64,
+        '6' : 80,
+        '7' : 96 ,
+        '8' : 112,
+        '9' : 128,
+        'a' : 160,
+        'b' : 192,
+        'c' : 224,
+        'd' : 256,
+        'e' : 320
+    };
+    var mpeg2 = {
+        '1' : 8,
+        '2' : 16,
+        '3' : 24,
+        '4' : 32,
+        '5' : 40,
+        '6' : 48,
+        '7' : 56,
+        '8' : 64,
+        '9' : 80,
+        'a' : 96,
+        'b' : 112,
+        'c' : 128,
+        'd' : 144,
+        'e' : 160
+    };
+
+    var type = header.substr(3,1);
+    var bitrate_key = header.substr(4,1);
+    var bitrate = 0;
+    switch(type) {
+        case '3':
+            bitrate = mpeg2[bitrate_key];
+        break;
+        case 'b':
+            bitrate = mpeg1[bitrate_key];
+        break;
+    }
+
+    return (audioHex.length * 4) / (bitrate * 1000);
+}
 
 // plugin
 Entry.plugin = (function () {
@@ -416,7 +496,7 @@ Entry.plugin = (function () {
 		images.forEach(function (url, index) {
 			var fileId = createFileId();
 			var dest = getUploadPath(fileId);
-			var url_split = url.split('/');
+			var url_split = url.split(path.sep);
 			var extension = '.' + url_split[url_split.length-1].split('.')[1];
 			var file_name = url_split[url_split.length-1].split('.')[0];
 			var imagePath = dest.imagePath + extension;
@@ -451,6 +531,7 @@ Entry.plugin = (function () {
 									name : file_name,
 									filename : fileId,
 									fileurl : encodeURI(imagePath),
+                                    extension : extension,
 									dimension : dimensions
 								}
 
@@ -474,60 +555,83 @@ Entry.plugin = (function () {
 		var run_cnt = 0;
 		var soundList = [];
 		console.log("file list : " + JSON.stringify(files));
-		for(var key in files) {
-			console.log("index : " + key);
-			if(key === 'length')
-				break;
-			console.log("file length : " + files.length);
-			if(files.hasOwnProperty(key)) {
-				var data = files[key];
-				var src = data.path;
-				var fileId = createFileId();
-				var dest = getUploadPath(fileId, 'sound');
-				var name = data.name;
+		for(var i = 0; i < files.length; i++) {
+            (function (i) {
+    			var data = files[i];
+    			var src = data.path;
+    			var fileId = createFileId();
+    			var dest = getUploadPath(fileId, 'sound');
+    			var name = data.name;
 
-				console.log("name : " + name);
-				var fileName = fileId;
-				var extension = name.split('.')[1];
-				var dirPath = dest.soundPath;
-				var soundPath = dirPath + '/' + fileName + "." + extension;
+    			console.log("name : " + name);
+    			var fileName = fileId;
+    			var extension = name.split('.')[1];
+    			var dirPath = dest.soundPath;
+    			var soundPath = _real_path + '\\' + dirPath + '\\' + fileName + "." + extension;
 
-				console.log("dest sound path : " + dest.soundPath);
-				//var fs_reader = fs.createReadStream(url);
-				//var fs_writer = fs.createWriteStream(soundPath);
+    			console.log("dest sound path : " + dest.soundPath);
+    			//var fs_reader = fs.createReadStream(url);
+    			//var fs_writer = fs.createWriteStream(soundPath);
 
-				that.mkdir(dest.uploadDir + '/sound', function () {
-					fs.readFile(src, function (err, stream) {
-						fs.writeFile(soundPath, stream, 'utf8', function (err) {
-							if(err) {
-								throw err;
-							}
+    			that.mkdir(dest.uploadDir + '/sound', function () {
+                    console.log("create!! dir ");
+    				fs.readFile(src, function (err, stream) {
+                        if(err) {
+                            throw err;
+                        }
+                        console.log("readFile!! sound ");
+    					fs.writeFile(soundPath, stream, 'utf8', function (err) {
+    						if(err) {
+    							throw err;
+    						}
+                            console.log("writeFile!! sound ");
 
-							var audio = new Audio();
-							audio.src = soundPath;
-							audio.addEventListener('canplaythrough', function() {
-							   console.log(audio);
-								var sound = {
-									_id : Entry.generateHash(),
-									type : 'user',
-									name : name.split('.')[0],
-									filename : fileName,
-									ext : extension,
-									path : soundPath,
-									fileurl : soundPath,
-									duration : Math.round(audio.duration * 10) / 10
-								}
+                            var audioStream = fs.createReadStream(soundPath);
 
-								soundList.push(sound);
+                            var audioHex = '';
+                            audioStream.on('data', function(buffer) {
+                                audioHex += buffer.toString('hex');
+                            });
+                            audioStream.on('end', function() {
+                                var duration = 0;
+                                if(extension === 'mp3') {
+                                    duration = calcDurationForMp3(audioHex);
+                                } else {
+                                    duration = calcDurationForWav(audioHex);
+                                }
 
-								if($.isFunction(cb) && ++run_cnt === sounds_cnt) {
-										cb(soundList);
-								}
-							}, false);
-						});
-					});
-				});
-			}
+                                var sound = {
+    								_id : Entry.generateHash(),
+    								type : 'user',
+    								name : name.split('.')[0],
+    								filename : fileName,
+    								ext : extension,
+    								path : soundPath,
+    								fileurl : soundPath,
+    								duration : Math.ceil(duration * 10) / 10
+    							}
+
+    							soundList.push(sound);
+
+    							if($.isFunction(cb) && ++run_cnt === sounds_cnt) {
+    								cb(soundList);
+    							}
+                            });
+
+
+                            return;
+    						var audio = new Audio();
+    						audio.src = soundPath;
+                            console.log("soundPath!! sound " + soundPath);
+    						audio.addEventListener('canplaythrough', function() {
+                                console.log("canplaythrough!! sound ");
+    						    console.log(audio);
+
+    						}, false);
+    					});
+    				});
+    			});
+            })(i);
 		}
 	}
 

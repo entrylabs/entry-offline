@@ -7,7 +7,9 @@ common.filter('makeThumbnail', function() {
     return function(picture) {
         if (picture) {
             // return picture.filename.substring(0,2)+'/'+picture.filename.substring(2,4)+'/thumb/'+picture.filename+'.png';
-            return '/uploads/' + picture.filename.substring(0,2)+'/'+picture.filename.substring(2,4)+'/thumb/'+picture.filename+'.png';;
+
+            var extension = picture.extension || '.png';
+            return '/uploads/' + picture.filename.substring(0,2) + '/' + picture.filename.substring(2,4)+'/thumb/' + picture.filename + extension;
         }
         else
             return '/images/text_icon.png';
@@ -18,7 +20,8 @@ common.filter('makeUploadThumbnail', function() {
     return function(picture) {
         if (picture) {
             // return picture.filename.substring(0,2)+'/'+picture.filename.substring(2,4)+'/thumb/'+picture.filename+'.png';
-            return '/temp/' + picture.filename.substring(0,2)+'/'+picture.filename.substring(2,4)+'/thumb/'+picture.filename+'.png';;
+            var extension = picture.extension || '.png';
+            return '/temp/' + picture.filename.substring(0,2) + '/' + picture.filename.substring(2,4)+'/thumb/' + picture.filename + extension;
         }
         else
             return '/images/text_icon.png';
