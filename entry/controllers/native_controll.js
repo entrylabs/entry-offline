@@ -185,6 +185,16 @@ Entry.plugin = (function () {
 		return r;
 	};
 
+    that.setZoomInPage = function () {
+        var zoomLevel = localStorage.getItem('window_zoomlevel') || 0;
+        zoomLevel = (++zoomLevel > 5) ? 5 : zoomLevel;
+        Entry.plugin.setZoomLevel(zoomLevel);
+    };
+    that.setZoomOutPage = function () {
+        var zoomLevel = localStorage.getItem('window_zoomlevel') || 0;
+        zoomLevel = (--zoomLevel < -2) ? -2 : zoomLevel;
+        Entry.plugin.setZoomLevel(zoomLevel);
+    };
 	var view_menus;
 	that.setZoomMenuState = function (state) {
 		if(!view_menus) {
@@ -617,17 +627,6 @@ Entry.plugin = (function () {
     								cb(soundList);
     							}
                             });
-
-
-                            return;
-    						var audio = new Audio();
-    						audio.src = soundPath;
-                            console.log("soundPath!! sound " + soundPath);
-    						audio.addEventListener('canplaythrough', function() {
-                                console.log("canplaythrough!! sound ");
-    						    console.log(audio);
-
-    						}, false);
     					});
     				});
     			});

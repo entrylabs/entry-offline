@@ -2,6 +2,15 @@ var gui = require('nw.gui');
 var nwWindow = gui.Window.get();
 var isOsx = false;
 
+$(document).on('mousewheel', function(e){
+    if(e.originalEvent.wheelDelta /120 > 0 && e.ctrlKey) {
+        Entry.plugin.setZoomInPage();
+    }
+    else if(e.ctrlKey){
+        Entry.plugin.setZoomOutPage();
+    }
+});
+
 // Create menu
 var native_menu = new gui.Menu({
 	type : 'menubar'
@@ -195,9 +204,7 @@ var menu_set = [{
 		'key': 'zoomin',
 		'label': Lang.Menus.zoom_in, //Zoom In
 		'click': function () {
-			var zoomLevel = localStorage.getItem('window_zoomlevel') || 0;
-			zoomLevel = (++zoomLevel > 5) ? 5 : zoomLevel;
-			Entry.plugin.setZoomLevel(zoomLevel);
+			Entry.plugin.setZoomInPage();
 		},
 		'shortcut' : {
 			'osx' : {
@@ -213,9 +220,7 @@ var menu_set = [{
 		'key': 'zoomout',
 		'label': Lang.Menus.zoom_out, //Zoom Out
 		'click': function () {
-			var zoomLevel = localStorage.getItem('window_zoomlevel') || 0;
-			zoomLevel = (--zoomLevel < -2) ? -2 : zoomLevel;
-			Entry.plugin.setZoomLevel(zoomLevel);
+            Entry.plugin.setZoomOutPage();
 		},
 		'shortcut' : {
 			'osx' : {
