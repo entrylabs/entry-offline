@@ -1,11 +1,12 @@
 {
   "name": "entry-offline",
   "version": "1.0.0",
+  "main" : "README.md",
   "ignore": [
-      "build/",
-      "entry/",
-      "sound_lib/"
-  ],
+    "build",
+    "entry",
+    "sound_lib"
+],
   "dependencies": {
     "entry-offline-editor-win32" : "https://github.com/entrylabs/entry-offline/releases/download/v1.0.0/Entry_1.0.0_Setup.exe",
     "entry-offline-editor-osx64" : "https://github.com/entrylabs/entry-offline/releases/download/v1.0.0/Entry_1.0.0_64.dmg",
