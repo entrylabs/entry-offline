@@ -25,10 +25,10 @@
 ;--------------------------------
 
 ; The name of the installer
-Name "Entry"
+Name "엔트리"
 
 ; The file to write
-OutFile "Entry_1.0.0_Setup.exe"
+OutFile "엔트리_1.0.1_Setup.exe"
 
 ; The default installation directory
 InstallDir "C:\Entry"
@@ -95,7 +95,7 @@ Section $(TEXT_ENTRY_TITLE) SectionEntry
   SetOutPath "$INSTDIR"
   File "..\*.*"
   File "icon.ico"
-  File "Entry.vbs"
+  File "엔트리.vbs"
   
   WriteRegStr HKCR ".ent" "" "Entry"
   WriteRegStr HKCR ".ent" "Content Type" "application/x-entryapp"
@@ -108,7 +108,7 @@ Section $(TEXT_ENTRY_TITLE) SectionEntry
   WriteRegStr HKLM "SOFTWARE\Entry" "Install_Dir" "$INSTDIR"
   
   ; Write the uninstall keys for Windows
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Entry" "DisplayName" "Entry"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Entry" "DisplayName" "엔트리"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Entry" "UninstallString" '"$INSTDIR\uninstall.exe"'
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Entry" "DisplayIcon" '"$INSTDIR\icon.ico"'
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Entry" "NoModify" 1
@@ -120,9 +120,9 @@ SectionEnd
 ; Optional section (can be disabled by the user)
 Section $(TEXT_START_MENU_TITLE) SectionStartMenu
 
-  CreateDirectory "$SMPROGRAMS\Entry"
-  CreateShortCut "$SMPROGRAMS\Entry\Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
-  CreateShortCut "$SMPROGRAMS\Entry\Entry.lnk" "$INSTDIR\Entry.vbs" "" "$INSTDIR\icon.ico" 0
+  CreateDirectory "$SMPROGRAMS\엔트리"
+  CreateShortCut "$SMPROGRAMS\엔트리\Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
+  CreateShortCut "$SMPROGRAMS\엔트리\엔트리.lnk" "$INSTDIR\엔트리.vbs" "" "$INSTDIR\icon.ico" 0
   
 SectionEnd
 
@@ -131,7 +131,7 @@ SectionEnd
 ; Optional section (can be disabled by the user)
 Section $(TEXT_DESKTOP_TITLE) SectionDesktop
 
-  CreateShortCut "$DESKTOP\Entry.lnk" "$INSTDIR\Entry.vbs" "" "$INSTDIR\icon.ico" 0
+  CreateShortCut "$DESKTOP\엔트리.lnk" "$INSTDIR\엔트리.vbs" "" "$INSTDIR\icon.ico" 0
   
 SectionEnd
 
@@ -158,12 +158,12 @@ Section "Uninstall"
   Delete $INSTDIR\*
 
   ; Remove shortcuts, if any
-  Delete "$SMPROGRAMS\Entry\*.*"
+  Delete "$SMPROGRAMS\엔트리\*.*"
   
-  Delete "$DESKTOP\Entry.lnk"
+  Delete "$DESKTOP\엔트리.lnk"
 
   ; Remove directories used
-  RMDir "$SMPROGRAMS\Entry"
+  RMDir "$SMPROGRAMS\엔트리"
   RMDir /r "$INSTDIR"
 
 SectionEnd

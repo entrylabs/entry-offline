@@ -7,7 +7,7 @@
 	<link rel='stylesheet'  href='../css/nanumbarungothic.css' />
 	<script type='text/javascript' src='../bower_components/jquery/dist/jquery.min.js'></script>
 	<script type="text/javascript" src="../js/nwjs-open-link-in-browser.js"></script>
-	
+
 </head>
 <body>
 	<div class="container">
@@ -16,11 +16,11 @@
 				<img src="../icon/app.png" />
 			</div>
 			<div>
-				<h3>Entry</h3>
+				<h3>엔트리</h3>
 			</div>
 			<div>
 				<p>
-					version 1.0.0<br/>
+					version <span id="version"></span><br/>
 					<a href="#" onClick="{nwjsOpenLinkInBrowser('http://play-entry.org')}">
 						http://play-entry.org
 					</a>
@@ -30,6 +30,8 @@
 	</div>
 	<script>
 		$(function () {
+            var gui = require('nw.gui');
+            $("#version").text(gui.App.manifest.version);
 			//$(document).on('click', function () {
 			//	window.close();
 			//});
