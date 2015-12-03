@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('workspace').controller("WorkspaceController", 
+angular.module('workspace').controller("WorkspaceController",
 	['$scope', '$rootScope', '$modal', '$http', 'myProject', function ($scope, $rootScope, $modal, $http, myProject) {
 		$scope.saveFileName = '';
 		$scope.project = myProject;
@@ -41,7 +41,7 @@ angular.module('workspace').controller("WorkspaceController",
 						url: './css/nanumgothiccoding.css'
 					}]
 				};
-								
+
 				Entry.init(workspace, initOptions);
 				Entry.playground.setBlockMenu();
 				//아두이노 사용 (웹소켓이용)
@@ -54,10 +54,10 @@ angular.module('workspace').controller("WorkspaceController",
 					storage.removeItem('nativeLoadProject');
 					storage.removeItem('localStorageProject');
 				}
-				
+
 				// Entry.loadProject(project);
 				$scope.setWorkspace(project);
-				
+
 				Entry.addEventListener('saveWorkspace', $scope.saveWorkspace);
 				Entry.addEventListener('saveAsWorkspace', $scope.saveAsWorkspace);
 				Entry.addEventListener('loadWorkspace', $scope.loadWorkspace);
@@ -69,13 +69,16 @@ angular.module('workspace').controller("WorkspaceController",
 				Entry.addEventListener('saveCanvasImage', $scope.saveCanvasData);
 				Entry.addEventListener('openPictureImport', $scope.openPictureImport);
 				// Entry.addEventListener('saveLocalStorageProject', saveLocalStorageProject);
-				
+				if(!Entry.plugin.isOsx()) {
+                    var category_list = Entry.playground.categoryView_.getElementsByTagName("li");
+                    category_list['entryCategoryarduino'].addClass('entryRemove');
+                }
 				$scope.setOfflineHW();
 			});
 		};
-		
+
 		$scope.setOfflineHW = function() {
-			$('#entryCategoryarduino').mouseup(function() {	
+			$('#entryCategoryarduino').mouseup(function() {
 					Entry.HW.prototype.downloadConnector = function() {
 						$('#saveArduinoPlugin').attr('nwsaveas', 'entry_plugin_hw.zip').trigger('click');
 						$("#saveArduinoPlugin").on("change", function () {
@@ -85,21 +88,21 @@ angular.module('workspace').controller("WorkspaceController",
 								var fs = require("fs");
 									fs.readFile("./hardware/plugin/entry_plugin_hw.zip", function (err, stream) {
 										fs.writeFile(filePath, stream, 'utf8', function (err) {
-											if (err) 
+											if (err)
 												alert("Unable to save file");
-											else 
+											else
 												console.log("File Saved");
 										});
-										
+
 									});
 							}
 							else {
-								// User cancelled 
+								// User cancelled
 							}
        					 });
-					};	
-							
-					
+					};
+
+
 					Entry.HW.prototype.downloadSource = function() {
 						 $('#saveArduinoCode').attr('nwsaveas', 'entry_arduino.ino').trigger('click');
 						 $("#saveArduinoCode").on("change", function () {
@@ -109,21 +112,21 @@ angular.module('workspace').controller("WorkspaceController",
 								var fs = require("fs");
 									fs.readFile("./hardware/source/entry_arduino.ino", function (err, stream) {
 										fs.writeFile(filePath, stream, 'utf8', function (err) {
-											if (err) 
+											if (err)
 												alert("Unable to save file");
-											else 
+											else
 												console.log("File Saved");
 											});
 									});
 							}
 							else {
-								// User cancelled 
+								// User cancelled
 							}
        					 });
 					};
-					
+
 					var user_lang = localStorage.getItem('lang');
-															
+
 					if(user_lang === 'ko' || null) {
 						Lang.Blocks.ARDUINO_download_connector = "하드웨어 플러그인 받기";
 						Lang.Blocks.ARDUINO_download_source = "아두이노 소스코드 받기";
@@ -137,7 +140,7 @@ angular.module('workspace').controller("WorkspaceController",
 						Lang.Blocks.ARDUINO_download_source = "Get Arduino Code";
 						Lang.Blocks.ARDUINO_reconnect = "Connect To Hardware";
 					}
-					
+
 			});
 	    };
 
@@ -157,7 +160,7 @@ angular.module('workspace').controller("WorkspaceController",
 
 
 			$scope.project.name = project_name || '새 프로젝트';
-			
+
 			myProject.name = project_name || '새 프로젝트';
 
 			angular.element('#project_name').trigger('blur');
@@ -176,7 +179,7 @@ angular.module('workspace').controller("WorkspaceController",
 			} else {
 				var default_path = storage.getItem('defaultPath') || '';
 
-            	$('#save_as_project').attr('nwworkingdir', default_path).trigger('click');		
+            	$('#save_as_project').attr('nwworkingdir', default_path).trigger('click');
 			}
         };
 
@@ -295,7 +298,7 @@ angular.module('workspace').controller("WorkspaceController",
 	            return false;
 	        }
 
-	        var modalInstance = $modal.open({	
+	        var modalInstance = $modal.open({
 	            templateUrl: './views/modal/picture.html',
 	            controller: 'PictureController',
 	            backdrop: false,
@@ -328,17 +331,17 @@ angular.module('workspace').controller("WorkspaceController",
 
 	        });
         };
-        
+
         //Adding Sound
         $scope.openSoundManager = function () {
         	//console.log('openSoundManager');
-            
+
             if (!Entry.engine.isState('stop')) {
                 alert(Lang.Workspace.cannot_add_object);
                 return false;
             }
-            
-            var modalInstance = $modal.open({	
+
+            var modalInstance = $modal.open({
 	            templateUrl: './views/modal/sound.html',
 	            controller: 'SoundController',
 	            backdrop: false,
@@ -349,16 +352,16 @@ angular.module('workspace').controller("WorkspaceController",
 	                }
 	            }
 	        });
-            
+
             modalInstance.result.then(function (selectedItems) {
                 selectedItems.data.forEach(function(item) {
                     item.id = Entry.generateHash();
                     console.log("item duration ws: " + JSON.stringify(item.duration));
                     Entry.playground.addSound(item, true);
                 });
-            }); 
+            });
         };
-        
+
         $scope.changeVariableName = function () {
         	console.log('changeVariableName');
         };
@@ -391,7 +394,7 @@ angular.module('workspace').controller("WorkspaceController",
 				        if (imageData.data[index+3] > 0) {
 				            pix.x.push(x);
 				            pix.y.push(y);
-				        }   
+				        }
 				    }
 				}
 				pix.x.sort(function(a,b){return a-b});
@@ -407,7 +410,7 @@ angular.module('workspace').controller("WorkspaceController",
 				ctx.putImageData(cut, 0, 0);
 
 				defer.resolve(canvas.toDataURL());
-        	}			
+        	}
 
 			return defer;
 		}
@@ -426,7 +429,7 @@ angular.module('workspace').controller("WorkspaceController",
 			    	var canvas = document.createElement('canvas');
 			    	var ctx = canvas.getContext("2d");
 			    	ctx.drawImage(this, 0, 0, canvas.width, canvas.height);
-		    	
+
 			    	// 이미지 TRIM
 			    	var image_data_url = {};
 			    	//일반 이미지
@@ -492,7 +495,7 @@ angular.module('workspace').controller("WorkspaceController",
 		        		var pathArr = path.split('/');
 		        		pathArr.pop();
 		        		storage.setItem('defaultPath', pathArr.join('/'));
-		        		
+
 		        		myProject.saveProject(path, function (project_name) {
 			            	myProject.isSaved = true;
 			            	myProject.isSavedPath = path;
@@ -533,11 +536,4 @@ angular.module('workspace').controller("WorkspaceController",
 		        });
 		    }
 	    };
-	});	;	
-
-
-
-
-
-
-
+	});	;

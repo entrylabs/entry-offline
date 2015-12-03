@@ -8,6 +8,19 @@ var fstream = require('fstream');
 var tar = require('tar');
 var zlib = require('zlib');
 
+var options = {};
+// gui.App.argv.forEach(function(item, index) {
+// 	if(item == '-debug') {
+// 		options.debug = true;
+// 	}
+// });
+
+// show devtools if console
+var win = gui.Window.get();
+if(options.debug) {
+	win.showDevTools();
+}
+
 var _real_path = '.';
 var _real_path_with_protocol = '';
 
@@ -287,6 +300,10 @@ Entry.plugin = (function () {
 		    this.close(true);
 		});
 	}
+
+    that.isOsx = function () {
+        return isOsx;
+    }
 
 	that.init = function (cb) {
 
