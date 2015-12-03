@@ -12,7 +12,7 @@ var options = {};
 gui.App.argv.forEach(function(item, index) {
 	if(item == '-debug') {
 		options.debug = true;
-	} else {
+	} else if(path.isAbsolute(item)){
         options.path = item || undefined;
     }
 });
