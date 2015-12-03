@@ -9,11 +9,13 @@ var tar = require('tar');
 var zlib = require('zlib');
 
 var options = {};
-// gui.App.argv.forEach(function(item, index) {
-// 	if(item == '-debug') {
-// 		options.debug = true;
-// 	}
-// });
+gui.App.argv.forEach(function(item, index) {
+	if(item == '-debug') {
+		options.debug = true;
+	} else {
+        options.path = item || undefined;
+    }
+});
 
 // show devtools if console
 var win = gui.Window.get();
@@ -319,15 +321,15 @@ Entry.plugin = (function () {
 					sessionStorage.setItem('isNotFirst', true);
 				});
 			}
-			if(gui.App.argv.length > 0 && !isNotFirst) {
-				if(gui.App.argv[0] !== '.') {
-					var load_path = gui.App.argv[0];
-					var pathArr = load_path.split('/');
+
+			if(options.path && !isNotFirst) {
+				if(options.path !== '.') {
+					var load_path = options.path;
+					var pathArr = load_path.split(path.sep);
 					pathArr.pop();
-					localStorage.setItem('defaultPath', pathArr.join('/'));
+					localStorage.setItem('defaultPath', pathArr.join(path.sep));
 
 					that.loadProject(load_path, function (data) {
-						console.log(data);
 						var jsonObj = JSON.parse(data);
 						jsonObj.path = load_path;
 						localStorage.setItem('nativeLoadProject', JSON.stringify(jsonObj));
