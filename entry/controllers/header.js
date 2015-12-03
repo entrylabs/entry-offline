@@ -94,6 +94,7 @@ angular.module('workspace').controller('HeaderController',
         
         $scope.startHWGuide = function(url, title, options) {
             gui.Window.open(url, {
+                toolbar: false,
                 position: 'center',
                 width: 1200,
                 height:800
