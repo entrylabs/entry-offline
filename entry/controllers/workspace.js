@@ -69,7 +69,7 @@ angular.module('workspace').controller("WorkspaceController",
 				Entry.addEventListener('saveCanvasImage', $scope.saveCanvasData);
 				Entry.addEventListener('openPictureImport', $scope.openPictureImport);
 				// Entry.addEventListener('saveLocalStorageProject', saveLocalStorageProject);
-				if(!Entry.plugin.isOsx()) {
+				if(Entry.plugin.isOsx()) {
                     var category_list = Entry.playground.categoryView_.getElementsByTagName("li");
                     category_list['entryCategoryarduino'].addClass('entryRemove');
                 }
