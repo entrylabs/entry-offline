@@ -26,11 +26,15 @@ if(options.debug) {
 var _real_path = '.';
 var _real_path_with_protocol = '';
 
-console.log = function () {};
+// console.log = function () {};
 console.fslog = function (text) {
-    // var data = fs.readFileSync(_real_path + '/debug.log', 'utf8');
-    // data += '\n\r' + new Date() + ' : ' + text;
-    // fs.writeFileSync(_real_path + '/debug.log', data, 'utf8');
+	var debug_path = _real_path + path.sep + 'debug.log';
+    if (!fs.existsSync(debug_path)) {
+	    fs.writeFileSync(debug_path, '', 'utf8');
+	}
+    var data = fs.readFileSync(debug_path, 'utf8');
+    data += '\n\r' + new Date() + ' : ' + text;
+    fs.writeFileSync(debug_path, data, 'utf8');
 };
 console.debug = function () {};
 console.warn = function () {};
@@ -303,12 +307,60 @@ Entry.plugin = (function () {
 		});
 	}
 
+	that.openAlert = function (text, callback) {
+		that.openDialogPage(text, 'alert', callback);
+	}
+
+	that.openConfirm = function (text, callback) {
+		that.openDialogPage(text, 'confirm', callback);
+	}
+
+	var _dialog = null;
+	that.openDialogPage = function (text, type, callback) {
+		if(_dialog){
+			_dialog.close(true);
+		}
+
+		_dialog = gui.Window.open('./views/dialog.html',{
+			frame: false,
+			width: 350,
+			height: 150,
+			min_width: 350,
+			min_height: 150,
+			fullscreen: false,
+			resizable: false,
+			icon: './icon/app.png'
+		});
+
+		_dialog.content = text;
+		_dialog.type = type || 'alert';
+		_dialog.lang = Lang.Buttons;
+
+		_dialog.setAlwaysOnTop(true);
+
+		_dialog.on('closed', function() {
+		    _dialog = null;
+		});
+
+		_dialog.on('close', function() {
+			if(callback) {
+				callback(this.answer);
+			}
+
+		    this.hide();
+
+		    if (_dialog != null)
+		        _dialog.close(true);
+
+		    this.close(true);
+		});
+	}
+
     that.isOsx = function () {
         return isOsx;
     }
 
 	that.init = function (cb) {
-
 		// NanumBarunGothic 폰트 로딩 시간까지 기다린다.
 		var font = new FontFace("nanumBarunRegular", "url(./fonts/NanumBarunGothic.woff2)");
 		font.load();

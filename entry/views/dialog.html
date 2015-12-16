@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>엔트리</title>
+	<link rel='stylesheet'  href='../css/dialog.css' />
+	<link rel='stylesheet'  href='../css/nanumbarungothic.css' />
+	<script type='text/javascript' src='../bower_components/jquery/dist/jquery.min.js'></script>
+</head>
+<body style="-webkit-app-region: drag">
+	<div class="menubar">
+		<!-- <span id="title" class="title">
+			확인
+		<span> -->
+		<a id="close" class="close_button">
+			<img class="close_icon" src="../images/close.png" />
+		</a>	
+	</div>
+	<div class="container">
+	</div>
+	<div class="button_area">
+		<button id="btn_ok">예</button>
+		<button id="btn_cancel">아니오</button>
+	</div>
+	<script>
+		$(function () {
+	        var gui = require('nw.gui');
+	        var win = gui.Window.get();
+
+	        // gui.Window.get().showDevTools();
+
+	        var lang = win.lang;
+	        $('#btn_ok').text(lang.confirm);
+	        if(win.type === 'alert') {
+	        	$('#btn_cancel').hide();
+	        } else {
+		        $('#btn_cancel').text(lang.cancel);
+	        }
+
+	        var content = win.content.replace(/\n/gi, '<br/>');
+	        $('.container').html(content);
+
+			$('#close').on('click', function () {
+				window.close();
+			});
+			$('#btn_ok').on('click', function () {
+				win.answer = true;
+				window.close();
+			});
+			$('#btn_cancel').on('click', function () {
+				win.answer = false;
+				window.close();
+			});
+		});
+	</script>
+</body>
+</html>
