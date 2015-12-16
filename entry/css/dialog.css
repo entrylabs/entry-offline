@@ -3,7 +3,8 @@
 	font-family: nanumBarunRegular;
 	font-size: 10pt;
 	color: #4d4d4d;
-	cursor: pointer;
+	cursor: default;
+	-webkit-user-select: none; 
 }
 
 html, body {

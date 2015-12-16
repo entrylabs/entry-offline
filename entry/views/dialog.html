@@ -7,8 +7,8 @@
 	<link rel='stylesheet'  href='../css/nanumbarungothic.css' />
 	<script type='text/javascript' src='../bower_components/jquery/dist/jquery.min.js'></script>
 </head>
-<body style="-webkit-app-region: drag">
-	<div class="menubar">
+<body>
+	<div class="menubar"  style="-webkit-app-region: drag">
 		<!-- <span id="title" class="title">
 			확인
 		<span> -->
@@ -35,6 +35,9 @@
 	        	$('#btn_cancel').hide();
 	        } else {
 		        $('#btn_cancel').text(lang.cancel);
+	        }
+	        if(!win.isOsx) {
+	        	$(body).css('border', '1px #4b4b4b solid');
 	        }
 
 	        var content = win.content.replace(/\n/gi, '<br/>');

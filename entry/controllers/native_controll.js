@@ -335,6 +335,8 @@ Entry.plugin = (function () {
 		_dialog.content = text;
 		_dialog.type = type || 'alert';
 		_dialog.lang = Lang.Buttons;
+		_dialog.isOsx = isOsx;
+		
 
 		_dialog.setAlwaysOnTop(true);
 
