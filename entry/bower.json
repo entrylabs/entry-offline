@@ -22,7 +22,8 @@
     "angular-bootstrap": "~0.14.3",
     "angular-local-storage": "~0.2.3",
     "angular-touch": "~1.4.7",
-    "angular-route": "~1.4.7"
+    "angular-route": "~1.4.7",
+    "Snap.svg": "~0.4.1"
   },
   "license": "MIT",
   "homepage": "http://play-entry.com",

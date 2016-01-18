@@ -13,6 +13,16 @@ html, body {
 	margin: 0px;
 }
 
+.app-region {
+	height: 30px;
+	background: rgba(1,1,1,0.1);
+	-webkit-app-region: drag;
+}
+
+.border_line {
+	box-shadow: inset 0 0 1px #444;
+}
+
 .title {
 	margin: 5px;
 }
@@ -21,6 +31,10 @@ html, body {
 	float: right;
 	margin-right: 15px;
 	margin-top: 15px;
+}
+
+.app-region .close_button {
+	display: none;
 }
 
 .close_icon {

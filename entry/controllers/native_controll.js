@@ -322,6 +322,7 @@ Entry.plugin = (function () {
 		}
 
 		_dialog = gui.Window.open('./views/dialog.html',{
+            toolbar: false,
 			frame: false,
 			width: 350,
 			height: 150,
