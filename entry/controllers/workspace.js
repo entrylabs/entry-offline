@@ -80,18 +80,20 @@ angular.module('workspace').controller("WorkspaceController",
 		$scope.setOfflineHW = function() {
 			$('#entryCategoryarduino').mouseup(function() {
 					Entry.HW.prototype.downloadConnector = function() {
-						$('#saveArduinoPlugin').attr('nwsaveas', 'entry_plugin_hw.zip').trigger('click');
+						$('#saveArduinoPlugin').attr('nwsaveas', '엔트리_하드웨어_v1.1.exe').trigger('click');
 						$("#saveArduinoPlugin").on("change", function () {
 							var filePath = $('#saveArduinoPlugin').val();
 							//alert("File Path : " + filePath);
 							if (filePath !== "") {
 								var fs = require("fs");
-									fs.readFile("./hardware/plugin/entry_plugin_hw.zip", function (err, stream) {
+									fs.readFile("./hardware/plugin/엔트리_하드웨어_v1.1.exe", function (err, stream) {
 										fs.writeFile(filePath, stream, 'utf8', function (err) {
 											if (err)
 												alert("Unable to save file");
 											else
 												console.log("File Saved");
+
+                                            $("#saveArduinoPlugin").val('');
 										});
 
 									});

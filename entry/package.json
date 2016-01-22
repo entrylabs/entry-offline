@@ -17,9 +17,9 @@
   "window": {
     "toolbar": false,
     "width": 1024,
-    "height": 550,
+    "height": 700,
     "min_width": 1024,
-    "min_height": 550,
+    "min_height": 700,
     "icon": "./icon/app.png"
   },
   "nodejs": "true",
