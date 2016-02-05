@@ -16,7 +16,6 @@ void initPorts () {
 void loop() {
   while (Serial.available()) {
     if (Serial.available() > 0) {
-      
       char c = Serial.read();
       updateDigitalPort(c);
     }
@@ -28,13 +27,13 @@ void loop() {
 
 void sendPinValues() {
   int pinNumber = 0;
-  for (pinNumber = 0; pinNumber < 6; pinNumber++) {
-    sendAnalogValue(pinNumber);
-  }
   for (pinNumber = 0; pinNumber < 14; pinNumber++) {
-    if (!isPortWritable(pinNumber))
       sendDigitalValue(pinNumber);
   }
+  for (pinNumber = 0; pinNumber < 6; pinNumber++) {
+      sendAnalogValue(pinNumber);
+  }
+  
 }
 
 void updateDigitalPort (char c) {

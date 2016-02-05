@@ -80,12 +80,12 @@ angular.module('workspace').controller("WorkspaceController",
 		$scope.setOfflineHW = function() {
 			$('#entryCategoryarduino').mouseup(function() {
 					Entry.HW.prototype.downloadConnector = function() {
-						$('#saveArduinoPlugin').attr('nwsaveas', '엔트리_하드웨어_v1.1.1.exe').trigger('click');
+						$('#saveArduinoPlugin').attr('nwsaveas', 'Entry_HW_v1.1.2.exe').trigger('click');
 						$("#saveArduinoPlugin").on("change", function () {
 							var filePath = $('#saveArduinoPlugin').val();
 							if (filePath !== "") {
 								var fs = require("fs");
-									fs.readFile("./hardware/plugin/엔트리_하드웨어_v1.1.1.exe", function (err, stream) {
+									fs.readFile("./hardware/plugin/Entry_HW_v1.1.2.exe", function (err, stream) {
 										fs.writeFile(filePath, stream, 'utf8', function (err) {
 											if (err)
 												alert("Unable to save file");
@@ -105,19 +105,21 @@ angular.module('workspace').controller("WorkspaceController",
 
 
 					Entry.HW.prototype.downloadSource = function() {
-						 $('#saveArduinoCode').attr('nwsaveas', 'entry_arduino.ino').trigger('click');
+						 $('#saveArduinoCode').attr('nwsaveas', 'board.ino').trigger('click');
 						 $("#saveArduinoCode").on("change", function () {
 							var filePath = $('#saveArduinoCode').val();
 							//alert("File Path : " + filePath);
 							if (filePath !== "") {
 								var fs = require("fs");
-									fs.readFile("./hardware/source/entry_arduino.ino", function (err, stream) {
+									fs.readFile("./hardware/source/board.ino", function (err, stream) {
 										fs.writeFile(filePath, stream, 'utf8', function (err) {
 											if (err)
 												alert("Unable to save file");
 											else
 												console.log("File Saved");
-											});
+
+											$("#saveArduinoCode").val('');
+										});
 									});
 							}
 							else {
