@@ -13,6 +13,7 @@
 		<link rel='stylesheet'  href='./css/workspace.css' />
 		<link rel='stylesheet'  href='./css/modal.css' />
 		<link rel='stylesheet'  href='./css/developer.css' />
+		<script type="text/javascript" src="./src/require.js"></script>
 		<script type='text/javascript' src='./bower_components/jquery/dist/jquery.min.js'></script>
 		<script type='text/javascript' src='./bower_components/jquery-ui/jquery-ui.min.js'></script>
 		<script type='text/javascript' src='./bower_components/angular/angular.min.js'></script>
@@ -37,22 +38,24 @@
 		<script type='text/javascript' src='./bower_components/entryjs/extern/util/ndgmr.Collision.js'></script>
 		<script type='text/javascript' src='./bower_components/entryjs/dist/entry.js'></script>
 
-        <script type='text/javascript' src='./controllers/app.js'></script>
-    	<script type='text/javascript' src='./controllers/context.js'></script>
-        <script type="text/javascript" src="./controllers/filters.js"></script>
-        <script type="text/javascript" src="./controllers/native_menu.js"></script>
-        <script type="text/javascript" src="./controllers/native_controll.js"></script>
-		<script type="text/javascript" src="./controllers/directives.js"></script>
+        <script type='text/javascript' src='./src/app.js'></script>
+    	<script type='text/javascript' src='./src/context.js'></script>
+        <script type="text/javascript" src="./src/filters.js"></script>
+        <!--
+        <script type="text/javascript" src="./src/native_menu.js"></script>    -->
+        <script type="text/javascript" src="./src/native_controll.js"></script>
+
+		<script type="text/javascript" src="./src/directives.js"></script>
 	</head>
 	<body >
 		<div class="workspaceHeader" data-ng-include="'./views/header.html'" data-role="navigation"></div>
 		<section class="wrapper" ng-controller="WorkspaceController" ng-init="initWorkspace()">
 			<div id="workspace"></div>
 		</section>
-		<script type="text/javascript" src="./controllers/workspace.js"></script>
-		<script type="text/javascript" src="./controllers/picture.js"></script>
-		<script type="text/javascript" src="./controllers/sprite.js"></script>
-		<script type="text/javascript" src="./controllers/header.js"></script>
-		<script type="text/javascript" src="./controllers/sound.js"></script>
+		<script type="text/javascript" src="./src/workspace.js"></script>
+		<script type="text/javascript" src="./src/picture.js"></script>
+		<script type="text/javascript" src="./src/sprite.js"></script>
+		<script type="text/javascript" src="./src/header.js"></script>
+		<script type="text/javascript" src="./src/sound.js"></script>
 	</body>
 </html>

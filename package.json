@@ -27,6 +27,18 @@
     "plugin": true
   },
   "devDependencies": {
-    "electron-prebuilt": "^0.36.8"
+    "css-loader": "^0.23.1",
+    "electron-prebuilt": "^0.36.8",
+    "file-loader": "^0.8.5",
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-less": "^3.0.5",
+    "gulp-minify-css": "^1.2.4",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-uglify": "^1.5.3",
+    "gulp-util": "^3.0.7",
+    "style-loader": "^0.13.0",
+    "url-loader": "^0.5.7",
+    "webpack": "^1.12.14"
   }
 }

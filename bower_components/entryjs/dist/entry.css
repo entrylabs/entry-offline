@@ -3361,10 +3361,10 @@
   display: none;
 }
 .entryPlaygroundPainterAttrAddButton {
-  background: url("../images/fill_in.png");
+  /*background: url("../images/fill_in.png");*/
 }
 .entryPlaygroundPainterAttrRemoveButton {
-  background: url("../images/fill_out.png");
+  /*background: url("../images/fill_out.png");*/
 }
 .painterAttrColorSpoid:hover {
   background: url("../images/color_on_spoid_1.png");

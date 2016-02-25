@@ -7,22 +7,10 @@ var Q = require('q');
 var fstream = require('fstream');
 var tar = require('tar');
 var zlib = require('zlib');
+var webFrame = require('electron').webFrame;
+var isOsx = false;
 
 var options = {};
-gui.App.argv.forEach(function(item, index) {
-	if(item == '-debug') {
-		options.debug = true;
-	} else if(path.isAbsolute(item)){
-        options.path = item || undefined;
-    }
-});
-
-// show devtools if console
-var win = gui.Window.get();
-if(options.debug) {
-	win.showDevTools();
-}
-
 var _real_path = '.';
 var _real_path_with_protocol = '';
 
@@ -211,42 +199,16 @@ Entry.plugin = (function () {
         Entry.plugin.setZoomLevel(zoomLevel);
     };
 	var view_menus;
+	/**
+	 * [setZoomMenuState 메뉴에 zoom부분을 갱신]
+	 * @param {[type]} state [description]
+	 */
 	that.setZoomMenuState = function (state) {
-		if(!view_menus) {
-			if(isOsx) {
-				view_menus = nwWindow.menu.items[3].submenu.items;
-			} else {
-				view_menus = nwWindow.menu.items[2].submenu.items;
-			}
-		}
-
-		switch(state) {
-			case 'default':
-				view_menus[0].enabled = false;
-				view_menus[1].enabled = true;
-				view_menus[2].enabled = true;
-			break;
-			case 'min':
-				view_menus[0].enabled = true;
-				view_menus[1].enabled = true;
-				view_menus[2].enabled = false;
-			break;
-			case 'max':
-				view_menus[0].enabled = true;
-				view_menus[1].enabled = false;
-				view_menus[2].enabled = true;
-			break;
-			default:
-				view_menus[0].enabled = true;
-				view_menus[1].enabled = true;
-				view_menus[2].enabled = true;
-			break;
-		}
 	}
 
 	that.setZoomLevel = function (level) {
-		localStorage.setItem('window_zoomlevel', level);
-		nwWindow.zoomLevel = level;
+		localStorage.setItem('window_zoomlevel', 1);
+		webFrame.setZoomFactor(+level);
 
 		var state = '';
 		switch (Number(level)) {
