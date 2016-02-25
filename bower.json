@@ -1,14 +1,36 @@
 {
   "name": "entry-offline",
-  "version": "1.0.0",
-  "main": "README.md",
-  "ignore": [
-    "build",
-    "entry",
-    "sound_lib"
+  "description": "entry-offline version",
+  "main": "",
+  "moduleType": [
+    "node"
   ],
   "dependencies": {
-    "entry-offline-editor-win32" : "https://github.com/entrylabs/entry-offline/releases/download/v1.0.0/Entry_1.0.0_Setup.exe",
-    "entry-offline-editor-osx64" : "https://github.com/entrylabs/entry-offline/releases/download/v1.0.0/Entry_1.0.0_64.dmg"
-  }
+    "entryjs": "https://github.com/entrylabs/entryjs.git",
+    "jquery": "~1.11.3",
+    "jquery-ui": "~1.11.x",
+    "underscore": "~1.8.x",
+    "PreloadJS": "0.6.0",
+    "EaselJS": "https://github.com/boolgom/EaselJS.git",
+    "SoundJS": "0.6.0",
+    "webfontloader": "1.5.18",
+    "angular": "angularjs#~1.4.7",
+    "angular-cookies": "~1.4.3",
+    "angular-filters": "~1.1.2",
+    "bootstrap": "~3.3.5",
+    "angular-resource": "~1.4.7",
+    "angular-bootstrap": "~0.14.3",
+    "angular-local-storage": "~0.2.3",
+    "angular-touch": "~1.4.7",
+    "angular-route": "~1.4.7"
+  },
+  "license": "MIT",
+  "homepage": "http://play-entry.com",
+  "ignore": [
+    "**/*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
 }
