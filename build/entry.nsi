@@ -96,6 +96,7 @@ Section $(TEXT_ENTRY_TITLE) SectionEntry
   File "..\*.*"
   File "icon.ico"
   File "엔트리.vbs"
+  File "Entry.lnk"
   
   WriteRegStr HKCR ".ent" "" "Entry"
   WriteRegStr HKCR ".ent" "Content Type" "application/x-entryapp"
@@ -122,7 +123,7 @@ Section $(TEXT_START_MENU_TITLE) SectionStartMenu
 
   CreateDirectory "$SMPROGRAMS\엔트리"
   CreateShortCut "$SMPROGRAMS\엔트리\Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
-  CreateShortCut "$SMPROGRAMS\엔트리\엔트리.lnk" "$INSTDIR\엔트리.vbs" "" "$INSTDIR\icon.ico" 0
+  CreateShortCut "$SMPROGRAMS\엔트리\엔트리.lnk" "$INSTDIR\nw.exe" "entry" "$INSTDIR\icon.ico" 0
   
 SectionEnd
 
@@ -131,7 +132,7 @@ SectionEnd
 ; Optional section (can be disabled by the user)
 Section $(TEXT_DESKTOP_TITLE) SectionDesktop
 
-  CreateShortCut "$DESKTOP\엔트리.lnk" "$INSTDIR\엔트리.vbs" "" "$INSTDIR\icon.ico" 0
+  CreateShortCut "$DESKTOP\엔트리.lnk" "$INSTDIR\nw.exe" "entry" "$INSTDIR\icon.ico" 0
   
 SectionEnd
 

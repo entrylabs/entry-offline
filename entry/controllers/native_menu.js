@@ -241,12 +241,12 @@ if(!isOsx) {
 	}, {
 		'label': Lang.Menus.offline_quit,
 		'click': function () {
-			gui.App.quit();
+			gui.Window.get().close();
 		},
 		'shortcut' : {
 			'win' : {
-				'key' : 'x',
-				'modifiers' : 'ctrl'
+				'key' : 'f4',
+				'modifiers' : 'alt'
 			}
 		}
 
