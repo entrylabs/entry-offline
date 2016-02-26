@@ -181,8 +181,12 @@ angular.module('workspace').controller("WorkspaceController",
 
 			} else {
 				var default_path = storage.getItem('defaultPath') || '';
-
-            	$('#save_as_project').attr('nwworkingdir', default_path).trigger('click');
+				dialog.showSaveDialog({
+					defaultPath: default_path,
+					filters: [
+					    { name: 'Entry File', extensions: ['ent'] }
+					]
+				});
 			}
         };
 
@@ -201,7 +205,27 @@ angular.module('workspace').controller("WorkspaceController",
         	}
 
         	if(!canLoad) {
-	            $('#load_project').trigger('click');
+        		dialog.showOpenDialog({
+        			properties: [
+        				'openFile'
+        			], filters: [
+					    { name: 'Entry File', extensions: ['ent'] }
+					]
+        		}, function (paths) {
+		        	if(Array.isArray(paths)) {
+		        		var filePath = paths[0];
+		        		var pathArr = filePath.split('/');
+		        		pathArr.pop();
+		        		storage.setItem('defaultPath', pathArr.join('/'));
+
+		        		Entry.plugin.loadProject(filePath, function (data) {
+		        			var jsonObj = JSON.parse(data);
+		        			jsonObj.path = filePath;
+    			            storage.setItem('nativeLoadProject', JSON.stringify(jsonObj));
+				            Entry.plugin.reloadApplication();
+		        		});
+		        	}
+        		});
         	}
         };
 
@@ -512,31 +536,4 @@ angular.module('workspace').controller("WorkspaceController",
 		        });
 		    }
 	    };
-	}]).directive('loadProject', function (){
-		return {
-		    controller: function($parse, $element, $attrs, $scope){
-		    	var supported = !(typeof storage == 'undefined' || typeof window.JSON == 'undefined');
-		        var storage = (typeof window.localStorage === 'undefined') ? undefined : window.localStorage;
-
-		        $element.on('change', function(){
-		        	var path = this.value;
-
-		        	if(path) {
-		        		var pathArr = path.split('/');
-		        		pathArr.pop();
-		        		storage.setItem('defaultPath', pathArr.join('/'));
-
-		        		Entry.plugin.loadProject(path, function (data) {
-		        			var jsonObj = JSON.parse(data);
-		        			jsonObj.path = path;
-		        			$scope.$root.$emit('loadProject', JSON.stringify(jsonObj));
-		        		});
-
-			            this.value = '';
-		        	}
-
-		            $scope.$apply();
-		        });
-		    }
-	    };
-	});	;
+	}]);

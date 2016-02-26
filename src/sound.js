@@ -1,5 +1,4 @@
 'use strict';
-var fs = require('fs');
 
 angular.module('common').controller('SoundController', 
 	['$scope', '$rootScope', '$modalInstance', '$routeParams', '$http', 'parent',

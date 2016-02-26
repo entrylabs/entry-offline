@@ -1,1 +1,11 @@
+const fs = require('fs');
+const sizeOf = require('image-size');
+const path = require('path');
+const Q = require('q');
+const fstream = require('fstream');
+const tar = require('tar');
+const zlib = require('zlib');
+const webFrame = require('electron').webFrame;
+const remote = require('remote');
+const dialog = remote.require('electron').dialog;
 window.$ = window.jQuery = require('./bower_components/jquery/dist/jquery.min.js');

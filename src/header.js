@@ -85,7 +85,7 @@ angular.module('workspace').controller('HeaderController',
             project.name = myProject.name;
             storage.setItem('localStorageProject', JSON.stringify(project));
             // location.reload(true);
-            nwWindow.reloadDev();
+            Entry.plugin.reloadApplication();
         };
 
         $scope.blockHelperOn = function(){
@@ -126,16 +126,9 @@ angular.module('workspace').controller('HeaderController',
             if(!canLoad) {
                 Entry.plugin.initProjectFolder(function () {
                 // location.reload(true);
-                nwWindow.reloadDev();
+                Entry.plugin.reloadApplication();
             });
             }
            
-        }
-
-        // 프로젝트 불러오기
-        $scope.loadProject = function (data) {
-            storage.setItem('nativeLoadProject', data);
-            // location.reload(true);
-            nwWindow.reloadDev();
         }
     }]);

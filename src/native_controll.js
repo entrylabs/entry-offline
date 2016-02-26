@@ -1,20 +1,11 @@
 'use strict';
-
-var fs = require('fs');
-var sizeOf = require('image-size');
-var path = require('path');
-var Q = require('q');
-var fstream = require('fstream');
-var tar = require('tar');
-var zlib = require('zlib');
-var webFrame = require('electron').webFrame;
 var isOsx = false;
 
 var options = {};
 var _real_path = '.';
 var _real_path_with_protocol = '';
 
-console.log = function () {};
+// console.log = function () {};
 console.fslog = function (text) {
     // var data = fs.readFileSync(_real_path + '/debug.log', 'utf8');
     // data += '\n\r' + new Date() + ' : ' + text;
@@ -172,6 +163,10 @@ Entry.plugin = (function () {
 	    return require('crypto').createHash('md5').update(randomStr).digest("hex");
 	};
 
+	that.reloadApplication = function () {
+		remote.getCurrentWindow().reload();
+	}
+
 	that.findObject = function (object, key) {
 		var r = [];
 		Object.keys(object).forEach(function (item_key) {
@@ -199,11 +194,31 @@ Entry.plugin = (function () {
         Entry.plugin.setZoomLevel(zoomLevel);
     };
 	var view_menus;
-	/**
-	 * [setZoomMenuState 메뉴에 zoom부분을 갱신]
-	 * @param {[type]} state [description]
-	 */
 	that.setZoomMenuState = function (state) {
+		return;
+
+		switch(state) {
+			case 'default':
+				view_menus[0].enabled = false;
+				view_menus[1].enabled = true;
+				view_menus[2].enabled = true;
+			break;
+			case 'min':
+				view_menus[0].enabled = true;
+				view_menus[1].enabled = true;
+				view_menus[2].enabled = false;
+			break;
+			case 'max':
+				view_menus[0].enabled = true;
+				view_menus[1].enabled = false;
+				view_menus[2].enabled = true;
+			break;
+			default:
+				view_menus[0].enabled = true;
+				view_menus[1].enabled = true;
+				view_menus[2].enabled = true;
+			break;
+		}
 	}
 
 	that.setZoomLevel = function (level) {
@@ -314,7 +329,7 @@ Entry.plugin = (function () {
 	}
 
 	// 프로젝트 저장
-	that.saveProject = function(path, data, cb, enc) {
+	that.saveProject = function(filePath, data, cb, enc) {
 		var string_data = JSON.stringify(data);
 		that.mkdir(_real_path + '/temp', function () {
 			fs.writeFile(_real_path + '/temp/project.json', string_data, enc || 'utf8', function (err) {
@@ -324,7 +339,7 @@ Entry.plugin = (function () {
 
 				var fs_reader = fstream.Reader({ 'path': _real_path + '/temp/', 'type': 'Directory' });
 
-				var fs_writer = fstream.Writer({ 'path': path, 'type': 'File' });
+				var fs_writer = fstream.Writer({ 'path': filePath, 'type': 'File' });
 
 				fs_writer.on('entry', function () {
 					// console.log('entry');
@@ -345,10 +360,10 @@ Entry.plugin = (function () {
 	}
 
 	// 프로젝트 불러오기
-	that.loadProject = function(path, cb, enc) {
+	that.loadProject = function(filePath, cb, enc) {
 		deleteFolderRecursive(_real_path + '/temp/');
 
-		var fs_reader = fstream.Reader({ 'path': path, 'type': 'File' });
+		var fs_reader = fstream.Reader({ 'path': filePath, 'type': 'File' });
 		var fs_writer = fstream.Writer({ 'path': _real_path, 'type': 'Directory' });
 
 		fs_writer.on('entry', function () {
@@ -382,8 +397,8 @@ Entry.plugin = (function () {
 
 
 	// 파일 저장
-	that.writeFile = function(path, data, cb, enc) {
-		fs.writeFile(path, data, enc || 'utf8', function (err) {
+	that.writeFile = function(filePath, data, cb, enc) {
+		fs.writeFile(filePath, data, enc || 'utf8', function (err) {
 			if(err) {
 				throw err;
 			}
@@ -395,8 +410,8 @@ Entry.plugin = (function () {
 	}
 
 	// 파일 열기
-	that.readFile = function(path, cb, enc) {
-		fs.readFile(path, enc || 'utf8', function (err, data) {
+	that.readFile = function(filePath, cb, enc) {
+		fs.readFile(filePath, enc || 'utf8', function (err, data) {
 			if(err) {
 				throw err;
 			}
@@ -407,10 +422,10 @@ Entry.plugin = (function () {
 		});
 	}
 
-	that.mkdir = function(path, cb) {
-		fs.access(path, function (err, files) {
+	that.mkdir = function(filePath, cb) {
+		fs.access(filePath, function (err, files) {
 			if(err){
-				fs.mkdir(path, function (err) {
+				fs.mkdir(filePath, function (err) {
 					if(err) {
 						throw err;
 					}
