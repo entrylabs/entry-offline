@@ -170,23 +170,40 @@ angular.module('workspace').controller("WorkspaceController",
 
 		}
 
+		function saveAsProject(title) {
+			var default_path = storage.getItem('defaultPath') || '';
+			dialog.showSaveDialog({
+				defaultPath: default_path,
+				title: title,
+				filters: [
+				    { 
+				    	name: 'Entry File', 
+				    	extensions: ['ent'] 
+				    }
+				]
+			}, function (filePath) {	
+	        	if(filePath) {
+	        		var pathArr = filePath.split('/');
+	        		pathArr.pop();
+	        		storage.setItem('defaultPath', pathArr.join('/'));
+
+	        		myProject.saveProject(filePath, function (project_name) {
+		            	myProject.isSaved = true;
+		            	myProject.isSavedPath = filePath;
+		            	Entry.toast.success(Lang.Workspace.saved, project_name + ' ' + Lang.Workspace.saved_msg)
+		            });
+	        	}
+			});
+		}
+
 		// 저장하기
 		$scope.saveWorkspace = function() {
 			if(myProject.isSaved) {
 				$scope.project.saveProject(myProject.isSavedPath, function () {
 	            	Entry.toast.success(Lang.Workspace.saved, myProject.name + ' ' + Lang.Workspace.saved_msg)
 	            });
-
-	            var project = Entry.exportProject();
-
 			} else {
-				var default_path = storage.getItem('defaultPath') || '';
-				dialog.showSaveDialog({
-					defaultPath: default_path,
-					filters: [
-					    { name: 'Entry File', extensions: ['ent'] }
-					]
-				});
+				saveAsProject(Lang.Workspace.file_save);
 			}
         };
 
@@ -194,7 +211,7 @@ angular.module('workspace').controller("WorkspaceController",
 		$scope.saveAsWorkspace = function() {
 			var default_path = storage.getItem('defaultPath') || '';
 			Entry.stateManager.addStamp();
-            $('#save_as_project').attr('nwworkingdir', default_path).trigger('click');
+			saveAsProject(Lang.Workspace.file_save);
         };
 
         // 불러오기
@@ -509,31 +526,4 @@ angular.module('workspace').controller("WorkspaceController",
             	};
             });
 		};
-	}).directive('saveAsProject', ['myProject', function(myProject){
-		return {
-		    controller: function($parse, $element, $attrs, $scope){
-		    	var supported = !(typeof storage == 'undefined' || typeof window.JSON == 'undefined');
-		        var storage = (typeof window.localStorage === 'undefined') ? undefined : window.localStorage;
-
-		        $element.on('change', function(){
-		        	var path = this.value;
-
-		        	if(path) {
-		        		var pathArr = path.split('/');
-		        		pathArr.pop();
-		        		storage.setItem('defaultPath', pathArr.join('/'));
-
-		        		myProject.saveProject(path, function (project_name) {
-			            	myProject.isSaved = true;
-			            	myProject.isSavedPath = path;
-			            	Entry.toast.success(Lang.Workspace.saved, project_name + ' ' + Lang.Workspace.saved_msg)
-			            });
-
-			            this.value = '';
-		        	}
-
-		            $scope.$apply();
-		        });
-		    }
-	    };
-	}]);
+	});

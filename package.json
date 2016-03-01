@@ -14,14 +14,6 @@
   },
   "version": "1.1.0",
   "chromium-args": "--disable-web-security --allow-file-access-from-files --enable-decoder=aac,h264,mp3 --enable-demuxer=mp3,mov --enable-parser=aac,h264,mpegaudio",
-  "window": {
-    "toolbar": false,
-    "width": 1024,
-    "height": 700,
-    "min_width": 1024,
-    "min_height": 700,
-    "icon": "./icon/app.png"
-  },
   "nodejs": "true",
   "webkit": {
     "plugin": true

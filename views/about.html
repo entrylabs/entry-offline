@@ -5,9 +5,11 @@
 	<title>엔트리</title>
 	<link rel='stylesheet'  href='../css/about.css' />
 	<link rel='stylesheet'  href='../css/nanumbarungothic.css' />
-	<script type='text/javascript' src='../bower_components/jquery/dist/jquery.min.js'></script>
-	<script type="text/javascript" src="../js/nwjs-open-link-in-browser.js"></script>
-
+	<script type="text/javascript">
+		window.$ = window.jQuery = require('../bower_components/jquery/dist/jquery.min.js');
+		const electron = require('electron');
+		const shell    = electron.shell;
+	</script>
 </head>
 <body>
 	<div class="container">
@@ -21,7 +23,7 @@
 			<div>
 				<p>
 					version <span id="version"></span><br/>
-					<a href="#" onClick="{nwjsOpenLinkInBrowser('http://play-entry.org')}">
+					<a href="#" id="playEntryBtn">
 						http://play-entry.org
 					</a>
 				</p>
@@ -30,8 +32,16 @@
 	</div>
 	<script>
 		$(function () {
-            var gui = require('nw.gui');
-            $("#version").text(gui.App.manifest.version);
+			$('body').on('click', function () {
+				window.close();	
+			});
+
+			$('#playEntryBtn').on('click', function (e) {
+				e.preventDefault();
+				shell.openExternal('http://play-entry.org');
+			});
+            // var gui = require('nw.gui');
+            // $("#version").text(gui.App.manifest.version);
 			//$(document).on('click', function () {
 			//	window.close();
 			//});

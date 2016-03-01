@@ -184,18 +184,22 @@ Entry.plugin = (function () {
 	};
 
     that.setZoomInPage = function () {
-        var zoomLevel = localStorage.getItem('window_zoomlevel') || 0;
-        zoomLevel = (++zoomLevel > 5) ? 5 : zoomLevel;
+        var zoomLevel = +localStorage.getItem('window_zoomlevel') || 0;
+        zoomLevel+=0.2;
+        zoomLevel = (zoomLevel > 3) ? 3 : zoomLevel;
         Entry.plugin.setZoomLevel(zoomLevel);
     };
     that.setZoomOutPage = function () {
-        var zoomLevel = localStorage.getItem('window_zoomlevel') || 0;
-        zoomLevel = (--zoomLevel < -2) ? -2 : zoomLevel;
+        var zoomLevel = +localStorage.getItem('window_zoomlevel') || 0;
+        zoomLevel-=0.2;
+        zoomLevel = (zoomLevel < 0) ? 0 : zoomLevel;
         Entry.plugin.setZoomLevel(zoomLevel);
     };
 	var view_menus;
 	that.setZoomMenuState = function (state) {
-		return;
+		if(!view_menus) {
+			view_menus = menu.items[2].submenu.items;
+		}
 
 		switch(state) {
 			case 'default':
@@ -222,18 +226,18 @@ Entry.plugin = (function () {
 	}
 
 	that.setZoomLevel = function (level) {
-		localStorage.setItem('window_zoomlevel', 1);
+		localStorage.setItem('window_zoomlevel', level);
 		webFrame.setZoomFactor(+level);
 
 		var state = '';
 		switch (Number(level)) {
-			case 0:
+			case 1:
 				state = 'default'
 				break;
-			case -2:
+			case 0:
 				state = 'min'
 				break;
-			case 5:
+			case 3:
 				state = 'max'
 				break;
 			default:
@@ -244,40 +248,25 @@ Entry.plugin = (function () {
 
 	var popup = null;
 	that.openAboutPage = function () {
-		if(popup)
-			popup.close(true);
-		popup = gui.Window.open('./views/about.html',{
-			toolbar: false,
-			width: 300,
-			height: 180,
-			max_width: 300,
-			max_height: 180,
-			min_width: 300,
-			min_height: 180,
-			fullscreen: false,
-			resizable: false,
-			icon: './icon/app.png'
+		if(popup) {
+			return;
+		}
+		//osx var win = new BrowserWindow({ 'titleBarStyle': 'hidden' });
+		popup = new BrowserWindow({
+			width: 300, 
+			height: 200, 
+			resizable: false, 
+			movable: false, 
+			center: true, 
+			frame: false,
+			alwaysOnTop: true
 		});
-
-		popup.setAlwaysOnTop(true);
-
-		// Release the 'win' object here after the new window is closed.
+		popup.loadURL('file:///views/about.html');
 		popup.on('closed', function() {
 		    popup = null;
 		});
-
-		  // Listen to main window's close event
-		popup.on('close', function() {
-		    // Hide the window to give user the feeling of closing immediately
-		    this.hide();
-
-		    // If the new window is still open then close it.
-		    if (popup != null)
-		        popup.close(true);
-
-		    // After closing the new window, close the main window.
-		    this.close(true);
-		});
+		popup.webContents.openDevTools();
+		popup.show();
 	}
 
     that.isOsx = function () {
@@ -440,6 +429,16 @@ Entry.plugin = (function () {
 				}
 			}
 		})
+	}
+
+	that.exists = function (filePath, cb) {
+		fs.exists(filePath, function (err, isExists) {
+			if(err){
+				throw err;
+			} else if($.isFunction(cb)) {
+				cb(isExists);
+			}
+		});
 	}
 
 	//임시 이미지 저장
