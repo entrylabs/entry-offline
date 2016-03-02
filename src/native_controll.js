@@ -5,6 +5,15 @@ var options = {};
 var _real_path = '.';
 var _real_path_with_protocol = '';
 
+var orgAlert = alert;
+alert = function (msg) {
+	orgAlert(msg, '엔트리');
+}
+var orgConfirm = confirm;
+confirm = function (msg) {
+	return orgConfirm(msg, '엔트리');
+}
+
 // console.log = function () {};
 console.fslog = function (text) {
     // var data = fs.readFileSync(_real_path + '/debug.log', 'utf8');
@@ -97,6 +106,8 @@ Entry.plugin = (function () {
 	var TARGET_SIZE = 960;
 	var THUMB_SIZE = 96;
 
+	that.beforeStatus = '';
+
 	var getUploadPath = function(fileId, option) {
 
 		console.log('file id : ' + fileId);
@@ -183,18 +194,18 @@ Entry.plugin = (function () {
 		return r;
 	};
 
+   
     that.setZoomInPage = function () {
-        var zoomLevel = +localStorage.getItem('window_zoomlevel') || 0;
-        zoomLevel+=0.2;
-        zoomLevel = (zoomLevel > 3) ? 3 : zoomLevel;
+        var zoomLevel = localStorage.getItem('window_zoomlevel') || 0;
+        zoomLevel = (++zoomLevel > 5) ? 5 : zoomLevel;
         Entry.plugin.setZoomLevel(zoomLevel);
     };
     that.setZoomOutPage = function () {
-        var zoomLevel = +localStorage.getItem('window_zoomlevel') || 0;
-        zoomLevel-=0.2;
-        zoomLevel = (zoomLevel < 0) ? 0 : zoomLevel;
+        var zoomLevel = localStorage.getItem('window_zoomlevel') || 0;
+        zoomLevel = (--zoomLevel < -2) ? -2 : zoomLevel;
         Entry.plugin.setZoomLevel(zoomLevel);
     };
+
 	var view_menus;
 	that.setZoomMenuState = function (state) {
 		if(!view_menus) {
@@ -227,17 +238,17 @@ Entry.plugin = (function () {
 
 	that.setZoomLevel = function (level) {
 		localStorage.setItem('window_zoomlevel', level);
-		webFrame.setZoomFactor(+level);
+		webFrame.setZoomLevel(+level);
 
 		var state = '';
 		switch (Number(level)) {
-			case 1:
+			case 0:
 				state = 'default'
 				break;
-			case 0:
+			case -2:
 				state = 'min'
 				break;
-			case 3:
+			case 5:
 				state = 'max'
 				break;
 			default:
@@ -251,7 +262,6 @@ Entry.plugin = (function () {
 		if(popup) {
 			return;
 		}
-		//osx var win = new BrowserWindow({ 'titleBarStyle': 'hidden' });
 		popup = new BrowserWindow({
 			width: 300, 
 			height: 200, 
@@ -265,7 +275,6 @@ Entry.plugin = (function () {
 		popup.on('closed', function() {
 		    popup = null;
 		});
-		popup.webContents.openDevTools();
 		popup.show();
 	}
 

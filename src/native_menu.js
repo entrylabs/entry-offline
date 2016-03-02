@@ -1,3 +1,12 @@
+$(document).on('mousewheel', function(e){
+    if(e.originalEvent.wheelDelta /120 > 0 && e.ctrlKey) {
+        Entry.plugin.setZoomInPage();
+    }
+    else if(e.ctrlKey){
+        Entry.plugin.setZoomOutPage();
+    }
+});
+
 var template = [{
     label: Lang.Menus.offline_file,
     submenu: [{
@@ -53,7 +62,7 @@ var template = [{
         label: Lang.Menus.actual_size,
         accelerator: 'CmdOrCtrl+0',
         click: function () {
-            Entry.plugin.setZoomLevel(1);
+            Entry.plugin.setZoomLevel(0);
         }
     }, {
         label: Lang.Menus.zoom_in,
@@ -105,7 +114,9 @@ if (process.platform == 'darwin') {
         }, {
             label: 'Quit',
             accelerator: 'Command+Q',
-            click: function() { app.quit(); }
+            click: function() { 
+                window.close(); 
+            }
         }]
     });
     template[3].submenu.push(
@@ -124,7 +135,7 @@ if (process.platform == 'darwin') {
             label: Lang.Menus.offline_quit,
             accelerator: 'Alt+F4',
             click: function () {
-                app.quit();
+                window.close();
             }
         }
     );
@@ -133,6 +144,7 @@ if (process.platform == 'darwin') {
         label: Lang.Menus.help,
         submenu: [{
             label: Lang.Menus.entry_info,
+            accelerator: 'F1',
             click: function () {
                 Entry.plugin.openAboutPage();
             }

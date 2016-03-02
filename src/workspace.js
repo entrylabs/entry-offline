@@ -43,6 +43,27 @@ angular.module('workspace').controller("WorkspaceController",
 				};
 
 				Entry.init(workspace, initOptions);
+
+				var beforeUnload = window.onbeforeunload;
+				window.onbeforeunload = function(e) {
+					if(['new', 'load'].indexOf(Entry.plugin.beforeStatus) > -1) {
+						Entry.plugin.beforeStatus = '';
+						return;
+					}
+					var canLoad = true;
+		        	if(!Entry.stateManager.isSaved()) {
+		        		canLoad = confirm(Lang.Menus.save_dismiss);
+		        	}
+
+		        	if(canLoad) {
+		        		beforeUnload();
+		        	} else {
+						console.log('I do not want to be closed');
+						e.preventDefault()
+						e.returnValue = false;
+		        	}
+				};
+
 				Entry.playground.setBlockMenu();
 				//아두이노 사용 (웹소켓이용)
 				Entry.enableArduino();
@@ -222,6 +243,7 @@ angular.module('workspace').controller("WorkspaceController",
         	}
 
         	if(!canLoad) {
+        		Entry.plugin.beforeStatus = 'load';
         		dialog.showOpenDialog({
         			properties: [
         				'openFile'

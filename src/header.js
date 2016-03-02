@@ -124,11 +124,10 @@ angular.module('workspace').controller('HeaderController',
             }
 
             if(!canLoad) {
+                Entry.plugin.beforeStatus = 'new';
                 Entry.plugin.initProjectFolder(function () {
-                // location.reload(true);
-                Entry.plugin.reloadApplication();
-            });
-            }
-           
+                    Entry.plugin.reloadApplication();
+                });
+            }           
         }
     }]);

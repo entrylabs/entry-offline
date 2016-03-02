@@ -8,6 +8,7 @@ const Menu     = electron.Menu;
 
 
 var mainWindow = null;
+var isClose = true;
 
 app.on('window-all-closed', function() {
     if (process.platform != 'darwin') {
@@ -17,10 +18,8 @@ app.on('window-all-closed', function() {
 
 // Parse command line options.
 var argv = process.argv.slice(1);
-console.log(argv);
 var option = { file: null, help: null, version: null, webdriver: null, modules: [] };
 for (var i = 0; i < argv.length; i++) {
-    console.log(argv[i]);
   if (argv[i] == '--version' || argv[i] == '-v') {
     option.version = true;
     break;
@@ -46,27 +45,7 @@ for (var i = 0; i < argv.length; i++) {
   }
 }
 
-
 app.once('ready', function() {
-    
-    // var protocol = electron.protocol;
-    // protocol.registerFileProtocol('file', function(request, callback) {
-    // var url = request.url.substr(7);  
-    //     callback({path: path.normalize(__dirname + '/' + url)});
-    // }, function (error) {
-    //   if (error)
-    //     console.error('Failed to register protocol')
-    // });
-
-
-  // "window": {
-  //   "toolbar": false,
-  //   "width": 1024,
-  //   "height": 700,
-  //   "min_width": 1024,
-  //   "min_height": 700,
-  //   "icon": "./icon/app.png"
-  // },
     mainWindow = new BrowserWindow({width: 1024, height: 700});
     mainWindow.loadURL('file:///entry_offline.html');
 
@@ -75,6 +54,7 @@ app.once('ready', function() {
     }
 
     mainWindow.on('closed', function() {
+        console.log('closed');
         mainWindow = null;
     });
 });
