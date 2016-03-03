@@ -1,36 +1,23 @@
 {
-  "dependencies": {
-    "fstream": "^1.0.8",
-    "image-size": "^0.3.5",
-    "nwjs-open-link-in-browser": "^1.0.3",
-    "q": "^1.4.1",
-    "tar": "^2.2.1"
+  "private": true,
+  "scripts": {
+    "postinstall": "install-app-deps",
+    "start": "npm install && npm run compile && electron ./app",
+    "clean": "rimraf dist",
+    "pack": "npm run clean && build",
+    "dist": "npm run clean && build",
+    "release": "npm run clean && build"
   },
-  "main": "entry_offline.js",
-  "name": "entry",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/boolgom/entry-offline.git"
-  },
-  "version": "1.1.0",
-  "chromium-args": "--disable-web-security --allow-file-access-from-files --enable-decoder=aac,h264,mp3 --enable-demuxer=mp3,mov --enable-parser=aac,h264,mpegaudio",
-  "nodejs": "true",
-  "webkit": {
-    "plugin": true
+  "build": {
+    "win": {
+      "appDirectory": "./app",
+      "title": "Entry",
+      "icon": "./icon/app.ico"
+    }
   },
   "devDependencies": {
-    "css-loader": "^0.23.1",
-    "electron-prebuilt": "^0.36.8",
-    "file-loader": "^0.8.5",
+    "electron-winstaller": "^2.0.4",
     "gulp": "^3.9.1",
-    "gulp-concat": "^2.6.0",
-    "gulp-less": "^3.0.5",
-    "gulp-minify-css": "^1.2.4",
-    "gulp-sourcemaps": "^1.6.0",
-    "gulp-uglify": "^1.5.3",
-    "gulp-util": "^3.0.7",
-    "style-loader": "^0.13.0",
-    "url-loader": "^0.5.7",
-    "webpack": "^1.12.14"
+    "gulp-electron": "0.0.10"
   }
 }

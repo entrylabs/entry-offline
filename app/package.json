@@ -1,0 +1,28 @@
+{
+  "dependencies": {
+    "fstream": "^1.0.8",
+    "image-size": "^0.3.5",
+    "q": "^1.4.1",
+    "tar": "^2.2.1"
+  },
+  "description": "entry-offline version",
+  "author": "kimorkim",
+  "main": "entry_offline.js",
+  "name": "entry",
+  "repository": {
+    "type": "git",
+    "url": "git+https://kimorkim@github.com/entrylabs/entry-offline.git"
+  },
+  "build": {
+    "arch": "x64",
+    "platform": "win32",
+    "app-bundle-id": "entry-offline",
+    "app-category-type": "org.play-entry.entry-offline"
+  },
+  "version": "1.1.0",
+  "chromium-args": "--disable-web-security --allow-file-access-from-files --enable-decoder=aac,h264,mp3 --enable-demuxer=mp3,mov --enable-parser=aac,h264,mpegaudio",
+  "nodejs": "true",
+  "webkit": {
+    "plugin": true
+  }
+}
