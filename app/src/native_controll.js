@@ -2,7 +2,7 @@
 var isOsx = false;
 
 var options = {};
-var _real_path = '.';
+var _real_path = __dirname;
 var _real_path_with_protocol = '';
 
 var orgAlert = alert;

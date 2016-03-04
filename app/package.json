@@ -6,7 +6,7 @@
     "tar": "^2.2.1"
   },
   "description": "entry-offline version",
-  "author": "kimorkim",
+  "authors": "entrylabs",
   "main": "entry_offline.js",
   "name": "entry",
   "repository": {

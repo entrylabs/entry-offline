@@ -95,6 +95,75 @@ angular.module('workspace').controller("WorkspaceController",
                     category_list['entryCategoryarduino'].addClass('entryRemove');
                 }
 				$scope.setOfflineHW();
+
+				// var body = document.body;
+				// body.ondragover = function () {
+				// 	$('.uploader-window').css('opacity', 1);
+				// 	$('.uploader-window').css('display', 'block');
+				// 	console.log('over');
+				//     return false;
+				// };
+				// body.ondragleave = function () {
+				// 	console.log('leave');
+				// }
+				// body.ondragend = function () {
+
+				// 	$('.uploader-window').css('opacity', 0);
+				// 	$('.uploader-window').css('display', 'none');
+				//     return false;
+				// };
+				// body.ondrop = function (e) {
+				// 	$('.uploader-window').css('opacity', 0);
+				// 	$('.uploader-window').css('display', 'none');
+				//     e.preventDefault();
+				//     var file = e.dataTransfer.files[0];
+				//     console.log('File you dragged here is', file.path);
+				//     return false;
+				// };
+
+
+				var $body = $('body');
+				$body.on('dragover', function () {
+					$('.uploader-window').css('opacity', 1);
+					console.log('over');
+					return false;
+				});
+				$body.on('dragleave dragend', function (e) {
+					$('.uploader-window').css('opacity', 0);
+					console.log('over');
+					return false;
+				});
+				$body.on('drop', function (e) {
+					$('.uploader-window').css('opacity', 0);
+				    e.preventDefault();
+				    var file = e.originalEvent.dataTransfer.files[0];
+				    var fileInfo = path.parse(file.path);
+
+				    if(fileInfo.ext === '.ent') {
+				    	var filePath = file.path;
+		        		var pathArr = filePath.split('/');
+		        		pathArr.pop();
+		        		storage.setItem('defaultPath', pathArr.join('/'));
+
+		        		Entry.plugin.loadProject(filePath, function (data) {
+		        			var jsonObj = JSON.parse(data);
+		        			jsonObj.path = filePath;
+    			            storage.setItem('nativeLoadProject', JSON.stringify(jsonObj));
+				            Entry.plugin.reloadApplication();
+		        		});
+				    } else {
+				    	alert('지원하지 않은 형식의 파일입니다.');
+				    }
+				    return false;
+				});
+
+				// $body[0].ondrop = function (e) {
+				// 	$('.uploader-window').css('opacity', 0);
+				// 	$('.uploader-window').css('display', 'none');
+				//     e.preventDefault();
+				//     console.log(e);
+				//     return false;
+				// };
 			});
 		};
 
