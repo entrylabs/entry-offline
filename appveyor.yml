@@ -9,6 +9,10 @@ cache:
   - '%APPDATA%\npm-cache'
   - '%USERPROFILE%\.electron'
 
+environment:
+  GH_TOKEN:
+    secure: +sYL7dvMYAqkqjswuvxZW4vS4Tpy5pc5p6vsdrLWt757ljOMwm2tVNLifIV2qHgx
+
 init:
   - git config --global core.autocrlf input
 
@@ -27,7 +31,6 @@ build_script:
 test: off
 
 deploy:
-    # FTP deployment provider settings
   - provider: FTP
     protocol: sftp
     host: play04.play-entry.com
