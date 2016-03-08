@@ -6,18 +6,21 @@
     "tar": "^2.2.1"
   },
   "description": "entry-offline version",
-  "authors": "entrylabs",
+  "author": "EntryLabs",
+  "authors": "EntryLabs",
   "main": "entry_offline.js",
-  "name": "entry",
+  "name": "Entry",
   "repository": {
     "type": "git",
     "url": "git+https://kimorkim@github.com/entrylabs/entry-offline.git"
   },
   "build": {
-    "arch": "x64",
-    "platform": "win32",
+    "asar" : false,
+    "version": "0.36.9",
+    "name": "Entry",
     "app-bundle-id": "entry-offline",
-    "app-category-type": "org.play-entry.entry-offline"
+    "app-category-type": "org.play-entry.entry-offline",
+    "icon": "./icon/app.ico"
   },
   "version": "1.1.0",
   "chromium-args": "--disable-web-security --allow-file-access-from-files --enable-decoder=aac,h264,mp3 --enable-demuxer=mp3,mov --enable-parser=aac,h264,mpegaudio",

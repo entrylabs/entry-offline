@@ -15,6 +15,7 @@ angular.module('workspace').controller("WorkspaceController",
 				var initOptions = {
 					type: 'workspace',
 					libDir: './bower_components',
+					defaultDir: '.',
 					fonts: [{
 						name: '바탕체',
 						family: 'KoPub Batang',
@@ -76,7 +77,6 @@ angular.module('workspace').controller("WorkspaceController",
 					storage.removeItem('localStorageProject');
 				}
 
-				// Entry.loadProject(project);
 				$scope.setWorkspace(project);
 
 				Entry.addEventListener('saveWorkspace', $scope.saveWorkspace);
@@ -96,74 +96,57 @@ angular.module('workspace').controller("WorkspaceController",
                 }
 				$scope.setOfflineHW();
 
-				// var body = document.body;
-				// body.ondragover = function () {
-				// 	$('.uploader-window').css('opacity', 1);
-				// 	$('.uploader-window').css('display', 'block');
-				// 	console.log('over');
-				//     return false;
-				// };
-				// body.ondragleave = function () {
-				// 	console.log('leave');
-				// }
-				// body.ondragend = function () {
-
-				// 	$('.uploader-window').css('opacity', 0);
-				// 	$('.uploader-window').css('display', 'none');
-				//     return false;
-				// };
-				// body.ondrop = function (e) {
-				// 	$('.uploader-window').css('opacity', 0);
-				// 	$('.uploader-window').css('display', 'none');
-				//     e.preventDefault();
-				//     var file = e.dataTransfer.files[0];
-				//     console.log('File you dragged here is', file.path);
-				//     return false;
-				// };
-
 
 				var $body = $('body');
+				var $uploadWindow = $('.entryUploaderWindow');
+				var actionDisplayNone;
 				$body.on('dragover', function () {
-					$('.uploader-window').css('opacity', 1);
-					console.log('over');
+					$uploadWindow.css('opacity', 1);
+					if(actionDisplayNone) {
+						clearTimeout(actionDisplayNone);
+						$uploadWindow.css('display', 'block');
+					}
 					return false;
 				});
 				$body.on('dragleave dragend', function (e) {
-					$('.uploader-window').css('opacity', 0);
-					console.log('over');
+					var child = $uploadWindow.find(e.target);
+					if(child.length === 0)  {
+						$uploadWindow.css('opacity', 0);
+						actionDisplayNone = setTimeout(function () {
+							$uploadWindow.css('display', 'none');
+						}, 200);
+					}
 					return false;
 				});
 				$body.on('drop', function (e) {
 					$('.uploader-window').css('opacity', 0);
+					setTimeout(function () {
+						$uploadWindow.css('display', 'none');
+					}, 200);
 				    e.preventDefault();
 				    var file = e.originalEvent.dataTransfer.files[0];
 				    var fileInfo = path.parse(file.path);
+				    try {
+					    if(fileInfo.ext === '.ent') {
+					    	var filePath = file.path;
+			        		var pathArr = filePath.split('/');
+			        		pathArr.pop();
+			        		storage.setItem('defaultPath', pathArr.join('/'));
 
-				    if(fileInfo.ext === '.ent') {
-				    	var filePath = file.path;
-		        		var pathArr = filePath.split('/');
-		        		pathArr.pop();
-		        		storage.setItem('defaultPath', pathArr.join('/'));
-
-		        		Entry.plugin.loadProject(filePath, function (data) {
-		        			var jsonObj = JSON.parse(data);
-		        			jsonObj.path = filePath;
-    			            storage.setItem('nativeLoadProject', JSON.stringify(jsonObj));
-				            Entry.plugin.reloadApplication();
-		        		});
-				    } else {
-				    	alert('지원하지 않은 형식의 파일입니다.');
+			        		Entry.plugin.loadProject(filePath, function (data) {
+			        			var jsonObj = JSON.parse(data);
+			        			jsonObj.path = filePath;
+	    			            storage.setItem('nativeLoadProject', JSON.stringify(jsonObj));
+					            Entry.plugin.reloadApplication();
+			        		});
+					    } else {
+					    	alert('지원하지 않은 형식의 파일입니다.');
+					    }
+				    } catch(e) {
+				    	alert('파일이 깨졌거나 잘못된 파일을 불러왔습니다.');
 				    }
 				    return false;
 				});
-
-				// $body[0].ondrop = function (e) {
-				// 	$('.uploader-window').css('opacity', 0);
-				// 	$('.uploader-window').css('display', 'none');
-				//     e.preventDefault();
-				//     console.log(e);
-				//     return false;
-				// };
 			});
 		};
 
@@ -277,20 +260,30 @@ angular.module('workspace').controller("WorkspaceController",
 	        		pathArr.pop();
 	        		storage.setItem('defaultPath', pathArr.join('/'));
 
-	        		myProject.saveProject(filePath, function (project_name) {
-		            	myProject.isSaved = true;
-		            	myProject.isSavedPath = filePath;
-		            	Entry.toast.success(Lang.Workspace.saved, project_name + ' ' + Lang.Workspace.saved_msg)
-		            });
+	        		try{
+		        		myProject.saveProject(filePath, function (project_name) {
+			            	myProject.isSaved = true;
+			            	myProject.isSavedPath = filePath;
+			            	Entry.toast.success(Lang.Workspace.saved, project_name + ' ' + Lang.Workspace.saved_msg);
+							$scope.hideSpinner();
+			            });
+	        		} catch(e) {
+		            	Entry.toast.success(Lang.Workspace.saved, project_name + ' ' + Lang.Workspace.saved_msg);
+						$scope.hideSpinner();	        			
+	        		}
+	        	} else {
+	        		$scope.hideSpinner();
 	        	}
 			});
 		}
 
 		// 저장하기
 		$scope.saveWorkspace = function() {
+			$scope.showSpinner();
 			if(myProject.isSaved) {
 				$scope.project.saveProject(myProject.isSavedPath, function () {
-	            	Entry.toast.success(Lang.Workspace.saved, myProject.name + ' ' + Lang.Workspace.saved_msg)
+	            	Entry.toast.success(Lang.Workspace.saved, myProject.name + ' ' + Lang.Workspace.saved_msg);
+	            	$scope.hideSpinner();
 	            });
 			} else {
 				saveAsProject(Lang.Workspace.file_save);
@@ -299,6 +292,7 @@ angular.module('workspace').controller("WorkspaceController",
 
         // 새 이름으로 저장하기
 		$scope.saveAsWorkspace = function() {
+			$scope.showSpinner();
 			var default_path = storage.getItem('defaultPath') || '';
 			Entry.stateManager.addStamp();
 			saveAsProject(Lang.Workspace.file_save);
@@ -503,6 +497,13 @@ angular.module('workspace').controller("WorkspaceController",
         $scope.deleteMessage = function () {
         	console.log('deleteMessage');
         };
+
+        $scope.showSpinner = function () {
+        	$('.entrySpinnerWindow').css('display', 'flex');
+        }
+        $scope.hideSpinner = function () {
+        	$('.entrySpinnerWindow').css('display', 'none');
+        }
 
         function cropImageFromCanvas(image_data) {
         	var defer = $.Deferred();

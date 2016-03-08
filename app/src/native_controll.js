@@ -5,6 +5,14 @@ var options = {};
 var _real_path = __dirname;
 var _real_path_with_protocol = '';
 
+// if (process.platform != 'darwin') {
+// 	isOsx = false;
+// 	var _real_path = path.join(process.env.APPDATA, 'entryTemp');
+// } else {
+// 	isOsx = true;
+// 	var _real_path = __dirname;
+// }
+
 var orgAlert = alert;
 alert = function (msg) {
 	orgAlert(msg, '엔트리');
@@ -421,23 +429,15 @@ Entry.plugin = (function () {
 	}
 
 	that.mkdir = function(filePath, cb) {
-		fs.access(filePath, function (err, files) {
-			if(err){
-				fs.mkdir(filePath, function (err) {
-					if(err) {
-						throw err;
-					}
-
-					if($.isFunction(cb)) {
-						cb();
-					}
-				});
-			} else {
-				if($.isFunction(cb)) {
-					cb();
-				}
-			}
-		})
+	    var exists = fs.existsSync(filePath);
+	    if (!exists) {
+	    	var parser = path.parse(filePath);
+	        that.mkdir(parser.dir);
+	        fs.mkdirSync(filePath);
+	    }
+	    if(typeof cb === 'function') {
+		    cb();
+	    }
 	}
 
 	that.exists = function (filePath, cb) {
