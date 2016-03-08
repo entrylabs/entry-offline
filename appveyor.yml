@@ -9,9 +9,9 @@ cache:
   - '%APPDATA%\npm-cache'
   - '%USERPROFILE%\.electron'
 
-environment:
-  GH_TOKEN:
-    secure: QPyErTwcxv7IGlN+tHKTlShFS7+C/m1kb5NbhHYIv3yf+wmIRUELEK8xJtPyeHna
+#environment:
+#  GH_TOKEN:
+#    secure: QPyErTwcxv7IGlN+tHKTlShFS7+C/m1kb5NbhHYIv3yf+wmIRUELEK8xJtPyeHna
 
 init:
   - git config --global core.autocrlf input
@@ -29,3 +29,16 @@ build_script:
   - npm run dist
 
 test: off
+
+deploy:
+
+    # FTP deployment provider settings
+  - provider: FTP
+    protocol: sftp
+    host: play04.play-entry.com
+    username: entry
+    password:
+      secure: AAMMJ21gGJ9i2Bhd7eCzeg==
+    folder: build
+    application:
+    active_mode: false
