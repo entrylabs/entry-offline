@@ -36,6 +36,6 @@ deploy:
     password:
       secure: AAMMJ21gGJ9i2Bhd7eCzeg==
     folder: 
-    artifact: /.*\.nupkg/
+    artifact: /.*\.exe/
     application:
     active_mode: false
