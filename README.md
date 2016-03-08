@@ -1,3 +1,4 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/y3yyjagb93vf5lp5/branch/master?svg=true)](https://ci.appveyor.com/project/kimorkim/entry-offline/branch/master)
 ## Entry-Offline
  Entry-Offline is an application for running in offline environment.
  This has two version of application, Windows and MAC system.
