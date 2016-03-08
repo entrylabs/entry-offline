@@ -2,8 +2,8 @@
   "private": true,
   "scripts": {
     "clean": "rimraf dist",
-    "pack": "npm run clean && build",
-    "dist": "npm run clean && build"
+    "pack": "build",
+    "dist": "build"
   },
   "build": {
     "win64": {
@@ -11,8 +11,7 @@
       "title": "Entry",
       "icon": "./icon/app.ico",
       "authors": "EntryLabs",
-      "exe": "Entry.exe",
-      "loadingGif": "C:/Users/entry_pc/Documents/entry-offline/build/install-spinner.gif"
+      "exe": "Entry.exe"
     }
   },
   "devDependencies": {

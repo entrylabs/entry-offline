@@ -300,6 +300,7 @@ angular.module('workspace').controller("WorkspaceController",
 
         // 불러오기
         $scope.loadWorkspace = function() {
+        	$scope.showSpinner();
         	var canLoad = false;
         	if(!Entry.stateManager.isSaved()) {
         		canLoad = !confirm(Lang.Menus.save_dismiss);
@@ -326,6 +327,8 @@ angular.module('workspace').controller("WorkspaceController",
     			            storage.setItem('nativeLoadProject', JSON.stringify(jsonObj));
 				            Entry.plugin.reloadApplication();
 		        		});
+		        	} else {
+			        	$scope.hideSpinner();
 		        	}
         		});
         	}
