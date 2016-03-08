@@ -103,7 +103,7 @@ angular.module('common').controller('PictureController',
 	            }
 	        }
 	        if($.isEmptyObject($scope.pictureData)) {
-		        $http.get('/resource_map/pictures.json').success(function(response) {
+		        $http.get('./resource_map/pictures.json').success(function(response) {
 			        makePictureData(response);
 			        setSystemPictures(type, main, sub);
 			    });

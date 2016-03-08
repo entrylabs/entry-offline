@@ -299,10 +299,27 @@ Entry.plugin = (function () {
 			var zoom_level = localStorage.getItem("window_zoomlevel") || 0;
 			that.setZoomLevel(zoom_level);
 			var isNotFirst = sessionStorage.getItem('isNotFirst');
+
 			if(!isNotFirst) {
-				that.initProjectFolder(function() {
-					sessionStorage.setItem('isNotFirst', true);
-				});
+				var isTempRecovery = false;
+				if(fs.existsSync(path.join(_real_path, 'temp', 'project.json'))) {
+					isTempRecovery = confirm('복구할래?');
+				}
+				if(!isTempRecovery) {
+					that.initProjectFolder(function() {
+						sessionStorage.setItem('isNotFirst', true);
+					});
+				} else {
+					that.loadTempProject(function (data) {
+						var jsonObj = JSON.parse(data);
+						jsonObj.path = load_path;
+						localStorage.setItem('nativeLoadProject', JSON.stringify(jsonObj));
+						if($.isFunction(cb)) {
+							cb();
+						}
+					});
+					return;
+				}
 			}
 
 			if(options.path && !isNotFirst) {
@@ -362,6 +379,18 @@ Entry.plugin = (function () {
 					.pipe(fs_writer)
 
 			});
+		});
+	}
+
+	that.loadTempProject = function(cb, enc) {
+		fs.readFile(_real_path + '/temp/project.json', enc || 'utf8', function (err, data) {
+			if(err) {
+				throw err;
+			}
+
+			if($.isFunction(cb)) {
+				cb(data);
+			}
 		});
 	}
 

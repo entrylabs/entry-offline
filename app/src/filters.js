@@ -7,12 +7,11 @@ common.filter('makeThumbnail', function() {
     return function(picture) {
         if (picture) {
             // return picture.filename.substring(0,2)+'/'+picture.filename.substring(2,4)+'/thumb/'+picture.filename+'.png';
-
             var extension = picture.extension || '.png';
-            return path.join(_real_path, 'uploads', picture.filename.substring(0,2), picture.filename.substring(2,4), 'thumb', picture.filename + extension);
+            return ['uploads', picture.filename.substring(0,2), picture.filename.substring(2,4), 'thumb', picture.filename + extension].join('/');
         }
         else
-            return '/images/text_icon.png';
+            return './images/text_icon.png';
     };
 });
 
@@ -21,10 +20,10 @@ common.filter('makeUploadThumbnail', function() {
         if (picture) {
             // return picture.filename.substring(0,2)+'/'+picture.filename.substring(2,4)+'/thumb/'+picture.filename+'.png';
             var extension = picture.extension || '.png';
-            return path.join(_real_path, 'temp', picture.filename.substring(0,2), picture.filename.substring(2,4), 'thumb', picture.filename + extension);
+            return ['temp', picture.filename.substring(0,2), picture.filename.substring(2,4), 'thumb', picture.filename + extension].join('/');
         }
         else
-            return '/images/text_icon.png';
+            return './images/text_icon.png';
     };
 });
 

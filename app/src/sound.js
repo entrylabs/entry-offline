@@ -31,14 +31,19 @@ angular.module('common').controller('SoundController',
     } 
         
     $scope.init = function() {
-        var soundMapFile = 'resource_map/' + 'sounds.json'; 
-        
-        readSoundMeta(soundMapFile);
-        
-        $routeParams.type = 'default';
-        $routeParams.main = '사람';
+        console.log('dasds');
+        var soundMapFile = './resource_map/' + 'sounds.json'; 
 
-        $scope.findSounds($routeParams.type, $routeParams.main, $routeParams.sub);
+        $http.get(soundMapFile).success(function(response) {
+            data = response;
+            $routeParams.type = 'default';
+            $routeParams.main = '사람';
+            $scope.findSounds($routeParams.type, $routeParams.main, $routeParams.sub);
+        });
+        
+        // readSoundMeta(soundMapFile);
+        
+
         //console.log("collapse " + $scope.isCollapsed1);       
     };
     
@@ -83,7 +88,7 @@ angular.module('common').controller('SoundController',
         for (var i in categorizedData) {
             var sound = categorizedData[i];
           
-            var path = '/uploads/' + sound.filename.substring(0,2)+'/'+sound.filename.substring(2,4)+'/'+sound.filename+sound.ext;
+            var path = './uploads/' + sound.filename.substring(0,2)+'/'+sound.filename.substring(2,4)+'/'+sound.filename+sound.ext;
         
             //console.log(path);
 
@@ -118,7 +123,7 @@ angular.module('common').controller('SoundController',
             var originalFileName = sound.name;
                         
             if(originalFileName.includes($scope.searchWord)) {
-                var path = '/uploads/' + sound.filename.substring(0,2)+'/'+sound.filename.substring(2,4)+'/'+sound.filename+sound.ext;
+                var path = './uploads/' + sound.filename.substring(0,2)+'/'+sound.filename.substring(2,4)+'/'+sound.filename+sound.ext;
         
                 Entry.soundQueue.loadFile({
                     id: sound._id,

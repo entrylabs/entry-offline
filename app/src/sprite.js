@@ -130,7 +130,7 @@ angular.module('common').controller('SpriteController',
         }
 
          if($.isEmptyObject($scope.spriteData)) {
-            $http.get('/resource_map/sprites.json').success(function(response) {
+            $http.get('./resource_map/sprites.json').success(function(response) {
                 makePictureData(response);
                 setSystemSprites(type, main, sub);
             });
@@ -429,12 +429,12 @@ angular.module('common').controller('SpriteController',
     };
 
     $scope.getFontOption = function(name) {
-        return '/images/text_button_'+name+'_'+$scope.fontData[name]+'.png';
+        return './images/text_button_'+name+'_'+$scope.fontData[name]+'.png';
     };
 
 
     $scope.getBackgroundColor = function(name) {
-        return '/images/text_button_background_'+$scope.background+'.png';
+        return './images/text_button_background_'+$scope.background+'.png';
     };
 
     $scope.toggleColorChooser = function(name) {
