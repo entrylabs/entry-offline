@@ -45,7 +45,7 @@ deploy:
     username: entry
     password:
       secure: AAMMJ21gGJ9i2Bhd7eCzeg==
-    folder: 
+    folder: build/$(appveyor_build_version)
     artifact: 
 
 
