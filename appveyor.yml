@@ -30,6 +30,13 @@ build_script:
 
 test: off
 
+artifacts:
+  - path: **\*.exe
+    name: setup
+
+  - path: **\*.nupkg
+    name: package
+
 deploy:
   - provider: FTP
     protocol: sftp
@@ -38,4 +45,4 @@ deploy:
     password:
       secure: AAMMJ21gGJ9i2Bhd7eCzeg==
     folder: 
-    artifact: /.*\.exe/
+    artifact: 
