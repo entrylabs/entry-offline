@@ -7,7 +7,7 @@
             <h4 class="modal-title">{{'Workspace.add_picture'|text}}</h4>
         </div>
         <div class="modal-body">
-            <input id="searchWord" class='searchWord' ng-model="searchWord" ng-enter="search()" ng-show="currentTab == 'system'"/>
+            <input id="searchWord" class='searchWord' ng-model="searchWord" ng-keyup="search($event)" ng-show="currentTab == 'system'"/>
             <tabset>
                 <tab ng-repeat="tab in tabs" select="changeTab(tab.category)" active="tab.active">
                     <tab-heading>{{tab.title | text}}

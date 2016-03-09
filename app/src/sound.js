@@ -109,43 +109,45 @@ angular.module('common').controller('SoundController',
         }
     };
 
-    $scope.search = function() {
-        $scope.searchWord = $('#searchWord').val();
-        if (!$scope.searchWord || $scope.searchWord == '') {
-            alert('검색어를 입력하세요.');
-            return false;
-        }
-
-        $scope.systemSounds = [];
-        
-        for (var i in data) {
-            var sound = data[i];
-            var originalFileName = sound.name;
-                        
-            if(originalFileName.includes($scope.searchWord)) {
-                var path = './uploads/' + sound.filename.substring(0,2)+'/'+sound.filename.substring(2,4)+'/'+sound.filename+sound.ext;
-        
-                Entry.soundQueue.loadFile({
-                    id: sound._id,
-                    src: path,
-                    type: createjs.LoadQueue.SOUND
-                });
-       
-                sound.selected = 'boxOuter';
-                for (var j in $scope.selectedSystem) {
-                    if ($scope.selectedSystem[j]._id === sound._id) {
-                        sound.selected = 'boxOuter selected';
-                        break;
-                    }
-                }
-        
-                $scope.systemSounds.push(sound);
-                console.log("sound : " + sound + "==>" + $scope.searchWord);
+    $scope.search = function(e) {
+        if(e.keyCode === 13) {
+            $scope.searchWord = $('#searchWord').val();
+            if (!$scope.searchWord || $scope.searchWord == '') {
+                alert(Lang.Menus.searchword_required);
+                return false;
             }
+
+            $scope.systemSounds = [];
+            
+            for (var i in data) {
+                var sound = data[i];
+                var originalFileName = sound.name;
+                            
+                if(originalFileName.includes($scope.searchWord)) {
+                    var path = './uploads/' + sound.filename.substring(0,2)+'/'+sound.filename.substring(2,4)+'/'+sound.filename+sound.ext;
+            
+                    Entry.soundQueue.loadFile({
+                        id: sound._id,
+                        src: path,
+                        type: createjs.LoadQueue.SOUND
+                    });
+           
+                    sound.selected = 'boxOuter';
+                    for (var j in $scope.selectedSystem) {
+                        if ($scope.selectedSystem[j]._id === sound._id) {
+                            sound.selected = 'boxOuter selected';
+                            break;
+                        }
+                    }
+            
+                    $scope.systemSounds.push(sound);
+                    console.log("sound : " + sound + "==>" + $scope.searchWord);
+                }
+            }
+        
+            $scope.collapse(0);
+            $scope.main_menu = '';
         }
-    
-        $scope.collapse(0);
-        $scope.main_menu = '';
        
     };
 
@@ -155,12 +157,12 @@ angular.module('common').controller('SoundController',
         console.log("upload file : " + uploadFile);
 
         if (!uploadFile) {
-            alert('파일은 필수입력 항목입니다.');
+            alert(Lang.Menus.file_required);
             return false;
         }
 
         if (uploadFile.length > 10) {
-            alert('한번에 10개까지 업로드가 가능합니다.');
+            alert(Lang.Menus.file_upload_max_count);
             return false;
         }
 
@@ -175,7 +177,7 @@ angular.module('common').controller('SoundController',
             }
 
             if (file.size > 1024*1024*10) {
-                alert('10MB 이하만 업로드가 가능합니다.');
+                alert(Lang.Menus.file_upload_max_size);
                 return false;
             }
             

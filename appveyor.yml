@@ -10,7 +10,6 @@ cache:
   - '%USERPROFILE%\.electron'
 
 environment:
-  build_number: $(build)
   GH_TOKEN:
     secure: +sYL7dvMYAqkqjswuvxZW4vS4Tpy5pc5p6vsdrLWt757ljOMwm2tVNLifIV2qHgx
 
@@ -46,7 +45,7 @@ deploy:
     username: entry
     password:
       secure: AAMMJ21gGJ9i2Bhd7eCzeg==
-    folder: build/$(build_number)
+    folder: 
     artifact: 
 
 

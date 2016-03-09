@@ -36,49 +36,6 @@ angular.module('workspace').controller('HeaderController',
             e.stopPropagation();
         }
 
-        var WorkspaceSaveCtrl = function($scope, $modalInstance) {
-            $scope.name = myProject.name;
-
-            // 적용
-            $scope.ok = function () {
-                var newName = document.getElementById('name').value;
-                if (newName === '') {
-                    alert('프로젝트 이름을 입력하십시요.');
-                } else {
-                    $modalInstance.close(newName);
-                }
-            };
-
-            // 취소
-            $scope.cancel = function () {
-                $modalInstance.dismiss('cancel');
-            };
-
-        }
-
-        var WorkspaceLoadCtrl = function($scope, $modalInstance) {
-            var url = '/api/project/browse';
-            $scope.projects = [];
-
-            $http({method: 'GET', url: url}).
-                success(function(data,status) {
-                    $scope.projects = data;
-                    console.log($scope.projects);
-                }).
-                error(function(data, status) {
-                    $scope.status = status;
-                });
-
-            $scope.ok = function (project) {
-                $modalInstance.close(project);
-            };
-
-            // 취소
-            $scope.cancel = function () {
-                $modalInstance.dismiss('cancel');
-            };
-        }
-
         $scope.setLanguage = function(language) {
             storage.setItem('lang', language);
             var project = Entry.exportProject();
@@ -124,6 +81,7 @@ angular.module('workspace').controller('HeaderController',
             }
 
             if(!canLoad) {
+                storage.removeItem('tempProject');
                 Entry.plugin.beforeStatus = 'new';
                 Entry.plugin.initProjectFolder(function () {
                     Entry.plugin.reloadApplication();

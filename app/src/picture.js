@@ -124,30 +124,32 @@ angular.module('common').controller('PictureController',
 	    	}
 	    }
 
-	    $scope.search = function() {
-	        calcInnerHeight();
-	        $scope.searchWord = $('#searchWord').val();
-	        if (!$scope.searchWord || $scope.searchWord == '') {
-	            alert(Lang.Menus.searchword_required);
-	            return false;
-	        }
+	    $scope.search = function(e) {
+	    	if(e.keyCode === 13) {
+		        calcInnerHeight();
+		        $scope.searchWord = $('#searchWord').val();
+		        if (!$scope.searchWord || $scope.searchWord == '') {
+		            alert(Lang.Menus.searchword_required);
+		            return false;
+		        }
 
-	        filterPictureData({name:$scope.searchWord}, function (filtered_data) {
-	        	$scope.systemPictures = [];
-                for (var i in filtered_data) {
-                    var picture = filtered_data[i];
-                    picture.selected = 'boxOuter';
-                    for (var j in $scope.selectedPictures) {
-                        if ($scope.selectedPictures[j]._id === picture._id) {
-                            picture.selected = 'boxOuter selected';
-                            break;
-                        }
-                    }
-                    $scope.systemPictures.push(picture);
-                }
-                $scope.collapse(0);
-                $scope.main_menu = '';
-	        });
+		        filterPictureData({name:$scope.searchWord}, function (filtered_data) {
+		        	$scope.systemPictures = [];
+	                for (var i in filtered_data) {
+	                    var picture = filtered_data[i];
+	                    picture.selected = 'boxOuter';
+	                    for (var j in $scope.selectedPictures) {
+	                        if ($scope.selectedPictures[j]._id === picture._id) {
+	                            picture.selected = 'boxOuter selected';
+	                            break;
+	                        }
+	                    }
+	                    $scope.systemPictures.push(picture);
+	                }
+	                $scope.collapse(0);
+	                $scope.main_menu = '';
+		        });	    		
+	    	}
 	    };
 
 

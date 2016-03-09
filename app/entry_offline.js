@@ -88,7 +88,6 @@ for (var i = 0; i < argv.length; i++) {
 }
 
 app.once('ready', function() {
-    var protocol = electron.protocol;
 
     mainWindow = new BrowserWindow({width: 1024, height: 700});
     // mainWindow.loadUrl('custom:///index.html');

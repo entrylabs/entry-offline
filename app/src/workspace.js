@@ -16,28 +16,29 @@ angular.module('workspace').controller("WorkspaceController",
 					type: 'workspace',
 					libDir: './bower_components',
 					defaultDir: '.',
+					blockInjectDir: './',
 					fonts: [{
-						name: '바탕체',
+						name: Lang.Fonts.batang,
 						family: 'KoPub Batang',
 						url: './css/kopubbatang.css'
 					}, {
-						name: '명조체',
+						name: Lang.Fonts.myeongjo,
 						family: 'Nanum Myeongjo',
 						url: './css/nanummyeongjo.css'
 					}, {
-						name: '고딕체',
+						name: Lang.Fonts.gothic,
 						family: 'Nanum Gothic',
 						url: './css/nanumgothic.css'
 					}, {
-						name: '필기체',
+						name: Lang.Fonts.pen_script,
 						family: 'Nanum Pen Script',
 						url: './css/nanumpenscript.css'
 					}, {
-						name: '한라산체',
+						name: Lang.Fonts.jeju_hallasan,
 						family: 'Jeju Hallasan',
 						url: './css/jejuhallasan.css'
 					}, {
-						name: '코딩고딕체',
+						name: Lang.Fonts.gothic_coding,
 						family: 'Nanum Gothic Coding',
 						url: './css/nanumgothiccoding.css'
 					}]
@@ -57,6 +58,7 @@ angular.module('workspace').controller("WorkspaceController",
 		        	}
 
 		        	if(canLoad) {
+		        		storage.removeItem('tempProject');
 		        		beforeUnload();
 		        	} else {
 						console.log('I do not want to be closed');
@@ -89,7 +91,7 @@ angular.module('workspace').controller("WorkspaceController",
 				Entry.addEventListener('deleteMessage', $scope.deleteMessage);
 				Entry.addEventListener('saveCanvasImage', $scope.saveCanvasData);
 				Entry.addEventListener('openPictureImport', $scope.openPictureImport);
-				// Entry.addEventListener('saveLocalStorageProject', saveLocalStorageProject);
+				Entry.addEventListener('saveLocalStorageProject', saveLocalStorageProject);
 				if(Entry.plugin.isOsx()) {
                     var category_list = Entry.playground.categoryView_.getElementsByTagName("li");
                     category_list['entryCategoryarduino'].addClass('entryRemove');
@@ -100,6 +102,7 @@ angular.module('workspace').controller("WorkspaceController",
 				var $body = $('body');
 				var $uploadWindow = $('.entryUploaderWindow');
 				var actionDisplayNone;
+
 				$body.on('dragover', function () {
 					$uploadWindow.css('opacity', 1);
 					if(actionDisplayNone) {
@@ -109,17 +112,14 @@ angular.module('workspace').controller("WorkspaceController",
 					return false;
 				});
 				$body.on('dragleave dragend', function (e) {
-					var child = $uploadWindow.find(e.target);
-					if(child.length === 0)  {
-						$uploadWindow.css('opacity', 0);
-						actionDisplayNone = setTimeout(function () {
-							$uploadWindow.css('display', 'none');
-						}, 200);
-					}
+					$uploadWindow.css('opacity', 0);
+					actionDisplayNone = setTimeout(function () {
+						$uploadWindow.css('display', 'none');
+					}, 200);
 					return false;
 				});
 				$body.on('drop', function (e) {
-					$('.uploader-window').css('opacity', 0);
+					$uploadWindow.css('opacity', 0);
 					setTimeout(function () {
 						$uploadWindow.css('display', 'none');
 					}, 200);
@@ -235,9 +235,9 @@ angular.module('workspace').controller("WorkspaceController",
 			}
 
 
-			$scope.project.name = project_name || '새 프로젝트';
+			$scope.project.name = project_name || Lang.Workspace.new_project;
 
-			myProject.name = project_name || '새 프로젝트';
+			myProject.name = project_name || Lang.Workspace.new_project;
 
 			angular.element('#project_name').trigger('blur');
 
@@ -298,6 +298,24 @@ angular.module('workspace').controller("WorkspaceController",
 			saveAsProject(Lang.Workspace.file_save);
         };
 
+        //임시 저장
+		var saveLocalStorageProject = function () {
+	        if(Entry.engine.isState('run')) {
+	            return;
+	        }
+	        if (Entry.Func &&
+	            Entry.Func.workspace &&
+	            Entry.Func.workspace.visible ) {
+	            return;
+	        }
+	        var project = {};
+	        (function (p) {
+	            Entry.exportProject(p);
+	            p.name = document.getElementById('project_name').value;
+                storage.setItem('tempProject', JSON.stringify(p));
+	        })(project);
+	    };
+
         // 불러오기
         $scope.loadWorkspace = function() {
         	$scope.showSpinner();
@@ -307,6 +325,7 @@ angular.module('workspace').controller("WorkspaceController",
         	}
 
         	if(!canLoad) {
+        		storage.removeItem('tempProject');
         		Entry.plugin.beforeStatus = 'load';
         		dialog.showOpenDialog({
         			properties: [

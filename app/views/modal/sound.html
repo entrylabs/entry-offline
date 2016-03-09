@@ -8,7 +8,7 @@
             <h4 class="modal-title">{{'Workspace.sound_add'|text}}</h4>
         </div>
         <div class="modal-body">
-            <input id="searchWord" class='searchWord' ng-model="searchWord" ng-enter="search()" ng-show="currentTab == 'system'"/>
+            <input id="searchWord" class='searchWord' ng-model="searchWord" ng-keyup="search($event)" ng-show="currentTab == 'system'"/>
             <uib-tabset>
                 <uib-tab select="changeTab('system')">
                     <tab-heading>

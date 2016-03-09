@@ -15,11 +15,11 @@ var _real_path_with_protocol = '';
 
 var orgAlert = alert;
 alert = function (msg) {
-	orgAlert(msg, '엔트리');
+	orgAlert(msg, Lang.Menus.Entry);
 }
 var orgConfirm = confirm;
 confirm = function (msg) {
-	return orgConfirm(msg, '엔트리');
+	return orgConfirm(msg, Lang.Menus.Entry);
 }
 
 // console.log = function () {};
@@ -279,7 +279,8 @@ Entry.plugin = (function () {
 			frame: false,
 			alwaysOnTop: true
 		});
-		popup.loadURL('file:///views/about.html');
+
+		popup.loadURL('file:///' + path.join(__dirname, 'views', 'about.html'));
 		popup.on('closed', function() {
 		    popup = null;
 		});
@@ -302,22 +303,22 @@ Entry.plugin = (function () {
 
 			if(!isNotFirst) {
 				var isTempRecovery = false;
-				if(fs.existsSync(path.join(_real_path, 'temp', 'project.json'))) {
+
+				if(localStorage.hasOwnProperty('tempProject')) {
 					isTempRecovery = confirm('복구할래?');
 				}
+
 				if(!isTempRecovery) {
 					that.initProjectFolder(function() {
 						sessionStorage.setItem('isNotFirst', true);
 					});
 				} else {
-					that.loadTempProject(function (data) {
-						var jsonObj = JSON.parse(data);
-						jsonObj.path = load_path;
-						localStorage.setItem('nativeLoadProject', JSON.stringify(jsonObj));
-						if($.isFunction(cb)) {
-							cb();
-						}
-					});
+					var jsonObj = JSON.parse(localStorage.getItem('tempProject'));
+					jsonObj.path = load_path;
+					localStorage.setItem('nativeLoadProject', JSON.stringify(jsonObj));
+					if($.isFunction(cb)) {
+						cb();
+					}
 					return;
 				}
 			}
