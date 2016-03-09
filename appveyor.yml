@@ -31,10 +31,10 @@ build_script:
 test: off
 
 artifacts:
-  - path: **\*.exe
+  - path: '**\*.exe'
     name: setup
 
-  - path: **\*.nupkg
+  - path: '**\*.nupkg'
     name: package
 
 deploy:
