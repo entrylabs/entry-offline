@@ -11,7 +11,7 @@ env:
 branches:
   only:
   - new/electron
-  - deploy/osx-build
+  - build
 cache:
   directories:
   - node_modules
@@ -34,7 +34,7 @@ deploy:
   provider: releases
   api_key:
     secure: R3bZfJSPCMkVqnd+icaitWWNzHho1CwsMhKVvFtPPrMBjIVZfBxxBPhwB+y4sKbF6IYkdncQ0pjVWmvpOrAwpms/57FxB3L2Pk5IOe/C7g5q7J7DM/eoO9Y8NztZH/2g9ohZz4mlgWMA9u8aJxQMjeS6L32JzA07sx0x1khEPQJM+wwwyjHuGinANMRMAQ97yfnGBvpzlGfvqiE/XMmw0iL13qXqaxGN2MlYMC5lRP0jGKFJLZzLUUGCf7E2LQ1Rqk6sxoubdmii/Px6ZO7S9DzQbphuaEK8O8qI5+nfb2bKarl7t9Ob8u+EStSR+Vta92hnBS5aWLl6RSftTpT1tZYhq1dOHOJR3DAMcmmtOwlK79KMgzeCVJutcV7+U2O2+68xm6llMimqa8VM8RKBZ54tXK4BdPA77HBGm5bJL0xDjzxcWUXT6Q5Pl8SUDFd3Dpb+rVGERFg3tBx7+KUxTYt11j273i9Fn2KOHHAxXSu05ROASi6wrtdtFJMQWdXktGhh5Aa9Sufq2sjy2jd+bfdDGmSzbl7W5ZSMJ6NVVutT5TondMKNGqghMXH7eMBofmXSLL6JAEU2W43uSAzK6aP4+OErvZnl+VvShAtIgjM1TBUuU7n79HIWseUjwDPfH+q0j8JLExGtE8VsFH4MmyDNEx3vXFRj2kokG90pDv8=
-  file: /dist/Entry-darwin-x64/Entry-1.1.0.dmg
+  file: "**/*.dmg"
   on:
     repo: entrylabs/entry-offline
     branch: new/electron
