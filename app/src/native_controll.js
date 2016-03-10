@@ -5,13 +5,13 @@ var options = {};
 var _real_path = __dirname;
 var _real_path_with_protocol = '';
 
-// if (process.platform != 'darwin') {
-// 	isOsx = false;
-// 	var _real_path = path.join(process.env.APPDATA, 'entryTemp');
-// } else {
-// 	isOsx = true;
-// 	var _real_path = __dirname;
-// }
+if (process.platform != 'darwin') {
+	isOsx = false;
+	// var _real_path = path.join(process.env.APPDATA, 'entryTemp');
+} else {
+	isOsx = true;
+	// var _real_path = __dirname;
+}
 
 var orgAlert = alert;
 alert = function (msg) {
@@ -217,7 +217,11 @@ Entry.plugin = (function () {
 	var view_menus;
 	that.setZoomMenuState = function (state) {
 		if(!view_menus) {
-			view_menus = menu.items[2].submenu.items;
+			if(isOsx) {
+				view_menus = menu.items[3].submenu.items;
+			} else {
+				view_menus = menu.items[2].submenu.items;
+			}
 		}
 
 		switch(state) {
