@@ -40,5 +40,6 @@ deploy:
   file: "${RELEASE_PKG_FILE}"
   skip_cleanup: true
   on:
+    tags: true
     repo: entrylabs/entry-offline 
     branch: new/electron
