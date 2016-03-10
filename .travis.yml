@@ -19,18 +19,23 @@ cache:
   - $HOME/.electron
   - $HOME/.npm
 before_install:
-- git clone https://github.com/creationix/nvm.git ~/.nvm
-- source ~/.nvm/nvm.sh
-- nvm install $NODE_VERSION
-- nvm use --delete-prefix $NODE_VERSION
+  - git clone https://github.com/creationix/nvm.git ~/.nvm
+  - source ~/.nvm/nvm.sh
+  - nvm install $NODE_VERSION
+  - nvm use --delete-prefix $NODE_VERSION
 install:
-- npm prune
-- npm install
+  - npm prune
+  - npm install
 script:
-- npm run dist
-after_success: curl --ftp-create-dirs -T ./dist/Entry-darwin-x64/Entry-1.1.0.dmg -u
+  - npm run dist
+#after_success: curl --ftp-create-dirs -T ./dist/Entry-darwin-x64/Entry-1.1.0.dmg -u
   $FTP_USER:$FTP_PASSWORD sftp://play04.play-entry.com/dist
 before_deploy:
+  - export RELEASE_PKG=$(ls)
+  - export RELEASE_PWD=$(pwd)
+  - echo "deploying $RELEASE_PKG to GitHub releases"
+  - echo "${RELEASE_PKG}"
+  - echo "${RELEASE_PWD}"
   - export RELEASE_PKG_FILE=$(ls *.dmg)
   - echo "deploying $RELEASE_PKG_FILE to GitHub releases"
 deploy:
