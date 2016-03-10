@@ -45,5 +45,5 @@ deploy:
   file_glob: true
   file: "${RELEASE_PKG_FILE}"
   on:
-    repo: entrylabs/entry-offline
+    repo: entrylabs/entry-offline 
     branch: new/electron
