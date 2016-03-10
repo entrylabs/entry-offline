@@ -53,9 +53,9 @@ var mainWindow = null;
 var isClose = true;
 
 app.on('window-all-closed', function() {
-    if (process.platform != 'darwin') {
         app.quit();
-    }
+    // if (process.platform != 'darwin') {
+    // }
 });
 
 // Parse command line options.

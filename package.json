@@ -6,6 +6,25 @@
     "dist": "build"
   },
   "build": {
+    "osx": {
+      "icon": "build/icon.icns",
+      "icon-size": 80,
+      "background": "build/background.png",
+      "contents": [
+        {
+          "x": 410,
+          "y": 220,
+          "type": "link",
+          "path": "/Applications"
+        },
+        {
+          "x": 130,
+          "y": 220,
+          "type": "file",
+          "path": "Entry.app"
+        }
+      ]
+    },
     "win64": {
       "appDirectory": "./dist/Entry-win32-x64",
       "title": "Entry",

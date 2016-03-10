@@ -86,36 +86,31 @@ var template = [{
 
 if (process.platform == 'darwin') {
     template.unshift({
-        label: 'Electron',
+        label: Lang.Menus.Entry,
         submenu: [{
-            label: 'About Electron',
-            role: 'about'
+            label: Lang.Menus.help,
+            role: 'about',
         }, {
             type: 'separator'
         }, {
-            label: 'Services',
-            role: 'services',
-            submenu: []
-        }, {
-            type: 'separator'
-        }, {
-            label: 'Hide Electron',
+            label: Lang.Menus.hide_entry,
             accelerator: 'Command+H',
             role: 'hide'
         }, {
-            label: 'Hide Others',
+            label: Lang.Menus.hide_others,
             accelerator: 'Command+Alt+H',
             role: 'hideothers'
         }, {
-            label: 'Show All',
+            label: Lang.Menus.show_all,
             role: 'unhide'
         }, {
             type: 'separator'
         }, {
-            label: 'Quit',
+            label: Lang.Menus.offline_quit,
             accelerator: 'Command+Q',
             click: function() { 
-                window.close(); 
+                console.log(app);
+                app.quit(); 
             }
         }]
     });
