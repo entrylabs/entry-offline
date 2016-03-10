@@ -9,7 +9,7 @@ env:
   - secure: X6KaTTToe11LbPnKxcqJA6/3jBkdd16DeI1Id9yQ4WLJyCPvVLEyW+gJdVB/6RfxMDly9sTSREnTv1VEJY5/V9xLlRfuQV39P+wtL4iQlSjNYoUrryCyU6LeprAf1712ERna3fAVEMoy5nHeer7BjdM5B5XTQTnCDAYTq0bXvO9UraQH7As10xlnGrW0rCBXN/BcPjcqUuRn26Gd7bDlsjl6/22Wx4cjzPWLsBd+QAR1PUazX7lv2UT6T3i4xibfBMyi+7uCM9gHG8jNNZ8slc/+4IxY/1wHfa2aTs/XrFkmvzygwPnz2Y88MW/U6G2WgX0Cd631OX18WMAl0yC0sHfIzJPQZPHEWPC2QilRNHySpgE/6u5xTcf9/drGWc4LdULxARHuzt3gLWJWZU/ZY7ELJ8ZSDQ5aru1jtY+uVlSFtONjsiCUA5h3Uy++i0N2xXDi0Q7XaxnAiLfaiV+003RH/L4WjnRPqImLyd7o8c7cqEwZio92PW+Hic4xvrlIgJmYNf2uL1anfqmxv4eLqlfULLsAqFFcuhye6XwoEWMM7w5YTX9M/s8VjqK61am1P0RS1/C8roFxrcjir6rmkJc2QRVLMlJWVQVV/kxQWzQi6b+AofdemXxEuspQMWkw6+2hi+qAojW3ltUNVvADQhLf/xaN0NOK6OmTtz7ZzxA=
 branches:
   only:
-    - electron
+    - new/electron
 cache:
   directories:
   - node_modules
