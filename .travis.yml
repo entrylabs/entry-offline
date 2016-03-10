@@ -28,8 +28,6 @@ install:
   - npm install
 script:
   - npm run dist
-#after_success: curl --ftp-create-dirs -T ./dist/Entry-darwin-x64/Entry-1.1.0.dmg -u
-  $FTP_USER:$FTP_PASSWORD sftp://play04.play-entry.com/dist
 before_deploy:
   - export RELEASE_PKG=$(ls)
   - export RELEASE_PWD=$(pwd)
