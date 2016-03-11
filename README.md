@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/entrylabs/entry-offline.svg?branch=master)](https://travis-ci.org/entrylabs/entry-offline)
+[![Build Status](https://travis-ci.org/entrylabs/entry-offline.svg?branch=build)](https://travis-ci.org/entrylabs/entry-offline)
 [![Build status](https://ci.appveyor.com/api/projects/status/y3yyjagb93vf5lp5/branch/build?svg=true)](https://ci.appveyor.com/project/kimorkim/entry-offline/branch/build)
 ## Entry-Offline
  Entry-Offline is an application for running in offline environment.
