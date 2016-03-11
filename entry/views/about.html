@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>엔트리</title>
+	<link rel='stylesheet'  href='../css/about.css' />
+	<link rel='stylesheet'  href='../css/nanumbarungothic.css' />
+	<script type='text/javascript' src='../bower_components/jquery/dist/jquery.min.js'></script>
+	<script type="text/javascript" src="../js/nwjs-open-link-in-browser.js"></script>
+
+</head>
+<body>
+	<div class="container">
+		<div class="container_inner">
+			<div>
+				<img src="../icon/app.png" />
+			</div>
+			<div>
+				<h3>엔트리</h3>
+			</div>
+			<div>
+				<p>
+					version <span id="version"></span><br/>
+					<a href="#" onClick="{nwjsOpenLinkInBrowser('http://play-entry.org')}">
+						http://play-entry.org
+					</a>
+				</p>
+			</div>
+		</div>
+	</div>
+	<script>
+		$(function () {
+            var gui = require('nw.gui');
+            $("#version").text(gui.App.manifest.version);
+			//$(document).on('click', function () {
+			//	window.close();
+			//});
+		});
+	</script>
+</body>
+</html>
