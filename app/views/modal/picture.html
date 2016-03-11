@@ -1,0 +1,48 @@
+<div data-ng-init="init()" class='modal_total_body'>
+    <div class="modal-content" ng-class="{'modal-lecture': parent == 'lecture', 'modal-workspace': parent == 'workspace'}">
+        <div class="modal-header">
+            <button type="button" class="close" ng-click="cancel()">
+                <img src="./images/close_modal_workspace.png"/>
+            </button>
+            <h4 class="modal-title">{{'Workspace.add_picture'|text}}</h4>
+        </div>
+        <div class="modal-body">
+            <input id="searchWord" class='searchWord' ng-model="searchWord" ng-keyup="search($event)" ng-show="currentTab == 'system'"/>
+            <tabset>
+                <tab ng-repeat="tab in tabs" select="changeTab(tab.category)" active="tab.active">
+                    <tab-heading>{{tab.title | text}}
+                        <div class='modal_tab_bottom'></div>
+                    </tab-heading>
+                    <ng-include src="tab.partial">
+                    </ng-include>
+                </tab>
+            </tabset>
+            <div class="modal_choosen" ng-show="showChoosen()">
+                <div class='modal_selected_arrow modal_selected_left_arrow' ng-click='moveContainer("right")'></div>
+                <div class='modal_selected_arrow modal_selected_right_arrow' ng-click='moveContainer("left")'></div>
+                <div class="modal_selected_container">
+                    <div class="modal_selected_container_moving">
+                        <div class="box" data-ng-repeat="picture in selectedPictures" ng-if='currentTab == "system"'>
+                            <div id="{{picture._id}}" class="{{picture.selected}} boxOuterChoosen">
+                                <img class="modal_choosen_cancel" src="./images/modal_choosen_cancel.png" ng-click='selectSystem(picture)'/>
+                                <div class="boxInner" style="background-image: url('{{picture|makeThumbnail}}');"></div>
+                            </div>
+                            <div class="titleBox">{{picture.name}}</div>
+                        </div>
+                        <div class="box" data-ng-repeat="picture in selectedUpload" ng-if='currentTab == "upload"'>
+                            <div id="{{picture._id}}" class="boxOuter boxOuterChoosen">
+                                <img class="modal_choosen_cancel" src="./images/modal_choosen_cancel.png" ng-click='selectSystem(picture)'/>
+                                <div class="boxInner" style="background-image: url('{{picture|makeUploadThumbnail}}');"></div>
+                            </div>
+                            <div class="titleBox">{{picture.name}}</div>
+                        </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn_confirm_modal" data-ng-click="ok()" ng-hide="currentTab == 'newPicture'">{{'Buttons.apply'|text}} ({{currentSelected().length}})</button>
+            <button type="button" class="btn btn_cancel_modal" data-ng-click="cancel()" ng-hide="currentTab == 'newPicture'">{{'Buttons.cancel'|text}}</button>
+        </div>
+    </div>
+</div>
+

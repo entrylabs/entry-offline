@@ -1,0 +1,88 @@
+<div data-ng-controller='HeaderController' data-ng-init="init()" class="page-header">
+    <div class="logo">
+        <img src="./images/workspace_header_logo_white.png">
+    </div>
+    <div class="workspaceProjectNameWrapper">
+        <span class="workspace_name_wrapper">
+            <input type="text" data-ng-model="project.name" id="project_name" class="normal workspace_project_name" data-ng-focus="focus()" data-ng-enter="blur()" ng-blur="blur()"/>
+        </span>
+    </div>
+    <div class="workspace_language">
+        <ul class="language_wrapper">
+            <li class="dropdown">
+                <a href class="dropdown-toggle" data-toggle="dropdown">
+                    <span class="menu">{{user_language | text}}<b class="caret"></b></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href data-ng-click="setLanguage('ko')">{{'ko' | text}}</a></li>
+                    <li><a href data-ng-click="setLanguage('en')">{{'en' | text}}</a></li>
+                    <li><a href data-ng-click="setLanguage('vn')">{{'vn' | text}}</a></li>
+                    <li><a href data-ng-click="setLanguage('code')">{{'code' | text}}</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="workspace_button_group">
+ 		<div class="btn-group" dropdown is-open="false">
+	        <a class="btn dropdown-toggle" data-toggle="dropdown">
+	            <img src="./images/top_icon_new_b_nor.png" />
+	            <span class="drop"><b class="caret"></b></span>
+	        </a>
+	        <ul class="dropdown-menu" role="menu">
+	            <li ng-click="newProject()">
+                    <a id="btnFileNew" href="">{{'Workspace.file_new' | text}}</a>
+                </li>
+	            <li>
+                    <a href ng-click="loadWorkspace()">{{'Workspace.file_upload' | text}}</a>
+                </li>
+	        </ul>
+	    </div>
+        <div class="btn-group" dropdown is-open="false">
+            <a class="btn dropdown-toggle" data-toggle="dropdown">
+                <img src="./images/top_icon_save_b_nor.png" />
+                <span class="drop"><b class="caret"></b></span>
+            </a>
+            <ul class="dropdown-menu" role="menu">
+                <li>
+                    <a href ng-click="saveWorkspace()">{{'Workspace.file_save' | text}}</a>
+                </li>
+                <li>
+                    <a href ng-click="saveAsWorkspace()">{{'Workspace.file_save_as' | text}}</a>
+                </li>
+            </ul>
+        </div>
+        <div class="btn-group" dropdown is-open="false">
+            <a class="btn dropdown-toggle" data-toggle="dropdown">
+                <img src="./images/block_help.png" />
+                <span class="drop"><b class="caret"></b></span>
+            </a>
+            <ul class="dropdown-menu" role="menu">
+                <li>
+                    <a href ng-click="blockHelperOn()">{{'Workspace.blocks_reference' | text}}</a>
+                </li>
+                <li>
+                    <a href ng-click="startHWGuide('./hardware/guide/hwguide.html', '엔트리 하드웨어 메뉴얼')">{{'Workspace.hardware_guide' | text}}</a>
+                </li>
+            </ul>
+        </div>
+        <div class="btn-group btn_undo_workspace">
+            <button type="button" class="btn" onclick="Entry.dispatchEvent('undo')">
+                <img src="./images/top_icon_left_b_nor.png">
+            </button>
+        </div>
+        <div class="btn-group">
+            <button type="button" class="btn" onclick="Entry.dispatchEvent('redo')">
+                <img src="./images/top_icon_right_b_nor.png">
+            </button>
+        </div>
+
+        <div class="workspace_divider"></div>
+	</div>
+    <div hidden>
+        <input id="saveArduinoCode" type="file" nwworkingdir nwsaveas />
+    </div>
+    <div hidden>
+        <input id="saveArduinoPlugin" type="file" nwworkingdir nwsaveas />
+    </div>
+</div>

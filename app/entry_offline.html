@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html ng-app="workspace">
+	<head>
+		<meta charset="utf-8">
+		<title>
+			엔트리
+		</title>
+		<link rel='stylesheet'  href='./bower_components/entryjs/dist/entry.css' />
+		<link rel='stylesheet'  href='./bower_components/bootstrap/dist/css/bootstrap.min.css' />
+		<link rel='stylesheet'  href='./css/nanumbarungothic.css' />
+		<link rel='stylesheet'  href='./css/header.css' />
+		<link rel='stylesheet'  href='./css/workspace_header.css' />
+		<link rel='stylesheet'  href='./css/workspace.css' />
+		<link rel='stylesheet'  href='./css/modal.css' />
+		<link rel='stylesheet'  href='./css/developer.css' />
+		<script type="text/javascript" src="./src/require.js"></script>
+		<script type='text/javascript' src='./bower_components/jquery/dist/jquery.min.js'></script>
+		<script type='text/javascript' src='./bower_components/jquery-ui/jquery-ui.min.js'></script>
+		<script type='text/javascript' src='./bower_components/angular/angular.min.js'></script>
+		<script type='text/javascript' src='./bower_components/angular-cookies/angular-cookies.min.js'></script>
+		<script type='text/javascript' src='./bower_components/angular-route/angular-route.min.js'></script>
+        <script type='text/javascript' src='./bower_components/angular-resource/angular-resource.min.js'></script>
+        <script type='text/javascript' src='./bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js'></script>
+        <script type='text/javascript' src='./bower_components/angular-local-storage/dist/angular-local-storage.min.js'></script>
+        <script type='text/javascript' src='./bower_components/angular-touch/angular-touch.min.js'></script>
+		<script type='text/javascript' src='./bower_components/angular-filters/dist/angular-filters.min.js'></script>
+		<script type='text/javascript' src='./bower_components/bootstrap/dist/js/bootstrap.min.js'></script>
+		<script type='text/javascript' src='./bower_components/underscore/underscore-min.js'></script>
+		<script type='text/javascript' src='./bower_components/PreloadJS/lib/preloadjs-0.6.0.min.js'></script>
+		<script type='text/javascript' src='./bower_components/EaselJS/lib/easeljs-0.8.0.min.js'></script>
+		<script type='text/javascript' src='./bower_components/SoundJS/lib/soundjs-0.6.0.combined.js'></script>
+		<script type='text/javascript' src='./bower_components/SoundJS/lib/flashaudioplugin-0.6.0.combined.js'></script>
+		<script type='text/javascript' src='./bower_components/webfontloader/webfontloader.js'></script>
+		<script type='text/javascript' src='./bower_components/entryjs/extern/blockly/blockly_compressed.js'></script>
+		<script type='text/javascript' src='./bower_components/entryjs/extern/util/static.js'></script>
+		<script type='text/javascript' src='./bower_components/entryjs/extern/util/CanvasInput.js'></script>
+		<script type='text/javascript' src='./bower_components/entryjs/extern/util/handle.js'></script>
+		<script type='text/javascript' src='./bower_components/entryjs/extern/util/ndgmr.Collision.js'></script>
+		<script type='text/javascript' src='./bower_components/entryjs/dist/entry.js'></script>
+
+        <script type='text/javascript' src='./src/app.js'></script>
+    	<script type='text/javascript' src='./src/context.js'></script>
+        <script type="text/javascript" src="./src/filters.js"></script>
+        <!--
+        <script type="text/javascript" src="./src/native_menu.js"></script>    -->
+        <script type="text/javascript" src="./src/native_menu.js"></script>
+        <script type="text/javascript" src="./src/native_controll.js"></script>
+
+		<script type="text/javascript" src="./src/directives.js"></script>
+	</head>
+	<body >
+		<div class="workspaceHeader" data-ng-include="'./views/header.html'" data-role="navigation"></div>
+		<section class="wrapper" ng-controller="WorkspaceController" ng-init="initWorkspace()">
+			<div id="workspace"></div>
+		</section>
+		<script type="text/javascript" src="./src/workspace.js"></script>
+		<script type="text/javascript" src="./src/picture.js"></script>
+		<script type="text/javascript" src="./src/sprite.js"></script>
+		<script type="text/javascript" src="./src/header.js"></script>
+		<script type="text/javascript" src="./src/sound.js"></script>
+		<div class="entryUploaderWindow">
+			<div class="entryUploaderWindowContent">
+				<h1>업로드 하려면 파일을 놓으세요</h1>
+			</div>
+		</div>
+		<div class="entrySpinnerWindow">
+			<div class="entrySpinner">
+			  <div class="rect1"></div>
+			  <div class="rect2"></div>
+			  <div class="rect3"></div>
+			  <div class="rect4"></div>
+			  <div class="rect5"></div>
+			</div>
+		</div>
+	</body>
+</html>
