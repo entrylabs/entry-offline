@@ -32,4 +32,4 @@ before_deploy:
   - export RELEASE_PKG_FILE=$(ls dist/**/*.dmg)
   - echo "deploying $RELEASE_PKG_FILE to GitHub releases"
 after_success: 
-  "curl --ftp-create-dirs -T $RELEASE_PKG_FILE -u $FTP_USER:$FTP_PASSWORD ftp://play04.play-entry.com/dist"
+  "curl --ftp-create-dirs -T $RELEASE_PKG_FILE -u $FTP_USER:$FTP_PASSWORD ftp://play04.play-entry.com"
