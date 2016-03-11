@@ -66,12 +66,7 @@ var template = [{
         }
     }, {
         label: Lang.Menus.zoom_in,
-        accelerator: (function() {
-            if (process.platform == 'darwin')
-                return 'Cmd++';
-            else
-                return 'Ctrl+=';
-        })(),
+        accelerator: 'CmdOrCtrl+=',
         click: function () {
             Entry.plugin.setZoomInPage();
         }
