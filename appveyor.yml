@@ -55,6 +55,11 @@ deploy:
     folder: build/win/$(appveyor_build_version)
     artifact: 
 
+notifications:
+  - provider: Slack
+    auth_token:
+      secure: mYDrSd0Et60MGIq5qI8C5S7lcFuI5zFcEPR1n2f+zr3UacYCPKqt6ASn/1rEZBcd9FkYV8aKdo0bT4TfYBUrIw==
+    channel: '#build-app'
 
 on_failure:
   - ps: Get-EventLog AppVeyor -newest 10 | Format-List
