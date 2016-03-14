@@ -28,7 +28,7 @@
 Name "¿£Æ®¸®"
 
 ; The file to write
-OutFile "Entry_1.0.5_Setup.exe"
+OutFile "Entry_1.0.6_Setup.exe"
 
 ; The default installation directory
 InstallDir "C:\Entry"
