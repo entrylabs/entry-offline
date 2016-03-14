@@ -31,7 +31,6 @@ angular.module('common').controller('SoundController',
     } 
         
     $scope.init = function() {
-        console.log('dasds');
         var soundMapFile = './resource_map/' + 'sounds.json'; 
 
         $http.get(soundMapFile).success(function(response) {

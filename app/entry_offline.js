@@ -6,7 +6,7 @@ const BrowserWindow = electron.BrowserWindow;  // 네이티브 브라우저 창�
 const path = require('path');
 const Menu     = electron.Menu;
 
-function run(args: string[], done: Function): void {
+function run(args, done) {
     const updateExe = path.resolve(path.dirname(process.execPath), "..", "Update.exe")
     log("Spawning `%s` with args `%s`", updateExe, args)
     spawn(updateExe, args, {
@@ -20,7 +20,7 @@ var handleStartupEvent = function() {
         return false;
     }
 
-    const target = path.basename(process.execPath)
+    const target = path.basename(process.execPath);
     var squirrelCommand = process.argv[1];
     switch (squirrelCommand) {
         case '--squirrel-install':
