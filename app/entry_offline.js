@@ -78,7 +78,7 @@ function deleteFromRegistry (keyPath, callback) {
     return spawnReg(['delete', keyPath, '/f'], callback);
 };
 
-function installRegistry() {
+function installRegistry(callback) {
     var args = [extensionPath, '/ve', '/d', 'Entry'];
     addToRegistry(args, function () {
         args = [extensionPath, '/v', 'Content Type', '/d', 'application/x-entryapp'];
@@ -91,7 +91,7 @@ function installRegistry() {
                     addToRegistry(args, function () {
                         args = [mimeTypePath, '/v', 'Extestion', '/d', '.ent'];
                         addToRegistry(args, function () {
-
+                            callback();
                         });
                     });
                 });
@@ -100,15 +100,15 @@ function installRegistry() {
     });
 }
 
-function unInstallRegistry() {
+function unInstallRegistry(callback) {
     deleteFromRegistry(extensionPath, function () {
         deleteFromRegistry(entryPath, function () {
             deleteFromRegistry(mimeTypePath, function () {
+                callback();
             });
         });
     });
 }
-
 
 function run(args, done) {
     const updateExe = path.resolve(path.dirname(process.execPath), "..", "Update.exe")
@@ -129,12 +129,14 @@ var handleStartupEvent = function() {
     switch (squirrelCommand) {
         case '--squirrel-install':
         case '--squirrel-updated':
-            installRegistry();
-            run(['--createShortcut=' + target + ''], app.quit);
+            installRegistry(function () {
+                run(['--createShortcut=' + target + ''], app.quit);
+            });
           return true;
         case '--squirrel-uninstall':
-            unInstallRegistry();
-            run(['--removeShortcut=' + target + ''], app.quit);
+            unInstallRegistry(function () {
+                run(['--removeShortcut=' + target + ''], app.quit);
+            });
             return true;
         case '--squirrel-obsolete':
             app.quit();
