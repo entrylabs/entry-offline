@@ -30,7 +30,8 @@
       "title": "Entry",
       "icon": "./icon/app.ico",
       "authors": "EntryLabs",
-      "exe": "Entry.exe"
+      "exe": "Entry.exe",
+      "noMsi": true
     }
   },
   "devDependencies": {
