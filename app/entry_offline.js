@@ -112,7 +112,7 @@ function unInstallRegistry() {
 
 function run(args, done) {
     const updateExe = path.resolve(path.dirname(process.execPath), "..", "Update.exe")
-    log("Spawning `%s` with args `%s`", updateExe, args)
+    // log("Spawning `%s` with args `%s`", updateExe, args)
     spawn(updateExe, args, {
         detached: true
     }).on("close", done)
