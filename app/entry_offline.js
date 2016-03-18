@@ -87,7 +87,7 @@ function installRegistry(callback) {
             addToRegistry(args, function () {
                 args = [entryShellPath, '/ve', '/d', '&Open'];
                 addToRegistry(args, function () {
-                    args = [entryShellCommandPath, '/ve', '/d', path.join(process.cwd(), 'Entry.exe') + ' "%1"'];
+                    args = [entryShellCommandPath, '/ve', '/d', '"' + path.join(__dirname, '..', '..', 'Entry.exe') + '" "%1"'];
                     addToRegistry(args, function () {
                         args = [mimeTypePath, '/v', 'Extestion', '/d', '.ent'];
                         addToRegistry(args, function () {
@@ -185,14 +185,22 @@ for (var i = 0; i < argv.length; i++) {
         break;
     }
 }
-
 app.once('ready', function() {
+    var locale = app.getLocale();
+    var title = packageJson.version;
+    
+    if(locale === 'ko') {
+        title = '엔트리 v' + title;
+    } else {
+        title = 'Entry v' + title;
+    }
 
     mainWindow = new BrowserWindow({
         width: 1024, 
         height: 700,
-        title: '엔트리 v' + packageJson.version
+        title: title
     });
+
     // mainWindow.loadUrl('custom:///index.html');
     // console.log('file:///' + path.join(__dirname, 'entry_offline.html'))
     mainWindow.loadURL('file:///' + path.join(__dirname, 'entry_offline.html'));
@@ -202,6 +210,9 @@ app.once('ready', function() {
         mainWindow.webContents.openDevTools();
     }
 
+    mainWindow.on('page-title-updated', function(e) {
+        e.preventDefault();
+    });
     mainWindow.on('closed', function() {
         mainWindow = null;
     });

@@ -1,9 +1,10 @@
 'use strict';
 var isOsx = false;
-
+var nowLocale = app.getLocale();
 var options = {};
 var _real_path = __dirname;
 var _real_path_with_protocol = '';
+Lang.Blocks.ARDUINO_download_connector = 'asds';
 
 if (process.platform != 'darwin') {
 	isOsx = false;
@@ -267,6 +268,37 @@ Entry.plugin = (function () {
 
 		}
 		that.setZoomMenuState(state);
+	}
+
+	var hardwarePopup = null;
+	that.openHardwarePage = function () {
+		if(hardwarePopup) {
+			return;
+		}
+
+		var title = '';
+
+		if(nowLocale === 'ko') {
+			title = '엔트리 하드웨어';
+		} else {
+			title = 'Entry HardWare'
+		}
+		hardwarePopup = new BrowserWindow({
+	        width: 800, 
+	        height: 650, 
+	        title: title,
+			resizable: false
+		});
+
+		hardwarePopup.loadURL('file:///' + path.join(__dirname, 'bower_components', 'entry-hw', 'app', 'index.html'));
+		hardwarePopup.on('closed', function() {
+		    hardwarePopup = null;
+		});
+
+		hardwarePopup.setMenu(null);
+
+		// hardwarePopup.webContents.openDevTools();
+		hardwarePopup.show();
 	}
 
 	var popup = null;

@@ -197,6 +197,12 @@ Entry.createElement = function(type, elementId) {
     return element;
 };
 
+Entry.makeAutolink = function(html) {
+    var regURL = new RegExp("(http|https|ftp|telnet|news|irc)://([-/.a-zA-Z0-9_~#%$?&=:200-377()][^)\\]}]+)","gi");
+    var regEmail = new RegExp("([xA1-xFEa-z0-9_-]+@[xA1-xFEa-z0-9-]+\.[a-z0-9-]+)","gi");
+    return html.replace(regURL,"<a href='$1://$2' target='_blank'>$1://$2</a>").replace(regEmail,"<a href='mailto:$1'>$1</a>");
+}
+
 /**
  * Generate random hash
  * @return {string}
@@ -531,10 +537,10 @@ Entry.nodeListToArray = function(nl) {
     return arr;
 };
 
-Entry.computeInputWidth = function(nameField){
+Entry.computeInputWidth = function(value){
     var tmp = document.createElement("span");
     tmp.className = "tmp-element";
-    tmp.innerHTML = nameField.value.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    tmp.innerHTML = value.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     document.body.appendChild(tmp);
     var theWidth = tmp.offsetWidth;
     document.body.removeChild(tmp);

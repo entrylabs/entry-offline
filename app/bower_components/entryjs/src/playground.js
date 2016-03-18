@@ -328,7 +328,7 @@ Entry.Playground.prototype.generateCodeView = function(codeView) {
         Blockly.inject(
             blocklyView,
             {
-                path: '.././',
+                path: Entry.blockInjectPath || '.././',
                 toolbox: XML,
                 trashcan: true,
                 blockmenu: this.blockMenuView_,
@@ -376,7 +376,7 @@ Entry.Playground.prototype.generateCodeView = function(codeView) {
         Blockly.inject(
             blocklyView,
             {
-                path: '.././',
+                path: Entry.blockInjectPath || '.././',
                 toolbox: XML,
                 trashcan: true,
                 mediaFilePath: Entry.mediaFilePath
@@ -897,8 +897,77 @@ Entry.Playground.prototype.injectCode = function() {
     var object = this.object;
     Blockly.mainWorkspace.clear();
     Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, object.script);
+
+    var blockXML = object.script;
+    var veryLeftX = 0;
+    var veryTopY = 0;
+    var veryLeftBlock = null;
+
+    $(blockXML).children("block").each(function(index) {
+        var x = Number($(this).attr('x'));
+        var y = Number($(this).attr('y'));
+
+        if(index == 0) {
+            veryLeftX = x;
+            veryTopY = y;
+            veryLeftBlock = this;
+        }
+
+        if(x < veryLeftX) {
+            veryLeftX = x; //most left-located X coordinate
+            veryLeftBlock = this; //most left-located block for this point
+        }
+
+        if(y < veryTopY) {
+            varyTopY = y; //most top-located Y coordinate for this point
+        }
+    });
+
+    //adjusing scroll bar by most left-located block
+    if(veryLeftBlock != null) {
+        var targetX = Number($(veryLeftBlock).attr('x'));
+        var targetY = Number($(veryLeftBlock).attr('y'));
+
+        var metrics = Blockly.mainWorkspace.getMetrics();
+
+        var adjustingX = (metrics.viewWidth * 0.1).toFixed(1); 
+        var adjustingY = (metrics.viewHeight * 0.4).toFixed(1); 
+
+        if(targetY == veryTopY) 
+            adjustingY = (metrics.viewHeight * 0.1).toFixed(1);
+
+        var scrollX = targetX - metrics.contentLeft - adjustingX;  
+        var scrollY = targetY - metrics.contentTop - adjustingY;
+
+        Blockly.mainWorkspace.scrollbar.set(scrollX, scrollY);
+        
+        //this.adjustScroll(0, 0); 
+    }
 };
 
+Entry.Playground.prototype.adjustScroll = function(xc, yc) {
+  var hScroll = Blockly.mainWorkspace.scrollbar.hScroll;
+  var vScroll = Blockly.mainWorkspace.scrollbar.vScroll;
+  hScroll.svgGroup_.setAttribute('opacity', '1');
+  vScroll.svgGroup_.setAttribute('opacity', '1');
+  
+  if(Blockly.mainWorkspace.getMetrics()) {
+    Blockly.removeAllRanges();
+    var metrics = Blockly.mainWorkspace.getMetrics();
+    var x = xc;
+    var y = yc;
+    x = Math.min(x, -metrics.contentLeft);
+    y = Math.min(y, -metrics.contentTop);
+    x = Math.max(x, metrics.viewWidth - metrics.contentLeft -
+                 metrics.contentWidth);
+    y = Math.max(y, metrics.viewHeight - metrics.contentTop -
+                 metrics.contentHeight);
+
+    Blockly.mainWorkspace.scrollbar.set(-x - metrics.contentLeft,
+                                        -y - metrics.contentTop);
+  
+    }    
+};
 /**
  * Inject picture
  */
@@ -961,7 +1030,7 @@ Entry.Playground.prototype.setPicture = function(picture) {
             // deprecated
             var fileName = picture.filename;
             thumbnailView.style.backgroundImage =
-                'url("' + '/uploads/' + fileName.substring(0, 2) + '/' +
+                'url("' + Entry.defaultPath + '/uploads/' + fileName.substring(0, 2) + '/' +
                 fileName.substring(2, 4) + '/thumb/' + fileName + '.png")';
         }
         var sizeView = $element.find('#s_'+picture.id)[0];
@@ -996,7 +1065,10 @@ Entry.Playground.prototype.selectPicture = function(picture) {
             target.view.removeClass('entryPictureSelected');
     }
 
-    var objectId_ = Entry.container.selectPicture(picture.id);
+    var objectId_;
+    if(picture && picture.id) {
+        objectId_ = Entry.container.selectPicture(picture.id);
+    }
 
     if( this.object.id === objectId_) {
         Entry.dispatchEvent('pictureSelected', picture);
@@ -1556,7 +1628,7 @@ Entry.Playground.prototype.generatePictureElement = function(picture) {
         // deptecated
         var fileName = picture.filename;
         thumbnailView.style.backgroundImage =
-            'url("' + '/uploads/' + fileName.substring(0, 2) + '/' +
+            'url("' + Entry.defaultPath + '/uploads/' + fileName.substring(0, 2) + '/' +
             fileName.substring(2, 4) + '/thumb/' + fileName + '.png")';
     }
     element.appendChild(thumbnailView);
@@ -1588,6 +1660,7 @@ Entry.Playground.prototype.generatePictureElement = function(picture) {
             }
         }
         this.picture.name = this.value;
+        Entry.playground.reloadPlayground();
         Entry.dispatchEvent('pictureNameChanged', this.picture);
     }
     nameView.onkeypress = function(e) {
@@ -1607,7 +1680,7 @@ Entry.Playground.prototype.generateSoundElement = function(sound) {
     sound.view = element;
     element.addClass('entryPlaygroundSoundElement');
     element.sound = sound;
-   
+
     Entry.Utils.disableContextmenu(sound.view);
     $(sound.view).on('contextmenu', function(){
         var options = [

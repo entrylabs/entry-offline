@@ -151,71 +151,48 @@ angular.module('workspace').controller("WorkspaceController",
 		};
 
 		$scope.setOfflineHW = function() {
+			Entry.HW.prototype.downloadConnector = function() {
+				Entry.plugin.openHardwarePage();
+			};
+
+
+			Entry.HW.prototype.downloadSource = function() {
+
+				dialog.showSaveDialog({
+					defaultPath: 'board.ino',
+					filters: [
+					    { name: 'Arduino(*.ino)', extensions: ['ino'] }
+				    ]
+				}, function (filePath) {	
+		        	if(filePath) {
+		        		var fs = require("fs");
+						fs.readFile("./hardware/source/board.ino", function (err, stream) {
+							fs.writeFile(filePath, stream, 'utf8', function (err) {
+								if (err)
+									alert("Unable to save file");
+								else
+									console.log("File Saved");
+
+								$("#saveArduinoCode").val('');
+							});
+						});
+		        	} else {
+		        	}
+				});
+			};
 			$('#entryCategoryarduino').mouseup(function() {
-					Entry.HW.prototype.downloadConnector = function() {
-						$('#saveArduinoPlugin').attr('nwsaveas', 'Entry_HW_v1.1.2.exe').trigger('click');
-						$("#saveArduinoPlugin").on("change", function () {
-							var filePath = $('#saveArduinoPlugin').val();
-							if (filePath !== "") {
-								var fs = require("fs");
-									fs.readFile("./hardware/plugin/Entry_HW_v1.1.2.exe", function (err, stream) {
-										fs.writeFile(filePath, stream, 'utf8', function (err) {
-											if (err)
-												alert("Unable to save file");
-											else
-												console.log("File Saved");
 
-                                            $("#saveArduinoPlugin").val('');
-										});
+				var user_lang = localStorage.getItem('lang');
 
-									});
-							}
-							else {
-								// User cancelled
-							}
-       					 });
-					};
-
-
-					Entry.HW.prototype.downloadSource = function() {
-						 $('#saveArduinoCode').attr('nwsaveas', 'board.ino').trigger('click');
-						 $("#saveArduinoCode").on("change", function () {
-							var filePath = $('#saveArduinoCode').val();
-							//alert("File Path : " + filePath);
-							if (filePath !== "") {
-								var fs = require("fs");
-									fs.readFile("./hardware/source/board.ino", function (err, stream) {
-										fs.writeFile(filePath, stream, 'utf8', function (err) {
-											if (err)
-												alert("Unable to save file");
-											else
-												console.log("File Saved");
-
-											$("#saveArduinoCode").val('');
-										});
-									});
-							}
-							else {
-								// User cancelled
-							}
-       					 });
-					};
-
-					var user_lang = localStorage.getItem('lang');
-
-					if(user_lang === 'ko' || null) {
-						Lang.Blocks.ARDUINO_download_connector = "하드웨어 플러그인 받기";
-						Lang.Blocks.ARDUINO_download_source = "아두이노 소스코드 받기";
-						Lang.Blocks.ARDUINO_reconnect = "하드웨어에 연결하기";
-					} else if(user_lang === 'en') {
-						Lang.Blocks.ARDUINO_download_connector = "Get Hardware Plugin";
-						Lang.Blocks.ARDUINO_download_source = "Get Arduino Code";
-						Lang.Blocks.ARDUINO_reconnect = "Connect To Hardware";
-					} else if(user_lang === 'vn') {
-						Lang.Blocks.ARDUINO_download_connector = "Get Hardware Plugin";
-						Lang.Blocks.ARDUINO_download_source = "Get Arduino Code";
-						Lang.Blocks.ARDUINO_reconnect = "Connect To Hardware";
-					}
+				if(user_lang === 'ko') {
+					Lang.Blocks.ARDUINO_download_connector = "하드웨어 플러그인 열기";
+					Lang.Blocks.ARDUINO_download_source = "아두이노 소스코드 받기";
+					Lang.Blocks.ARDUINO_reconnect = "하드웨어에 연결하기";
+				} else {
+					Lang.Blocks.ARDUINO_download_connector = "Open Hardware Plugin";
+					Lang.Blocks.ARDUINO_download_source = "Get Arduino Code";
+					Lang.Blocks.ARDUINO_reconnect = "Connect To Hardware";
+				}
 
 			});
 	    };
@@ -246,7 +223,7 @@ angular.module('workspace').controller("WorkspaceController",
 		function saveAsProject(title) {
 			var default_path = storage.getItem('defaultPath') || '';
 			dialog.showSaveDialog({
-				defaultPath: default_path,
+				defaultPath: default_path + $scope.project.name,
 				title: title,
 				filters: [
 				    { 

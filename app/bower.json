@@ -7,6 +7,7 @@
   ],
   "dependencies": {
     "entryjs": "https://github.com/entrylabs/entryjs.git",
+    "entry-hw": "https://github.com/entrylabs/entry-hw.git#feature/electron",
     "jquery": "~1.11.3",
     "jquery-ui": "~1.11.x",
     "underscore": "~1.8.x",
