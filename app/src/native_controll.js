@@ -272,41 +272,50 @@ Entry.plugin = (function () {
 
 	var hardwarePopup = null;
 	that.openHardwarePage = function () {
-		if(hardwarePopup) {
-			return;
-		}
+		try{
+			if(hardwarePopup) {
+				return;
+			}
 
-		var title = '';
+			var title = '';
 
-		if(nowLocale === 'ko') {
-			title = '엔트리 하드웨어';
-		} else {
-			title = 'Entry HardWare'
-		}
-		hardwarePopup = new BrowserWindow({
-	        width: 800, 
-	        height: 650, 
-	        title: title,
-			resizable: false
-		});
+			if(nowLocale === 'ko') {
+				title = '엔트리 하드웨어';
+			} else {
+				title = 'Entry HardWare'
+			}
+			hardwarePopup = new BrowserWindow({
+		        width: 800, 
+		        height: 650, 
+		        title: title,
+				resizable: false
+			});
 
-		hardwarePopup.loadURL('file:///' + path.join(__dirname, 'bower_components', 'entry-hw', 'app', 'index.html'));
-		hardwarePopup.on('closed', function() {
-		    hardwarePopup = null;
-		});
+			hardwarePopup.loadURL('file:///' + path.join(__dirname, 'bower_components', 'entry-hw', 'app', 'index.html'));
+			hardwarePopup.on('closed', function() {
+			    hardwarePopup = null;
+			});
 
-		hardwarePopup.setMenu(null);
+			hardwarePopup.setMenu(null);
 
-		// hardwarePopup.webContents.openDevTools();
-		hardwarePopup.show();
+			// hardwarePopup.webContents.openDevTools();
+			hardwarePopup.show();
+		} catch(e) {}
 	}
 
-	var popup = null;
+	that.closeHardwarePage = function () {
+		if(hardwarePopup) {
+			hardwarePopup.close();
+			hardwarePopup = null;
+		}
+	}
+
+	var aboutPopup = null;
 	that.openAboutPage = function () {
-		if(popup) {
+		if(aboutPopup) {
 			return;
 		}
-		popup = new BrowserWindow({
+		aboutPopup = new BrowserWindow({
 			width: 300, 
 			height: 200, 
 			resizable: false, 
@@ -316,11 +325,18 @@ Entry.plugin = (function () {
 			alwaysOnTop: true
 		});
 
-		popup.loadURL('file:///' + path.join(__dirname, 'views', 'about.html'));
-		popup.on('closed', function() {
-		    popup = null;
+		aboutPopup.loadURL('file:///' + path.join(__dirname, 'views', 'about.html'));
+		aboutPopup.on('closed', function() {
+		    aboutPopup = null;
 		});
-		popup.show();
+		aboutPopup.show();
+	}
+
+	that.closeAboutPage = function() {
+		if(aboutPopup) {
+			aboutPopup.close();
+			aboutPopup = null;
+		}
 	}
 
     that.isOsx = function () {

@@ -38,5 +38,6 @@
     "electron-builder": "^2.9.5",
     "electron-prebuilt": "0.36.10",
     "rimraf": "^2.5.2"
-  }
+  },
+  "dependencies": {}
 }

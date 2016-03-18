@@ -58,6 +58,9 @@ angular.module('workspace').controller("WorkspaceController",
 		        	}
 
 		        	if(canLoad) {
+		        		Entry.plugin.closeAboutPage();
+		        		Entry.plugin.closeHardwarePage();
+
 		        		storage.removeItem('tempProject');
 		        		beforeUnload();
 		        	} else {
