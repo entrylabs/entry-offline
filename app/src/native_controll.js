@@ -304,8 +304,10 @@ Entry.plugin = (function () {
 	}
 
 	that.closeHardwarePage = function () {
-		hardwarePopup.close();
-		hardwarePopup = null;
+		if(hardwarePopup) {
+			hardwarePopup.close();
+			hardwarePopup = null;
+		}
 	}
 
 	var aboutPopup = null;
@@ -331,8 +333,10 @@ Entry.plugin = (function () {
 	}
 
 	that.closeAboutPage = function() {
-		aboutPopup.close();
-		aboutPopup = null;
+		if(aboutPopup) {
+			aboutPopup.close();
+			aboutPopup = null;
+		}
 	}
 
     that.isOsx = function () {

@@ -4,3 +4,4 @@ app/temp/
 dist/
 *.rej
 temp/
+app/bower_components/
