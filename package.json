@@ -30,12 +30,13 @@
       "title": "Entry",
       "icon": "./icon/app.ico",
       "authors": "EntryLabs",
-      "exe": "Entry.exe"
+      "exe": "Entry.exe",
+      "noMsi": true
     }
   },
   "devDependencies": {
-    "electron-builder": "2.8.3",
-    "electron-prebuilt": "^0.36.10",
+    "electron-builder": "^2.9.5",
+    "electron-prebuilt": "0.36.10",
     "rimraf": "^2.5.2"
   }
 }

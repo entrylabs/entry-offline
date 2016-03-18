@@ -15,7 +15,7 @@ cache:
 
 environment:
   GH_TOKEN:
-    secure: +sYL7dvMYAqkqjswuvxZW4vS4Tpy5pc5p6vsdrLWt757ljOMwm2tVNLifIV2qHgx
+    secure: kFHTqZNKfBFqDQh/WA5Cb18/6+pJhRzPj3ZDZQVQPZjzlWqbATIpDqcai/CMyr7f
 
 init:
   - git config --global core.autocrlf input
@@ -28,7 +28,7 @@ install:
   - npm update
 
 before_build:
-- cmd: copy /Y build\install-spinner.gif node_modules\electron-winstaller-temp-fork\resources\install-spinner.gif
+- cmd: copy /Y build\install-spinner.gif node_modules\electron-winstaller-fixed\resources\install-spinner.gif
 
 build_script:
   - node --version
@@ -38,8 +38,10 @@ build_script:
 test: off
 
 artifacts:
-  - path: 'dist\win-x64\*.exe'
-    name: setup64
+  #- path: 'dist\win-x64\*.exe'
+  #  name: setup64
+  - path: 'dist\win\*.exe'
+    name: setup32
   # - path: 'dist\win\*.exe'
     # name: setup32
   # - path: '**\*.nupkg'

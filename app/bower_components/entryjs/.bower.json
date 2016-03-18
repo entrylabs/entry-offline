@@ -1,12 +1,12 @@
 {
   "name": "entryjs",
   "homepage": "https://github.com/entrylabs/entryjs",
-  "version": "1.0.5",
-  "_release": "1.0.5",
+  "version": "1.0.6",
+  "_release": "1.0.6",
   "_resolution": {
     "type": "version",
-    "tag": "1.0.5",
-    "commit": "6907f93a2544d51d5bc9a7b6673fa3096fdeaf3a"
+    "tag": "1.0.6",
+    "commit": "55f2b460df6f3dd7d8c9f3264d59d093a3c5e379"
   },
   "_source": "https://github.com/entrylabs/entryjs.git",
   "_target": "*",

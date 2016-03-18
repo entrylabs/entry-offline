@@ -2,8 +2,12 @@
   "dependencies": {
     "fstream": "^1.0.8",
     "image-size": "^0.3.5",
+    "node-pre-gyp": "^0.6.23",
     "q": "^1.4.1",
-    "tar": "^2.2.1"
+    "socket.io": "^1.4.5",
+    "tar": "^2.2.1",
+    "typedarray-to-buffer": "^3.1.2",
+    "yaeti": "0.0.5"
   },
   "description": "entry-offline version",
   "author": "EntryLabs",
@@ -15,7 +19,7 @@
     "url": "git+https://kimorkim@github.com/entrylabs/entry-offline.git"
   },
   "build": {
-    "asar" : false,
+    "asar": false,
     "version": "0.36.10",
     "name": "Entry",
     "app-bundle-id": "entry-offline",
