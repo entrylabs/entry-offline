@@ -12,14 +12,14 @@
       "background": "build/background.png",
       "contents": [
         {
-          "x": 410,
-          "y": 220,
+          "x": 240,
+          "y": 380,
           "type": "link",
           "path": "/Applications"
         },
         {
-          "x": 130,
-          "y": 220,
+          "x": 240,
+          "y": 120,
           "type": "file",
           "path": "Entry.app"
         }

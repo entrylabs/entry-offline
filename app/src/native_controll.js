@@ -184,7 +184,9 @@ Entry.plugin = (function () {
 	};
 
 	that.reloadApplication = function () {
-		remote.getCurrentWindow().reload();
+		// remote.getCurrentWindow().reload();
+		ipcRenderer.send('reload');
+		// location.reload();
 	}
 
 	that.findObject = function (object, key) {
@@ -454,8 +456,11 @@ Entry.plugin = (function () {
 		var fs_reader = fstream.Reader({ 'path': filePath, 'type': 'File' });
 		var fs_writer = fstream.Writer({ 'path': _real_path, 'type': 'Directory' });
 
-		fs_writer.on('entry', function () {
-			// console.log('entry');
+		fs_writer.on('entry', function (e) {
+			console.log('entry');
+		});
+		fs_writer.on('error', function (e) {
+			console.log('error');
 		});
 		fs_writer.on('end', function () {
 			fs.readFile(_real_path + '/temp/project.json', enc || 'utf8', function (err, data) {
@@ -663,7 +668,7 @@ Entry.plugin = (function () {
     			var fileName = fileId;
     			var extension = name.split('.')[1];
     			var dirPath = dest.soundPath;
-    			var soundPath = _real_path + path.sep + dirPath + path.sep + fileName + "." + extension;
+    			var soundPath = dirPath + path.sep + fileName + "." + extension;
 
     			console.log("dest sound path : " + dest.soundPath);
     			//var fs_reader = fs.createReadStream(url);
