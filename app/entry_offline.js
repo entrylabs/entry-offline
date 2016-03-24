@@ -1,6 +1,7 @@
 'use strict';
 
 const electron = require('electron');
+const ipcMain = electron.ipcMain;
 const app = electron.app;  // 어플리케이션 기반을 조작 하는 모듈.
 const BrowserWindow = electron.BrowserWindow;  // 네이티브 브라우저 창을 만드는 모듈.
 const path = require('path');
@@ -201,6 +202,7 @@ app.once('ready', function() {
         title: title
     });
 
+    mainWindow.setMenu(null);
     // mainWindow.loadUrl('custom:///index.html');
     // console.log('file:///' + path.join(__dirname, 'entry_offline.html'))
     mainWindow.loadURL('file:///' + path.join(__dirname, 'entry_offline.html'));
@@ -209,11 +211,14 @@ app.once('ready', function() {
     if(option.debug) {
         mainWindow.webContents.openDevTools();
     }
-
     mainWindow.on('page-title-updated', function(e) {
         e.preventDefault();
     });
     mainWindow.on('closed', function() {
         mainWindow = null;
     });
+});
+
+ipcMain.on('reload', function(event, arg) {
+    mainWindow.reload(true);
 });

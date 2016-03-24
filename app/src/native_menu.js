@@ -16,7 +16,7 @@ var template = [{
             angular.element('[data-ng-controller="HeaderController"]').scope().newProject();
         }
     }, {
-        label: Lang.Workspace.file_open,
+        label: Lang.Workspace.file_upload,
         accelerator: 'CmdOrCtrl+o',
         click: function () {
             Entry.dispatchEvent('loadWorkspace');
@@ -31,7 +31,7 @@ var template = [{
         }
     }, {
         label: Lang.Workspace.file_save_as,
-        accelerator: 'Shift+CmdOrCtrl+s',
+        accelerator: 'Shift+CmdOrCtrl+S',
         click: function () {
             Entry.dispatchEvent('saveAsWorkspace');
         }
