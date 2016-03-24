@@ -30,6 +30,7 @@ install:
   - cd app
   - npm install
   - bower install
+  - cd ..
 
 before_build:
 - cmd: copy /Y build\install-spinner.gif node_modules\electron-winstaller-fixed\resources\install-spinner.gif
