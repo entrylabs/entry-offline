@@ -29,6 +29,7 @@ install:
   - npm update
   - cd app
   - npm install
+  - npm dedupe
   - bower install
   - cd ..
 
