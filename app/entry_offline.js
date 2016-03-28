@@ -119,24 +119,40 @@ function run(args, done) {
     }).on("close", done)
 }
 
+function createShortcut(locations, done) {
+    var updateExe = path.resolve(path.dirname(process.execPath), "..", "Update.exe"); 
+    var target = path.basename(process.execPath);
+    var args = ['--createShortcut', target, '-l', locations];
+    var child = ChildProcess.spawn(updateExe, args, { detached: true });
+    child.on('close', done);
+}
+
+function removeShortcut(locations, done) {
+    var updateExe = path.resolve(path.dirname(process.execPath), "..", "Update.exe"); 
+    var target = path.basename(process.execPath);
+    var args = ['--removeShortcut', target, '-l', locations];
+    var child = ChildProcess.spawn(updateExe, args, { detached: true });
+    child.on('close', done);
+}
 
 var handleStartupEvent = function() {
     if (process.platform !== 'win32') {
         return false;
     }
 
+    var defaultLocations = 'Desktop,StartMenu';
     const target = path.basename(process.execPath);
     var squirrelCommand = process.argv[1];
     switch (squirrelCommand) {
         case '--squirrel-install':
         case '--squirrel-updated':
             installRegistry(function () {
-                run(['--createShortcut=' + target + ''], app.quit);
+                createShortcut(defaultLocations, app.quit);
             });
           return true;
         case '--squirrel-uninstall':
             unInstallRegistry(function () {
-                run(['--removeShortcut=' + target + ''], app.quit);
+                removeShortcut(defaultLocations, app.quit);
             });
             return true;
         case '--squirrel-obsolete':
