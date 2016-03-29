@@ -3,7 +3,9 @@
   "scripts": {
     "clean": "rimraf dist",
     "pack": "build",
-    "dist": "build"
+    "dist": "build",
+    "dist:win": "build --arch ia32",
+    "dist:osx": "build"
   },
   "build": {
     "osx": {
@@ -25,13 +27,19 @@
         }
       ]
     },
-    "win64": {
-      "appDirectory": "./dist/Entry-win32-x64",
+    "win": {
+      "appDirectory": "./dist/Entry-win32-ia32",
       "title": "Entry",
       "icon": "./icon/app.ico",
       "authors": "EntryLabs",
       "exe": "Entry.exe"
-    }
+    },
+    "asar": false,
+    "name": "Entry",
+    "app-bundle-id": "entry-offline",
+    "app-category-type": "org.play-entry.entry-offline",
+    "iconUrl": "https://raw.githubusercontent.com/entrylabs/entry-hw/feature/electron/build/icon.ico",
+    "icon": "app/icon/app"
   },
   "devDependencies": {
     "electron-builder": "^3.1.0",

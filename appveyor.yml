@@ -39,7 +39,7 @@ before_build:
 build_script:
   - node --version
   - npm --version
-  - npm run dist
+  - npm run dist:win
 
 test: off
 
