@@ -19,7 +19,7 @@
     "url": "git+https://kimorkim@github.com/entrylabs/entry-offline.git"
   },
   "build": {
-    "asar": false,
+    "asar": true,
     "version": "0.36.10",
     "name": "Entry",
     "app-bundle-id": "entry-offline",
