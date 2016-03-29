@@ -60,7 +60,7 @@ deploy:
     username: entry
     password:
       secure: AAMMJ21gGJ9i2Bhd7eCzeg==
-    folder: build/win/$(appveyor_build_version)
+    folder: build/Entry/win/$(appveyor_build_version)
     artifact: 
 
 notifications:
