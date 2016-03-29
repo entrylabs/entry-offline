@@ -9,6 +9,8 @@ const Menu     = electron.Menu;
 const packageJson     = require('./package.json');
 const ChildProcess = require('child_process');    
 
+var language;
+
 function spawn(command, args, callback) {
     var error, spawnedProcess, stdout;
     stdout = '';
@@ -111,6 +113,26 @@ function unInstallRegistry(callback) {
     });
 }
 
+
+var deleteRecursiveSync = function(target) {
+    try{
+        var exists = fs.existsSync(target);
+        console.log(target);
+        console.log(exists);
+        if (exists) {
+            if(fs.lstatSync(target).isDirectory()) { // recurse
+                fs.readdirSync(target).forEach(function(file) {
+                    var curPath = path.join(target, file);
+                    deleteRecursiveSync(curPath);
+                });
+                fs.rmdirSync(target);
+            } else { // delete file
+                fs.unlinkSync(target);
+            }           
+        }
+    } catch(e) {}
+};
+
 function run(args, done) {
     const updateExe = path.resolve(path.dirname(process.execPath), "..", "Update.exe")
     // log("Spawning `%s` with args `%s`", updateExe, args)
@@ -124,7 +146,22 @@ function createShortcut(locations, done) {
     var target = path.basename(process.execPath);
     var args = ['--createShortcut', target, '-l', locations];
     var child = ChildProcess.spawn(updateExe, args, { detached: true });
-    child.on('close', done);
+    child.on('close', function () {
+        language = app.getLocale();
+        if(language === 'ko') {
+            var sourcePath = path.resolve(process.env.USERPROFILE, 'Desktop', 'Entry.lnk');
+            var destPath = path.resolve(process.env.USERPROFILE, 'Desktop', '엔트리.lnk');
+            fs.rename(sourcePath, destPath, function (err) {
+                sourcePath = path.resolve(process.env.APPDATA, 'Microsoft', 'Windows', 'Start Menu', 'Programs', 'EntryLabs', 'Entry.lnk');
+                destPath = path.resolve(process.env.APPDATA, 'Microsoft', 'Windows', 'Start Menu', 'Programs', 'EntryLabs', '엔트리.lnk');
+                fs.rename(sourcePath, destPath, function (err) {
+                    if(done) {
+                        done();
+                    }
+                });
+            });
+        }
+    });
 }
 
 function removeShortcut(locations, done) {
@@ -132,7 +169,20 @@ function removeShortcut(locations, done) {
     var target = path.basename(process.execPath);
     var args = ['--removeShortcut', target, '-l', locations];
     var child = ChildProcess.spawn(updateExe, args, { detached: true });
-    child.on('close', done);
+    child.on('close', function () {
+        var desktopEng = path.resolve(process.env.USERPROFILE, 'Desktop', 'Entry.lnk');
+        var desktopKo = path.resolve(process.env.USERPROFILE, 'Desktop', '엔트리.lnk');
+        var startMenuEng = path.resolve(process.env.APPDATA, 'Microsoft', 'Windows', 'Start Menu', 'Programs', 'EntryLabs', 'Entry.lnk');
+        var startMenuKo = path.resolve(process.env.APPDATA, 'Microsoft', 'Windows', 'Start Menu', 'Programs', 'EntryLabs', '엔트리.lnk');
+        deleteRecursiveSync(desktopEng);
+        deleteRecursiveSync(desktopKo);
+        deleteRecursiveSync(startMenuEng);
+        deleteRecursiveSync(startMenuKo);
+
+        if(done) {
+            done();
+        }
+    });
 }
 
 var handleStartupEvent = function() {
@@ -203,10 +253,10 @@ for (var i = 0; i < argv.length; i++) {
     }
 }
 app.once('ready', function() {
-    var locale = app.getLocale();
+    language = app.getLocale();
     var title = packageJson.version;
     
-    if(locale === 'ko') {
+    if(language === 'ko') {
         title = '엔트리 v' + title;
     } else {
         title = 'Entry v' + title;
