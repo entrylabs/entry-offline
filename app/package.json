@@ -11,20 +11,12 @@
   },
   "description": "entry-offline version",
   "author": "EntryLabs",
-  "authors": "EntryLabs",
   "main": "entry_offline.js",
   "name": "Entry",
+  "productName": "Entry",
   "repository": {
     "type": "git",
     "url": "git+https://kimorkim@github.com/entrylabs/entry-offline.git"
-  },
-  "build": {
-    "asar": true,
-    "version": "0.36.10",
-    "name": "Entry",
-    "app-bundle-id": "entry-offline",
-    "app-category-type": "org.play-entry.entry-offline",
-    "icon": "app/icon/app"
   },
   "version": "1.1.0",
   "chromium-args": "--disable-web-security --allow-file-access-from-files --enable-decoder=aac,h264,mp3 --enable-demuxer=mp3,mov --enable-parser=aac,h264,mpegaudio",
