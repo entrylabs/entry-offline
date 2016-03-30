@@ -4,7 +4,6 @@ var nowLocale = app.getLocale();
 var options = {};
 var _real_path = __dirname;
 var _real_path_with_protocol = '';
-Lang.Blocks.ARDUINO_download_connector = 'asds';
 
 if (process.platform != 'darwin') {
 	isOsx = false;
