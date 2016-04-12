@@ -26,7 +26,7 @@ if(options.debug) {
 var _real_path = '.';
 var _real_path_with_protocol = '';
 
-console.log = function () {};
+// console.log = function () {};
 console.fslog = function (text) {
     // var data = fs.readFileSync(_real_path + '/debug.log', 'utf8');
     // data += '\n\r' + new Date() + ' : ' + text;

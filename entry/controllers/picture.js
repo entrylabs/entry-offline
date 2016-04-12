@@ -9,6 +9,7 @@ angular.module('common').controller('PictureController',
 	    $scope.menu = "";
 
 	    $scope.searchWord = '';
+	    $scope.language = localStorage.getItem('lang') || 'ko';
 
 	    // 현재 선택한 탭
 	    $scope.currentTab = 'system'; //for modal(sprite,upload,paint,character,text,etc)
@@ -113,11 +114,32 @@ angular.module('common').controller('PictureController',
 	    };
 
 	    var filterPictureData = function (keyword, cb) {
-	    	var filtered_data = $scope.orgPictureData.filter(function (item) {
-	    		return Object.keys(keyword).every(function (key) {
-	    			return item[key].indexOf(keyword[key]) >= 0;
+	    	var filtered_data = [];
+	    	if($scope.language === 'ko') {
+		    	filtered_data = $scope.orgPictureData.filter(function (item) {
+		    		return Object.keys(keyword).every(function (key) {
+		    			return item[key].indexOf(keyword[key]) >= 0;
+		    		});
+		    	});
+	    	} else {
+	    		var engData = [];
+	    		Object.keys(PictureNames).forEach(function (key) {
+	    			Object.keys(keyword).forEach(function (key2) {
+		    			if(PictureNames[key].indexOf(keyword[key2]) >= 0) {
+		    				engData.push(key);
+		    			}
+
+		    		});
 	    		});
-	    	});
+
+	    		$scope.orgPictureData.forEach(function (item) {
+		    		engData.forEach(function (key) {
+		    			if(item.name === key) {
+		    				filtered_data.push(item);
+			    		}
+		    		});
+		    	});
+	    	}
 
 	    	if($.isFunction(cb)) {
 	    		cb(filtered_data);
@@ -143,6 +165,7 @@ angular.module('common').controller('PictureController',
                             break;
                         }
                     }
+
                     $scope.systemPictures.push(picture);
                 }
                 $scope.collapse(0);

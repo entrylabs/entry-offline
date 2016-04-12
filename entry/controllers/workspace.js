@@ -80,12 +80,12 @@ angular.module('workspace').controller("WorkspaceController",
 		$scope.setOfflineHW = function() {
 			$('#entryCategoryarduino').mouseup(function() {
 					Entry.HW.prototype.downloadConnector = function() {
-						$('#saveArduinoPlugin').attr('nwsaveas', 'Entry_HW_v1.1.3.exe').trigger('click');
+						$('#saveArduinoPlugin').attr('nwsaveas', 'Entry_HW_v1.1.4.exe').trigger('click');
 						$("#saveArduinoPlugin").on("change", function () {
 							var filePath = $('#saveArduinoPlugin').val();
 							if (filePath !== "") {
 								var fs = require("fs");
-									fs.readFile("./hardware/plugin/Entry_HW_v1.1.3.exe", function (err, stream) {
+									fs.readFile("./hardware/plugin/Entry_HW_v1.1.4.exe", function (err, stream) {
 										fs.writeFile(filePath, stream, 'utf8', function (err) {
 											if (err)
 												alert("Unable to save file");

@@ -3,14 +3,18 @@
     <div class="modal-content" ng-class="{'modal-lecture': parent == 'lecture', 'modal-workspace': parent == 'workspace'}">
         <div class="modal-header">
             <button type="button" class="close" ng-click="cancel()">
-                <img src='/images/close_modal_workspace.png'/>
+                <img src='/img/assets/close_modal_workspace.png'/>
             </button>
             <h4 class="modal-title">{{'Workspace.sound_add'|text}}</h4>
         </div>
         <div class="modal-body">
-            <input id="searchWord" class='searchWord' ng-model="searchWord" ng-enter="search()" ng-show="currentTab == 'system'"/>
-            <uib-tabset>
-                <uib-tab select="changeTab('system')">
+            <span class="searchWord" ng-show="currentTab == 'system'">
+                <input id="searchWord" ng-model="searchWord" ng-enter="search()" />
+                <img src="/img/assets/workspace_modal_search.png" ng-click="search()" ng-if="parent == 'workspace'"/>
+                <img src="/img/assets/lecture/lecture_modal_search.png" ng-click="search()" ng-if="parent == 'lecture'"/>
+            </span>
+            <tabset>
+                <tab select="changeTab('system')">
                     <tab-heading>
                         {{'Workspace.select_sound'|text}}
                         <div class='modal_tab_bottom'></div>
@@ -21,62 +25,62 @@
                                 <div class="list-group">
                                     <div class="list-group-item">
                                         <div data-ng-class='{"active":main_menu === "사람"}' data-ng-click="collapse(1);findSounds('default','사람')" class="list-group-item-heading">
-                                            <a href data-ng-click="findSounds('default','사람')">사람</a>
+                                            <a href data-ng-click="findSounds('default','사람')">{{"Menus.people" | text}}</a>
                                         </div>
-                                        <div class="list-group-item-text" uib-collapse="isCollapsed1">
+                                        <div class="list-group-item-text" collapse="isCollapsed1">
                                             <ul>
-                                                <a href data-ng-click="findSounds('default','사람')"><li data-ng-class='{"active":main_menu === "사람" && menu === ""}'>전체</li></a>
-                                                <a href data-ng-click="findSounds('default','사람','일상생활')"><li data-ng-class='{"active":menu === "일상생활"}'>일상생활</li></a>
+                                                <a href data-ng-click="findSounds('default','사람')"><li data-ng-class='{"active":main_menu === "사람" && menu === ""}'>{{"Menus.all" | text}}</li></a>
+                                                <a href data-ng-click="findSounds('default','사람','일상생활')"><li data-ng-class='{"active":menu === "일상생활"}'>{{"Menus.life" | text}}</li></a>
                                             </ul>
                                         </div>
                                     </div>
                                     <div class="list-group-item">
                                         <div data-ng-class='{"active":main_menu === "자연"}' data-ng-click="collapse(2);findSounds('default','자연')" class="list-group-item-heading">
-                                            <a href data-ng-click="findSounds('default','자연')">자연</a>
+                                            <a href data-ng-click="findSounds('default','자연')">{{"Menus.nature" | text}}</a>
                                         </div>
-                                        <div class="list-group-item-text" uib-collapse="isCollapsed2">
+                                        <div class="list-group-item-text" collapse="isCollapsed2">
                                             <ul>
-                                                <a href data-ng-click="findSounds('default','자연')"><li data-ng-class='{"active":main_menu === "자연" && menu === ""}'>전체</li></a>
-                                                <a href data-ng-click="findSounds('default','자연','동물')"><li data-ng-class='{"active":menu === "동물"}'>동물/곤충</li></a>
-                                                <a href data-ng-click="findSounds('default','자연','자연환경')"><li data-ng-class='{"active":menu === "자연환경"}'>자연환경</li></a>
+                                                <a href data-ng-click="findSounds('default','자연')"><li data-ng-class='{"active":main_menu === "자연" && menu === ""}'>{{"Menus.all" | text}}</li></a>
+                                                <a href data-ng-click="findSounds('default','자연','동물')"><li data-ng-class='{"active":menu === "동물"}'>{{"Menus.animal_insect" | text}}</li></a>
+                                                <a href data-ng-click="findSounds('default','자연','자연환경')"><li data-ng-class='{"active":menu === "자연환경"}'>{{"Menus.instrument" | text}}</li></a>
                                             </ul>
                                         </div>
                                     </div>
                                     <div class="list-group-item">
                                         <div data-ng-class='{"active":main_menu === "사물"}' data-ng-click="collapse(3);findSounds('default','사물')" class="list-group-item-heading">
-                                            <a href data-ng-click="findSounds('default','사물')">사물</a>
+                                            <a href data-ng-click="findSounds('default','사물')">{{"Menus.things" | text}}</a>
                                         </div>
-                                        <div class="list-group-item-text" uib-collapse="isCollapsed3">
+                                        <div class="list-group-item-text" collapse="isCollapsed3">
                                             <ul>
-                                                <a href data-ng-click="findSounds('default','사물')"><li data-ng-class='{"active":main_menu === "사물" && menu === ""}'>전체</li></a>
-                                                <a href data-ng-click="findSounds('default','사물','이동수단')"><li data-ng-class='{"active":menu === "이동수단"}'>이동수단</li></a>
-                                                <a href data-ng-click="findSounds('default','사물','기타')"><li data-ng-class='{"active":menu === "기타"}'>기타</li></a>
+                                                <a href data-ng-click="findSounds('default','사물')"><li data-ng-class='{"active":main_menu === "사물" && menu === ""}'>{{"Menus.all" | text}}</li></a>
+                                                <a href data-ng-click="findSounds('default','사물','이동수단')"><li data-ng-class='{"active":menu === "이동수단"}'>{{"Menus.vehicles" | text}}</li></a>
+                                                <a href data-ng-click="findSounds('default','사물','기타')"><li data-ng-class='{"active":menu === "기타"}'>{{"Menus.others" | text}}</li></a>
                                             </ul>
                                         </div>
                                     </div>
                                     <div class="list-group-item">
                                         <div data-ng-class='{"active":main_menu === "판타지"}' data-ng-click="collapse(4);findSounds('default','판타지')" class="list-group-item-heading">
-                                            <a href data-ng-click="findSounds('default','판타지')">판타지</a>
+                                            <a href data-ng-click="findSounds('default','판타지')">{{"Menus.fantasy" | text}}</a>
                                         </div>
-                                        <div class="list-group-item-text" uib-collapse="isCollapsed4">
+                                        <div class="list-group-item-text" collapse="isCollapsed4">
                                             <ul>
-                                                <a href data-ng-click="findSounds('default','판타지')"><li data-ng-class='{"active":main_menu === "판타지" && menu === ""}'>전체</li></a>
+                                                <a href data-ng-click="findSounds('default','판타지')"><li data-ng-class='{"active":main_menu === "판타지" && menu === ""}'>{{"Menus.all" | text}}</li></a>
                                             </ul>
                                         </div>
                                     </div>
                                     <div class="list-group-item">
                                         <div data-ng-class='{"active":main_menu === "악기"}' data-ng-click="collapse(5);findSounds('default','악기')" class="list-group-item-heading">
-                                            <a href data-ng-click="findSounds('default','악기')">악기</a>
+                                            <a href data-ng-click="findSounds('default','악기')">{{"Menus.instrument" | text}}</a>
                                         </div>
-                                        <div class="list-group-item-text" uib-collapse="isCollapsed5">
+                                        <div class="list-group-item-text" collapse="isCollapsed5">
                                             <ul>
-                                                <a href data-ng-click="findSounds('default','악기')"><li data-ng-class='{"active":main_menu === "악기" && menu === ""}'>전체</li></a>
-                                                <a href data-ng-click="findSounds('default','악기','피아노')"><li data-ng-class='{"active":menu === "피아노"}'>피아노</li></a>
-                                                <a href data-ng-click="findSounds('default','악기','마림바')"><li data-ng-class='{"active":menu === "마림바"}'>마림바</li></a>
-                                                <a href data-ng-click="findSounds('default','악기','드럼')"><li data-ng-class='{"active":menu === "드럼"}'>드럼</li></a>
-                                                <a href data-ng-click="findSounds('default','악기','장구')"><li data-ng-class='{"active":menu === "장구"}'>장구</li></a>
-                                                <a href data-ng-click="findSounds('default','악기','효과음')"><li data-ng-class='{"active":menu === "효과음"}'>효과음</li></a>
-                                                <a href data-ng-click="findSounds('default','악기','기타타악기')"><li data-ng-class='{"active":menu === "기타타악기"}'>기타 타악기</li></a>
+                                                <a href data-ng-click="findSounds('default','악기')"><li data-ng-class='{"active":main_menu === "악기" && menu === ""}'>{{"Menus.all" | text}}</li></a>
+                                                <a href data-ng-click="findSounds('default','악기','피아노')"><li data-ng-class='{"active":menu === "피아노"}'>{{"Menus.piano" | text}}</li></a>
+                                                <a href data-ng-click="findSounds('default','악기','마림바')"><li data-ng-class='{"active":menu === "마림바"}'>{{"Menus.marimba" | text}}</li></a>
+                                                <a href data-ng-click="findSounds('default','악기','드럼')"><li data-ng-class='{"active":menu === "드럼"}'>{{"Menus.drum" | text}}</li></a>
+                                                <a href data-ng-click="findSounds('default','악기','장구')"><li data-ng-class='{"active":menu === "장구"}'>{{"Menus.janggu" | text}}</li></a>
+                                                <a href data-ng-click="findSounds('default','악기','효과음')"><li data-ng-class='{"active":menu === "효과음"}'>{{"Menus.sound_effect" | text}}</li></a>
+                                                <a href data-ng-click="findSounds('default','악기','기타타악기')"><li data-ng-class='{"active":menu === "기타타악기"}'>{{"Menus.others_instrument" | text}}</li></a>
                                             </ul>
                                         </div>
                                     </div>
@@ -100,17 +104,17 @@
                             <div class="wrap wrap_sprite">
                                 <div class="box" data-ng-repeat="sound in systemSounds">
                                     <div id="{{sound._id}}" class="{{sound.selected}}" data-ng-click="selectSystem(sound)" data-ng-dblclick="applySystem(sound)">
-                                        <div class="boxInner" style="background-image: url('/images/soundimage.png');">
+                                        <div class="boxInner" style="background-image: url('/img/assets/soundimage.png');">
                                         </div>
-                                        <img class="overlay" src="./images/check_inside_new.png"/>
+                                        <img class="overlay" src="/img/assets/check_inside_new.png"/>
                                     </div>
-                                    <div class="titleBox">{{sound.name}}</div>
+                                    <div class="titleBox">{{sound.name | nameTranslate : 'sound'}}</div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </uib-tab>
-                <uib-tab select="changeTab('upload')">
+                </tab>
+                <tab select="changeTab('upload')">
                     <tab-heading>
                         {{'Workspace.upload'|text}}
                         <div class='modal_tab_bottom'></div>
@@ -128,7 +132,7 @@
                                 <form>
                                     <div class="image-upload boxOuter">
                                         <label for="uploadFile">
-                                            <img src="./images/fileadd.png"/>
+                                            <img src="/img/assets/fileadd.png"/>
                                             <span class="workspace_upload_span"></span>
                                         </label>
 
@@ -142,15 +146,15 @@
                             </div>
                             <div class="box" data-ng-repeat="sound in uploadSounds">
                                 <div id="{{sound._id}}" class="boxOuter" data-ng-click="selectUpload(sound)" data-ng-dblclick="applyUpload(sound)">
-                                    <div class="boxInner" style="background-image: url('/images/soundimage.png');"></div>
-                                    <img class="overlay" src="./images/check_inside_new.png"/>
+                                    <div class="boxInner" style="background-image: url('/img/assets/soundimage.png');"></div>
+                                    <img class="overlay" src="/img/assets/check_inside_new.png"/>
                                 </div>
                                 <div class="titleBox">{{sound.name}}</div>
                             </div>
                         </div>
                     </div>
-                </uib-tab>
-            </uib-tabset>
+                </tab>
+            </tabset>
 
         <div class="modal_choosen">
             <div class='modal_selected_arrow modal_selected_left_arrow' ng-click='moveContainer("right")'></div>
@@ -159,15 +163,15 @@
                 <div class="modal_selected_container_moving">
                     <div class="box" data-ng-repeat="sound in selectedSystem" ng-if="currentTab == 'system'">
                         <div id="{{sound._id}}" class="{{sound.selected}} boxOuterChoosen">
-                            <img class="modal_choosen_cancel" src="./images/modal_choosen_cancel.png" data-ng-click="selectSystem(sound)"/>
-                            <div class="boxInner" style="background-image: url('/images/soundimage.png');"></div>
+                            <img class="modal_choosen_cancel" src="/img/assets/modal_choosen_cancel.png" data-ng-click="selectSystem(sound)"/>
+                            <div class="boxInner" style="background-image: url('/img/assets/soundimage.png');"></div>
                         </div>
-                        <div class="titleBox titleBoxChoosen">{{sound.name}}</div>
+                        <div class="titleBox titleBoxChoosen">{{sound.name | nameTranslate : 'sound'}}</div>
                     </div>
                     <div class="box" data-ng-repeat="sound in selectedUpload" ng-if="currentTab == 'upload'">
                         <div id="{{sound._id}}" class="boxOuter boxOuterChoosen">
-                            <img class="modal_choosen_cancel" src="./images/modal_choosen_cancel.png" data-ng-click="selectSystem(sound)"/>
-                            <div class="boxInner" style="background-image: url('/images/soundimage.png');"></div>
+                            <img class="modal_choosen_cancel" src="/img/assets/modal_choosen_cancel.png" data-ng-click="selectSystem(sound)"/>
+                            <div class="boxInner" style="background-image: url('/img/assets/soundimage.png');"></div>
                         </div>
                         <div class="titleBox titleBoxChoosen">{{sound.name}}</div>
                     </div>
