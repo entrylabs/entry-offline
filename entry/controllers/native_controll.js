@@ -310,7 +310,7 @@ Entry.plugin = (function () {
 	that.init = function (cb) {
 
 		// NanumBarunGothic 폰트 로딩 시간까지 기다린다.
-		var font = new FontFace("nanumBarunRegular", "url(./fonts/NanumBarunGothic.woff2)");
+		var font = new FontFace("nanumBarunRegular", "url(./builds/ecf17559a7d726e924c87764d4e869d5.woff2)");
 		font.load();
 		font.loaded.then(function() {
 			var zoom_level = localStorage.getItem("window_zoomlevel") || 0;
