@@ -54,3 +54,26 @@ common.filter('text', function() {
         }
     }
 });
+
+common.filter('nameTranslate', function() {
+    return function(str, type) {
+        var dict = SpriteNames;
+        if (type == 'picture')
+            dict = PictureNames;
+        else if (type == 'sound')
+            dict = SoundNames;
+
+        var lang = localStorage.getItem('lang') || 'ko';
+        if (window.lang)
+            lang = window.lang;
+
+        if (window.user && window.user.language)
+            lang = window.user.language;
+
+        if (!dict || lang == 'ko' || lang == 'code') {
+            return str;
+        } else {
+            return dict[str] ? dict[str] : str;
+        }
+    }
+});

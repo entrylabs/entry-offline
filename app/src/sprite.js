@@ -140,15 +140,42 @@ angular.module('common').controller('SpriteController',
     };
 
     var filterSpriteData = function (keyword, cb) {
-        var filtered_data = $scope.orgSpriteData.filter(function (item) {
-            return Object.keys(keyword).every(function (key) {
-                if(item[key]) {
+        // var filtered_data = $scope.orgSpriteData.filter(function (item) {
+        //     return Object.keys(keyword).every(function (key) {
+        //         if(item[key]) {
+        //             return item[key].indexOf(keyword[key]) >= 0;
+        //         } else {
+        //             return false;
+        //         }
+        //     });
+        // });
+
+        var filtered_data = [];
+        if($scope.language === 'ko') {
+            filtered_data = $scope.orgSpriteData.filter(function (item) {
+                return Object.keys(keyword).every(function (key) {
                     return item[key].indexOf(keyword[key]) >= 0;
-                } else {
-                    return false;
-                }
+                });
             });
-        });
+        } else {
+            var engData = [];
+            Object.keys(SpriteNames).forEach(function (key) {
+                Object.keys(keyword).forEach(function (key2) {
+                    if(SpriteNames[key].indexOf(keyword[key2]) >= 0) {
+                        engData.push(key);
+                    }
+
+                });
+            });
+
+            $scope.orgSpriteData.forEach(function (item) {
+                engData.forEach(function (key) {
+                    if(item.name === key) {
+                        filtered_data.push(item);
+                    }
+                });
+            });
+        }
 
         if($.isFunction(cb)) {
             cb(filtered_data);
@@ -256,9 +283,24 @@ angular.module('common').controller('SpriteController',
         }
     };
 
+    $scope.changeLanguage = function (sprite) {
+        if($scope.language !== 'ko') {
+            sprite.name = SpriteNames[sprite.name] || sprite.name;
+
+            sprite.pictures.forEach(function (item) {
+                item.name = PictureNames[item.name] || item.name;
+            });
+            sprite.sounds.forEach(function (item) {
+                item.name = SoundNames[item.name] || item.name;
+            });
+        }
+    }
+
     $scope.applySprite = function(sprite) {
+        var cloneSprite = $.extend({}, sprite, true);
         $scope.selectedSprites = [];
-        $scope.selectedSprites.push(sprite);
+        $scope.changeLanguage(cloneSprite);
+        $scope.selectedSprites.push(cloneSprite);
 
         $modalInstance.close({
             target: $scope.currentTab,
@@ -285,7 +327,10 @@ angular.module('common').controller('SpriteController',
                 }
             });
         } else {
-            $scope.selectedSprites.push(sprite);
+            var cloneSprite = $.extend({}, sprite, true);
+            $scope.changeLanguage(cloneSprite);
+            $scope.selectedSprites.push(cloneSprite);
+            // $scope.selectedSprites.push(sprite);
             // 스프라이트 다중 선택.
             var elements = jQuery('.boxOuter').each(function() {
                 var element = jQuery(this);

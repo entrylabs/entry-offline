@@ -9,6 +9,11 @@ angular.module('workspace').controller("WorkspaceController",
         var storage = (typeof window.localStorage === 'undefined') ? undefined : window.localStorage;
 
 		$scope.initWorkspace = function () {
+            if(!$scope.popupHelper) {
+                $scope.popupHelper = new Entry.popupHelper(true);
+            }
+            addSpinnerPopup();
+            addFailedPopup();
 			// 기본 초기화를 수행수 동작한다.
 			Entry.plugin.init(function () {
 				myProject.isSavedPath = storage.getItem('defaultPath') || '';
@@ -204,6 +209,95 @@ angular.module('workspace').controller("WorkspaceController",
 			});
 	    };
 
+        $scope.spinnerTitle;
+        $scope.failTitle;
+
+        $scope.doPopupControl = function (obj) {
+            if(obj.type === 'spinner') {
+                // $scope.spinnerMsg = obj.msg;
+                $scope.spinnerTitle.text(obj.msg);
+                $scope.popupHelper.show('workspaceSpinner');
+            } else if (obj.type === 'fail') {
+                // $scope.failMsg = obj.msg;
+                $scope.failTitle.html(obj.msg);
+                $scope.popupHelper.show('workspaceFailed');
+            } else if (obj.type === 'hide') {
+                $scope.popupHelper.hide();
+            }
+        }
+
+        function addSpinnerPopup() {
+            $scope.popupHelper.addPopup('workspaceSpinner', {
+                type: 'spinner',
+                setPopupLayout : function (popup) {
+                    var content = Entry.Dom('div', {
+                        class: 'contentArea'
+                    });
+                    var title = Entry.Dom('div', {
+                        class : 'workspaceSpinnerTitle',
+                        parent: content
+                    });
+                    var circle = Entry.Dom('div', {
+                        class : 'workspaceSpinnerCircle',
+                        parent: content
+                    });
+                    var inner1 = Entry.Dom('div', {
+                        class : 'inner1',
+                        parent: circle
+                    });
+                    var inner2 = Entry.Dom('div', {
+                        class : 'inner2',
+                        parent: circle
+                    });
+                    var inner3 = Entry.Dom('div', {
+                        class : 'inner3',
+                        parent: circle
+                    });
+                    Entry.Dom('div', {
+                        class : 'workspaceSpinnerCharacter',
+                        parent: circle
+                    });
+                    title.text(Lang.Workspace.uploading_msg);
+                    $scope.spinnerTitle = title;
+
+                    popup.append(content);
+                }
+            });
+        }
+
+        function addFailedPopup() {
+            $scope.popupHelper.addPopup('workspaceFailed', {
+                setPopupLayout : function (popup) {
+                    var content = Entry.Dom('div', {
+                        class: 'contentArea'
+                    });
+                    var title = Entry.Dom('div', {
+                        class : 'workspaceFailedTitle',
+                        parent: content
+                    });
+
+                    var close = Entry.Dom('div', {
+                        class : 'workspaceFailedCloseBtn',
+                        parent: content
+                    });
+
+                    var subTitle = Entry.Dom('div', {
+                        class : 'workspaceFailedSubTitle',
+                        parent: content
+                    });
+                    title.html(Lang.Workspace.upload_fail_msg);
+                    subTitle.html(Lang.Workspace.fail_contact_msg);
+                    $scope.failTitle = title;
+
+                    close.bindOnClick(function () {
+                        popupHelper.hide();
+                    });
+
+                    popup.append(content);
+                }
+            });
+        }
+
 		// 프로젝트 세팅
 		$scope.setWorkspace = function(project) {
 			Entry.loadProject(project);
@@ -233,9 +327,9 @@ angular.module('workspace').controller("WorkspaceController",
 				defaultPath: default_path + $scope.project.name,
 				title: title,
 				filters: [
-				    { 
-				    	name: 'Entry File', 
-				    	extensions: ['ent'] 
+				    {
+				    	name: 'Entry File',
+				    	extensions: ['ent']
 				    }
 				]
 			}, function (filePath) {	
@@ -249,16 +343,33 @@ angular.module('workspace').controller("WorkspaceController",
 			            	myProject.isSaved = true;
 			            	myProject.isSavedPath = filePath;
 			            	Entry.toast.success(Lang.Workspace.saved, project_name + ' ' + Lang.Workspace.saved_msg);
-							$scope.hideSpinner();
+							// $scope.hideSpinner();
+							$scope.doPopupControl({
+				                'type':'hide'
+				            });
 							$scope.isNowSaving = false;
 			            });
 	        		} catch(e) {
-		            	Entry.toast.success(Lang.Workspace.saved, project_name + ' ' + Lang.Workspace.saved_msg);
-						$scope.hideSpinner();	        			
+		            	// Entry.toast.success(Lang.Workspace.saved, project_name + ' ' + Lang.Workspace.saved_msg);
+						// $scope.hideSpinner();	
+						$scope.doPopupControl({
+			                'type':'hide'
+			            });
+						$scope.doPopupControl({
+			                'type':'fail',
+			                'msg': Lang.Workspace.saving_fail_msg
+			            });        			
 						$scope.isNowSaving = false;
 	        		}
 	        	} else {
-	        		$scope.hideSpinner();
+	        		// $scope.hideSpinner();
+	        		$scope.doPopupControl({
+		                'type':'hide'
+		            });
+		            // $scope.doPopupControl({
+		            //     'type':'fail',
+		            //     'msg': Lang.Workspace.saving_fail_msg
+		            // });
 	        		$scope.isNowSaving = false;
 	        	}
 			});
@@ -267,11 +378,18 @@ angular.module('workspace').controller("WorkspaceController",
 		// 저장하기
 		$scope.saveWorkspace = function() {
 			$scope.isNowSaving = true;
-			$scope.showSpinner();
+			// $scope.showSpinner();
+			$scope.doPopupControl({
+                'type':'spinner',
+                'msg': Lang.Workspace.saving_msg
+            });
 			if(myProject.isSaved) {
 				$scope.project.saveProject(myProject.isSavedPath, function () {
 	            	Entry.toast.success(Lang.Workspace.saved, myProject.name + ' ' + Lang.Workspace.saved_msg);
-	            	$scope.hideSpinner();
+	            	// $scope.hideSpinner();
+	            	$scope.doPopupControl({
+		                'type':'hide'
+		            });
 	            	$scope.isNowSaving = false;
 	            });
 			} else {
@@ -282,7 +400,11 @@ angular.module('workspace').controller("WorkspaceController",
         // 새 이름으로 저장하기
 		$scope.saveAsWorkspace = function() {
 			$scope.isNowSaving = true;
-			$scope.showSpinner();
+			// $scope.showSpinner();
+			$scope.doPopupControl({
+                'type':'spinner',
+                'msg': Lang.Workspace.saving_msg
+            });
 			var default_path = storage.getItem('defaultPath') || '';
 			Entry.stateManager.addStamp();
 			saveAsProject(Lang.Workspace.file_save);
@@ -308,7 +430,11 @@ angular.module('workspace').controller("WorkspaceController",
 
         // 불러오기
         $scope.loadWorkspace = function() {
-        	$scope.showSpinner();
+        	// $scope.showSpinner();
+        	$scope.doPopupControl({
+                'type':'spinner',
+                'msg': Lang.Workspace.loading_msg
+            });
         	var canLoad = false;
         	if(!Entry.stateManager.isSaved()) {
         		canLoad = !confirm(Lang.Menus.save_dismiss);
@@ -337,7 +463,10 @@ angular.module('workspace').controller("WorkspaceController",
 				            Entry.plugin.reloadApplication();
 		        		});
 		        	} else {
-			        	$scope.hideSpinner();
+			        	// $scope.hideSpinner();
+			        	$scope.doPopupControl({
+			                'type':'hide'
+			            });
 		        	}
         		});
         	}

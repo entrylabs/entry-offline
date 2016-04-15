@@ -173,7 +173,7 @@
                                         </div>
                                         <img class="overlay" src="./images/check_inside_new.png"/>
                                     </div>
-                                    <div class="titleBox">{{picture.name}}</div>
+                                    <div class="titleBox">{{picture.name | nameTranslate : 'picture'}}</div>
                                 </div>
                             </div>
 
@@ -211,7 +211,6 @@
                     </div>
                 </tab>
             </tabset>
-          
             <div class="modal-footer">
                 <button type="button" class="btn btn_confirm_modal" data-ng-click="ok()">적용하기 ({{currentSelected().length}})</button>
                 <button type="button" class="btn btn_cancel_modal" data-ng-click="cancel()">취소</button>
