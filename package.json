@@ -27,7 +27,7 @@
         }
       ]
     },
-    "win": {
+    "win64": {
       "appDirectory": "./dist/Entry-win32-ia32",
       "title": "Entry",
       "icon": "./icon/app.ico",
