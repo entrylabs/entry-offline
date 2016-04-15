@@ -1,5 +1,5 @@
 <div data-ng-init="init()" class='modal_total_body'>
-    <div class="modal-content" ng-class="{'modal-lecture': parent == 'lecture', 'modal-workspace': parent == 'workspace'}">
+    <div class="modal-content modal-workspace" ng-class="{'modal-lecture': parent == 'lecture', 'modal-workspace': parent == 'workspace'}">
         <div class="modal-header">
             <button type="button" class="close" ng-click="cancel()">
                 <img src="./images/close_modal_workspace.png"/>
@@ -7,7 +7,10 @@
             <h4 class="modal-title">{{'Workspace.add_picture'|text}}</h4>
         </div>
         <div class="modal-body">
-            <input id="searchWord" class='searchWord' ng-model="searchWord" ng-keyup="search($event)" ng-show="currentTab == 'system'"/>
+            <span class="searchWord" ng-show="currentTab == 'system'">
+                <input id="searchWord" ng-model="searchWord" ng-enter="search()" />
+                <img src="./images/workspace_modal_search.png" ng-click="search()"/>
+            </span>
             <tabset>
                 <tab ng-repeat="tab in tabs" select="changeTab(tab.category)" active="tab.active">
                     <tab-heading>{{tab.title | text}}
@@ -27,17 +30,27 @@
                                 <img class="modal_choosen_cancel" src="./images/modal_choosen_cancel.png" ng-click='selectSystem(picture)'/>
                                 <div class="boxInner" style="background-image: url('{{picture|makeThumbnail}}');"></div>
                             </div>
-                            <div class="titleBox">{{picture.name}}</div>
+                            <div class="titleBox">{{picture.name | nameTranslate : 'picture'}}</div>
                         </div>
                         <div class="box" data-ng-repeat="picture in selectedUpload" ng-if='currentTab == "upload"'>
                             <div id="{{picture._id}}" class="boxOuter boxOuterChoosen">
                                 <img class="modal_choosen_cancel" src="./images/modal_choosen_cancel.png" ng-click='selectSystem(picture)'/>
-                                <div class="boxInner" style="background-image: url('{{picture|makeUploadThumbnail}}');"></div>
+                                <div class="boxInner" style="background-image: url('{{picture|makeThumbnail}}');"></div>
                             </div>
                             <div class="titleBox">{{picture.name}}</div>
                         </div>
+                    </div>
                 </div>
             </div>
+            <!--
+                <div class="modalFilter" ng-show='currentTab == "upload"'>
+                    <div class="filterCheckBox">
+                        <img ng-show="applyOriginal == true" ng-click="toggleApplyOriginal()" src="./images/study/list_checkbox.png"/>
+                        <img ng-show="applyOriginal == false" ng-click="toggleApplyOriginal()" src="./images/study/list_checkbox_basic.png"/>
+                        원본 이미지 그대로 적용하기
+                    </div>
+                </div>
+            -->
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn_confirm_modal" data-ng-click="ok()" ng-hide="currentTab == 'newPicture'">{{'Buttons.apply'|text}} ({{currentSelected().length}})</button>

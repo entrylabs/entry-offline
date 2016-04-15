@@ -95,9 +95,9 @@
                     <div class="list-group-item-text" collapse="isCollapsed8">
                         <ul>
                             <a href data-ng-click="findSprites('default','environment')"><li data-ng-class='{"active":main_menu === "environment" && menu === ""}'>{{'Workspace.all'|text}}</li></a>
-                            <a href data-ng-click="findSprites('default','environment')"><li data-ng-class='{"active":main_menu === "environment" && menu === "environment_nature"}'>{{'Category.environment_nature'|text}}</li></a>
-                            <a href data-ng-click="findSprites('default','environment')"><li data-ng-class='{"active":main_menu === "environment" && menu === "environment_space"}'>{{'Category.environment_space'|text}}</li></a>
-                            <a href data-ng-click="findSprites('default','environment')"><li data-ng-class='{"active":main_menu === "environment" && menu === "environment_others"}'>{{'Category.environment_others'|text}}</li></a>
+                            <a href data-ng-click="findSprites('default','environment','environment_nature')"><li data-ng-class='{"active":main_menu === "environment" && menu === "environment_nature"}'>{{'Category.environment_nature'|text}}</li></a>
+                            <a href data-ng-click="findSprites('default','environment','environment_space')"><li data-ng-class='{"active":main_menu === "environment" && menu === "environment_space"}'>{{'Category.environment_space'|text}}</li></a>
+                            <a href data-ng-click="findSprites('default','environment','environment_others')"><li data-ng-class='{"active":main_menu === "environment" && menu === "environment_others"}'>{{'Category.environment_others'|text}}</li></a>
                         </ul>
                     </div>
                 </div>
@@ -154,7 +154,7 @@
                     <div class="boxInner" style="background-image: url('{{sprite.pictures[0]|makeThumbnail}}');"></div>
                     <img class="overlay" src="./images/check_inside_new.png"/>
                 </div>
-                <div class="titleBox">{{sprite.name}}</div>
+                <div class="titleBox">{{sprite.name | nameTranslate : 'sprite'}}</div>
             </div>
         </div>
     </div>

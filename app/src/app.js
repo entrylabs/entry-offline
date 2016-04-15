@@ -13,5 +13,5 @@ angular.module('workspace', ['common']);
 // 다국어 변경 적용
 {
 	var user_lang = localStorage.getItem('lang') || 'ko';
-	$('head').append('<script src="./bower_components/entryjs/extern/util/' + user_lang + '.js">' + '</script>')
+	$('head').append('<script src="./lang/' + user_lang + '.js">' + '</script>')
 }
