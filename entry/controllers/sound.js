@@ -20,6 +20,7 @@ angular.module('common').controller('SoundController',
     $scope.menu = "";
 
     $scope.searchWord = '';
+    $scope.language = localStorage.getItem('lang') || 'ko';
     var data;
     
     var readSoundMeta = function(soundMapFile) {
@@ -116,7 +117,13 @@ angular.module('common').controller('SoundController',
         
         for (var i in data) {
             var sound = data[i];
-            var originalFileName = sound.name;
+            var originalFileName = '';
+
+            if($scope.language === 'ko') {
+                originalFileName = sound.name;
+            } else {
+                originalFileName = SoundNames[sound.name];
+            }
                         
             if(originalFileName.includes($scope.searchWord)) {
                 var path = '/uploads/' + sound.filename.substring(0,2)+'/'+sound.filename.substring(2,4)+'/'+sound.filename+sound.ext;
@@ -136,7 +143,7 @@ angular.module('common').controller('SoundController',
                 }
         
                 $scope.systemSounds.push(sound);
-                console.log("sound : " + sound + "==>" + $scope.searchWord);
+                // console.log("sound : " + sound + "==>" + $scope.searchWord);
             }
         }
     
@@ -303,7 +310,9 @@ angular.module('common').controller('SoundController',
 
         if (selected) {
             createjs.Sound.play(sound._id);
-            $scope.selectedSystem.push(sound);
+            var cloneSound = $.extend({}, sound, true);
+            $scope.changeLanguage(cloneSound);
+            $scope.selectedSystem.push(cloneSound);
             // 스프라이트 다중 선택.
             var elements = jQuery('.boxOuter').each(function() {
                 var element = jQuery(this);
@@ -347,9 +356,18 @@ angular.module('common').controller('SoundController',
         }
     }
 
+
+    $scope.changeLanguage = function (sound) {
+        if($scope.language !== 'ko') {
+            sound.name = SoundNames[sound.name] || sound.name;
+        }
+    }
+
     $scope.applySystem = function(sound) {
+        var cloneSound = $.extend({}, sound, true);
         $scope.selectedSystem = [];
-        $scope.selectedSystem.push(sound);
+        $scope.changeLanguage(cloneSound);
+        $scope.selectedSystem.push(cloneSound);
 
         $modalInstance.close({
             target: $scope.currentTab,

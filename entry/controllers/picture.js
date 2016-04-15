@@ -91,7 +91,6 @@ angular.module('common').controller('PictureController',
             }
 	    }
 
-
 	    $scope.findPictures = function(type, main, sub) {
 	        calcInnerHeight();
 
@@ -128,7 +127,6 @@ angular.module('common').controller('PictureController',
 		    			if(PictureNames[key].indexOf(keyword[key2]) >= 0) {
 		    				engData.push(key);
 		    			}
-
 		    		});
 	    		});
 
@@ -261,7 +259,9 @@ angular.module('common').controller('PictureController',
 	        }
 
 	        if (selected) {
-	            $scope.selectedPictures.push(picture);
+	        	var clonePicture = $.extend({}, picture, true);
+		        $scope.changeLanguage(clonePicture);
+	            $scope.selectedPictures.push(clonePicture);
 	            // 스프라이트 다중 선택.
 	            var elements = jQuery('.boxOuter').each(function() {
 	                var element = jQuery(this);
@@ -280,9 +280,18 @@ angular.module('common').controller('PictureController',
 	        }
 
 	    };
+
+	    $scope.changeLanguage = function (picture) {
+	        if($scope.language !== 'ko') {
+	            picture.name = PictureNames[picture.name] || picture.name;
+	        }
+	    }
+
         $scope.applySystem = function(picture) {
+        	var clonePicture = $.extend({}, picture, true);
 	        $scope.selectedPictures = [];
-	        $scope.selectedPictures.push(picture);
+	        $scope.changeLanguage(clonePicture);
+	        $scope.selectedPictures.push(clonePicture);
 
 	        $modalInstance.close({
 	            target: $scope.currentTab,
