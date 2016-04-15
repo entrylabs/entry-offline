@@ -2220,7 +2220,11 @@ Lang.Workspace = {
     "upload_fail_msg": "Upload failed. Please try again.",
     "file_converting_msg": "​File converting in process",
     "file_converting_fail_msg": "​File conversion has failed",
-    "fail_contact_msg": "If the problem persists, contact contact_entry@entrylabs.org"
+    "fail_contact_msg": "If the problem persists,</br>contact contact_entry@entrylabs.org",
+    "saving_msg": "Saving",
+    "saving_fail_msg": "Save failed. Please try again.",
+    "loading_msg": "Loading",
+    "loading_fail_msg": "Load failed. Please try again."
 };
 Lang.code = "view code";
 Lang.EntryStatic = {

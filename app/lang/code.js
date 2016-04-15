@@ -2217,10 +2217,14 @@ Lang.Workspace = {
     "arduino_connect_success": "하드웨어가 연결되었습니다.",
     "confirm_load_header": "작품 복구",
     "uploading_msg": "업로드 중입니다",
-    "upload_fail_msg": "업로드에 실패하였습니다. 다시한번 시도해주세요.",
+    "upload_fail_msg": "업로드에 실패하였습니다.</br>다시 한번 시도해주세요.",
     "file_converting_msg": "파일 변환 중입니다.",
     "file_converting_fail_msg": "파일 변환에 실패하였습니다.",
-    "fail_contact_msg": "문제가 계속된다면 contact_entry@entrylabs.org로 문의해주세요."
+    "fail_contact_msg": "문제가 계속된다면</br>contact_entry@entrylabs.org로 문의해주세요.",
+    "saving_msg": "저장 중입니다",
+    "saving_fail_msg": "저장에 실패하였습니다.</br>다시 한번 시도해주세요.",
+    "loading_msg": "불러오는 중입니다",
+    "loading_fail_msg": "불러오기에 실패하였습니다.</br>다시 한번 시도해주세요."
 };
 Lang.code = "코드보기";
 Lang.EntryStatic = {
