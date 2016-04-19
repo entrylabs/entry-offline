@@ -254,9 +254,10 @@ var handleStartupEvent = function() {
             }, 1000);
             return true;
             break;
-        // case '--squirrel-obsolete':
-            // app.quit();
-        //     return true;
+        case '--squirrel-obsolete':
+            app.quit();
+            process.exit(0);
+            return true;
         default:
             return false;
             break;
