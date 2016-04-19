@@ -218,7 +218,7 @@ for (var i = 0; i < argv.length; i++) {
 
 var handleStartupEvent = function() {
     if (process.platform !== 'win32') {
-        return true;
+        return false;
     }
 
     var squirrelCommand = process.argv[1];
@@ -239,7 +239,8 @@ var handleStartupEvent = function() {
                     process.exit(0);
                 });
             });
-          return true;
+            return true;
+            break;
         case '--squirrel-uninstall':
             unInstallRegistry(function () {
                 removeShortcut(defaultLocations, function () {
@@ -248,62 +249,66 @@ var handleStartupEvent = function() {
                 });
             });
             return true;
+            break;
         // case '--squirrel-obsolete':
             // app.quit();
         //     return true;
+        default:
+            return false;
+            break;
     }
 
-    return true;
+    return false;
 };
 
-if (!handleStartupEvent()) {
-    app.quit();
-    process.exit(0);
+if (handleStartupEvent()) {
+    console.log('aa');
     return;
+} else {
+    console.log('bb');
+    var mainWindow = null;
+    var isClose = true;
+
+    app.on('window-all-closed', function() {
+        app.quit();
+        // if (process.platform != 'darwin') {
+        // }
+    });
+
+    app.once('ready', function() {
+        language = app.getLocale();
+        var title = packageJson.version;
+        
+        if(language === 'ko') {
+            title = '엔트리 v' + title;
+        } else {
+            title = 'Entry v' + title;
+        }
+
+        mainWindow = new BrowserWindow({
+            width: 1024, 
+            height: 700,
+            title: title
+        });
+
+        mainWindow.setMenu(null);
+        // mainWindow.loadUrl('custom:///index.html');
+        // console.log('file:///' + path.join(__dirname, 'entry_offline.html'))
+        mainWindow.loadURL('file:///' + path.join(__dirname, 'entry_offline.html'));
+        // mainWindow.loadURL('file:///entry_offline.html');
+
+        if(option.debug) {
+            mainWindow.webContents.openDevTools();
+        }
+        mainWindow.on('page-title-updated', function(e) {
+            e.preventDefault();
+        });
+        mainWindow.on('closed', function() {
+            mainWindow = null;
+        });
+    });
+
+    ipcMain.on('reload', function(event, arg) {
+        mainWindow.reload(true);
+    });
 }
-
-var mainWindow = null;
-var isClose = true;
-
-app.on('window-all-closed', function() {
-    app.quit();
-    // if (process.platform != 'darwin') {
-    // }
-});
-
-app.once('ready', function() {
-    language = app.getLocale();
-    var title = packageJson.version;
-    
-    if(language === 'ko') {
-        title = '엔트리 v' + title;
-    } else {
-        title = 'Entry v' + title;
-    }
-
-    mainWindow = new BrowserWindow({
-        width: 1024, 
-        height: 700,
-        title: title
-    });
-
-    mainWindow.setMenu(null);
-    // mainWindow.loadUrl('custom:///index.html');
-    // console.log('file:///' + path.join(__dirname, 'entry_offline.html'))
-    mainWindow.loadURL('file:///' + path.join(__dirname, 'entry_offline.html'));
-    // mainWindow.loadURL('file:///entry_offline.html');
-
-    if(option.debug) {
-        mainWindow.webContents.openDevTools();
-    }
-    mainWindow.on('page-title-updated', function(e) {
-        e.preventDefault();
-    });
-    mainWindow.on('closed', function() {
-        mainWindow = null;
-    });
-});
-
-ipcMain.on('reload', function(event, arg) {
-    mainWindow.reload(true);
-});
