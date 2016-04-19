@@ -54,14 +54,14 @@ artifacts:
     # name: package
 
 deploy:
-  - provider: FTP
-    protocol: sftp
-    host: play04.play-entry.com
-    username: entry
-    password:
-      secure: AAMMJ21gGJ9i2Bhd7eCzeg==
-    folder: build/Entry/win/$(appveyor_build_version)
-    artifact: 
+  #- provider: FTP
+  #  protocol: sftp
+  #  host: play04.play-entry.com
+  #  username: entry
+  #  password:
+  #    secure: AAMMJ21gGJ9i2Bhd7eCzeg==
+  #  folder: build/Entry/win/$(appveyor_build_version)
+  #  artifact: 
 
 notifications:
   - provider: Slack

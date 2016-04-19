@@ -27,12 +27,12 @@
         }
       ]
     },
-    "win64": {
-      "appDirectory": "./dist/Entry-win32-ia32",
+    "win": {
+      "loadingGif": "build/install-spinner.gif",
       "title": "Entry",
       "icon": "./icon/app.ico",
       "authors": "EntryLabs",
-      "exe": "Entry.exe"
+      "noMsi": false
     },
     "asar": false,
     "name": "Entry",
