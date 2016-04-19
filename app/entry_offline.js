@@ -233,21 +233,25 @@ var handleStartupEvent = function() {
     switch (squirrelCommand) {
         case '--squirrel-install':
         case '--squirrel-updated':
-            installRegistry(function () {
-                createShortcut(defaultLocations, function () {
-                    app.quit();
-                    process.exit(0);
+            setTimeout(function () {
+                installRegistry(function () {
+                    createShortcut(defaultLocations, function () {
+                        app.quit();
+                        process.exit(0);
+                    });
                 });
-            });
+            }, 1000);
             return true;
             break;
         case '--squirrel-uninstall':
-            unInstallRegistry(function () {
-                removeShortcut(defaultLocations, function () {
-                    app.quit();
-                    process.exit(0);
+            setTimeout(function () {
+                unInstallRegistry(function () {
+                    removeShortcut(defaultLocations, function () {
+                        app.quit();
+                        process.exit(0);
+                    });
                 });
-            });
+            }, 1000);
             return true;
             break;
         // case '--squirrel-obsolete':
