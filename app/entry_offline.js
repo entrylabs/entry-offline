@@ -186,10 +186,46 @@ function removeShortcut(locations, done) {
     });
 }
 
+
+// Parse command line options.
+var argv = process.argv.slice(1);
+var option = { file: null, help: null, version: null, webdriver: null, modules: [] };
+for (var i = 0; i < argv.length; i++) {
+    if (argv[i] == '--version' || argv[i] == '-v') {
+        option.version = true;
+        break;
+    } else if (argv[i].match(/^--app=/)) {
+        option.file = argv[i].split('=')[1];
+        break;
+    } else if (argv[i] == '--help' || argv[i] == '-h') {
+        option.help = true;
+        break;
+    } else if (argv[i] == '--test-type=webdriver') {
+        option.webdriver = true;
+    } else if (argv[i] == '--debug' || argv[i] == '-d') {
+        option.debug = true;
+        continue;
+    } else if (argv[i] == '--require' || argv[i] == '-r') {
+        option.modules.push(argv[++i]);
+        continue;
+    } else if (argv[i][0] == '-') {
+        continue;
+    } else {
+        option.file = argv[i];
+        break;
+    }
+}
+
 var handleStartupEvent = function() {
     if (process.platform !== 'win32') {
         return false;
     }
+
+    if (!(argv && argv.length >= 1)) return true;
+
+    var m = argv[0].match(/--squirrel-([a-z]+)/);
+    if (!(m && m[1])) return true;
+    if (m[1] === 'firstrun') return true;
 
     var defaultLocations = 'Desktop,StartMenu';
     const target = path.basename(process.execPath);
@@ -225,34 +261,6 @@ app.on('window-all-closed', function() {
     // }
 });
 
-// Parse command line options.
-var argv = process.argv.slice(1);
-var option = { file: null, help: null, version: null, webdriver: null, modules: [] };
-for (var i = 0; i < argv.length; i++) {
-    if (argv[i] == '--version' || argv[i] == '-v') {
-        option.version = true;
-        break;
-    } else if (argv[i].match(/^--app=/)) {
-        option.file = argv[i].split('=')[1];
-        break;
-    } else if (argv[i] == '--help' || argv[i] == '-h') {
-        option.help = true;
-        break;
-    } else if (argv[i] == '--test-type=webdriver') {
-        option.webdriver = true;
-    } else if (argv[i] == '--debug' || argv[i] == '-d') {
-        option.debug = true;
-        continue;
-    } else if (argv[i] == '--require' || argv[i] == '-r') {
-        option.modules.push(argv[++i]);
-        continue;
-    } else if (argv[i][0] == '-') {
-        continue;
-    } else {
-        option.file = argv[i];
-        break;
-    }
-}
 app.once('ready', function() {
     language = app.getLocale();
     var title = packageJson.version;
