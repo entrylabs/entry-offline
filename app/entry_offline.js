@@ -218,15 +218,15 @@ for (var i = 0; i < argv.length; i++) {
 
 var handleStartupEvent = function() {
     if (process.platform !== 'win32') {
-        return false;
+        return true;
     }
 
     var squirrelCommand = process.argv[1];
-    if (!(squirrelCommand && squirrelCommand.length >= 1)) return true;
+    if (!(squirrelCommand && squirrelCommand.length >= 1)) return false;
 
     var m = squirrelCommand[0].match(/--squirrel-([a-z]+)/);
-    if (!(m && m[1])) return true;
-    if (m[1] === 'firstrun') return true;
+    if (!(m && m[1])) return false;
+    if (m[1] === 'firstrun') return false;
 
     var defaultLocations = 'Desktop,StartMenu';
     const target = path.basename(process.execPath);
@@ -253,7 +253,7 @@ var handleStartupEvent = function() {
         //     return true;
     }
 
-    return false;
+    return true;
 };
 
 if (!handleStartupEvent()) {
