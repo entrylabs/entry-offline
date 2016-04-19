@@ -221,34 +221,44 @@ var handleStartupEvent = function() {
         return false;
     }
 
-    if (!(argv && argv.length >= 1)) return true;
+    var squirrelCommand = process.argv[1];
+    if (!(squirrelCommand && squirrelCommand.length >= 1)) return true;
 
-    var m = argv[0].match(/--squirrel-([a-z]+)/);
+    var m = squirrelCommand[0].match(/--squirrel-([a-z]+)/);
     if (!(m && m[1])) return true;
     if (m[1] === 'firstrun') return true;
 
     var defaultLocations = 'Desktop,StartMenu';
     const target = path.basename(process.execPath);
-    var squirrelCommand = process.argv[1];
     switch (squirrelCommand) {
         case '--squirrel-install':
         case '--squirrel-updated':
             installRegistry(function () {
-                createShortcut(defaultLocations, app.quit);
+                createShortcut(defaultLocations, function () {
+                    app.quit();
+                    process.exit(0);
+                });
             });
           return true;
         case '--squirrel-uninstall':
             unInstallRegistry(function () {
-                removeShortcut(defaultLocations, app.quit);
+                removeShortcut(defaultLocations, function () {
+                    app.quit();
+                    process.exit(0);
+                });
             });
             return true;
-        case '--squirrel-obsolete':
-            app.quit();
-            return true;
+        // case '--squirrel-obsolete':
+            // app.quit();
+        //     return true;
     }
+
+    return false;
 };
 
-if (handleStartupEvent()) {
+if (!handleStartupEvent()) {
+    app.quit();
+    process.exit(0);
     return;
 }
 
