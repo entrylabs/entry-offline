@@ -12,6 +12,17 @@ const ChildProcess = require('child_process');
 
 var language;
 
+function logger(msg) {
+    var log_path = path.resolve(process.env.APPDATA, 'entry_log');
+    if(!fs.existsSync(log_path)) {
+        fs.mkdirSync(log_path);
+        fs.writeFileSync(path.join(log_path, 'debug.log'), '', 'utf8');
+    }
+    var data = fs.readFileSync(path.join(log_path, 'debug.log'), 'utf8');
+    data += '\n\r' + new Date() + ' : ' + msg;
+    fs.writeFileSync(path.join(log_path, 'debug.log'), data, 'utf8');
+}
+
 function spawn(command, args, callback) {
     var error, spawnedProcess, stdout;
     stdout = '';
@@ -114,26 +125,6 @@ function unInstallRegistry(callback) {
     });
 }
 
-
-var deleteRecursiveSync = function(target) {
-    try{
-        var exists = fs.existsSync(target);
-        console.log(target);
-        console.log(exists);
-        if (exists) {
-            if(fs.lstatSync(target).isDirectory()) { // recurse
-                fs.readdirSync(target).forEach(function(file) {
-                    var curPath = path.join(target, file);
-                    deleteRecursiveSync(curPath);
-                });
-                fs.rmdirSync(target);
-            } else { // delete file
-                fs.unlinkSync(target);
-            }           
-        }
-    } catch(e) {}
-};
-
 function run(args, done) {
     const updateExe = path.resolve(path.dirname(process.execPath), "..", "Update.exe")
     // log("Spawning `%s` with args `%s`", updateExe, args)
@@ -217,55 +208,63 @@ for (var i = 0; i < argv.length; i++) {
 }
 
 var handleStartupEvent = function() {
-    if (process.platform !== 'win32') {
-        return false;
-    }
+    logger('start handleStartupEvent');
+    try{
+        if (process.platform !== 'win32') {
+            return false;
+        }
 
-    var squirrelCommand = process.argv[1];
-    if (!(squirrelCommand && squirrelCommand.length >= 1)) return false;
+        var squirrelCommand = process.argv[1];
+        logger('squirrelCommand : ' + squirrelCommand);
+        if (!(squirrelCommand && squirrelCommand.length >= 1)) return false;
 
-    var m = squirrelCommand[0].match(/--squirrel-([a-z]+)/);
-    if (!(m && m[1])) return false;
-    if (m[1] === 'firstrun') return false;
+        var m = squirrelCommand[0].match(/--squirrel-([a-z]+)/);
+        if (!(m && m[1])) return false;
+        if (m[1] === 'firstrun') return false;
 
-    var defaultLocations = 'Desktop,StartMenu';
-    const target = path.basename(process.execPath);
-    switch (squirrelCommand) {
-        case '--squirrel-install':
-        case '--squirrel-updated':
-            installRegistry(function () {
-                createShortcut(defaultLocations, function () {
-                    app.quit();
-                    process.exit(0);
+        var defaultLocations = 'Desktop,StartMenu';
+        switch (squirrelCommand) {
+            case '--squirrel-install':
+            case '--squirrel-updated':
+                installRegistry(function () {
+                    createShortcut(defaultLocations, function () {
+                        app.quit();
+                        process.exit(0);
+                    });
                 });
-            });
-            return true;
-            break;
-        case '--squirrel-uninstall':
-            unInstallRegistry(function () {
-                removeShortcut(defaultLocations, function () {
-                    app.quit();
-                    process.exit(0);
+                return true;
+                break;
+            case '--squirrel-uninstall':
+                unInstallRegistry(function () {
+                    removeShortcut(defaultLocations, function () {
+                        app.quit();
+                        process.exit(0);
+                    });
                 });
-            });
-            return true;
-            break;
-        case '--squirrel-obsolete':
-            app.quit();
-            process.exit(0);
-            return true;
+                return true;
+                break;
+            case '--squirrel-obsolete':
+                app.quit();
+                process.exit(0);
+                return true;
+        }
+    } catch(e) {
+        logger(e.stack);
+        app.quit();
+        process.exit(0);
     }
 };
 
 try{
     if (handleStartupEvent()) {
+        logger('handleStartupEvent = true');
         setTimeout(function () {
             app.quit();
             process.exit(0);
         }, 1000)
         return;
     } else {
-        console.log('bb');
+        logger('handleStartupEvent = false');
         var mainWindow = null;
         var isClose = true;
 
@@ -312,16 +311,7 @@ try{
         });
     }    
 } catch(e) {
-    var log_path = path.resolve(process.env.APPDATA, 'entry_log');
-
-    if(!fs.existsSync(log_path)) {
-        fs.mkdirSync(log_path);
-        fs.writeFileSync(path.join(log_path, 'debug.log'), '', 'utf8');
-    }
-    var data = fs.readFileSync(path.join(log_path, 'debug.log'), 'utf8');
-    data += '\n\r' + new Date() + ' : ' + e.stack;
-    fs.writeFileSync(path.join(log_path, 'debug.log'), data, 'utf8');
-
+    logger(e.stack);
     app.quit();
     process.exit(0);
 }

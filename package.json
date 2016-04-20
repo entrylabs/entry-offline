@@ -31,8 +31,7 @@
       "loadingGif": "build/install-spinner.gif",
       "title": "Entry",
       "icon": "./icon/app.ico",
-      "authors": "EntryLabs",
-      "noMsi": false
+      "authors": "EntryLabs"
     },
     "asar": false,
     "name": "Entry",
