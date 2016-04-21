@@ -54,7 +54,6 @@ angular.module('workspace').controller("WorkspaceController",
 
 				var beforeUnload = window.onbeforeunload;
 				window.onbeforeunload = function(e) {
-					console.log(Entry.plugin.beforeStatus);
 					if($scope.isNowSaving === true) {
 						alert('저장중에는 종료하실수 없습니다.');
 						e.preventDefault();
@@ -68,12 +67,12 @@ angular.module('workspace').controller("WorkspaceController",
 
 		        	if(canLoad) {
 		        		Entry.plugin.closeAboutPage();
-		        		Entry.plugin.closeHardwarePage();
+		        		Entry.plugin.closeHwGuidePage();
+		        		// Entry.plugin.closeHardwarePage();
 
 		        		storage.removeItem('tempProject');
 		        		beforeUnload();
 		        	} else {
-						console.log('I do not want to be closed');
 						e.preventDefault();
 						e.returnValue = false;
 		        	}
@@ -140,6 +139,11 @@ angular.module('workspace').controller("WorkspaceController",
 				    var fileInfo = path.parse(file.path);
 				    try {
 					    if(fileInfo.ext === '.ent') {
+					    	$scope.doPopupControl({
+				                'type':'spinner',
+				                'msg': Lang.Workspace.loading_msg
+				            });
+					    	
 					    	var filePath = file.path;
 			        		var pathArr = filePath.split('/');
 			        		pathArr.pop();
@@ -441,6 +445,7 @@ angular.module('workspace').controller("WorkspaceController",
         	}
 
         	if(!canLoad) {
+        		Entry.stateManager.addStamp();
         		storage.removeItem('tempProject');
         		Entry.plugin.beforeStatus = 'load';
         		dialog.showOpenDialog({
@@ -633,10 +638,10 @@ angular.module('workspace').controller("WorkspaceController",
         };
 
         $scope.changeVariableName = function () {
-        	console.log('changeVariableName');
+        	// console.log('changeVariableName');
         };
         $scope.deleteMessage = function () {
-        	console.log('deleteMessage');
+        	// console.log('deleteMessage');
         };
 
         $scope.showSpinner = function () {

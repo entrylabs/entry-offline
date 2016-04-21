@@ -7,10 +7,15 @@ var _real_path_with_protocol = '';
 
 if (process.platform != 'darwin') {
     isOsx = false;
-    // var _real_path = path.join(process.env.APPDATA, 'entryTemp');
 } else {
     isOsx = true;
-    // var _real_path = __dirname;
+}
+
+var _webContents = remote.getCurrentWebContents();
+var startFile = _webContents.startFile;
+
+if(startFile && path.isAbsolute(startFile)){
+    options.path = startFile || undefined;
 }
 
 var orgAlert = alert;
@@ -274,33 +279,34 @@ Entry.plugin = (function () {
     var hardwarePopup = null;
     that.openHardwarePage = function () {
         try{
-            if(hardwarePopup) {
-                return;
-            }
+            ipcRenderer.send('openHardware');
+            // if(hardwarePopup) {
+            //     return;
+            // }
 
-            var title = '';
+            // var title = '';
 
-            if(nowLocale === 'ko') {
-                title = '엔트리 하드웨어';
-            } else {
-                title = 'Entry HardWare'
-            }
-            hardwarePopup = new BrowserWindow({
-                width: 800, 
-                height: 650, 
-                title: title,
-                resizable: false
-            });
+            // if(nowLocale === 'ko') {
+            //     title = '엔트리 하드웨어';
+            // } else {
+            //     title = 'Entry HardWare'
+            // }
+            // hardwarePopup = new BrowserWindow({
+            //     width: 800, 
+            //     height: 650, 
+            //     title: title,
+            //     resizable: false
+            // });
 
-            hardwarePopup.loadURL('file:///' + path.join(__dirname, 'bower_components', 'entry-hw', 'app', 'index.html'));
-            hardwarePopup.on('closed', function() {
-                hardwarePopup = null;
-            });
+            // hardwarePopup.loadURL('file:///' + path.join(__dirname, 'bower_components', 'entry-hw', 'app', 'index.html'));
+            // hardwarePopup.on('closed', function() {
+            //     hardwarePopup = null;
+            // });
 
-            hardwarePopup.setMenu(null);
+            // hardwarePopup.setMenu(null);
 
-            // hardwarePopup.webContents.openDevTools();
-            hardwarePopup.show();
+            // // hardwarePopup.webContents.openDevTools();
+            // hardwarePopup.show();
         } catch(e) {}
     }
 
@@ -340,12 +346,36 @@ Entry.plugin = (function () {
         }
     }
 
+    var hwGuidePopup = null;
+    that.openHwGuidePopup = function () {
+        if(hwGuidePopup) {
+            return;
+        }
+        hwGuidePopup = new BrowserWindow({
+            width: 1200,
+            height: 800
+        });
+        hwGuidePopup.setMenu(null);
+        hwGuidePopup.loadURL('file:///' + path.resolve(__dirname, 'hardware', 'guide', 'hwguide.html'));
+        hwGuidePopup.on('closed', function(e) {
+            try{
+                hwGuidePopup = null;
+            } catch(e){}
+        });
+    }
+
+    that.closeHwGuidePage = function() {
+        if(hwGuidePopup) {
+            hwGuidePopup.close();
+            hwGuidePopup = null;
+        }
+    }
+
     that.isOsx = function () {
         return isOsx;
     }
 
     that.init = function (cb) {
-
         // NanumBarunGothic 폰트 로딩 시간까지 기다린다.
         var font = new FontFace("nanumBarunRegular", "url(./builds/ecf17559a7d726e924c87764d4e869d5.woff2)");
         font.load();
@@ -358,7 +388,7 @@ Entry.plugin = (function () {
                 var isTempRecovery = false;
 
                 if(localStorage.hasOwnProperty('tempProject')) {
-                    isTempRecovery = confirm('복구할래?');
+                    isTempRecovery = confirm('이전에 작성했던 프로젝트가 정상적으로 저장되지 않았습니다. 해당 프로젝트를 복구 하시겠습니까?');
                 }
 
                 if(!isTempRecovery) {

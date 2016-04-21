@@ -143,4 +143,9 @@ if (process.platform == 'darwin') {
 }
 
 var menu = Menu.buildFromTemplate(template);
-Menu.setApplicationMenu(menu);
+if(isOsx) {
+    Menu.setApplicationMenu(menu);
+} else {
+    BrowserWindow.fromWebContents(_webContents).setMenu(menu)
+}
+

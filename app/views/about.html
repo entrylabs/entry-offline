@@ -3,14 +3,6 @@
 <head>
 	<meta charset="utf-8">
 	<title>엔트리</title>
-	<link rel='stylesheet'  href='../css/about.css' />
-	<link rel='stylesheet'  href='../css/nanumbarungothic.css' />
-	<script type="text/javascript">
-		window.$ = window.jQuery = require('../bower_components/jquery/dist/jquery.min.js');
-		const pjson = require('../package.json');
-		const electron = require('electron');
-		const shell    = electron.shell;
-	</script>
 </head>
 <body>
 	<div class="container">
@@ -31,7 +23,12 @@
 			</div>
 		</div>
 	</div>
+	<link rel='stylesheet'  href='../css/about.css' />
 	<script>
+		window.$ = window.jQuery = require('../bower_components/jquery/dist/jquery.js');
+		const pjson = require('../package.json');
+		const electron = require('electron');
+		const shell    = electron.shell;
 		$(function () {
 			$('body').on('click', function () {
 				window.close();	

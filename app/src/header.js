@@ -9,8 +9,10 @@ angular.module('workspace').controller('HeaderController',
         var storage = (typeof window.localStorage === 'undefined') ? undefined : window.localStorage;
 
         $scope.init = function() {
-            
-
+                if(hwGuidePopup) {
+                    hwGuidePopup.close();
+                    hwGuidePopup = null;
+                }
         };
 
         $rootScope.$on('loadProject', function(event, data) {
@@ -48,14 +50,27 @@ angular.module('workspace').controller('HeaderController',
         $scope.blockHelperOn = function(){
             Entry.helper.blockHelperOn();
         };
-        
+
+        var hwGuidePopup = null;
         $scope.startHWGuide = function(url, title, options) {
-            gui.Window.open(url, {
-                toolbar: false,
-                position: 'center',
-                width: 1200,
-                height:800
-            });
+            Entry.plugin.openHwGuidePopup();
+            // try{
+            //     if(hwGuidePopup == null) {
+            //         hwGuidePopup = new BrowserWindow({
+            //             width: 1200,
+            //             height: 800
+            //         });
+            //         hwGuidePopup.setMenu(null);
+            //         hwGuidePopup.loadURL('file:///' + path.resolve(__dirname, 'hardware', 'guide', 'hwguide.html'));
+            //         hwGuidePopup.on('closed', function(e) {
+            //             try{
+            //                 hwGuidePopup = null;
+            //             } catch(e){}
+            //         });
+            //     }
+            // } catch(e) {
+
+            // }
         }
 
         $scope.showPopup = function (target) {
@@ -81,6 +96,7 @@ angular.module('workspace').controller('HeaderController',
             }
 
             if(!canLoad) {
+                Entry.stateManager.addStamp();
                 storage.removeItem('tempProject');
                 Entry.plugin.beforeStatus = 'new';
                 Entry.plugin.initProjectFolder(function () {

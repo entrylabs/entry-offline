@@ -13,6 +13,9 @@ const ChildProcess = require('child_process');
 var language;
 
 function logger(msg) {
+    if (process.platform !== 'win32') {
+        return false;
+    }
     var log_path = path.resolve(process.env.APPDATA, 'entry_log');
     if(!fs.existsSync(log_path)) {
         fs.mkdirSync(log_path);
@@ -201,6 +204,8 @@ for (var i = 0; i < argv.length; i++) {
         continue;
     } else if (argv[i][0] == '-') {
         continue;
+    } else if (argv[i] == 'app') {
+        continue;
     } else {
         option.file = argv[i];
         break;
@@ -216,14 +221,12 @@ var handleStartupEvent = function() {
 
         var squirrelCommand = process.argv[1];
         logger('squirrelCommand : ' + squirrelCommand);
-        if (!(squirrelCommand && squirrelCommand.length >= 1)) return false;
-
-        var m = squirrelCommand[0].match(/--squirrel-([a-z]+)/);
-        if (!(m && m[1])) return false;
-        if (m[1] === 'firstrun') return false;
-
+        if(squirrelCommand.indexOf('--squirrel') < 0) return false;
         var defaultLocations = 'Desktop,StartMenu';
         switch (squirrelCommand) {
+            case '--squirrel-firstrun':
+                return false;
+                break;
             case '--squirrel-install':
             case '--squirrel-updated':
                 installRegistry(function () {
@@ -255,63 +258,106 @@ var handleStartupEvent = function() {
     }
 };
 
-try{
-    if (handleStartupEvent()) {
-        logger('handleStartupEvent = true');
-        setTimeout(function () {
-            app.quit();
-            process.exit(0);
-        }, 1000)
-        return;
-    } else {
-        logger('handleStartupEvent = false');
-        var mainWindow = null;
-        var isClose = true;
 
-        app.on('window-all-closed', function() {
-            app.quit();
-            process.exit(0);
-        });
+var mainWindow = null;
+var hardwareWindow = null;
+var isClose = true;
 
-        app.once('ready', function() {
-            language = app.getLocale();
-            var title = packageJson.version;
-            
-            if(language === 'ko') {
-                title = '엔트리 v' + title;
-            } else {
-                title = 'Entry v' + title;
-            }
-
-            mainWindow = new BrowserWindow({
-                width: 1024, 
-                height: 700,
-                title: title
-            });
-
-            mainWindow.setMenu(null);
-            // mainWindow.loadUrl('custom:///index.html');
-            // console.log('file:///' + path.join(__dirname, 'entry_offline.html'))
-            mainWindow.loadURL('file:///' + path.join(__dirname, 'entry_offline.html'));
-            // mainWindow.loadURL('file:///entry_offline.html');
-
-            if(option.debug) {
-                mainWindow.webContents.openDevTools();
-            }
-            mainWindow.on('page-title-updated', function(e) {
-                e.preventDefault();
-            });
-            mainWindow.on('closed', function() {
-                mainWindow = null;
-            });
-        });
-
-        ipcMain.on('reload', function(event, arg) {
-            mainWindow.reload(true);
-        });
-    }    
-} catch(e) {
-    logger(e.stack);
+app.on('window-all-closed', function() {
     app.quit();
     process.exit(0);
-}
+});
+
+app.once('ready', function() {
+    language = app.getLocale();
+    var title = packageJson.version;
+    
+    if(language === 'ko') {
+        title = '엔트리 v' + title;
+    } else {
+        title = 'Entry v' + title;
+    }
+
+    mainWindow = new BrowserWindow({
+        width: 1024, 
+        height: 700,
+        title: title
+    });
+
+    mainWindow.setMenu(null);
+
+    mainWindow.loadURL('file:///' + path.join(__dirname, 'entry_offline.html'));
+
+    if(option.debug) {
+        mainWindow.webContents.openDevTools();
+    }
+
+    if(option.file) {
+        mainWindow.webContents.startFile = option.file;
+    }
+
+    mainWindow.webContents.hpopup = hardwareWindow;
+
+    mainWindow.on('page-title-updated', function(e) {
+        e.preventDefault();
+    });
+    mainWindow.on('close', function(e) {
+        mainWindow.webContents.send('main-close');
+    });
+    mainWindow.on('closed', function() {
+        mainWindow = null;
+    });
+});
+
+ipcMain.on('reload', function(event, arg) {
+    mainWindow.reload(true);
+});
+
+ipcMain.on('openHardware', function(event, arg) {
+    if(hardwareWindow == null) {
+        var title;
+        if(language === 'ko') {
+            title = '엔트리 하드웨어';
+        } else {
+            title = 'Entry HardWare'
+        }
+
+        hardwareWindow = new BrowserWindow({
+            width: 800, 
+            height: 650,
+            title: title,
+            resizable: false
+        });
+
+        hardwareWindow.setMenu(null);
+        hardwareWindow.setMenuBarVisibility(false);
+        hardwareWindow.loadURL('file:///' + path.join(__dirname, 'bower_components', 'entry-hw', 'app', 'index.html'));
+        hardwareWindow.on('closed', function() {
+            hardwareWindow = null;
+        });
+
+        
+
+        // hardwareWindow.webContents.openDevTools();
+        hardwareWindow.show();
+    }
+
+});
+
+// try{
+//     if (handleStartupEvent()) {
+//         logger('handleStartupEvent = true');
+//         app.quit();
+//         process.exit(0);
+//         // setTimeout(function () {
+//         // }, 1000)
+//         return;
+//     } else {
+//         logger('handleStartupEvent = false');
+       
+//     }    
+// } catch(e) {
+//     logger(e.stack);
+//     app.quit();
+//     process.exit(0);
+// }
