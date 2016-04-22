@@ -158,12 +158,12 @@ angular.module('common').controller('SoundController',
         console.log("upload file : " + uploadFile);
 
         if (!uploadFile) {
-            alert('파일은 필수입력 항목입니다.');
+            alert(Lang.Menus.file_required);
             return false;
         }
 
         if (uploadFile.length > 10) {
-            alert('한번에 10개까지 업로드가 가능합니다.');
+            alert(Lang.Menus.file_upload_max_count);
             return false;
         }
 
@@ -173,12 +173,12 @@ angular.module('common').controller('SoundController',
             //var isAudio = (/^audio\/mp3/).test(file.type);
             var isAudio = file.name.toLowerCase().indexOf('.mp3') + file.name.toLowerCase().indexOf('.wav');
             if (isAudio < 0) {
-                alert('MP3, WAV 파일만 등록이 가능합니다.');
+                alert(Lang.Workspace.check_audio_msg);
                 return false;
             }
 
             if (file.size > 1024*1024*10) {
-                alert('10MB 이하만 업로드가 가능합니다.');
+                alert(Lang.Menus.file_upload_max_size);
                 return false;
             }
             
@@ -200,75 +200,38 @@ angular.module('common').controller('SoundController',
     };
 
     $scope.uploadSoundFile = function(files) {
-
-//         $.ajax({
-//             url: '/api/sound/upload',
-//             data: formData,
-//             cache: false,
-//             contentType: false,
-//             processData: false,
-//             type: 'POST',
-//             success: function(data) {
-//                 $scope.$apply(function() {
-//                     $scope.isUploading = false;
-//                     data.forEach(function(item) {
-//                         var path = '/uploads/' + item.filename.substring(0,2)+'/'+
-//                             item.filename.substring(2,4)+'/'+item.filename+item.ext;
-//                         Entry.soundQueue.loadFile({
-//                             id: item._id,
-//                             src: path,
-//                             type: createjs.LoadQueue.SOUND
-//                         });
-// 
-//                         $scope.uploadSounds.push(item);
-// 
-//                         //if ($scope.loadings && $scope.loadings.length > 0)
-//                         //    $scope.loadings.splice(0,1);
-// 
-//                     });
-// 
-//                 });
-//             },
-//             error: function() {
-//                 $scope.apply(function() {
-//                     $scope.isUploading = false;
-//                     alert(Lang.Msgs.error_occured);
-//                 });
-//             }
-//         });
-
-            //Sound 파일을 로컬 디렉토리에 저장 
-            console.log('files number : ' + JSON.stringify(files));
-           
-            Entry.plugin.uploadTempSoundFile(files, function(soundList) {
-                
-                console.log("sound : " + JSON.stringify(soundList));
-                
-                //Sound 파일을 로컬 디렉토리에 저장 후 메타 정보 업데이트    
-                $scope.$apply(function() {
-                    soundList.forEach(function(item) {
-                        console.log("item check : " + JSON.stringify(item));
-                        // var path = '/temp/' + item.filename.substring(0,2)+'/'+
-                        //     item.filename.substring(2,4)+'/'+'sound'+'/'+item.filename+'.'+item.ext;
-                        
-                                                
-                        Entry.soundQueue.loadFile({
-                            id: item._id,
-                            src: item.path,
-                            type: createjs.LoadQueue.SOUND
-                        });
-        
-                        $scope.uploadSounds.push(item);
-        
-                        //if ($scope.loadings && $scope.loadings.length > 0)
-                        //    $scope.loadings.splice(0,1);
-        
+        //Sound 파일을 로컬 디렉토리에 저장 
+        console.log('files number : ' + JSON.stringify(files));
+       
+        Entry.plugin.uploadTempSoundFile(files, function(soundList) {
+            
+            console.log("sound : " + JSON.stringify(soundList));
+            
+            //Sound 파일을 로컬 디렉토리에 저장 후 메타 정보 업데이트    
+            $scope.$apply(function() {
+                soundList.forEach(function(item) {
+                    console.log("item check : " + JSON.stringify(item));
+                    // var path = '/temp/' + item.filename.substring(0,2)+'/'+
+                    //     item.filename.substring(2,4)+'/'+'sound'+'/'+item.filename+'.'+item.ext;
+                    
+                                            
+                    Entry.soundQueue.loadFile({
+                        id: item._id,
+                        src: item.path,
+                        type: createjs.LoadQueue.SOUND
                     });
-                    $scope.isUploading = false;
-        
+    
+                    $scope.uploadSounds.push(item);
+    
+                    //if ($scope.loadings && $scope.loadings.length > 0)
+                    //    $scope.loadings.splice(0,1);
+    
                 });
-               
-            }); 
+                $scope.isUploading = false;
+    
+            });
+           
+        }); 
     };
 
     /*

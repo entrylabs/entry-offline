@@ -15,4 +15,5 @@ const Menu     = remote.Menu;
 const BrowserWindow = remote.BrowserWindow;
 const mainWindow = remote.require('browser-window');
 const packageJson     = require('./package.json');
+const originalFs = require('original-fs');
 window.$ = window.jQuery = require('./bower_components/jquery/dist/jquery.min.js');

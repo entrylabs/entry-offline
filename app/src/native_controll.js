@@ -156,7 +156,7 @@ Entry.plugin = (function () {
             var soundPath = path.join(uploadDir, 'sound'); // for sound file
         }
 
-        var baseUrl = path.join(fileId.substr(0,2) + '/' + fileId.substr(2,2)); // uploads/xx/yy/[tmp/thumb/image]/[hashkey].png
+        var baseUrl = path.join(fileId.substr(0,2), fileId.substr(2,2)); // uploads/xx/yy/[tmp/thumb/image]/[hashkey].png
 
         return {
             uploadDir: uploadDir,
@@ -168,17 +168,17 @@ Entry.plugin = (function () {
 
     };
 
-    var deleteFolderRecursive = function(path) {
-        if( fs.existsSync(path) ) {
-            fs.readdirSync(path).forEach(function(file,index){
-                var curPath = path + "/" + file;
+    var deleteFolderRecursive = function(local_path) {
+        if( fs.existsSync(local_path) ) {
+            fs.readdirSync(local_path).forEach(function(file,index){
+                var curPath = path.resolve(local_path, file);
                 if(fs.lstatSync(curPath).isDirectory()) { // recurse
                     deleteFolderRecursive(curPath);
                 } else { // delete file
                     fs.unlinkSync(curPath);
                 }
             });
-            fs.rmdirSync(path);
+            fs.rmdirSync(local_path);
         }
     };
 
@@ -388,7 +388,7 @@ Entry.plugin = (function () {
                 var isTempRecovery = false;
 
                 if(localStorage.hasOwnProperty('tempProject')) {
-                    isTempRecovery = confirm('이전에 작성했던 프로젝트가 정상적으로 저장되지 않았습니다. 해당 프로젝트를 복구 하시겠습니까?');
+                    isTempRecovery = confirm(Lang.Workspace.restore_project_msg);
                 }
 
                 if(!isTempRecovery) {
@@ -439,16 +439,17 @@ Entry.plugin = (function () {
     that.saveProject = function(filePath, data, cb, enc) {
         var string_data = JSON.stringify(data);
         that.mkdir(_real_path + '/temp', function () {
-            fs.writeFile(_real_path + '/temp/project.json', string_data, enc || 'utf8', function (err) {
+            fs.writeFile(_real_path + '/temp/project.json', string_data, {encoding: (enc || 'utf8'), mode: '0666'}, function (err) {
                 if(err) {
                     throw err;
                 }
 
-                var fs_reader = fstream.Reader({ 'path': _real_path + '/temp/', 'type': 'Directory' });
+                var fs_reader = fstream.Reader({ 'path': path.resolve(_real_path, 'temp'), 'type': 'Directory' });
 
-                var fs_writer = fstream.Writer({ 'path': filePath, 'type': 'File' });
+                var fs_writer = fstream.Writer({ 'path': filePath, 'mode': '0666', 'type': 'File',  });
 
-                fs_writer.on('entry', function () {
+                fs_writer.on('entry', function (list) {
+                    list.props.mode = '0666';
                     // console.log('entry');
                 });
                 fs_writer.on('end', function () {
@@ -483,16 +484,16 @@ Entry.plugin = (function () {
         deleteFolderRecursive(_real_path + '/temp/');
 
         var fs_reader = fstream.Reader({ 'path': filePath, 'type': 'File' });
-        var fs_writer = fstream.Writer({ 'path': _real_path, 'type': 'Directory' });
+        var fs_writer = fstream.Writer({ 'path': _real_path, 'mode': '0666', 'type': 'Directory' });
 
-        fs_writer.on('entry', function (e) {
-            console.log('entry');
+        fs_writer.on('entry', function (list) {
+            list.props.mode = '0666';
         });
         fs_writer.on('error', function (e) {
             console.log('error');
         });
         fs_writer.on('end', function () {
-            fs.readFile(_real_path + '/temp/project.json', enc || 'utf8', function (err, data) {
+            fs.readFile(path.resolve(_real_path, 'temp', 'project.json'), enc || 'utf8', function (err, data) {
                 if(err) {
                     throw err;
                 }
@@ -520,7 +521,10 @@ Entry.plugin = (function () {
 
     // 파일 저장
     that.writeFile = function(filePath, data, cb, enc) {
-        fs.writeFile(filePath, data, enc || 'utf8', function (err) {
+        fs.writeFile(filePath, data, {
+            encoding: enc || 'utf8',
+            mode: '0666'
+        }, function (err) {
             if(err) {
                 throw err;
             }
@@ -571,9 +575,9 @@ Entry.plugin = (function () {
         var fileId = createFileId();
         var dest = getUploadPath(fileId);
         that.mkdir(dest.uploadDir + '/image', function () {
-            fs.writeFile(dest.imagePath + '.png', data.org, { encoding: 'base64' }, function (err) {
+            fs.writeFile(dest.imagePath + '.png', data.org, { encoding: 'base64', mode: '0666' }, function (err) {
                 that.mkdir(dest.uploadDir + '/thumb', function () {
-                    fs.writeFile(dest.thumbPath + '.png', data.thumb, { encoding: 'base64' }, function (err) {
+                    fs.writeFile(dest.thumbPath + '.png', data.thumb, { encoding: 'base64', mode: '0666' }, function (err) {
                         if(err) {
                             throw err;
                         }
@@ -627,18 +631,26 @@ Entry.plugin = (function () {
             var fileId = createFileId();
             var dest = getUploadPath(fileId);
             var url_split = url.split(path.sep);
-            var extension = '.' + url_split[url_split.length-1].split('.')[1];
+            var extension = '.png';// + url_split[url_split.length-1].split('.')[1];
             var file_name = url_split[url_split.length-1].split('.')[0];
             var imagePath = dest.imagePath + extension;
             var fs_reader = fs.createReadStream(url);
             var fs_writer = fs.createWriteStream(imagePath);
 
             that.mkdir(dest.uploadDir + '/image', function () {
-                fs.readFile(url, function (err, stream) {
-                    fs.writeFile(imagePath, stream, function (err) {
-                        if(err) {
-                            throw err;
-                        }
+                var orgImage = new Image();
+                orgImage.src = url;
+                orgImage.onload = function () {
+                    var orgCanvas = document.createElement('canvas');
+                    orgCanvas.width = orgImage.width;
+                    orgCanvas.height = orgImage.height;
+                    var orgData = that.getResizeImageFromBase64(orgImage, orgCanvas, 960);
+                    fs_writer.write(orgData, 'base64');
+                    fs_writer.end(function () {
+                        console.log('close');
+                        orgCanvas = null;
+                        orgImage = null;
+
                         var image = new Image();
                         image.src = imagePath;
                         image.onload = function () {
@@ -653,6 +665,8 @@ Entry.plugin = (function () {
                                 if(err) {
                                     throw err;
                                 }
+
+                                canvas = null;
 
                                 var dimensions = sizeOf(imagePath);
                                 var picture = {
@@ -673,7 +687,7 @@ Entry.plugin = (function () {
                             });
                         };
                     });
-                });
+                };
             });
 
         });
@@ -710,7 +724,7 @@ Entry.plugin = (function () {
                             throw err;
                         }
                         console.log("readFile!! sound ");
-                        fs.writeFile(soundPath, stream, 'utf8', function (err) {
+                        fs.writeFile(soundPath, stream, {encoding:'utf8', mode: '0666'}, function (err) {
                             if(err) {
                                 throw err;
                             }

@@ -55,7 +55,7 @@ angular.module('workspace').controller("WorkspaceController",
 				var beforeUnload = window.onbeforeunload;
 				window.onbeforeunload = function(e) {
 					if($scope.isNowSaving === true) {
-						alert('저장중에는 종료하실수 없습니다.');
+						alert(Lang.Workspace.quit_stop_msg);
 						e.preventDefault();
 						e.returnValue = false;
 						return;
@@ -143,7 +143,7 @@ angular.module('workspace').controller("WorkspaceController",
 				                'type':'spinner',
 				                'msg': Lang.Workspace.loading_msg
 				            });
-					    	
+
 					    	var filePath = file.path;
 			        		var pathArr = filePath.split('/');
 			        		pathArr.pop();
@@ -156,10 +156,10 @@ angular.module('workspace').controller("WorkspaceController",
 					            Entry.plugin.reloadApplication();
 			        		});
 					    } else {
-					    	alert('지원하지 않은 형식의 파일입니다.');
+					    	alert(Lang.Workspace.not_supported_file_msg);
 					    }
 				    } catch(e) {
-				    	alert('파일이 깨졌거나 잘못된 파일을 불러왔습니다.');
+				    	alert(Lang.Workspace.broken_file_msg);
 				    }
 				    return false;
 				});

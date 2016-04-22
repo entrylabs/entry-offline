@@ -7,8 +7,13 @@ common.filter('makeThumbnail', function() {
     return function(picture) {
         if (picture) {
             // return picture.filename.substring(0,2)+'/'+picture.filename.substring(2,4)+'/thumb/'+picture.filename+'.png';
-            var extension = picture.extension || '.png';
-            return ['uploads', picture.filename.substring(0,2), picture.filename.substring(2,4), 'thumb', picture.filename + extension].join('/');
+            // 
+            if(picture.fileurl) {
+                return encodeURI(decodeURI(picture.fileurl).replace(path.join(path.sep, 'image', path.sep), path.join(path.sep, 'thumb', path.sep)));
+            } else {
+                var extension = picture.extension || '.png';
+                return ['uploads', picture.filename.substring(0,2), picture.filename.substring(2,4), 'thumb', picture.filename + extension].join('/');                
+            }
         }
         else
             return './images/text_icon.png';
