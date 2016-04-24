@@ -5,7 +5,8 @@
     "pack": "build",
     "dist": "build",
     "dist:win": "build --arch ia32",
-    "dist:osx": "build"
+    "dist:osx": "build",
+    "start": "set NODE_ENV=development&&electron -d app"
   },
   "build": {
     "osx": {

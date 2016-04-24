@@ -33,7 +33,12 @@ angular.module('common').controller('SoundController',
     } 
         
     $scope.init = function() {
-        var soundMapFile = path.resolve('app', 'resource_map', 'sounds.json'); 
+        var appPath = 'app';
+        if(NODE_ENV === 'production') {
+            appPath = 'resources' + path.sep + 'app';
+        }
+
+        var soundMapFile = path.resolve(appPath, 'resource_map', 'sounds.json'); 
         
         readSoundMeta(soundMapFile);
         

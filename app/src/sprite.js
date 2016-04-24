@@ -32,6 +32,8 @@ angular.module('common').controller('SpriteController',
     $scope.menu = "";
 
     $scope.searchWord = '';
+    $scope.language = localStorage.getItem('lang') || 'ko';
+
 
     $scope.colours = Entry.getColourCodes();
     $scope.currentIndex = 0;
@@ -154,7 +156,12 @@ angular.module('common').controller('SpriteController',
         if($scope.language === 'ko') {
             filtered_data = $scope.orgSpriteData.filter(function (item) {
                 return Object.keys(keyword).every(function (key) {
-                    return item[key].indexOf(keyword[key]) >= 0;
+                    try{
+                        return item[key].indexOf(keyword[key]) >= 0;
+                        
+                    } catch(e) {
+                        return false;
+                    }
                 });
             });
         } else {
