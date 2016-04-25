@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>엔트리 하드웨어 가이드</title>
+
+	
+	<style type="text/css">
+		.centered {
+			position: relative;
+			display: inline-block;
+
+			width: 100%;
+			height: 100%;
+			padding: 1em;
+			color: white;
+		}
+	</style>
+
+	<style type="text/css">
+		.centered_50 {
+			position: relative;
+			display: inline-block;
+
+			width: 50%;
+			height: 50%;
+			padding: 1em;
+			color: white;
+		}
+	</style>
+
+	<style type="text/css">
+		.centered_30 {
+			position: relative;
+			display: inline-block;
+
+			width: 30%;
+			height: 30%;
+			padding: 1em;
+			color: white;
+		}
+	</style>
+
+</head>
+
+<body id="page-top" class="index">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <div><span class="icon-bar"></span>
+                    <a class="navbar-brand">엔트리 하드웨어 연동 가이드</a>
+                </div>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="hidden">
+                        <a href="#page-top"></a>
+                    </li>
+                    <li class="page-scroll">
+                        <a href="#page-top">소개</a>
+                    </li>
+                    <li class="page-scroll">
+                        <a href="#hwguide">매뉴얼</a>
+                    </li>
+                    <li class="page-scroll">
+                        <a href="#info">관련정보</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <img class="img-responsive" src="./hwguide/img/main_manual.png" alt="enrty_mascot">
+                    <div class="intro-text">
+                        <hr class="star-light">
+                        <h3>엔트리와 센서보드를 이용하여 <br/>소프트웨어와 하드웨어가 연결되어 동작되는 프로그램을 만들수 있습니다</h3>
+						
+                        <h5 style="color:red">주의사항 : 엔트리 하드웨어 연동은 MS Windows 7 이상, 크롬 브라우저에서만 지원합니다</h5>
+                        <h5 style="color:red">(MAC OS에서는 지원하지 않습니다)</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hwguide Grid Section -->
+    <section id="hwguide">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2>설치 매뉴얼</h2>
+                    <hr class="star-primary">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 hwguide-item" align="center">
+                    <a href="#newModal" class="hwguide-link" data-toggle="modal">
+                        <div class="caption">
+                            <div class="caption-content">
+                                <i class="fa fa-search-plus fa-3x"></i>
+                            </div>
+                        </div>
+                        <img src="./hwguide/img/first.png" class="img-responsive" alt="">
+			             <br/>
+			             <span><h4 style="color:#2c3e50">처음 연결하는 경우<br/> (드라이버와 펌웨어를 설치한적 없는 경우)</h4></span>
+                    </a>
+                </div>
+                <div class="col-sm-6 hwguide-item" align="center">
+                    <a href="#alreadyModal" class="hwguide-link" data-toggle="modal">
+                        <div class="caption">
+                            <div class="caption-content">
+                                <i class="fa fa-search-plus fa-3x"></i>
+                            </div>
+                        </div>
+                        <img src="./hwguide/img/already.png" class="img-responsive" alt=""><br/>
+		              	<span><h4 style="color:#2c3e50">기존에 연결한 적이 있는 경우<br/>(드라이버와 펌웨어를 설치한적이 있는 경우)</h4></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="info" class="text-center">
+        <div class="footer-above">
+            <div class="container">
+                <div class="row">
+                    <div class="footer-col col-md-4">
+                        <h3 style="color:white">회사주소</h3>
+                        <h5 style="color:white">서울특별시 강남구 강남대로 382 메리츠타워 7층 <br/> 엔트리 교육연구소</h5>
+                    </div>
+                    <div class="footer-col col-md-4">
+                        <h3 style="color:white">온라인 사이트 주소</h3>
+			            <p style="color:white">http://play-entry.org</p>
+                    </div>
+                    <div class="footer-col col-md-4">
+                        <h3 style="color:white">엔트리 소개</h3>
+                        <h5 style="color:white">엔트리는 누구나 쉽고 편리하게 SW 원리를 배우고 학습할 수 있는 교육용 서비스 플랫폼입니다. </h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-below">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        Copyright 2014 Entrylabs Inc. All Rights Reserved
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top Button (Only visible on small and extra-small screen sizes) -->
+    <div class="scroll-top page-scroll visible-xs visible-sm">
+        <a class="btn btn-primary" href="#page-top">
+            <i class="fa fa-chevron-up"></i>
+        </a>
+    </div>
+
+    <!-- Hwguide Modals -->
+    <div class="hwguide-modal modal fade" id="newModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-content">
+            <div class="close-modal" data-dismiss="modal">
+                <div class="lr">
+                    <div class="rl">
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2">
+                        <div class="modal-body">
+                            <h2>처음 연결하는 경우</h2>
+                            <hr class="star-primary">
+				<div>	
+					<h5>
+					<주의사항><br/>
+					 - MAC OS를 지원하지 않습니다.<br/>
+				         - 윈도우 7이상을 권장합니다. <br/>
+					 - 크롬 브라우저에서만 사용 가능합니다.<br/> 
+					</h5>
+				</div>
+		            <div>		
+                            	<p>1)엔트리를 시작합니다.</p>
+		  	    </div>		
+		            <div>		
+                            	<p>2)[블록]탭에서 [하드웨어]를 선택한후 [하드웨어 플러그인 받기] 버튼을 누른후 entry_plugin_hw.zip 파일을 저장하고 압축을 풉니다.</p>
+				<img class="centered" src="./hwguide/img/step_image/step2.png"></img>
+		  	    </div>		
+		            <div>		
+                            	<p>3)entry_plugin_hw 디렉토리에서 Entry 파일을 실행합니다.</p>
+				<img class="centered_30" src="./hwguide/img/step_image/step3.png"></img>
+		  	    </div>		
+		            <div>		
+                            	<p>4)연결하고자 하는 하드웨어를 클릭합니다.</p>
+                            	<h5>(본 매뉴얼에서는 엔트리 센서보드를 기준으로 설명합니다.)</h5>
+				<img class="centered" src="./hwguide/img/step_image/step4.png"></img>
+		  	    </div>		
+		            <div>		
+                            	<p>5)아두이노 기반의 하드웨어(아두이노, 엔트리 센서보드)는 드라이버와 펌웨어를, 나머지 하드웨어는 드라이버를 설치해야 합니다. 드라이버 설치 버튼을 클릭하면 엔트리 센서보드의 드라이버가 설치됩니다.</p>
+				<h5> 주의사항) 이미 드라이버를 설치한 적이 있는 컴퓨터에서는 이 과정을 생략합니다.</h5>
+				<img class="centered" src="./hwguide/img/step_image/step5.png"></img>
+				
+		  	    </div>		
+		            <div>		
+                            	<p>6)인스톨 버튼을 누른후 Driver Install Succes 메시지가 뜰때까지 기다립니다.</p>
+				<img class="centered_50" src="./hwguide/img/step_image/step6.png"></img>
+		  	    </div>		
+		            <div>		
+                            	<p>7)엔트리센서보드를 컴퓨터의 USB포트에 연결한 후 펌웨어 설치 버튼을 클릭하여 펌웨어를 설치합니다.</p>
+				<img class="centered" src="./hwguide/img/step_image/step7.png"></img>
+		  	    </div>		
+		            <div>		
+                            	<p>8)엔트리 플러그인 연동 화면에서 [하드웨어>>연결중]에서 [하드웨어>>연결 성공]으로 바뀌면 엔트리보드(하드웨어)가 성공적으로 연결된 것입니다.</p>
+				<img class="centered" src="./hwguide/img/step_image/step8.png"></img>
+		  	    </div>		
+		            <div>		
+                            	<p>9)엔트리에서 [블록>>하드웨어>>하드웨어에 연결하기]버튼을 클릭합니다.</p>
+				<img class="centered" src="./hwguide/img/step_image/step9.png"></img>
+		  	    </div>		
+		            <div>		
+                            	<p>10)엔트리에서 엔트리보드(하드웨어)를 제어할 수 있는 블록들을 확인할 수 있습니다.</p>
+				<img class="centered" src="./hwguide/img/step_image/step10.png"></img>
+		  	    </div>		
+                            <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i>닫 기</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="hwguide-modal modal fade" id="alreadyModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-content">
+            <div class="close-modal" data-dismiss="modal">
+                <div class="lr">
+                    <div class="rl">
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2">
+                        <div class="modal-body">
+                            <h2>기존에 연결한 적이 있는 경우</h2>
+                            <hr class="star-primary">
+			    <div>	
+				<h5>
+				    <주의사항><br/>
+				     - MAC OS를 지원하지 않습니다.<br/>
+			       	     - 윈도우 7이상을 권장합니다.<br/>
+				     - 크롬 브라우저에서만 사용 가능합니다.<br/> 
+				</h5>
+		            </div>
+		            <div>		
+                            	<p>1)entry_plugin_hw 디렉토리에서 Entry 파일을 실행합니다.</p>
+				<img class="centered_30" src="./hwguide/img/step_image/step3.png"></img>
+		  	    </div>		
+		            <div>		
+                            	<p>2)연결하고자 하는 하드웨어를 클릭합니다.</p>
+                            	<h5>(본 메뉴얼에서는 엔트리 센서보드를 기준으로 설명합니다.)</h5>
+				<img class="centered" src="./hwguide/img/step_image/step4.png"></img>
+		  	    </div>		
+		            <div>		
+		            <div>		
+                            	<p>3)엔트리 플러그인 연동 화면에서 [하드웨어>>연결중]에서 [하드웨어>>연결 성공]으로 바뀌면 엔트리보드(하드웨어)가 성공적으로 연결된 것입니다.</p>
+				<img class="centered" src="./hwguide/img/step_image/step8.png"></img>
+		  	    </div>		
+		            <div>		
+                            	<p>4)엔트리에서 [블록>>하드웨어>>하드웨어에 연결하기]버튼을 클릭합니다.</p>
+				<img class="centered" src="./hwguide/img/step_image/step9.png"></img>
+		  	    </div>		
+		            <div>		
+                            	<p>5)엔트리에서 엔트리보드(하드웨어)를 제어할 수 있는 블록들을 확인할 수 있습니다.</p>
+				<img class="centered" src="./hwguide/img/step_image/step10.png"></img>
+		  	    </div>		
+
+                            <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i>닫 기</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap Core CSS - Uses Bootswatch Flatly Theme: http://bootswatch.com/flatly/ -->
+    <link href="./hwguide/css/bootstrap.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="./hwguide/css/hwguide.css" rel="stylesheet">
+    <!--
+    Custom Fonts-->
+    <link href="./hwguide/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"> 
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- jQuery -->
+    <script src="./hwguide/js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="./hwguide/js/bootstrap.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="./hwguide/js/jquery.easing-1.3.min.js"></script>
+    <script src="./hwguide/js/classie.js"></script>
+    <script src="./hwguide/js/cbpAnimatedHeader.js"></script>
+
+    <!-- Contact Form JavaScript -->
+    <script src="./hwguide/js/jqBootstrapValidation.js"></script>
+    <script src="./hwguide/js/contact_me.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="./hwguide/js/freelancer.js"></script>
+
+
+</body>
+</html>

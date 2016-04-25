@@ -1,0 +1,7 @@
+node_modules/
+cache/
+app/temp/
+dist/
+*.rej
+temp/
+app/bower_components/

@@ -1,0 +1,51 @@
+{
+  "private": true,
+  "scripts": {
+    "clean": "rimraf dist",
+    "pack": "build",
+    "dist": "build",
+    "dist:win": "build --arch ia32",
+    "dist:osx": "build",
+    "start": "set NODE_ENV=development&&electron -d app"
+  },
+  "build": {
+    "osx": {
+      "icon": "build/icon.icns",
+      "icon-size": 80,
+      "background": "build/background.png",
+      "contents": [
+        {
+          "x": 240,
+          "y": 380,
+          "type": "link",
+          "path": "/Applications"
+        },
+        {
+          "x": 240,
+          "y": 120,
+          "type": "file",
+          "path": "Entry.app"
+        }
+      ]
+    },
+    "win": {
+      "loadingGif": "build/install-spinner.gif",
+      "title": "Entry",
+      "icon": "./icon/app.ico",
+      "authors": "EntryLabs"
+    },
+    "asar": false,
+    "name": "Entry",
+    "app-bundle-id": "entry-offline",
+    "app-category-type": "org.play-entry.entry-offline",
+    "iconUrl": "https://raw.githubusercontent.com/entrylabs/entry-hw/feature/electron/build/icon.ico",
+    "icon": "app/icon/app"
+  },
+  "devDependencies": {
+    "electron-builder": "3.6.0",
+    "electron-prebuilt": "0.36.10",
+    "electron-rebuild": "^1.1.3",
+    "rimraf": "^2.5.2"
+  },
+  "dependencies": {}
+}
