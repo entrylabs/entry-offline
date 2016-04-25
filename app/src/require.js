@@ -16,5 +16,4 @@ const BrowserWindow = remote.BrowserWindow;
 const mainWindow = remote.require('browser-window');
 const packageJson     = require('./package.json');
 const originalFs = require('original-fs');
-var NODE_ENV = process.env.NODE_ENV || 'production';
 window.$ = window.jQuery = require('./bower_components/jquery/dist/jquery.min.js');
