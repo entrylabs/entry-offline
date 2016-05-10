@@ -11,6 +11,10 @@
 ; MUI Settings / Icons
 !define MUI_ICON "icon.ico"
 !define MUI_UNICON "icon.ico"
+!define PRODUCT_NAME "Entry"
+!define PRODUCT_VERSION "1.2.0"
+!define PRODUCT_PUBLISHER "EntryLabs"
+!define PRODUCT_WEB_SITE "http://www.play-entry.org/"
  
 ; MUI Settings / Header
 ;!define MUI_HEADERIMAGE
@@ -28,14 +32,14 @@
 Name "엔트리"
 
 ; The file to write
-OutFile "Entry_1.2.0_Setup.exe"
+OutFile "${PRODUCT_NAME}_${PRODUCT_VERSEION}_Setup.exe"
 
 ; The default installation directory
-InstallDir "C:\Entry"
+InstallDir "C:\${PRODUCT_NAME}"
 
 ; Registry key to check for directory (so if you install again, it will 
 ; overwrite the old one automatically)
-InstallDirRegKey HKLM "Software\Entry" "Install_Dir"
+InstallDirRegKey HKLM "Software\${PRODUCT_NAME}" "Install_Dir"
 
 ; Request application privileges for Windows Vista
 RequestExecutionLevel admin
@@ -97,23 +101,25 @@ Section $(TEXT_ENTRY_TITLE) SectionEntry
   File "..\*.*"
   File "icon.ico"
   
-  WriteRegStr HKCR ".ent" "" "Entry"
+  WriteRegStr HKCR ".ent" "" "${PRODUCT_NAME}"
   WriteRegStr HKCR ".ent" "Content Type" "application/x-entryapp"
-  WriteRegStr HKCR "Entry\DefaultIcon" "" "$INSTDIR\icon.ico"
-  WriteRegStr HKCR "Entry\Shell\Open" "" "&Open"
-  WriteRegStr HKCR "Entry\Shell\Open\Command" "" '"$INSTDIR\Entry.exe" "%1"'
+  WriteRegStr HKCR "${PRODUCT_NAME}\DefaultIcon" "" "$INSTDIR\icon.ico"
+  WriteRegStr HKCR "${PRODUCT_NAME}\Shell\Open" "" "&Open"
+  WriteRegStr HKCR "${PRODUCT_NAME}\Shell\Open\Command" "" '"$INSTDIR\${PRODUCT_NAME}.exe" "%1"'
   WriteRegStr HKCR "MIME\DataBase\Content Type\application/x-entryapp" "Extestion" ".ent"
   
   ; Write the installation path into the registry
-  WriteRegStr HKLM "SOFTWARE\Entry" "Install_Dir" "$INSTDIR"
+  WriteRegStr HKLM "SOFTWARE\${PRODUCT_NAME}" "Install_Dir" "$INSTDIR"
   
   ; Write the uninstall keys for Windows
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Entry" "DisplayName" "엔트리"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Entry_HW" "DisplayVersion" "1.2.0"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Entry" "UninstallString" '"$INSTDIR\엔트리 제거.exe"'
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Entry" "DisplayIcon" '"$INSTDIR\icon.ico"'
-  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Entry" "NoModify" 1
-  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Entry" "NoRepair" 1
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" "DisplayName" "엔트리"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" "DisplayVersion" "1.2.0"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" "Publisher" "${PRODUCT_NAME}Labs"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" "URLInfoAbout" "http://www.play-entry.org"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" "UninstallString" '"$INSTDIR\엔트리 제거.exe"'
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" "DisplayIcon" '"$INSTDIR\icon.ico"'
+  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" "NoModify" 1
+  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" "NoRepair" 1
   WriteUninstaller "엔트리 제거.exe"
   
 SectionEnd
@@ -121,9 +127,9 @@ SectionEnd
 ; Optional section (can be disabled by the user)
 Section $(TEXT_START_MENU_TITLE) SectionStartMenu
 
-  CreateDirectory "$SMPROGRAMS\EntryLabs\Entry"
-  CreateShortCut "$SMPROGRAMS\EntryLabs\Entry\엔트리 제거.lnk" "$INSTDIR\엔트리 제거.exe" "" "$INSTDIR\엔트리 제거.exe" 0
-  CreateShortCut "$SMPROGRAMS\EntryLabs\Entry\엔트리.lnk" "$INSTDIR\Entry.exe" "" "$INSTDIR\icon.ico" 0
+  CreateDirectory "$SMPROGRAMS\EntryLabs\${PRODUCT_NAME}"
+  CreateShortCut "$SMPROGRAMS\EntryLabs\${PRODUCT_NAME}\엔트리 제거.lnk" "$INSTDIR\엔트리 제거.exe" "" "$INSTDIR\엔트리 제거.exe" 0
+  CreateShortCut "$SMPROGRAMS\EntryLabs\${PRODUCT_NAME}\엔트리.lnk" "$INSTDIR\${PRODUCT_NAME}.exe" "" "$INSTDIR\icon.ico" 0
   
 SectionEnd
 
@@ -132,7 +138,7 @@ SectionEnd
 ; Optional section (can be disabled by the user)
 Section $(TEXT_DESKTOP_TITLE) SectionDesktop
 
-  CreateShortCut "$DESKTOP\엔트리.lnk" "$INSTDIR\Entry.exe" "" "$INSTDIR\icon.ico" 0
+  CreateShortCut "$DESKTOP\엔트리.lnk" "$INSTDIR\${PRODUCT_NAME}.exe" "" "$INSTDIR\icon.ico" 0
   
 SectionEnd
 
@@ -149,22 +155,22 @@ SectionEnd
 Section "Uninstall"
   
   ; Remove registry keys
-  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Entry"
-  DeleteRegKey HKLM "SOFTWARE\Entry"
+  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
+  DeleteRegKey HKLM "SOFTWARE\${PRODUCT_NAME}"
   DeleteRegKey HKCR ".ent"
-  DeleteRegKey HKCR "Entry"
+  DeleteRegKey HKCR "${PRODUCT_NAME}"
   DeleteRegKey HKCR "MIME\DataBase\Content Type\application/x-entryapp"
 
   ; Remove files and uninstaller
   Delete $INSTDIR\*
 
   ; Remove shortcuts, if any
-  Delete "$SMPROGRAMS\EntryLabs\Entry\*.*"
+  Delete "$SMPROGRAMS\EntryLabs\${PRODUCT_NAME}\*.*"
   
   Delete "$DESKTOP\엔트리.lnk"
 
   ; Remove directories used
-  RMDir "$SMPROGRAMS\EntryLabs\Entry"
+  RMDir "$SMPROGRAMS\EntryLabs\${PRODUCT_NAME}"
   RMDir /r "$INSTDIR"
 
 SectionEnd
@@ -172,7 +178,7 @@ SectionEnd
 Function .onInit
  
   ReadRegStr $R0 HKLM \
-  "Software\Microsoft\Windows\CurrentVersion\Uninstall\Entry" \
+  "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
   "UninstallString"
   StrCmp $R0 "" done
  

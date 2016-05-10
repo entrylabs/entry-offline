@@ -457,18 +457,26 @@ angular.module('workspace').controller("WorkspaceController",
         		}, function (paths) {
 		        	if(Array.isArray(paths)) {
 		        		var filePath = paths[0];
-		        		var pathArr = filePath.split('/');
-		        		pathArr.pop();
-		        		storage.setItem('defaultPath', pathArr.join('/'));
+		        		var pathInfo = path.parse(filePath);
 
-		        		Entry.plugin.loadProject(filePath, function (data) {
-		        			var jsonObj = JSON.parse(data);
-		        			jsonObj.path = filePath;
-    			            storage.setItem('nativeLoadProject', JSON.stringify(jsonObj));
-				            Entry.plugin.reloadApplication();
-		        		});
+		        		if(pathInfo.ext === '.ent') {
+			        		var pathArr = filePath.split('/');
+			        		pathArr.pop();
+			        		storage.setItem('defaultPath', pathArr.join('/'));
+
+			        		Entry.plugin.loadProject(filePath, function (data) {
+			        			var jsonObj = JSON.parse(data);
+			        			jsonObj.path = filePath;
+	    			            storage.setItem('nativeLoadProject', JSON.stringify(jsonObj));
+					            Entry.plugin.reloadApplication();
+			        		});
+		        		} else {
+		        			alert(Lang.Workspace.check_entry_file_msg);
+		        			$scope.doPopupControl({
+				                'type':'hide'
+				            });
+		        		}
 		        	} else {
-			        	// $scope.hideSpinner();
 			        	$scope.doPopupControl({
 			                'type':'hide'
 			            });
