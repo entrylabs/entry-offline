@@ -53,7 +53,28 @@ angular.module('workspace').controller('HeaderController',
 
         var hwGuidePopup = null;
         $scope.startHWGuide = function(url, title, options) {
-            Entry.plugin.openHwGuidePopup();
+            // Entry.plugin.openHwGuidePopup();
+            dialog.showSaveDialog({
+                defaultPath: '엔트리-하드웨어 연결 메뉴얼.hwp',
+                filters: [
+                    { name: '*.hwp', extensions: ['hwp'] }
+                ]
+            }, function (filePath) {    
+                if(filePath) {
+                    var fs = require("fs");
+                    fs.readFile(path.resolve(__dirname, 'hardware', 'guide', '엔트리-하드웨어 연결 메뉴얼.hwp'), function (err, stream) {
+                        fs.writeFile(filePath, stream, 'utf8', function (err) {
+                            if (err)
+                                alert("Unable to save file");
+                            else
+                                console.log("File Saved");
+
+                            $("#saveArduinoCode").val('');
+                        });
+                    });
+                } else {
+                }
+            });
             // try{
             //     if(hwGuidePopup == null) {
             //         hwGuidePopup = new BrowserWindow({

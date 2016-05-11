@@ -5,6 +5,7 @@
 }
 
 body {
+    overflow: hidden;
 	font-family: 'Nanum Gothic';
 }
 
