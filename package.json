@@ -42,6 +42,7 @@
     "icon": "app/icon/app"
   },
   "devDependencies": {
+    "appdmg-tf": "^0.3.11",
     "electron-builder": "3.18.0",
     "electron-prebuilt": "0.36.10",
     "electron-rebuild": "^1.1.3",
