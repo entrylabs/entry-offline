@@ -9,6 +9,14 @@ angular.module('workspace').controller("WorkspaceController",
         var storage = (typeof window.localStorage === 'undefined') ? undefined : window.localStorage;
 
 		$scope.initWorkspace = function () {
+
+			var playFunc = createjs.Sound.play;
+			createjs.Sound.play = function (a, b) {
+				if (b) b.pan = 0.01;
+				else b = {pan: 0.01};
+				return playFunc(a, b);
+			};
+
             if(!$scope.popupHelper) {
                 $scope.popupHelper = new Entry.popupHelper(true);
             }
@@ -68,7 +76,6 @@ angular.module('workspace').controller("WorkspaceController",
 		        	if(canLoad) {
 		        		Entry.plugin.closeAboutPage();
 		        		Entry.plugin.closeHwGuidePage();
-		        		// Entry.plugin.closeHardwarePage();
 
 		        		storage.removeItem('tempProject');
 		        		beforeUnload();
@@ -152,6 +159,24 @@ angular.module('workspace').controller("WorkspaceController",
 			        		Entry.plugin.loadProject(filePath, function (data) {
 			        			var jsonObj = JSON.parse(data);
 			        			jsonObj.path = filePath;
+			        			
+								jsonObj.objects.forEach(function (object) {
+									var sprite = object.sprite;
+									sprite.pictures.forEach(function (picture) {
+										picture.fileurl.replace(/\\/gi, path.sep);
+										if(picture.fileurl && picture.fileurl.indexOf('bower_components') === -1) {
+											picture.fileurl = path.join('.', picture.fileurl.substr(picture.fileurl.lastIndexOf('temp')))
+										}
+
+									});
+									sprite.sounds.forEach(function (sound) {
+										sound.fileurl.replace(/\\/gi, path.sep);
+										if(sound.fileurl && sound.fileurl.indexOf('bower_components') === -1) {
+											sound.fileurl = path.join('.', sound.fileurl.substr(sound.fileurl.lastIndexOf('temp')))
+										}
+									});
+								});
+
 	    			            storage.setItem('nativeLoadProject', JSON.stringify(jsonObj));
 					            Entry.plugin.reloadApplication();
 			        		});
@@ -344,6 +369,7 @@ angular.module('workspace').controller("WorkspaceController",
 
 	        		try{
 		        		myProject.saveProject(filePath, function (project_name) {
+		        			Entry.stateManager.addStamp();
 			            	myProject.isSaved = true;
 			            	myProject.isSavedPath = filePath;
 			            	Entry.toast.success(Lang.Workspace.saved, project_name + ' ' + Lang.Workspace.saved_msg);
@@ -389,6 +415,7 @@ angular.module('workspace').controller("WorkspaceController",
             });
 			if(myProject.isSaved) {
 				$scope.project.saveProject(myProject.isSavedPath, function () {
+					Entry.stateManager.addStamp();
 	            	Entry.toast.success(Lang.Workspace.saved, myProject.name + ' ' + Lang.Workspace.saved_msg);
 	            	// $scope.hideSpinner();
 	            	$scope.doPopupControl({
@@ -397,6 +424,7 @@ angular.module('workspace').controller("WorkspaceController",
 	            	$scope.isNowSaving = false;
 	            });
 			} else {
+				Entry.stateManager.cancelLastCommand();
 				saveAsProject(Lang.Workspace.file_save);
 			}
         };
@@ -410,7 +438,6 @@ angular.module('workspace').controller("WorkspaceController",
                 'msg': Lang.Workspace.saving_msg
             });
 			var default_path = storage.getItem('defaultPath') || '';
-			Entry.stateManager.addStamp();
 			saveAsProject(Lang.Workspace.file_save);
         };
 
@@ -467,6 +494,24 @@ angular.module('workspace').controller("WorkspaceController",
 			        		Entry.plugin.loadProject(filePath, function (data) {
 			        			var jsonObj = JSON.parse(data);
 			        			jsonObj.path = filePath;
+
+								jsonObj.objects.forEach(function (object) {
+									var sprite = object.sprite;
+									sprite.pictures.forEach(function (picture) {
+										picture.fileurl.replace(/\\/gi, path.sep);
+										if(picture.fileurl && picture.fileurl.indexOf('bower_components') === -1) {
+											picture.fileurl = path.join('.', picture.fileurl.substr(picture.fileurl.lastIndexOf('temp')))
+										}
+
+									});
+									sprite.sounds.forEach(function (sound) {
+										sound.fileurl.replace(/\\/gi, path.sep);
+										if(sound.fileurl && sound.fileurl.indexOf('bower_components') === -1) {
+											sound.fileurl = path.join('.', sound.fileurl.substr(sound.fileurl.lastIndexOf('temp')))
+										}
+									});
+								});
+
 	    			            storage.setItem('nativeLoadProject', JSON.stringify(jsonObj));
 					            Entry.plugin.reloadApplication();
 			        		});
@@ -482,6 +527,10 @@ angular.module('workspace').controller("WorkspaceController",
 			            });
 		        	}
         		});
+        	} else {
+        		$scope.doPopupControl({
+	                'type':'hide'
+	            });
         	}
         };
 
