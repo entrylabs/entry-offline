@@ -17,3 +17,4 @@ const mainWindow = remote.require('browser-window');
 const packageJson     = require('./package.json');
 const originalFs = require('original-fs');
 window.$ = window.jQuery = require('./bower_components/jquery/dist/jquery.min.js');
+const blockConverter = require('./src/block_converter.js');

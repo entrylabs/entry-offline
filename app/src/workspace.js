@@ -78,7 +78,7 @@ angular.module('workspace').controller("WorkspaceController",
 		        	}
 				};
 
-				Entry.playground.setBlockMenu();
+				// Entry.playground.setBlockMenu();
 				//아두이노 사용 (웹소켓이용)
 				Entry.enableArduino();
 
@@ -152,8 +152,17 @@ angular.module('workspace').controller("WorkspaceController",
 			        		Entry.plugin.loadProject(filePath, function (data) {
 			        			var jsonObj = JSON.parse(data);
 			        			jsonObj.path = filePath;
-	    			            storage.setItem('nativeLoadProject', JSON.stringify(jsonObj));
-					            Entry.plugin.reloadApplication();
+
+			        			if (jsonObj.objects[0] &&
+							        jsonObj.objects[0].script.substr(0,4) === "<xml") {
+							        blockConverter.convert(jsonObj, function(result) {
+							            storage.setItem('nativeLoadProject', JSON.stringify(result));
+							            Entry.plugin.reloadApplication();
+							        });
+							    } else {
+		    			            storage.setItem('nativeLoadProject', JSON.stringify(jsonObj));
+						            Entry.plugin.reloadApplication();
+							    }
 			        		});
 					    } else {
 					    	alert(Lang.Workspace.not_supported_file_msg);
@@ -467,8 +476,17 @@ angular.module('workspace').controller("WorkspaceController",
 			        		Entry.plugin.loadProject(filePath, function (data) {
 			        			var jsonObj = JSON.parse(data);
 			        			jsonObj.path = filePath;
-	    			            storage.setItem('nativeLoadProject', JSON.stringify(jsonObj));
-					            Entry.plugin.reloadApplication();
+
+					            if (jsonObj.objects[0] &&
+							        jsonObj.objects[0].script.substr(0,4) === "<xml") {
+							        blockConverter.convert(jsonObj, function(result) {
+							            storage.setItem('nativeLoadProject', JSON.stringify(result));
+							            Entry.plugin.reloadApplication();
+							        });
+							    } else {
+		    			            storage.setItem('nativeLoadProject', JSON.stringify(jsonObj));
+						            Entry.plugin.reloadApplication();
+							    }
 			        		});
 		        		} else {
 		        			alert(Lang.Workspace.check_entry_file_msg);
