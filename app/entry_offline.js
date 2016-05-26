@@ -336,9 +336,10 @@ ipcMain.on('openHardware', function(event, arg) {
             hardwareWindow = null;
         });
 
-        
+        if(option.debug) {
+            hardwareWindow.webContents.openDevTools();
+        }
 
-        // hardwareWindow.webContents.openDevTools();
         hardwareWindow.show();
     }
 

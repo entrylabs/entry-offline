@@ -92,13 +92,13 @@ Section $(TEXT_ENTRY_TITLE) SectionEntry
 
   ; Put file there
   SetOutPath "$INSTDIR\locales"
-  File "..\locales\*.*"
+  File "..\dist\Entry-win32-ia32\locales\*.*"
   
   SetOutPath "$INSTDIR\resources"
-  File /r "..\resources\*.*"
+  File /r "..\dist\Entry-win32-ia32\resources\*.*"
   
   SetOutPath "$INSTDIR"
-  File "..\*.*"
+  File "..\dist\Entry-win32-ia32\*.*"
   File "icon.ico"
   
   WriteRegStr HKCR ".ent" "" "${PRODUCT_NAME}"
