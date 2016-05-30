@@ -163,16 +163,19 @@ angular.module('workspace').controller("WorkspaceController",
 								jsonObj.objects.forEach(function (object) {
 									var sprite = object.sprite;
 									sprite.pictures.forEach(function (picture) {
-										picture.fileurl.replace(/\\/gi, path.sep);
-										if(picture.fileurl && picture.fileurl.indexOf('bower_components') === -1) {
-											picture.fileurl = path.join('.', picture.fileurl.substr(picture.fileurl.lastIndexOf('temp')))
+										if(picture.fileurl) {
+											picture.fileurl.replace(/\\/gi, path.sep);
+											if(picture.fileurl && picture.fileurl.indexOf('bower_components') === -1) {
+												picture.fileurl = path.join('.', picture.fileurl.substr(picture.fileurl.lastIndexOf('temp')))
+											}											
 										}
-
 									});
 									sprite.sounds.forEach(function (sound) {
-										sound.fileurl.replace(/\\/gi, path.sep);
-										if(sound.fileurl && sound.fileurl.indexOf('bower_components') === -1) {
-											sound.fileurl = path.join('.', sound.fileurl.substr(sound.fileurl.lastIndexOf('temp')))
+										if(sound.fileurl) {
+											sound.fileurl.replace(/\\/gi, path.sep);
+											if(sound.fileurl && sound.fileurl.indexOf('bower_components') === -1) {
+												sound.fileurl = path.join('.', sound.fileurl.substr(sound.fileurl.lastIndexOf('temp')))
+											}
 										}
 									});
 								});
@@ -498,16 +501,20 @@ angular.module('workspace').controller("WorkspaceController",
 								jsonObj.objects.forEach(function (object) {
 									var sprite = object.sprite;
 									sprite.pictures.forEach(function (picture) {
-										picture.fileurl.replace(/\\/gi, path.sep);
-										if(picture.fileurl && picture.fileurl.indexOf('bower_components') === -1) {
-											picture.fileurl = path.join('.', picture.fileurl.substr(picture.fileurl.lastIndexOf('temp')))
+										if(picture.fileurl) {
+											picture.fileurl.replace(/\\/gi, path.sep);
+											if(picture.fileurl && picture.fileurl.indexOf('bower_components') === -1) {
+												picture.fileurl = path.join('.', picture.fileurl.substr(picture.fileurl.lastIndexOf('temp')))
+											}
 										}
 
 									});
 									sprite.sounds.forEach(function (sound) {
-										sound.fileurl.replace(/\\/gi, path.sep);
-										if(sound.fileurl && sound.fileurl.indexOf('bower_components') === -1) {
-											sound.fileurl = path.join('.', sound.fileurl.substr(sound.fileurl.lastIndexOf('temp')))
+										if(sound.fileurl) {
+											sound.fileurl.replace(/\\/gi, path.sep);
+											if(sound.fileurl && sound.fileurl.indexOf('bower_components') === -1) {
+												sound.fileurl = path.join('.', sound.fileurl.substr(sound.fileurl.lastIndexOf('temp')))
+											}
 										}
 									});
 								});
