@@ -268,6 +268,21 @@ app.on('window-all-closed', function() {
     process.exit(0);
 });
 
+var shouldQuit = app.makeSingleInstance(function(commandLine, workingDirectory) {
+// 어플리케이션을 중복 실행했습니다. 주 어플리케이션 인스턴스를 활성화 합니다.
+    if (mainWindow) {
+        if (mainWindow.isMinimized()) 
+            mainWindow.restore();
+        mainWindow.focus();
+    }
+    return true;
+});
+
+if (shouldQuit) {
+    app.quit();
+    return;
+}
+
 app.once('ready', function() {
     language = app.getLocale();
     var title = packageJson.version;

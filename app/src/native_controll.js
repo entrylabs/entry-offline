@@ -20,11 +20,11 @@ if(startFile && path.isAbsolute(startFile)){
 
 var orgAlert = alert;
 alert = function (msg) {
-    orgAlert(msg, Lang.Menus.Entry);
+    orgAlert(msg || '', Lang.Menus.Entry);
 }
 var orgConfirm = confirm;
 confirm = function (msg) {
-    return orgConfirm(msg, Lang.Menus.Entry);
+    return orgConfirm(msg || '', Lang.Menus.Entry);
 }
 
 // console.log = function () {};
