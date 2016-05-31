@@ -155,7 +155,7 @@ angular.module('common').controller('SoundController',
 
     $scope.upload = function() {
         var uploadFile = document.getElementById("uploadFile").files;
-        console.log("upload file : " + uploadFile);
+        // console.log("upload file : " + uploadFile);
 
         if (!uploadFile) {
             alert(Lang.Menus.file_required);
@@ -201,16 +201,16 @@ angular.module('common').controller('SoundController',
 
     $scope.uploadSoundFile = function(files) {
         //Sound 파일을 로컬 디렉토리에 저장 
-        console.log('files number : ' + JSON.stringify(files));
+        // console.log('files number : ' + JSON.stringify(files));
        
         Entry.plugin.uploadTempSoundFile(files, function(soundList) {
             
-            console.log("sound : " + JSON.stringify(soundList));
+            // console.log("sound : " + JSON.stringify(soundList));
             
             //Sound 파일을 로컬 디렉토리에 저장 후 메타 정보 업데이트    
             $scope.$apply(function() {
                 soundList.forEach(function(item) {
-                    console.log("item check : " + JSON.stringify(item));
+                    // console.log("item check : " + JSON.stringify(item));
                     // var path = '/temp/' + item.filename.substring(0,2)+'/'+
                     //     item.filename.substring(2,4)+'/'+'sound'+'/'+item.filename+'.'+item.ext;
                     

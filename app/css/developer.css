@@ -140,3 +140,8 @@ body {
     -webkit-transform: scaleY(1.0);
   }
 }
+
+
+.tab-content .tab-pane .upload_wrap {
+    width: 85%;
+}

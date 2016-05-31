@@ -77,13 +77,13 @@ angular.module('workspace').controller("WorkspaceController",
                         Entry.plugin.closeAboutPage();
                         Entry.plugin.closeHwGuidePage();
 
-                        storage.removeItem('tempProject');
-                        beforeUnload();
-                    } else {
-                        e.preventDefault();
-                        e.returnValue = false;
-                    }
-                };
+		        		storage.removeItem('tempProject');
+		        		beforeUnload();
+		        	} else {
+						e.preventDefault();
+						e.returnValue = false;
+		        	}
+				};
 
                 // Entry.playground.setBlockMenu();
                 //아두이노 사용 (웹소켓이용)
@@ -117,39 +117,39 @@ angular.module('workspace').controller("WorkspaceController",
                 $scope.setOfflineHW();
 
 
-                var $body = $('body');
-                var $uploadWindow = $('.entryUploaderWindow');
-                var actionDisplayNone;
+				var $body = $('body');
+				var $uploadWindow = $('.entryUploaderWindow');
+				var actionDisplayNone;
 
-                $body.on('dragover', function () {
-                    $uploadWindow.css('opacity', 1);
-                    if(actionDisplayNone) {
-                        clearTimeout(actionDisplayNone);
-                        $uploadWindow.css('display', 'block');
-                    }
-                    return false;
-                });
-                $body.on('dragleave dragend', function (e) {
-                    $uploadWindow.css('opacity', 0);
-                    actionDisplayNone = setTimeout(function () {
-                        $uploadWindow.css('display', 'none');
-                    }, 200);
-                    return false;
-                });
-                $body.on('drop', function (e) {
-                    $uploadWindow.css('opacity', 0);
-                    setTimeout(function () {
-                        $uploadWindow.css('display', 'none');
-                    }, 200);
-                    e.preventDefault();
-                    var file = e.originalEvent.dataTransfer.files[0];
-                    var fileInfo = path.parse(file.path);
-                    try {
-                        if(fileInfo.ext === '.ent') {
-                            $scope.doPopupControl({
-                                'type':'spinner',
-                                'msg': Lang.Workspace.loading_msg
-                            });
+				$body.on('dragover', function () {
+					$uploadWindow.css('opacity', 1);
+					if(actionDisplayNone) {
+						clearTimeout(actionDisplayNone);
+						$uploadWindow.css('display', 'block');
+					}
+					return false;
+				});
+				$body.on('dragleave dragend', function (e) {
+					$uploadWindow.css('opacity', 0);
+					actionDisplayNone = setTimeout(function () {
+						$uploadWindow.css('display', 'none');
+					}, 200);
+					return false;
+				});
+				$body.on('drop', function (e) {
+					$uploadWindow.css('opacity', 0);
+					setTimeout(function () {
+						$uploadWindow.css('display', 'none');
+					}, 200);
+				    e.preventDefault();
+				    var file = e.originalEvent.dataTransfer.files[0];
+				    var fileInfo = path.parse(file.path);
+				    try {
+					    if(fileInfo.ext === '.ent') {
+					    	$scope.doPopupControl({
+				                'type':'spinner',
+				                'msg': Lang.Workspace.loading_msg
+				            });
 
                             var filePath = file.path;
                             var pathArr = filePath.split('/');
@@ -161,21 +161,30 @@ angular.module('workspace').controller("WorkspaceController",
                                 jsonObj.path = filePath;
                                 
                                 jsonObj.objects.forEach(function (object) {
-                                    var sprite = object.sprite;
-                                    sprite.pictures.forEach(function (picture) {
-                                        picture.fileurl.replace(/\\/gi, path.sep);
-                                        if(picture.fileurl && picture.fileurl.indexOf('bower_components') === -1) {
-                                            picture.fileurl = path.join('.', picture.fileurl.substr(picture.fileurl.lastIndexOf('temp')))
-                                        }
-
-                                    });
-                                    sprite.sounds.forEach(function (sound) {
-                                        sound.fileurl.replace(/\\/gi, path.sep);
-                                        if(sound.fileurl && sound.fileurl.indexOf('bower_components') === -1) {
-                                            sound.fileurl = path.join('.', sound.fileurl.substr(sound.fileurl.lastIndexOf('temp')))
-                                        }
-                                    });
-                                });
+									var sprite = object.sprite;
+									sprite.pictures.forEach(function (picture) {
+										if(picture.fileurl) {
+											picture.fileurl = picture.fileurl.replace(/\\/gi, '%5C');
+											if(isOsx) {
+												picture.fileurl = picture.fileurl.replace(/%5C/gi, path.sep);
+											}
+											if(picture.fileurl && picture.fileurl.indexOf('bower_components') === -1) {
+												picture.fileurl = picture.fileurl.substr(picture.fileurl.lastIndexOf('temp'));
+											}										
+										}
+									});
+									sprite.sounds.forEach(function (sound) {
+										if(sound.fileurl) {
+											sound.fileurl = sound.fileurl.replace(/\\/gi, '%5C');
+											if(isOsx) {
+												sound.fileurl = sound.fileurl.replace(/%5C/gi, path.sep);
+											}
+											if(sound.fileurl && sound.fileurl.indexOf('bower_components') === -1) {
+												sound.fileurl = sound.fileurl.substr(sound.fileurl.lastIndexOf('temp'));
+											}
+										}
+									});
+								});
                                 
                                 if (jsonObj.objects[0] &&
                                     jsonObj.objects[0].script.substr(0,4) === "<xml") {
@@ -205,7 +214,7 @@ angular.module('workspace').controller("WorkspaceController",
             };
 
 
-            Entry.HW.prototype.downloadSource = function() {
+			Entry.HW.prototype.downloadSource = function() {
 
                 dialog.showSaveDialog({
                     defaultPath: 'board.ino',
@@ -350,7 +359,7 @@ angular.module('workspace').controller("WorkspaceController",
             }
 
 
-            $scope.project.name = project_name || Lang.Workspace.new_project;
+			$scope.project.name = project_name || Lang.Workspace.new_project;
 
             myProject.name = project_name || Lang.Workspace.new_project;
 
@@ -375,43 +384,43 @@ angular.module('workspace').controller("WorkspaceController",
                     pathArr.pop();
                     storage.setItem('defaultPath', pathArr.join('/'));
 
-                    try{
-                        myProject.saveProject(filePath, function (project_name) {
-                            Entry.stateManager.addStamp();
-                            myProject.isSaved = true;
-                            myProject.isSavedPath = filePath;
-                            Entry.toast.success(Lang.Workspace.saved, project_name + ' ' + Lang.Workspace.saved_msg);
-                            // $scope.hideSpinner();
-                            $scope.doPopupControl({
-                                'type':'hide'
-                            });
-                            $scope.isNowSaving = false;
-                        });
-                    } catch(e) {
-                        // Entry.toast.success(Lang.Workspace.saved, project_name + ' ' + Lang.Workspace.saved_msg);
-                        // $scope.hideSpinner();    
-                        $scope.doPopupControl({
-                            'type':'hide'
-                        });
-                        $scope.doPopupControl({
-                            'type':'fail',
-                            'msg': Lang.Workspace.saving_fail_msg
-                        });                 
-                        $scope.isNowSaving = false;
-                    }
-                } else {
-                    // $scope.hideSpinner();
-                    $scope.doPopupControl({
-                        'type':'hide'
-                    });
-                    // $scope.doPopupControl({
-                    //     'type':'fail',
-                    //     'msg': Lang.Workspace.saving_fail_msg
-                    // });
-                    $scope.isNowSaving = false;
-                }
-            });
-        }
+	        		try{
+		        		myProject.saveProject(filePath, function (project_name) {
+		        			Entry.stateManager.addStamp();
+			            	myProject.isSaved = true;
+			            	myProject.isSavedPath = filePath;
+			            	Entry.toast.success(Lang.Workspace.saved, project_name + ' ' + Lang.Workspace.saved_msg);
+							// $scope.hideSpinner();
+							$scope.doPopupControl({
+				                'type':'hide'
+				            });
+							$scope.isNowSaving = false;
+			            });
+	        		} catch(e) {
+		            	// Entry.toast.success(Lang.Workspace.saved, project_name + ' ' + Lang.Workspace.saved_msg);
+						// $scope.hideSpinner();	
+						$scope.doPopupControl({
+			                'type':'hide'
+			            });
+						$scope.doPopupControl({
+			                'type':'fail',
+			                'msg': Lang.Workspace.saving_fail_msg
+			            });        			
+						$scope.isNowSaving = false;
+	        		}
+	        	} else {
+	        		// $scope.hideSpinner();
+	        		$scope.doPopupControl({
+		                'type':'hide'
+		            });
+		            // $scope.doPopupControl({
+		            //     'type':'fail',
+		            //     'msg': Lang.Workspace.saving_fail_msg
+		            // });
+	        		$scope.isNowSaving = false;
+	        	}
+			});
+		}
 
         // 저장하기
         $scope.saveWorkspace = function() {
@@ -421,20 +430,20 @@ angular.module('workspace').controller("WorkspaceController",
                 'type':'spinner',
                 'msg': Lang.Workspace.saving_msg
             });
-            if(myProject.isSaved) {
-                $scope.project.saveProject(myProject.isSavedPath, function () {
-                    Entry.stateManager.addStamp();
-                    Entry.toast.success(Lang.Workspace.saved, myProject.name + ' ' + Lang.Workspace.saved_msg);
-                    // $scope.hideSpinner();
-                    $scope.doPopupControl({
-                        'type':'hide'
-                    });
-                    $scope.isNowSaving = false;
-                });
-            } else {
-                Entry.stateManager.cancelLastCommand();
-                saveAsProject(Lang.Workspace.file_save);
-            }
+			if(myProject.isSaved) {
+				$scope.project.saveProject(myProject.isSavedPath, function () {
+					Entry.stateManager.addStamp();
+	            	Entry.toast.success(Lang.Workspace.saved, myProject.name + ' ' + Lang.Workspace.saved_msg);
+	            	// $scope.hideSpinner();
+	            	$scope.doPopupControl({
+		                'type':'hide'
+		            });
+	            	$scope.isNowSaving = false;
+	            });
+			} else {
+				Entry.stateManager.cancelLastCommand();
+				saveAsProject(Lang.Workspace.file_save);
+			}
         };
 
         // 새 이름으로 저장하기
@@ -469,15 +478,15 @@ angular.module('workspace').controller("WorkspaceController",
 
         // 불러오기
         $scope.loadWorkspace = function() {
-            // $scope.showSpinner();
-            $scope.doPopupControl({
+        	// $scope.showSpinner();
+        	$scope.doPopupControl({
                 'type':'spinner',
                 'msg': Lang.Workspace.loading_msg
             });
-            var canLoad = false;
-            if(!Entry.stateManager.isSaved()) {
-                canLoad = !confirm(Lang.Menus.save_dismiss);
-            }
+        	var canLoad = false;
+        	if(!Entry.stateManager.isSaved()) {
+        		canLoad = !confirm(Lang.Menus.save_dismiss);
+        	}
 
             if(!canLoad) {
                 Entry.stateManager.addStamp();
@@ -499,26 +508,35 @@ angular.module('workspace').controller("WorkspaceController",
                             pathArr.pop();
                             storage.setItem('defaultPath', pathArr.join('/'));
 
-                            Entry.plugin.loadProject(filePath, function (data) {
-                                var jsonObj = JSON.parse(data);
-                                jsonObj.path = filePath;
+			        		Entry.plugin.loadProject(filePath, function (data) {
+			        			var jsonObj = JSON.parse(data);
+			        			jsonObj.path = filePath;
 
-                                jsonObj.objects.forEach(function (object) {
-                                    var sprite = object.sprite;
-                                    sprite.pictures.forEach(function (picture) {
-                                        picture.fileurl.replace(/\\/gi, path.sep);
-                                        if(picture.fileurl && picture.fileurl.indexOf('bower_components') === -1) {
-                                            picture.fileurl = path.join('.', picture.fileurl.substr(picture.fileurl.lastIndexOf('temp')))
-                                        }
-
-                                    });
-                                    sprite.sounds.forEach(function (sound) {
-                                        sound.fileurl.replace(/\\/gi, path.sep);
-                                        if(sound.fileurl && sound.fileurl.indexOf('bower_components') === -1) {
-                                            sound.fileurl = path.join('.', sound.fileurl.substr(sound.fileurl.lastIndexOf('temp')))
-                                        }
-                                    });
-                                });
+								jsonObj.objects.forEach(function (object) {
+									var sprite = object.sprite;
+									sprite.pictures.forEach(function (picture) {
+										if(picture.fileurl) {
+											picture.fileurl = picture.fileurl.replace(/\\/gi, '%5C');
+											if(isOsx) {
+												picture.fileurl = picture.fileurl.replace(/%5C/gi, path.sep);
+											}
+											if(picture.fileurl && picture.fileurl.indexOf('bower_components') === -1) {
+												picture.fileurl = picture.fileurl.substr(picture.fileurl.lastIndexOf('temp'));
+											}										
+										}
+									});
+									sprite.sounds.forEach(function (sound) {
+										if(sound.fileurl) {
+											sound.fileurl = sound.fileurl.replace(/\\/gi, '%5C');
+											if(isOsx) {
+												sound.fileurl = sound.fileurl.replace(/%5C/gi, path.sep);
+											}
+											if(sound.fileurl && sound.fileurl.indexOf('bower_components') === -1) {
+												sound.fileurl = sound.fileurl.substr(sound.fileurl.lastIndexOf('temp'));
+											}
+										}
+									});
+								});
 
                                 if (jsonObj.objects[0] &&
                                     jsonObj.objects[0].script.substr(0,4) === "<xml") {
@@ -672,17 +690,17 @@ angular.module('workspace').controller("WorkspaceController",
                     });
                 }
 
-                selectedItems.data.forEach(function(item) {
-                    item.id = Entry.generateHash();
-                    Entry.playground.addPicture(item, true);
-                });
+	            selectedItems.data.forEach(function(item) {
+	                item.id = Entry.generateHash();
+	                Entry.playground.addPicture(item, true);
+	            });
 
-            });
+	        });
         };
 
         //Adding Sound
         $scope.openSoundManager = function () {
-            //console.log('openSoundManager');
+        	//console.log('openSoundManager');
 
             if (!Entry.engine.isState('stop')) {
                 alert(Lang.Workspace.cannot_add_object);

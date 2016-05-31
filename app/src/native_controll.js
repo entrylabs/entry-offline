@@ -134,16 +134,16 @@ Entry.plugin = (function () {
         var uploadDir = path.join(baseDir, fileId.substr(0,2), fileId.substr(2,2));
 
         if (!fs.existsSync(path.join(baseDir, fileId.substr(0,2))))
-            fs.mkdirSync(path.join(baseDir, fileId.substr(0,2)));
+            fs.mkdirSync(path.join(baseDir, fileId.substr(0,2)), '0777');
 
         if (!fs.existsSync(path.join(baseDir, fileId.substr(0,2), fileId.substr(2,2))))
-            fs.mkdirSync(path.join(baseDir, fileId.substr(0,2), fileId.substr(2,2))); // uploadDir
+            fs.mkdirSync(path.join(baseDir, fileId.substr(0,2), fileId.substr(2,2)), '0777'); // uploadDir
 
         if (!fs.existsSync(path.join(uploadDir, 'thumb')))
-            fs.mkdirSync(path.join(uploadDir, 'thumb'));
+            fs.mkdirSync(path.join(uploadDir, 'thumb'), '0777');
 
         if (!fs.existsSync(path.join(uploadDir, 'image')))
-            fs.mkdirSync(path.join(uploadDir, 'image'));
+            fs.mkdirSync(path.join(uploadDir, 'image'), '0777');
 
         //Path of upload folder where you want to upload fies/
         if(option === 'image') {
@@ -151,7 +151,7 @@ Entry.plugin = (function () {
             var imagePath = path.join(uploadDir, 'image', fileId); // main image
         } else if(option === 'sound') {
             if (!fs.existsSync(path.join(uploadDir, 'sound')))
-                fs.mkdirSync(path.join(uploadDir, 'sound'));
+                fs.mkdirSync(path.join(uploadDir, 'sound'), '0777');
 
             var soundPath = path.join(uploadDir, 'sound'); // for sound file
         }
@@ -439,17 +439,17 @@ Entry.plugin = (function () {
     that.saveProject = function(filePath, data, cb, enc) {
         var string_data = JSON.stringify(data);
         that.mkdir(_real_path + '/temp', function () {
-            fs.writeFile(_real_path + '/temp/project.json', string_data, {encoding: (enc || 'utf8'), mode: '0666'}, function (err) {
+            fs.writeFile(_real_path + '/temp/project.json', string_data, {encoding: (enc || 'utf8'), mode: '0777'}, function (err) {
                 if(err) {
                     throw err;
                 }
 
                 var fs_reader = fstream.Reader({ 'path': path.resolve(_real_path, 'temp'), 'type': 'Directory' });
 
-                var fs_writer = fstream.Writer({ 'path': filePath, 'mode': '0666', 'type': 'File',  });
+                var fs_writer = fstream.Writer({ 'path': filePath, 'mode': '0777', 'type': 'File',  });
 
                 fs_writer.on('entry', function (list) {
-                    list.props.mode = '0666';
+                    list.props.mode = '0777';
                     // console.log('entry');
                 });
                 fs_writer.on('end', function () {
@@ -484,10 +484,10 @@ Entry.plugin = (function () {
         deleteFolderRecursive(_real_path + '/temp/');
 
         var fs_reader = fstream.Reader({ 'path': filePath, 'type': 'File' });
-        var fs_writer = fstream.Writer({ 'path': _real_path, 'mode': '0666', 'type': 'Directory' });
+        var fs_writer = fstream.Writer({ 'path': _real_path, 'mode': '0777', 'type': 'Directory' });
 
         fs_writer.on('entry', function (list) {
-            list.props.mode = '0666';
+            list.props.mode = '0777';
         });
         fs_writer.on('error', function (e) {
             console.log('error');
@@ -523,7 +523,7 @@ Entry.plugin = (function () {
     that.writeFile = function(filePath, data, cb, enc) {
         fs.writeFile(filePath, data, {
             encoding: enc || 'utf8',
-            mode: '0666'
+            mode: '0777'
         }, function (err) {
             if(err) {
                 throw err;
@@ -553,7 +553,7 @@ Entry.plugin = (function () {
         if (!exists) {
             var parser = path.parse(filePath);
             that.mkdir(parser.dir);
-            fs.mkdirSync(filePath);
+            fs.mkdirSync(filePath, '0777');
         }
         if(typeof cb === 'function') {
             cb();
@@ -574,10 +574,10 @@ Entry.plugin = (function () {
     that.saveTempImageFile = function (data, cb) {
         var fileId = createFileId();
         var dest = getUploadPath(fileId);
-        that.mkdir(dest.uploadDir + '/image', function () {
-            fs.writeFile(dest.imagePath + '.png', data.org, { encoding: 'base64', mode: '0666' }, function (err) {
-                that.mkdir(dest.uploadDir + '/thumb', function () {
-                    fs.writeFile(dest.thumbPath + '.png', data.thumb, { encoding: 'base64', mode: '0666' }, function (err) {
+        that.mkdir(dest.uploadDir + '/image', '0777', function () {
+            fs.writeFile(dest.imagePath + '.png', data.org, { encoding: 'base64', mode: '0777' }, function (err) {
+                that.mkdir(dest.uploadDir + '/thumb', '0777', function () {
+                    fs.writeFile(dest.thumbPath + '.png', data.thumb, { encoding: 'base64', mode: '0777' }, function (err) {
                         if(err) {
                             throw err;
                         }
@@ -724,7 +724,7 @@ Entry.plugin = (function () {
                             throw err;
                         }
                         console.log("readFile!! sound ");
-                        fs.writeFile(soundPath, stream, {encoding:'utf8', mode: '0666'}, function (err) {
+                        fs.writeFile(soundPath, stream, {encoding:'utf8', mode: '0777'}, function (err) {
                             if(err) {
                                 throw err;
                             }
