@@ -165,7 +165,8 @@ angular.module('workspace').controller("WorkspaceController",
 									var sprite = object.sprite;
 									sprite.pictures.forEach(function (picture) {
 										if(picture.fileurl) {
-											picture.fileurl.replace(/\\/gi, path.sep);
+											picture.fileurl = picture.fileurl.replace(/\\/gi, path.sep);
+											picture.fileurl = picture.fileurl.replace(/%5C/gi, path.sep);
 											if(picture.fileurl && picture.fileurl.indexOf('bower_components') === -1) {
 												picture.fileurl = path.join('.', picture.fileurl.substr(picture.fileurl.lastIndexOf('temp')))
 											}											
@@ -173,7 +174,8 @@ angular.module('workspace').controller("WorkspaceController",
 									});
 									sprite.sounds.forEach(function (sound) {
 										if(sound.fileurl) {
-											sound.fileurl.replace(/\\/gi, path.sep);
+											sound.fileurl = sound.fileurl.replace(/\\/gi, path.sep);
+											sound.fileurl = sound.fileurl.replace(/%5C/gi, path.sep);
 											if(sound.fileurl && sound.fileurl.indexOf('bower_components') === -1) {
 												sound.fileurl = path.join('.', sound.fileurl.substr(sound.fileurl.lastIndexOf('temp')))
 											}
@@ -492,7 +494,8 @@ angular.module('workspace').controller("WorkspaceController",
 									var sprite = object.sprite;
 									sprite.pictures.forEach(function (picture) {
 										if(picture.fileurl) {
-											picture.fileurl.replace(/\\/gi, path.sep);
+											picture.fileurl = picture.fileurl.replace(/\\/gi, path.sep);
+											picture.fileurl = picture.fileurl.replace(/%5C/gi, path.sep);
 											if(picture.fileurl && picture.fileurl.indexOf('bower_components') === -1) {
 												picture.fileurl = path.join('.', picture.fileurl.substr(picture.fileurl.lastIndexOf('temp')))
 											}
@@ -500,7 +503,8 @@ angular.module('workspace').controller("WorkspaceController",
 									});
 									sprite.sounds.forEach(function (sound) {
 										if(sound.fileurl) {
-											sound.fileurl.replace(/\\/gi, path.sep);
+											sound.fileurl = sound.fileurl.replace(/\\/gi, path.sep);
+											sound.fileurl = sound.fileurl.replace(/%5C/gi, path.sep);
 											if(sound.fileurl && sound.fileurl.indexOf('bower_components') === -1) {
 												sound.fileurl = path.join('.', sound.fileurl.substr(sound.fileurl.lastIndexOf('temp')))
 											}
