@@ -82,6 +82,9 @@ angular.module('workspace').controller("WorkspaceController",
 		        	} else {
 						e.preventDefault();
 						e.returnValue = false;
+						$scope.doPopupControl({
+			                'type':'hide'
+			            });
 		        	}
 				};
 
@@ -165,19 +168,23 @@ angular.module('workspace').controller("WorkspaceController",
 									var sprite = object.sprite;
 									sprite.pictures.forEach(function (picture) {
 										if(picture.fileurl) {
-											picture.fileurl = picture.fileurl.replace(/\\/gi, path.sep);
-											picture.fileurl = picture.fileurl.replace(/%5C/gi, path.sep);
+											picture.fileurl = picture.fileurl.replace(/\\/gi, '%5C');
+											if(isOsx) {
+												picture.fileurl = picture.fileurl.replace(/%5C/gi, path.sep);
+											}
 											if(picture.fileurl && picture.fileurl.indexOf('bower_components') === -1) {
-												picture.fileurl = path.join('.', picture.fileurl.substr(picture.fileurl.lastIndexOf('temp')))
-											}											
+												picture.fileurl = picture.fileurl.substr(picture.fileurl.lastIndexOf('temp'));
+											}										
 										}
 									});
 									sprite.sounds.forEach(function (sound) {
 										if(sound.fileurl) {
-											sound.fileurl = sound.fileurl.replace(/\\/gi, path.sep);
-											sound.fileurl = sound.fileurl.replace(/%5C/gi, path.sep);
+											sound.fileurl = sound.fileurl.replace(/\\/gi, '%5C');
+											if(isOsx) {
+												sound.fileurl = sound.fileurl.replace(/%5C/gi, path.sep);
+											}
 											if(sound.fileurl && sound.fileurl.indexOf('bower_components') === -1) {
-												sound.fileurl = path.join('.', sound.fileurl.substr(sound.fileurl.lastIndexOf('temp')))
+												sound.fileurl = sound.fileurl.substr(sound.fileurl.lastIndexOf('temp'));
 											}
 										}
 									});
@@ -494,19 +501,23 @@ angular.module('workspace').controller("WorkspaceController",
 									var sprite = object.sprite;
 									sprite.pictures.forEach(function (picture) {
 										if(picture.fileurl) {
-											picture.fileurl = picture.fileurl.replace(/\\/gi, path.sep);
-											picture.fileurl = picture.fileurl.replace(/%5C/gi, path.sep);
+											picture.fileurl = picture.fileurl.replace(/\\/gi, '%5C');
+											if(isOsx) {
+												picture.fileurl = picture.fileurl.replace(/%5C/gi, path.sep);
+											}
 											if(picture.fileurl && picture.fileurl.indexOf('bower_components') === -1) {
-												picture.fileurl = path.join('.', picture.fileurl.substr(picture.fileurl.lastIndexOf('temp')))
+												picture.fileurl = picture.fileurl.substr(picture.fileurl.lastIndexOf('temp'));
 											}
 										}
 									});
 									sprite.sounds.forEach(function (sound) {
 										if(sound.fileurl) {
-											sound.fileurl = sound.fileurl.replace(/\\/gi, path.sep);
-											sound.fileurl = sound.fileurl.replace(/%5C/gi, path.sep);
+											sound.fileurl = sound.fileurl.replace(/\\/gi, '%5C');
+											if(isOsx) {
+												sound.fileurl = sound.fileurl.replace(/%5C/gi, path.sep);
+											}
 											if(sound.fileurl && sound.fileurl.indexOf('bower_components') === -1) {
-												sound.fileurl = path.join('.', sound.fileurl.substr(sound.fileurl.lastIndexOf('temp')))
+												sound.fileurl = sound.fileurl.substr(sound.fileurl.lastIndexOf('temp'));
 											}
 										}
 									});
