@@ -116,7 +116,6 @@ angular.module('workspace').controller("WorkspaceController",
                 }
 				$scope.setOfflineHW();
 
-
 				var $body = $('body');
 				var $uploadWindow = $('.entryUploaderWindow');
 				var actionDisplayNone;
@@ -129,6 +128,7 @@ angular.module('workspace').controller("WorkspaceController",
 					}
 					return false;
 				});
+
 				$body.on('dragleave dragend', function (e) {
 					$uploadWindow.css('opacity', 0);
 					actionDisplayNone = setTimeout(function () {
@@ -136,6 +136,7 @@ angular.module('workspace').controller("WorkspaceController",
 					}, 200);
 					return false;
 				});
+
 				$body.on('drop', function (e) {
 					$uploadWindow.css('opacity', 0);
 					setTimeout(function () {
@@ -198,7 +199,6 @@ angular.module('workspace').controller("WorkspaceController",
 			Entry.HW.prototype.downloadConnector = function() {
 				Entry.plugin.openHardwarePage();
 			};
-
 
 			Entry.HW.prototype.downloadSource = function() {
 
@@ -344,7 +344,6 @@ angular.module('workspace').controller("WorkspaceController",
                 project_name = Lang.Workspace.PROJECTDEFAULTNAME[i] + ' ' + Lang.Workspace.project;
 			}
 
-
 			$scope.project.name = project_name || Lang.Workspace.new_project;
 
 			myProject.name = project_name || Lang.Workspace.new_project;
@@ -383,8 +382,6 @@ angular.module('workspace').controller("WorkspaceController",
 							$scope.isNowSaving = false;
 			            });
 	        		} catch(e) {
-		            	// Entry.toast.success(Lang.Workspace.saved, project_name + ' ' + Lang.Workspace.saved_msg);
-						// $scope.hideSpinner();	
 						$scope.doPopupControl({
 			                'type':'hide'
 			            });
@@ -395,14 +392,9 @@ angular.module('workspace').controller("WorkspaceController",
 						$scope.isNowSaving = false;
 	        		}
 	        	} else {
-	        		// $scope.hideSpinner();
 	        		$scope.doPopupControl({
 		                'type':'hide'
 		            });
-		            // $scope.doPopupControl({
-		            //     'type':'fail',
-		            //     'msg': Lang.Workspace.saving_fail_msg
-		            // });
 	        		$scope.isNowSaving = false;
 	        	}
 			});
@@ -420,7 +412,6 @@ angular.module('workspace').controller("WorkspaceController",
 				$scope.project.saveProject(myProject.isSavedPath, function () {
 					Entry.stateManager.addStamp();
 	            	Entry.toast.success(Lang.Workspace.saved, myProject.name + ' ' + Lang.Workspace.saved_msg);
-	            	// $scope.hideSpinner();
 	            	$scope.doPopupControl({
 		                'type':'hide'
 		            });
@@ -464,11 +455,11 @@ angular.module('workspace').controller("WorkspaceController",
 
         // 불러오기
         $scope.loadWorkspace = function() {
-        	// $scope.showSpinner();
         	$scope.doPopupControl({
                 'type':'spinner',
                 'msg': Lang.Workspace.loading_msg
             });
+
         	var canLoad = false;
         	if(!Entry.stateManager.isSaved()) {
         		canLoad = !confirm(Lang.Menus.save_dismiss);
@@ -497,7 +488,6 @@ angular.module('workspace').controller("WorkspaceController",
 			        		Entry.plugin.loadProject(filePath, function (data) {
 			        			var jsonObj = JSON.parse(data);
 			        			jsonObj.path = filePath;
-
 								jsonObj.objects.forEach(function (object) {
 									var sprite = object.sprite;
 									sprite.pictures.forEach(function (picture) {
@@ -507,7 +497,6 @@ angular.module('workspace').controller("WorkspaceController",
 												picture.fileurl = path.join('.', picture.fileurl.substr(picture.fileurl.lastIndexOf('temp')))
 											}
 										}
-
 									});
 									sprite.sounds.forEach(function (sound) {
 										if(sound.fileurl) {
@@ -667,14 +656,11 @@ angular.module('workspace').controller("WorkspaceController",
 	                item.id = Entry.generateHash();
 	                Entry.playground.addPicture(item, true);
 	            });
-
 	        });
         };
 
         //Adding Sound
         $scope.openSoundManager = function () {
-        	//console.log('openSoundManager');
-
             if (!Entry.engine.isState('stop')) {
                 alert(Lang.Workspace.cannot_add_object);
                 return false;

@@ -12,7 +12,7 @@
 !define MUI_ICON "icon.ico"
 !define MUI_UNICON "icon.ico"
 !define PRODUCT_NAME "Entry"
-!define PRODUCT_VERSION "1.2.1"
+!define PRODUCT_VERSION "1.2.2"
 !define PRODUCT_PUBLISHER "EntryLabs"
 !define PRODUCT_WEB_SITE "http://www.play-entry.org/"
  
