@@ -1,8 +1,7 @@
 'use strict';
 
 var parseString = require('xml2js').parseString,
-    _ = require('lodash'),
-    entry = require('../bower_components/entryjs/src/workspace/block_entry.js');
+    _ = require('lodash');
 
 function processCode (xml) {
     var code = [];

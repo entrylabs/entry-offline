@@ -165,9 +165,7 @@ angular.module('workspace').controller("WorkspaceController",
 									sprite.pictures.forEach(function (picture) {
 										if(picture.fileurl) {
 											picture.fileurl = picture.fileurl.replace(/\\/gi, '%5C');
-											if(isOsx) {
-												picture.fileurl = picture.fileurl.replace(/%5C/gi, path.sep);
-											}
+											picture.fileurl = picture.fileurl.replace(/%5C/gi, '/');
 											if(picture.fileurl && picture.fileurl.indexOf('bower_components') === -1) {
 												picture.fileurl = picture.fileurl.substr(picture.fileurl.lastIndexOf('temp'));
 											}										
@@ -176,9 +174,7 @@ angular.module('workspace').controller("WorkspaceController",
 									sprite.sounds.forEach(function (sound) {
 										if(sound.fileurl) {
 											sound.fileurl = sound.fileurl.replace(/\\/gi, '%5C');
-											if(isOsx) {
-												sound.fileurl = sound.fileurl.replace(/%5C/gi, path.sep);
-											}
+                                            sound.fileurl = sound.fileurl.replace(/%5C/gi, '/');
 											if(sound.fileurl && sound.fileurl.indexOf('bower_components') === -1) {
 												sound.fileurl = sound.fileurl.substr(sound.fileurl.lastIndexOf('temp'));
 											}
@@ -517,9 +513,7 @@ angular.module('workspace').controller("WorkspaceController",
 									sprite.pictures.forEach(function (picture) {
 										if(picture.fileurl) {
 											picture.fileurl = picture.fileurl.replace(/\\/gi, '%5C');
-											if(isOsx) {
-												picture.fileurl = picture.fileurl.replace(/%5C/gi, path.sep);
-											}
+                                            picture.fileurl = picture.fileurl.replace(/%5C/gi, '/');                                                
 											if(picture.fileurl && picture.fileurl.indexOf('bower_components') === -1) {
 												picture.fileurl = picture.fileurl.substr(picture.fileurl.lastIndexOf('temp'));
 											}										
@@ -528,9 +522,7 @@ angular.module('workspace').controller("WorkspaceController",
 									sprite.sounds.forEach(function (sound) {
 										if(sound.fileurl) {
 											sound.fileurl = sound.fileurl.replace(/\\/gi, '%5C');
-											if(isOsx) {
-												sound.fileurl = sound.fileurl.replace(/%5C/gi, path.sep);
-											}
+                                            sound.fileurl = sound.fileurl.replace(/%5C/gi, '/');                                                
 											if(sound.fileurl && sound.fileurl.indexOf('bower_components') === -1) {
 												sound.fileurl = sound.fileurl.substr(sound.fileurl.lastIndexOf('temp'));
 											}
@@ -657,8 +649,6 @@ angular.module('workspace').controller("WorkspaceController",
         };
 
         $scope.openPictureManager = function () {
-            console.log('openPictureManager');
-
             if (!Entry.engine.isState('stop')) {
                 alert(Lang.Workspace.cannot_add_picture);
                 return false;
