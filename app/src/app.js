@@ -12,6 +12,9 @@ angular.module('workspace', ['common']);
 
 // 다국어 변경 적용
 {
-	var user_lang = localStorage.getItem('lang') || 'ko';
+	if(!localStorage.getItem('lang')) {
+		localStorage.setItem('lang', 'ko');
+	}
+	var user_lang = localStorage.getItem('lang');
 	$('head').append('<script src="./lang/' + user_lang + '.js">' + '</script>')
 }

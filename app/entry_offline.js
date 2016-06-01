@@ -1,12 +1,9 @@
 'use strict';
 
 const electron = require('electron');
-const ipcMain = electron.ipcMain;
-const app = electron.app;  // 어플리케이션 기반을 조작 하는 모듈.
-const BrowserWindow = electron.BrowserWindow;  // 네이티브 브라우저 창을 만드는 모듈.
+const {app, BrowserWindow, Menu, globalShortcut, ipcMain} = electron;
 const path = require('path');
 const fs = require('fs');
-const Menu     = electron.Menu;
 const packageJson     = require('./package.json');
 const ChildProcess = require('child_process');    
 
@@ -322,6 +319,16 @@ app.once('ready', function() {
     mainWindow.on('closed', function() {
         mainWindow = null;
     });
+
+    let inspectorShortcut = '';
+    if(process.platform == 'darwin') {
+        inspectorShortcut = 'Command+Alt+i';
+    } else {
+        inspectorShortcut = 'Control+Shift+i';
+    }
+    globalShortcut.register(inspectorShortcut, () => {
+        mainWindow.webContents.openDevTools();
+    });
 });
 
 ipcMain.on('reload', function(event, arg) {
@@ -359,21 +366,3 @@ ipcMain.on('openHardware', function(event, arg) {
     }
 
 });
-
-// try{
-//     if (handleStartupEvent()) {
-//         logger('handleStartupEvent = true');
-//         app.quit();
-//         process.exit(0);
-//         // setTimeout(function () {
-//         // }, 1000)
-//         return;
-//     } else {
-//         logger('handleStartupEvent = false');
-       
-//     }    
-// } catch(e) {
-//     logger(e.stack);
-//     app.quit();
-//     process.exit(0);
-// }
