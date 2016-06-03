@@ -112,6 +112,10 @@ function calcDurationForMp3(audioHex) {
     return (audioHex.length * 4) / (bitrate * 1000);
 }
 
+ipcRenderer.on('loadProject', function (e, projectPath) {
+    Entry.dispatchEvent('loadProject', projectPath);
+});
+
 // plugin
 Entry.plugin = (function () {
     var that = {};
@@ -278,33 +282,6 @@ Entry.plugin = (function () {
     that.openHardwarePage = function () {
         try{
             ipcRenderer.send('openHardware');
-            // if(hardwarePopup) {
-            //     return;
-            // }
-
-            // var title = '';
-
-            // if(nowLocale === 'ko') {
-            //     title = '엔트리 하드웨어';
-            // } else {
-            //     title = 'Entry HardWare'
-            // }
-            // hardwarePopup = new BrowserWindow({
-            //     width: 800, 
-            //     height: 650, 
-            //     title: title,
-            //     resizable: false
-            // });
-
-            // hardwarePopup.loadURL('file:///' + path.join(__dirname, 'bower_components', 'entry-hw', 'app', 'index.html'));
-            // hardwarePopup.on('closed', function() {
-            //     hardwarePopup = null;
-            // });
-
-            // hardwarePopup.setMenu(null);
-
-            // // hardwarePopup.webContents.openDevTools();
-            // hardwarePopup.show();
         } catch(e) {}
     }
 

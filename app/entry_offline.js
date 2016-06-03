@@ -255,7 +255,6 @@ var handleStartupEvent = function() {
     }
 };
 
-
 var mainWindow = null;
 var hardwareWindow = null;
 var isClose = true;
@@ -266,12 +265,17 @@ app.on('window-all-closed', function() {
 });
 
 var shouldQuit = app.makeSingleInstance(function(commandLine, workingDirectory) {
-// 어플리케이션을 중복 실행했습니다. 주 어플리케이션 인스턴스를 활성화 합니다.
+    // 어플리케이션을 중복 실행했습니다. 주 어플리케이션 인스턴스를 활성화 합니다.
     if (mainWindow) {
         if (mainWindow.isMinimized()) 
             mainWindow.restore();
         mainWindow.focus();
+
+        if(Array.isArray(commandLine)) {
+            mainWindow.webContents.send('loadProject', commandLine[1]);
+        }
     }
+
     return true;
 });
 
@@ -314,6 +318,9 @@ app.once('ready', function() {
         e.preventDefault();
     });
     mainWindow.on('close', function(e) {
+        if(hardwareWindow) {
+            hardwareWindow.close();
+        }
         mainWindow.webContents.send('main-close');
     });
     mainWindow.on('closed', function() {

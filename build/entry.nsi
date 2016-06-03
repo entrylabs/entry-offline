@@ -12,7 +12,7 @@
 !define MUI_ICON "icon.ico"
 !define MUI_UNICON "icon.ico"
 !define PRODUCT_NAME "Entry"
-!define PRODUCT_VERSION "1.2.2"
+!define PRODUCT_VERSION "1.3.0"
 !define PRODUCT_PUBLISHER "EntryLabs"
 !define PRODUCT_WEB_SITE "http://www.play-entry.org/"
  
@@ -92,13 +92,13 @@ Section $(TEXT_ENTRY_TITLE) SectionEntry
 
   ; Put file there
   SetOutPath "$INSTDIR\locales"
-  File "..\dist\Entry-win32-ia32\locales\*.*"
+  File "..\dist\win-ia32-unpacked\lib\net45\locales\*.*"
   
   SetOutPath "$INSTDIR\resources"
-  File /r "..\dist\Entry-win32-ia32\resources\*.*"
+  File /r "..\dist\win-ia32-unpacked\lib\net45\resources\*.*"
   
   SetOutPath "$INSTDIR"
-  File "..\dist\Entry-win32-ia32\*.*"
+  File "..\dist\win-ia32-unpacked\lib\net45\*.*"
   File "icon.ico"
   
   WriteRegStr HKCR ".ent" "" "${PRODUCT_NAME}"

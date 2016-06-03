@@ -80,6 +80,9 @@ angular.module('workspace').controller("WorkspaceController",
 		        		storage.removeItem('tempProject');
 		        		beforeUnload();
 		        	} else {
+                        $scope.doPopupControl({
+                            'type':'hide'
+                        });
 						e.preventDefault();
 						e.returnValue = false;
 		        	}
@@ -102,6 +105,7 @@ angular.module('workspace').controller("WorkspaceController",
                 Entry.addEventListener('saveWorkspace', $scope.saveWorkspace);
                 Entry.addEventListener('saveAsWorkspace', $scope.saveAsWorkspace);
                 Entry.addEventListener('loadWorkspace', $scope.loadWorkspace);
+                Entry.addEventListener('loadProject', $scope.loadProject);
                 Entry.addEventListener('openSpriteManager', $scope.openSpriteManager);
                 Entry.addEventListener('openPictureManager', $scope.openPictureManager);
                 Entry.addEventListener('openSoundManager', $scope.openSoundManager);
@@ -156,43 +160,7 @@ angular.module('workspace').controller("WorkspaceController",
                             pathArr.pop();
                             storage.setItem('defaultPath', pathArr.join('/'));
 
-                            Entry.plugin.loadProject(filePath, function (data) {
-                                var jsonObj = JSON.parse(data);
-                                jsonObj.path = filePath;
-                                
-                                jsonObj.objects.forEach(function (object) {
-									var sprite = object.sprite;
-									sprite.pictures.forEach(function (picture) {
-										if(picture.fileurl) {
-											picture.fileurl = picture.fileurl.replace(/\\/gi, '%5C');
-											picture.fileurl = picture.fileurl.replace(/%5C/gi, '/');
-											if(picture.fileurl && picture.fileurl.indexOf('bower_components') === -1) {
-												picture.fileurl = picture.fileurl.substr(picture.fileurl.lastIndexOf('temp'));
-											}										
-										}
-									});
-									sprite.sounds.forEach(function (sound) {
-										if(sound.fileurl) {
-											sound.fileurl = sound.fileurl.replace(/\\/gi, '%5C');
-                                            sound.fileurl = sound.fileurl.replace(/%5C/gi, '/');
-											if(sound.fileurl && sound.fileurl.indexOf('bower_components') === -1) {
-												sound.fileurl = sound.fileurl.substr(sound.fileurl.lastIndexOf('temp'));
-											}
-										}
-									});
-								});
-                                
-                                if (jsonObj.objects[0] &&
-                                    jsonObj.objects[0].script.substr(0,4) === "<xml") {
-                                    blockConverter.convert(jsonObj, function(result) {
-                                        storage.setItem('nativeLoadProject', JSON.stringify(result));
-                                        Entry.plugin.reloadApplication();
-                                    });
-                                } else {
-                                    storage.setItem('nativeLoadProject', JSON.stringify(jsonObj));
-                                    Entry.plugin.reloadApplication();
-                                }
-                            });
+                            $scope.loadProject(filePath);
                         } else {
                             alert(Lang.Workspace.not_supported_file_msg);
                         }
@@ -341,7 +309,9 @@ angular.module('workspace').controller("WorkspaceController",
         }
 
         // 프로젝트 세팅
-        $scope.setWorkspace = function(project) {
+        $scope.setWorkspace = function(project, b) {
+            console.log(project);
+            console.log(b);
             Entry.loadProject(project);
 
             var project_name = "";
@@ -472,6 +442,50 @@ angular.module('workspace').controller("WorkspaceController",
             })(project);
         };
 
+        $scope.loadProject = function (filePath) {
+            $scope.doPopupControl({
+                'type':'spinner',
+                'msg': Lang.Workspace.loading_msg
+            });
+            Entry.plugin.loadProject(filePath, function (data) {
+                var jsonObj = JSON.parse(data);
+                jsonObj.path = filePath;
+
+                jsonObj.objects.forEach(function (object) {
+                    var sprite = object.sprite;
+                    sprite.pictures.forEach(function (picture) {
+                        if(picture.fileurl) {
+                            picture.fileurl = picture.fileurl.replace(/\\/gi, '%5C');
+                            picture.fileurl = picture.fileurl.replace(/%5C/gi, '/');                                                
+                            if(picture.fileurl && picture.fileurl.indexOf('bower_components') === -1) {
+                                picture.fileurl = picture.fileurl.substr(picture.fileurl.lastIndexOf('temp'));
+                            }                                       
+                        }
+                    });
+                    sprite.sounds.forEach(function (sound) {
+                        if(sound.fileurl) {
+                            sound.fileurl = sound.fileurl.replace(/\\/gi, '%5C');
+                            sound.fileurl = sound.fileurl.replace(/%5C/gi, '/');                                                
+                            if(sound.fileurl && sound.fileurl.indexOf('bower_components') === -1) {
+                                sound.fileurl = sound.fileurl.substr(sound.fileurl.lastIndexOf('temp'));
+                            }
+                        }
+                    });
+                });
+
+                if (jsonObj.objects[0] &&
+                    jsonObj.objects[0].script.substr(0,4) === "<xml") {
+                    blockConverter.convert(jsonObj, function(result) {
+                        storage.setItem('nativeLoadProject', JSON.stringify(result));
+                        Entry.plugin.reloadApplication();
+                    });
+                } else {
+                    storage.setItem('nativeLoadProject', JSON.stringify(jsonObj));
+                    Entry.plugin.reloadApplication();
+                }
+            });
+        }
+
         // 불러오기
         $scope.loadWorkspace = function() {
         	// $scope.showSpinner();
@@ -504,43 +518,7 @@ angular.module('workspace').controller("WorkspaceController",
                             pathArr.pop();
                             storage.setItem('defaultPath', pathArr.join('/'));
 
-			        		Entry.plugin.loadProject(filePath, function (data) {
-			        			var jsonObj = JSON.parse(data);
-			        			jsonObj.path = filePath;
-
-								jsonObj.objects.forEach(function (object) {
-									var sprite = object.sprite;
-									sprite.pictures.forEach(function (picture) {
-										if(picture.fileurl) {
-											picture.fileurl = picture.fileurl.replace(/\\/gi, '%5C');
-                                            picture.fileurl = picture.fileurl.replace(/%5C/gi, '/');                                                
-											if(picture.fileurl && picture.fileurl.indexOf('bower_components') === -1) {
-												picture.fileurl = picture.fileurl.substr(picture.fileurl.lastIndexOf('temp'));
-											}										
-										}
-									});
-									sprite.sounds.forEach(function (sound) {
-										if(sound.fileurl) {
-											sound.fileurl = sound.fileurl.replace(/\\/gi, '%5C');
-                                            sound.fileurl = sound.fileurl.replace(/%5C/gi, '/');                                                
-											if(sound.fileurl && sound.fileurl.indexOf('bower_components') === -1) {
-												sound.fileurl = sound.fileurl.substr(sound.fileurl.lastIndexOf('temp'));
-											}
-										}
-									});
-								});
-
-                                if (jsonObj.objects[0] &&
-                                    jsonObj.objects[0].script.substr(0,4) === "<xml") {
-                                    blockConverter.convert(jsonObj, function(result) {
-                                        storage.setItem('nativeLoadProject', JSON.stringify(result));
-                                        Entry.plugin.reloadApplication();
-                                    });
-                                } else {
-                                    storage.setItem('nativeLoadProject', JSON.stringify(jsonObj));
-                                    Entry.plugin.reloadApplication();
-                                }
-                            });
+                            $scope.loadProject(filePath);
                         } else {
                             alert(Lang.Workspace.check_entry_file_msg);
                             $scope.doPopupControl({

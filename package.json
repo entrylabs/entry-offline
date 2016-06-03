@@ -46,7 +46,7 @@
   "devDependencies": {
     "appdmg-tf": "^0.3.11",
     "electron-packager": "^7.0.2",
-    "electron-prebuilt": "1.1.0",
+    "electron-prebuilt": "1.1.1",
     "rimraf": "^2.5.2"
   },
   "dependencies": {
