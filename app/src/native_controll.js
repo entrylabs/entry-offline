@@ -391,10 +391,44 @@ Entry.plugin = (function () {
                     that.loadProject(load_path, function (data) {
                         var jsonObj = JSON.parse(data);
                         jsonObj.path = load_path;
-                        localStorage.setItem('nativeLoadProject', JSON.stringify(jsonObj));
-                        if($.isFunction(cb)) {
-                            cb();
+
+                        jsonObj.objects.forEach(function (object) {
+                            var sprite = object.sprite;
+                            sprite.pictures.forEach(function (picture) {
+                                if(picture.fileurl) {
+                                    picture.fileurl = picture.fileurl.replace(/\\/gi, '%5C');
+                                    picture.fileurl = picture.fileurl.replace(/%5C/gi, '/');                                                
+                                    if(picture.fileurl && picture.fileurl.indexOf('bower_components') === -1) {
+                                        picture.fileurl = picture.fileurl.substr(picture.fileurl.lastIndexOf('temp'));
+                                    }                                       
+                                }
+                            });
+                            sprite.sounds.forEach(function (sound) {
+                                if(sound.fileurl) {
+                                    sound.fileurl = sound.fileurl.replace(/\\/gi, '%5C');
+                                    sound.fileurl = sound.fileurl.replace(/%5C/gi, '/');                                                
+                                    if(sound.fileurl && sound.fileurl.indexOf('bower_components') === -1) {
+                                        sound.fileurl = sound.fileurl.substr(sound.fileurl.lastIndexOf('temp'));
+                                    }
+                                }
+                            });
+                        });
+
+                        if (jsonObj.objects[0] &&
+                            jsonObj.objects[0].script.substr(0,4) === "<xml") {
+                            blockConverter.convert(jsonObj, function(result) {
+                                storage.setItem('nativeLoadProject', JSON.stringify(result));
+                                if($.isFunction(cb)) {
+                                    cb();
+                                }
+                            });
+                        } else {
+                            storage.setItem('nativeLoadProject', JSON.stringify(jsonObj));
+                            if($.isFunction(cb)) {
+                                cb();
+                            }
                         }
+                        
                     });
                 } else {
                     if($.isFunction(cb)) {

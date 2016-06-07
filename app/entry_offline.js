@@ -271,7 +271,7 @@ var shouldQuit = app.makeSingleInstance(function(commandLine, workingDirectory) 
             mainWindow.restore();
         mainWindow.focus();
 
-        if(Array.isArray(commandLine)) {
+        if(Array.isArray(commandLine) && commandLine[1]) {
             mainWindow.webContents.send('loadProject', commandLine[1]);
         }
     }

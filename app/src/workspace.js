@@ -115,11 +115,10 @@ angular.module('workspace').controller("WorkspaceController",
                 Entry.addEventListener('openPictureImport', $scope.openPictureImport);
                 Entry.addEventListener('saveLocalStorageProject', saveLocalStorageProject);
                 if(Entry.plugin.isOsx()) {
-                    var category_list = Entry.playground.categoryView_.getElementsByTagName("li");
-                    category_list['entryCategoryarduino'].addClass('entryRemove');
+                    var category_list = Entry.playground.mainWorkspace.blockMenu._categoryElems;
+                    category_list['arduino'].addClass('entryRemove');
                 }
                 $scope.setOfflineHW();
-
 
 				var $body = $('body');
 				var $uploadWindow = $('.entryUploaderWindow');
