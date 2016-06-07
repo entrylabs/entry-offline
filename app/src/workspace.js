@@ -535,7 +535,7 @@ angular.module('workspace').controller("WorkspaceController",
 
         // 스프라이트 매니저 오픈.
         $scope.openSpriteManager = function() {
-            console.log('openSpriteManager');
+            // console.log('openSpriteManager');
             if (!Entry.engine.isState('stop')) {
                 alert(Lang.Workspace.cannot_add_object);
                 return false;

@@ -708,7 +708,7 @@ Entry.plugin = (function () {
         var sounds_cnt = files.length;
         var run_cnt = 0;
         var soundList = [];
-        console.log("file list : " + JSON.stringify(files));
+        // console.log("file list : " + JSON.stringify(files));
         for(var i = 0; i < files.length; i++) {
             (function (i) {
                 var data = files[i];
@@ -717,28 +717,28 @@ Entry.plugin = (function () {
                 var dest = getUploadPath(fileId, 'sound');
                 var name = data.name;
 
-                console.log("name : " + name);
+                // console.log("name : " + name);
                 var fileName = fileId;
                 var extension = name.split('.')[1];
                 var dirPath = dest.soundPath;
                 var soundPath = dirPath + path.sep + fileName + "." + extension;
 
-                console.log("dest sound path : " + dest.soundPath);
+                // console.log("dest sound path : " + dest.soundPath);
                 //var fs_reader = fs.createReadStream(url);
                 //var fs_writer = fs.createWriteStream(soundPath);
 
                 that.mkdir(dest.uploadDir + '/sound', function () {
-                    console.log("create!! dir ");
+                    // console.log("create!! dir ");
                     fs.readFile(src, function (err, stream) {
                         if(err) {
                             throw err;
                         }
-                        console.log("readFile!! sound ");
+                        // console.log("readFile!! sound ");
                         fs.writeFile(soundPath, stream, {encoding:'utf8', mode: '0777'}, function (err) {
                             if(err) {
                                 throw err;
                             }
-                            console.log("writeFile!! sound ");
+                            // console.log("writeFile!! sound ");
 
                             var audioStream = fs.createReadStream(soundPath);
 
@@ -782,7 +782,7 @@ Entry.plugin = (function () {
         var cache = {};
         fs.realpath(path, function (err, resolvedPath) {
             if (err) throw err;
-            console.log(resolvedPath);
+            // console.log(resolvedPath);
             if($.isFunction(cb)) {
                 cb(resolvedPath);
             }
