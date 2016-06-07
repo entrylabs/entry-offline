@@ -32,7 +32,7 @@
 Name "¿£Æ®¸®"
 
 ; The file to write
-OutFile "${PRODUCT_NAME}_${PRODUCT_VERSION}_Setup.exe"
+OutFile "${PRODUCT_NAME}_${PRODUCT_VERSION}_Setup(x86).exe"
 
 ; The default installation directory
 InstallDir "C:\${PRODUCT_NAME}"

@@ -325,6 +325,8 @@ app.once('ready', function() {
     });
     mainWindow.on('closed', function() {
         mainWindow = null;
+        app.quit();
+        process.exit(0);
     });
 
     let inspectorShortcut = '';
@@ -370,6 +372,10 @@ ipcMain.on('openHardware', function(event, arg) {
         }
 
         hardwareWindow.show();
+    } else {
+        if (hardwareWindow.isMinimized()) 
+            hardwareWindow.restore();
+        hardwareWindow.focus();
     }
 
 });

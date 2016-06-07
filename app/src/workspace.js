@@ -310,8 +310,6 @@ angular.module('workspace').controller("WorkspaceController",
 
         // 프로젝트 세팅
         $scope.setWorkspace = function(project, b) {
-            console.log(project);
-            console.log(b);
             Entry.loadProject(project);
 
             var project_name = "";
@@ -324,13 +322,11 @@ angular.module('workspace').controller("WorkspaceController",
                 project_name = Lang.Workspace.PROJECTDEFAULTNAME[i] + ' ' + Lang.Workspace.project;
             }
 
-
 			$scope.project.name = project_name || Lang.Workspace.new_project;
 
             myProject.name = project_name || Lang.Workspace.new_project;
 
             angular.element('#project_name').trigger('blur');
-
         }
 
         function saveAsProject(title) {
