@@ -9,6 +9,8 @@ angular.module('workspace').controller("WorkspaceController",
         var storage = (typeof window.localStorage === 'undefined') ? undefined : window.localStorage;
 
         $scope.initWorkspace = function () {
+            Entry.addEventListener('showLoadingPopup', $scope.showLoadingPopup);
+            Entry.addEventListener('hideLoadingPopup', $scope.hideLoadingPopup);
 
             var playFunc = createjs.Sound.play;
             createjs.Sound.play = function (a, b) {
@@ -176,7 +178,6 @@ angular.module('workspace').controller("WorkspaceController",
                 Entry.plugin.openHardwarePage();
             };
 
-
 			Entry.HW.prototype.downloadSource = function() {
 
                 dialog.showSaveDialog({
@@ -233,6 +234,19 @@ angular.module('workspace').controller("WorkspaceController",
             } else if (obj.type === 'hide') {
                 $scope.popupHelper.hide();
             }
+        }
+
+        $scope.showLoadingPopup = function () {
+            $scope.doPopupControl({
+                'type':'spinner',
+                'msg': Lang.Workspace.loading_msg
+            });
+        }
+        
+        $scope.hideLoadingPopup = function () {
+            $scope.doPopupControl({
+                'type':'hide'
+            });
         }
 
         function addSpinnerPopup() {

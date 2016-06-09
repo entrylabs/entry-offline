@@ -6,7 +6,7 @@
     "node"
   ],
   "dependencies": {
-    "entryjs": "https://github.com/entrylabs/entryjs.git#hotfix/remove_function_ref",
+    "entryjs": "https://github.com/entrylabs/entryjs.git#1.3.1",
     "entry-hw": "https://github.com/entrylabs/entry-hw.git#master",
     "jquery": "~1.11.3",
     "jquery-ui": "~1.11.x",

@@ -12,7 +12,8 @@
 !define MUI_ICON "icon.ico"
 !define MUI_UNICON "icon.ico"
 !define PRODUCT_NAME "Entry"
-!define PRODUCT_VERSION "1.3.0"
+!define APP_NAME "Entry.exe"
+!define PRODUCT_VERSION "1.3.1"
 !define PRODUCT_PUBLISHER "EntryLabs"
 !define PRODUCT_WEB_SITE "http://www.play-entry.org/"
  
@@ -52,6 +53,10 @@ RequestExecutionLevel admin
 !insertmacro MUI_PAGE_COMPONENTS
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_INSTFILES
+!define MUI_FINISHPAGE_NOAUTOCLOSE
+!define MUI_FINISHPAGE_RUN
+!define MUI_FINISHPAGE_RUN_FUNCTION "LaunchLink"
+!insertmacro MUI_PAGE_FINISH
 
 !insertmacro MUI_UNPAGE_CONFIRM
 !insertmacro MUI_UNPAGE_INSTFILES
@@ -175,8 +180,17 @@ Section "Uninstall"
 
 SectionEnd
 
+Function LaunchLink
+  Exec "${APP_NAME}"
+FunctionEnd
+
 Function .onInit
- 
+  FindProcDLL::FindProc "${APP_NAME}"
+  StrCmp $R0 1 mfound notRunning
+  mfound:
+	KillProcDLL::KillProc "${APP_NAME}"
+  notRunning:
+  
   ReadRegStr $R0 HKLM \
   "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
   "UninstallString"

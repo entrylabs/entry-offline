@@ -380,56 +380,63 @@ Entry.plugin = (function () {
                     return;
                 }
             }
-
+            
             if(options.path && !isNotFirst) {
                 if(options.path !== '.') {
-                    var load_path = options.path;
-                    var pathArr = load_path.split(path.sep);
-                    pathArr.pop();
-                    localStorage.setItem('defaultPath', pathArr.join(path.sep));
+                    Entry.dispatchEvent('showLoadingPopup');
+                    try{                        
+                        var load_path = options.path;
+                        var pathArr = load_path.split(path.sep);
+                        pathArr.pop();
+                        localStorage.setItem('defaultPath', pathArr.join(path.sep));
 
-                    that.loadProject(load_path, function (data) {
-                        var jsonObj = JSON.parse(data);
-                        jsonObj.path = load_path;
+                        that.loadProject(load_path, function (data) {
+                            var jsonObj = JSON.parse(data);
+                            jsonObj.path = load_path;
 
-                        jsonObj.objects.forEach(function (object) {
-                            var sprite = object.sprite;
-                            sprite.pictures.forEach(function (picture) {
-                                if(picture.fileurl) {
-                                    picture.fileurl = picture.fileurl.replace(/\\/gi, '%5C');
-                                    picture.fileurl = picture.fileurl.replace(/%5C/gi, '/');                                                
-                                    if(picture.fileurl && picture.fileurl.indexOf('bower_components') === -1) {
-                                        picture.fileurl = picture.fileurl.substr(picture.fileurl.lastIndexOf('temp'));
-                                    }                                       
-                                }
-                            });
-                            sprite.sounds.forEach(function (sound) {
-                                if(sound.fileurl) {
-                                    sound.fileurl = sound.fileurl.replace(/\\/gi, '%5C');
-                                    sound.fileurl = sound.fileurl.replace(/%5C/gi, '/');                                                
-                                    if(sound.fileurl && sound.fileurl.indexOf('bower_components') === -1) {
-                                        sound.fileurl = sound.fileurl.substr(sound.fileurl.lastIndexOf('temp'));
+                            jsonObj.objects.forEach(function (object) {
+                                var sprite = object.sprite;
+                                sprite.pictures.forEach(function (picture) {
+                                    if(picture.fileurl) {
+                                        picture.fileurl = picture.fileurl.replace(/\\/gi, '%5C');
+                                        picture.fileurl = picture.fileurl.replace(/%5C/gi, '/');                                                
+                                        if(picture.fileurl && picture.fileurl.indexOf('bower_components') === -1) {
+                                            picture.fileurl = picture.fileurl.substr(picture.fileurl.lastIndexOf('temp'));
+                                        }                                       
                                     }
-                                }
+                                });
+                                sprite.sounds.forEach(function (sound) {
+                                    if(sound.fileurl) {
+                                        sound.fileurl = sound.fileurl.replace(/\\/gi, '%5C');
+                                        sound.fileurl = sound.fileurl.replace(/%5C/gi, '/');                                                
+                                        if(sound.fileurl && sound.fileurl.indexOf('bower_components') === -1) {
+                                            sound.fileurl = sound.fileurl.substr(sound.fileurl.lastIndexOf('temp'));
+                                        }
+                                    }
+                                });
                             });
-                        });
 
-                        if (jsonObj.objects[0] &&
-                            jsonObj.objects[0].script.substr(0,4) === "<xml") {
-                            blockConverter.convert(jsonObj, function(result) {
-                                storage.setItem('nativeLoadProject', JSON.stringify(result));
+                            if (jsonObj.objects[0] &&
+                                jsonObj.objects[0].script.substr(0,4) === "<xml") {
+                                blockConverter.convert(jsonObj, function(result) {
+                                    localStorage.setItem('nativeLoadProject', JSON.stringify(result));
+                                    Entry.dispatchEvent('hideLoadingPopup');
+                                    if($.isFunction(cb)) {
+                                        cb();
+                                    }
+                                });
+                            } else {
+                                localStorage.setItem('nativeLoadProject', JSON.stringify(jsonObj));
+                                Entry.dispatchEvent('hideLoadingPopup');
                                 if($.isFunction(cb)) {
                                     cb();
                                 }
-                            });
-                        } else {
-                            storage.setItem('nativeLoadProject', JSON.stringify(jsonObj));
-                            if($.isFunction(cb)) {
-                                cb();
                             }
-                        }
-                        
-                    });
+                            
+                        });
+                    } catch(e) {
+                        Entry.dispatchEvent('hideLoadingPopup');
+                    }
                 } else {
                     if($.isFunction(cb)) {
                         cb();
