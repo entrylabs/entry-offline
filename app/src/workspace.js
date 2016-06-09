@@ -345,7 +345,7 @@ angular.module('workspace').controller("WorkspaceController",
         function saveAsProject(title) {
             var default_path = storage.getItem('defaultPath') || '';
             dialog.showSaveDialog({
-                defaultPath: default_path + $scope.project.name,
+                defaultPath: path.join(default_path, $scope.project.name),
                 title: title,
                 filters: [
                     {

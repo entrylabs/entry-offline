@@ -37,7 +37,6 @@
       "authors": "EntryLabs"
     },
     "asar": false,
-    "name": "Entry",
     "app-bundle-id": "entry-offline",
     "app-category-type": "org.play-entry.entry-offline",
     "iconUrl": "https://raw.githubusercontent.com/entrylabs/entry-hw/feature/electron/build/icon.ico",
