@@ -6,7 +6,7 @@
 ; there. 
 
 !include MUI2.nsh
-
+!include nsProcess.nsh
 
 ; MUI Settings / Icons
 !define MUI_ICON "icon.ico"
@@ -184,35 +184,32 @@ Function LaunchLink
   Exec "${APP_NAME}"
 FunctionEnd
 
+
 Function .onInit
-  FindProcDLL::FindProc "${APP_NAME}"
-  StrCmp $R0 1 mfound notRunning
-  mfound:
-	KillProcDLL::KillProc "${APP_NAME}"
-  notRunning:
+	${nsProcess::FindProcess} "${APP_NAME}" $R0
+	StrCmp $R0 0 mfound notRunning
+	mfound:
+		${nsProcess::KillProcess} "${APP_NAME}" $R0
+	notRunning:
   
-  ReadRegStr $R0 HKLM \
-  "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
-  "UninstallString"
-  StrCmp $R0 "" done
- 
-  MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
-  $(SETUP_UNINSTALL_MSG) \
-  IDOK uninst
-  Abort
- 
-;Run the uninstaller
-uninst:
-  ClearErrors
-  ExecWait '$R0 _?=$INSTDIR'
-  ;ExecWait '$R0 _?=$R1'
- 
-  ;IfErrors no_remove_uninstaller done
-  ;no_remove_uninstaller:
-  IfErrors 0 +2
+	ReadRegStr $R0 HKLM \
+	"Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
+	"UninstallString"
+	StrCmp $R0 "" done
+
+	MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
+	$(SETUP_UNINSTALL_MSG) \
+	IDOK uninst
 	Abort
-	RMDir /r /REBOOTOK $R1
  
-done:
+	;Run the uninstaller	
+	uninst:
+		ClearErrors
+		ExecWait '$R0 _?=$INSTDIR'
+		IfErrors 0 +2
+			Abort
+			RMDir /r /REBOOTOK $R1
+	 
+	done:
  
 FunctionEnd
