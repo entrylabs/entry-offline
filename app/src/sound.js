@@ -295,11 +295,18 @@ angular.module('common').controller('SoundController',
     };
 
     $scope.moveContainer = function (direction) {
-        if ($scope.selectedSystem.length <=5)
+        var sounds;
+
+        if($scope.currentTab === 'upload') {
+            sounds = $scope.selectedUpload;
+        } else {
+            sounds = $scope.selectedSystem;
+        }
+        
+        if (sounds.length <=5)
             return;
 
         var mover = jQuery('.modal_selected_container_moving').eq(0);
-        var sounds = $scope.selectedSystem;
         if (direction == 'left') {
             if ($scope.currentIndex+2 > sounds.length)
                 return;

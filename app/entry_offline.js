@@ -1,12 +1,9 @@
 'use strict';
 
 const electron = require('electron');
-const ipcMain = electron.ipcMain;
-const app = electron.app;  // 어플리케이션 기반을 조작 하는 모듈.
-const BrowserWindow = electron.BrowserWindow;  // 네이티브 브라우저 창을 만드는 모듈.
+const {app, BrowserWindow, Menu, globalShortcut, ipcMain} = electron;
 const path = require('path');
 const fs = require('fs');
-const Menu     = electron.Menu;
 const packageJson     = require('./package.json');
 const ChildProcess = require('child_process');    
 
@@ -258,7 +255,6 @@ var handleStartupEvent = function() {
     }
 };
 
-
 var mainWindow = null;
 var hardwareWindow = null;
 var isClose = true;
@@ -269,12 +265,17 @@ app.on('window-all-closed', function() {
 });
 
 var shouldQuit = app.makeSingleInstance(function(commandLine, workingDirectory) {
-// 어플리케이션을 중복 실행했습니다. 주 어플리케이션 인스턴스를 활성화 합니다.
+    // 어플리케이션을 중복 실행했습니다. 주 어플리케이션 인스턴스를 활성화 합니다.
     if (mainWindow) {
         if (mainWindow.isMinimized()) 
             mainWindow.restore();
         mainWindow.focus();
+
+        if(Array.isArray(commandLine) && commandLine[1]) {
+            mainWindow.webContents.send('loadProject', commandLine[1]);
+        }
     }
+
     return true;
 });
 
@@ -317,10 +318,25 @@ app.once('ready', function() {
         e.preventDefault();
     });
     mainWindow.on('close', function(e) {
+        if(hardwareWindow) {
+            hardwareWindow.close();
+        }
         mainWindow.webContents.send('main-close');
     });
     mainWindow.on('closed', function() {
         mainWindow = null;
+        app.quit();
+        process.exit(0);
+    });
+
+    let inspectorShortcut = '';
+    if(process.platform == 'darwin') {
+        inspectorShortcut = 'Command+Alt+i';
+    } else {
+        inspectorShortcut = 'Control+Shift+i';
+    }
+    globalShortcut.register(inspectorShortcut, () => {
+        mainWindow.webContents.openDevTools();
     });
 });
 
@@ -356,24 +372,10 @@ ipcMain.on('openHardware', function(event, arg) {
         }
 
         hardwareWindow.show();
+    } else {
+        if (hardwareWindow.isMinimized()) 
+            hardwareWindow.restore();
+        hardwareWindow.focus();
     }
 
 });
-
-// try{
-//     if (handleStartupEvent()) {
-//         logger('handleStartupEvent = true');
-//         app.quit();
-//         process.exit(0);
-//         // setTimeout(function () {
-//         // }, 1000)
-//         return;
-//     } else {
-//         logger('handleStartupEvent = false');
-       
-//     }    
-// } catch(e) {
-//     logger(e.stack);
-//     app.quit();
-//     process.exit(0);
-// }

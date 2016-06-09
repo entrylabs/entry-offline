@@ -9,7 +9,23 @@ common.filter('makeThumbnail', function() {
             // return picture.filename.substring(0,2)+'/'+picture.filename.substring(2,4)+'/thumb/'+picture.filename+'.png';
             // 
             if(picture.fileurl) {
-                return encodeURI(decodeURI(picture.fileurl).replace(path.join(path.sep, 'image', path.sep), path.join(path.sep, 'thumb', path.sep)));
+                var returnValue;
+                picture.fileurl = picture.fileurl.replace(/\\/gi, '/');
+                picture.fileurl = picture.fileurl.replace(/%5C/gi, '/');
+
+                // console.log(decodeURI(picture.fileurl).replace('/image/', '/thumb/'));
+                // return decodeURI(picture.fileurl).replace('/image/', '/thumb/');
+
+                var lastIdx = picture.fileurl.lastIndexOf('/image/');
+                if(lastIdx > -1) {
+                    var temp = decodeURI(picture.fileurl);
+                    temp = temp.substr(lastIdx).replace('/image/', '/thumb/');
+                    returnValue = picture.fileurl.substr(0, lastIdx) + temp;
+                }
+
+                // console.log(picture.fileurl);
+                return returnValue;
+
             } else {
                 var extension = picture.extension || '.png';
                 return ['uploads', picture.filename.substring(0,2), picture.filename.substring(2,4), 'thumb', picture.filename + extension].join('/');                
@@ -25,7 +41,12 @@ common.filter('makeUploadThumbnail', function() {
         if (picture) {
             // return picture.filename.substring(0,2)+'/'+picture.filename.substring(2,4)+'/thumb/'+picture.filename+'.png';
             var extension = picture.extension || '.png';
-            return ['temp', picture.filename.substring(0,2), picture.filename.substring(2,4), 'thumb', picture.filename + extension].join('/');
+            var temp;
+
+            temp = _real_path.replace(/\\/gi, '/');
+            temp = temp.replace(/%5C/gi, '/');
+                
+            return [temp, 'temp', picture.filename.substring(0,2), picture.filename.substring(2,4), 'thumb', picture.filename + extension].join('/');
         }
         else
             return './images/text_icon.png';

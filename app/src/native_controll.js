@@ -20,11 +20,11 @@ if(startFile && path.isAbsolute(startFile)){
 
 var orgAlert = alert;
 alert = function (msg) {
-    orgAlert(msg, Lang.Menus.Entry);
+    orgAlert(msg || '', Lang.Menus.Entry);
 }
 var orgConfirm = confirm;
 confirm = function (msg) {
-    return orgConfirm(msg, Lang.Menus.Entry);
+    return orgConfirm(msg || '', Lang.Menus.Entry);
 }
 
 // console.log = function () {};
@@ -112,6 +112,10 @@ function calcDurationForMp3(audioHex) {
     return (audioHex.length * 4) / (bitrate * 1000);
 }
 
+ipcRenderer.on('loadProject', function (e, projectPath) {
+    Entry.dispatchEvent('loadProject', projectPath);
+});
+
 // plugin
 Entry.plugin = (function () {
     var that = {};
@@ -123,10 +127,8 @@ Entry.plugin = (function () {
 
     var getUploadPath = function(fileId, option) {
 
-        console.log('file id : ' + fileId);
         if(option === undefined) {
             option = 'image';
-            console.log("option : " + option);
         }
 
         // prepare upload directory
@@ -280,33 +282,6 @@ Entry.plugin = (function () {
     that.openHardwarePage = function () {
         try{
             ipcRenderer.send('openHardware');
-            // if(hardwarePopup) {
-            //     return;
-            // }
-
-            // var title = '';
-
-            // if(nowLocale === 'ko') {
-            //     title = '엔트리 하드웨어';
-            // } else {
-            //     title = 'Entry HardWare'
-            // }
-            // hardwarePopup = new BrowserWindow({
-            //     width: 800, 
-            //     height: 650, 
-            //     title: title,
-            //     resizable: false
-            // });
-
-            // hardwarePopup.loadURL('file:///' + path.join(__dirname, 'bower_components', 'entry-hw', 'app', 'index.html'));
-            // hardwarePopup.on('closed', function() {
-            //     hardwarePopup = null;
-            // });
-
-            // hardwarePopup.setMenu(null);
-
-            // // hardwarePopup.webContents.openDevTools();
-            // hardwarePopup.show();
         } catch(e) {}
     }
 
@@ -405,22 +380,63 @@ Entry.plugin = (function () {
                     return;
                 }
             }
-
+            
             if(options.path && !isNotFirst) {
                 if(options.path !== '.') {
-                    var load_path = options.path;
-                    var pathArr = load_path.split(path.sep);
-                    pathArr.pop();
-                    localStorage.setItem('defaultPath', pathArr.join(path.sep));
+                    Entry.dispatchEvent('showLoadingPopup');
+                    try{                        
+                        var load_path = options.path;
+                        var pathArr = load_path.split(path.sep);
+                        pathArr.pop();
+                        localStorage.setItem('defaultPath', pathArr.join(path.sep));
 
-                    that.loadProject(load_path, function (data) {
-                        var jsonObj = JSON.parse(data);
-                        jsonObj.path = load_path;
-                        localStorage.setItem('nativeLoadProject', JSON.stringify(jsonObj));
-                        if($.isFunction(cb)) {
-                            cb();
-                        }
-                    });
+                        that.loadProject(load_path, function (data) {
+                            var jsonObj = JSON.parse(data);
+                            jsonObj.path = load_path;
+
+                            jsonObj.objects.forEach(function (object) {
+                                var sprite = object.sprite;
+                                sprite.pictures.forEach(function (picture) {
+                                    if(picture.fileurl) {
+                                        picture.fileurl = picture.fileurl.replace(/\\/gi, '%5C');
+                                        picture.fileurl = picture.fileurl.replace(/%5C/gi, '/');                                                
+                                        if(picture.fileurl && picture.fileurl.indexOf('bower_components') === -1) {
+                                            picture.fileurl = picture.fileurl.substr(picture.fileurl.lastIndexOf('temp'));
+                                        }                                       
+                                    }
+                                });
+                                sprite.sounds.forEach(function (sound) {
+                                    if(sound.fileurl) {
+                                        sound.fileurl = sound.fileurl.replace(/\\/gi, '%5C');
+                                        sound.fileurl = sound.fileurl.replace(/%5C/gi, '/');                                                
+                                        if(sound.fileurl && sound.fileurl.indexOf('bower_components') === -1) {
+                                            sound.fileurl = sound.fileurl.substr(sound.fileurl.lastIndexOf('temp'));
+                                        }
+                                    }
+                                });
+                            });
+
+                            if (jsonObj.objects[0] &&
+                                jsonObj.objects[0].script.substr(0,4) === "<xml") {
+                                blockConverter.convert(jsonObj, function(result) {
+                                    localStorage.setItem('nativeLoadProject', JSON.stringify(result));
+                                    Entry.dispatchEvent('hideLoadingPopup');
+                                    if($.isFunction(cb)) {
+                                        cb();
+                                    }
+                                });
+                            } else {
+                                localStorage.setItem('nativeLoadProject', JSON.stringify(jsonObj));
+                                Entry.dispatchEvent('hideLoadingPopup');
+                                if($.isFunction(cb)) {
+                                    cb();
+                                }
+                            }
+                            
+                        });
+                    } catch(e) {
+                        Entry.dispatchEvent('hideLoadingPopup');
+                    }
                 } else {
                     if($.isFunction(cb)) {
                         cb();
@@ -437,32 +453,34 @@ Entry.plugin = (function () {
 
     // 프로젝트 저장
     that.saveProject = function(filePath, data, cb, enc) {
-        var string_data = JSON.stringify(data);
-        that.mkdir(_real_path + '/temp', function () {
-            fs.writeFile(_real_path + '/temp/project.json', string_data, {encoding: (enc || 'utf8'), mode: '0777'}, function (err) {
-                if(err) {
-                    throw err;
-                }
-
-                var fs_reader = fstream.Reader({ 'path': path.resolve(_real_path, 'temp'), 'type': 'Directory' });
-
-                var fs_writer = fstream.Writer({ 'path': filePath, 'mode': '0777', 'type': 'File',  });
-
-                fs_writer.on('entry', function (list) {
-                    list.props.mode = '0777';
-                    // console.log('entry');
-                });
-                fs_writer.on('end', function () {
-
-                    if($.isFunction(cb)){
-                        cb();
+        blocklyConverter.convert(data, function (data) {
+            var string_data = JSON.stringify(data);
+            that.mkdir(_real_path + '/temp', function () {
+                fs.writeFile(_real_path + '/temp/project.json', string_data, {encoding: (enc || 'utf8'), mode: '0777'}, function (err) {
+                    if(err) {
+                        throw err;
                     }
+
+                    var fs_reader = fstream.Reader({ 'path': path.resolve(_real_path, 'temp'), 'type': 'Directory' });
+
+                    var fs_writer = fstream.Writer({ 'path': filePath, 'mode': '0777', 'type': 'File',  });
+
+                    fs_writer.on('entry', function (list) {
+                        list.props.mode = '0777';
+                        // console.log('entry');
+                    });
+                    fs_writer.on('end', function () {
+
+                        if($.isFunction(cb)){
+                            cb();
+                        }
+                    });
+
+                    fs_reader.pipe(tar.Pack())
+                        .pipe(zlib.Gzip())
+                        .pipe(fs_writer)
+
                 });
-
-                fs_reader.pipe(tar.Pack())
-                    .pipe(zlib.Gzip())
-                    .pipe(fs_writer)
-
             });
         });
     }
@@ -647,7 +665,6 @@ Entry.plugin = (function () {
                     var orgData = that.getResizeImageFromBase64(orgImage, orgCanvas, 960);
                     fs_writer.write(orgData, 'base64');
                     fs_writer.end(function () {
-                        console.log('close');
                         orgCanvas = null;
                         orgImage = null;
 
@@ -698,7 +715,7 @@ Entry.plugin = (function () {
         var sounds_cnt = files.length;
         var run_cnt = 0;
         var soundList = [];
-        console.log("file list : " + JSON.stringify(files));
+        // console.log("file list : " + JSON.stringify(files));
         for(var i = 0; i < files.length; i++) {
             (function (i) {
                 var data = files[i];
@@ -707,28 +724,28 @@ Entry.plugin = (function () {
                 var dest = getUploadPath(fileId, 'sound');
                 var name = data.name;
 
-                console.log("name : " + name);
+                // console.log("name : " + name);
                 var fileName = fileId;
                 var extension = name.split('.')[1];
                 var dirPath = dest.soundPath;
                 var soundPath = dirPath + path.sep + fileName + "." + extension;
 
-                console.log("dest sound path : " + dest.soundPath);
+                // console.log("dest sound path : " + dest.soundPath);
                 //var fs_reader = fs.createReadStream(url);
                 //var fs_writer = fs.createWriteStream(soundPath);
 
                 that.mkdir(dest.uploadDir + '/sound', function () {
-                    console.log("create!! dir ");
+                    // console.log("create!! dir ");
                     fs.readFile(src, function (err, stream) {
                         if(err) {
                             throw err;
                         }
-                        console.log("readFile!! sound ");
+                        // console.log("readFile!! sound ");
                         fs.writeFile(soundPath, stream, {encoding:'utf8', mode: '0777'}, function (err) {
                             if(err) {
                                 throw err;
                             }
-                            console.log("writeFile!! sound ");
+                            // console.log("writeFile!! sound ");
 
                             var audioStream = fs.createReadStream(soundPath);
 
@@ -772,7 +789,7 @@ Entry.plugin = (function () {
         var cache = {};
         fs.realpath(path, function (err, resolvedPath) {
             if (err) throw err;
-            console.log(resolvedPath);
+            // console.log(resolvedPath);
             if($.isFunction(cb)) {
                 cb(resolvedPath);
             }
