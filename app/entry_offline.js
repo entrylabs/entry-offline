@@ -297,7 +297,10 @@ app.once('ready', function() {
     mainWindow = new BrowserWindow({
         width: 1024, 
         height: 700,
-        title: title
+        title: title,
+        webPreferences: {
+            backgroundThrottling: false
+        }
     });
 
     mainWindow.setMenu(null);
@@ -357,7 +360,9 @@ ipcMain.on('openHardware', function(event, arg) {
             width: 800, 
             height: 650,
             title: title,
-            resizable: false
+            webPreferences: {
+                backgroundThrottling: false
+            }
         });
 
         hardwareWindow.setMenu(null);

@@ -157,9 +157,8 @@ angular.module('workspace').controller("WorkspaceController",
 				            });
 
                             var filePath = file.path;
-                            var pathArr = filePath.split('/');
-                            pathArr.pop();
-                            storage.setItem('defaultPath', pathArr.join('/'));
+                            var parser = path.parse(filePath);
+                            storage.setItem('defaultPath', parser.dir);
 
                             $scope.loadProject(filePath);
                         } else {
@@ -344,8 +343,10 @@ angular.module('workspace').controller("WorkspaceController",
 
         function saveAsProject(title) {
             var default_path = storage.getItem('defaultPath') || '';
+            var projectName = $scope.project.name.replace(/[\\\/:*?"<>|]/gi, '');
+            var savePath = path.join(default_path, projectName);
             dialog.showSaveDialog({
-                defaultPath: path.join(default_path, $scope.project.name),
+                defaultPath: savePath,
                 title: title,
                 filters: [
                     {
@@ -355,9 +356,8 @@ angular.module('workspace').controller("WorkspaceController",
                 ]
             }, function (filePath) {    
                 if(filePath) {
-                    var pathArr = filePath.split('/');
-                    pathArr.pop();
-                    storage.setItem('defaultPath', pathArr.join('/'));
+                    var parser = path.parse(filePath);
+                    storage.setItem('defaultPath', parser.dir);
 
 	        		try{
 		        		myProject.saveProject(filePath, function (project_name) {
@@ -511,7 +511,9 @@ angular.module('workspace').controller("WorkspaceController",
                 Entry.stateManager.addStamp();
                 storage.removeItem('tempProject');
                 Entry.plugin.beforeStatus = 'load';
+                var default_path = storage.getItem('defaultPath') || '';
                 dialog.showOpenDialog({
+                    defaultPath: default_path,
                     properties: [
                         'openFile'
                     ], filters: [
@@ -523,10 +525,8 @@ angular.module('workspace').controller("WorkspaceController",
                         var pathInfo = path.parse(filePath);
 
                         if(pathInfo.ext === '.ent') {
-                            var pathArr = filePath.split('/');
-                            pathArr.pop();
-                            storage.setItem('defaultPath', pathArr.join('/'));
-
+                            var parser = path.parse(filePath);
+                            storage.setItem('defaultPath', parser.dir);
                             $scope.loadProject(filePath);
                         } else {
                             alert(Lang.Workspace.check_entry_file_msg);

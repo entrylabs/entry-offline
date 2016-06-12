@@ -44,11 +44,11 @@
   },
   "devDependencies": {
     "appdmg-tf": "^0.3.11",
+    "electron-builder": "^3.25.0",
     "electron-packager": "^7.0.2",
     "electron-prebuilt": "1.1.1",
-    "electron-builder": "^3.25.0",
-    "rimraf": "^2.5.2"
+    "rimraf": "^2.5.2",
+    "spectron": "^3.2.3"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }
