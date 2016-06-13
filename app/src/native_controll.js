@@ -386,9 +386,8 @@ Entry.plugin = (function () {
                     Entry.dispatchEvent('showLoadingPopup');
                     try{                        
                         var load_path = options.path;
-                        var pathArr = load_path.split(path.sep);
-                        pathArr.pop();
-                        localStorage.setItem('defaultPath', pathArr.join(path.sep));
+                        var parser = path.parse(filePath);
+                        localStorage.setItem('defaultPath', parser.dir);
 
                         that.loadProject(load_path, function (data) {
                             var jsonObj = JSON.parse(data);
