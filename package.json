@@ -27,6 +27,12 @@
           "y": 120,
           "type": "file",
           "path": "Entry.app"
+        },
+        {
+          "x": 380,
+          "y": 250,
+          "type": "file",
+          "path": "./app/README.md"
         }
       ]
     },
