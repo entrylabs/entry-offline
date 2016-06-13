@@ -495,6 +495,42 @@ angular.module('workspace').controller("WorkspaceController",
             });
         }
 
+        $scope.loadWorkspaceTest = function (filePath) {
+            // $scope.showSpinner();
+            $scope.doPopupControl({
+                'type':'spinner',
+                'msg': Lang.Workspace.loading_msg
+            });
+            var canLoad = false;
+            if(!Entry.stateManager.isSaved()) {
+                canLoad = !confirm(Lang.Menus.save_dismiss);
+            }
+
+            if(!canLoad) {
+                Entry.stateManager.addStamp();
+                storage.removeItem('tempProject');
+                Entry.plugin.beforeStatus = 'load';
+                var default_path = storage.getItem('defaultPath') || '';
+              
+                var pathInfo = path.parse(filePath);
+
+                if(pathInfo.ext === '.ent') {
+                    var parser = path.parse(filePath);
+                    storage.setItem('defaultPath', parser.dir);
+                    $scope.loadProject(filePath);
+                } else {
+                    alert(Lang.Workspace.check_entry_file_msg);
+                    $scope.doPopupControl({
+                        'type':'hide'
+                    });
+                }
+            } else {
+                $scope.doPopupControl({
+                    'type':'hide'
+                });
+            }
+        }
+
         // 불러오기
         $scope.loadWorkspace = function() {
         	// $scope.showSpinner();

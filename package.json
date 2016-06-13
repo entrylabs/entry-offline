@@ -8,7 +8,8 @@
     "dist:win64": "build --arch x64",
     "pack:win": "electron-packager ./dist --platform=win32 --arch=ia32",
     "dist:osx": "build",
-    "start": "set NODE_ENV=development&&electron -d app"
+    "start": "set NODE_ENV=development&&electron -d app",
+    "test": "mocha test/default.js"
   },
   "build": {
     "osx": {
@@ -47,6 +48,7 @@
     "electron-builder": "^3.25.0",
     "electron-packager": "^7.0.2",
     "electron-prebuilt": "1.1.1",
+    "mocha": "^2.5.3",
     "rimraf": "^2.5.2",
     "spectron": "^3.2.3"
   },
