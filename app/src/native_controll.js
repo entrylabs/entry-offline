@@ -361,8 +361,14 @@ Entry.plugin = (function () {
 
             if(!isNotFirst) {
                 var isTempRecovery = false;
+                var isExistFolder;
+                var tempProject = path.join(__dirname, 'temp');
 
-                if(localStorage.hasOwnProperty('tempProject')) {
+                if( fs.existsSync(tempProject) ) {
+                    isExistFolder = fs.readdirSync(tempProject).length > 0;
+                }
+
+                if(localStorage.hasOwnProperty('tempProject') && isExistFolder) {
                     isTempRecovery = confirm(Lang.Workspace.restore_project_msg);
                 }
 
@@ -372,7 +378,6 @@ Entry.plugin = (function () {
                     });
                 } else {
                     var jsonObj = JSON.parse(localStorage.getItem('tempProject'));
-                    jsonObj.path = load_path;
                     localStorage.setItem('nativeLoadProject', JSON.stringify(jsonObj));
                     if($.isFunction(cb)) {
                         cb();
@@ -386,7 +391,7 @@ Entry.plugin = (function () {
                     Entry.dispatchEvent('showLoadingPopup');
                     try{                        
                         var load_path = options.path;
-                        var parser = path.parse(filePath);
+                        var parser = path.parse(load_path);
                         localStorage.setItem('defaultPath', parser.dir);
 
                         that.loadProject(load_path, function (data) {
