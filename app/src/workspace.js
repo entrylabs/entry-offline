@@ -360,7 +360,17 @@ angular.module('workspace').controller("WorkspaceController",
                     storage.setItem('defaultPath', parser.dir);
 
 	        		try{
-		        		myProject.saveProject(filePath, function (project_name) {
+		        		myProject.saveProject(filePath, function (e, project_name) {
+                            if(e) {
+                                $scope.doPopupControl({
+                                    'type':'hide'
+                                });
+                                $scope.doPopupControl({
+                                    'type':'fail',
+                                    'msg': Lang.Workspace.saving_fail_msg
+                                });                 
+                                $scope.isNowSaving = false;
+                            }
 		        			Entry.stateManager.addStamp();
 			            	myProject.isSaved = true;
 			            	myProject.isSavedPath = filePath;
@@ -456,7 +466,16 @@ angular.module('workspace').controller("WorkspaceController",
                 'type':'spinner',
                 'msg': Lang.Workspace.loading_msg
             });
-            Entry.plugin.loadProject(filePath, function (data) {
+            Entry.plugin.loadProject(filePath, function (e, data) {
+                if(e) {
+                    $scope.doPopupControl({
+                        'type':'hide'
+                    });
+                    $scope.doPopupControl({
+                        'type':'fail',
+                        'msg': Lang.Workspace.saving_fail_msg
+                    }); 
+                }
                 var jsonObj = JSON.parse(data);
                 jsonObj.path = filePath;
 
@@ -862,9 +881,9 @@ angular.module('workspace').controller("WorkspaceController",
             var project = Entry.exportProject();
             project.name = project_name;
 
-            Entry.plugin.saveProject(path, project, function () {
+            Entry.plugin.saveProject(path, project, function (e) {
                 if($.isFunction(cb)) {
-                    cb(project_name);
+                    cb(e, project_name);
                 };
             });
         };

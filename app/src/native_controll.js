@@ -473,6 +473,11 @@ Entry.plugin = (function () {
                         list.props.mode = '0777';
                         // console.log('entry');
                     });
+                    fs_writer.on('error', function (e) {
+                        if($.isFunction(cb)){
+                            cb(e);
+                        }
+                    });
                     fs_writer.on('end', function () {
 
                         if($.isFunction(cb)){
@@ -512,7 +517,9 @@ Entry.plugin = (function () {
             list.props.mode = '0777';
         });
         fs_writer.on('error', function (e) {
-            console.log('error');
+            if($.isFunction(cb)) {
+                cb(data);
+            }
         });
         fs_writer.on('end', function () {
             fs.readFile(path.resolve(_real_path, 'temp', 'project.json'), enc || 'utf8', function (err, data) {
@@ -521,7 +528,7 @@ Entry.plugin = (function () {
                 }
 
                 if($.isFunction(cb)) {
-                    cb(data);
+                    cb(null, data);
                 }
             });
         });
