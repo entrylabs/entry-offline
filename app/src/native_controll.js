@@ -596,9 +596,9 @@ Entry.plugin = (function () {
     that.saveTempImageFile = function (data, cb) {
         var fileId = createFileId();
         var dest = getUploadPath(fileId);
-        that.mkdir(dest.uploadDir + '/image', '0777', function () {
+        that.mkdir(dest.uploadDir + '/image', function () {
             fs.writeFile(dest.imagePath + '.png', data.org, { encoding: 'base64', mode: '0777' }, function (err) {
-                that.mkdir(dest.uploadDir + '/thumb', '0777', function () {
+                that.mkdir(dest.uploadDir + '/thumb', function () {
                     fs.writeFile(dest.thumbPath + '.png', data.thumb, { encoding: 'base64', mode: '0777' }, function (err) {
                         if(err) {
                             throw err;
