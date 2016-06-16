@@ -609,7 +609,7 @@ Entry.plugin = (function () {
                             type : 'user',
                             name : fileId,
                             filename : fileId,
-                            fileurl : encodeURI(dest.imagePath + '.png'),
+                            fileurl : (dest.imagePath + '.png').replace(/\\/gi, '/'),
                             dimension : dimensions
                         }
 
