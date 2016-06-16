@@ -361,6 +361,7 @@ angular.module('workspace').controller("WorkspaceController",
 
 	        		try{
 		        		myProject.saveProject(filePath, function (e, project_name) {
+                            $scope.isNowSaving = false;
                             if(e) {
                                 $scope.doPopupControl({
                                     'type':'hide'
@@ -368,18 +369,17 @@ angular.module('workspace').controller("WorkspaceController",
                                 $scope.doPopupControl({
                                     'type':'fail',
                                     'msg': Lang.Workspace.saving_fail_msg
-                                });                 
-                                $scope.isNowSaving = false;
+                                });        
+                            } else {
+    		        			Entry.stateManager.addStamp();
+    			            	myProject.isSaved = true;
+    			            	myProject.isSavedPath = filePath;
+    			            	Entry.toast.success(Lang.Workspace.saved, project_name + ' ' + Lang.Workspace.saved_msg);
+    							// $scope.hideSpinner();
+    							$scope.doPopupControl({
+    				                'type':'hide'
+    				            });
                             }
-		        			Entry.stateManager.addStamp();
-			            	myProject.isSaved = true;
-			            	myProject.isSavedPath = filePath;
-			            	Entry.toast.success(Lang.Workspace.saved, project_name + ' ' + Lang.Workspace.saved_msg);
-							// $scope.hideSpinner();
-							$scope.doPopupControl({
-				                'type':'hide'
-				            });
-							$scope.isNowSaving = false;
 			            });
 	        		} catch(e) {
 		            	// Entry.toast.success(Lang.Workspace.saved, project_name + ' ' + Lang.Workspace.saved_msg);
@@ -473,43 +473,44 @@ angular.module('workspace').controller("WorkspaceController",
                     });
                     $scope.doPopupControl({
                         'type':'fail',
-                        'msg': Lang.Workspace.saving_fail_msg
+                        'msg': Lang.Workspace.loading_fail_msg
                     }); 
-                }
-                var jsonObj = JSON.parse(data);
-                jsonObj.path = filePath;
-
-                jsonObj.objects.forEach(function (object) {
-                    var sprite = object.sprite;
-                    sprite.pictures.forEach(function (picture) {
-                        if(picture.fileurl) {
-                            picture.fileurl = picture.fileurl.replace(/\\/gi, '%5C');
-                            picture.fileurl = picture.fileurl.replace(/%5C/gi, '/');                                                
-                            if(picture.fileurl && picture.fileurl.indexOf('bower_components') === -1) {
-                                picture.fileurl = picture.fileurl.substr(picture.fileurl.lastIndexOf('temp'));
-                            }                                       
-                        }
-                    });
-                    sprite.sounds.forEach(function (sound) {
-                        if(sound.fileurl) {
-                            sound.fileurl = sound.fileurl.replace(/\\/gi, '%5C');
-                            sound.fileurl = sound.fileurl.replace(/%5C/gi, '/');                                                
-                            if(sound.fileurl && sound.fileurl.indexOf('bower_components') === -1) {
-                                sound.fileurl = sound.fileurl.substr(sound.fileurl.lastIndexOf('temp'));
-                            }
-                        }
-                    });
-                });
-
-                if (jsonObj.objects[0] &&
-                    jsonObj.objects[0].script.substr(0,4) === "<xml") {
-                    blockConverter.convert(jsonObj, function(result) {
-                        storage.setItem('nativeLoadProject', JSON.stringify(result));
-                        Entry.plugin.reloadApplication();
-                    });
                 } else {
-                    storage.setItem('nativeLoadProject', JSON.stringify(jsonObj));
-                    Entry.plugin.reloadApplication();
+                    var jsonObj = JSON.parse(data);
+                    jsonObj.path = filePath;
+
+                    jsonObj.objects.forEach(function (object) {
+                        var sprite = object.sprite;
+                        sprite.pictures.forEach(function (picture) {
+                            if(picture.fileurl) {
+                                picture.fileurl = picture.fileurl.replace(/\\/gi, '%5C');
+                                picture.fileurl = picture.fileurl.replace(/%5C/gi, '/');                                                
+                                if(picture.fileurl && picture.fileurl.indexOf('bower_components') === -1) {
+                                    picture.fileurl = picture.fileurl.substr(picture.fileurl.lastIndexOf('temp'));
+                                }                                       
+                            }
+                        });
+                        sprite.sounds.forEach(function (sound) {
+                            if(sound.fileurl) {
+                                sound.fileurl = sound.fileurl.replace(/\\/gi, '%5C');
+                                sound.fileurl = sound.fileurl.replace(/%5C/gi, '/');                                                
+                                if(sound.fileurl && sound.fileurl.indexOf('bower_components') === -1) {
+                                    sound.fileurl = sound.fileurl.substr(sound.fileurl.lastIndexOf('temp'));
+                                }
+                            }
+                        });
+                    });
+
+                    if (jsonObj.objects[0] &&
+                        jsonObj.objects[0].script.substr(0,4) === "<xml") {
+                        blockConverter.convert(jsonObj, function(result) {
+                            storage.setItem('nativeLoadProject', JSON.stringify(result));
+                            Entry.plugin.reloadApplication();
+                        });
+                    } else {
+                        storage.setItem('nativeLoadProject', JSON.stringify(jsonObj));
+                        Entry.plugin.reloadApplication();
+                    }
                 }
             });
         }
