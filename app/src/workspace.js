@@ -475,7 +475,7 @@ angular.module('workspace').controller("WorkspaceController",
                         'type':'fail',
                         'msg': Lang.Workspace.loading_fail_msg
                     }); 
-                } else {
+                } else {                         
                     var jsonObj = JSON.parse(data);
                     jsonObj.path = filePath;
 
