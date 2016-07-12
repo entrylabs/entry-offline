@@ -42,6 +42,7 @@ angular.module('workspace').controller('HeaderController',
             storage.setItem('lang', language);
             var project = Entry.exportProject();
             project.name = myProject.name;
+            project.path = myProject.isSavedPath;
             storage.setItem('localStorageProject', JSON.stringify(project));
             // location.reload(true);
             Entry.plugin.reloadApplication();

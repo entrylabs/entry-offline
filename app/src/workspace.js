@@ -327,8 +327,10 @@ angular.module('workspace').controller("WorkspaceController",
             var project_name = "";
             if($.isPlainObject(project)) {
                 project_name = project.name;
-                myProject.isSaved = true;
-                myProject.isSavedPath = project.path;
+                if(project.path) {
+                    myProject.isSaved = true;
+                    myProject.isSavedPath = project.path;
+                }
             } else {
                 var i = Math.floor(Math.random() * Lang.Workspace.PROJECTDEFAULTNAME.length);
                 project_name = Lang.Workspace.PROJECTDEFAULTNAME[i] + ' ' + Lang.Workspace.project;
