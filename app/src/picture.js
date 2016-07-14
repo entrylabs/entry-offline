@@ -55,7 +55,7 @@ angular.module('common').controller('PictureController',
 
 				$scope.pictureData[category].push(item);
 	        });
-
+	        sessionStorage.setItem("pictureData", JSON.stringify($scope.pictureData));
 	    }
 
 	    var getPictureData = function (main, sub) {
@@ -91,6 +91,18 @@ angular.module('common').controller('PictureController',
             }
 	    }
 
+		var sortPictureData = function(response) {
+	        response = response.sort(function (a, b) {
+	            if(a.name > b.name) {
+	                return 1;
+	            } else if(a.name < b.name) {
+	                return -1;
+	            } else {
+	                return 0;
+	            }
+	        });
+	    }
+
 	    $scope.findPictures = function(type, main, sub) {
 	        calcInnerHeight();
 
@@ -103,10 +115,18 @@ angular.module('common').controller('PictureController',
 	            }
 	        }
 	        if($.isEmptyObject($scope.pictureData)) {
-		        $http.get('./resource_map/pictures.json').success(function(response) {
-			        makePictureData(response);
-			        setSystemPictures(type, main, sub);
-			    });
+	        	var pictureData = sessionStorage.getItem("pictureData");
+	            pictureData = pictureData ? JSON.parse(pictureData) : {};
+	            if($.isEmptyObject(pictureData)) {
+			        $http.get('./resource_map/pictures.json').success(function(response) {
+			        	sortPictureData(response);
+				        makePictureData(response);
+				        setSystemPictures(type, main, sub);
+				    });
+			    } else {
+			    	$scope.pictureData = pictureData;
+	                setSystemPictures(type, main, sub);
+			    }
 	        } else {
 	        	setSystemPictures(type, main, sub);
 	        }

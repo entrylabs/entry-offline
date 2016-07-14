@@ -62,7 +62,8 @@ angular.module('common').controller('SpriteController',
 
         calcInnerHeight();
 
-        $scope.systemSprites = $scope.findSprites($routeParams.type, $routeParams.main, $routeParams.sub);
+        // $scope.systemSprites = 
+        $scope.findSprites($routeParams.type, $routeParams.main, $routeParams.sub);
     };
 
     var makePictureData = function (items) {
@@ -83,7 +84,7 @@ angular.module('common').controller('SpriteController',
 
             $scope.spriteData[category].push(item);
         });
-
+        sessionStorage.setItem("spriteData", JSON.stringify($scope.spriteData));
     }
 
     var getPictureData = function (main, sub) {
@@ -119,6 +120,18 @@ angular.module('common').controller('SpriteController',
         }
     }
 
+    var sortPictureData = function(response) {
+        response = response.sort(function (a, b) {
+            if(a.name > b.name) {
+                return 1;
+            } else if(a.name < b.name) {
+                return -1;
+            } else {
+                return 0;
+            }
+        });
+    }
+
     $scope.findSprites = function(type, main, sub) {
         calcInnerHeight();
 
@@ -131,11 +144,19 @@ angular.module('common').controller('SpriteController',
             }
         }
 
-         if($.isEmptyObject($scope.spriteData)) {
-            $http.get('./resource_map/sprites.json').success(function(response) {
-                makePictureData(response);
+        if($.isEmptyObject($scope.spriteData)) {
+            var spriteData = sessionStorage.getItem("spriteData");
+            spriteData = spriteData ? JSON.parse(spriteData) : {};
+            if($.isEmptyObject(spriteData)) {
+                $http.get('./resource_map/sprites.json').success(function(response) {
+                    sortPictureData(response);
+                    makePictureData(response);
+                    setSystemSprites(type, main, sub);
+                });
+            } else {
+                $scope.spriteData = spriteData;
                 setSystemSprites(type, main, sub);
-            });
+            }
         } else {
             setSystemSprites(type, main, sub);
         }

@@ -23,13 +23,31 @@ angular.module('common').controller('SoundController',
     $scope.language = localStorage.getItem('lang') || 'ko';
     var data;
     
+    var sortSoundData = function(response) {
+        response = response.sort(function (a, b) {
+            if(a.name > b.name) {
+                return 1;
+            } else if(a.name < b.name) {
+                return -1;
+            } else {
+                return 0;
+            }
+        });
+    }
+
     var readSoundMeta = function(soundMapFile) {
-        if (fs.existsSync(soundMapFile)) {
-            var soundMapData = fs.readFileSync(soundMapFile, "utf8");
-        }  
-        //console.log("sound meta : " + soundMapData);
-        
-        data = JSON.parse(soundMapData);
+        var soundData = sessionStorage.getItem("soundData");
+        soundData = soundData ? JSON.parse(soundData) : {};
+        if($.isEmptyObject(soundData)) {
+            if (fs.existsSync(soundMapFile)) {
+                var soundMapData = fs.readFileSync(soundMapFile, "utf8");
+            }  
+            data = JSON.parse(soundMapData);
+            sortSoundData(data);
+            sessionStorage.setItem("soundData", JSON.stringify(data));
+        } else {
+            data = soundData;
+        }
     } 
         
     $scope.init = function() {
@@ -41,23 +59,17 @@ angular.module('common').controller('SoundController',
         $routeParams.main = '사람';
 
         $scope.findSounds($routeParams.type, $routeParams.main, $routeParams.sub);
-        //console.log("collapse " + $scope.isCollapsed1);       
     };
     
     $scope.findSounds = function(type, main, sub) {
-
-        //var url = '/api/sound/browse';
-        if (!type)
+        if (!type) {
             type = 'default';
-
-        //url += ('/' + type);
+        }
 
         if (main) {
             $scope.main_menu = main;
-            //url += ('/' + encodeURIComponent(main));
             if (sub) {
                 $scope.menu = sub;
-                //url += ('/' + encodeURIComponent(sub));
             } else {
                 $scope.menu = '';
             }
@@ -71,13 +83,11 @@ angular.module('common').controller('SoundController',
             if($scope.menu === '') {
                 if($scope.main_menu === data[i].category.main) {
                     categorizedData.push(data[i]); 
-                    //console.log("All : " + $scope.main_menu + " " + data[i].category.main);
                 }       
             }
             else {
                 if($scope.menu === data[i].category.sub && $scope.main_menu === data[i].category.main) {
                     categorizedData.push(data[i]);
-                    //console.log("Sub : " + data[i].category.sub);
                 }
             }
         }        
@@ -86,8 +96,6 @@ angular.module('common').controller('SoundController',
             var sound = categorizedData[i];
           
             var path = './uploads/' + sound.filename.substring(0,2)+'/'+sound.filename.substring(2,4)+'/'+sound.filename+sound.ext;
-        
-            //console.log(path);
 
             Entry.soundQueue.loadFile({
                 id: sound._id,
