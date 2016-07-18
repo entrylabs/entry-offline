@@ -45,7 +45,6 @@ angular.module('common').controller('SpriteController',
     $scope.selectedColour = '#000000';
 
     $scope.spriteData = {};
-    $scope.orgSpriteData = [];
     $scope.systemSprites = [];
 
     var calcInnerHeight = function() {
@@ -67,7 +66,6 @@ angular.module('common').controller('SpriteController',
     };
 
     var makePictureData = function (items) {
-        $scope.orgSpriteData = items;
         $scope.spriteData = {};
         items.forEach(function (item, index) {
 
