@@ -1,11 +1,13 @@
 <div class="row">
     <div class="wrap">
         <div class='addnewHelperWorkspace'>
-            <div class='addnewBtnWorkspace' ng-click='addNewSprite()'>
-                이동하기
+            <span ng-bind-html="'Menus.draw_new_ques' | text | unsafe">
+            </span>
+            <div class='addnewBtnWorkspace' ng-click='addNewSprite()'>            
+                {{'Menus.draw_new_go' | text}}
             </div>
             <div class='addnewBtnWorkspace' ng-click="tabs[0].active = true">
-                이동하지 않기
+                {{'Menus.draw_new_stay' | text}}
             </div>
         </div>
     </div>

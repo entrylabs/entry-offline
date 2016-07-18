@@ -9,6 +9,7 @@ angular.module('workspace').controller("WorkspaceController",
         var storage = (typeof window.localStorage === 'undefined') ? undefined : window.localStorage;
 
         $scope.initWorkspace = function () {
+            window.lang = localStorage.getItem('lang');
             Entry.addEventListener('showLoadingPopup', $scope.showLoadingPopup);
             Entry.addEventListener('hideLoadingPopup', $scope.hideLoadingPopup);
 
@@ -24,6 +25,7 @@ angular.module('workspace').controller("WorkspaceController",
             }
             addSpinnerPopup();
             addFailedPopup();
+
             // 기본 초기화를 수행수 동작한다.
             Entry.plugin.init(function () {
                 myProject.isSavedPath = storage.getItem('defaultPath') || '';
@@ -90,8 +92,7 @@ angular.module('workspace').controller("WorkspaceController",
 		        	}
 				};
 
-                // Entry.playground.setBlockMenu();
-                //아두이노 사용 (웹소켓이용)
+                // 아두이노 사용 (웹소켓이용)
                 Entry.enableArduino();
 
                 var project = storage.getItem('nativeLoadProject') || storage.getItem('localStorageProject');
@@ -223,11 +224,9 @@ angular.module('workspace').controller("WorkspaceController",
 
         $scope.doPopupControl = function (obj) {
             if(obj.type === 'spinner') {
-                // $scope.spinnerMsg = obj.msg;
                 $scope.spinnerTitle.text(obj.msg);
                 $scope.popupHelper.show('workspaceSpinner');
             } else if (obj.type === 'fail') {
-                // $scope.failMsg = obj.msg;
                 $scope.failTitle.html(obj.msg);
                 $scope.popupHelper.show('workspaceFailed');
             } else if (obj.type === 'hide') {
@@ -322,19 +321,25 @@ angular.module('workspace').controller("WorkspaceController",
 
         // 프로젝트 세팅
         $scope.setWorkspace = function(project, b) {
-            Entry.loadProject(project);
-
             var project_name = "";
-            if($.isPlainObject(project)) {
+
+            if(!project) {
+                project = Entry.getStartProject(Entry.mediaFilePath);
+                project.objects[0] = getTranslatedObject(project.objects[0]);
+                project.scenes[0] = getTranslatedScene(project.scenes[0]);
+                var i = Math.floor(Math.random() * Lang.Workspace.PROJECTDEFAULTNAME.length);
+                project_name = Lang.Workspace.PROJECTDEFAULTNAME[i] + ' ' + Lang.Workspace.project;
+                sessionStorage.setItem('isDefaultProject', true);
+            } else {
                 project_name = project.name;
                 if(project.path) {
                     myProject.isSaved = true;
                     myProject.isSavedPath = project.path;
                 }
-            } else {
-                var i = Math.floor(Math.random() * Lang.Workspace.PROJECTDEFAULTNAME.length);
-                project_name = Lang.Workspace.PROJECTDEFAULTNAME[i] + ' ' + Lang.Workspace.project;
+                sessionStorage.setItem('isDefaultProject', false);
             }
+
+            Entry.loadProject(project);
 
 			$scope.project.name = project_name || Lang.Workspace.new_project;
 
@@ -377,15 +382,12 @@ angular.module('workspace').controller("WorkspaceController",
     			            	myProject.isSaved = true;
     			            	myProject.isSavedPath = filePath;
     			            	Entry.toast.success(Lang.Workspace.saved, project_name + ' ' + Lang.Workspace.saved_msg);
-    							// $scope.hideSpinner();
     							$scope.doPopupControl({
     				                'type':'hide'
     				            });
                             }
 			            });
 	        		} catch(e) {
-		            	// Entry.toast.success(Lang.Workspace.saved, project_name + ' ' + Lang.Workspace.saved_msg);
-						// $scope.hideSpinner();	
 						$scope.doPopupControl({
 			                'type':'hide'
 			            });
@@ -396,14 +398,9 @@ angular.module('workspace').controller("WorkspaceController",
 						$scope.isNowSaving = false;
 	        		}
 	        	} else {
-	        		// $scope.hideSpinner();
 	        		$scope.doPopupControl({
 		                'type':'hide'
 		            });
-		            // $scope.doPopupControl({
-		            //     'type':'fail',
-		            //     'msg': Lang.Workspace.saving_fail_msg
-		            // });
 	        		$scope.isNowSaving = false;
 	        	}
 			});
@@ -412,16 +409,15 @@ angular.module('workspace').controller("WorkspaceController",
         // 저장하기
         $scope.saveWorkspace = function() {
             $scope.isNowSaving = true;
-            // $scope.showSpinner();
             $scope.doPopupControl({
                 'type':'spinner',
                 'msg': Lang.Workspace.saving_msg
             });
-			if(myProject.isSaved) {
+            const parseDir = path.parse(myProject.isSavedPath);
+            if(myProject.isSaved && parseDir.ext === ".ent") {
 				$scope.project.saveProject(myProject.isSavedPath, function () {
 					Entry.stateManager.addStamp();
 	            	Entry.toast.success(Lang.Workspace.saved, myProject.name + ' ' + Lang.Workspace.saved_msg);
-	            	// $scope.hideSpinner();
 	            	$scope.doPopupControl({
 		                'type':'hide'
 		            });
@@ -436,7 +432,6 @@ angular.module('workspace').controller("WorkspaceController",
         // 새 이름으로 저장하기
         $scope.saveAsWorkspace = function() {
             $scope.isNowSaving = true;
-            // $scope.showSpinner();
             $scope.doPopupControl({
                 'type':'spinner',
                 'msg': Lang.Workspace.saving_msg
@@ -870,6 +865,32 @@ angular.module('workspace').controller("WorkspaceController",
             console.log('openPictureImport');
         };
 
+
+        /* Function Area Start*/
+        function getTranslatedObject(object) {
+            object.name = EntryStatic.getName(object.name, 'sprite');
+            if (object.sprite) {
+                if (object.sprite.pictures && object.sprite.pictures.length > 0) {
+                    for (var i = 0, len = object.sprite.pictures.length; i < len; i++) {
+                        object.sprite.pictures[i].name = EntryStatic.getName(object.sprite.pictures[i].name, 'picture');
+                    }
+                }
+                if (object.sprite.sounds && object.sprite.sounds.length > 0) {
+                    for (var i = 0, len = object.sprite.sounds.length; i < len; i++) {
+                        object.sprite.sounds[i].name = EntryStatic.getName(object.sprite.sounds[i].name, 'sound');
+                    }
+                }
+            }
+
+            return object;
+        };
+
+        function getTranslatedScene(scene) {
+            // object
+            scene.name = Lang.Blocks.SCENE + ' 1';
+            return scene;
+        };
+        /* Function Area End*/
 
     }]).service('myProject', function () {
         this.name = '';

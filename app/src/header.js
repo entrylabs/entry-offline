@@ -40,10 +40,14 @@ angular.module('workspace').controller('HeaderController',
 
         $scope.setLanguage = function(language) {
             storage.setItem('lang', language);
-            var project = Entry.exportProject();
-            project.name = myProject.name;
-            project.path = myProject.isSavedPath;
-            storage.setItem('localStorageProject', JSON.stringify(project));
+            var isDefaultProject = sessionStorage.getItem('isDefaultProject');
+
+            if(Entry.stateManager.canUndo() || isDefaultProject !== 'true') {
+                var project = Entry.exportProject();
+                project.name = myProject.name;
+                project.path = myProject.isSavedPath;
+                storage.setItem('localStorageProject', JSON.stringify(project));
+            }
             // location.reload(true);
             Entry.plugin.reloadApplication();
         };

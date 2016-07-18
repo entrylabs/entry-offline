@@ -1,6 +1,6 @@
 'use strict';
 
-// 기존에서 제거된 요소ㅓ 'ngRoute'
+// 기존에서 제거된 요소 'ngRoute'
 angular.module('common', ['ngCookies', 'ngResource', 'ngRoute', 'ui.bootstrap', 'LocalStorageModule', 'ngTouch'])
 	.config(['$compileProvider', function ($compileProvider) {
 		//  Default imgSrcSanitizationWhitelist: /^\s*((https?|ftp|file|blob):|data:image\/)/

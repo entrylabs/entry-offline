@@ -394,7 +394,11 @@ Entry.plugin = (function () {
                         var parser = path.parse(load_path);
                         localStorage.setItem('defaultPath', parser.dir);
 
-                        that.loadProject(load_path, function (data) {
+                        that.loadProject(load_path, function (err, data) {
+                            if(err) {
+                                throw err;
+                            }
+                            
                             var jsonObj = JSON.parse(data);
                             jsonObj.path = load_path;
 
@@ -518,16 +522,14 @@ Entry.plugin = (function () {
         });
         fs_writer.on('error', function (e) {
             if($.isFunction(cb)) {
-                cb(data);
+                cb(e);
             }
         });
         fs_writer.on('end', function () {
             fs.readFile(path.resolve(_real_path, 'temp', 'project.json'), enc || 'utf8', function (err, data) {
                 if(err) {
-                    throw err;
-                }
-
-                if($.isFunction(cb)) {
+                    cb(err);
+                } else if($.isFunction(cb)) {
                     cb(null, data);
                 }
             });
