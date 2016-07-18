@@ -7,7 +7,7 @@ common.filter('makeThumbnail', function() {
     return function(picture) {
         if (picture) {
             // return picture.filename.substring(0,2)+'/'+picture.filename.substring(2,4)+'/thumb/'+picture.filename+'.png';
-            // 
+            //
             if(picture.fileurl) {
                 var returnValue;
                 picture.fileurl = picture.fileurl.replace(/\\/gi, '/');
@@ -28,7 +28,7 @@ common.filter('makeThumbnail', function() {
 
             } else {
                 var extension = picture.extension || '.png';
-                return ['uploads', picture.filename.substring(0,2), picture.filename.substring(2,4), 'thumb', picture.filename + extension].join('/');                
+                return ['uploads', picture.filename.substring(0,2), picture.filename.substring(2,4), 'thumb', picture.filename + extension].join('/');
             }
         }
         else
@@ -45,7 +45,7 @@ common.filter('makeUploadThumbnail', function() {
 
             temp = _real_path.replace(/\\/gi, '/');
             temp = temp.replace(/%5C/gi, '/');
-                
+
             return [temp, 'temp', picture.filename.substring(0,2), picture.filename.substring(2,4), 'thumb', picture.filename + extension].join('/');
         }
         else
@@ -103,3 +103,11 @@ common.filter('nameTranslate', function() {
         }
     }
 });
+
+common.filter('unsafe', ['$sce', function($sce) {
+    return function(str) {
+        if (!str)
+            return '';
+        return $sce.trustAsHtml(str.replace(new RegExp('\r?\n','g'), '<br/>'));
+    }
+}]);

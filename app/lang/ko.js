@@ -860,7 +860,7 @@ Lang.Menus = {
     "already_exist_group": "이미 존재하는 학급 입니다.",
     "cannot_invite_you": "자기 자신을 초대할 수 없습니다.",
     "apply_original_image": "원본 이미지 그대로 적용하기",
-    "draw_new_ques": "새로 그리지 페이지로\n이동하시겠습니까?",
+    "draw_new_ques": "새로 그리기 페이지로\n이동하시겠습니까?",
     "draw_new_go": "이동하기",
     "draw_new_stay": "이동하지 않기",
     "file_upload_desc_1": "이런 그림은 \n 안돼요!",
