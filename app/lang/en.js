@@ -840,6 +840,7 @@ Lang.Buttons = {
 };
 Lang.ko = "한국어";
 Lang.Menus = {
+    "mission_guide": "Mission guide",
     "of": " 's  ",
     "no_results_found": "No results found",
     "upload_pdf": "Upload PDF materials",
@@ -2005,6 +2006,9 @@ Lang.Menus = {
     "jr_down_cert": "Certification",
     "jr_popup_prefix_1": "Hooray! I met Entry-Bot!",
     "jr_popup_prefix_2": "Nice! I met Entry-Bot! But we can make it with fewer blocks. How about try again?",
+    "jr_popup_prefix_3": "Hooray! I got my backpack!",
+    "jr_popup_prefix_4": "Great! I have my backpack! But we can make it with fewer blocks. How about we try again?",
+    "jr_popup_suffix_1": "Thank you! I had so much fun with you. See you around!",
     "jr_popup_suffix": "Thanks to you! I had fun time with Entry-Bot. See you around~",
     "jr_fail_dont_go": "Oops, I can't go there. Please guide me again~",
     "jr_fail_dont_know": "Hmm. Where should I go? Please guide me more~",
@@ -2404,6 +2408,14 @@ Lang.Menus = {
     "maze_content_18": "The path looks complex! We can get through this if we turn left and right at the right time.",
     "maze_content_19": "The 'Promise' if already set for us! However, we can't use the Promise blocks as is. I'll need to use the Promise blocks at the right timing to get the battery.",
     "maze_content_20": "Excellent! You've done great so far! After the final battery, I won't need to charge any more. So help me get the last battery using the Promise so I can live forever free!",
+    "maze_content_21": "안녕? 나는 엔트리 봇이야. 지금 많은 친구들이 내 도움을 필요로 하고 있어. 반복하기를 이용해서 친구들을 도울수 있게 데려다 줘!",
+    "maze_content_22": "고마워! 이번에는 벌집을 뛰어넘어서 친구를 구하러 갈 수 있게 도와줘!",
+    "maze_content_23": "좋아! 이번에는 친구 로봇한테 갈 때까지 반복하기를 이용해서 친구를 도울 수 있게 도와줘!",
+    "maze_content_24": "안녕! 나는 엔트리 봇이야. 지금 나는 너무 오래 움직여서 배터리를 채워야 해. 약속 불러오기를 써서 배터리를 채울 수 있도록 도와줘!",
+    "maze_content_25": "멋져! 이번에는 여러 약속을 불러와서 배터리가 있는 곳까지 가보자!",
+    "maze_content_26": "좋아! 이제 약속할 블록을 나한테 가르쳐줘! 약속하기 블록 안에 자주 쓰일 블록을 넣으면 돼!",
+    "maze_content_27": "지금은 미리 약속이 정해져 있어. 그런데, 약속을 쓰기위해서는 내가 갈 방향을 보고 약속을 사용해야해. 도와줄거지?",
+    "maze_content_28": "드디어 마지막이야! 약속을 이용하여 마지막 배터리를 얻을 수 있게 도와줘!",
     "ai_content_1": "Hi! I'm Entrybot. I just completed the space exploration mission and I need to return to Earth but it's not easy because of the asteroids. Could you help me return home? I have radars on top, front and back of the spaceship to detect how far an obstacle exists. It'll help you make smart decisions.",
     "ai_content_2": "Thank you! I was able to avoid the asteroids without trouble. There are more asteroids this time. Let's try avoiding them!",
     "ai_content_3": "Great! I was able to safely avoid the asteroids! There are more asteroids now! Don't worry though! I have the 'repeat' block. Place blocks in the 'repeat' block so we can get to the destination!",
