@@ -343,6 +343,13 @@ angular.module('common').controller('SpriteController',
             }
         }
 
+        let _id;
+        if($.isPlainObject(sprite._id)) {
+            _id = JSON.stringify(sprite._id);
+        } else {
+            _id = sprite._id;
+        }
+
         if (selected) {
             var elements = jQuery('.boxOuter').each(function() {
                 var element = jQuery(this);
@@ -358,7 +365,8 @@ angular.module('common').controller('SpriteController',
             // 스프라이트 다중 선택.
             var elements = jQuery('.boxOuter').each(function() {
                 var element = jQuery(this);
-                if (element.attr('id') === sprite._id) {
+
+                if (element.attr('id') === _id) {
                     element.attr('class', 'boxOuter selected');
                 }
             });

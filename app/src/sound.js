@@ -279,6 +279,13 @@ angular.module('common').controller('SoundController',
             }
         }
 
+        let _id;
+        if($.isPlainObject(sound._id)) {
+            _id = JSON.stringify(sound._id);
+        } else {
+            _id = sound._id;
+        }
+
         if (selected) {
             createjs.Sound.play(sound._id);
             var cloneSound = $.extend({}, sound, true);
@@ -287,7 +294,7 @@ angular.module('common').controller('SoundController',
             // 스프라이트 다중 선택.
             var elements = jQuery('.boxOuter').each(function() {
                 var element = jQuery(this);
-                if (element.attr('id') === sound._id) {
+                if (element.attr('id') === _id) {
                     element.attr('class', 'boxOuter selected');
                 }
             });
@@ -295,7 +302,7 @@ angular.module('common').controller('SoundController',
             createjs.Sound.stop();
             var elements = jQuery('.boxOuter').each(function() {
                 var element = jQuery(this);
-                if (element.attr('id') === sound._id) {
+                if (element.attr('id') === _id) {
                     element.attr('class', 'boxOuter');
                 }
             });

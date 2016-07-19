@@ -135,29 +135,42 @@ angular.module('common').controller('PictureController',
 	    var filterPictureData = function (keyword, cb) {
 	    	var filtered_data = [];
 	    	if($scope.language === 'ko') {
-		    	filtered_data = $scope.orgPictureData.filter(function (item) {
-		    		return Object.keys(keyword).every(function (key) {
-		    			return item[key].indexOf(keyword[key]) >= 0;
-		    		});
-		    	});
-	    	} else {
-	    		var engData = [];
-	    		Object.keys(PictureNames).forEach(function (key) {
-	    			Object.keys(keyword).forEach(function (key2) {
-		    			if(PictureNames[key].indexOf(keyword[key2]) >= 0) {
-		    				engData.push(key);
-		    			}
-		    		});
-	    		});
+	            var categories = Object.keys($scope.pictureData);
+	            for (var i=0,len=categories.length; i<len; i++) {
+	                var current = categories[i];
+	                var result = $scope.pictureData[current].filter(function(item) {
+	                    return item.name && item.name.indexOf(keyword.name) > -1
+	                });
 
-	    		$scope.orgPictureData.forEach(function (item) {
-		    		engData.forEach(function (key) {
-		    			if(item.name === key) {
-		    				filtered_data.push(item);
-			    		}
-		    		});
-		    	});
-	    	}
+	                if (result && result.length > 0) {
+	                    result.forEach(function(d) {
+	                        filtered_data.push(d);
+	                    });
+	                }
+	            }
+	        } else {
+	            var keys = Object.keys(PictureNames);
+	            var resultKeys = keys.filter(function(key) {
+	                return PictureNames[key].toLowerCase().indexOf(keyword.name.toLowerCase()) > -1
+	            });
+	            
+	            var categories = Object.keys($scope.pictureData);
+	            for (var i=0,len=categories.length; i<len; i++) {
+	                var current = categories[i];
+	                var result = $scope.pictureData[current].filter(function(item) {
+	                    for (var j=0,l=resultKeys.length; j<l; j++) {
+	                        if (item.name == resultKeys[j])
+	                            return true;
+	                    }
+	                });
+
+	                if (result && result.length > 0) {
+	                    result.forEach(function(d) {
+	                        filtered_data.push(d);
+	                    });
+	                }
+	            }
+	        }
 
 	    	if($.isFunction(cb)) {
 	    		cb(filtered_data);
@@ -278,6 +291,13 @@ angular.module('common').controller('PictureController',
 	            }
 	        }
 
+        	let _id;
+            if($.isPlainObject(picture._id)) {
+                _id = JSON.stringify(picture._id);
+            } else {
+                _id = picture._id;
+            }
+
 	        if (selected) {
 	        	var clonePicture = $.extend({}, picture, true);
 		        $scope.changeLanguage(clonePicture);
@@ -285,7 +305,7 @@ angular.module('common').controller('PictureController',
 	            // 스프라이트 다중 선택.
 	            var elements = jQuery('.boxOuter').each(function() {
 	                var element = jQuery(this);
-	                if (element.attr('id') === picture._id) {
+	                if (element.attr('id') === _id) {
 	                    element.attr('class', 'boxOuter selected');
 	                }
 	            });
@@ -293,7 +313,7 @@ angular.module('common').controller('PictureController',
 	        } else {
 	            var elements = jQuery('.boxOuter').each(function() {
 	                var element = jQuery(this);
-	                if (element.attr('id') === picture._id) {
+	                if (element.attr('id') === _id) {
 	                    element.attr('class', 'boxOuter');
 	                }
 	            });

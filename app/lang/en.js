@@ -3602,7 +3602,7 @@ Lang.template = {
     "see_angle_object": "Turn towards %1 %2",
     "see_angle_direction": "See angle to %1 degree %2",
     "rotate_direction": "Change direction by  %1 %2",
-    "locate_object_time": "for %1 secs moves to %2 %3",
+    "locate_object_time": "for %1 secs move to %2 %3",
     "rotate_absolute": "Set rotation to %1 %2",
     "rotate_relative": "Rotate %1 %2",
     "direction_absolute": "Set direction to %1 %2",
