@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('common').controller('SpriteController', 
+angular.module('common').controller('SpriteController',
     ['$scope', '$modalInstance', '$routeParams', '$http', 'parent', function ($scope, $modalInstance, $routeParams, $http, parent) {
     $scope.systemSprites = [];
     $scope.uploadPictures = [];
@@ -45,7 +45,6 @@ angular.module('common').controller('SpriteController',
     $scope.selectedColour = '#000000';
 
     $scope.spriteData = {};
-    $scope.orgSpriteData = {};
     $scope.systemSprites = [];
 
     var calcInnerHeight = function() {
@@ -62,12 +61,11 @@ angular.module('common').controller('SpriteController',
 
         calcInnerHeight();
 
-        // $scope.systemSprites = 
+        // $scope.systemSprites =
         $scope.findSprites($routeParams.type, $routeParams.main, $routeParams.sub);
     };
 
     var makePictureData = function (items) {
-        $scope.orgSpriteData = items;
         $scope.spriteData = {};
         items.forEach(function (item, index) {
 
@@ -81,7 +79,6 @@ angular.module('common').controller('SpriteController',
             if(!Array.isArray($scope.spriteData[category])) {
                 $scope.spriteData[category] = [];
             }
-
             $scope.spriteData[category].push(item);
         });
         sessionStorage.setItem("spriteData", JSON.stringify($scope.spriteData));
@@ -163,47 +160,46 @@ angular.module('common').controller('SpriteController',
     };
 
     var filterSpriteData = function (keyword, cb) {
-        // var filtered_data = $scope.orgSpriteData.filter(function (item) {
-        //     return Object.keys(keyword).every(function (key) {
-        //         if(item[key]) {
-        //             return item[key].indexOf(keyword[key]) >= 0;
-        //         } else {
-        //             return false;
-        //         }
-        //     });
-        // });
-
         var filtered_data = [];
         if($scope.language === 'ko') {
-            filtered_data = $scope.orgSpriteData.filter(function (item) {
-                return Object.keys(keyword).every(function (key) {
-                    try{
-                        return item[key].indexOf(keyword[key]) >= 0;
-                        
-                    } catch(e) {
-                        return false;
-                    }
+            var categories = Object.keys($scope.spriteData);
+            for (var i=0,len=categories.length; i<len; i++) {
+                var current = categories[i];
+                var result = $scope.spriteData[current].filter(function(item) {
+                    return item.name && item.name.indexOf(keyword.name) > -1
                 });
-            });
+
+                if (result && result.length > 0) {
+                    result.forEach(function(d) {
+                        filtered_data.push(d);
+                    });
+                }
+            }
         } else {
-            var engData = [];
-            Object.keys(SpriteNames).forEach(function (key) {
-                Object.keys(keyword).forEach(function (key2) {
-                    if(SpriteNames[key].indexOf(keyword[key2]) >= 0) {
-                        engData.push(key);
-                    }
-
-                });
+            var keys = Object.keys(SpriteNames);
+            var resultKeys = keys.filter(function(key) {
+                return SpriteNames[key].toLowerCase().indexOf(keyword.name.toLowerCase()) > -1
             });
 
-            $scope.orgSpriteData.forEach(function (item) {
-                engData.forEach(function (key) {
-                    if(item.name === key) {
-                        filtered_data.push(item);
+            var categories = Object.keys($scope.spriteData);
+            for (var i=0,len=categories.length; i<len; i++) {
+                var current = categories[i];
+                var result = $scope.spriteData[current].filter(function(item) {
+                    for (var j=0,l=resultKeys.length; j<l; j++) {
+                        if (item.name == resultKeys[j])
+                            return true;
                     }
                 });
-            });
+
+                if (result && result.length > 0) {
+                    result.forEach(function(d) {
+                        filtered_data.push(d);
+                    });
+                }
+            }
+
         }
+
 
         if($.isFunction(cb)) {
             cb(filtered_data);
@@ -292,7 +288,7 @@ angular.module('common').controller('SpriteController',
                         })
                     });
                 }
-            });             
+            });
         } catch(e) {
              $scope.$apply(function() {
                 $scope.isUploading = false;
