@@ -735,7 +735,7 @@ Entry.plugin = (function () {
                 var src = data.path;
                 var fileId = createFileId();
                 var dest = getUploadPath(fileId, 'sound');
-                var name = data.name;
+                var name = data.name.normalize("NFC");
 
                 // console.log("name : " + name);
                 var fileName = fileId;
