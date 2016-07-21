@@ -211,7 +211,7 @@ Entry.plugin = (function () {
         return r;
     };
 
-   
+
     that.setZoomInPage = function () {
         var zoomLevel = localStorage.getItem('window_zoomlevel') || 0;
         zoomLevel = (++zoomLevel > 5) ? 5 : zoomLevel;
@@ -298,11 +298,11 @@ Entry.plugin = (function () {
             return;
         }
         aboutPopup = new BrowserWindow({
-            width: 300, 
-            height: 200, 
-            resizable: false, 
-            movable: false, 
-            center: true, 
+            width: 300,
+            height: 200,
+            resizable: false,
+            movable: false,
+            center: true,
             frame: false,
             alwaysOnTop: true
         });
@@ -385,11 +385,11 @@ Entry.plugin = (function () {
                     return;
                 }
             }
-            
+
             if(options.path && !isNotFirst) {
                 if(options.path !== '.') {
                     Entry.dispatchEvent('showLoadingPopup');
-                    try{                        
+                    try{
                         var load_path = options.path;
                         var parser = path.parse(load_path);
                         localStorage.setItem('defaultPath', parser.dir);
@@ -398,7 +398,7 @@ Entry.plugin = (function () {
                             if(err) {
                                 throw err;
                             }
-                            
+
                             var jsonObj = JSON.parse(data);
                             jsonObj.path = load_path;
 
@@ -407,16 +407,16 @@ Entry.plugin = (function () {
                                 sprite.pictures.forEach(function (picture) {
                                     if(picture.fileurl) {
                                         picture.fileurl = picture.fileurl.replace(/\\/gi, '%5C');
-                                        picture.fileurl = picture.fileurl.replace(/%5C/gi, '/');                                                
+                                        picture.fileurl = picture.fileurl.replace(/%5C/gi, '/');
                                         if(picture.fileurl && picture.fileurl.indexOf('bower_components') === -1) {
                                             picture.fileurl = picture.fileurl.substr(picture.fileurl.lastIndexOf('temp'));
-                                        }                                       
+                                        }
                                     }
                                 });
                                 sprite.sounds.forEach(function (sound) {
                                     if(sound.fileurl) {
                                         sound.fileurl = sound.fileurl.replace(/\\/gi, '%5C');
-                                        sound.fileurl = sound.fileurl.replace(/%5C/gi, '/');                                                
+                                        sound.fileurl = sound.fileurl.replace(/%5C/gi, '/');
                                         if(sound.fileurl && sound.fileurl.indexOf('bower_components') === -1) {
                                             sound.fileurl = sound.fileurl.substr(sound.fileurl.lastIndexOf('temp'));
                                         }
@@ -440,7 +440,7 @@ Entry.plugin = (function () {
                                     cb();
                                 }
                             }
-                            
+
                         });
                     } catch(e) {
                         Entry.dispatchEvent('hideLoadingPopup');
@@ -663,7 +663,7 @@ Entry.plugin = (function () {
             var dest = getUploadPath(fileId);
             var url_split = url.split(path.sep);
             var extension = '.png';// + url_split[url_split.length-1].split('.')[1];
-            var file_name = url_split[url_split.length-1].split('.')[0];
+            var file_name = url_split[url_split.length-1].split('.')[0].normalize('NFC');
             var imagePath = dest.imagePath + extension;
             var fs_reader = fs.createReadStream(url);
             var fs_writer = fs.createWriteStream(imagePath);
