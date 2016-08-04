@@ -98,13 +98,13 @@ Section $(TEXT_ENTRY_TITLE) SectionEntry
 
   ; Put file there
   SetOutPath "$INSTDIR\locales"
-  File "..\dist\win-ia32-unpacked\lib\net45\locales\*.*"
+  File "..\dist\win-ia32-unpacked\locales\*.*"
   
   SetOutPath "$INSTDIR\resources"
-  File /r "..\dist\win-ia32-unpacked\lib\net45\resources\*.*"
+  File /r "..\dist\win-ia32-unpacked\resources\*.*"
   
   SetOutPath "$INSTDIR"
-  File "..\dist\win-ia32-unpacked\lib\net45\*.*"
+  File "..\dist\win-ia32-unpacked\*.*"
   File "icon.ico"
   
   WriteRegStr HKCR ".ent" "" "${PRODUCT_NAME}"
