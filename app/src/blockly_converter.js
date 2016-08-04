@@ -45,9 +45,8 @@ function processBlock(parent, data, funcMap) {
         } else {
             var field = blockNode.ele(
                 "field",
-                {"name": paramsKeyMap[i]},
-                param
-            );
+                {"name": paramsKeyMap[i]}
+            ).dat(param);
         }
     }
     if (blockData.statements && blockData.statements.length) {
