@@ -64,6 +64,28 @@ angular.module('workspace').controller("WorkspaceController",
 
                 Entry.init(workspace, initOptions);
 
+                Entry.playground.board._contextOptions[3].option.callback = function () {
+                    dialog.showOpenDialog({
+                        properties: [
+                            'openDirectory'
+                        ], filters: [
+                            { name: 'Image', extensions: ['png'] }
+                        ]
+                    }, function (paths) {
+                        Entry.playground.board.code.getThreads().forEach(function (t, index) {
+                            var topBlock = t.getFirstBlock();
+                            if (!topBlock) return;
+                            (function (i) {
+                                topBlock.view.getDataUrl().then(function(data) {
+                                    var savePath = path.resolve(paths[0], i + '.png');
+                                    Entry.plugin.saveImage(data.src, savePath);
+                                });
+                            })(++index);
+                        })
+                    })
+                }
+
+
                 var beforeUnload = window.onbeforeunload;
                 window.onbeforeunload = function(e) {
                     if($scope.isNowSaving === true) {
