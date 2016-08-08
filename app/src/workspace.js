@@ -337,6 +337,7 @@ angular.module('workspace').controller("WorkspaceController",
                     myProject.isSavedPath = project.path;
                 }
                 sessionStorage.setItem('isDefaultProject', false);
+                $scope.project.parent = project.parent;
             }
 
             Entry.loadProject(project);
@@ -898,12 +899,14 @@ angular.module('workspace').controller("WorkspaceController",
         this.isSavedPath = '';
         this.saveProject = function (path, cb) {
             var project_name = this.name;
+            var parent = this.parent;
             //저장 수행
             Entry.stage.handle.setVisible(false);
             Entry.stage.update();
 
             var project = Entry.exportProject();
             project.name = project_name;
+            project.parent = parent;
 
             Entry.plugin.saveProject(path, project, function (e) {
                 if($.isFunction(cb)) {
