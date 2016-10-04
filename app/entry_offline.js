@@ -289,9 +289,9 @@ app.once('ready', function() {
     var title = packageJson.version;
     
     if(language === 'ko') {
-        title = '엔트리 v' + title;
+        title = '엔트리 미니'; //' v' + title;
     } else {
-        title = 'Entry v' + title;
+        title = 'Entry Mini'//' v' + title;
     }
 
     mainWindow = new BrowserWindow({
