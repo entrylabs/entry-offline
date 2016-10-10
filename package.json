@@ -46,6 +46,7 @@
     "asar": false,
     "app-bundle-id": "entry-offline",
     "app-category-type": "org.play-entry.entry-offline",
+    "extend-info": "build/build.plist",
     "iconUrl": "https://raw.githubusercontent.com/entrylabs/entry-hw/feature/electron/build/icon.ico",
     "icon": "app/icon/app"
   },
