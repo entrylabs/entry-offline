@@ -847,7 +847,7 @@ angular.module('workspace').controller("WorkspaceController",
                             Entry.playground.addPicture(picture, true);
                             Entry.playground.setPicture(picture);
                         } else { //edit
-                            picture.id = file.id;
+                            picture.id = file.id; 
                             picture.name = file.name;
                             Entry.playground.setPicture(picture);
                         }
@@ -855,8 +855,11 @@ angular.module('workspace').controller("WorkspaceController",
                         var image = new Image();
                         image.src = picture.fileurl;
                         image.onload = function(e) {
-                            Entry.container.cachePicture(picture.id, image);
-                            Entry.playground.selectPicture(picture);
+                            Entry.container.cachePicture(picture.id + Entry.playground.object.entity.id, image);
+                            
+                            if (Entry.playground.painter.file.id === picture.id) {
+                                Entry.playground.selectPicture(picture);
+                            }
                         };
                     });
                 };

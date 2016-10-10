@@ -6,8 +6,10 @@
     "node"
   ],
   "dependencies": {
-    "entryjs": "https://github.com/entrylabs/entryjs.git#v1.3.5",
-    "entry-hw": "https://github.com/entrylabs/entry-hw.git#master",
+    "entryjs": "https://github.com/entrylabs/entryjs.git#issue/4775",
+    "entry-hw": "https://github.com/entrylabs/entry-hw.git#1.5.11",
+    "literallycanvas": "https://github.com/entrylabs/literallycanvas.git#master",
+    "react": "~15.2.0",
     "jquery": "~1.11.3",
     "jquery-ui": "~1.11.x",
     "underscore": "~1.8.x",
