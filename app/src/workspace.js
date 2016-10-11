@@ -117,6 +117,7 @@ angular.module('workspace').controller("WorkspaceController",
                 Entry.addEventListener('saveCanvasImage', $scope.saveCanvasData);
                 Entry.addEventListener('openPictureImport', $scope.openPictureImport);
                 Entry.addEventListener('saveLocalStorageProject', saveLocalStorageProject);
+                Entry.addEventListener('saveBlockImages', saveBlockImages);
                 if(Entry.plugin.isOsx()) {
                     var category_list = Entry.playground.mainWorkspace.blockMenu._categoryElems;
                     category_list['arduino'].addClass('entryRemove');
@@ -897,6 +898,27 @@ angular.module('workspace').controller("WorkspaceController",
             // object
             scene.name = Lang.Blocks.SCENE + ' 1';
             return scene;
+        };
+
+        function saveBlockImages(data) {
+            var default_path = storage.getItem('defaultPath') || '';
+            var fileName = "엔트리블록.zip";
+            var savePath = path.join(default_path, fileName);
+            
+            dialog.showSaveDialog({
+                defaultPath: savePath,
+                title: 'save images'
+            }, function(filePath) {
+                var baseName = path.parse(filePath).base;
+                if (baseName.split(".").length < 2 ||
+                    baseName.split(".")[1].toLowerCase() != "zip") {
+                    filePath += ".zip";
+                }
+                var tempPath = path.join(_real_path, 'temp');
+                Entry.plugin.writeTempBlockImages(filePath, tempPath, data.images);
+            });
+
+
         };
         /* Function Area End*/
 
