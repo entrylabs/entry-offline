@@ -1284,3 +1284,5 @@ SpriteNames["원피스(2)"] = "Dress(2)";
 SpriteNames["원피스(3)"] = "Dress(3)";
 SpriteNames["쓰레기"] = "Waste";
 SpriteNames["야구경기장"] = "Baseball Field";
+SpriteNames["트레이닝콘"] = "Traing Cone";
+SpriteNames["부채꼴"] = "Fan Shape";

@@ -176,6 +176,10 @@ angular.module('workspace').controller("WorkspaceController",
         $scope.setOfflineHW = function() {
             Entry.HW.prototype.downloadConnector = function() {
                 Entry.plugin.openHardwarePage();
+            };            
+
+            Entry.HW.prototype.downloadGuide = function() {
+                Entry.plugin.getHardwareManual();
             };
 
 			Entry.HW.prototype.downloadSource = function() {

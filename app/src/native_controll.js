@@ -339,6 +339,31 @@ Entry.plugin = (function () {
         });
     }
 
+    that.getHardwareManual = function(callback) {
+        dialog.showSaveDialog({
+            defaultPath: '엔트리-하드웨어연결매뉴얼_16_08_17.hwp',
+            filters: [
+                { name: '*.hwp', extensions: ['hwp'] }
+            ]
+        }, function (filePath) {    
+            if(filePath) {
+                var fs = require("fs");
+                fs.readFile(path.resolve(__dirname, 'hardware', 'guide', '엔트리-하드웨어연결매뉴얼_16_08_17.hwp'), function (err, stream) {
+                    fs.writeFile(filePath, stream, 'utf8', function (err) {
+                        if (err)
+                            alert("Unable to save file");
+                        else
+                            console.log("File Saved");
+
+                        if(callback) {
+                            callback();
+                        }
+                    });
+                });
+            }
+        });
+    }
+
     that.closeHwGuidePage = function() {
         if(hwGuidePopup) {
             hwGuidePopup.close();
