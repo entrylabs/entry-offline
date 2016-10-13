@@ -838,39 +838,22 @@ Entry.plugin = (function () {
         that.getRealPath('./');
     }
 
-    that.writeTempBlockImages = function(filePath, tempPath, images) {
-        console.log('tempPath=',tempPath);
-        deleteFolderRecursive(tempPath);
-        fs.mkdirSync(tempPath);
-        var folderName = path.parse(filePath).base.split(".")[0];
-        fs.mkdirSync(path.join(tempPath, folderName));
-        console.log(path.join(tempPath, folderName));
+    that.zipBlockImages = function(filePath, images) {
+        var zip = new JSZip();
         images.forEach(function(image, i) {
             image = image.src.split(',')[1];
             var filename = 'block'+(i+1)+'.png';
-            fs.writeFile(path.join(tempPath,folderName, filename), image, {
-                encoding: 'base64',
-                mode: '0777'
-            }, function(err) {
-                if (images.length-1 == i) {
-                    var fs_reader = fstream.Reader({ 'path': path.join(tempPath, folderName), 'type': 'Directory' });
-                    var fs_writer = fstream.Writer({ 'path': filePath, 'mode': '0777', 'type': 'File',  });
-
-                    fs_writer.on('entry', function (list) {
-                        list.props.mode = '0777';
+            zip.file(filename, image, {base64:true});
+            if (images.length-1 == i) {
+                zip.generateNodeStream({type:'nodebuffer',streamFiles:true})
+                    .pipe(fs.createWriteStream(filePath))
+                    .on('finish', function () {
+                        // JSZip generates a readable stream with a "end" event,
+                        // but is piped here in a writable stream which emits a "finish" event.
+                        Entry.toast.success("저장되었습니다.","");
                     });
-                    fs_writer.on('error', function (e) {
-                    });
-                    fs_writer.on('end', function () {
-                        deleteFolderRecursive(tempPath);
-                    });
-
-                    fs_reader.pipe(tar.Pack())
-                        .pipe(zlib.Gzip())
-                        .pipe(fs_writer)
-
-                }
-            })
+            }
+            
         });
 
     }

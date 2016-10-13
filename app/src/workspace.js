@@ -907,15 +907,14 @@ angular.module('workspace').controller("WorkspaceController",
             
             dialog.showSaveDialog({
                 defaultPath: savePath,
-                title: 'save images'
+                title: '블록이미지 저장하기'
             }, function(filePath) {
                 var baseName = path.parse(filePath).base;
                 if (baseName.split(".").length < 2 ||
                     baseName.split(".")[1].toLowerCase() != "zip") {
                     filePath += ".zip";
                 }
-                var tempPath = path.join(_real_path, 'temp');
-                Entry.plugin.writeTempBlockImages(filePath, tempPath, data.images);
+                Entry.plugin.zipBlockImages(filePath, data.images);
             });
 
 
