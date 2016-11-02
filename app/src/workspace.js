@@ -179,6 +179,10 @@ angular.module('workspace').controller("WorkspaceController",
                 Entry.plugin.openHardwarePage();
             };            
 
+            Entry.HW.prototype.openHardwareProgram = function() {
+                Entry.plugin.openHardwarePage();
+            };            
+
             Entry.HW.prototype.downloadGuide = function() {
                 Entry.plugin.getHardwareManual();
             };

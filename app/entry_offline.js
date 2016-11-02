@@ -264,6 +264,7 @@ app.on('window-all-closed', function() {
     process.exit(0);
 });
 
+
 var shouldQuit = app.makeSingleInstance(function(commandLine, workingDirectory) {
     // 어플리케이션을 중복 실행했습니다. 주 어플리케이션 인스턴스를 활성화 합니다.
     if (mainWindow) {
@@ -345,6 +346,17 @@ app.once('ready', function() {
 
 ipcMain.on('reload', function(event, arg) {
     mainWindow.reload(true);
+});
+
+ipcMain.on('roomId', function(event, arg) {
+    event.returnValue = '';
+});
+
+ipcMain.on('version', function(event, arg) {
+    event.returnValue = '';
+});
+
+ipcMain.on('serverMode', function(event, mode) {
 });
 
 ipcMain.on('openHardware', function(event, arg) {
