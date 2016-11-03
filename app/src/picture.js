@@ -24,7 +24,9 @@ angular.module('common').controller('PictureController',
 		var calcInnerHeight = function() {
 	        var height = $(".tab-right").height();
 	        var rowCount = parseInt(height/148);
-	        $scope.showCount = (rowCount+1)*6;
+	        var count = (rowCount + 1) * 6;
+
+	        $scope.showCount = count;
 	    };
 
 		$scope.init = function() {
