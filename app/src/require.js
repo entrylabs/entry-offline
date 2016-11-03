@@ -20,5 +20,6 @@ window.$ = window.jQuery = require('./bower_components/jquery/dist/jquery.min.js
 const entry = require('./bower_components/entryjs/src/workspace/block_entry.js');
 const blockConverter = require('./src/block_converter.js');
 const blocklyConverter = require('./src/blockly_converter.js');
+// <script type='text/javascript' src=></script>
 const JSZip = require("jszip");
 const isOffline = true;
