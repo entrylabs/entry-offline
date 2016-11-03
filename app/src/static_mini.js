@@ -8,26 +8,26 @@ EntryStatic.objectTypes = [
 ]
 
 EntryStatic.usageList = [
-    'usage_event','usage_signal','usage_scene','usage_repeat', 'usage_condition_repeat',
-    'usage_condition','usage_clone', 'usage_arrow_move', 'usage_rotation', 'usage_coordinate', 'usage_shape',
-    'usage_speak','usage_picture_effect', 'usage_textBox', 'usage_draw' , 'usage_sound',
-    'usage_confirm',  'usage_comp_operation' ,'usage_logical_operation' ,'usage_math_operation',
-    'usage_random', 'usage_timer', 'usage_variable', 'usage_list' ,'usage_ask_answer',
+    'usage_event', 'usage_signal', 'usage_scene', 'usage_repeat', 'usage_condition_repeat',
+    'usage_condition', 'usage_clone', 'usage_arrow_move', 'usage_rotation', 'usage_coordinate', 'usage_shape',
+    'usage_speak', 'usage_picture_effect', 'usage_textBox', 'usage_draw', 'usage_sound',
+    'usage_confirm', 'usage_comp_operation', 'usage_logical_operation', 'usage_math_operation',
+    'usage_random', 'usage_timer', 'usage_variable', 'usage_list', 'usage_ask_answer',
     'usage_function', 'usage_arduino'
 ];
 
 EntryStatic.conceptList = [
-    'concept_resource_analytics', 'concept_individual', 'concept_abstractive','concept_procedual',
-     'concept_automation', 'concept_simulation', 'concept_parallel'
+    'concept_resource_analytics', 'concept_individual', 'concept_abstractive', 'concept_procedual',
+    'concept_automation', 'concept_simulation', 'concept_parallel'
 ];
 
 EntryStatic.subjectList = [
-    'subject_korean', 'subject_mathmatics',  'subject_social',
-    'subject_science', 'subject_english', 'subject_courtesy','subject_music', 'subject_paint',
-    'subject_athletic',  'subject_progmatic'
+    'subject_korean', 'subject_mathmatics', 'subject_social',
+    'subject_science', 'subject_english', 'subject_courtesy', 'subject_music', 'subject_paint',
+    'subject_athletic', 'subject_progmatic'
 ];
 
-EntryStatic.lectureLevels=[1,2,3];
+EntryStatic.lectureLevels = [1, 2, 3];
 
 // EntryStatic.lectureLevels = ['level_high', 'level_mid','level_row'];
 
@@ -42,40 +42,33 @@ EntryStatic.categoryList = [
     'category_physical', 'category_etc'
 ];
 
-EntryStatic.requiredTimes = [1,2,3,4,5];
+EntryStatic.requiredTimes = [1, 2, 3, 4, 5];
 
-EntryStatic.searchProjectOption = [
-   {
-       'key':'search_updated',
-       'lang':'search_updated',
-       'value': 'updated'
-   },
-   {
-       'key':'search_recent',
-       'lang':'search_recent',
-       'value': 'recent'
-   },
-   {
-       'key':'search_complexity',
-       'lang':'search_complexity',
-       'value':'complexity'
-   },
-   {
-       'key':'search_staffPicked',
-       'lang':'search_staffPicked',
-       'value': 'staffPicked'
-   },
-   {
-       'key':'search_childCnt',
-       'lang':'search_childCnt',
-       'value': 'childCnt'
-   },
-   {
-       'key':'search_likeCnt',
-       'lang':'search_likeCnt',
-       'value': 'recentLikeCnt'
-   }
-]
+EntryStatic.searchProjectOption = [{
+    'key': 'search_updated',
+    'lang': 'search_updated',
+    'value': 'updated'
+}, {
+    'key': 'search_recent',
+    'lang': 'search_recent',
+    'value': 'recent'
+}, {
+    'key': 'search_complexity',
+    'lang': 'search_complexity',
+    'value': 'complexity'
+}, {
+    'key': 'search_staffPicked',
+    'lang': 'search_staffPicked',
+    'value': 'staffPicked'
+}, {
+    'key': 'search_childCnt',
+    'lang': 'search_childCnt',
+    'value': 'childCnt'
+}, {
+    'key': 'search_likeCnt',
+    'lang': 'search_likeCnt',
+    'value': 'recentLikeCnt'
+}]
 
 EntryStatic.getAllBlocks = function() {
     return [
@@ -111,6 +104,7 @@ EntryStatic.getAllBlocks = function() {
                 "bounce_wall",
                 "move_x",
                 "move_y",
+                "locate_y",
                 "locate_xy",
                 "locate_xy_time",
                 "locate",
@@ -133,6 +127,8 @@ EntryStatic.getAllBlocks = function() {
                 "add_effect_amount",
                 "change_effect_amount",
                 "erase_all_effects",
+                "change_scale_size",
+                "set_scale_size",
             ]
         },
         {
@@ -142,6 +138,7 @@ EntryStatic.getAllBlocks = function() {
                 "start_drawing",
                 "stop_drawing",
                 "set_color",
+                "change_thickness",
                 "set_thickness",
                 "brush_erase_all"
             ]
@@ -159,6 +156,9 @@ EntryStatic.getAllBlocks = function() {
             category: "sound",
             blocks: [
                 "sound_something_with_block",
+                "sound_something_wait_with_block",
+                "sound_volume_change",
+                "sound_volume_set",
             ]
         },
         {
@@ -200,26 +200,23 @@ EntryStatic.getAllBlocks = function() {
                 "show_variable",
                 "hide_variable",
             ]
-        },
-        {
-            category: "arduino",
-            blocks: [
-                "arduino_download_connector",
-                "download_guide",
-                "arduino_download_source",
-                "arduino_connected",
-                "arduino_reconnect",
-                "arduino_open",
-            ]
-        }
-    ]
+        }, {
+        category: "arduino",
+        blocks: [
+            "arduino_download_connector",
+            "download_guide",
+            "arduino_download_source",
+            "arduino_connected",
+            "arduino_reconnect",
+        ]
+    }]
 }
 
 EntryStatic.getCategoryByBlock = function(blockName) {
     if (!blockName)
         return false;
     var allBlocks = EntryStatic.getAllBlocks();
-    for (var i=0,len=allBlocks.length; i<len; i++) {
+    for (var i = 0, len = allBlocks.length; i < len; i++) {
         var blocks = allBlocks[i].blocks;
         if (blocks.indexOf(blockName) > -1) {
             return allBlocks[i].category;
@@ -229,8 +226,9 @@ EntryStatic.getCategoryByBlock = function(blockName) {
 }
 
 EntryStatic.objectMainCategories = ['entrybot_friends', 'people', 'animal', 'plant', 'vehicles',
-                'architect', 'food', 'environment', 'stuff', 'fantasy', 'interface',
-                'background'];
+    'architect', 'food', 'environment', 'stuff', 'fantasy', 'interface',
+    'background'
+];
 
 EntryStatic.objectSubCategories = {
     'entrybot_friends': [],
@@ -247,38 +245,31 @@ EntryStatic.objectSubCategories = {
     'background': ['background_outdoor', 'background_indoor', 'background_nature', 'background_others']
 };
 
-EntryStatic.fonts = [
-{
+EntryStatic.fonts = [{
     name: '바탕체',
     family: 'KoPub Batang',
     url: '/css/kopubbatang.css'
-},
-{
+}, {
     name: '명조체',
     family: 'Nanum Myeongjo',
     url: '/css/nanummyeongjo.css'
-},
-{
+}, {
     name: '고딕체',
     family: 'Nanum Gothic',
     url: '/css/nanumgothic.css'
-},
-{
+}, {
     name: '필기체',
     family: 'Nanum Pen Script',
     url: '/css/nanumpenscript.css'
-},
-{
+}, {
     name: '한라산체',
     family: 'Jeju Hallasan',
     url: '/css/jejuhallasan.css'
-},
-{
+}, {
     name: '코딩고딕체',
     family: 'Nanum Gothic Coding',
     url: '/css/nanumgothiccoding.css'
-}
-];
+}];
 
 EntryStatic.getName = function(str, type) {
     var dict = SpriteNames;

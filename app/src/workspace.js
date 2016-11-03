@@ -7,7 +7,152 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
     var supported = !(typeof storage == 'undefined' || typeof window.JSON == 'undefined');
     var storage = (typeof window.localStorage === 'undefined') ? undefined : window.localStorage;
 
+    function a() {
+        EntryStatic.getAllBlocks = function() {
+            return [
+                {
+                    category: "start",
+                    blocks: [
+                        "when_run_button_click",
+                        "when_some_key_pressed",
+                        "mouse_clicked",
+                        "mouse_click_cancled",
+                        "when_object_click",
+                        "when_message_cast",
+                        "message_cast",
+                    ]
+                },
+                {
+                    category: "flow",
+                    blocks: [
+                        "wait_second",
+                        "repeat_basic",
+                        "repeat_inf",
+                        "repeat_while_true",
+                        "stop_repeat",
+                        "_if",
+                        "if_else",
+                        "wait_until_true",
+                    ]
+                },
+                {
+                    category: "moving",
+                    blocks: [
+                        "move_direction",
+                        "bounce_wall",
+                        "move_x",
+                        "move_y",
+                        "locate_y",
+                        "locate_xy",
+                        "locate_xy_time",
+                        "locate",
+                        "locate_object_time",
+                        "rotate_relative",
+                        "direction_relative",
+                        "rotate_absolute",
+                        "direction_absolute",
+                        "see_angle_object",
+                    ]
+                },
+                {
+                    category: "looks",
+                    blocks: [
+                        "show",
+                        "hide",
+                        "dialog_time",
+                        "change_to_some_shape",
+                        "change_to_next_shape",
+                        "add_effect_amount",
+                        "change_effect_amount",
+                        "erase_all_effects",
+                        "change_scale_size",
+                        "set_scale_size",
+                    ]
+                },
+                {
+                    category: "brush",
+                    blocks: [
+                        "brush_stamp",
+                        "start_drawing",
+                        "stop_drawing",
+                        "set_color",
+                        "change_thickness",
+                        "set_thickness",
+                        "brush_erase_all"
+                    ]
+                },
+                {
+                    category: "text",
+                    blocks: [
+                        "text_write",
+                        "text_append",
+                        "text_prepend",
+                        "text_flush"
+                    ]
+                },
+                {
+                    category: "sound",
+                    blocks: [
+                        "sound_something_with_block",
+                        "sound_something_wait_with_block",
+                        "sound_volume_change",
+                        "sound_volume_set",
+                    ]
+                },
+                {
+                    category: "judgement",
+                    blocks: [
+                        "is_clicked",
+                        "is_press_some_key",
+                        "reach_something",
+                        "boolean_basic_operator",
+                    ]
+                },
+                {
+                    category: "calc",
+                    blocks: [
+                        "calc_basic",
+                        "calc_rand",
+                        "coordinate_object",
+                        "quotient_and_mod",
+                        "get_project_timer_value",
+                        "choose_project_timer_action",
+                        "set_visible_project_timer",
+                        "length_of_string",
+                        "combine_something",
+                        "char_at",
+                        "substring",
+                        "replace_string",
+                    ]
+                },
+                {
+                    category: "variable",
+                    blocks: [
+                        "variableAddButton",
+                        "ask_and_wait",
+                        "get_canvas_input_value",
+                        "set_visible_answer",
+                        "get_variable",
+                        "change_variable",
+                        "set_variable",
+                        "show_variable",
+                        "hide_variable",
+                    ]
+                }, {
+                category: "arduino",
+                blocks: [
+                    "arduino_download_connector",
+                    "download_guide",
+                    "arduino_download_source",
+                    "arduino_connected",
+                    "arduino_reconnect",
+                ]
+            }]
+        }
+    }
+
     $scope.initWorkspace = function() {
+        a();
         window.lang = localStorage.getItem('lang');
         Entry.addEventListener('showLoadingPopup', $scope.showLoadingPopup);
         Entry.addEventListener('hideLoadingPopup', $scope.hideLoadingPopup);
@@ -60,6 +205,9 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                     url: './css/nanumgothiccoding.css'
                 }]
             };
+
+            initOptions.listEnable = false;
+            initOptions.functionEnable = false;
 
             Entry.init(workspace, initOptions);
 
@@ -200,8 +348,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                         fs.writeFile(filePath, stream, 'utf8', function(err) {
                             if (err) {
                                 alert("Unable to save file");
-                            }
-                            else {
+                            } else {
                                 console.log("File Saved");
                             }
 
@@ -810,9 +957,11 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                 }
             }
             pix.x.sort(function(a, b) {
-                return a - b });
+                return a - b
+            });
             pix.y.sort(function(a, b) {
-                return a - b });
+                return a - b
+            });
             var n = pix.x.length - 1;
 
             w = pix.x[n] - pix.x[0];
@@ -891,7 +1040,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
         modalInstance.result.then(function(selectedItems) {
             selectedItems.data.forEach(function(item) {
                 item.id = Entry.generateHash();
-                if(item.fileurl) {
+                if (item.fileurl) {
                     item.fileurl = item.fileurl.replace(/%5C/gi, '/');
                 }
                 Entry.dispatchEvent('pictureImport', item);
