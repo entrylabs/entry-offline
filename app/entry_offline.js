@@ -257,13 +257,13 @@ var handleStartupEvent = function() {
 
 var mainWindow = null;
 var hardwareWindow = null;
+var hardwareWindowReLaunch = false;
 var isClose = true;
 
 app.on('window-all-closed', function() {
     app.quit();
     process.exit(0);
 });
-
 
 var shouldQuit = app.makeSingleInstance(function(commandLine, workingDirectory) {
     // 어플리케이션을 중복 실행했습니다. 주 어플리케이션 인스턴스를 활성화 합니다.
@@ -317,13 +317,14 @@ app.once('ready', function() {
     }
 
     mainWindow.webContents.hpopup = hardwareWindow;
+    mainWindow.webContents.name = 'entry';
 
     mainWindow.on('page-title-updated', function(e) {
         e.preventDefault();
     });
     mainWindow.on('close', function(e) {
         if(hardwareWindow) {
-            hardwareWindow.close();
+            hardwareWindow.close(true);
         }
         mainWindow.webContents.send('main-close');
     });
@@ -345,7 +346,15 @@ app.once('ready', function() {
 });
 
 ipcMain.on('reload', function(event, arg) {
-    mainWindow.reload(true);
+    if(event.sender.webContents.name === 'entry') {
+        mainWindow.reload(true);
+    } else {
+        hardwareWindowReLaunch = true;
+        hardwareWindow.close(true);
+    }
+    if(event.sender.webContents) {
+        event.sender.webContents.reload();
+    }
 });
 
 ipcMain.on('roomId', function(event, arg) {
@@ -360,6 +369,10 @@ ipcMain.on('serverMode', function(event, mode) {
 });
 
 ipcMain.on('openHardware', function(event, arg) {
+    lanunchHardware();
+});
+
+function lanunchHardware () {
     if(hardwareWindow == null) {
         var title;
         if(language === 'ko') {
@@ -382,17 +395,21 @@ ipcMain.on('openHardware', function(event, arg) {
         hardwareWindow.loadURL('file:///' + path.join(__dirname, 'bower_components', 'entry-hw', 'app', 'index.html'));
         hardwareWindow.on('closed', function() {
             hardwareWindow = null;
+            if(hardwareWindowReLaunch) {
+                hardwareWindowReLaunch = false;
+                lanunchHardware();
+            }
         });
 
         if(option.debug) {
             hardwareWindow.webContents.openDevTools();
         }
 
+        hardwareWindow.webContents.name = 'hardware';
         hardwareWindow.show();
     } else {
         if (hardwareWindow.isMinimized()) 
             hardwareWindow.restore();
         hardwareWindow.focus();
     }
-
-});
+}

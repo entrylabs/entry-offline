@@ -25,6 +25,7 @@ var template = [{
     }, {
         label: '실과모드',
         type: 'checkbox',
+        checked: localStorage.getItem('isMiniMode') == 'true' ? true : false,
         click: function(menuItem) {
             localStorage.setItem('isMiniMode', menuItem.checked);
             ipcRenderer.send('reload');
