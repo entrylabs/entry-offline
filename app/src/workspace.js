@@ -640,8 +640,8 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                 object.sprite.pictures = [];
                 object.sprite.pictures.push({
                     dimension: {
-                        height: 1,
-                        width: 1
+                        height: 540,
+                        width: 960
                     },
                     filename: "_1x1",
                     name: Lang.Workspace.new_picture,
@@ -721,8 +721,8 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                 selectedItems.data.push({
                     fileurl: './bower_components/entryjs/images/_1x1.png',
                     dimension: {
-                        height: 1,
-                        width: 1
+                        height: 540,
+                        width: 960
                     },
                     filename: "_1x1",
                     name: Lang.Workspace.new_picture,
@@ -815,8 +815,20 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                 return a - b });
             var n = pix.x.length - 1;
 
-            w = pix.x[n] - pix.x[0];
-            h = pix.y[n] - pix.y[0];
+            if(pix.x.length > 0) {
+                w = pix.x[n] - pix.x[0];
+            } else {
+                w = 1;
+                pix.x = [0];
+            }
+
+            if(pix.y.length > 0) {
+                h = pix.y[n] - pix.y[0];
+            } else {
+                h = 1;
+                pix.y = [0];
+            }
+
             var cut = ctx.getImageData(pix.x[0], pix.y[0], w, h);
 
             canvas.width = w;
