@@ -810,32 +810,49 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                 }
             }
             pix.x.sort(function(a, b) {
-                return a - b });
+                return a - b
+            });
             pix.y.sort(function(a, b) {
-                return a - b });
+                return a - b
+            });
             var n = pix.x.length - 1;
 
+            var minx = 0;
+            var miny = 0;
+            var maxx = 0;
+            var maxy = 0;
+
             if(pix.x.length > 0) {
-                w = pix.x[n] - pix.x[0];
+                minx = pix.x[0];
+                maxx = pix.x[n];
+                w = maxx - minx;
+                if(w % 2 != 0) {
+                    w += 1;
+                }
             } else {
                 w = 1;
-                pix.x = [0];
+                minx = 0;
             }
 
             if(pix.y.length > 0) {
-                h = pix.y[n] - pix.y[0];
+                miny = pix.y[0];
+                maxy = pix.y[n]
+                h = maxy - miny;
+                if(h % 2 != 0) {
+                    h += 1;
+                }
             } else {
                 h = 1;
-                pix.y = [0];
+                miny = 0;
             }
 
-            var cut = ctx.getImageData(pix.x[0], pix.y[0], w, h);
+            var cut = ctx.getImageData(minx, miny, w, h);
 
             canvas.width = w;
             canvas.height = h;
             ctx.putImageData(cut, 0, 0);
 
-            defer.resolve(canvas.toDataURL());
+            defer.resolve(canvas.toDataURL("image/png"));
         }
 
         return defer;
