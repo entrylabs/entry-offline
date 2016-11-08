@@ -141,7 +141,32 @@ body {
   }
 }
 
-
 .tab-content .tab-pane .upload_wrap {
     width: 713px;
+}
+
+#entryCategoryhw_download {
+    background-image: url('../images/categories/touch.png');
+    background-repeat: no-repeat;
+}
+
+#entryCategoryhw_sensor {
+    background-image: url('../images/categories/others.png');
+    background-repeat: no-repeat;
+}
+
+#entryCategoryhw_led {
+    font-size: 11px;
+    background-image: url('../images/categories/diode.png');
+    background-repeat: no-repeat;
+}
+
+#entryCategoryhw_motor {
+    background-image: url('../images/categories/dcmotor.png');
+    background-repeat: no-repeat;
+}
+
+#entryCategoryhw_melody {
+    background-image: url('../images/categories/melody.png');
+    background-repeat: no-repeat;
 }

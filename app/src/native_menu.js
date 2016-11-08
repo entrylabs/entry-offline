@@ -23,7 +23,7 @@ var template = [{
     }, {
         type: 'separator'
     }, {
-        label: '실과모드',
+        label: Lang.Workspace.practical_arts_mode,
         type: 'checkbox',
         checked: localStorage.getItem('isMiniMode') == 'true' ? true : false,
         click: function(menuItem) {

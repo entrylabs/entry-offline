@@ -121,6 +121,40 @@
                 "hide_variable",
             ]
         }, {
+            category: "hw_motor",
+            blocks: [
+                "practical_arts_move_for_secs",
+                "practical_arts_move_for",
+                "practical_arts_stop_for",
+                "practical_arts_set_servo2",
+            ]
+        }, {
+            category: "hw_melody",
+            blocks: [
+                "practical_arts_melody_note_for",
+            ]
+        }, {
+            category: "hw_sensor",
+            blocks: [
+                "practical_arts_touch_value",
+                "practical_arts_touch_value_boolean",
+                "practical_arts_light_value",
+                "practical_arts_light_value_boolean",
+                "practical_arts_sound_value",
+                "practical_arts_sound_value_boolean",
+                "practical_arts_irs_value",
+                "practical_arts_irs_value_boolean",
+            ]
+        }, {
+            category: "hw_led",
+            blocks: [
+                "practical_arts_diode_secs_toggle",
+                "practical_arts_diode_toggle",
+                "practical_arts_diode_inout_toggle",
+                "practical_arts_diode_set_output",
+                "practical_arts_diode_input_value"
+            ]
+        }, {
             category: "arduino",
             blocks: [
                 "arduino_download_connector",

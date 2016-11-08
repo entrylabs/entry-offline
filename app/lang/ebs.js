@@ -419,6 +419,10 @@ Lang.Blocks = {
     "VARIABLE_value_of_index_from_list_1": "",
     "VARIABLE_value_of_index_from_list_2": "의",
     "VARIABLE_value_of_index_from_list_3": "번째 항목",
+    "HW_MOTOR": "모터",
+    "HW_SENSOR": "센서",
+    "HW_LED": "발광다이오드",
+    "HW_MELODY": "멜로디",
     "HAMSTER_hand_found": "손 찾음?",
     "HAMSTER_sensor_left_proximity": "왼쪽 근접 센서",
     "HAMSTER_sensor_right_proximity": "오른쪽 근접 센서",
@@ -898,7 +902,7 @@ Lang.Blocks = {
     "FLOW_repeat_while_true_while": "",
     "copy_block": "",
     "delete_block": "",
-    "tidy_up_block": "",
+    "tidy_up_block": "코드 정리하기",
     "block_hi": "안녕!",
     "entry_bot_name": "",
     "hi_entry": "",
@@ -924,6 +928,7 @@ Lang.Buttons = {
     "button_no": "아니오"
 };
 Lang.ko = "한국어";
+Lang.vn = "tiếng Việt";
 Lang.Menus = {
     "duplicate_username": "이미 입력한 아이디 입니다.",
     "share_your_project": "내가 만든 작품을 공유해 보세요",
@@ -1270,7 +1275,7 @@ Lang.Menus = {
     "make_using_entry_desc_2": "제공되는 교재를 다운받아 차근차근 따라하다보면 애니메이션, 미디어아트, 게임 등 다양한 작품을 만들 수 있어요.",
     "make_through_ebs_1": "EBS 방송영상으로 소프트웨어를 배워보세요.",
     "make_through_ebs_2": "방송영상은 물론, 차근차근 따라 할 수 있는 특별영상과 함께 누구나 쉽게 다양한 소프트웨어를 만들 수 있어요.",
-    "support_block_js": "모든 미션에 대한 자바스크립트 언어는 8월 중 지원 예정입니다.",
+    "support_block_js": "블록 코딩과 자바스크립트 언어를 모두 지원합니다.",
     "study_ebs_title_1": "순서대로! 차례대로!",
     "study_ebs_desc_1": "[실습] 엔트리봇의 심부름",
     "study_ebs_title_2": "쉽고 간단하게!",
@@ -2344,7 +2349,7 @@ Lang.Menus = {
     "offline_required": "최소 요구사항",
     "offline_required_detail": "디스크 여유 공간 500MB 이상, windows7 혹은 MAC OS 10.8 이상",
     "offline_notice": "설치 전 참고사항",
-    "offline_notice_1": "1. 버전 1.3.2 에서는 하드웨어 연결 프로그램이 내장되어 있습니다.",
+    "offline_notice_1": "1. 버전 1.3.3 에서는 하드웨어 연결 프로그램이 내장되어 있습니다.",
     "offline_notice_2": "2. 별도의 웹브라우져가 필요하지 않습니다.",
     "offline_notice_3": "버전 별 변경 사항 안내",
     "cparty_jr_result_2": "고마워~ 덕분에 책가방을 챙겨서 학교에 올 수 있었어~ <br>다음 학교 가는 길도 함께 가자~ ",
@@ -3108,6 +3113,9 @@ Lang.Workspace = {
     "picture_size": "크기",
     "picture_rotation": "회전",
     "thickness": "굵기",
+    "regular": "보통",
+    "bold": "굵게",
+    "italic": "기울임",
     "textStyle": "글자",
     "add_picture": "모양 추가",
     "select_picture": "모양 선택",
@@ -3163,7 +3171,8 @@ Lang.Workspace = {
     "variable_name_auto_edited_title": "변수 이름 자동 변경",
     "variable_name_auto_edited_content": "변수의 이름은 10글자를 넘을 수 없습니다.",
     "list_name_auto_edited_title": "리스트 이름 자동 변경",
-    "list_name_auto_edited_content": "리스트의 이름은 10글자를 넘을 수 없습니다."
+    "list_name_auto_edited_content": "리스트의 이름은 10글자를 넘을 수 없습니다.",
+    "practical_arts_mode": "실과모드"
 };
 Lang.code = "코드보기";
 Lang.EntryStatic = {
@@ -3497,7 +3506,8 @@ Lang.Helper = {
     "neobot_set_output": "OUT1 ~ OUT3에 라이팅블록 및 전자회로를 연결했을 때 출력 전압을 설정할 수 있습니다.</br>0은 0V, 1 ~ 255는 2.4 ~ 4.96V의 전압을 나타냅니다.",
     "neobot_set_fnd": "FND로 0~99 까지의 숫자를 표시할 수 있습니다.",
     "neobot_set_fnd_off": "FND에 표시한 숫자를 끌 수 있습니다.",
-    "neobot_play_note_for": "주파수 발진 방법을 이용해 멜로디에 반음 단위의 멜로디 음을 발생시킬 수 있습니다."
+    "neobot_play_note_for": "주파수 발진 방법을 이용해 멜로디에 반음 단위의 멜로디 음을 발생시킬 수 있습니다.",
+    "rotate_by_angle_dropdown": "오브젝트의 방향을 입력한 각도만큼 시계방향으로 회전합니다. (오브젝트의 중심점을 기준으로 회전합니다.)"
 };
 Lang.Category = {
     "entrybot_friends": "엔트리봇 친구들",
