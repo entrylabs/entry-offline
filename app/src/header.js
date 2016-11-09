@@ -52,7 +52,7 @@ angular.module('workspace').controller('HeaderController', ['$scope', '$rootScop
                 storage.setItem('localStorageProject', JSON.stringify(project));
             }
             // location.reload(true);
-            Entry.plugin.reloadApplication();
+            Entry.plugin.reloadApplication(true);
         };
 
         $scope.blockHelperOn = function() {

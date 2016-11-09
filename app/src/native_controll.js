@@ -189,24 +189,16 @@ Entry.plugin = (function () {
         return require('crypto').createHash('md5').update(randomStr).digest("hex");
     };
 
-    that.reloadApplication = function () {
-        if (window.isNowSaving === true) {
-            alert(Lang.Workspace.quit_stop_msg);
-            return;
-        }
-        var canLoad = true;
-        if (!Entry.stateManager.isSaved()) {
-            canLoad = confirm(Lang.Menus.save_dismiss);
-        }
-
-        if (canLoad) {
+    that.reloadApplication = function (isSkip) {
+        if(isSkip) {
             Entry.stateManager.addStamp();
             Entry.plugin.closeAboutPage();
             Entry.plugin.closeHwGuidePage();
             localStorage.removeItem('tempProject');
             ipcRenderer.send('reload');
+        } else {
+            ipcRenderer.send('reload');
         }
-
     }
 
     that.findObject = function (object, key) {
