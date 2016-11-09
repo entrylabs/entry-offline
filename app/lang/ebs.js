@@ -924,6 +924,7 @@ Lang.Buttons = {
     "button_no": "아니오"
 };
 Lang.ko = "한국어";
+Lang.vn = "tiếng Việt";
 Lang.Menus = {
     "duplicate_username": "이미 입력한 아이디 입니다.",
     "share_your_project": "내가 만든 작품을 공유해 보세요",
@@ -2344,7 +2345,7 @@ Lang.Menus = {
     "offline_required": "최소 요구사항",
     "offline_required_detail": "디스크 여유 공간 500MB 이상, windows7 혹은 MAC OS 10.8 이상",
     "offline_notice": "설치 전 참고사항",
-    "offline_notice_1": "1. 버전 1.3.2 에서는 하드웨어 연결 프로그램이 내장되어 있습니다.",
+    "offline_notice_1": "1. 버전 1.3.3 에서는 하드웨어 연결 프로그램이 내장되어 있습니다.",
     "offline_notice_2": "2. 별도의 웹브라우져가 필요하지 않습니다.",
     "offline_notice_3": "버전 별 변경 사항 안내",
     "cparty_jr_result_2": "고마워~ 덕분에 책가방을 챙겨서 학교에 올 수 있었어~ <br>다음 학교 가는 길도 함께 가자~ ",
@@ -3108,6 +3109,9 @@ Lang.Workspace = {
     "picture_size": "크기",
     "picture_rotation": "회전",
     "thickness": "굵기",
+    "regular": "보통",
+    "bold": "굵게",
+    "italic": "기울임",
     "textStyle": "글자",
     "add_picture": "모양 추가",
     "select_picture": "모양 선택",

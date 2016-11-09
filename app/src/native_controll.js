@@ -195,10 +195,9 @@ Entry.plugin = (function () {
             Entry.plugin.closeAboutPage();
             Entry.plugin.closeHwGuidePage();
             localStorage.removeItem('tempProject');
-            ipcRenderer.send('reload');
-        } else {
-            ipcRenderer.send('reload');
         }
+
+        ipcRenderer.send('reload');
     }
 
     that.findObject = function (object, key) {
