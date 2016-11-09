@@ -22,22 +22,21 @@
             </li>
         </ul>
     </div>
-
     <div class="workspace_button_group">
- 		<div class="btn-group" dropdown is-open="false">
-	        <a class="btn dropdown-toggle" data-toggle="dropdown">
-	            <img src="./images/top_icon_new_b_nor.png" />
-	            <span class="drop"><b class="caret"></b></span>
-	        </a>
-	        <ul class="dropdown-menu" role="menu">
-	            <li ng-click="newProject()">
+        <div class="btn-group" dropdown is-open="false">
+            <a class="btn dropdown-toggle" data-toggle="dropdown">
+                <img src="./images/top_icon_new_b_nor.png" />
+                <span class="drop"><b class="caret"></b></span>
+            </a>
+            <ul class="dropdown-menu" role="menu">
+                <li ng-click="newProject()">
                     <a id="btnFileNew" href="">{{'Workspace.file_new' | text}}</a>
                 </li>
-	            <li>
+                <li>
                     <a href ng-click="loadWorkspace()">{{'Workspace.file_upload' | text}}</a>
                 </li>
-	        </ul>
-	    </div>
+            </ul>
+        </div>
         <div class="btn-group" dropdown is-open="false">
             <a class="btn dropdown-toggle" data-toggle="dropdown">
                 <img src="./images/top_icon_save_b_nor.png" />
@@ -62,6 +61,9 @@
                     <a href ng-click="blockHelperOn()">{{'Workspace.blocks_reference' | text}}</a>
                 </li> -->
                 <li>
+                    <a href ng-click="showBlockHelper()">{{'Workspace.block_helper' | text}}</a>
+                </li>
+                <li>
                     <a href ng-click="startHWGuide('./hardware/guide/hwguide.html', '엔트리 하드웨어 메뉴얼')">{{'Workspace.hardware_guide' | text}}</a>
                 </li>
             </ul>
@@ -76,9 +78,8 @@
                 <img src="./images/top_icon_right_b_nor.png">
             </button>
         </div>
-
         <div class="workspace_divider"></div>
-	</div>
+    </div>
     <div hidden>
         <input id="saveArduinoCode" type="file" nwworkingdir nwsaveas />
     </div>

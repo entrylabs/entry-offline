@@ -1,18 +1,17 @@
 'use strict';
 
-angular.module('workspace').controller('HeaderController',
-    ['$scope', '$rootScope', '$cookies', 'myProject',
-    function ($scope, $rootScope, $cookies, myProject) {
+angular.module('workspace').controller('HeaderController', ['$scope', '$rootScope', '$cookies', 'myProject',
+    function($scope, $rootScope, $cookies, myProject) {
         $scope.user_language = localStorage.getItem('lang') || 'ko';
         $scope.project = myProject;
         var supported = !(typeof storage == 'undefined' || typeof window.JSON == 'undefined');
         var storage = (typeof window.localStorage === 'undefined') ? undefined : window.localStorage;
 
         $scope.init = function() {
-                if(hwGuidePopup) {
-                    hwGuidePopup.close();
-                    hwGuidePopup = null;
-                }
+            if (hwGuidePopup) {
+                hwGuidePopup.close();
+                hwGuidePopup = null;
+            }
         };
 
         $rootScope.$on('loadProject', function(event, data) {
@@ -34,7 +33,11 @@ angular.module('workspace').controller('HeaderController',
             Entry.dispatchEvent('loadWorkspace')
         };
 
-        $scope.stopPropagation = function (e) {
+        $scope.showBlockHelper = function() {
+            Entry.dispatchEvent('showBlockHelper');
+        };
+
+        $scope.stopPropagation = function(e) {
             e.stopPropagation();
         }
 
@@ -42,7 +45,7 @@ angular.module('workspace').controller('HeaderController',
             storage.setItem('lang', language);
             var isDefaultProject = sessionStorage.getItem('isDefaultProject');
 
-            if(Entry.stateManager.canUndo() || isDefaultProject !== 'true') {
+            if (Entry.stateManager.canUndo() || isDefaultProject !== 'true') {
                 var project = Entry.exportProject();
                 project.name = myProject.name;
                 project.path = myProject.isSavedPath;
@@ -52,7 +55,7 @@ angular.module('workspace').controller('HeaderController',
             Entry.plugin.reloadApplication();
         };
 
-        $scope.blockHelperOn = function(){
+        $scope.blockHelperOn = function() {
             Entry.helper.blockHelperOn();
         };
 
@@ -63,7 +66,7 @@ angular.module('workspace').controller('HeaderController',
             });
         }
 
-        $scope.showPopup = function (target) {
+        $scope.showPopup = function(target) {
             var popup = $('#' + target);
             var body = $('body').eq(0);
             body.css('overflow', 'hidden');
@@ -71,7 +74,7 @@ angular.module('workspace').controller('HeaderController',
             popup.css('top', $(document).scrollTop() + 'px');
         };
 
-        $scope.hidePopup = function (target) {
+        $scope.hidePopup = function(target) {
             var popup = $('#' + target);
             var body = $('body').eq(0);
             body.css('overflow', 'auto');
@@ -79,19 +82,20 @@ angular.module('workspace').controller('HeaderController',
         };
 
         //새 프로젝트
-        $scope.newProject = function () {
+        $scope.newProject = function() {
             var canLoad = false;
-            if(!Entry.stateManager.isSaved()) {
+            if (!Entry.stateManager.isSaved()) {
                 canLoad = !confirm(Lang.Menus.save_dismiss);
             }
 
-            if(!canLoad) {
+            if (!canLoad) {
                 Entry.stateManager.addStamp();
                 storage.removeItem('tempProject');
                 Entry.plugin.beforeStatus = 'new';
-                Entry.plugin.initProjectFolder(function () {
+                Entry.plugin.initProjectFolder(function() {
                     Entry.plugin.reloadApplication();
                 });
-            }           
+            }
         }
-    }]);
+    }
+]);
