@@ -355,7 +355,7 @@ app.once('ready', function() {
 
 ipcMain.on('reload', function(event, arg) {
     if(event.sender.webContents.name === 'entry') {
-        mainWindow.reload();
+        // mainWindow.reload();
     } else {
         hardwareWindowReLaunch = true;
         hardwareWindow.close();

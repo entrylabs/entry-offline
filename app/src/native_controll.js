@@ -190,9 +190,23 @@ Entry.plugin = (function () {
     };
 
     that.reloadApplication = function () {
-        // remote.getCurrentWindow().reload();
-        ipcRenderer.send('reload');
-        // location.reload();
+        if (window.isNowSaving === true) {
+            alert(Lang.Workspace.quit_stop_msg);
+            return;
+        }
+        var canLoad = true;
+        if (!Entry.stateManager.isSaved()) {
+            canLoad = confirm(Lang.Menus.save_dismiss);
+        }
+
+        if (canLoad) {
+            Entry.stateManager.addStamp();
+            Entry.plugin.closeAboutPage();
+            Entry.plugin.closeHwGuidePage();
+            localStorage.removeItem('tempProject');
+            ipcRenderer.send('reload');
+        }
+
     }
 
     that.findObject = function (object, key) {

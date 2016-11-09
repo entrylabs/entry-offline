@@ -3,7 +3,7 @@
 angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootScope', '$modal', '$http', 'myProject', function($scope, $rootScope, $modal, $http, myProject) {
     $scope.saveFileName = '';
     $scope.project = myProject;
-    $scope.isNowSaving = false;
+    window.isNowSaving = false;
     var supported = !(typeof storage == 'undefined' || typeof window.JSON == 'undefined');
     var storage = (typeof window.localStorage === 'undefined') ? undefined : window.localStorage;
 
@@ -65,7 +65,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
 
             var beforeUnload = window.onbeforeunload;
             window.onbeforeunload = function(e) {
-                if ($scope.isNowSaving === true) {
+                if (window.isNowSaving === true) {
                     alert(Lang.Workspace.quit_stop_msg);
                     e.preventDefault();
                     e.returnValue = false;
@@ -376,7 +376,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
 
                 try {
                     myProject.saveProject(filePath, function(e, project_name) {
-                        $scope.isNowSaving = false;
+                        window.isNowSaving = false;
                         if (e) {
                             $scope.doPopupControl({
                                 'type': 'hide'
@@ -403,20 +403,20 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                         'type': 'fail',
                         'msg': Lang.Workspace.saving_fail_msg
                     });
-                    $scope.isNowSaving = false;
+                    window.isNowSaving = false;
                 }
             } else {
                 $scope.doPopupControl({
                     'type': 'hide'
                 });
-                $scope.isNowSaving = false;
+                window.isNowSaving = false;
             }
         });
     }
 
     // 저장하기
     $scope.saveWorkspace = function() {
-        $scope.isNowSaving = true;
+        window.isNowSaving = true;
         $scope.doPopupControl({
             'type': 'spinner',
             'msg': Lang.Workspace.saving_msg
@@ -429,7 +429,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                 $scope.doPopupControl({
                     'type': 'hide'
                 });
-                $scope.isNowSaving = false;
+                window.isNowSaving = false;
             });
         } else {
             Entry.stateManager.cancelLastCommand();
@@ -439,7 +439,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
 
     // 새 이름으로 저장하기
     $scope.saveAsWorkspace = function() {
-        $scope.isNowSaving = true;
+        window.isNowSaving = true;
         $scope.doPopupControl({
             'type': 'spinner',
             'msg': Lang.Workspace.saving_msg
