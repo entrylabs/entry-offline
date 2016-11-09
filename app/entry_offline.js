@@ -9,17 +9,16 @@ const ChildProcess = require('child_process');
 
 var language;
 
-function logger(msg) {
-    if (process.platform !== 'win32') {
-        return false;
-    }
-    var log_path = path.resolve(process.env.APPDATA, 'entry_log');
+function logger(text) {
+    var log_path = path.join(__dirname);
     if(!fs.existsSync(log_path)) {
         fs.mkdirSync(log_path);
+    }
+    if(!fs.existsSync(path.join(log_path, 'debug.log'))) {
         fs.writeFileSync(path.join(log_path, 'debug.log'), '', 'utf8');
     }
     var data = fs.readFileSync(path.join(log_path, 'debug.log'), 'utf8');
-    data += '\n\r' + new Date() + ' : ' + msg;
+    data += '\n\r' + new Date() + ' : ' + text;
     fs.writeFileSync(path.join(log_path, 'debug.log'), data, 'utf8');
 }
 
@@ -210,14 +209,14 @@ for (var i = 0; i < argv.length; i++) {
 }
 
 var handleStartupEvent = function() {
-    logger('start handleStartupEvent');
+    // logger('start handleStartupEvent');
     try{
         if (process.platform !== 'win32') {
             return false;
         }
 
         var squirrelCommand = process.argv[1];
-        logger('squirrelCommand : ' + squirrelCommand);
+        // logger('squirrelCommand : ' + squirrelCommand);
         if(squirrelCommand.indexOf('--squirrel') < 0) return false;
         var defaultLocations = 'Desktop,StartMenu';
         switch (squirrelCommand) {
@@ -249,7 +248,7 @@ var handleStartupEvent = function() {
                 return true;
         }
     } catch(e) {
-        logger(e.stack);
+        // logger(e.stack);
         app.quit();
         process.exit(0);
     }
@@ -284,6 +283,12 @@ if (shouldQuit) {
     app.quit();
     return;
 }
+
+app.on('open-file', function(event, pathToOpen) {
+    if(process.platform === 'darwin') {
+        option.file = pathToOpen;
+    }
+});
 
 app.once('ready', function() {
     language = app.getLocale();
