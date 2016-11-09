@@ -287,6 +287,9 @@ if (shouldQuit) {
 app.on('open-file', function(event, pathToOpen) {
     if(process.platform === 'darwin') {
         option.file = pathToOpen;
+        if(mainWindow) {
+            mainWindow.webContents.send('loadProject', pathToOpen);
+        }
     }
 });
 
