@@ -161,6 +161,10 @@ body {
     margin-left: 369px !important;
 }
 
+.entryPlayground_bgColorDiv {
+    margin-left: 403px !important;
+}
+
 .entryPlaygroundTextColoursWrapper {
     margin-left: 359px !important;
 }
@@ -172,6 +176,10 @@ body {
 
 .textProperties .fgColorDiv {
     margin-left: 280px;
+}
+
+.textProperties .bgColorDiv {
+    margin-left: 318px
 }
 
 .coloursWrapper {
