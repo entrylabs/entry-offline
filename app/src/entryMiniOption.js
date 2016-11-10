@@ -122,6 +122,7 @@
             ]
         }, {
             category: "hw_motor",
+            visible: false,
             blocks: [
                 "practical_arts_move_for_secs",
                 "practical_arts_move_for",
@@ -130,11 +131,13 @@
             ]
         }, {
             category: "hw_melody",
+            visible: false,
             blocks: [
                 "practical_arts_melody_note_for",
             ]
         }, {
             category: "hw_sensor",
+            visible: false,
             blocks: [
                 "practical_arts_touch_value",
                 "practical_arts_touch_value_boolean",
@@ -147,6 +150,7 @@
             ]
         }, {
             category: "hw_led",
+            visible: false,
             blocks: [
                 "practical_arts_diode_secs_toggle",
                 "practical_arts_diode_toggle",

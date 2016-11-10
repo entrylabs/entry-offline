@@ -347,10 +347,10 @@ app.once('ready', function() {
 
 ipcMain.on('reload', function(event, arg) {
     if(event.sender.webContents.name === 'entry') {
-        mainWindow.reload(true);
+        mainWindow.reload();
     } else {
         hardwareWindowReLaunch = true;
-        hardwareWindow.close(true);
+        hardwareWindow.close();
     }
     if(event.sender.webContents) {
         event.sender.webContents.reload();

@@ -23,6 +23,10 @@ body {
 }
 
 .hide_contents {
+    display: none !important;
+}
+
+.entryRemoveCategory {
 	display: none !important;
 }
 
