@@ -458,6 +458,8 @@
         sceneEditable: false,
     }
 
+    option.hwCategoryList = ['hw_motor', 'hw_melody', 'hw_sensor', 'hw_led'];
+
     if (typeof define === 'function' && define.amd) {
         define(function() {
             return option;

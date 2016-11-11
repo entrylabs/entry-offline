@@ -8,10 +8,12 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
     var storage = (typeof window.localStorage === 'undefined') ? undefined : window.localStorage;
     var isMiniMode = false;
     var defaultInitOption = {};
+    var hwCategoryList = [];
 
     function settingForMini() {
         defaultInitOption = miniOption.initOptions;
         EntryStatic.getAllBlocks = miniOption.allBlocks;
+        hwCategoryList = miniOption.hwCategoryList;
     }
 
     $scope.initWorkspace = function() {
@@ -117,6 +119,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
 
             $scope.setWorkspace(project);
 
+            Entry.addEventListener('hwChanged', $scope.hwChanged);
             Entry.addEventListener('saveWorkspace', $scope.saveWorkspace);
             Entry.addEventListener('saveAsWorkspace', $scope.saveAsWorkspace);
             Entry.addEventListener('loadWorkspace', $scope.loadWorkspace);
@@ -185,6 +188,20 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
             });
         });
     };
+
+
+
+    $scope.hwChanged = function () {
+        if(Entry.hw.connected) {
+            hwCategoryList.forEach(function (categoryName) {
+                Entry.playground.blockMenu.unbanCategory(categoryName);
+            });
+        } else {
+            hwCategoryList.forEach(function (categoryName) {
+                Entry.playground.blockMenu.banCategory(categoryName);
+            });
+        }
+    }
 
     $scope.setOfflineHW = function() {
         Entry.HW.prototype.downloadConnector = function() {
