@@ -7,17 +7,36 @@
             <input type="text" data-ng-model="project.name" id="project_name" class="normal workspace_project_name" data-ng-focus="focus()" data-ng-enter="blur()" ng-blur="blur()"/>
         </span>
     </div>
-    <div class="workspace_language">
+    <div class="workspace_mode">
         <ul class="language_wrapper">
             <li class="dropdown">
                 <a href class="dropdown-toggle" data-toggle="dropdown">
-                    <span class="menu">{{user_language | text}}<b class="caret"></b></span>
+                    <span class="menu mode_text">
+                        {{ PracticalModeName }}
+                        <div class="practical_arts_badge">
+                            <span>
+                                {{ 'Workspace.practical_arts' | text }}
+                            </span>
+                        </div>
+                        <b class="caret"></b>
+                    </span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a href data-ng-click="setLanguage('ko')">{{'ko' | text}}</a></li>
-                    <li><a href data-ng-click="setLanguage('en')">{{'en' | text}}</a></li>
-                    <!-- <li><a href data-ng-click="setLanguage('vn')">{{'vn' | text}}</a></li> -->
-                    <li><a href data-ng-click="setLanguage('code')">{{'code' | text}}</a></li>
+                    <li>
+                        <a href data-ng-click="setWorkspaceMode('default')">
+                            {{ 'Workspace.default_mode' | text }}
+                        </a>
+                    </li>
+                    <li>
+                        <a href data-ng-click="setWorkspaceMode('practical_arts')">
+                            {{ 'Workspace.practical_arts_mode' | text }}
+                            <div class="practical_arts_badge">
+                                <span>
+                                    {{ 'Workspace.practical_arts' | text }}
+                                </span>
+                            </div>
+                        </a>
+                    </li>
                 </ul>
             </li>
         </ul>

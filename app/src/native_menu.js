@@ -23,13 +23,32 @@ var template = [{
     }, {
         type: 'separator'
     }, {
-        label: Lang.Workspace.practical_arts_mode,
-        type: 'checkbox',
-        checked: localStorage.getItem('isMiniMode') == 'true' ? true : false,
-        click: function(menuItem) {
-            localStorage.setItem('isMiniMode', menuItem.checked);
-            ipcRenderer.send('reload');
-        }
+        label: Lang.Workspace.select_mode,
+        submenu: [{
+            label: Lang.Workspace.default_mode,
+            type: 'checkbox',
+            checked: localStorage.getItem('isMiniMode') != 'true' ? true : false,
+            click: function(menuItem) {
+                if(menuItem.checked) {
+                    localStorage.setItem('isMiniMode', false);
+                    ipcRenderer.send('reload');
+                } else {
+                    menuItem.checked = true;
+                }
+            }
+        }, {
+            label: Lang.Workspace.practical_arts_mode,
+            type: 'checkbox',
+            checked: localStorage.getItem('isMiniMode') === 'true',
+            click: function(menuItem) {
+                if(menuItem.checked) {
+                    localStorage.setItem('isMiniMode', true);
+                    ipcRenderer.send('reload');
+                } else {
+                    menuItem.checked = true;
+                }
+            }
+        }]
     }, {
         type: 'separator'
     }, {
@@ -84,6 +103,31 @@ var template = [{
         accelerator: 'CmdOrCtrl+-',
         click: function() {
             Entry.plugin.setZoomOutPage();
+        }
+    }]
+}, {
+    label: Lang.Menus.language,
+    submenu: [{
+        label: Lang.Menus.korean,
+        type: 'checkbox',
+        checked: localStorage.getItem('lang') === 'ko',
+        click: function(menuItem) {
+            if(localStorage.getItem('lang') !== 'ko') {
+                angular.element('[data-ng-controller=HeaderController]').scope().setLanguage('ko');
+            } else {
+                menuItem.checked = true;
+            }
+        }
+    }, {
+        label: Lang.Menus.english,
+        type: 'checkbox',
+        checked: localStorage.getItem('lang') !== 'ko',
+        click: function(menuItem) {
+            if(localStorage.getItem('lang') === 'ko') {
+                angular.element('[data-ng-controller=HeaderController]').scope().setLanguage('en');
+            } else {
+                menuItem.checked = true;
+            }
         }
     }]
 }];

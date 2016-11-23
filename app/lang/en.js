@@ -12,6 +12,7 @@ Lang.Blocks = {
     "ARDUINO_download_source": "Entry Arduino code",
     "ARDUINO_reconnect": "Connect Hardware",
     "ARDUINO_program": "Run the program",
+    "ARDUINO_cloud_pc_connector": "Connect to Cloud PC",
     "ARDUINO_connected": "Hardware connected",
     "ARDUINO_arduino_get_number_1": "number result of signal",
     "ARDUINO_arduino_get_number_2": "",
@@ -419,10 +420,6 @@ Lang.Blocks = {
     "VARIABLE_value_of_index_from_list_1": "value of",
     "VARIABLE_value_of_index_from_list_2": "",
     "VARIABLE_value_of_index_from_list_3": "th element",
-    "HW_MOTOR": "MOTOR",
-    "HW_SENSOR": "SENSOR",
-    "HW_LED": "LED",
-    "HW_MELODY": "MELODY",
     "HAMSTER_hand_found": "hand found?",
     "HAMSTER_sensor_left_proximity": "left proximity",
     "HAMSTER_sensor_right_proximity": "right proximity",
@@ -911,7 +908,25 @@ Lang.Blocks = {
     "walking_entryBot": "Walking Entrybot",
     "entry": "Entry",
     "hello": "Hello",
-    "nice": "nice to meet you"
+    "nice": "nice to meet you",
+    "silent": "Silent",
+    "do_name": "Do",
+    "do_sharp_name": "Do#(Re♭)",
+    "re_name": "Re",
+    "re_sharp_name": "Re(Mi♭)",
+    "mi_name": "Mi",
+    "fa_name": "Fa",
+    "fa_sharp_name": "Fa#(Sol♭)",
+    "sol_name": "Sol",
+    "sol_sharp_name": "Sol#(La♭)",
+    "la_name": "La",
+    "la_sharp_name": "La#(Si♭)",
+    "si_name": "Si",
+    "HW_MOTOR": "MOTOR",
+    "HW_SENSOR": "SENSOR",
+    "HW_LED": "LED",
+    "HW_MELODY": "MELODY",
+    "HW_ROBOT": "ROBOT"
 };
 Lang.Buttons = {
     "apply": "Apply",
@@ -1139,7 +1154,7 @@ Lang.Menus = {
     "enter_lecture_description": "Enter lecture information",
     "enter_curriculum_description": "Enter courseware information",
     "first_page": "처음 입니다.",
-    "last_page": "마지막 페이지 입니다.",
+    "last_page": "마지막 입니다.",
     "alert_duplicate_lecture": "The lesson is already registered",
     "enter_lesson_alert": "Register one or more lessons",
     "open_edit_lessons": "Open lesson to be edited",
@@ -2349,7 +2364,7 @@ Lang.Menus = {
     "offline_required": "System Requirement",
     "offline_required_detail": "Minimum 500mb disk space is required, Windows7 and above or, Mac OS 10.8 and above",
     "offline_notice": "Side notes",
-    "offline_notice_1": "1. Version 1.3.3 does not support installation of all-in-one hardware connection program",
+    "offline_notice_1": "1. Version 1.3.4 does not support installation of all-in-one hardware connection program",
     "offline_notice_2": "2. Web browser is not needed.",
     "offline_notice_3": "Release note",
     "cparty_jr_result_2": "Thank you! I had so much fun with you.<br> See you around!",
@@ -3132,7 +3147,7 @@ Lang.Workspace = {
     "list_used_specific_objects": "List used for specific object",
     "List_used_all_objects": "List used for all objects",
     "Scene_delete_error": "The scene is, there should be at least one.",
-    "Scene_add_error": "The scene is up to 10.",
+    "Scene_add_error": "The scene is up to 20.",
     "replica_of_object": "'s replicas",
     "will_you_delete_scene": "Deleting scene can not be restored.\nAre you sure you want to delete scene?",
     "will_you_delete_function": "Deleting function can not be restored.\nAre you sure you want to delete function?",
@@ -3172,7 +3187,15 @@ Lang.Workspace = {
     "variable_name_auto_edited_content": "variable name cannot exceed 10 characters",
     "list_name_auto_edited_title": "list name auto-edited",
     "list_name_auto_edited_content": "list name cannot exceed 10 characters",
-    "practical_arts_mode": "Practical Arts Mode"
+    "default_mode": "기본형",
+    "practical_arts_mode": "교과형",
+    "practical_arts": "practical arts",
+    "select_mode": "Mode",
+    "select_mode_popup_title": "엔트리 만들기 환경을 선택해 주세요.",
+    "select_mode_popup_lable1": "기본형",
+    "select_mode_popup_lable2": "교과형(실과)",
+    "select_mode_popup_desc1": "엔트리의 모든 기능을 이용하여<br/>자유롭게 작품을 만듭니다.",
+    "select_mode_popup_desc2": "실과 교과서에 등장하는 기능만을<br/>이용하여 작품을 만듭니다."
 };
 Lang.code = "view code";
 Lang.EntryStatic = {
@@ -3593,12 +3616,12 @@ Lang.General = {
     "note_b": "B"
 };
 Lang.Fonts = {
-    "batang": "KoPub Batang",
-    "myeongjo": "Nanum Myeongjo",
-    "gothic": "Nanum Gothic",
-    "pen_script": "Nanum Pen Script",
+    "batang": "Batang",
+    "myeongjo": "Myeongjo",
+    "gothic": "Gothic",
+    "pen_script": "Pen Script",
     "jeju_hallasan": "Jeju Hallasan",
-    "gothic_coding": "Nanum Gothic Coding"
+    "gothic_coding": "Gothic Coding"
 };
 Lang.Hw = {
     "note": "note",
@@ -3675,6 +3698,7 @@ Lang.template = {
     "arduino_get_pwm_port_number": "%1  ",
     "arduino_get_number_sensor_value": "Analog %1 Sensor value  ",
     "arduino_ext_get_analog_value": "Analog %1 Sensor value",
+    "arduino_ext_get_analog_value_map": "Map Value %1 %2 ~ %3 to %4 ~ %5  ",
     "arduino_ext_get_ultrasonic_value": "Read ultrasonic sensor trig pin %1 echo pin %2",
     "arduino_ext_toggle_led": "Digital %1 Pin %2 %3",
     "arduino_ext_digital_pwm": "Digital %1 Pin %2 %3",

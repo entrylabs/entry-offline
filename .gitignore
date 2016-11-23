@@ -6,3 +6,4 @@ dist/
 temp/
 app/bower_components/
 build/*.exe
+build/*.zip

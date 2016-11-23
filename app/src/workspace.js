@@ -17,9 +17,26 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
     }
 
     $scope.initWorkspace = function() {
-        isMiniMode = localStorage.getItem('isMiniMode') == 'true';
-        if(isMiniMode) {
+        if (!$scope.popupHelper) {
+            $scope.popupHelper = new Entry.popupHelper(true);
+            addSpinnerPopup();
+            addFailedPopup();
+            addSelectModePopup();
+        }
+
+        isMiniMode = localStorage.getItem('isMiniMode');
+        if (isMiniMode === null) {
+            $scope.doPopupControl({
+                type: 'mode'
+            });
+            return;
+        } else if (isMiniMode === 'true') {
+            $('html').addClass('practical_arts_mode');
+            myProject.setMode('practical_arts');
             settingForMini();
+        } else {
+            $('html').addClass('default_mode');
+            myProject.setMode('default');
         }
 
         window.lang = localStorage.getItem('lang');
@@ -32,12 +49,6 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
             else b = { pan: 0.01 };
             return playFunc(a, b);
         };
-
-        if (!$scope.popupHelper) {
-            $scope.popupHelper = new Entry.popupHelper(true);
-        }
-        addSpinnerPopup();
-        addFailedPopup();
 
         // 기본 초기화를 수행수 동작한다.
         Entry.plugin.init(function() {
@@ -189,18 +200,23 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
         });
     };
 
-
-
-    $scope.hwChanged = function () {
-        if(Entry.hw.connected) {
-            hwCategoryList.forEach(function (categoryName) {
+    var lastHwConnected = false;
+    $scope.hwChanged = function() {
+        if (Entry.hw.connected === lastHwConnected || !isMiniMode) {
+            return;
+        }
+        if (Entry.hw.connected) {
+            hwCategoryList.forEach(function(categoryName) {
                 Entry.playground.blockMenu.unbanCategory(categoryName);
             });
+            Entry.playground.blockMenu.banCategory('hw_robot');
         } else {
-            hwCategoryList.forEach(function (categoryName) {
+            hwCategoryList.forEach(function(categoryName) {
                 Entry.playground.blockMenu.banCategory(categoryName);
             });
+            Entry.playground.blockMenu.unbanCategory('hw_robot');
         }
+        lastHwConnected = Entry.hw.connected;
     }
 
     $scope.setOfflineHW = function() {
@@ -267,6 +283,9 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
         } else if (obj.type === 'fail') {
             $scope.failTitle.html(obj.msg);
             $scope.popupHelper.show('workspaceFailed');
+        } else if (obj.type === 'mode') {
+            // $scope.failTitle.html(obj.msg);
+            $scope.popupHelper.show('workspaceModeSelect');
         } else if (obj.type === 'hide') {
             $scope.popupHelper.hide();
         }
@@ -349,6 +368,90 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                 $scope.failTitle = title;
 
                 close.bindOnClick(function() {
+                    popupHelper.hide();
+                });
+
+                popup.append(content);
+            }
+        });
+    }
+
+    function addSelectModePopup() {
+        $scope.popupHelper.addPopup('workspaceModeSelect', {
+            setPopupLayout: function(popup) {
+                var content = Entry.Dom('div', {
+                    class: 'contentArea'
+                });
+                var title = Entry.Dom('div', {
+                    class: 'workspaceModeSelectTitle',
+                    parent: content
+                });
+                var modeSelectArea = Entry.Dom('div', {
+                    classes: ['workspaceModeSelectArea'],
+                    parent: content
+                });
+                var modeDefault = Entry.Dom('div', {
+                    classes: ['workspaceModeSelectDefault', 'active', 'workspaceModeSelectBox'],
+                    parent: modeSelectArea
+                });
+                Entry.Dom('div', {
+                    classes: ['modeTitle'],
+                    parent: modeDefault,
+                }).text(Lang.Workspace.select_mode_popup_lable1);
+                Entry.Dom('div', {
+                    classes: ['modeDesc'],
+                    parent: modeDefault,
+                }).html(Lang.Workspace.select_mode_popup_desc1);
+                Entry.Dom('div', {
+                    classes: ['modeButton'],
+                    parent: modeDefault,
+                });
+                var modePracticalArts = Entry.Dom('div', {
+                    classes: ['workspaceModeSelectPracticalArts', 'workspaceModeSelectBox'],
+                    parent: modeSelectArea
+                });
+                Entry.Dom('div', {
+                    classes: ['modeTitle'],
+                    parent: modePracticalArts,
+                }).text(Lang.Workspace.select_mode_popup_lable2);
+                Entry.Dom('div', {
+                    classes: ['modeDesc'],
+                    parent: modePracticalArts,
+                }).html(Lang.Workspace.select_mode_popup_desc2);
+                Entry.Dom('div', {
+                    classes: ['modeButton'],
+                    parent: modePracticalArts,
+                });
+                Entry.Dom('div', {
+                    class: 'workspaceModeSelectDivideLine',
+                    parent: content
+                });
+                var close = Entry.Dom('div', {
+                    class: 'workspaceModeSelectCloseBtn',
+                    parent: content
+                }).text(Lang.Buttons.confirm);
+                title.text(Lang.Workspace.select_mode_popup_title);
+
+                var mode = 'default';
+                modeDefault.bindOnClick(function() {
+                    mode = 'default';
+                    modePracticalArts.removeClass('active');
+                    $(this).addClass('active');
+                });
+                modePracticalArts.bindOnClick(function() {
+                    mode = 'practical_arts';
+                    modeDefault.removeClass('active');
+                    $(this).addClass('active');
+                });
+                close.bindOnClick(function() {
+                    if(mode === 'default') {
+                        localStorage.setItem('isMiniMode', false);
+                        // ipcRenderer.send('reload');
+                    } else {
+                        localStorage.setItem('isMiniMode', true);
+                        // ipcRenderer.send('reload');
+                    }
+                    $scope.initWorkspace();
                     popupHelper.hide();
                 });
 
@@ -851,11 +954,11 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
             var maxx = 0;
             var maxy = 0;
 
-            if(pix.x.length > 0) {
+            if (pix.x.length > 0) {
                 minx = pix.x[0];
                 maxx = pix.x[n];
                 w = maxx - minx;
-                if(w % 2 != 0) {
+                if (w % 2 != 0) {
                     w += 1;
                 }
             } else {
@@ -863,11 +966,11 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                 minx = 0;
             }
 
-            if(pix.y.length > 0) {
+            if (pix.y.length > 0) {
                 miny = pix.y[0];
                 maxy = pix.y[n]
                 h = maxy - miny;
-                if(h % 2 != 0) {
+                if (h % 2 != 0) {
                     h += 1;
                 }
             } else {
@@ -1004,10 +1107,27 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
     };
     /* Function Area End*/
 
-}]).service('myProject', function() {
+}]).service('myProject', function($rootScope) {
     this.name = '';
     this.isSaved = false;
     this.isSavedPath = '';
+    this.mode;
+    this.modeName;
+
+    this.setMode = function(value) {
+        this.mode = value;
+        if(value === 'default') {
+            this.modeName = Lang.Workspace.default_mode;
+        } else {
+            this.modeName = Lang.Workspace.practical_arts_mode;
+        }
+        $rootScope.$broadcast('modeChange', this);
+    }
+
+    this.getMode = function() {
+        return mode;
+    }
+
     this.saveProject = function(path, cb) {
         var project_name = this.name;
         var parent = this.parent;

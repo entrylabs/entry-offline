@@ -189,10 +189,22 @@ Entry.plugin = (function () {
         return require('crypto').createHash('md5').update(randomStr).digest("hex");
     };
 
+    that.setLanguage = function(language) {
+        localStorage.setItem('lang', language);
+        var isDefaultProject = sessionStorage.getItem('isDefaultProject');
+
+        if (Entry.stateManager.canUndo() || isDefaultProject !== 'true') {
+            var project = Entry.exportProject();
+            project.name = myProject.name;
+            project.path = myProject.isSavedPath;
+            localStorage.setItem('localStorageProject', JSON.stringify(project));
+        }
+
+        Entry.plugin.reloadApplication();
+    }
+
     that.reloadApplication = function () {
-        // remote.getCurrentWindow().reload();
         ipcRenderer.send('reload');
-        // location.reload();
     }
 
     that.findObject = function (object, key) {
