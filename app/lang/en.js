@@ -12,6 +12,7 @@ Lang.Blocks = {
     "ARDUINO_download_source": "Entry Arduino code",
     "ARDUINO_reconnect": "Connect Hardware",
     "ARDUINO_program": "Run the program",
+    "ARDUINO_cloud_pc_connector": "Connect to Cloud PC",
     "ARDUINO_connected": "Hardware connected",
     "ARDUINO_arduino_get_number_1": "number result of signal",
     "ARDUINO_arduino_get_number_2": "",
@@ -907,7 +908,25 @@ Lang.Blocks = {
     "walking_entryBot": "Walking Entrybot",
     "entry": "Entry",
     "hello": "Hello",
-    "nice": "nice to meet you"
+    "nice": "nice to meet you",
+    "silent": "Silent",
+    "do_name": "Do",
+    "do_sharp_name": "Do#(Re♭)",
+    "re_name": "Re",
+    "re_sharp_name": "Re(Mi♭)",
+    "mi_name": "Mi",
+    "fa_name": "Fa",
+    "fa_sharp_name": "Fa#(Sol♭)",
+    "sol_name": "Sol",
+    "sol_sharp_name": "Sol#(La♭)",
+    "la_name": "La",
+    "la_sharp_name": "La#(Si♭)",
+    "si_name": "Si",
+    "HW_MOTOR": "Motor",
+    "HW_SENSOR": "Sensor",
+    "HW_LED": "Led",
+    "HW_MELODY": "Melody",
+    "HW_ROBOT": "Robot"
 };
 Lang.Buttons = {
     "apply": "Apply",
@@ -1135,7 +1154,7 @@ Lang.Menus = {
     "enter_lecture_description": "Enter lecture information",
     "enter_curriculum_description": "Enter courseware information",
     "first_page": "처음 입니다.",
-    "last_page": "마지막 페이지 입니다.",
+    "last_page": "마지막 입니다.",
     "alert_duplicate_lecture": "The lesson is already registered",
     "enter_lesson_alert": "Register one or more lessons",
     "open_edit_lessons": "Open lesson to be edited",
@@ -1271,7 +1290,7 @@ Lang.Menus = {
     "make_using_entry_desc_2": "Download and follow along the learning materials to create animation, media art, game and other fun programs.",
     "make_through_ebs_1": "Learn to code by watching EBS TV Series.",
     "make_through_ebs_2": "The fun TV Series are accompanied by step-by-step tutorial videos so anyone can easily create programs.",
-    "support_block_js": "Javascript mode will be supported for all Missions starting August.",
+    "support_block_js": "Block code and javascript are supported",
     "study_ebs_title_1": "순서대로! 차례대로!",
     "study_ebs_desc_1": "[실습] 엔트리봇의 심부름",
     "study_ebs_title_2": "쉽고 간단하게!",
@@ -2345,7 +2364,7 @@ Lang.Menus = {
     "offline_required": "System Requirement",
     "offline_required_detail": "Minimum 500mb disk space is required, Windows7 and above or, Mac OS 10.8 and above",
     "offline_notice": "Side notes",
-    "offline_notice_1": "1. Version 1.3.3 does not support installation of all-in-one hardware connection program",
+    "offline_notice_1": "1. Version 1.3.4 does not support installation of all-in-one hardware connection program",
     "offline_notice_2": "2. Web browser is not needed.",
     "offline_notice_3": "Release note",
     "cparty_jr_result_2": "Thank you! I had so much fun with you.<br> See you around!",
@@ -3128,7 +3147,7 @@ Lang.Workspace = {
     "list_used_specific_objects": "List used for specific object",
     "List_used_all_objects": "List used for all objects",
     "Scene_delete_error": "The scene is, there should be at least one.",
-    "Scene_add_error": "The scene is up to 10.",
+    "Scene_add_error": "The scene is up to 20.",
     "replica_of_object": "'s replicas",
     "will_you_delete_scene": "Deleting scene can not be restored.\nAre you sure you want to delete scene?",
     "will_you_delete_function": "Deleting function can not be restored.\nAre you sure you want to delete function?",
@@ -3167,7 +3186,16 @@ Lang.Workspace = {
     "variable_name_auto_edited_title": "variable name auto-edited",
     "variable_name_auto_edited_content": "variable name cannot exceed 10 characters",
     "list_name_auto_edited_title": "list name auto-edited",
-    "list_name_auto_edited_content": "list name cannot exceed 10 characters"
+    "list_name_auto_edited_content": "list name cannot exceed 10 characters",
+    "default_mode": "Standard",
+    "practical_course_mode": "Textbook",
+    "practical_course": "practical course",
+    "select_mode": "Mode",
+    "select_mode_popup_title": "Choose 'Create' option",
+    "select_mode_popup_lable1": "Textbook",
+    "select_mode_popup_lable2": "Textbook(Practical Course)",
+    "select_mode_popup_desc1": "Create projects with<br/>unlimited Entry features",
+    "select_mode_popup_desc2": "Create projects using<br/>'Practical Course' features"
 };
 Lang.code = "view code";
 Lang.EntryStatic = {
@@ -3501,7 +3529,8 @@ Lang.Helper = {
     "neobot_set_output": "The output voltage when connecting lighting block and electronic circuit to OUT1 - OUT3 can be set.</br>0 indicates 0V, and 1 ~ 255 indicates 2.4 ~ 4.96V.",
     "neobot_set_fnd": "Numbers from 0 to 99 with FND can be indicated.",
     "neobot_set_fnd_off": "Number indicated on FND can be turned off.",
-    "neobot_play_note_for": "Notes in semitone units of the melody can be played by utilizing frequency oscillation. "
+    "neobot_play_note_for": "Notes in semitone units of the melody can be played by utilizing frequency oscillation. ",
+    "rotate_by_angle_dropdown": "Rotates the object by the input number of degrees."
 };
 Lang.Category = {
     "entrybot_friends": "Entrybot friends",
@@ -3669,6 +3698,7 @@ Lang.template = {
     "arduino_get_pwm_port_number": "%1  ",
     "arduino_get_number_sensor_value": "Analog %1 Sensor value  ",
     "arduino_ext_get_analog_value": "Analog %1 Sensor value",
+    "arduino_ext_get_analog_value_map": "Map Value %1 %2 ~ %3 to %4 ~ %5  ",
     "arduino_ext_get_ultrasonic_value": "Read ultrasonic sensor trig pin %1 echo pin %2",
     "arduino_ext_toggle_led": "Digital %1 Pin %2 %3",
     "arduino_ext_digital_pwm": "Digital %1 Pin %2 %3",

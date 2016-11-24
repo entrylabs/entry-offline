@@ -282,6 +282,11 @@ html.practical_course_mode #project_name.workspace_project_name {
     background-color: #7b57ff;
 }
 
+html.practical_course_mode #project_name.workspace_project_name:hover,
+html.practical_course_mode #project_name.workspace_project_name:focus {
+    background-color: #fff;
+}
+
 html.practical_course_mode .entrySceneWorkspace {
     background-color: #7b57ff;
 }
