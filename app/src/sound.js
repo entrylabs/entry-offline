@@ -81,12 +81,12 @@ angular.module('common').controller('SoundController',
         
         for(var i in data) {
             if($scope.menu === '') {
-                if($scope.main_menu === data[i].category.main) {
+                if(data[i].category && $scope.main_menu === data[i].category.main) {
                     categorizedData.push(data[i]); 
                 }       
             }
             else {
-                if($scope.menu === data[i].category.sub && $scope.main_menu === data[i].category.main) {
+                if(data[i].category && $scope.menu === data[i].category.sub && $scope.main_menu === data[i].category.main) {
                     categorizedData.push(data[i]);
                 }
             }

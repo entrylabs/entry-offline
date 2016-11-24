@@ -33,7 +33,6 @@ body {
 
 .entryTextFontSelecter {
     display: inline-block;
-    width: 96px;
     height: 32px;
     float: left;
 }
@@ -156,6 +155,47 @@ body {
 
 .tab-content .tab-pane .upload_wrap {
     width: 713px;
+}
+
+.entryPlaygroundPainterAttrFont .entryPlaygroundPainterAttrTop {
+    min-width: 120px;    
+}
+
+.entryPlaygroundPainterAttrFont .entryPlaygroundPainterAttrFontStyleArea {
+    min-width: 75px;
+}
+
+.entryTextFontSelect {
+    min-width: 120px;
+}
+
+.entryPlayground_fgColorDiv {
+    margin-left: 369px !important;
+}
+
+.entryPlayground_bgColorDiv {
+    margin-left: 403px !important;
+}
+
+.entryPlaygroundTextColoursWrapper {
+    margin-left: 359px !important;
+}
+
+.textProperties .fontDropdown {
+    width: 130px;
+    padding-left: 10px;
+}
+
+.textProperties .fgColorDiv {
+    margin-left: 280px;
+}
+
+.textProperties .bgColorDiv {
+    margin-left: 318px
+}
+
+.coloursWrapper {
+    margin-left: 277px !important;
 }
 
 #entryCategoryhw_download {

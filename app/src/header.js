@@ -62,6 +62,10 @@ angular.module('workspace').controller('HeaderController', ['$scope', '$rootScop
             Entry.dispatchEvent('loadWorkspace')
         };
 
+        $scope.showBlockHelper = function() {
+            Entry.dispatchEvent('showBlockHelper');
+        };
+
         $scope.stopPropagation = function(e) {
             e.stopPropagation();
         }
@@ -77,7 +81,7 @@ angular.module('workspace').controller('HeaderController', ['$scope', '$rootScop
                 storage.setItem('localStorageProject', JSON.stringify(project));
             }
 
-            Entry.plugin.reloadApplication();
+            Entry.plugin.reloadApplication(true);
         };
 
         $scope.setWorkspaceMode = function(type) {
@@ -85,10 +89,10 @@ angular.module('workspace').controller('HeaderController', ['$scope', '$rootScop
 
             if(isMiniMode && type === 'default')  {
                 localStorage.setItem('isMiniMode', 'false');
-                Entry.plugin.reloadApplication();
+                Entry.plugin.reloadApplication(true);
             } else if (!isMiniMode && type !== 'default') {
                 localStorage.setItem('isMiniMode', 'true');
-                Entry.plugin.reloadApplication();
+                Entry.plugin.reloadApplication(true);
             }
         };
 

@@ -203,7 +203,14 @@ Entry.plugin = (function () {
         Entry.plugin.reloadApplication();
     }
 
-    that.reloadApplication = function () {
+    that.reloadApplication = function (isSkip) {
+        if(isSkip) {
+            Entry.stateManager.addStamp();
+            Entry.plugin.closeAboutPage();
+            Entry.plugin.closeHwGuidePage();
+            localStorage.removeItem('tempProject');
+        }
+
         ipcRenderer.send('reload');
     }
 
@@ -353,14 +360,14 @@ Entry.plugin = (function () {
 
     that.getHardwareManual = function(callback) {
         dialog.showSaveDialog({
-            defaultPath: '엔트리-하드웨어연결매뉴얼_16_08_17.hwp',
+            defaultPath: '엔트리 하드웨어 연결 매뉴얼(오프라인용).pdf',
             filters: [
-                { name: '*.hwp', extensions: ['hwp'] }
+                { name: '*.pdf', extensions: ['pdf'] }
             ]
         }, function (filePath) {    
             if(filePath) {
                 var fs = require("fs");
-                fs.readFile(path.resolve(__dirname, 'hardware', 'guide', '엔트리-하드웨어연결매뉴얼_16_08_17.hwp'), function (err, stream) {
+                fs.readFile(path.resolve(__dirname, 'hardware', 'guide', '엔트리 하드웨어 연결 매뉴얼(오프라인용).pdf'), function (err, stream) {
                     fs.writeFile(filePath, stream, 'utf8', function (err) {
                         if (err)
                             alert("Unable to save file");
@@ -493,7 +500,13 @@ Entry.plugin = (function () {
                 }
             }
         });
+    }
 
+    that.saveImage = function(data, path) {
+        var buff = new Buffer(data.replace(/^data:image\/(png|gif|jpeg);base64,/,''), 'base64');
+        fs.writeFile(path, buff, function (err) {
+            // console.log('done');
+        });
     }
 
     // 프로젝트 저장
