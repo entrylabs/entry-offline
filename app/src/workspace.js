@@ -63,6 +63,27 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
 
             Entry.init(workspace, initOptions);
 
+            Entry.playground.board._contextOptions[3].option.callback = function() {
+                dialog.showOpenDialog({
+                    properties: [
+                        'openDirectory'
+                    ],
+                    filters: [
+                        { name: 'Image', extensions: ['png'] }
+                    ]
+                }, function(paths) {
+                    Entry.playground.board.code.getThreads().forEach(function(t, index) {
+                        var topBlock = t.getFirstBlock();
+                        if (!topBlock) return;
+                        (function(i) {
+                            topBlock.view.getDataUrl().then(function(data) {
+                                var savePath = path.resolve(paths[0], i + '.png');
+                                Entry.plugin.saveImage(data.src, savePath);
+                            });
+                        })(++index);
+                    })
+                })
+            }
             var beforeUnload = window.onbeforeunload;
             window.onbeforeunload = function(e) {
                 if (window.isNowSaving === true) {
@@ -200,8 +221,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                         fs.writeFile(filePath, stream, 'utf8', function(err) {
                             if (err) {
                                 alert("Unable to save file");
-                            }
-                            else {
+                            } else {
                                 console.log("File Saved");
                             }
 
@@ -822,11 +842,11 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
             var maxx = 0;
             var maxy = 0;
 
-            if(pix.x.length > 0) {
+            if (pix.x.length > 0) {
                 minx = pix.x[0];
                 maxx = pix.x[n];
                 w = maxx - minx;
-                if(w % 2 != 0) {
+                if (w % 2 != 0) {
                     w += 1;
                 }
             } else {
@@ -834,11 +854,11 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                 minx = 0;
             }
 
-            if(pix.y.length > 0) {
+            if (pix.y.length > 0) {
                 miny = pix.y[0];
                 maxy = pix.y[n]
                 h = maxy - miny;
-                if(h % 2 != 0) {
+                if (h % 2 != 0) {
                     h += 1;
                 }
             } else {
@@ -920,7 +940,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
         modalInstance.result.then(function(selectedItems) {
             selectedItems.data.forEach(function(item) {
                 item.id = Entry.generateHash();
-                if(item.fileurl) {
+                if (item.fileurl) {
                     item.fileurl = item.fileurl.replace(/%5C/gi, '/');
                 }
                 Entry.dispatchEvent('pictureImport', item);

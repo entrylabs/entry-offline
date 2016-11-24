@@ -486,7 +486,13 @@ Entry.plugin = (function () {
                 }
             }
         });
+    }
 
+    that.saveImage = function(data, path) {
+        var buff = new Buffer(data.replace(/^data:image\/(png|gif|jpeg);base64,/,''), 'base64');
+        fs.writeFile(path, buff, function (err) {
+            // console.log('done');
+        });
     }
 
     // 프로젝트 저장
