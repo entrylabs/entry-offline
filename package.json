@@ -46,14 +46,14 @@
     "asar": false,
     "app-bundle-id": "entry-offline",
     "app-category-type": "org.play-entry.entry-offline",
+    "extend-info": "build/build.plist",
     "iconUrl": "https://raw.githubusercontent.com/entrylabs/entry-hw/feature/electron/build/icon.ico",
     "icon": "app/icon/app"
   },
   "devDependencies": {
-    "appdmg-tf": "^0.3.11",
     "electron-builder": "^3.25.0",
     "electron-packager": "^7.0.2",
-    "electron-prebuilt": "1.1.1",
+    "electron-prebuilt": "^1.4.2",
     "mocha": "^2.5.3",
     "rimraf": "^2.5.2",
     "spectron": "^3.2.3"

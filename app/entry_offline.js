@@ -9,17 +9,16 @@ const ChildProcess = require('child_process');
 
 var language;
 
-function logger(msg) {
-    if (process.platform !== 'win32') {
-        return false;
-    }
-    var log_path = path.resolve(process.env.APPDATA, 'entry_log');
+function logger(text) {
+    var log_path = path.join(__dirname);
     if(!fs.existsSync(log_path)) {
         fs.mkdirSync(log_path);
+    }
+    if(!fs.existsSync(path.join(log_path, 'debug.log'))) {
         fs.writeFileSync(path.join(log_path, 'debug.log'), '', 'utf8');
     }
     var data = fs.readFileSync(path.join(log_path, 'debug.log'), 'utf8');
-    data += '\n\r' + new Date() + ' : ' + msg;
+    data += '\n\r' + new Date() + ' : ' + text;
     fs.writeFileSync(path.join(log_path, 'debug.log'), data, 'utf8');
 }
 
@@ -210,14 +209,14 @@ for (var i = 0; i < argv.length; i++) {
 }
 
 var handleStartupEvent = function() {
-    logger('start handleStartupEvent');
+    // logger('start handleStartupEvent');
     try{
         if (process.platform !== 'win32') {
             return false;
         }
 
         var squirrelCommand = process.argv[1];
-        logger('squirrelCommand : ' + squirrelCommand);
+        // logger('squirrelCommand : ' + squirrelCommand);
         if(squirrelCommand.indexOf('--squirrel') < 0) return false;
         var defaultLocations = 'Desktop,StartMenu';
         switch (squirrelCommand) {
@@ -249,7 +248,7 @@ var handleStartupEvent = function() {
                 return true;
         }
     } catch(e) {
-        logger(e.stack);
+        // logger(e.stack);
         app.quit();
         process.exit(0);
     }
@@ -257,6 +256,7 @@ var handleStartupEvent = function() {
 
 var mainWindow = null;
 var hardwareWindow = null;
+var hardwareWindowReLaunch = false;
 var isClose = true;
 
 app.on('window-all-closed', function() {
@@ -283,6 +283,15 @@ if (shouldQuit) {
     app.quit();
     return;
 }
+
+app.on('open-file', function(event, pathToOpen) {
+    if(process.platform === 'darwin') {
+        option.file = pathToOpen;
+        if(mainWindow) {
+            mainWindow.webContents.send('loadProject', pathToOpen);
+        }
+    }
+});
 
 app.once('ready', function() {
     language = app.getLocale();
@@ -316,13 +325,14 @@ app.once('ready', function() {
     }
 
     mainWindow.webContents.hpopup = hardwareWindow;
+    mainWindow.webContents.name = 'entry';
 
     mainWindow.on('page-title-updated', function(e) {
         e.preventDefault();
     });
     mainWindow.on('close', function(e) {
         if(hardwareWindow) {
-            hardwareWindow.close();
+            hardwareWindow.close(true);
         }
         mainWindow.webContents.send('main-close');
     });
@@ -344,10 +354,33 @@ app.once('ready', function() {
 });
 
 ipcMain.on('reload', function(event, arg) {
-    mainWindow.reload(true);
+    if(event.sender.webContents.name === 'entry') {
+        // mainWindow.reload();
+    } else {
+        hardwareWindowReLaunch = true;
+        hardwareWindow.close();
+    }
+    if(event.sender.webContents) {
+        event.sender.webContents.reload();
+    }
+});
+
+ipcMain.on('roomId', function(event, arg) {
+    event.returnValue = '';
+});
+
+ipcMain.on('version', function(event, arg) {
+    event.returnValue = '';
+});
+
+ipcMain.on('serverMode', function(event, mode) {
 });
 
 ipcMain.on('openHardware', function(event, arg) {
+    launchHardware();
+});
+
+function launchHardware () {
     if(hardwareWindow == null) {
         var title;
         if(language === 'ko') {
@@ -370,17 +403,21 @@ ipcMain.on('openHardware', function(event, arg) {
         hardwareWindow.loadURL('file:///' + path.join(__dirname, 'bower_components', 'entry-hw', 'app', 'index.html'));
         hardwareWindow.on('closed', function() {
             hardwareWindow = null;
+            if(hardwareWindowReLaunch) {
+                hardwareWindowReLaunch = false;
+                launchHardware();
+            }
         });
 
         if(option.debug) {
             hardwareWindow.webContents.openDevTools();
         }
 
+        hardwareWindow.webContents.name = 'hardware';
         hardwareWindow.show();
     } else {
         if (hardwareWindow.isMinimized()) 
             hardwareWindow.restore();
         hardwareWindow.focus();
     }
-
-});
+}

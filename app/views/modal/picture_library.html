@@ -150,8 +150,8 @@
         </div>
     </div>
     <div class="col-md-9 tab-right" style='margin-left: 145px; padding-right: 0'>
-        <div class="wrap wrap_sprite" when-scrolled="loadMore()">
-            <div class="box" data-ng-repeat="picture in systemPictures | limitTo : showCount">
+        <div class="wrap wrap_sprite">
+            <div class="box" data-ng-repeat="picture in systemPictures">
                 <div id="{{picture._id}}" class="{{picture.selected}}" data-ng-click="selectSystem(picture)" data-ng-dblclick="applySystem(picture)">
                     <div class="boxInner" style="background-image: url('{{picture|makeThumbnail}}');">
                     </div>

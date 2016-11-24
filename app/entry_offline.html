@@ -4,11 +4,13 @@
 		<meta charset="utf-8">
 		<link rel='stylesheet'  href='./css/fonts.css' />
 		<link rel='stylesheet'  href='./css/developer.css' />
+		<link rel='stylesheet'  href='./bower_components/literallycanvas/lib/css/literallycanvas.css' />
 		<script type="text/javascript" src="./src/main.js"></script>
 		<script type="text/javascript" src="./src/ws.js"></script>
 		<script type="text/javascript" src="./src/require.js"></script>
 		<script type='text/javascript' src='./bower_components/jquery/dist/jquery.min.js'></script>
 		<script type='text/javascript' src='./bower_components/jquery-ui/jquery-ui.min.js'></script>
+		<script type='text/javascript' src='./bower_components/socket.io-client/socket.io.js'></script>
 		<script type='text/javascript' src='./bower_components/angular/angular.min.js'></script>
 		<script type='text/javascript' src='./bower_components/angular-cookies/angular-cookies.min.js'></script>
 		<script type='text/javascript' src='./bower_components/angular-route/angular-route.min.js'></script>
@@ -25,6 +27,9 @@
 		<script type='text/javascript' src='./bower_components/SoundJS/lib/flashaudioplugin-0.6.0.combined.js'></script>
 		<script type='text/javascript' src='./bower_components/webfontloader/webfontloader.js'></script>
 		<script type='text/javascript' src='./bower_components/velocity/velocity.min.js'></script>
+		<script type='text/javascript' src='./bower_components/react/react.min.js'></script>
+		<script type='text/javascript' src='./bower_components/react/react-dom.min.js'></script>
+		<script type='text/javascript' src='./bower_components/literallycanvas/lib/js/literallycanvas.js'></script>
         <script type='text/javascript' src='./src/app.js'></script>
 		<script type='text/javascript' src='./bower_components/entryjs/extern/blockly/blockly_compressed.js'></script>
 		<script type='text/javascript' src='./bower_components/entryjs/extern/util/static.js'></script>
@@ -34,6 +39,7 @@
 		<script type='text/javascript' src='./bower_components/entryjs/dist/entry.js'></script>
 		<script type='text/javascript'>
 			Entry.isOffline = true;
+			Entry.painterBaseUrl = './bower_components/literallycanvas/lib/img';
 		</script>
 		<script type='text/javascript' src='./bower_components/entryjs/src/workspace/block_entry.js'></script>
     	<script type='text/javascript' src='./src/context.js'></script>
@@ -53,6 +59,7 @@
 		</section>
 		<script type="text/javascript" src="./src/workspace.js"></script>
 		<script type="text/javascript" src="./src/picture.js"></script>
+		<script type="text/javascript" src="./src/picture_import.js"></script>
 		<script type="text/javascript" src="./src/sprite.js"></script>
 		<script type="text/javascript" src="./src/header.js"></script>
 		<script type="text/javascript" src="./src/sound.js"></script>

@@ -189,10 +189,15 @@ Entry.plugin = (function () {
         return require('crypto').createHash('md5').update(randomStr).digest("hex");
     };
 
-    that.reloadApplication = function () {
-        // remote.getCurrentWindow().reload();
+    that.reloadApplication = function (isSkip) {
+        if(isSkip) {
+            Entry.stateManager.addStamp();
+            Entry.plugin.closeAboutPage();
+            Entry.plugin.closeHwGuidePage();
+            localStorage.removeItem('tempProject');
+        }
+
         ipcRenderer.send('reload');
-        // location.reload();
     }
 
     that.findObject = function (object, key) {
@@ -336,6 +341,31 @@ Entry.plugin = (function () {
             try{
                 hwGuidePopup = null;
             } catch(e){}
+        });
+    }
+
+    that.getHardwareManual = function(callback) {
+        dialog.showSaveDialog({
+            defaultPath: '엔트리 하드웨어 연결 매뉴얼(오프라인용).pdf',
+            filters: [
+                { name: '*.pdf', extensions: ['pdf'] }
+            ]
+        }, function (filePath) {    
+            if(filePath) {
+                var fs = require("fs");
+                fs.readFile(path.resolve(__dirname, 'hardware', 'guide', '엔트리 하드웨어 연결 매뉴얼(오프라인용).pdf'), function (err, stream) {
+                    fs.writeFile(filePath, stream, 'utf8', function (err) {
+                        if (err)
+                            alert("Unable to save file");
+                        else
+                            console.log("File Saved");
+
+                        if(callback) {
+                            callback();
+                        }
+                    });
+                });
+            }
         });
     }
 
@@ -811,6 +841,26 @@ Entry.plugin = (function () {
 
     that.testPath = function() {
         that.getRealPath('./');
+    }
+
+    that.zipBlockImages = function(filePath, images) {
+        var zip = new JSZip();
+        images.forEach(function(image, i) {
+            image = image.src.split(',')[1];
+            var filename = 'block'+(i+1)+'.png';
+            zip.file(filename, image, {base64:true});
+            if (images.length-1 == i) {
+                zip.generateNodeStream({type:'nodebuffer',streamFiles:true})
+                    .pipe(fs.createWriteStream(filePath))
+                    .on('finish', function () {
+                        // JSZip generates a readable stream with a "end" event,
+                        // but is piped here in a writable stream which emits a "finish" event.
+                        Entry.toast.success("저장되었습니다.","");
+                    });
+            }
+            
+        });
+
     }
 
     return that;
