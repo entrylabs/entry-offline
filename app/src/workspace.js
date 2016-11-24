@@ -31,8 +31,8 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
             });
             return;
         } else if (isMiniMode === 'true') {
-            $('html').addClass('practical_arts_mode');
-            myProject.setMode('practical_arts');
+            $('html').addClass('practical_course_mode');
+            myProject.setMode('practical_course');
             settingForMini();
         } else {
             $('html').addClass('default_mode');
@@ -88,6 +88,28 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
 
             initOptions = Object.assign(initOptions, defaultInitOption);
             Entry.init(workspace, initOptions);
+
+            Entry.playground.board._contextOptions[3].option.callback = function() {
+                dialog.showOpenDialog({
+                    properties: [
+                        'openDirectory'
+                    ],
+                    filters: [
+                        { name: 'Image', extensions: ['png'] }
+                    ]
+                }, function(paths) {
+                    Entry.playground.board.code.getThreads().forEach(function(t, index) {
+                        var topBlock = t.getFirstBlock();
+                        if (!topBlock) return;
+                        (function(i) {
+                            topBlock.view.getDataUrl().then(function(data) {
+                                var savePath = path.resolve(paths[0], i + '.png');
+                                Entry.plugin.saveImage(data.src, savePath);
+                            });
+                        })(++index);
+                    })
+                })
+            }
 
             var beforeUnload = window.onbeforeunload;
             window.onbeforeunload = function(e) {
@@ -429,7 +451,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                 var close = Entry.Dom('div', {
                     class: 'workspaceModeSelectCloseBtn',
                     parent: content
-                }).text(Lang.Buttons.confirm);
+                }).text(Lang.EntryStatic.usage_confirm);
                 title.text(Lang.Workspace.select_mode_popup_title);
 
                 var mode = 'default';
@@ -439,17 +461,15 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                     $(this).addClass('active');
                 });
                 modePracticalArts.bindOnClick(function() {
-                    mode = 'practical_arts';
+                    mode = 'practical_course';
                     modeDefault.removeClass('active');
                     $(this).addClass('active');
                 });
                 close.bindOnClick(function() {
                     if(mode === 'default') {
                         localStorage.setItem('isMiniMode', false);
-                        // ipcRenderer.send('reload');
                     } else {
                         localStorage.setItem('isMiniMode', true);
-                        // ipcRenderer.send('reload');
                     }
                     $scope.initWorkspace();
                     popupHelper.hide();
@@ -1119,7 +1139,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
         if(value === 'default') {
             this.modeName = Lang.Workspace.default_mode;
         } else {
-            this.modeName = Lang.Workspace.practical_arts_mode;
+            this.modeName = Lang.Workspace.practical_course_mode;
         }
         $rootScope.$broadcast('modeChange', this);
     }

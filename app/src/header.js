@@ -20,7 +20,7 @@ angular.module('workspace').controller('HeaderController', ['$scope', '$rootScop
                 undo: './images/top_icon_left_b_nor.png',
                 redo: './images/top_icon_right_b_nor.png',
             },
-            practical_arts: {
+            practical_course: {
                 new: './images/ic_new.png',
                 save: './images/top_icon_save_b_nor.png',
                 help: './images/ic_q.png',

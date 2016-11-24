@@ -37,7 +37,7 @@ var template = [{
                 }
             }
         }, {
-            label: Lang.Workspace.practical_arts_mode,
+            label: Lang.Workspace.practical_course_mode,
             type: 'checkbox',
             checked: localStorage.getItem('isMiniMode') === 'true',
             click: function(menuItem) {

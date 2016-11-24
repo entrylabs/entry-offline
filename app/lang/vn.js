@@ -922,11 +922,11 @@ Lang.Blocks = {
     "la_name": "La",
     "la_sharp_name": "La#(Si♭)",
     "si_name": "Si",
-    "HW_MOTOR": "MOTOR",
-    "HW_SENSOR": "SENSOR",
-    "HW_LED": "LED",
-    "HW_MELODY": "MELODY",
-    "HW_ROBOT": "ROBOT"
+    "HW_MOTOR": "Motor",
+    "HW_SENSOR": "Sensor",
+    "HW_LED": "Led",
+    "HW_MELODY": "Melody",
+    "HW_ROBOT": "Robot"
 };
 Lang.Buttons = {
     "apply": "ứng dụng",
@@ -3187,15 +3187,15 @@ Lang.Workspace = {
     "variable_name_auto_edited_content": "variable name cannot exceed 10 characters",
     "list_name_auto_edited_title": "list name auto-edited",
     "list_name_auto_edited_content": "list name cannot exceed 10 characters",
-    "default_mode": "기본형",
-    "practical_arts_mode": "교과형",
-    "practical_arts": "practical arts",
+    "default_mode": "Standard",
+    "practical_course_mode": "Textbook",
+    "practical_course": "practical course",
     "select_mode": "Mode",
-    "select_mode_popup_title": "엔트리 만들기 환경을 선택해 주세요.",
-    "select_mode_popup_lable1": "기본형",
-    "select_mode_popup_lable2": "교과형(실과)",
-    "select_mode_popup_desc1": "엔트리의 모든 기능을 이용하여<br/>자유롭게 작품을 만듭니다.",
-    "select_mode_popup_desc2": "실과 교과서에 등장하는 기능만을<br/>이용하여 작품을 만듭니다."
+    "select_mode_popup_title": "Choose 'Create' option",
+    "select_mode_popup_lable1": "Textbook",
+    "select_mode_popup_lable2": "Textbook(Practical Course)",
+    "select_mode_popup_desc1": "Create projects with<br/>unlimited Entry features",
+    "select_mode_popup_desc2": "Create projects using<br/>'Practical Course' features"
 };
 Lang.code = "view code";
 Lang.EntryStatic = {

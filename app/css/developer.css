@@ -209,7 +209,7 @@ body {
     font-size: 14px;
 }
 
-.workspace_mode .practical_arts_badge {
+.workspace_mode .practical_course_badge {
     margin-left: 3px;
     text-align: center;
     line-height: 14px;
@@ -221,11 +221,11 @@ body {
     border-radius: 100px;
 }
 
-.workspace_mode .dropdown-toggle .practical_arts_badge span {
+.workspace_mode .dropdown-toggle .practical_course_badge span {
     display: none;
 }
 
-.workspace_mode .dropdown-menu .practical_arts_badge {
+.workspace_mode .dropdown-menu .practical_course_badge {
     background-color: #7b57ff;
     color: #ffffff;
 }
@@ -233,68 +233,68 @@ body {
 
 /* practical mode color */
 
-html.practical_arts_mode .workspaceHeader {
+html.practical_course_mode .workspaceHeader {
     background-color: #7b57ff;
     border-color: #7b57ff;
 }
 
-html.practical_arts_mode #project_name.workspace_project_name {
+html.practical_course_mode #project_name.workspace_project_name {
     background-color: #7b57ff;
 }
 
-html.practical_arts_mode .entrySceneWorkspace {
+html.practical_course_mode .entrySceneWorkspace {
     background-color: #7b57ff;
 }
 
-html.practical_arts_mode .propertyTabElement.selected {
+html.practical_course_mode .propertyTabElement.selected {
     background-color: #7b57ff;
 }
 
-html.practical_arts_mode .propertyPanel {
+html.practical_course_mode .propertyPanel {
     border-top: 2px solid #7b57ff;
 }
-
-html.practical_arts_mode .entryMouseViewWorkspace_w {
+/*
+html.practical_course_mode .entryMouseViewWorkspace_w {
     color: #7b57ff;
 }
-
-html.practical_arts_mode .entrySceneInputCover {
+*/
+html.practical_course_mode .entrySceneInputCover {
     background-color: #593ce5;
 }
 
-html.practical_arts_mode .entrySceneFieldWorkspace {
+html.practical_course_mode .entrySceneFieldWorkspace {
     background-color: #593ce5;
 }
 
-html.practical_arts_mode .selectedScene .entrySceneInputCover {
+html.practical_course_mode .selectedScene .entrySceneInputCover {
     background-color: #fff;
 }
 
-html.practical_arts_mode .selectedScene .entrySceneFieldWorkspace {
+html.practical_course_mode .selectedScene .entrySceneFieldWorkspace {
     background-color: #fff;
 }
 
-html.practical_arts_mode .selectedScene .entrySceneLeftWorkspace {
+html.practical_course_mode .selectedScene .entrySceneLeftWorkspace {
     background-image: url(../images/selected_tap1.png);
     background-repeat: no-repeat;
 }
 
-html.practical_arts_mode .entrySceneLeftWorkspace {
+html.practical_course_mode .entrySceneLeftWorkspace {
     background-image: url(../images/tap1.png);
     background-repeat: no-repeat;
 }
 
-html.practical_arts_mode .selectedScene .entrySceneRemoveButtonCoverWorkspace {
+html.practical_course_mode .selectedScene .entrySceneRemoveButtonCoverWorkspace {
     background-image: url(../images/selected_tap2.png);
     background-repeat: no-repeat;
 }
 
-html.practical_arts_mode .entrySceneRemoveButtonCoverWorkspace {
+html.practical_course_mode .entrySceneRemoveButtonCoverWorkspace {
     background-image: url(../images/tap2.png);
     background-repeat: no-repeat;
 }
 
-html.practical_arts_mode .workspace_mode .dropdown-toggle .practical_arts_badge {
+html.practical_course_mode .workspace_mode .dropdown-toggle .practical_course_badge {
     text-align: center;
     line-height: 14px;
     display: inline-block;
@@ -306,19 +306,19 @@ html.practical_arts_mode .workspace_mode .dropdown-toggle .practical_arts_badge 
     background-color: #ffffff;
 }
 
-html.practical_arts_mode .workspace_mode .dropdown-toggle .practical_arts_badge span {
+html.practical_course_mode .workspace_mode .dropdown-toggle .practical_course_badge span {
     display: inline-block;
 }
 
-html.practical_arts_mode .workspace_button_group .workspace_divider {
+html.practical_course_mode .workspace_button_group .workspace_divider {
     background-color: #fff;
 }
 
-html.practical_arts_mode .entryRunButtonWorkspace_w {
+html.practical_course_mode .entryRunButtonWorkspace_w {
     background-image: url(../images/workspace/btn_play.png);
 }
 
-html.practical_arts_mode .entryAddButtonWorkspace_w {
+html.practical_course_mode .entryAddButtonWorkspace_w {
     background-image: url(../images/workspace/btn_add.png);
 }
 
@@ -405,6 +405,7 @@ html.practical_arts_mode .entryAddButtonWorkspace_w {
 }
 
 .workspaceModeSelect .workspaceModeSelectCloseBtn{
+    cursor: pointer;
     width: 118px;
     height: 45px;
     margin: auto;
