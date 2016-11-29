@@ -295,12 +295,13 @@ app.on('open-file', function(event, pathToOpen) {
 
 app.once('ready', function() {
     language = app.getLocale();
-    var title = packageJson.version;
+    // var title = 'v'+packageJson.version;
+    var title = '';
     
     if(language === 'ko') {
-        title = '엔트리 v' + title;
+        title = '엔트리' + title;
     } else {
-        title = 'Entry v' + title;
+        title = 'Entry' + title;
     }
 
     mainWindow = new BrowserWindow({

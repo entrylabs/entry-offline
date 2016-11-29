@@ -367,6 +367,38 @@ html.practical_course_mode .entryAddButtonWorkspace_w {
     background-image: url(../images/workspace/btn_add.png);
 }
 
+@media screen and (min-height: 880px) {
+    html.practical_course_mode .entryCategoryElementWorkspace {
+        height: 61px;
+        background-position: 50% 6px;
+        padding-top: 38px;
+    }
+}
+
+@media screen and (max-height: 880px) {
+    html.practical_course_mode .entryCategoryElementWorkspace {
+        height: 53px;
+        background-position: 50% 4px;
+        padding-top: 34px;
+    }
+}
+
+@media screen and (max-height: 810px) {
+    html.practical_course_mode .entryCategoryElementWorkspace {
+        height: 47px;
+        background-position: 50% 2px;
+        padding-top: 30px;
+    }
+}
+
+@media screen and (max-height: 740px) {
+    html.practical_course_mode .entryCategoryElementWorkspace {
+        height: 39px;
+        background-position: 50% 1px;
+        background-size: 35px;
+        padding-top: 23px;
+    }
+}
 
 /**
     workspaceModeSelect popup
