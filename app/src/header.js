@@ -74,7 +74,7 @@ angular.module('workspace').controller('HeaderController', ['$scope', '$rootScop
             storage.setItem('lang', language);
             var isDefaultProject = sessionStorage.getItem('isDefaultProject');
 
-            if (Entry.stateManager.canUndo() || isDefaultProject !== 'true') {
+            if (Entry.stateManager && (Entry.stateManager.canUndo() || isDefaultProject !== 'true')) {
                 var project = Entry.exportProject();
                 project.name = myProject.name;
                 project.path = myProject.isSavedPath;

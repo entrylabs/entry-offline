@@ -204,7 +204,7 @@ Entry.plugin = (function () {
     }
 
     that.reloadApplication = function (isSkip) {
-        if(isSkip) {
+        if(!isSkip) {
             Entry.stateManager.addStamp();
             Entry.plugin.closeAboutPage();
             Entry.plugin.closeHwGuidePage();

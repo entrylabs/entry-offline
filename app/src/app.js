@@ -18,6 +18,7 @@ angular.module('workspace', ['common']);
 		if(systemLang != 'ko') {
 			systemLang = 'en';
 		}
+		user_lang = systemLang;
 		localStorage.setItem('lang', systemLang);
 	}
 	$('head').append('<script src="./lang/' + user_lang + '.js">' + '</script>')
