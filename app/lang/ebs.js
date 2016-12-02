@@ -12,6 +12,7 @@ Lang.Blocks = {
     "ARDUINO_download_source": "엔트리 아두이노 소스",
     "ARDUINO_reconnect": "하드웨어 연결하기",
     "ARDUINO_program": "프로그램 실행하기",
+    "ARDUINO_cloud_pc_connector": "클라우드 PC 연결하기",
     "ARDUINO_connected": "하드웨어가 연결되었습니다. ",
     "ARDUINO_arduino_get_number_1": "신호",
     "ARDUINO_arduino_get_number_2": "의 숫자 결과값",
@@ -898,7 +899,7 @@ Lang.Blocks = {
     "FLOW_repeat_while_true_while": "",
     "copy_block": "",
     "delete_block": "",
-    "tidy_up_block": "",
+    "tidy_up_block": "코드 정리하기",
     "block_hi": "안녕!",
     "entry_bot_name": "",
     "hi_entry": "",
@@ -907,7 +908,25 @@ Lang.Blocks = {
     "walking_entryBot": "",
     "entry": "엔트리",
     "hello": "",
-    "nice": ""
+    "nice": "",
+    "silent": "무음",
+    "do_name": "도",
+    "do_sharp_name": "도#(레♭)",
+    "re_name": "레",
+    "re_sharp_name": "레#(미♭)",
+    "mi_name": "미",
+    "fa_name": "파",
+    "fa_sharp_name": "파#(솔♭)",
+    "sol_name": "솔",
+    "sol_sharp_name": "솔#(라♭)",
+    "la_name": "라",
+    "la_sharp_name": "라#(시♭)",
+    "si_name": "시",
+    "HW_MOTOR": "모터",
+    "HW_SENSOR": "센서",
+    "HW_LED": "발광다이오드",
+    "HW_MELODY": "멜로디",
+    "HW_ROBOT": "로봇"
 };
 Lang.Buttons = {
     "apply": "적용하기",
@@ -1135,7 +1154,7 @@ Lang.Menus = {
     "enter_lecture_description": "강의 설명을 입력하세요.",
     "enter_curriculum_description": "강의 모음 설명을 입력하세요.",
     "first_page": "처음 입니다.",
-    "last_page": "마지막 페이지 입니다.",
+    "last_page": "마지막 입니다.",
     "alert_duplicate_lecture": "이미 등록된 강의는 다시 등록할 수 없습니다.",
     "enter_lesson_alert": "하나 이상의 강의를 등록해주세요.",
     "open_edit_lessons": "편집할 강의를 불러오세요.",
@@ -1271,7 +1290,7 @@ Lang.Menus = {
     "make_using_entry_desc_2": "제공되는 교재를 다운받아 차근차근 따라하다보면 애니메이션, 미디어아트, 게임 등 다양한 작품을 만들 수 있어요.",
     "make_through_ebs_1": "EBS 방송영상으로 소프트웨어를 배워보세요.",
     "make_through_ebs_2": "방송영상은 물론, 차근차근 따라 할 수 있는 특별영상과 함께 누구나 쉽게 다양한 소프트웨어를 만들 수 있어요.",
-    "support_block_js": "모든 미션에 대한 자바스크립트 언어는 8월 중 지원 예정입니다.",
+    "support_block_js": "블록 코딩과 자바스크립트 언어를 모두 지원합니다.",
     "study_ebs_title_1": "순서대로! 차례대로!",
     "study_ebs_desc_1": "[실습] 엔트리봇의 심부름",
     "study_ebs_title_2": "쉽고 간단하게!",
@@ -2345,7 +2364,7 @@ Lang.Menus = {
     "offline_required": "최소 요구사항",
     "offline_required_detail": "디스크 여유 공간 500MB 이상, windows7 혹은 MAC OS 10.8 이상",
     "offline_notice": "설치 전 참고사항",
-    "offline_notice_1": "1. 버전 1.3.3 에서는 하드웨어 연결 프로그램이 내장되어 있습니다.",
+    "offline_notice_1": "1. 버전 1.3.4 에서는 하드웨어 연결 프로그램이 내장되어 있습니다.",
     "offline_notice_2": "2. 별도의 웹브라우져가 필요하지 않습니다.",
     "offline_notice_3": "버전 별 변경 사항 안내",
     "cparty_jr_result_2": "고마워~ 덕분에 책가방을 챙겨서 학교에 올 수 있었어~ <br>다음 학교 가는 길도 함께 가자~ ",
@@ -3128,7 +3147,7 @@ Lang.Workspace = {
     "list_used_specific_objects": "특정 오브젝트에서만 사용되는 리스트 입니다. ",
     "List_used_all_objects": "모든 오브젝트에서 사용되는 리스트",
     "Scene_delete_error": "장면은 최소 하나 이상 존재해야 합니다.",
-    "Scene_add_error": "장면은 최대 10개까지 추가 가능합니다.",
+    "Scene_add_error": "장면은 최대 20개까지 추가 가능합니다.",
     "replica_of_object": "의 복제본",
     "will_you_delete_scene": "장면은 한번 삭제하면 취소가 불가능 합니다. \n정말 삭제 하시겠습니까?",
     "will_you_delete_function": "함수는 한번 삭제하면 취소가 불가능 합니다. \n정말 삭제 하시겠습니까?",
@@ -3167,7 +3186,16 @@ Lang.Workspace = {
     "variable_name_auto_edited_title": "변수 이름 자동 변경",
     "variable_name_auto_edited_content": "변수의 이름은 10글자를 넘을 수 없습니다.",
     "list_name_auto_edited_title": "리스트 이름 자동 변경",
-    "list_name_auto_edited_content": "리스트의 이름은 10글자를 넘을 수 없습니다."
+    "list_name_auto_edited_content": "리스트의 이름은 10글자를 넘을 수 없습니다.",
+    "default_mode": "기본형",
+    "practical_course_mode": "교과형",
+    "practical_course": "실과",
+    "select_mode": "모드선택",
+    "select_mode_popup_title": "엔트리 만들기 환경을 선택해 주세요.",
+    "select_mode_popup_lable1": "기본형",
+    "select_mode_popup_lable2": "교과형(실과)",
+    "select_mode_popup_desc1": "엔트리의 모든 기능을 이용하여<br/>자유롭게 작품을 만듭니다.",
+    "select_mode_popup_desc2": "실과 교과서에 등장하는 기능만을<br/>이용하여 작품을 만듭니다."
 };
 Lang.code = "코드보기";
 Lang.EntryStatic = {
@@ -3501,7 +3529,8 @@ Lang.Helper = {
     "neobot_set_output": "OUT1 ~ OUT3에 라이팅블록 및 전자회로를 연결했을 때 출력 전압을 설정할 수 있습니다.</br>0은 0V, 1 ~ 255는 2.4 ~ 4.96V의 전압을 나타냅니다.",
     "neobot_set_fnd": "FND로 0~99 까지의 숫자를 표시할 수 있습니다.",
     "neobot_set_fnd_off": "FND에 표시한 숫자를 끌 수 있습니다.",
-    "neobot_play_note_for": "주파수 발진 방법을 이용해 멜로디에 반음 단위의 멜로디 음을 발생시킬 수 있습니다."
+    "neobot_play_note_for": "주파수 발진 방법을 이용해 멜로디에 반음 단위의 멜로디 음을 발생시킬 수 있습니다.",
+    "rotate_by_angle_dropdown": "오브젝트의 방향을 입력한 각도만큼 시계방향으로 회전합니다. (오브젝트의 중심점을 기준으로 회전합니다.)"
 };
 Lang.Category = {
     "entrybot_friends": "엔트리봇 친구들",
@@ -3669,6 +3698,7 @@ Lang.template = {
     "arduino_get_pwm_port_number": "%1  ",
     "arduino_get_number_sensor_value": "아날로그 %1 번 센서값  ",
     "arduino_ext_get_analog_value": "아날로그 %1 번 센서값",
+    "arduino_ext_get_analog_value_map": "아날로그 %1번 센서값의 범위를 %2 ~ %3 에서 %4 ~ %5 (으)로 바꾼값  ",
     "arduino_ext_get_ultrasonic_value": "울트라소닉 Trig %1번핀 Echo %2번핀 센서값",
     "arduino_ext_toggle_led": "디지털 %1 번 핀 %2 %3",
     "arduino_ext_digital_pwm": "디지털 %1 번 핀을 %2 (으)로 정하기 %3",
