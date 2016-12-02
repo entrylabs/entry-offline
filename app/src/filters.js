@@ -43,7 +43,7 @@ common.filter('makeUploadThumbnail', function() {
             var extension = picture.extension || '.png';
             var temp;
 
-            temp = _real_path.replace(/\\/gi, '/');
+            temp = _real_temp_path.replace(/\\/gi, '/');
             temp = temp.replace(/%5C/gi, '/');
 
             return [temp, 'temp', picture.filename.substring(0,2), picture.filename.substring(2,4), 'thumb', picture.filename + extension].join('/');
