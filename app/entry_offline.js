@@ -1,7 +1,7 @@
 'use strict';
 
 const electron = require('electron');
-const {app, BrowserWindow, Menu, globalShortcut, ipcMain} = electron;
+const {app, BrowserWindow, Menu, globalShortcut, ipcMain, webContents} = electron;
 const path = require('path');
 const fs = require('fs');
 const packageJson     = require('./package.json');
@@ -348,8 +348,8 @@ app.once('ready', function() {
     } else {
         inspectorShortcut = 'Control+Shift+i';
     }
-    globalShortcut.register(inspectorShortcut, () => {
-        mainWindow.webContents.openDevTools();
+    globalShortcut.register(inspectorShortcut, (e) => {
+        webContents.getFocusedWebContents().openDevTools(); 
     });
 });
 
