@@ -13,26 +13,24 @@
   "build": {
     "dmg": {
       "icon": "build/icon.icns",
-      "icon-size": 80,
+      "iconSize": 80,
       "background": "build/background.png",
       "contents": [
         {
           "x": 240,
-          "y": 380,
-          "type": "link",
-          "path": "/Applications"
-        },
-        {
-          "x": 240,
-          "y": 120,
-          "type": "file",
-          "path": "Entry.app"
+          "y": 120
         },
         {
           "x": 380,
           "y": 250,
           "type": "file",
           "path": "./app/README.md"
+        },
+        {
+          "x": 240,
+          "y": 380,
+          "type": "link",
+          "path": "/Applications"
         }
       ]
     },
@@ -51,7 +49,7 @@
     "icon": "app/icon/app"
   },
   "devDependencies": {
-    "electron-builder": "^10.4.1",
+    "electron-builder": "^10.5.0",
     "electron-packager": "^8.3.0",
     "electron-prebuilt": "^1.4.2",
     "mocha": "^2.5.3",
