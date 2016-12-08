@@ -2,57 +2,55 @@
   "private": true,
   "scripts": {
     "clean": "rimraf dist",
-    "pack": "build",
     "dist": "build",
     "dist:win": "build --arch ia32",
     "dist:win64": "build --arch x64",
-    "pack:win": "electron-packager ./dist --platform=win32 --arch=ia32",
-    "dist:osx": "build",
+    "pack:win": "electron-packager ./app Entry --platform=win32 --arch=ia32 --icon=./build/icon.ico --asar=true --overwrite=true",
+    "pack:win64": "electron-packager ./app Entry --platform=win32 --arch=x64 --icon=./build/icon.ico",
     "start": "set NODE_ENV=development&&electron -d app",
     "test": "mocha test/default.js"
   },
   "build": {
-    "osx": {
+    "dmg": {
       "icon": "build/icon.icns",
-      "icon-size": 80,
+      "iconSize": 80,
       "background": "build/background.png",
       "contents": [
         {
           "x": 240,
-          "y": 380,
-          "type": "link",
-          "path": "/Applications"
-        },
-        {
-          "x": 240,
-          "y": 120,
-          "type": "file",
-          "path": "Entry.app"
+          "y": 120
         },
         {
           "x": 380,
           "y": 250,
           "type": "file",
           "path": "./app/README.md"
+        },
+        {
+          "x": 240,
+          "y": 380,
+          "type": "link",
+          "path": "/Applications"
         }
       ]
     },
     "win": {
-      "loadingGif": "build/install-spinner.gif",
+      "target": "dir",
       "title": "Entry",
-      "icon": "./icon/app.ico",
+      "#certificateSubjectName": "my",
+      "#rfc3161TimeStampServer": "http://timestamp.geotrust.com/tsa",
       "authors": "EntryLabs"
     },
-    "asar": false,
-    "app-bundle-id": "entry-offline",
-    "app-category-type": "org.play-entry.entry-offline",
+    "asar": true,
+    "appId": "entry-offline",
+    "productName": "Entry",
     "extend-info": "build/build.plist",
     "iconUrl": "https://raw.githubusercontent.com/entrylabs/entry-hw/feature/electron/build/icon.ico",
     "icon": "app/icon/app"
   },
   "devDependencies": {
-    "electron-builder": "^3.25.0",
-    "electron-packager": "^7.0.2",
+    "electron-builder": "^10.5.0",
+    "electron-packager": "^8.3.0",
     "electron-prebuilt": "^1.4.2",
     "mocha": "^2.5.3",
     "rimraf": "^2.5.2",

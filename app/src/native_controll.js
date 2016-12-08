@@ -3,7 +3,14 @@ var isOsx = false;
 var nowLocale = app.getLocale();
 var options = {};
 var _real_path = __dirname;
+var _real_temp_path = _real_path;
 var _real_path_with_protocol = '';
+var isAsar = false;
+
+if(_real_path.indexOf('.asar') > -1) {
+    isAsar = true;
+    _real_temp_path = path.resolve(_real_path, '..');
+}
 
 if (process.platform != 'darwin') {
     isOsx = false;
@@ -132,7 +139,7 @@ Entry.plugin = (function () {
         }
 
         // prepare upload directory
-        var baseDir = _real_path + '/temp';
+        var baseDir = path.join(_real_temp_path, 'temp');
         var uploadDir = path.join(baseDir, fileId.substr(0,2), fileId.substr(2,2));
 
         if (!fs.existsSync(path.join(baseDir, fileId.substr(0,2))))
@@ -326,7 +333,7 @@ Entry.plugin = (function () {
             alwaysOnTop: true
         });
 
-        aboutPopup.loadURL('file:///' + path.join(__dirname, 'views', 'about.html'));
+        aboutPopup.loadURL('file:///' + path.join(_real_path, 'views', 'about.html'));
         aboutPopup.on('closed', function() {
             aboutPopup = null;
         });
@@ -350,7 +357,7 @@ Entry.plugin = (function () {
             height: 800
         });
         hwGuidePopup.setMenu(null);
-        hwGuidePopup.loadURL('file:///' + path.resolve(__dirname, 'hardware', 'guide', 'hwguide.html'));
+        hwGuidePopup.loadURL('file:///' + path.resolve(_real_path, 'hardware', 'guide', 'hwguide.html'));
         hwGuidePopup.on('closed', function(e) {
             try{
                 hwGuidePopup = null;
@@ -367,7 +374,7 @@ Entry.plugin = (function () {
         }, function (filePath) {    
             if(filePath) {
                 var fs = require("fs");
-                fs.readFile(path.resolve(__dirname, 'hardware', 'guide', '엔트리 하드웨어 연결 매뉴얼(오프라인용).pdf'), function (err, stream) {
+                fs.readFile(path.resolve(_real_path, 'hardware', 'guide', '엔트리 하드웨어 연결 매뉴얼(오프라인용).pdf'), function (err, stream) {
                     fs.writeFile(filePath, stream, 'utf8', function (err) {
                         if (err)
                             alert("Unable to save file");
@@ -395,18 +402,21 @@ Entry.plugin = (function () {
     }
 
     that.init = function (cb) {
+        // 아두이노 open 블록을 제거
+        delete Entry.block.arduino_open;
+
         // NanumBarunGothic 폰트 로딩 시간까지 기다린다.
         var font = new FontFace("nanumBarunRegular", "url(./fonts/NanumBarunGothic.woff2)");
         font.load();
         font.loaded.then(function() {
             var zoom_level = localStorage.getItem("window_zoomlevel") || 0;
             that.setZoomLevel(zoom_level);
-            var isNotFirst = sessionStorage.getItem('isNotFirst');
+            var isNotFirst = sessionStorage.getItem('isNotFirst') == "true";
 
             if(!isNotFirst) {
                 var isTempRecovery = false;
                 var isExistFolder;
-                var tempProject = path.join(__dirname, 'temp');
+                var tempProject = path.join(_real_temp_path, 'temp');
 
                 if( fs.existsSync(tempProject) ) {
                     isExistFolder = fs.readdirSync(tempProject).length > 0;
@@ -513,13 +523,13 @@ Entry.plugin = (function () {
     that.saveProject = function(filePath, data, cb, enc) {
         blocklyConverter.convert(data, function (data) {
             var string_data = JSON.stringify(data);
-            that.mkdir(_real_path + '/temp', function () {
-                fs.writeFile(_real_path + '/temp/project.json', string_data, {encoding: (enc || 'utf8'), mode: '0777'}, function (err) {
+            that.mkdir(path.join(_real_temp_path, 'temp'), function () {
+                fs.writeFile(path.join(_real_temp_path, 'temp', 'project.json'), string_data, {encoding: (enc || 'utf8'), mode: '0777'}, function (err) {
                     if(err) {
                         throw err;
                     }
 
-                    var fs_reader = fstream.Reader({ 'path': path.resolve(_real_path, 'temp'), 'type': 'Directory' });
+                    var fs_reader = fstream.Reader({ 'path': path.resolve(_real_temp_path, 'temp'), 'type': 'Directory' });
 
                     var fs_writer = fstream.Writer({ 'path': filePath, 'mode': '0777', 'type': 'File',  });
 
@@ -549,7 +559,7 @@ Entry.plugin = (function () {
     }
 
     that.loadTempProject = function(cb, enc) {
-        fs.readFile(_real_path + '/temp/project.json', enc || 'utf8', function (err, data) {
+        fs.readFile(path.join(_real_temp_path, 'temp', 'project.json'), enc || 'utf8', function (err, data) {
             if(err) {
                 throw err;
             }
@@ -562,10 +572,10 @@ Entry.plugin = (function () {
 
     // 프로젝트 불러오기
     that.loadProject = function(filePath, cb, enc) {
-        deleteFolderRecursive(_real_path + '/temp/');
+        deleteFolderRecursive(path.join(_real_temp_path, 'temp'));
 
         var fs_reader = fstream.Reader({ 'path': filePath, 'type': 'File' });
-        var fs_writer = fstream.Writer({ 'path': _real_path, 'mode': '0777', 'type': 'Directory' });
+        var fs_writer = fstream.Writer({ 'path': _real_temp_path, 'mode': '0777', 'type': 'Directory' });
 
         fs_writer.on('entry', function (list) {
             list.props.mode = '0777';
@@ -576,7 +586,7 @@ Entry.plugin = (function () {
             }
         });
         fs_writer.on('end', function () {
-            fs.readFile(path.resolve(_real_path, 'temp', 'project.json'), enc || 'utf8', function (err, data) {
+            fs.readFile(path.resolve(_real_temp_path, 'temp', 'project.json'), enc || 'utf8', function (err, data) {
                 if(err) {
                     cb(err);
                 } else if($.isFunction(cb)) {
@@ -591,8 +601,8 @@ Entry.plugin = (function () {
     }
 
     that.initProjectFolder = function (cb) {
-        deleteFolderRecursive(_real_path + '/temp/');
-        that.mkdir(_real_path + '/temp/', function () {
+        deleteFolderRecursive(path.join(_real_temp_path, 'temp'));
+        that.mkdir(path.join(_real_temp_path, 'temp'), function () {
             if($.isFunction(cb)) {
                 cb();
             };

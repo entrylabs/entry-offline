@@ -1,11 +1,15 @@
 'use strict';
 
 const electron = require('electron');
-const {app, BrowserWindow, Menu, globalShortcut, ipcMain} = electron;
+const {app, BrowserWindow, Menu, globalShortcut, ipcMain, webContents} = electron;
 const path = require('path');
 const fs = require('fs');
 const packageJson     = require('./package.json');
 const ChildProcess = require('child_process');    
+
+global.sharedObject = {
+    roomId: ''
+}
 
 var language;
 
@@ -22,162 +26,6 @@ function logger(text) {
     fs.writeFileSync(path.join(log_path, 'debug.log'), data, 'utf8');
 }
 
-function spawn(command, args, callback) {
-    var error, spawnedProcess, stdout;
-    stdout = '';
-    try {
-        spawnedProcess = ChildProcess.spawn(command, args);
-    } catch (_error) {
-        error = _error;
-        process.nextTick(function() {
-            return typeof callback === "function" ? callback(error, stdout) : void 0;
-        });
-        return;
-    }
-    spawnedProcess.stdout.on('data', function(data) {
-        return stdout += data;
-    });
-    error = null;
-    spawnedProcess.on('error', function(processError) {
-        return error != null ? error : error = processError;
-    });
-    return spawnedProcess.on('close', function(code, signal) {
-        if (code !== 0) {
-            if (error == null) {
-                error = new Error("Command failed: " + (signal != null ? signal : code));
-            }
-        }
-    if (error != null) {
-        if (error.code == null) {
-            error.code = code;
-        }
-    }
-    if (error != null) {
-        if (error.stdout == null) {
-            error.stdout = stdout;
-        }
-    }
-    return typeof callback === "function" ? callback(error, stdout) : void 0;
-    });
-};
-
-var extensionPath = 'HKCU\\Software\\Classes\\.ent';
-var entryPath = 'HKCU\\Software\\Classes\\Entry';
-var defaultIconPath = 'HKCU\\Software\\Classes\\Entry\\DefaultIcon';
-var entryShellPath = 'HKCU\\Software\\Classes\\Entry\\Shell\\Open';
-var entryShellCommandPath = 'HKCU\\Software\\Classes\\Entry\\Shell\\Open\\Command';
-var mimeTypePath = 'HKCU\\Software\\Classes\\MIME\\DataBase\\Content Type\\application/x-entryapp';
-var system32Path, regPath, setxPath;
-
-if (process.env.SystemRoot) {
-    system32Path = path.join(process.env.SystemRoot, 'System32');
-    regPath = path.join(system32Path, 'reg.exe');
-    setxPath = path.join(system32Path, 'setx.exe');
-} else {
-    regPath = 'reg.exe';
-    setxPath = 'setx.exe';
-}
-
-function spawnReg(args, callback) {
-    return spawn(regPath, args, callback);
-};
-
-function addToRegistry(args, callback) {
-    args.unshift('add');
-    args.push('/f');
-    return spawnReg(args, callback);
-};
-
-function deleteFromRegistry (keyPath, callback) {
-    return spawnReg(['delete', keyPath, '/f'], callback);
-};
-
-function installRegistry(callback) {
-    var args = [extensionPath, '/ve', '/d', 'Entry'];
-    addToRegistry(args, function () {
-        args = [extensionPath, '/v', 'Content Type', '/d', 'application/x-entryapp'];
-        addToRegistry(args, function () {
-            args = [defaultIconPath, '/ve', '/d', path.join(__dirname, 'icon', 'icon.ico')];
-            addToRegistry(args, function () {
-                args = [entryShellPath, '/ve', '/d', '&Open'];
-                addToRegistry(args, function () {
-                    args = [entryShellCommandPath, '/ve', '/d', '"' + path.join(__dirname, '..', '..', 'Entry.exe') + '" "%1"'];
-                    addToRegistry(args, function () {
-                        args = [mimeTypePath, '/v', 'Extestion', '/d', '.ent'];
-                        addToRegistry(args, function () {
-                            callback();
-                        });
-                    });
-                });
-            });
-        });
-    });
-}
-
-function unInstallRegistry(callback) {
-    deleteFromRegistry(extensionPath, function () {
-        deleteFromRegistry(entryPath, function () {
-            deleteFromRegistry(mimeTypePath, function () {
-                callback();
-            });
-        });
-    });
-}
-
-function run(args, done) {
-    const updateExe = path.resolve(path.dirname(process.execPath), "..", "Update.exe")
-    // log("Spawning `%s` with args `%s`", updateExe, args)
-    spawn(updateExe, args, {
-        detached: true
-    }).on("close", done)
-}
-
-function createShortcut(locations, done) {
-    var updateExe = path.resolve(path.dirname(process.execPath), "..", "Update.exe"); 
-    var target = path.basename(process.execPath);
-    var args = ['--createShortcut', target, '-l', locations];
-    var child = ChildProcess.spawn(updateExe, args, { detached: true });
-    child.on('close', function () {
-        language = app.getLocale();
-        if(language === 'ko') {
-            var sourcePath = path.resolve(process.env.USERPROFILE, 'Desktop', 'Entry.lnk');
-            var destPath = path.resolve(process.env.USERPROFILE, 'Desktop', '엔트리.lnk');
-            fs.rename(sourcePath, destPath, function (err) {
-                sourcePath = path.resolve(process.env.APPDATA, 'Microsoft', 'Windows', 'Start Menu', 'Programs', 'EntryLabs', 'Entry.lnk');
-                destPath = path.resolve(process.env.APPDATA, 'Microsoft', 'Windows', 'Start Menu', 'Programs', 'EntryLabs', '엔트리.lnk');
-                fs.rename(sourcePath, destPath, function (err) {
-                    if(done) {
-                        done();
-                    }
-                });
-            });
-        }
-    });
-}
-
-function removeShortcut(locations, done) {
-    var updateExe = path.resolve(path.dirname(process.execPath), "..", "Update.exe"); 
-    var target = path.basename(process.execPath);
-    var args = ['--removeShortcut', target, '-l', locations];
-    var child = ChildProcess.spawn(updateExe, args, { detached: true });
-    child.on('close', function () {
-        var desktopEng = path.resolve(process.env.USERPROFILE, 'Desktop', 'Entry.lnk');
-        var desktopKo = path.resolve(process.env.USERPROFILE, 'Desktop', '엔트리.lnk');
-        var startMenuEng = path.resolve(process.env.APPDATA, 'Microsoft', 'Windows', 'Start Menu', 'Programs', 'EntryLabs', 'Entry.lnk');
-        var startMenuKo = path.resolve(process.env.APPDATA, 'Microsoft', 'Windows', 'Start Menu', 'Programs', 'EntryLabs', '엔트리.lnk');
-        deleteRecursiveSync(desktopEng);
-        deleteRecursiveSync(desktopKo);
-        deleteRecursiveSync(startMenuEng);
-        deleteRecursiveSync(startMenuKo);
-
-        if(done) {
-            done();
-        }
-    });
-}
-
-
-// Parse command line options.
 var argv = process.argv.slice(1);
 var option = { file: null, help: null, version: null, webdriver: null, modules: [] };
 for (var i = 0; i < argv.length; i++) {
@@ -207,52 +55,6 @@ for (var i = 0; i < argv.length; i++) {
         break;
     }
 }
-
-var handleStartupEvent = function() {
-    // logger('start handleStartupEvent');
-    try{
-        if (process.platform !== 'win32') {
-            return false;
-        }
-
-        var squirrelCommand = process.argv[1];
-        // logger('squirrelCommand : ' + squirrelCommand);
-        if(squirrelCommand.indexOf('--squirrel') < 0) return false;
-        var defaultLocations = 'Desktop,StartMenu';
-        switch (squirrelCommand) {
-            case '--squirrel-firstrun':
-                return false;
-                break;
-            case '--squirrel-install':
-            case '--squirrel-updated':
-                installRegistry(function () {
-                    createShortcut(defaultLocations, function () {
-                        app.quit();
-                        process.exit(0);
-                    });
-                });
-                return true;
-                break;
-            case '--squirrel-uninstall':
-                unInstallRegistry(function () {
-                    removeShortcut(defaultLocations, function () {
-                        app.quit();
-                        process.exit(0);
-                    });
-                });
-                return true;
-                break;
-            case '--squirrel-obsolete':
-                app.quit();
-                process.exit(0);
-                return true;
-        }
-    } catch(e) {
-        // logger(e.stack);
-        app.quit();
-        process.exit(0);
-    }
-};
 
 var mainWindow = null;
 var hardwareWindow = null;
@@ -349,32 +151,35 @@ app.once('ready', function() {
     } else {
         inspectorShortcut = 'Control+Shift+i';
     }
-    globalShortcut.register(inspectorShortcut, () => {
-        mainWindow.webContents.openDevTools();
+    globalShortcut.register(inspectorShortcut, (e) => {
+        webContents.getFocusedWebContents().openDevTools(); 
     });
 });
 
+
 ipcMain.on('reload', function(event, arg) {
-    if(event.sender.webContents.name === 'entry') {
-        // mainWindow.reload();
-    } else {
+    if(event.sender.webContents.name !== 'entry') {
         hardwareWindowReLaunch = true;
         hardwareWindow.close();
     }
+
     if(event.sender.webContents) {
         event.sender.webContents.reload();
     }
 });
 
 ipcMain.on('roomId', function(event, arg) {
-    event.returnValue = '';
+    event.returnValue = global.sharedObject.roomId;
 });
 
 ipcMain.on('version', function(event, arg) {
-    event.returnValue = '';
+    event.returnValue = '99';
 });
 
 ipcMain.on('serverMode', function(event, mode) {
+    if(event.sender && event.sender.webContents) {
+        event.sender.webContents.send('serverMode', mode);
+    }
 });
 
 ipcMain.on('openHardware', function(event, arg) {

@@ -241,11 +241,15 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
 
     $scope.setOfflineHW = function() {
         Entry.HW.prototype.downloadConnector = function() {
+            remote.getGlobal('sharedObject').roomId = [ localStorage.getItem('entryhwRoomId') ];
             Entry.plugin.openHardwarePage();
+            Entry.hw.initSocket();
         };
 
         Entry.HW.prototype.openHardwareProgram = function() {
+            remote.getGlobal('sharedObject').roomId = [ localStorage.getItem('entryhwRoomId') ];
             Entry.plugin.openHardwarePage();
+            Entry.hw.initSocket();
         };
 
         Entry.HW.prototype.downloadGuide = function() {
@@ -642,6 +646,9 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                             picture.fileurl = picture.fileurl.replace(/%5C/gi, '/');
                             if (picture.fileurl && picture.fileurl.indexOf('bower_components') === -1) {
                                 picture.fileurl = picture.fileurl.substr(picture.fileurl.lastIndexOf('temp'));
+                                if(isAsar) {
+                                    picture.fileurl = ['..', picture.fileurl].join('/');
+                                }
                             }
                         }
                     });
@@ -651,6 +658,9 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                             sound.fileurl = sound.fileurl.replace(/%5C/gi, '/');
                             if (sound.fileurl && sound.fileurl.indexOf('bower_components') === -1) {
                                 sound.fileurl = sound.fileurl.substr(sound.fileurl.lastIndexOf('temp'));
+                                if(isAsar) {
+                                    sound.fileurl = ['..', sound.fileurl].join('/');
+                                }
                             }
                         }
                     });
