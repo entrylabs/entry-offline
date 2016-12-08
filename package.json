@@ -13,7 +13,7 @@
   "build": {
     "dmg": {
       "icon": "build/icon.icns",
-      "icon-size": 80,
+      "iconSize": 80,
       "background": "build/background.png",
       "contents": [
         {

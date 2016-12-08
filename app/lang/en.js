@@ -14,6 +14,7 @@ Lang.Blocks = {
     "ARDUINO_program": "Run the program",
     "ARDUINO_cloud_pc_connector": "Connect to Cloud PC",
     "ARDUINO_connected": "Hardware connected",
+    "ARDUINO_connect": "Connect hardware",
     "ARDUINO_arduino_get_number_1": "number result of signal",
     "ARDUINO_arduino_get_number_2": "",
     "ARDUINO_arduino_get_sensor_number_0": "0",
@@ -921,12 +922,7 @@ Lang.Blocks = {
     "sol_sharp_name": "Sol#(La♭)",
     "la_name": "La",
     "la_sharp_name": "La#(Si♭)",
-    "si_name": "Si",
-    "HW_MOTOR": "Motor",
-    "HW_SENSOR": "Sensor",
-    "HW_LED": "Led",
-    "HW_MELODY": "Melody",
-    "HW_ROBOT": "Robot"
+    "si_name": "Si"
 };
 Lang.Buttons = {
     "apply": "Apply",
@@ -2364,7 +2360,7 @@ Lang.Menus = {
     "offline_required": "System Requirement",
     "offline_required_detail": "Minimum 500mb disk space is required, Windows7 and above or, Mac OS 10.8 and above",
     "offline_notice": "Side notes",
-    "offline_notice_1": "1. Version 1.3.4 does not support installation of all-in-one hardware connection program",
+    "offline_notice_1": "1. Version 1.3.5 does not support installation of all-in-one hardware connection program",
     "offline_notice_2": "2. Web browser is not needed.",
     "offline_notice_3": "Release note",
     "cparty_jr_result_2": "Thank you! I had so much fun with you.<br> See you around!",
@@ -2553,6 +2549,7 @@ Lang.Menus = {
     "linebreak_on_desc_1": "The size of textbox determines how much you can write.",
     "linebreak_on_desc_2": "You can change the line by pressing the 'Enter' key.",
     "linebreak_on_desc_3": "Your content will automatically go to the next line if the length exceeds the width of the textbox, when writing or adding new words.",
+    "not_supported_text": "Current font does not support Chinese characters",
     "entry_with": "Entry is Created With Teachers",
     "ebs_season_1": "Visit Season 1",
     "ebs_season_2": "Visit Season 2",
@@ -3186,16 +3183,7 @@ Lang.Workspace = {
     "variable_name_auto_edited_title": "variable name auto-edited",
     "variable_name_auto_edited_content": "variable name cannot exceed 10 characters",
     "list_name_auto_edited_title": "list name auto-edited",
-    "list_name_auto_edited_content": "list name cannot exceed 10 characters",
-    "default_mode": "Standard",
-    "practical_course_mode": "Textbook",
-    "practical_course": "practical course",
-    "select_mode": "Mode",
-    "select_mode_popup_title": "Choose 'Create' option",
-    "select_mode_popup_lable1": "Textbook",
-    "select_mode_popup_lable2": "Textbook(Practical Course)",
-    "select_mode_popup_desc1": "Create projects with<br/>unlimited Entry features",
-    "select_mode_popup_desc2": "Create projects using<br/>'Practical Course' features"
+    "list_name_auto_edited_content": "list name cannot exceed 10 characters"
 };
 Lang.code = "view code";
 Lang.EntryStatic = {
@@ -3754,6 +3742,7 @@ Lang.template = {
     "download_guide": "%1",
     "arduino_download_source": "%1",
     "arduino_connected": "%1",
+    "arduino_connect": "%1",
     "arduino_reconnect": "%1",
     "CODEino_get_sensor_number": "%1  ",
     "CODEino_get_named_sensor_value": "  %1  Sensor value ",

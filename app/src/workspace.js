@@ -196,11 +196,15 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
 
     $scope.setOfflineHW = function() {
         Entry.HW.prototype.downloadConnector = function() {
+            remote.getGlobal('sharedObject').roomId = [ localStorage.getItem('entryhwRoomId') ];
             Entry.plugin.openHardwarePage();
+            Entry.hw.initSocket();
         };
 
         Entry.HW.prototype.openHardwareProgram = function() {
+            remote.getGlobal('sharedObject').roomId = [ localStorage.getItem('entryhwRoomId') ];
             Entry.plugin.openHardwarePage();
+            Entry.hw.initSocket();
         };
 
         Entry.HW.prototype.downloadGuide = function() {
