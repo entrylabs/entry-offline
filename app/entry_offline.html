@@ -32,7 +32,7 @@
 		<script type='text/javascript' src='./bower_components/literallycanvas/lib/js/literallycanvas.js'></script>
         <script type='text/javascript' src='./src/app.js'></script>
 		<script type='text/javascript' src='./bower_components/entryjs/extern/blockly/blockly_compressed.js'></script>
-        <script type='text/javascript' src='./bower_components/entryjs/extern/util/static.js'></script>
+        <!-- <script type='text/javascript' src='./bower_components/entryjs/extern/util/static.js'></script> -->
 		<script type='text/javascript' src='./bower_components/entryjs/extern/util/CanvasInput.js'></script>
 		<script type='text/javascript' src='./bower_components/entryjs/extern/util/handle.js'></script>
 		<script type='text/javascript' src='./bower_components/entryjs/extern/util/ndgmr.Collision.js'></script>
@@ -40,6 +40,13 @@
 		<script type='text/javascript'>
 			Entry.isOffline = true;
 			Entry.painterBaseUrl = './bower_components/literallycanvas/lib/img';
+			var isMiniMode = localStorage.getItem('isMiniMode');
+			var EntryStatic;
+			if(isMiniMode === 'true') {
+				EntryStatic = require('./bower_components/entryjs/extern/util/static_mini.js').EntryStatic;
+			} else {
+				EntryStatic = require('./bower_components/entryjs/extern/util/static.js').EntryStatic;
+			}
 		</script>
 		<script type='text/javascript' src='./bower_components/entryjs/src/workspace/block_entry.js'></script>
     	<script type='text/javascript' src='./src/context.js'></script>

@@ -6,14 +6,13 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
     window.isNowSaving = false;
     var supported = !(typeof storage == 'undefined' || typeof window.JSON == 'undefined');
     var storage = (typeof window.localStorage === 'undefined') ? undefined : window.localStorage;
-    var isMiniMode = false;
+    // var isMiniMode = false;
     var defaultInitOption = {};
     var hwCategoryList = [];
 
     function settingForMini() {
-        defaultInitOption = miniOption.initOptions;
-        EntryStatic.getAllBlocks = miniOption.allBlocks;
-        hwCategoryList = miniOption.hwCategoryList;
+        defaultInitOption = EntryStatic.initOptions;
+        hwCategoryList = EntryStatic.hwCategoryList;
     }
 
     $scope.initWorkspace = function() {
@@ -226,7 +225,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
         if (Entry.hw.connected === lastHwConnected || !isMiniMode) {
             return;
         }
-        if (Entry.hw.connected) {
+        if (Entry.hw.connected && Entry.hw.hwModule) {
             hwCategoryList.forEach(function(categoryName) {
                 Entry.playground.blockMenu.unbanCategory(categoryName);
             });
