@@ -222,21 +222,32 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
 
     var lastHwConnected = false;
     $scope.hwChanged = function() {
-        if (Entry.hw.connected === lastHwConnected || !isMiniMode) {
+        if ((Entry.hw.connected && Entry.hw.hwModule && lastHwConnected) || !isMiniMode) {
             return;
         }
         if (Entry.hw.connected && Entry.hw.hwModule) {
-            hwCategoryList.forEach(function(categoryName) {
-                Entry.playground.blockMenu.unbanCategory(categoryName);
-            });
-            Entry.playground.blockMenu.banCategory('hw_robot');
+            if(EntryStatic.hwMiniSupportList.indexOf(Entry.hw.hwModule.name) > -1) {
+                hwCategoryList.forEach(function(categoryName) {
+                    Entry.playground.blockMenu.unbanCategory(categoryName);
+                });
+                Entry.playground.blockMenu.banCategory('arduino');
+                Entry.playground.blockMenu.banCategory('hw_robot');
+            } else {
+                hwCategoryList.forEach(function(categoryName) {
+                    Entry.playground.blockMenu.banCategory(categoryName);
+                });
+                Entry.playground.blockMenu.banCategory('hw_robot');
+                Entry.playground.blockMenu.unbanCategory('arduino');
+            }
+            lastHwConnected = true;
         } else {
             hwCategoryList.forEach(function(categoryName) {
                 Entry.playground.blockMenu.banCategory(categoryName);
             });
+            Entry.playground.blockMenu.banCategory('arduino');
             Entry.playground.blockMenu.unbanCategory('hw_robot');
+            lastHwConnected = false;
         }
-        lastHwConnected = Entry.hw.connected;
     }
 
     $scope.setOfflineHW = function() {
