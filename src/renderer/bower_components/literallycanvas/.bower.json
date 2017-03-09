@@ -1,0 +1,13 @@
+{
+  "name": "literallycanvas",
+  "homepage": "https://github.com/entrylabs/literallycanvas",
+  "_release": "95f5e1a105",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "95f5e1a1055f697da84f2654ca7d2a7668ed3356"
+  },
+  "_source": "https://github.com/entrylabs/literallycanvas.git",
+  "_target": "master",
+  "_originalSource": "https://github.com/entrylabs/literallycanvas.git"
+}

@@ -7,54 +7,62 @@
     "dist:win64": "build --arch x64",
     "pack:win": "electron-packager ./app Entry --platform=win32 --arch=ia32 --icon=./build/icon.ico --asar=true --overwrite=true",
     "pack:win64": "electron-packager ./app Entry --platform=win32 --arch=x64 --icon=./build/icon.ico",
-    "start": "set NODE_ENV=development&&electron -d app",
-    "test": "mocha test/default.js"
-  },
-  "build": {
-    "dmg": {
-      "icon": "build/icon.icns",
-      "iconSize": 80,
-      "background": "build/background.png",
-      "contents": [
-        {
-          "x": 240,
-          "y": 120
-        },
-        {
-          "x": 380,
-          "y": 250,
-          "type": "file",
-          "path": "./app/README.md"
-        },
-        {
-          "x": 240,
-          "y": 380,
-          "type": "link",
-          "path": "/Applications"
-        }
-      ]
-    },
-    "win": {
-      "target": "dir",
-      "title": "Entry",
-      "#certificateSubjectName": "my",
-      "#rfc3161TimeStampServer": "http://timestamp.geotrust.com/tsa",
-      "authors": "EntryLabs"
-    },
-    "asar": true,
-    "appId": "entry-offline",
-    "productName": "Entry",
-    "extend-info": "build/build.plist",
-    "iconUrl": "https://raw.githubusercontent.com/entrylabs/entry-hw/feature/electron/build/icon.ico",
-    "icon": "app/icon/app"
+    "start": "electron-forge start -d",
+    "test": "mocha test/default.js",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "preinstall": "bower cache clean && bower install"
   },
   "devDependencies": {
-    "electron-builder": "^10.5.0",
-    "electron-packager": "^8.3.0",
-    "electron-prebuilt": "^1.4.2",
+    "babel-plugin-transform-async-to-generator": "^6.22.0",
+    "babel-preset-babili": "0.0.12",
+    "babel-preset-env": "^1.2.1",
+    "babel-preset-react": "^6.23.0",
+    "electron-prebuilt-compile": "1.4.15",
     "mocha": "^2.5.3",
     "rimraf": "^2.5.2",
     "spectron": "^3.2.3"
   },
-  "dependencies": {}
+  "dependencies": {
+    "bindings": "^1.2.1",
+    "electron-compile": "^6.1.3",
+    "fstream": "^1.0.11",
+    "jszip": "^3.1.3",
+    "object.assign": "^4.0.4",
+    "socket.io": "^1.7.3",
+    "socket.io-client": "^1.7.3",
+    "tar": "^2.2.1",
+    "xml2js": "^0.4.17"
+  },
+  "main": "src/entry_offline.js",
+  "version": "1.5.0",
+  "config": {
+    "forge": {
+      "make_targets": {
+        "win32": [
+          "squirrel"
+        ],
+        "darwin": [
+          "zip"
+        ],
+        "linux": [
+          "deb",
+          "rpm"
+        ]
+      },
+      "electronPackagerConfig": {},
+      "electronWinstallerConfig": {
+        "name": ""
+      },
+      "electronInstallerDebian": {},
+      "electronInstallerRedhat": {},
+      "github_repository": {
+        "owner": "",
+        "name": ""
+      },
+      "windowsStoreConfig": {
+        "packageName": ""
+      }
+    }
+  }
 }

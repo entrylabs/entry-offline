@@ -1,0 +1,217 @@
+v0.4.14:
+ * onInit option works again (broke in 0.4.13)
+ * Remove Bower support
+ * Remove jQuery plugin
+ * lc.teardown() won't crash if no tool was selected
+ * lc.respondToSizeChange() gives you a way to make sure the contents of the
+   widget are correct after you change its size without resizing the window
+
+v0.4.13:
+ * Require React 0.14+ (up from 0.13+)
+ * SelectShape tool (no GUI for this yet)
+ * Use <LC.LiterallyCanvasReactComponent /> as a React component!
+ * Rewrote LC.init() (with GUI) to use LiterallyCanvasReactComponent. This
+   causes some initialization of the LiterallyCanvas object to be done one
+   or more frames after the LC.init() call. Please report any resulting
+   bugs on GitHub.
+ * CommonJS build that can be install from NPM with "npm install literallycanvas"
+ * Improved eyedropper tool
+   * Samples background. Should match expected behavior better.
+   * Can be used to set fill color as well as stroke color.
+ * LC.util.getDefaultImageRect() and LiterallyCanvas.getDefaultImageRect()
+   make it easy to figure out the effective bounds of the canvas, whether
+   or not it is "infinite." Mostly useful for tool implementations.
+ * Fixed CSS Z-ordering bug that caused text being edited to show up on top
+   of the color picker
+
+v0.4.12:
+ * Identical to 0.4.13 except for a Readme update to make npm happy.
+
+v0.4.11:
+ * lc.setWatermarkImage(image)
+ * 'scale' parameter for the Image shape
+ * Fix text box drag handles (they were invisible)
+ * Transparency and saturation sliders in color picker
+ * Build a literallycanvas-core library that does not include the tool UI
+ * Decouple polygon tool UI from tool; trigger 'lc-polygon*' events
+ * Fixed several bugs in SVG rendering
+ * Fixed behavior of stroke width picker when switching tools
+ * Add ability to programmatically select a shape & move it (no GUI yet)
+
+v0.4.10:
+ * Fix the text tool
+
+v0.4.9:
+ * The snapshot API is more public. The JSON-suffixed snapshot methods are
+   being deprecated in favor of ones that deal with JavaScript objects.
+ * New LC.init() options:
+   * snapshot: load a snapshot immediately
+   * defaultStrokeWidth
+   * strokeWidths: defaults to [1, 2, 5, 10, 20, 30]
+   * toolbarPosition can now be 'hidden'
+ * Snapshots save and load pan and zoom values, image size, and background
+   shapes
+ * lc.getImage({margin: {top, right, bottom, left}}) lets you put a margin
+   around an image whose bounds are derived from the shapes' bounding rect
+ * LC.renderSnapshotToImage()
+ * LC.renderSnapshotToSVG()
+ * LC.teardown() completely removes Literally Canvas from the web page
+ * LC.util.addImageOnload(img, callback) adds a callback to the image's onload
+   event without replacing any existing callbacks
+ * Polygon tool behavior improvements:
+    * On-screen UI to close or cancel, for a better experience on touch devices
+    * Cancel current shape if user hits undo, redo, or clear
+ * Event handling improvements
+ * LC.util.classSet replaces internal usage of React.addons.classSet
+ * LC.util.combineCanvases() doesn't draw each canvas twice (probably fixed
+   some image rendering bugs)
+ * Deprecations (docs provide external replacements):
+    * Keyboard navigation (keyboardShortcuts option)
+    * lc.getSnapshotJSON()
+    * lc.setSnapshotJSON()
+    * LC.snapshotJSONToShapes()
+
+v0.4.8:
+ * Fix loading an image from JSON.
+ * Rename pointerdown, pointerdrag, pointermove, and pointerup to
+   lc-pointerdown, lc-pointerdrag, lc-pointermove, and lc-pointerup (#308)
+
+v0.4.7:
+ * Fix color picker not working on Firefox
+
+v0.4.6:
+ * Fix various awful bugs
+ * Move color pickers back to the left, with a slightly better UI than before
+
+v0.4.5:
+ * Require React v0.13+ (up from v0.10)
+ * UI improvements
+ * New option toolbarPosition: 'top'|'bottom'
+ * LC.renderShapesToCanvas(shapes, rect, backgroundColor)
+ * LC.renderShapesToSVG(shapes, rect, backgroundColor)
+ * LC.snapshotToShapes(snapshot) -> shapes
+ * LC.snapshotJSONToShapes(snapshotJSON) -> shapes
+ * New rendering API
+   * LC.defineCanvasRenderer shapeName, (ctx, shape) -> mutate ctx
+   * LC.defineSVGRenderer shapeName, (shape) -> string
+ * Tools can be implemented with @usesSimpleAPI=false and the new events
+     pointerdown, pointermove, pointerdrag, and pointerup
+ * Polygon tool
+ * Zero-length lines render consistently across browsers (by not rendering)
+ * Shape rendering aligned to pixel grid for sharper drawings
+ * Zooming works correctly
+ * Configurable zoomMin, zoomMax, zoomStep
+
+v0.4.4:
+ * Fix idiotic text tool exception
+
+v0.4.3:
+ * User-friendly text tool
+ * lc.setShapesInProgress(shapes), a better way to draw shapes in progress
+ * Tool.willBecomeActive(lc) and Tool.didBecomeActive(lc)
+ * Include IE shims for CustomEvent and ctx.setLineDash()
+ * Text shapes are now anchored at the top left instead of baseline left.
+   Positions are updated automatically.
+ * Text bounds are correctly accounted for when exporting to SVG. Text wrapping
+   may be incorrect unless you render the text to the canvas first.
+ * SVG export produces valid XML with the correct namespace and no newlines
+ * Better-ish visual style
+ * getImage() content bounds detection includes background shapes
+ * Fixed one class of image-not-displaying bugs
+ * Line path reuses smoothed points instead of recalculating on load
+
+v0.4.2:
+ * lc.getSVGString()
+ * LC.setTool() is part of the public API
+ * Improved behavior when dragging outside the LC div while drawing
+ * backgroundColor initialization option works
+ * Allow transparent stroke and fill colors
+
+v0.4.1:
+ * Watermark can be included in image output with
+   getImage({includeWatermark: true})
+ * Line tool allows dashes, arrows
+ * LinePathShape can be used without smoothing; set
+   {smooth: false}
+ * New icons for undo/redo
+ * Tooltips everywhere
+ * getImage() scales for retina correctly
+ * Watermark no longer requires user input to render if image isn't
+   loaded at init time
+ * Dragging off the canvas while drawing no longer results in a crazy
+   line
+
+v0.4:
+ * New GUI using React.js
+ * Simplified color picker
+ * Removed jQuery dependency, though the plugin works if jQuery is present
+ * Performance improvements
+   * Line path adds points in constant time
+   * Line path throttles mouse events
+   * requestAnimationFrame is used
+ * Retina display rendering is the correct size instead of being scaled up
+   half-resolution
+ * Code is browserified; can still be used as a standalone script
+ * Overhauled API for defining tools and shapes (see docs)
+ * Backgrounds and watermarks are no longer affected by the eraser
+ * No DOM is preserved inside the container div at all
+ * LiterallyCanvas class API
+   * Removed preserveCanvasContents option
+   * watermarkScale option
+   * 'toolClasses' option has been replace with 'tools' option
+   * Constructor takes (containerElement, opts) instead of (canvas, opts)
+   * API for subscribing/unsubscribing event listeners has changed (see #130)
+   * Redraw layers ('main' or 'background') with repaintLayer(layerName);
+     repaint everything with repaintAllLayers(). Removed repaint().
+   * getImage() allows rendering drawing at any scale clipped to any rect. Old
+     canvasForExport() and canvasWithBackground() are deprecated.
+   * setPan() and setZoom() can set position and zoom values directly, in
+     addition to the old pan() and zoom() that move them by relative values.
+   * getContentBounds() returns the bounding rect of all shapes
+ * LC.util functions
+   * sizeToContainer() removed in favor of matchElementSize()
+   * renderShapes() renders any list of shapes to a canvas, without having to
+      instantiate LiterallyCanvas
+   * getBoundingRect(listOfRects)
+ * Reorganized top-level API on window.LC or require('literallycanvas')
+   LC.init()
+   LC.registerJQueryPlugin()
+   LC.util
+   LC.tools
+   LC.defineOptionsStyle()
+   LC.defineShape()
+   LC.createShape()
+   LC.JSONToShape()
+   LC.shapeToJSON()
+   LC.setDefaultImageURLPrefix()
+ * Support for fixed size drawing area
+ * Basic localization support
+ * Added ellipse tool
+ * Event handling bug fixes
+
+v0.3:
+ * LiterallyCanvas.canvasWithBackground() renders the current drawing over a
+   background image
+ * Save/load to/from JSON
+ * Text tool
+ * New events
+ * preserveCanvasContents option
+ * Image shape (no corresponding tool yet)
+ * Split code into jQuery plugin and core code
+ * Remove Underscore dependency
+ * Support IE Mobile (probably)
+
+v0.2.1:
+ * Redo toolbar/CSS markup
+ * Drop fat version of build
+ * Allow changing background color
+
+v0.2:
+ * Speed improvements
+ * Line tool
+ * Rectangle tool
+ * Better iOS support (fix several bugs)
+ * Toolbar style tweaks
+ * Replace Imgur stuff with canvasForExport()
+
+v0.1: Initial release

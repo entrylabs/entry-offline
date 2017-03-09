@@ -1,0 +1,231 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Literally Canvas</title>
+    <link href="/lib/css/literallycanvas.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no" />
+
+    <style type="text/css">
+      body {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        margin: 0;
+        background-color: gray;
+        height: 2000px;
+      }
+
+      .fs-container {
+        /* width: 768px; */
+        width: 320px;
+        margin: auto;
+        /* margin-top: 50px; */
+      }
+
+      .literally {
+        width: 100%;
+        height: 100%;
+        position: relative;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="fs-container">
+      <a href="react-component">react-component</a>
+      <a href="core_demo.html">core</a>
+      <div class="one"></div>
+      <a href="javascript:void(0);" id="open-image">Open image</a>
+      <br>
+      <a href="javascript:void(0);" id="change-size">Change size</a>
+      <br>
+      <a href="javascript:void(0);" id="hide-lc">Teardown</a>
+      <br>
+      <a href="javascript:void(0);" id="show-lc">Setup</a>
+
+      <br>
+      <div class="svg-container"
+          style="display: inline-block; border: 1px solid yellow"></div>
+
+      <!--
+      <br><br>
+      <div class="literally two"></div>
+      -->
+    </div>
+
+    <script src="/demo/jquery-1.8.2.js"></script>
+    <script src="/demo/fastclick.js"></script>
+    <script src="/demo/react-0.14.7.js"></script>
+    <!--<script src="/demo/react-0.13.3.js"></script>-->
+    <!--<script src="/demo/react-0.10.0.js"></script>-->
+    <script src="/lib/js/literallycanvas.js"></script>
+
+    <script type="text/javascript">
+      LC.setDefaultImageURLPrefix('/lib/img');
+
+      var lc = null;
+
+      var updateSVG = function() {
+        if (!lc) return;
+        $('.svg-container')[0].innerHTML = lc.getSVGString();
+      }
+
+      var backgroundImage = new Image();
+      window.debugImage = backgroundImage;
+
+      LC.util.addImageOnload(backgroundImage, updateSVG);
+
+      backgroundImage.src = '/demo/bear.png';
+
+      var watermarkImage = new Image();
+      watermarkImage.src = '/demo/watermark.png';
+      // for testing watermark loading bug:
+      //watermarkImage.src = 'http://literallycanvas.com/_static/watermark.png'
+
+      // the only LC-specific thing we have to do
+      var containerOne = document.getElementsByClassName('one')[0];
+
+      var MyTool = function() {
+        var self = this;
+
+        return {
+          usesSimpleAPI: false,  // DO NOT FORGET THIS!!!
+          name: 'ImageTool',
+          iconName: 'line',
+          optionsStyle: null,
+
+          didBecomeActive: function(lc) {
+            var onPointerDown = function(pt) {
+              self.currentShape = LC.createShape('Image', {
+                image: backgroundImage, x: pt.x, y: pt.y});
+              lc.setShapesInProgress([self.currentShape]);
+              lc.repaintLayer('main');
+            };
+
+            var onPointerDrag = function(pt) {
+              self.currentShape.x = pt.x;
+              self.currentShape.y = pt.y;
+              lc.setShapesInProgress([self.currentShape]);
+              lc.repaintLayer('main');
+            };
+
+            var onPointerUp = function(pt) {
+              self.currentShape.x = pt.x;
+              self.currentShape.y = pt.y;
+              lc.setShapesInProgress([]);
+              lc.saveShape(self.currentShape);
+            };
+
+            // lc.on() returns a function that unsubscribes us. capture it.
+            self.unsubscribeFuncs = [
+              lc.on('lc-pointerdown', onPointerDown),
+              lc.on('lc-pointerdrag', onPointerDrag),
+              lc.on('lc-pointerup', onPointerUp)
+            ];
+          },
+
+          willBecomeInactive: function(lc) {
+            // call all the unsubscribe functions
+            self.unsubscribeFuncs.map(function(f) { f() });
+          }
+        }
+      };
+
+      // disable scrolling on touch devices so we can actually draw
+      $(document).bind('touchmove', function(e) {
+        if (e.target === document.documentElement) {
+          return e.preventDefault();
+        }
+      });
+
+      var showLC = function() {
+        lc = LC.init(containerOne, {
+          toolbarPosition: 'bottom',
+          tools: LC.defaultTools.concat([MyTool]),
+          snapshot: JSON.parse(localStorage.getItem('drawing')),
+          defaultStrokeWidth: 2,
+          strokeWidths: [1, 2, 3, 5, 30],
+          backgroundShapes: [
+            LC.createShape(
+              'Image', {image: backgroundImage, x: 100, y: 100, scale: 2}),
+            LC.createShape(
+              'Rectangle',
+              {x: 0, y: 0, width: 100, height: 100, strokeColor: '#000'})
+          ],
+          onInit: function(lc) {
+            console.log('initialized with', lc)
+          }
+          // backgroundColor: '#f00',
+          // watermarkImage: watermarkImage//,
+          // imageSize: {width: 500, height: 300}
+        });
+        window.demoLC = lc;
+        lc.setWatermarkImage(watermarkImage);
+
+        var save = function() {
+          localStorage.setItem('drawing', JSON.stringify(lc.getSnapshot()));
+          updateSVG();
+        }
+
+        lc.on('drawingChange', save);
+        lc.on('pan', save);
+        lc.on('zoom', save);
+
+        // lc.setPan(100, 100);
+
+        $("#open-image").click(function() {
+          window.open(lc.getImage({
+            // rect: {x: 0, y: 0, width: 100, height: 100}
+            scale: 1, margin: {top: 10, right: 10, bottom: 10, left: 10}
+          }).toDataURL());
+        });
+
+        $("#change-size").click(function() {
+          lc.setImageSize(null, 200)
+        });
+
+        updateSVG();
+
+        /* demo of inserting a shape below another
+        var newShape = LC.JSONToShape({"className":"Rectangle","data":{"x":238,"y":168,"width":122,"height":112,"strokeWidth":5,"strokeColor":"hsl(0, 100%, 42%)","fillColor":"#0f0"},"id":"4764db7c-9d6d-1e7f-f304-3904fa464e6b"})
+        lc.saveShape(newShape, false, "e97d582e-6c88-f01e-6ba0-6a9344b5594c")
+        */
+      };
+
+      $(document).ready(function() {
+        // disable scrolling on touch devices so we can actually draw
+        $(document).bind('touchmove', function(e) {
+          if (e.target === document.documentElement) {
+            return e.preventDefault();
+          }
+        });
+        showLC();
+      });
+
+      $('#hide-lc').click(function() {
+        if (lc) {
+          lc.teardown();
+          lc = null;
+        }
+      });
+
+      $('#show-lc').click(function() {
+        if (!lc) { showLC(); }
+      });
+    </script>
+
+    <!--
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $('.literally.two').literallycanvas({
+          imageURLPrefix: '/lib/img',
+          onInit: function(lc) {
+            console.log('initialized with', lc)
+          }
+        });
+      });
+    </script>
+    -->
+
+    <script src="//localhost:35728/livereload.js"></script>
+  </body>
+</html>
