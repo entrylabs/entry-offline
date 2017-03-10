@@ -141,13 +141,8 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
             Entry.addEventListener('openPictureImport', $scope.openPictureImport);
             Entry.addEventListener('saveLocalStorageProject', saveLocalStorageProject);
             Entry.addEventListener('saveBlockImages', saveBlockImages);
-            if (Entry.plugin.isOsx()) {
-                var category_list = Entry.playground.mainWorkspace.blockMenu._categoryElems;
-                category_list['arduino'].addClass('entryRemove');
-            }
             $scope.setOfflineHW();
 
-            console.log(Entry.getMainWS().changeEvent);
             Entry.getMainWS().changeEvent.attach(this, ()=> {
                 myProject.programmingMode = Number(Entry.getMainWS().mode);
                 $scope.$apply();
