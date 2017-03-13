@@ -7,7 +7,7 @@
     "dist:win64": "build --arch x64",
     "pack:win": "electron-packager ./app Entry --platform=win32 --arch=ia32 --icon=./build/icon.ico --asar=true --overwrite=true",
     "pack:win64": "electron-packager ./app Entry --platform=win32 --arch=x64 --icon=./build/icon.ico",
-    "start": "electron-forge start -d",
+    "start": "electron-forge start",
     "test": "mocha test/default.js",
     "package": "electron-forge package",
     "make": "electron-forge make",

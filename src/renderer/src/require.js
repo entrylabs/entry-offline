@@ -22,6 +22,10 @@ const blockConverter = require('./src/block_converter.js');
 const blocklyConverter = require('./src/blockly_converter.js');
 const JSZip = require("jszip");
 const isOffline = true;
+const __rendererPath = path.resolve(__dirname);
 
-import filbert from './src/textmode/python/parser/filbert.js'
-window.filbert = filbert;
+import parser from './src/textmode/python/parser/filbert.js';
+const filbert = parser;
+
+import util from './src/sources/Util';
+const Util = util;

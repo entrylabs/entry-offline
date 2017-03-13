@@ -66,6 +66,26 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
 
             Entry.init(workspace, initOptions);
 
+            Entry.playground.downloadPicture = function (pictureId) {
+                const picture = Entry.playground.object.getPicture(pictureId);
+                let fileurl;
+
+                if(picture.fileurl) {
+                    fileurl = picture.fileurl;
+                } else {
+                    let url = picture.filename;
+                    fileurl = path.resolve(__rendererPath, 'uploads', url.substr(0, 2), url.substr(2, 2), 'image', `${url}.png`);
+                }
+
+                const pictureInfo = path.parse(fileurl);
+
+                Util.saveFileDialog(fileurl, `${picture.name}${pictureInfo.ext}`, (err)=> {
+                    if(err) {
+                        console.log(err);
+                    }
+                })
+            }
+
             Entry.playground.board._contextOptions[3].option.callback = function() {
                 dialog.showOpenDialog({
                     properties: [
