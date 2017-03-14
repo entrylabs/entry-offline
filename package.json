@@ -1,5 +1,7 @@
 {
-  "private": true,
+  "private": true,  
+  "name": "Entry",
+  "productName": "Entry",
   "scripts": {
     "clean": "rimraf dist",
     "dist": "build",
@@ -50,7 +52,17 @@
           "rpm"
         ]
       },
-      "electronPackagerConfig": {},
+      "electronPackagerConfig": {
+        "icon": "build/icon",
+        "asar": true,
+        "win32metadata": {
+          "CompanyName": "EntryLabs",
+          "FileDescription": "Entry Offline Version",
+          "OriginalFilename": "Entry.exe",
+          "ProductName": "Entry",
+          "InternalName": "Entry"
+        }
+      },
       "electronWinstallerConfig": {
         "name": ""
       },
