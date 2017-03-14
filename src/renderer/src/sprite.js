@@ -61,7 +61,6 @@ angular.module('common').controller('SpriteController',
 
         calcInnerHeight();
 
-        // $scope.systemSprites =
         $scope.findSprites($routeParams.type, $routeParams.main, $routeParams.sub);
     };
 
@@ -119,9 +118,9 @@ angular.module('common').controller('SpriteController',
 
     var sortPictureData = function(response) {
         response = response.sort(function (a, b) {
-            if(a.name > b.name) {
+            if(!b.name || a.name > b.name) {
                 return 1;
-            } else if(a.name < b.name) {
+            } else if(!a.name || a.name < b.name) {
                 return -1;
             } else {
                 return 0;
@@ -140,6 +139,8 @@ angular.module('common').controller('SpriteController',
                 $scope.menu = "";
             }
         }
+
+        $('.wrap_sprite').scrollTop(0);
 
         if($.isEmptyObject($scope.spriteData)) {
             var spriteData = sessionStorage.getItem("spriteData");
@@ -473,7 +474,7 @@ angular.module('common').controller('SpriteController',
         } else if ($scope.currentTab === 'upload') {
             return $scope.selectedPictures;
         } else if ($scope.currentTab === 'textBox') {
-            return '1';
+            return 'textbox';
         } else {
             return null;
         }
@@ -543,7 +544,8 @@ angular.module('common').controller('SpriteController',
         if (!$scope.currentSelected()) {
             alert(Lang.Workspace.select_sprite);
         } else {
-            if ($scope.currentSelected() == 1) {
+            if ($scope.currentSelected() === 'textbox') {
+                removeUploadPictures();
                 var value = jQuery('.modal_textBox').eq(0).val();
                 if ($scope.linebreak)
                     value = jQuery('.modal_textBox').eq(1).val();
@@ -553,6 +555,7 @@ angular.module('common').controller('SpriteController',
                     options: $scope.fontData
                 });
             } else {
+                removeUploadPictures($scope.currentSelected());
                 $modalInstance.close({
                     target: $scope.currentTab,
                     data: $scope.currentSelected()
@@ -563,8 +566,25 @@ angular.module('common').controller('SpriteController',
 
     // 취소
     $scope.cancel = function () {
+        removeUploadPictures();
         $modalInstance.dismiss('cancel');
     };
+
+    function removeUploadPictures(passItems = []) {
+        const passKeys = passItems.map((item)=> {
+            return item.filename || '';
+        });
+
+        const removePictures = $scope.uploadPictures.filter((item)=> {
+            return passKeys.indexOf(item.filename) === -1;
+        });
+
+        removePictures.forEach(function (item) {
+            Util.removeFileByUrl(item.fileurl);
+        });
+
+        Util.clearTempDir();
+    }
 
     // 새로 그리기
     $scope.addNewSprite = function() {

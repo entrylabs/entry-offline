@@ -75,6 +75,8 @@ angular.module('common').controller('SoundController',
             }
         }
 
+        $('.wrap_sprite').scrollTop(0);
+
         $scope.systemSounds = [];
 
         var categorizedData = [];
@@ -425,22 +427,42 @@ angular.module('common').controller('SoundController',
 
     // 적용
     $scope.ok = function () {
+        createjs.Sound.stop();
         if (!$scope.currentSelected()) {
             alert(Lang.Workspace.select_sprite);
         } else {
+            removeUploadSound($scope.currentSelected());
             $modalInstance.close({
                 target: $scope.currentTab,
                 data: $scope.currentSelected()
             });
         }
-        createjs.Sound.stop();
     };
 
     // 취소
     $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
         createjs.Sound.stop();
+        removeUploadSound();
+        $modalInstance.dismiss('cancel');
     };
+
+    function removeUploadSound(passItems = []) {
+        const passKeys = passItems.map((item)=> {
+            return item.filename || '';
+        });
+
+        const removeSounds = $scope.uploadSounds.filter((item)=> {
+            return passKeys.indexOf(item.filename) === -1;
+        });
+
+        console.log(removeSounds);
+        
+        removeSounds.forEach(function (item) {
+            Util.removeFileByUrl(item.fileurl);
+        });
+
+        Util.clearTempDir();
+    }
     
 		
 }]);

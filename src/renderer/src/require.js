@@ -1,4 +1,5 @@
 const fs = require('fs');
+const fse = require('fs-extra');
 const sizeOf = require('image-size');
 const path = require('path');
 const Q = require('q');
@@ -29,3 +30,6 @@ const filbert = parser;
 
 import util from './src/sources/Util';
 const Util = util;
+
+import _async from 'async';
+const async = _async;

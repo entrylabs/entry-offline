@@ -161,6 +161,9 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
             Entry.addEventListener('openPictureImport', $scope.openPictureImport);
             Entry.addEventListener('saveLocalStorageProject', saveLocalStorageProject);
             Entry.addEventListener('saveBlockImages', saveBlockImages);
+            Entry.addEventListener('removeObject', removeObject);
+            Entry.addEventListener('removePicture', removePicture);
+            Entry.addEventListener('removeSound', removeSound);
             $scope.setOfflineHW();
 
             Entry.getMainWS().changeEvent.attach(this, ()=> {
@@ -180,6 +183,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                 }
                 return false;
             });
+            
             $body.on('dragleave dragend', function(e) {
                 $uploadWindow.css('opacity', 0);
                 actionDisplayNone = setTimeout(function() {
@@ -374,6 +378,35 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                 popup.append(content);
             }
         });
+    }
+
+    function removeObject(sprite) {
+        const tempDirPath = `${path.sep}temp${path.sep}`;
+        const { pictures = [] } = sprite;
+        console.log(sprite);
+
+        pictures.forEach((picture)=> {
+            if(picture.fileurl && path.isAbsolute(picture.fileurl) && picture.fileurl.indexOf(tempDirPath) > 1) {
+                Util.removeFileByUrl(picture.fileurl);
+                Util.clearTempDir();
+            }
+        });
+    }
+
+    function removePicture(picture) {
+        const tempDirPath = `${path.sep}temp${path.sep}`;
+        if(picture.fileurl && path.isAbsolute(picture.fileurl) && picture.fileurl.indexOf(tempDirPath) > 1) {
+            Util.removeFileByUrl(picture.fileurl);
+            Util.clearTempDir();
+        }
+    }
+
+    function removeSound(sound) {
+        const tempDirPath = `${path.sep}temp${path.sep}`;
+        if(sound.fileurl && path.isAbsolute(sound.fileurl) && sound.fileurl.indexOf(tempDirPath) > 1) {
+            Util.removeFileByUrl(sound.fileurl);
+            Util.clearTempDir();
+        }
     }
 
     // 프로젝트 세팅
@@ -737,13 +770,40 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                 object = Entry.container.addObject(object, 0);
                 Entry.playground.changeViewMode('picture');
             } else if (selectedItems.target === 'sprite') {
-                selectedItems.data.forEach(function(item) {
-                    var object = {
-                        id: Entry.generateHash(),
-                        objectType: 'sprite',
-                        sprite: item // 스프라이트 정보
-                    };
-                    object = Entry.container.addObject(object, 0);
+                console.log(selectedItems.data);
+
+                selectedItems.data.forEach(function(items) {
+                    const {pictures = []} = items;
+                    const images = pictures.map((item)=> {
+                        const fileurl = item.filename;
+                        const url = path.resolve(__rendererPath, 'uploads', fileurl.substr(0, 2), fileurl.substr(2, 2), 'image', `${fileurl}.png`);
+
+                        return {
+                            url,
+                            filename: item.name,
+                        };
+                    });
+
+                    const spritePromise = new Promise((resolve, reject)=> {
+                        try{
+                            Entry.plugin.uploadTempImageFileByObject(images, resolve);
+                        } catch(e) {
+                            reject(e);
+                        }
+                    });
+                    
+                    spritePromise.then((pictures)=> {
+                        items.pictures = pictures;
+                        var object = {
+                            id: Entry.generateHash(),
+                            objectType: 'sprite',
+                            sprite: items // 스프라이트 정보
+                        };
+                        Entry.container.addObject(object, 0);
+                    }).catch((err)=> {
+                        console.error(err);
+                    })
+                    
                 });
             } else if (selectedItems.target === 'upload') {
                 selectedItems.data.forEach(function(item, index, array) {
@@ -812,11 +872,28 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                 });
             }
 
-            selectedItems.data.forEach(function(item) {
-                item.id = Entry.generateHash();
-                Entry.playground.addPicture(item, true);
-            });
+            if(selectedItems.data.length && !selectedItems.data[0].fileurl) {
+                const images = selectedItems.data.map((item)=> {
+                    const fileurl = item.filename;
+                    const url = path.resolve(__rendererPath, 'uploads', fileurl.substr(0, 2), fileurl.substr(2, 2), 'image', `${fileurl}.png`);
 
+                    return {
+                        url,
+                        filename: item.name,
+                    };
+                });
+
+                Entry.plugin.uploadTempImageFileByObject(images, (data)=> {
+                    data.forEach((item)=> {
+                        Entry.playground.addPicture(item, true);
+                    });
+                });
+            } else {
+                selectedItems.data.forEach(function(item) {
+                    item.id = Entry.generateHash();
+                    Entry.playground.addPicture(item, true);
+                });
+            }
         });
     };
 
@@ -842,11 +919,28 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
         });
 
         modalInstance.result.then(function(selectedItems) {
-            selectedItems.data.forEach(function(item) {
-                item.id = Entry.generateHash();
-                console.log("item duration ws: " + JSON.stringify(item.duration));
-                Entry.playground.addSound(item, true);
-            });
+
+            console.log(selectedItems);
+
+            if(selectedItems.data.length) {
+                const sounds = selectedItems.data.map((item)=> {
+                    const fileurl = item.filename;
+                    const url = path.resolve(__rendererPath, 'uploads', fileurl.substr(0, 2), fileurl.substr(2, 2), `${fileurl}.mp3`);
+
+                    return {
+                        url,
+                        filename: item.name,
+                    };
+                });
+
+
+                Entry.plugin.uploadTempSoundFileByObject(sounds, (data)=> {
+                    data.forEach((item)=> {
+                        console.log("item duration ws: " + JSON.stringify(item.duration));
+                        Entry.playground.addSound(item, true);
+                    });
+                });
+            }
         });
     };
 

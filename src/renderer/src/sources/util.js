@@ -1,3 +1,10 @@
+import path from 'path';
+const tempDirPath = `${path.sep}temp${path.sep}`;
+const imageDirName = `${path.sep}image${path.sep}`;
+const thumbDirName = `${path.sep}thumb${path.sep}`;
+const imageDirCnt = imageDirName.length;
+const thumbDirCnt = thumbDirName.length;
+
 class Util {
     static test() {
         console.log(fs);
@@ -10,6 +17,30 @@ class Util {
         }, (target) => {
             this.copyFile(source, target, callback);
         });
+    }
+
+    static clearTempDir(target = `${__rendererPath}${tempDirPath}`) {
+        const stats = fs.lstatSync(target);
+
+        if(stats.isDirectory()) {
+            let fileList = fs.readdirSync(target);
+
+            fileList.forEach((item)=> {
+                this.clearTempDir(path.join(target, item));
+            });
+
+            fileList = fs.readdirSync(target);
+            if(fileList.length === 0 && target !== `${__rendererPath}${tempDirPath}`) {
+                fse.removeSync(target);
+            }
+        }        
+    }
+
+    static removeFileByUrl(fileurl) {
+        const lastImageIndex = fileurl.lastIndexOf(imageDirName);
+        const thumbFileUrl = `${fileurl.substr(0, lastImageIndex)}${thumbDirName}${fileurl.substr(lastImageIndex+imageDirCnt)}`;
+        fse.removeSync(fileurl);
+        fse.removeSync(thumbFileUrl);
     }
 
     static copyFile(source, target, callback) {

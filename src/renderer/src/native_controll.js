@@ -767,57 +767,107 @@ Entry.plugin = (function () {
         });
     };
 
+    that.uploadTempImageFileByObject = function (images, cb) {
+        const images_cnt = images.length;
+        let run_cnt = 0;
+        const pictures = [];
+        images.forEach(function (image, index) {
+            const url = image.url;
+            const fileId = createFileId();
+            const dest = getUploadPath(fileId);
+            const extension = '.png';
+            const file_name = image.filename;
+            const imagePath = dest.imagePath + extension;
+            const fs_reader = fs.createReadStream(url);
+            const fs_writer = fs.createWriteStream(imagePath);
+
+            that.mkdir(dest.uploadDir + '/image', function () {
+                let orgImage = new Image();
+                orgImage.src = url;
+                orgImage.onload = function () {
+                    let orgCanvas = document.createElement('canvas');
+                    orgCanvas.width = orgImage.width;
+                    orgCanvas.height = orgImage.height;
+                    const orgData = that.getResizeImageFromBase64(orgImage, orgCanvas, 960);
+                    fs_writer.write(orgData, 'base64');
+                    fs_writer.end(function () {
+                        orgCanvas = null;
+                        orgImage = null;
+
+                        const image = new Image();
+                        image.src = imagePath;
+                        image.onload = function () {
+                            let canvas = document.createElement('canvas');
+                            canvas.width = image.width;
+                            canvas.height = image.height;
+                            const ctx = canvas.getContext("2d");
+                            ctx.drawImage(this, 0, 0, canvas.width, canvas.height);
+                            const thumb = that.getResizeImageFromBase64(image, canvas, THUMB_SIZE);
+
+                            fs.writeFile(dest.thumbPath + extension, thumb, { encoding: 'base64' }, function (err) {
+                                if(err) {
+                                    throw err;
+                                }
+
+                                canvas = null;
+
+                                const dimensions = sizeOf(imagePath);
+                                const picture = {
+                                    _id : Entry.generateHash(),
+                                    type : 'user',
+                                    name : file_name,
+                                    filename : fileId,
+                                    fileurl : encodeURI(imagePath),
+                                    extension : extension,
+                                    dimension : dimensions
+                                }
+
+                                pictures.push(picture);
+
+                                if($.isFunction(cb) && ++run_cnt === images_cnt) {
+                                    cb(pictures);
+                                }
+                            });
+                        };
+                    });
+                };
+            });
+        });
+    };
+
     //사운드 파일 로컬 업로드
     that.uploadTempSoundFile = function (files, cb) {
-        var sounds_cnt = files.length;
-        var run_cnt = 0;
-        var soundList = [];
-        // console.log("file list : " + JSON.stringify(files));
-        for(var i = 0; i < files.length; i++) {
-            (function (i) {
-                var data = files[i];
-                var src = data.path;
-                var fileId = createFileId();
-                var dest = getUploadPath(fileId, 'sound');
-                var name = data.name.normalize("NFC");
+        const sounds_cnt = files.length;
+        const soundList = [];
+        let run_cnt = 0;
 
-                // console.log("name : " + name);
-                var fileName = fileId;
-                var extension = name.split('.')[1];
-                var dirPath = dest.soundPath;
-                var soundPath = dirPath + path.sep + fileName + "." + extension;
+        for(let i = 0; i < files.length; i++) {
+            ((i)=> {
+                const data = files[i];
+                const src = data.path;
+                const fileId = createFileId();
+                const dest = getUploadPath(fileId, 'sound');
+                const name = data.name.normalize("NFC");
+                const fileName = fileId;
+                const extension = name.split('.')[1];
+                const dirPath = dest.soundPath;
+                const soundPath = path.resovle(dirPath, `${fileName}.${extension}`);
 
-                // console.log("dest sound path : " + dest.soundPath);
-                //var fs_reader = fs.createReadStream(url);
-                //var fs_writer = fs.createWriteStream(soundPath);
-
-                that.mkdir(dest.uploadDir + '/sound', function () {
-                    // console.log("create!! dir ");
+                that.mkdir(path.resolve(dest.uploadDir, 'sound'), function () {
                     fs.readFile(src, function (err, stream) {
                         if(err) {
                             throw err;
                         }
-                        // console.log("readFile!! sound ");
+
                         fs.writeFile(soundPath, stream, {encoding:'utf8', mode: '0777'}, function (err) {
                             if(err) {
                                 throw err;
                             }
-                            // console.log("writeFile!! sound ");
 
-                            var audioStream = fs.createReadStream(soundPath);
-
-                            var audioHex = '';
-                            audioStream.on('data', function(buffer) {
-                                audioHex += buffer.toString('hex');
-                            });
-                            audioStream.on('end', function() {
-                                var duration = 0;
-                                if(extension === 'mp3') {
-                                    duration = calcDurationForMp3(audioHex);
-                                } else {
-                                    duration = calcDurationForWav(audioHex);
-                                }
-
+                            const audio = new Audio();
+                            audio.src = soundPath;
+                            audio.oncanplay = function () {
+                                var duration = audio.duration;
                                 var sound = {
                                     _id : Entry.generateHash(),
                                     type : 'user',
@@ -834,7 +884,63 @@ Entry.plugin = (function () {
                                 if($.isFunction(cb) && ++run_cnt === sounds_cnt) {
                                     cb(soundList);
                                 }
-                            });
+                            }
+                        });
+                    });
+                });
+            })(i);
+        }
+    }
+
+    that.uploadTempSoundFileByObject = function (files, cb) {
+        const sounds_cnt = files.length;
+        const soundList = [];
+        let run_cnt = 0;
+
+        for(let i = 0; i < files.length; i++) {
+            ((i)=> {
+                const data = files[i];
+                const src = data.url;
+                const fileId = createFileId();
+                const dest = getUploadPath(fileId, 'sound');
+                const name = data.filename.normalize("NFC");
+                const fileName = fileId;
+                const extension = name.split('.')[1];
+                const dirPath = dest.soundPath;
+                const soundPath = path.resolve(dirPath, `${fileName}.mp3`);
+
+                that.mkdir(path.resolve(dest.uploadDir, 'sound'), function () {
+                    fs.readFile(src, function (err, stream) {
+                        if(err) {
+                            throw err;
+                        }
+
+                        fs.writeFile(soundPath, stream, {encoding:'utf8', mode: '0777'}, function (err) {
+                            if(err) {
+                                throw err;
+                            }
+
+                            const audio = new Audio();
+                            audio.src = soundPath;
+                            audio.oncanplay = function () {
+                                var duration = audio.duration;
+                                var sound = {
+                                    _id : Entry.generateHash(),
+                                    type : 'user',
+                                    name : name.split('.')[0],
+                                    filename : fileName,
+                                    ext : extension,
+                                    path : soundPath,
+                                    fileurl : soundPath,
+                                    duration : Math.floor(duration * 10) / 10
+                                }
+
+                                soundList.push(sound);
+
+                                if($.isFunction(cb) && ++run_cnt === sounds_cnt) {
+                                    cb(soundList);
+                                }
+                            }
                         });
                     });
                 });
@@ -846,7 +952,6 @@ Entry.plugin = (function () {
         var cache = {};
         fs.realpath(path, function (err, resolvedPath) {
             if (err) throw err;
-            // console.log(resolvedPath);
             if($.isFunction(cb)) {
                 cb(resolvedPath);
             }
