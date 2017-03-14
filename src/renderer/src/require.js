@@ -30,6 +30,3 @@ const filbert = parser;
 
 import util from './src/sources/Util';
 const Util = util;
-
-import _async from 'async';
-const async = _async;

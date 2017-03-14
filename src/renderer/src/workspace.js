@@ -383,11 +383,12 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
     function removeObject(sprite) {
         const tempDirPath = `${path.sep}temp${path.sep}`;
         const { pictures = [] } = sprite;
-        console.log(sprite);
+        let { fileurl = '' } = sprite;
+        fileurl = decodeURI(fileurl);
 
         pictures.forEach((picture)=> {
-            if(picture.fileurl && path.isAbsolute(picture.fileurl) && picture.fileurl.indexOf(tempDirPath) > 1) {
-                Util.removeFileByUrl(picture.fileurl);
+            if(fileurl && path.isAbsolute(fileurl) && fileurl.indexOf(tempDirPath) > 1) {
+                Util.removeFileByUrl(fileurl);
                 Util.clearTempDir();
             }
         });
@@ -395,16 +396,22 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
 
     function removePicture(picture) {
         const tempDirPath = `${path.sep}temp${path.sep}`;
-        if(picture.fileurl && path.isAbsolute(picture.fileurl) && picture.fileurl.indexOf(tempDirPath) > 1) {
-            Util.removeFileByUrl(picture.fileurl);
+        let { fileurl = '' } = picture;
+        fileurl = decodeURI(fileurl);
+
+        if(fileurl && path.isAbsolute(fileurl) && fileurl.indexOf(tempDirPath) > 1) {
+            Util.removeFileByUrl(fileurl);
             Util.clearTempDir();
         }
     }
 
     function removeSound(sound) {
         const tempDirPath = `${path.sep}temp${path.sep}`;
-        if(sound.fileurl && path.isAbsolute(sound.fileurl) && sound.fileurl.indexOf(tempDirPath) > 1) {
-            Util.removeFileByUrl(sound.fileurl);
+        let { fileurl = '' } = sound;
+        fileurl = decodeURI(fileurl);
+        
+        if(fileurl && path.isAbsolute(fileurl) && fileurl.indexOf(tempDirPath) > 1) {
+            Util.removeFileByUrl(fileurl);
             Util.clearTempDir();
         }
     }
