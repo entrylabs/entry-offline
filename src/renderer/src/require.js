@@ -28,5 +28,5 @@ const __rendererPath = path.resolve(__dirname);
 import parser from './src/textmode/python/parser/filbert.js';
 const filbert = parser;
 
-import util from './src/sources/Util';
+import util from './src/sources/util';
 const Util = util;
