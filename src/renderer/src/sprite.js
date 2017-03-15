@@ -146,11 +146,10 @@ angular.module('common').controller('SpriteController',
             var spriteData = sessionStorage.getItem("spriteData");
             spriteData = spriteData ? JSON.parse(spriteData) : {};
             if($.isEmptyObject(spriteData)) {
-                $http.get('./resource_map/sprites.json').success(function(response) {
-                    sortPictureData(response);
-                    makePictureData(response);
-                    setSystemSprites(type, main, sub);
-                });
+                const response = require('./resource_map/sprites.json');
+                sortPictureData(response);
+                makePictureData(response);
+                setSystemSprites(type, main, sub);
             } else {
                 $scope.spriteData = spriteData;
                 setSystemSprites(type, main, sub);

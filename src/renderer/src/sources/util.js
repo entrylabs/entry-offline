@@ -19,7 +19,7 @@ class Util {
         });
     }
 
-    static clearTempDir(target = `${__rendererPath}${tempDirPath}`) {
+    static clearTempDir(target = `${_real_temp_path}${tempDirPath}`) {
         const stats = fs.lstatSync(target);
 
         if(stats.isDirectory()) {
@@ -30,7 +30,7 @@ class Util {
             });
 
             fileList = fs.readdirSync(target);
-            if(fileList.length === 0 && target !== `${__rendererPath}${tempDirPath}`) {
+            if(fileList.length === 0 && target !== `${_real_temp_path}${tempDirPath}`) {
                 fse.removeSync(target);
             }
         }        
@@ -43,9 +43,9 @@ class Util {
         fse.removeSync(thumbFileUrl);
     }
 
-    static copyFile(source, target, callback) {
+    static copyFile(_source, target, callback) {
         let cbCalled = false;
-
+        const source = decodeURI(_source);
         let sourcePath = source;
 
         if(!path.isAbsolute(source)) {

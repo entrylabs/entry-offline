@@ -15,7 +15,7 @@ const app = remote.app;
 const Menu = remote.Menu;
 const BrowserWindow = remote.BrowserWindow;
 const mainWindow = electron.browser - window;
-const packageJson = require(path.join(process.cwd(), 'package.json'));
+const packageJson = require(path.join(path.resolve(__dirname, '..', '..'), 'package.json'));
 const originalFs = require('original-fs');
 window.$ = window.jQuery = require('./bower_components/jquery/dist/jquery.min.js');
 const entry = require('./bower_components/entryjs/src/workspace/block_entry.js');

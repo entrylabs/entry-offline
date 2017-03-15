@@ -9,7 +9,8 @@ var isAsar = false;
 
 if(_real_path.indexOf('.asar') > -1) {
     isAsar = true;
-    _real_temp_path = path.resolve(_real_path, '..');
+    let asarIndex = _real_path.indexOf(`${path.sep}app.asar`);
+    _real_temp_path = _real_path.substr(0, asarIndex);
 }
 
 if (process.platform != 'darwin') {
