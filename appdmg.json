@@ -1,0 +1,27 @@
+{ 
+  "title": "Entry",
+  "contents":[ 
+    { 
+      "x": 240, 
+      "y": 380,
+      "type": "link", 
+      "path": "/Applications" 
+    },
+    { 
+      "x": 240,
+      "y": 120,
+      "type": "file",
+      "path": "./out/Entry-darwin-x64/Entry.app"
+    },
+    {
+      "x": 380,
+      "y": 250,
+      "type": "file",
+      "path": "./src/README.md"
+    }
+  ],
+  "icon": "/Users/Naver/entry-offline/build/icon.icns",
+  "background": "./build/background.png",
+  "icon-size": 80,
+  "format": "UDZO"
+}

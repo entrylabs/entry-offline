@@ -607,24 +607,12 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                         if (picture.fileurl) {
                             picture.fileurl = picture.fileurl.replace(/\\/gi, '%5C');
                             picture.fileurl = picture.fileurl.replace(/%5C/gi, '/');
-                            if (picture.fileurl && picture.fileurl.indexOf('bower_components') === -1) {
-                                picture.fileurl = picture.fileurl.substr(picture.fileurl.lastIndexOf('temp'));
-                                if(isAsar) {
-                                    picture.fileurl = ['..', picture.fileurl].join('/');
-                                }
-                            }
                         }
                     });
                     sprite.sounds.forEach(function(sound) {
                         if (sound.fileurl) {
                             sound.fileurl = sound.fileurl.replace(/\\/gi, '%5C');
                             sound.fileurl = sound.fileurl.replace(/%5C/gi, '/');
-                            if (sound.fileurl && sound.fileurl.indexOf('bower_components') === -1) {
-                                sound.fileurl = sound.fileurl.substr(sound.fileurl.lastIndexOf('temp'));
-                                if(isAsar) {
-                                    sound.fileurl = ['..', sound.fileurl].join('/');
-                                }
-                            }
                         }
                     });
                 });
