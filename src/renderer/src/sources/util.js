@@ -1,4 +1,5 @@
 import path from 'path';
+import mime from 'mime-types';
 const tempDirPath = `${path.sep}temp${path.sep}`;
 const imageDirName = `${path.sep}image${path.sep}`;
 const thumbDirName = `${path.sep}thumb${path.sep}`;
@@ -8,6 +9,27 @@ const thumbDirCnt = thumbDirName.length;
 class Util {
     static test() {
         console.log(fs);
+    }
+
+    static getMimeType(path) {
+        return mime.lookup(path);
+    }
+
+    static getMediaDataURI(path) {
+        return new Promise((resolve, reject)=> {
+            if(fs.existsSync(path)) {
+                fs.readFile(path, (err, file)=> {
+                    if(err) {
+                        reject(err);
+                    }
+                    const mimeType = this.getMimeType(path);
+                    const dataURI = `data:${mimeType};base64,${new Buffer(file).toString('base64')}`;
+                    resolve(dataURI);                    
+                });
+            } else {
+                reject('해당 경로에 파일이 없습니다.');
+            }
+        });
     }
 
     static saveFileDialog(source, name, callback) {

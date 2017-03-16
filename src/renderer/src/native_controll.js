@@ -715,7 +715,11 @@ Entry.plugin = (function () {
 
             that.mkdir(dest.uploadDir + '/image', function () {
                 var orgImage = new Image();
-                orgImage.src = url;
+                Util.getMediaDataURI(url).then((imageData)=> {
+                    orgImage.src = imageData;
+                }).catch((err)=> {
+                    throw err;
+                });
                 orgImage.onload = function () {
                     var orgCanvas = document.createElement('canvas');
                     orgCanvas.width = orgImage.width;
@@ -727,7 +731,11 @@ Entry.plugin = (function () {
                         orgImage = null;
 
                         var image = new Image();
-                        image.src = imagePath;
+                        Util.getMediaDataURI(imagePath).then((imageData)=> {
+                            image.src = url;
+                        }).catch((imageData)=> {
+                            throw err;
+                        });
                         image.onload = function () {
                             var canvas = document.createElement('canvas');
                             canvas.width = image.width;
@@ -784,7 +792,11 @@ Entry.plugin = (function () {
 
             that.mkdir(dest.uploadDir + '/image', function () {
                 let orgImage = new Image();
-                orgImage.src = url;
+                Util.getMediaDataURI(url).then((imageData)=> {
+                    orgImage.src = imageData;
+                }).catch((err)=> {
+                    throw err;
+                });
                 orgImage.onload = function () {
                     let orgCanvas = document.createElement('canvas');
                     orgCanvas.width = orgImage.width;
@@ -796,7 +808,11 @@ Entry.plugin = (function () {
                         orgImage = null;
 
                         const image = new Image();
-                        image.src = imagePath;
+                        Util.getMediaDataURI(imagePath).then((imageData)=> {
+                            image.src = url;
+                        }).catch((imageData)=> {
+                            throw err;
+                        });
                         image.onload = function () {
                             let canvas = document.createElement('canvas');
                             canvas.width = image.width;
@@ -864,9 +880,14 @@ Entry.plugin = (function () {
                             if(err) {
                                 throw err;
                             }
-
+                            
                             const audio = new Audio();
-                            audio.src = soundPath;
+                            Util.getMediaDataURI(soundPath).then((soundData)=> {
+                                audio.src = soundData;
+                            }).catch((err)=> {
+                                throw err;
+                            });
+
                             audio.oncanplay = function () {
                                 var duration = audio.duration;
                                 var sound = {
@@ -877,7 +898,7 @@ Entry.plugin = (function () {
                                     ext : extension,
                                     path : soundPath,
                                     fileurl : soundPath,
-                                    duration : Math.ceil(duration * 10) / 10
+                                    duration : Math.floor(duration * 10) / 10
                                 }
 
                                 soundList.push(sound);
@@ -922,7 +943,12 @@ Entry.plugin = (function () {
                             }
 
                             const audio = new Audio();
-                            audio.src = soundPath;
+                            Util.getMediaDataURI(soundPath).then((soundData)=> {
+                                audio.src = soundData;
+                            }).catch((err)=> {
+                                throw err;
+                            });
+
                             audio.oncanplay = function () {
                                 var duration = audio.duration;
                                 var sound = {

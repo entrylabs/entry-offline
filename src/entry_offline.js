@@ -6,6 +6,13 @@ const path = require('path');
 const fs = require('fs');
 const packageJson = require('../package.json');
 const ChildProcess = require('child_process');    
+import { addBypassChecker } from 'electron-compile';
+
+const bypassList = ['.png', '.jpg', '.mp3', '.wav', '.gif'];
+addBypassChecker((filePath) => {
+    const { ext = ''} = path.parse(filePath);
+    return filePath.indexOf(app.getAppPath()) === -1 && bypassList.indexOf(ext) > -1;
+});
 
 global.sharedObject = {
     roomId: ''
