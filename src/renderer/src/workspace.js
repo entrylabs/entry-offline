@@ -603,12 +603,22 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                         if (picture.fileurl) {
                             picture.fileurl = picture.fileurl.replace(/\\/gi, '%5C');
                             picture.fileurl = picture.fileurl.replace(/%5C/gi, '/');
+                            const tempIndex = picture.fileurl.lastIndexOf('temp') - 1;
+
+                            if(path.isAbsolute(picture.fileurl) && tempIndex > -1) {
+                                picture.fileurl = _real_temp_path + picture.fileurl.substr(tempIndex);
+                            }
                         }
                     });
                     sprite.sounds.forEach(function(sound) {
                         if (sound.fileurl) {
                             sound.fileurl = sound.fileurl.replace(/\\/gi, '%5C');
                             sound.fileurl = sound.fileurl.replace(/%5C/gi, '/');
+                            const tempIndex = sound.fileurl.lastIndexOf('temp') - 1;
+
+                            if(path.isAbsolute(sound.fileurl) && tempIndex > -1) {
+                                sound.fileurl = _real_temp_path + sound.fileurl.substr(tempIndex);
+                            }
                         }
                     });
                 });

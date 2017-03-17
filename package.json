@@ -58,7 +58,7 @@
       },
       "electronPackagerConfig": {
         "icon": "build/icon",
-        "asar": true,
+        "asar": false,
         "win32metadata": {
           "CompanyName": "EntryLabs",
           "FileDescription": "Entry Offline Version",
@@ -90,6 +90,9 @@
             "path": "/Users/Naver/entry-offline/src/README.md"
           }
         ],
+        "osxSign": {
+          "identity": "Entry Education Laboratory INC."
+        },
         "icon": "./build/icon.icns",
         "background": "./build/background.png",
         "icon-size": 80
