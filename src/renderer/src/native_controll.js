@@ -305,51 +305,12 @@ Entry.plugin = (function () {
         }
     }
 
-    var aboutPopup = null;
     that.openAboutPage = function () {
-        if(aboutPopup) {
-            return;
-        }
-        aboutPopup = new BrowserWindow({
-            width: 300,
-            height: 200,
-            resizable: false,
-            movable: false,
-            center: true,
-            frame: false,
-            alwaysOnTop: true
-        });
-
-        aboutPopup.loadURL('file:///' + path.join(_real_path, 'views', 'about.html'));
-        aboutPopup.on('closed', function() {
-            aboutPopup = null;
-        });
-        aboutPopup.show();
+        ipcRenderer.send('openAboutWindow');
     }
 
     that.closeAboutPage = function() {
-        if(aboutPopup) {
-            aboutPopup.close();
-            aboutPopup = null;
-        }
-    }
-
-    var hwGuidePopup = null;
-    that.openHwGuidePopup = function () {
-        if(hwGuidePopup) {
-            return;
-        }
-        hwGuidePopup = new BrowserWindow({
-            width: 1200,
-            height: 800
-        });
-        hwGuidePopup.setMenu(null);
-        hwGuidePopup.loadURL('file:///' + path.resolve(_real_path, 'hardware', 'guide', 'hwguide.html'));
-        hwGuidePopup.on('closed', function(e) {
-            try{
-                hwGuidePopup = null;
-            } catch(e){}
-        });
+        ipcRenderer.send('closeAboutWindow');
     }
 
     that.getHardwareManual = function(callback) {
@@ -361,12 +322,35 @@ Entry.plugin = (function () {
         }, function (filePath) {    
             if(filePath) {
                 var fs = require("fs");
-                fs.readFile(path.resolve(_real_path, 'hardware', 'guide', '엔트리 하드웨어 연결 매뉴얼(오프라인용).pdf'), function (err, stream) {
+                fs.readFile(path.resolve(_real_path, 'static', 'guide', '엔트리 하드웨어 연결 매뉴얼(오프라인용).pdf'), function (err, stream) {
                     fs.writeFile(filePath, stream, 'utf8', function (err) {
                         if (err)
                             alert("Unable to save file");
                         else
                             console.log("File Saved");
+
+                        if(callback) {
+                            callback();
+                        }
+                    });
+                });
+            }
+        });
+    }
+
+    that.getPythonManual = function(callback) {
+        dialog.showSaveDialog({
+            defaultPath: 'Python.Guide.zip',
+            filters: [
+                { name: '*.zip', extensions: ['zip'] }
+            ]
+        }, function (filePath) {    
+            if(filePath) {
+                var fs = require("fs");
+                fs.readFile(path.resolve(_real_path, 'static', 'guide', 'Python.Guide.zip'), function (err, stream) {
+                    fs.writeFile(filePath, stream, 'utf8', function (err) {
+                        if (err)
+                            alert("Unable to save file");
 
                         if(callback) {
                             callback();
@@ -395,7 +379,7 @@ Entry.plugin = (function () {
         // NanumBarunGothic 폰트 로딩 시간까지 기다린다.
         var font = new FontFace("nanumBarunRegular", "url(./fonts/NanumBarunGothic.woff2)");
         font.load();
-        font.loaded.then(function() {
+        font.loaded.then(()=> {
             var zoom_level = localStorage.getItem("window_zoomlevel") || 0;
             that.setZoomLevel(zoom_level);
             var isNotFirst = sessionStorage.getItem('isNotFirst') == "true";

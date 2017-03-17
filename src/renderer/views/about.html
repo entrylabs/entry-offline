@@ -8,7 +8,7 @@
 	<div class="container">
 		<div class="container_inner">
 			<div>
-				<img src="../icon/app.png" />
+				<img src="../../icon/app.png" />
 			</div>
 			<div>
 				<h3>엔트리</h3>
@@ -26,23 +26,21 @@
 	<link rel='stylesheet'  href='../css/about.css' />
 	<script>
 		window.$ = window.jQuery = require('../bower_components/jquery/dist/jquery.js');
-		const pjson = require('../package.json');
-		const electron = require('electron');
-		const shell    = electron.shell;
+		import { shell, remote } from 'electron';
+		const { app } = remote;
+		const aboutWindow = remote.getCurrentWindow();
+
 		$(function () {
 			$('body').on('click', function () {
-				window.close();	
+				aboutWindow.hide();	
 			});
 
 			$('#playEntryBtn').on('click', function (e) {
 				e.preventDefault();
 				shell.openExternal('https://playentry.org');
 			});
-            // var gui = require('nw.gui');
-            $("#version").text(pjson.version);
-			//$(document).on('click', function () {
-			//	window.close();
-			//});
+
+            $("#version").text(app.getVersion());
 		});
 	</script>
 </body>

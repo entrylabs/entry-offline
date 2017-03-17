@@ -21,10 +21,6 @@ angular.module('workspace').controller('HeaderController', ['$scope', '$rootScop
         var applied = false;
 
         $scope.init = function() {
-            if (hwGuidePopup) {
-                hwGuidePopup.close();
-                hwGuidePopup = null;
-            }
         };
 
         $rootScope.$on('loadProject', function(event, data) {
@@ -72,11 +68,12 @@ angular.module('workspace').controller('HeaderController', ['$scope', '$rootScop
             Entry.helper.blockHelperOn();
         };
 
-        var hwGuidePopup = null;
-        $scope.startHWGuide = function(url, title, options) {
-            Entry.plugin.getHardwareManual(function() {
-                $("#saveArduinoCode").val('');
-            });
+        $scope.getHardwareManual = function() {
+            Entry.plugin.getHardwareManual();
+        }
+
+        $scope.getPythonManual = function() {
+            Entry.plugin.getPythonManual();
         }
 
         $scope.showPopup = function(target) {

@@ -249,7 +249,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
             }, function(filePath) {
                 if (filePath) {
                     var fs = require("fs");
-                    fs.readFile(path.resolve(__dirname, 'hardware', 'source', 'board.ino'), function(err, stream) {
+                    fs.readFile(path.resolve(__dirname, 'static', 'source', 'board.ino'), function(err, stream) {
                         fs.writeFile(filePath, stream, 'utf8', function(err) {
                             if (err) {
                                 alert("Unable to save file");

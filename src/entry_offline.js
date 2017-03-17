@@ -4,8 +4,8 @@ const electron = require('electron');
 const {app, BrowserWindow, Menu, globalShortcut, ipcMain, webContents} = electron;
 const path = require('path');
 const fs = require('fs');
-const packageJson = require('../package.json');
 const ChildProcess = require('child_process');    
+import ChildWindowManager from './main/ChildWindowManager';
 import { addBypassChecker } from 'electron-compile';
 
 const bypassList = ['.png', '.jpg', '.mp3', '.wav', '.gif'];
@@ -64,8 +64,7 @@ for (var i = 0; i < argv.length; i++) {
 }
 
 var mainWindow = null;
-var hardwareWindow = null;
-var hardwareWindowReLaunch = false;
+let cwm;
 var isClose = true;
 
 app.on('window-all-closed', function() {
@@ -102,7 +101,7 @@ if (shouldQuit) {
 
     app.once('ready', function() {
         language = app.getLocale();
-        var title = packageJson.version;
+        var title = app.getVersion();
         
         if(language === 'ko') {
             title = '엔트리 v' + title;
@@ -114,10 +113,16 @@ if (shouldQuit) {
             width: 1024, 
             height: 700,
             title: title,
+            show: false,
+            backgroundColor: '#5096f5',
             webPreferences: {
                 backgroundThrottling: false
             }
         });
+
+        mainWindow.once('ready-to-show', () => {
+            mainWindow.show()
+        })
 
         mainWindow.setMenu(null);
         mainWindow.loadURL('file:///' + path.join(__dirname, 'renderer', 'entry_offline.html'));
@@ -130,16 +135,13 @@ if (shouldQuit) {
             mainWindow.webContents.startFile = option.file;
         }
 
-        mainWindow.webContents.hpopup = hardwareWindow;
         mainWindow.webContents.name = 'entry';
 
         mainWindow.on('page-title-updated', function(e) {
             e.preventDefault();
         });
         mainWindow.on('close', function(e) {
-            if(hardwareWindow) {
-                hardwareWindow.close(true);
-            }
+            cwm.closeHardwareWindow();
             mainWindow.webContents.send('main-close');
         });
         mainWindow.on('closed', function() {
@@ -157,13 +159,15 @@ if (shouldQuit) {
         globalShortcut.register(inspectorShortcut, (e) => {
             webContents.getFocusedWebContents().openDevTools(); 
         });
+
+        cwm = new ChildWindowManager(mainWindow);
+        cwm.createAboutWindow();
     });
 
 
     ipcMain.on('reload', function(event, arg) {
         if(event.sender.webContents.name !== 'entry') {
-            hardwareWindowReLaunch = true;
-            hardwareWindow.close();
+            cwm.reloadHardwareWindow();
         }
 
         if(event.sender.webContents) {
@@ -186,48 +190,14 @@ if (shouldQuit) {
     });
 
     ipcMain.on('openHardware', function(event, arg) {
-        launchHardware();
+        cwm.openHardwareWindow();
     });
 
-    function launchHardware () {
-        if(hardwareWindow == null) {
-            var title;
-            if(language === 'ko') {
-                title = '엔트리 하드웨어';
-            } else {
-                title = 'Entry HardWare'
-            }
+    ipcMain.on('openAboutWindow', function(event, arg) {
+        cwm.openAboutWindow();
+    });
 
-            hardwareWindow = new BrowserWindow({
-                width: 800, 
-                height: 650,
-                title: title,
-                webPreferences: {
-                    backgroundThrottling: false
-                }
-            });
-
-            hardwareWindow.setMenu(null);
-            hardwareWindow.setMenuBarVisibility(false);
-            hardwareWindow.loadURL('file:///' + path.join(__dirname, 'renderer', 'bower_components', 'entry-hw', 'app', 'index.html'));
-            hardwareWindow.on('closed', function() {
-                hardwareWindow = null;
-                if(hardwareWindowReLaunch) {
-                    hardwareWindowReLaunch = false;
-                    launchHardware();
-                }
-            });
-
-            if(option.debug) {
-                hardwareWindow.webContents.openDevTools();
-            }
-
-            hardwareWindow.webContents.name = 'hardware';
-            hardwareWindow.show();
-        } else {
-            if (hardwareWindow.isMinimized()) 
-                hardwareWindow.restore();
-            hardwareWindow.focus();
-        }
-    }
+    ipcMain.on('closeAboutWindow', function(event, arg) {
+        cwm.closeAboutWindow();
+    });
 }
