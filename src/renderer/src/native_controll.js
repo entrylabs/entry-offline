@@ -3,15 +3,9 @@ var isOsx = false;
 var nowLocale = app.getLocale();
 var options = {};
 var _real_path = __dirname;
-var _real_temp_path = _real_path;
+var _real_temp_path = app.getPath('userData');
 var _real_path_with_protocol = '';
 var isAsar = false;
-
-if(_real_path.indexOf('.asar') > -1) {
-    isAsar = true;
-    let asarIndex = _real_path.indexOf(`${path.sep}app.asar`);
-    _real_temp_path = _real_path.substr(0, asarIndex);
-}
 
 if (process.platform != 'darwin') {
     isOsx = false;
@@ -201,7 +195,6 @@ Entry.plugin = (function () {
         if(isSkip) {
             Entry.stateManager.addStamp();
             Entry.plugin.closeAboutPage();
-            Entry.plugin.closeHwGuidePage();
             localStorage.removeItem('tempProject');
         }
 
@@ -359,13 +352,6 @@ Entry.plugin = (function () {
                 });
             }
         });
-    }
-
-    that.closeHwGuidePage = function() {
-        if(hwGuidePopup) {
-            hwGuidePopup.close();
-            hwGuidePopup = null;
-        }
     }
 
     that.isOsx = function () {
