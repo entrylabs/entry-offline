@@ -114,7 +114,7 @@ if (shouldQuit) {
             height: 700,
             title: title,
             show: false,
-            backgroundColor: '#5096f5',
+            backgroundColor: '#e5e5e5',
             webPreferences: {
                 backgroundThrottling: false
             }
