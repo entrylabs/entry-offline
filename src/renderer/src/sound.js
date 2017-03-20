@@ -97,7 +97,7 @@ angular.module('common').controller('SoundController',
         for (var i in categorizedData) {
             var sound = categorizedData[i];
           
-            var path = './uploads/' + sound.filename.substring(0,2)+'/'+sound.filename.substring(2,4)+'/'+sound.filename+sound.ext;
+            var path = './node_modules/uploads/' + sound.filename.substring(0,2)+'/'+sound.filename.substring(2,4)+'/'+sound.filename+sound.ext;
 
             Entry.soundQueue.loadFile({
                 id: sound._id,
@@ -136,7 +136,7 @@ angular.module('common').controller('SoundController',
             }
                         
             if(originalFileName.includes($scope.searchWord)) {
-                var path = './uploads/' + sound.filename.substring(0,2)+'/'+sound.filename.substring(2,4)+'/'+sound.filename+sound.ext;
+                var path = './node_modules/uploads/' + sound.filename.substring(0,2)+'/'+sound.filename.substring(2,4)+'/'+sound.filename+sound.ext;
         
                 Entry.soundQueue.loadFile({
                     id: sound._id,
@@ -270,8 +270,6 @@ angular.module('common').controller('SoundController',
     $scope.currentIndex = 0;
     // 선택
     $scope.selectSystem = function(sound) {
-        // var path = '/uploads/' + sound.filename.substring(0,2)+'/'+sound.filename.substring(2,4)+'/'+sound.filename+sound.ext;
-
         var selected = true;
         for (var i in $scope.selectedSystem) {
             var item = $scope.selectedSystem[i];

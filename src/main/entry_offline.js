@@ -5,7 +5,7 @@ const {app, BrowserWindow, Menu, globalShortcut, ipcMain, webContents} = electro
 const path = require('path');
 const fs = require('fs');
 const ChildProcess = require('child_process');    
-import ChildWindowManager from './main/ChildWindowManager';
+import ChildWindowManager from './ChildWindowManager';
 import { addBypassChecker, init } from 'electron-compile';
 
 // Assuming this file is ./src/es6-init.js
@@ -13,10 +13,10 @@ import { addBypassChecker, init } from 'electron-compile';
 // console.log(appRoot);
 // init(appRoot, require.resolve('./src'));
 
-const bypassList = ['.png', '.jpg', '.mp3', '.wav', '.gif'];
+const bypassList = ['.png', '.jpg', '.mp3', '.wav', '.gif', 'woff', 'woff2'];
 addBypassChecker((filePath) => {
     const { ext = ''} = path.parse(filePath);
-    return filePath.indexOf(app.getAppPath()) === -1 && bypassList.indexOf(ext) > -1;
+    return filePath.indexOf('uploads') > -1 || filePath.indexOf('bower_components') > -1 ||  bypassList.indexOf(ext) > -1;
 });
 
 global.sharedObject = {
@@ -26,7 +26,7 @@ global.sharedObject = {
 var language;
 
 function logger(text) {
-    var log_path = path.join(__dirname);
+    var log_path = path.join(__dirname, '..');
     if(!fs.existsSync(log_path)) {
         fs.mkdirSync(log_path);
     }
@@ -130,7 +130,7 @@ if (shouldQuit) {
         })
 
         mainWindow.setMenu(null);
-        mainWindow.loadURL('file:///' + path.join(__dirname, 'renderer', 'entry_offline.html'));
+        mainWindow.loadURL('file:///' + path.join(__dirname, '..', 'renderer', 'entry_offline.html'));
 
         if(option.debug) {
             mainWindow.webContents.openDevTools();

@@ -74,7 +74,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                     fileurl = picture.fileurl;
                 } else {
                     let url = picture.filename;
-                    fileurl = path.resolve(__rendererPath, 'uploads', url.substr(0, 2), url.substr(2, 2), 'image', `${url}.png`);
+                    fileurl = path.resolve(__rendererPath, 'node_modules', 'uploads', url.substr(0, 2), url.substr(2, 2), 'image', `${url}.png`);
                 }
 
                 const pictureInfo = path.parse(fileurl);
@@ -777,7 +777,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                     const {pictures = []} = items;
                     const images = pictures.map((item)=> {
                         const fileurl = item.filename;
-                        const url = path.resolve(__rendererPath, 'uploads', fileurl.substr(0, 2), fileurl.substr(2, 2), 'image', `${fileurl}.png`);
+                        const url = path.resolve(__rendererPath, 'node_modules', 'uploads', fileurl.substr(0, 2), fileurl.substr(2, 2), 'image', `${fileurl}.png`);
 
                         return {
                             url,
@@ -876,7 +876,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
             if(selectedItems.data.length && !selectedItems.data[0].fileurl) {
                 const images = selectedItems.data.map((item)=> {
                     const fileurl = item.filename;
-                    const url = path.resolve(__rendererPath, 'uploads', fileurl.substr(0, 2), fileurl.substr(2, 2), 'image', `${fileurl}.png`);
+                    const url = path.resolve(__rendererPath, 'node_modules', 'uploads', fileurl.substr(0, 2), fileurl.substr(2, 2), 'image', `${fileurl}.png`);
 
                     return {
                         url,
@@ -926,7 +926,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
             if(selectedItems.data.length) {
                 const sounds = selectedItems.data.map((item)=> {
                     const fileurl = item.filename;
-                    const url = path.resolve(__rendererPath, 'uploads', fileurl.substr(0, 2), fileurl.substr(2, 2), `${fileurl}.mp3`);
+                    const url = path.resolve(__rendererPath, 'node_modules', 'uploads', fileurl.substr(0, 2), fileurl.substr(2, 2), `${fileurl}.mp3`);
 
                     return {
                         url,

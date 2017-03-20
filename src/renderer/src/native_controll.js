@@ -363,7 +363,7 @@ Entry.plugin = (function () {
         delete Entry.block.arduino_open;
         
         // NanumBarunGothic 폰트 로딩 시간까지 기다린다.
-        var font = new FontFace("nanumBarunRegular", "url(./fonts/NanumBarunGothic.woff2)");
+        var font = new FontFace("nanumBarunRegular", "url(./node_modules/fonts/NanumBarunGothic.woff2)");
         font.load();
         font.loaded.then(()=> {
             var zoom_level = localStorage.getItem("window_zoomlevel") || 0;

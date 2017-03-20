@@ -28,7 +28,7 @@ common.filter('makeThumbnail', function() {
 
             } else {
                 var extension = picture.extension || '.png';
-                return ['uploads', picture.filename.substring(0,2), picture.filename.substring(2,4), 'thumb', picture.filename + extension].join('/');
+                return ['node_modules', 'uploads', picture.filename.substring(0,2), picture.filename.substring(2,4), 'thumb', picture.filename + extension].join('/');
             }
         }
         else
