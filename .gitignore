@@ -1,4 +1,5 @@
 node_modules/
+!src/renderer/node_modules/
 cache/
 app/temp/
 dist/
