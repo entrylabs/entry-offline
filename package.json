@@ -61,6 +61,7 @@
       "electronPackagerConfig": {
         "icon": "build/icon",
         "asar": false,
+        "extendInfo": "./build/build.plist",
         "win32metadata": {
           "CompanyName": "EntryLabs",
           "FileDescription": "Entry Offline Version",
@@ -83,13 +84,13 @@
             "x": 240,
             "y": 120,
             "type": "file",
-            "path": "/Users/Naver/entry-offline/out/Entry-darwin-x64/Entry.app"
+            "path": "/Users/usbsync/entry-offline/out/Entry-darwin-x64/Entry.app"
           },
           {
             "x": 380, 
             "y": 250,
             "type": "file",
-            "path": "/Users/Naver/entry-offline/src/README.md"
+            "path": "/Users/usbsync/entry-offline/src/README.md"
           }
         ],
         "osxSign": {
@@ -97,7 +98,6 @@
         },
         "icon": "./build/icon.icns",
         "background": "./build/background.png",
-        "extendInfo": "./build/build.plist",
         "icon-size": 80
       }
     }
