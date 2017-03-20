@@ -84,7 +84,7 @@
             "path": "/Users/Naver/entry-offline/out/Entry-darwin-x64/Entry.app"
           },
           {
-            "x": 380,
+            "x": 380, 
             "y": 250,
             "type": "file",
             "path": "/Users/Naver/entry-offline/src/README.md"
@@ -95,6 +95,7 @@
         },
         "icon": "./build/icon.icns",
         "background": "./build/background.png",
+        "extendInfo": "./build/build.plist",
         "icon-size": 80
       }
     }
