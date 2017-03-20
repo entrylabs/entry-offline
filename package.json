@@ -5,6 +5,7 @@
   "scripts": {
     "clean": "rimraf dist",
     "dist": "build",
+    "comp": "electron-compile ./src/renderer/src ./src/main ./src/entry-offline.js",
     "dist:win": "electron-forge package --arch ia32",
     "dist:win64": "electron-forge package --arch x64",
     "pack:win": "electron-packager ./app Entry --platform=win32 --arch=ia32 --icon=./build/icon.ico --asar=true --overwrite=true",
@@ -21,6 +22,7 @@
     "babel-preset-babili": "0.0.12",
     "babel-preset-env": "^1.2.1",
     "babel-preset-react": "^6.23.0",
+    "electron-compilers": "^5.5.1",
     "electron-prebuilt-compile": "1.4.15",
     "mocha": "^2.5.3",
     "rimraf": "^2.5.2",
