@@ -9,3 +9,4 @@ build/*.exe
 
 out/
 **/bower_components/
+.cache/
