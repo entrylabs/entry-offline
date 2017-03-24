@@ -60,7 +60,7 @@
       },
       "electronPackagerConfig": {
         "icon": "build/icon",
-        "asar": false,
+        "asar": true,
         "extendInfo": "./build/build.plist",
         "win32metadata": {
           "CompanyName": "EntryLabs",
