@@ -1,5 +1,17 @@
 (function(module) {
     const path = require('path');
+    var fs = require('fs-extra');
+    const filesToDelete = [
+        '.bowerrc',
+        '.compilerc',
+        '.gitignore',
+        '.travis.yml',
+        'appdmg.json',
+        'appveyor.yml',
+        'bower.json',
+        'forge.config.js',
+        'build'
+    ];
 
     module.exports = {
         'make_targets': {
@@ -20,7 +32,15 @@
                 'OriginalFilename': 'Entry.exe',
                 'ProductName': 'Entry',
                 'InternalName': 'Entry'
-            }
+            },
+            afterCopy: [
+                (buildPath, electronVersion, platform, arch, callback) => {
+                    filesToDelete.forEach((filePath) => {
+                    	fs.remove(path.join(buildPath, filePath))
+                    });
+                    callback();
+                }
+            ]
         },
         'electronInstallerDMG': {
             'name': 'Entry',
