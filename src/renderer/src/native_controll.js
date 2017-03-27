@@ -4,6 +4,8 @@ var nowLocale = app.getLocale();
 var options = {};
 var _real_path = __dirname;
 var _real_temp_path = app.getPath('userData');
+var _real_temp_path_posix = '';
+_real_temp_path_posix = _real_temp_path.replace(/\\/gi, '%5C').replace(/%5C/gi, '/');
 var _real_path_with_protocol = '';
 var isAsar = false;
 

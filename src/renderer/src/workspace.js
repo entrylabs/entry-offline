@@ -385,7 +385,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
         fileurl = decodeURI(fileurl);
 
         pictures.forEach((picture)=> {
-            if(fileurl && path.isAbsolute(fileurl) && fileurl.indexOf('temp') > 1) {
+            if(fileurl && fileurl.indexOf('temp') > 1) {
                 Util.removeFileByUrl(fileurl);
                 Util.clearTempDir();
             }
@@ -396,7 +396,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
         let { fileurl = '' } = picture;
         fileurl = decodeURI(fileurl);
 
-        if(fileurl && path.isAbsolute(fileurl) && fileurl.indexOf('temp') > 1) {
+        if(fileurl && fileurl.indexOf('temp') > 1) {
             Util.removeFileByUrl(fileurl);
             Util.clearTempDir();
         }
@@ -406,7 +406,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
         let { fileurl = '' } = sound;
         fileurl = decodeURI(fileurl);
         
-        if(fileurl && path.isAbsolute(fileurl) && fileurl.indexOf('temp') > 1) {
+        if(fileurl && fileurl.indexOf('temp') > 1) {
             Util.removeFileByUrl(fileurl);
             Util.clearTempDir();
         }
@@ -605,8 +605,8 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                             picture.fileurl = picture.fileurl.replace(/%5C/gi, '/');
                             const tempIndex = picture.fileurl.lastIndexOf('temp') - 1;
 
-                            if(path.isAbsolute(picture.fileurl) && tempIndex > -1) {
-                                picture.fileurl = _real_temp_path + picture.fileurl.substr(tempIndex);
+                            if(tempIndex > -1) {
+                                picture.fileurl = _real_temp_path_posix + picture.fileurl.substr(tempIndex);
                             }
                         }
                     });
@@ -616,8 +616,8 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                             sound.fileurl = sound.fileurl.replace(/%5C/gi, '/');
                             const tempIndex = sound.fileurl.lastIndexOf('temp') - 1;
 
-                            if(path.isAbsolute(sound.fileurl) && tempIndex > -1) {
-                                sound.fileurl = _real_temp_path + sound.fileurl.substr(tempIndex);
+                            if(tempIndex > -1) {
+                                sound.fileurl = _real_temp_path_posix + sound.fileurl.substr(tempIndex);
                             }
                         }
                     });
