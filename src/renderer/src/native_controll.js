@@ -411,8 +411,10 @@ Entry.plugin = (function () {
                                     if(picture.fileurl) {
                                         picture.fileurl = picture.fileurl.replace(/\\/gi, '%5C');
                                         picture.fileurl = picture.fileurl.replace(/%5C/gi, '/');
-                                        if(picture.fileurl && picture.fileurl.indexOf('bower_components') === -1) {
-                                            picture.fileurl = picture.fileurl.substr(picture.fileurl.lastIndexOf('temp'));
+                                        const tempIndex = picture.fileurl.lastIndexOf('temp') - 1;
+
+                                        if(tempIndex > -1) {
+                                            picture.fileurl = _real_temp_path_posix + picture.fileurl.substr(tempIndex);
                                         }
                                     }
                                 });
@@ -420,8 +422,10 @@ Entry.plugin = (function () {
                                     if(sound.fileurl) {
                                         sound.fileurl = sound.fileurl.replace(/\\/gi, '%5C');
                                         sound.fileurl = sound.fileurl.replace(/%5C/gi, '/');
-                                        if(sound.fileurl && sound.fileurl.indexOf('bower_components') === -1) {
-                                            sound.fileurl = sound.fileurl.substr(sound.fileurl.lastIndexOf('temp'));
+                                        const tempIndex = sound.fileurl.lastIndexOf('temp') - 1;
+
+                                        if(tempIndex > -1) {
+                                            sound.fileurl = _real_temp_path_posix + sound.fileurl.substr(tempIndex);
                                         }
                                     }
                                 });
