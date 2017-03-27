@@ -31,16 +31,6 @@ confirm = function (msg) {
     return orgConfirm(msg || '', Lang.Menus.Entry);
 }
 
-// console.log = function () {};
-console.fslog = function (text) {
-    // var data = fs.readFileSync(_real_path + '/debug.log', 'utf8');
-    // data += '\n\r' + new Date() + ' : ' + text;
-    // fs.writeFileSync(_real_path + '/debug.log', data, 'utf8');
-};
-console.debug = function () {};
-console.warn = function () {};
-console.error = function () {};
-
 // 16진수 little Endian 을 16진수 Big Endian으로 변환
 function getLittleToBigEndian(hex_string) {
     var big_endian = '';
