@@ -49,58 +49,7 @@
   "main": "src/entry_offline.js",
   "version": "1.5.0",
   "config": {
-    "forge": {
-      "make_targets": {
-        "win32": [
-          "zip"
-        ],
-        "darwin": [
-          "dmg"
-        ]
-      },
-      "electronPackagerConfig": {
-        "icon": "build/icon",
-        "asar": true,
-        "extendInfo": "./build/build.plist",
-        "win32metadata": {
-          "CompanyName": "EntryLabs",
-          "FileDescription": "Entry Offline Version",
-          "OriginalFilename": "Entry.exe",
-          "ProductName": "Entry",
-          "InternalName": "Entry"
-        }
-      },
-      "electronInstallerDMG": {
-        "name": "Entry",
-        "title": "Entry",
-        "contents": [
-          {
-            "x": 240,
-            "y": 380,
-            "type": "link",
-            "path": "/Applications"
-          },
-          {
-            "x": 240,
-            "y": 120,
-            "type": "file",
-            "path": "/Users/usbsync/entry-offline/out/Entry-darwin-x64/Entry.app"
-          },
-          {
-            "x": 380, 
-            "y": 250,
-            "type": "file",
-            "path": "/Users/usbsync/entry-offline/src/README.md"
-          }
-        ],
-        "osxSign": {
-          "identity": "Entry Education Laboratory INC."
-        },
-        "icon": "./build/icon.icns",
-        "background": "./build/background.png",
-        "icon-size": 80
-      }
-    }
+    "forge": "./forge.config.js"
   }
 }
 
