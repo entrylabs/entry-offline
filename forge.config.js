@@ -33,6 +33,9 @@
                 'ProductName': 'Entry',
                 'InternalName': 'Entry'
             },
+            'osxSign': {
+                'identity': 'Entry Education Laboratory INC.'
+            },
             afterCopy: [
                 (buildPath, electronVersion, platform, arch, callback) => {
                     filesToDelete.forEach((filePath) => {
@@ -61,9 +64,6 @@
                 'type': 'file',
                 'path': path.resolve(__dirname, 'src', 'README.md'),
             }],
-            'osxSign': {
-                'identity': 'Entry Education Laboratory INC.'
-            },
             'icon': './build/icon.icns',
             'background': './build/background.png',
             'icon-size': 80
