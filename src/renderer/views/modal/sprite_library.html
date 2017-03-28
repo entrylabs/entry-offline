@@ -151,7 +151,7 @@
         <div class="wrap wrap_sprite">
             <div class="box" data-ng-repeat="sprite in systemSprites">
                 <div id="{{sprite._id}}" class="{{sprite.selected}}" data-ng-click="selectSprite(sprite)" data-ng-dblclick="applySprite(sprite)">
-                    <div class="boxInner" style="background-image: url('{{sprite.pictures[0]|makeThumbnail}}');"></div>
+                    <div class="boxInner" style="background-size:contain;background-image: url('{{sprite.pictures[0]|makeThumbnail}}');"></div>
                     <img class="overlay" src="./images/check_inside_new.png"/>
                 </div>
                 <div class="titleBox">{{sprite.name | nameTranslate : 'sprite'}}</div>

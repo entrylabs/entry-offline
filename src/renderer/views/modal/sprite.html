@@ -28,14 +28,14 @@
                         <div class="box" data-ng-repeat="sprite in currentSelected()" ng-if="currentTab == 'sprite'">
                             <div id="{{sprite._id}}" class="{{sprite.selected}}  boxOuterChoosen">
                                 <img class="modal_choosen_cancel" src="./images/modal_choosen_cancel.png" ng-click='selectSprite(sprite)'/>
-                                <div class="boxInner" style="background-image: url('{{sprite.pictures[0]|makeThumbnail}}');" ng-if="currentTab == 'sprite'"></div>
+                                <div class="boxInner" style="background-size:contain;background-image: url('{{sprite.pictures[0]|makeThumbnail}}');" ng-if="currentTab == 'sprite'"></div>
                             </div>
                             <div class="titleBox titleBoxChoosen">{{sprite.name | nameTranslate : 'sprite'}}</div>
                         </div>
                         <div class="box" data-ng-repeat="picture in selectedPictures" ng-if="currentTab == 'upload'">
                             <div id="{{picture._id}}" class="boxOuter  boxOuterChoosen">
                                 <img class="modal_choosen_cancel" src="./images/modal_choosen_cancel.png" ng-click='selectPicture(picture)'/>
-                                <div class="boxInner" style="background-image: url('{{picture|makeThumbnail}}');"></div>
+                                <div class="boxInner" style="background-size:contain;background-image: url('{{picture|makeThumbnail}}');"></div>
                             </div>
                             <div class="titleBox titleBoxChoosen">{{picture.name}}</div>
                         </div>
