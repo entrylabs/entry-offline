@@ -80,13 +80,13 @@
         <div class="workspace_divider"></div>
     </div>
     <div class="workspace_button_group workspaceModeSelector">
-        <div class="btn-group" uib-dropdown>
-            <a class="btn dropdown-toggle" uib-dropdown-toggle>
+        <div class="btn-group" dropdown is-open="false">
+            <a class="btn dropdown-toggle" data-toggle="dropdown">
                 <img src="./images/top_icon_block.png" ng-show="myProject.programmingMode == 0"/>
                 <img src="./images/top_icon_python.png" ng-hide="myProject.programmingMode == 0"/>
                 <span class="drop"><b class="caret"></b></span>
             </a>
-            <ul class="dropdown-menu" uib-dropdown-menu>
+            <ul class="dropdown-menu" uib-dropdown-menu role="menu">
                 <li><a href ng-click="setMode(0)">{{::dict.WORKSPACE_BLOCK_CODING}}</a></li>
                 <li><a href ng-click="setMode(1)">{{::dict.WORKSPACE_PYTHON_CODING}}</a></li>
             </ul>
