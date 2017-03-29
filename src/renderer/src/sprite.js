@@ -382,9 +382,6 @@ angular.module('common').controller('SpriteController',
             sprites = $scope.selectedSprites;
         }
 
-        if (sprites.length <=5)
-            return;
-
         var mover = jQuery('.modal_selected_container_moving').eq(0);
         if (direction == 'left') {
             if ($scope.currentIndex+2 > sprites.length)

@@ -318,9 +318,6 @@ angular.module('common').controller('SoundController',
             sounds = $scope.selectedSystem;
         }
         
-        if (sounds.length <=5)
-            return;
-
         var mover = jQuery('.modal_selected_container_moving').eq(0);
         if (direction == 'left') {
             if ($scope.currentIndex+2 > sounds.length)
