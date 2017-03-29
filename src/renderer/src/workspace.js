@@ -34,7 +34,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
             var initOptions = {
                 type: 'workspace',
                 libDir: './bower_components',
-                defaultDir: '.',
+                defaultDir: './node_modules',
                 blockInjectDir: './',
                 textCodingEnable: true,
                 fonts: [{
@@ -920,9 +920,6 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
         });
 
         modalInstance.result.then(function(selectedItems) {
-
-            console.log(selectedItems);
-
             if(selectedItems.data.length) {
                 const sounds = selectedItems.data.map((item)=> {
                     const fileurl = item.filename;
