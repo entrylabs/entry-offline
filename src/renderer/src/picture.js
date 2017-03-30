@@ -313,7 +313,7 @@ angular.module('common').controller('PictureController',
                         element.attr('class', 'boxOuter selected');
                     }
                 });
-
+                $scope.moveContainer('left');
             } else {
                 var elements = jQuery('.boxOuter').each(function() {
                     var element = jQuery(this);
@@ -321,8 +321,8 @@ angular.module('common').controller('PictureController',
                         element.attr('class', 'boxOuter');
                     }
                 });
+                $scope.moveContainer('right');
             }
-
         };
 
         $scope.changeLanguage = function (picture) {
@@ -400,6 +400,9 @@ angular.module('common').controller('PictureController',
             } else {
                 pictures = $scope.selectedPictures;
             }
+
+            if (pictures.length <=5 && direction === 'left')
+                return;
 
             var mover = jQuery('.modal_selected_container_moving').eq(0);
             if (direction == 'left') {

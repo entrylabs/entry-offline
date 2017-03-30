@@ -298,6 +298,7 @@ angular.module('common').controller('SoundController',
                     element.attr('class', 'boxOuter selected');
                 }
             });
+            $scope.moveContainer('left');
         } else {
             createjs.Sound.stop();
             var elements = jQuery('.boxOuter').each(function() {
@@ -306,6 +307,7 @@ angular.module('common').controller('SoundController',
                     element.attr('class', 'boxOuter');
                 }
             });
+            $scope.moveContainer('right');
         }
     };
 
@@ -317,6 +319,9 @@ angular.module('common').controller('SoundController',
         } else {
             sounds = $scope.selectedSystem;
         }
+
+        if (sounds.length <=5 && direction === 'left')
+            return;
         
         var mover = jQuery('.modal_selected_container_moving').eq(0);
         if (direction == 'left') {

@@ -357,6 +357,7 @@ angular.module('common').controller('SpriteController',
                     element.attr('class', 'boxOuter');
                 }
             });
+            $scope.moveContainer('right');
         } else {
             var cloneSprite = $.extend({}, sprite, true);
             $scope.changeLanguage(cloneSprite);
@@ -370,6 +371,7 @@ angular.module('common').controller('SpriteController',
                     element.attr('class', 'boxOuter selected');
                 }
             });
+            $scope.moveContainer('left');
         }
     };
 
@@ -381,6 +383,9 @@ angular.module('common').controller('SpriteController',
         } else {
             sprites = $scope.selectedSprites;
         }
+
+        if (sprites.length <=5 && direction === 'left')
+            return;
 
         var mover = jQuery('.modal_selected_container_moving').eq(0);
         if (direction == 'left') {
