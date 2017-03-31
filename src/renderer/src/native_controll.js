@@ -411,10 +411,14 @@ Entry.plugin = (function () {
                                     if(picture.fileurl) {
                                         picture.fileurl = picture.fileurl.replace(/\\/gi, '%5C');
                                         picture.fileurl = picture.fileurl.replace(/%5C/gi, '/');
-                                        const tempIndex = picture.fileurl.lastIndexOf('temp') - 1;
+                                        const tempIndex = picture.fileurl.lastIndexOf('temp');
+                                        let tempPath = picture.fileurl;
 
                                         if(tempIndex > -1) {
-                                            picture.fileurl = _real_temp_path_posix + picture.fileurl.substr(tempIndex);
+                                            if(tempIndex > 0) {
+                                                tempPath = picture.fileurl.substr(tempIndex - 1);
+                                            }
+                                            picture.fileurl = path.resolve(_real_temp_path_posix, tempPath);
                                         }
                                     }
                                 });
@@ -422,10 +426,15 @@ Entry.plugin = (function () {
                                     if(sound.fileurl) {
                                         sound.fileurl = sound.fileurl.replace(/\\/gi, '%5C');
                                         sound.fileurl = sound.fileurl.replace(/%5C/gi, '/');
-                                        const tempIndex = sound.fileurl.lastIndexOf('temp') - 1;
+                                        const tempIndex = sound.fileurl.lastIndexOf('temp');
+                                        let tempPath = sound.fileurl;
+
 
                                         if(tempIndex > -1) {
-                                            sound.fileurl = _real_temp_path_posix + sound.fileurl.substr(tempIndex);
+                                            if(tempIndex > 0) {
+                                                tempPath = sound.fileurl.substr(tempIndex - 1);
+                                            }
+                                            sound.fileurl = path.resolve(_real_temp_path_posix, tempPath);
                                         }
                                     }
                                 });

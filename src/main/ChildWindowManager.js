@@ -22,6 +22,10 @@ class ChildWindowManager {
         });
 
         this.aboutWindow.loadURL('file:///' + path.resolve(__dirname, '..', 'renderer','views', 'about.html'));
+
+        this.aboutWindow.on('closed', ()=> {
+            this.aboutWindow = null;
+        });
     }
 
     openAboutWindow() {
@@ -33,7 +37,9 @@ class ChildWindowManager {
     }
 
     closeAboutWindow() {
-        this.aboutWindow.hide();   
+        if(this.aboutWindow) {
+            this.aboutWindow.hide();
+        }
     }
 
     createHardwareWindow() {
@@ -44,7 +50,7 @@ class ChildWindowManager {
             title = 'Entry HardWare'
         }
 
-        this.hardwareWindow = new BrowserWindow({
+        this.hardwareWindow = new BrowserWindow({   
             width: 800, 
             height: 650,
             title: title,
