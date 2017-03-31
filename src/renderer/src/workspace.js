@@ -610,7 +610,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                                 if(tempIndex > 0) {
                                     tempPath = picture.fileurl.substr(tempIndex - 1);
                                 }
-                                picture.fileurl = path.resolve(_real_temp_path_posix, tempPath);
+                                picture.fileurl = path.posix.join(_real_temp_path_posix, tempPath);
                             }
                         }
                     });
@@ -625,7 +625,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                                 if(tempIndex > 0) {
                                     tempPath = sound.fileurl.substr(tempIndex - 1);
                                 }
-                                sound.fileurl = path.resolve(_real_temp_path_posix, tempPath);
+                                sound.fileurl = path.posix.join(_real_temp_path_posix, tempPath);
                             }
                         }
                     });
