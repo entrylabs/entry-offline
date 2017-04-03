@@ -737,7 +737,7 @@ Entry.plugin = (function () {
                                     dimension : dimensions
                                 }
 
-                                pictures.push(picture);
+                                pictures[index] = picture;
 
                                 if($.isFunction(cb) && ++run_cnt === images_cnt) {
                                     cb(pictures);
@@ -814,7 +814,7 @@ Entry.plugin = (function () {
                                     dimension : dimensions
                                 }
 
-                                pictures.push(picture);
+                                pictures[index] = picture;
 
                                 if($.isFunction(cb) && ++run_cnt === images_cnt) {
                                     cb(pictures);
@@ -876,7 +876,7 @@ Entry.plugin = (function () {
                                     duration : Math.floor(duration * 10) / 10
                                 }
 
-                                soundList.push(sound);
+                                soundList[i] = sound;
 
                                 if($.isFunction(cb) && ++run_cnt === sounds_cnt) {
                                     cb(soundList);
@@ -937,7 +937,7 @@ Entry.plugin = (function () {
                                     duration : Math.floor(duration * 10) / 10
                                 }
 
-                                soundList.push(sound);
+                                soundList[i] = sound;
 
                                 if($.isFunction(cb) && ++run_cnt === sounds_cnt) {
                                     cb(soundList);
