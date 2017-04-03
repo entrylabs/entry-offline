@@ -779,8 +779,8 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                 object = Entry.container.addObject(object, 0);
                 Entry.playground.changeViewMode('picture');
             } else if (selectedItems.target === 'sprite') {
-                console.log(selectedItems.data);
-
+                const promiseList = [];
+                
                 selectedItems.data.forEach(function(items) {
                     const {pictures = []} = items;
                     const images = pictures.map((item)=> {
@@ -799,20 +799,29 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                         } catch(e) {
                             reject(e);
                         }
+                    });                    
+
+                    const mainPromise = new Promise((resolve, reject)=> {
+                        spritePromise.then((pictures)=> {
+                            items.pictures = pictures;
+                            resolve(pictures);
+                        }).catch((err)=> {
+                            console.error(err);
+                            reject(err);
+                        })                    
                     });
-                    
-                    spritePromise.then((pictures)=> {
-                        items.pictures = pictures;
+                    promiseList.push(mainPromise);
+                });
+
+                Promise.all(promiseList).then(()=> {
+                    selectedItems.data.forEach((items)=> {
                         var object = {
                             id: Entry.generateHash(),
                             objectType: 'sprite',
                             sprite: items // 스프라이트 정보
                         };
                         Entry.container.addObject(object, 0);
-                    }).catch((err)=> {
-                        console.error(err);
-                    })
-                    
+                    });
                 });
             } else if (selectedItems.target === 'upload') {
                 selectedItems.data.forEach(function(item, index, array) {
@@ -942,7 +951,6 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
 
                 Entry.plugin.uploadTempSoundFileByObject(sounds, (data)=> {
                     data.forEach((item)=> {
-                        console.log("item duration ws: " + JSON.stringify(item.duration));
                         Entry.playground.addSound(item, true);
                     });
                 });

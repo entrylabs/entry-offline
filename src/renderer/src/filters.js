@@ -16,11 +16,11 @@ common.filter('makeThumbnail', function() {
                 // console.log(decodeURI(picture.fileurl).replace('/image/', '/thumb/'));
                 // return decodeURI(picture.fileurl).replace('/image/', '/thumb/');
 
-                var lastIdx = picture.fileurl.lastIndexOf('/image/');
+                var decodePath = decodeURI(picture.fileurl);
+                var lastIdx = decodePath.lastIndexOf('/image/');
                 if(lastIdx > -1) {
-                    var temp = decodeURI(picture.fileurl);
-                    temp = temp.substr(lastIdx).replace('/image/', '/thumb/');
-                    returnValue = picture.fileurl.substr(0, lastIdx) + temp;
+                    let temp = decodePath.substr(lastIdx).replace('/image/', '/thumb/');
+                    returnValue = decodePath.substr(0, lastIdx) + temp;
                 }
 
                 // console.log(picture.fileurl);
