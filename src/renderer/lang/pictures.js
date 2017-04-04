@@ -2460,3 +2460,7 @@ PictureNames["몽타주_2"] = "Montage_2";
 PictureNames["몽타주_3"] = "Montage_3";
 PictureNames["몽타주_4"] = "Montage_4";
 PictureNames["몽타주_5"] = "Montage_5";
+PictureNames["꽃(1)_완전히 핀 상태"] = "Flower(1)_Fully bloom";
+PictureNames["꽃(1)_많이 핀 상태"] = "Flower(1)_Near-fully bloom";
+PictureNames["꽃(1)_조금 핀 상태"] = "Flower(1)_Partially bloom";
+PictureNames["꽃(1)_봉오리 상태"] = "Flower(1)_bud";

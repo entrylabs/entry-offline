@@ -1182,6 +1182,20 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
         project.name = project_name;
         project.parent = parent;
 
+        // project.objects.forEach((object)=> {
+        //     for(let key in object.sprite) {
+        //         object.sprite[key].forEach((item)=> {
+        //             if(item.fileurl) {
+        //                 let temp = item.fileurl;
+        //                 let subIndex = temp.lastIndexOf('temp');
+        //                 item.fileurl = temp.substr(subIndex);
+        //             }
+        //         });
+        //     }
+        // });
+
+        console.log(project);
+
         Entry.plugin.saveProject(path, project, function(e) {
             if ($.isFunction(cb)) {
                 cb(e, project_name);

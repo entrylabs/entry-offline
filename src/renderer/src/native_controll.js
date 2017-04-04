@@ -902,7 +902,7 @@ Entry.plugin = (function () {
                 const dest = getUploadPath(fileId, 'sound');
                 const name = data.filename.normalize("NFC");
                 const fileName = fileId;
-                const extension = name.split('.')[1];
+                const extension = 'mp3';
                 const dirPath = dest.soundPath;
                 const soundPath = path.resolve(dirPath, `${fileName}.mp3`);
 

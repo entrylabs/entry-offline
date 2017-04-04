@@ -1320,3 +1320,4 @@ SpriteNames["꼬마로봇"] = "Miniature Robot";
 SpriteNames["검은 돌맹이"] = "Black stone";
 SpriteNames["범인 찾기"] = "Find a criminal";
 SpriteNames["몽타주"] = "Montage";
+SpriteNames["꽃(1)"] = "Flower(1)";
