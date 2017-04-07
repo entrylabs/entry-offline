@@ -937,7 +937,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
         });
 
         modalInstance.result.then(function(selectedItems) {
-            if(selectedItems.data.length) {
+            if(selectedItems.data.length && !selectedItems.data[0].fileurl) {
                 const sounds = selectedItems.data.map((item)=> {
                     const fileurl = item.filename;
                     const url = path.resolve(__rendererPath, 'node_modules', 'uploads', fileurl.substr(0, 2), fileurl.substr(2, 2), `${fileurl}.mp3`);
@@ -948,11 +948,14 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                     };
                 });
 
-
                 Entry.plugin.uploadTempSoundFileByObject(sounds, (data)=> {
                     data.forEach((item)=> {
                         Entry.playground.addSound(item, true);
                     });
+                });
+            } else {
+                selectedItems.data.forEach(function(item) {
+                    Entry.playground.addSound(item, true);
                 });
             }
         });

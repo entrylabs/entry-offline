@@ -843,7 +843,7 @@ Entry.plugin = (function () {
                 const fileName = fileId;
                 const extension = name.split('.')[1];
                 const dirPath = dest.soundPath;
-                const soundPath = path.resovle(dirPath, `${fileName}.${extension}`);
+                const soundPath = path.resolve(dirPath, `${fileName}.${extension}`);
 
                 that.mkdir(path.resolve(dest.uploadDir, 'sound'), function () {
                     fs.readFile(src, function (err, stream) {
