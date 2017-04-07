@@ -119,11 +119,10 @@ angular.module('common').controller('PictureImportController', ['$scope', '$moda
             var pictureData = sessionStorage.getItem("pictureData");
             pictureData = pictureData ? JSON.parse(pictureData) : {};
             if ($.isEmptyObject(pictureData)) {
-                $http.get('./resource_map/pictures.json').success(function(response) {
-                    sortPictureData(response);
-                    makePictureData(response);
-                    setSystemPictures(type, main, sub);
-                });
+                const response = require('./resource_map/pictures.json');
+                sortPictureData(response);
+                makePictureData(response);
+                setSystemPictures(type, main, sub);
             } else {
                 $scope.pictureData = pictureData;
                 setSystemPictures(type, main, sub);
