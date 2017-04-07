@@ -842,6 +842,7 @@ Entry.plugin = (function () {
                 const dest = getUploadPath(fileId, 'sound');
                 const name = data.name.normalize("NFC");
                 const fileName = fileId;
+                const orgName = parser.name;
                 const extension = parser.ext.substr(1);
                 const dirPath = dest.soundPath;
                 const soundPath = path.resolve(dirPath, `${fileName}.${extension}`);
@@ -869,7 +870,7 @@ Entry.plugin = (function () {
                                 var sound = {
                                     _id : Entry.generateHash(),
                                     type : 'user',
-                                    name : name.split('.')[0],
+                                    name : orgName,
                                     filename : fileName,
                                     ext : extension,
                                     path : soundPath,

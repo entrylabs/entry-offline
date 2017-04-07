@@ -22,7 +22,10 @@ class Util {
                     if(err) {
                         reject(err);
                     }
-                    const mimeType = this.getMimeType(path);
+                    let mimeType = this.getMimeType(path);
+                    if(mimeType === 'audio/wave') {
+                        mimeType = 'audio/wav';
+                    }
                     const dataURI = `data:${mimeType};base64,${new Buffer(file).toString('base64')}`;
                     resolve(dataURI);                    
                 });
