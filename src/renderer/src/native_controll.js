@@ -837,11 +837,12 @@ Entry.plugin = (function () {
             ((i)=> {
                 const data = files[i];
                 const src = data.path;
+                const parser = path.parse(src);
                 const fileId = createFileId();
                 const dest = getUploadPath(fileId, 'sound');
                 const name = data.name.normalize("NFC");
                 const fileName = fileId;
-                const extension = name.split('.')[1];
+                const extension = parser.ext.substr(1);
                 const dirPath = dest.soundPath;
                 const soundPath = path.resovle(dirPath, `${fileName}.${extension}`);
 
