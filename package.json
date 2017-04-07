@@ -14,7 +14,8 @@
     "test": "mocha test/default.js",
     "package": "electron-forge package",
     "pack": "electron-forge package",
-    "pack:win": "electron-forge package --arch=ia32",
+    "pack:win": "electron-forge package --platform=win32",
+    "pack:win32": "electron-forge package --arch=ia32 --platform=win32",
     "make": "electron-forge make",
     "preinstall": "bower cache clean && bower install"
   },
