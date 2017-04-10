@@ -362,6 +362,7 @@ angular.module('common').controller('PictureController',
                         element.attr('class', 'boxOuter selected');
                     }
                 });
+                $scope.moveContainer('left');
             } else {
                 var elements = jQuery('.boxOuter').each(function() {
                     var element = jQuery(this);
@@ -369,6 +370,7 @@ angular.module('common').controller('PictureController',
                         element.attr('class', 'boxOuter');
                     }
                 });
+                $scope.moveContainer('right');
             }
         };
 

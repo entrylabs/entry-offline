@@ -434,6 +434,7 @@ angular.module('common').controller('SpriteController',
                     element.attr('class', 'boxOuter');
                 }
             });
+            $scope.moveContainer('right');
         } else {
             $scope.selectedPictures.push(picture);
             // 스프라이트 다중 선택.
@@ -443,6 +444,7 @@ angular.module('common').controller('SpriteController',
                     element.attr('class', 'boxOuter selected');
                 }
             });
+            $scope.moveContainer('left');
         }
 
     };
