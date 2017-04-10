@@ -707,7 +707,7 @@ Entry.plugin = (function () {
 
                         var image = new Image();
                         Util.getMediaDataURI(imagePath).then((imageData)=> {
-                            image.src = url;
+                            image.src = imageData;
                         }).catch((imageData)=> {
                             throw err;
                         });
@@ -784,7 +784,7 @@ Entry.plugin = (function () {
 
                         const image = new Image();
                         Util.getMediaDataURI(imagePath).then((imageData)=> {
-                            image.src = url;
+                            image.src = imageData;
                         }).catch((imageData)=> {
                             throw err;
                         });
