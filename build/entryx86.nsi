@@ -8,15 +8,14 @@
 !include MUI2.nsh
 !include nsProcess.nsh
 
-
 ; MUI Settings / Icons
 !define MUI_ICON "icon.ico"
 !define MUI_UNICON "icon.ico"
 !define PRODUCT_NAME "Entry"
 !define APP_NAME "Entry.exe"
-!define PRODUCT_VERSION "1.3.5"
+!define PRODUCT_VERSION "1.5.0"
 !define PRODUCT_PUBLISHER "EntryLabs"
-!define PRODUCT_WEB_SITE "http://www.play-entry.org/"
+!define PRODUCT_WEB_SITE "http://www.playentry.org/"
  
 ; MUI Settings / Header
 ;!define MUI_HEADERIMAGE
@@ -98,13 +97,13 @@ Section $(TEXT_ENTRY_TITLE) SectionEntry
 
   ; Put file there
   SetOutPath "$INSTDIR\locales"
-  File "..\dist\win-ia32-unpacked\locales\*.*"
+  File "..\out\Entry-win32-ia32\locales\*.*"
   
   SetOutPath "$INSTDIR\resources"
-  File /r "..\dist\win-ia32-unpacked\resources\*.*"
+  File /r "..\out\Entry-win32-ia32\resources\*.*"
   
   SetOutPath "$INSTDIR"
-  File "..\dist\win-ia32-unpacked\*.*"
+  File "..\out\Entry-win32-ia32\*.*"
   File "icon.ico"
   
   WriteRegStr HKCR ".ent" "" "${PRODUCT_NAME}"
@@ -121,7 +120,7 @@ Section $(TEXT_ENTRY_TITLE) SectionEntry
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" "DisplayName" "엔트리"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" "DisplayVersion" "${PRODUCT_VERSION}"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" "Publisher" "${PRODUCT_PUBLISHER}"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" "URLInfoAbout" "http://www.play-entry.org"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" "URLInfoAbout" "http://www.playentry.org"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" "UninstallString" '"$INSTDIR\엔트리 제거.exe"'
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" "DisplayIcon" '"$INSTDIR\icon.ico"'
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" "NoModify" 1

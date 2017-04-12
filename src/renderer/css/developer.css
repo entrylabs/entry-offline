@@ -1,0 +1,175 @@
+* {
+	box-sizing : border-box;
+	margin : 0;
+    font-family: nanumBarunRegular;
+}
+
+body {
+    overflow: hidden;
+	font-family: 'Nanum Gothic';
+}
+
+.page-header {
+	margin : 0;
+	border : 0;
+}
+
+.wrapper {
+    position: absolute;
+    left: 0;
+    top: 45px;
+    right: 0;
+    bottom: 0;
+}
+
+.hide_contents {
+	display: none !important;
+}
+
+.entryTextFontSelecter {
+    display: inline-block;
+    height: 32px;
+    float: left;
+}
+
+.entryPauseButtonWorkspace_w {
+    display: none;
+}
+
+.entryUploaderWindow {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,86,132,.9);
+    z-index: 250000;
+    text-align: center;
+    opacity: 0;
+    -webkit-transition: opacity 250ms;
+    transition: opacity 250ms;
+}
+
+.entryUploaderWindowContent {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    border: 1px dashed #fff;
+}
+.entryUploaderWindowContent h1{
+    margin: -.5em 0 0;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    font-size: 40px;
+    color: #fff;
+    padding: 0;
+}
+
+
+.entrySpinnerWindow {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,.6);
+    z-index: 250000;
+    text-align: center;
+}
+
+.entrySpinner {
+    position: relative;
+    left: 0;
+    width: 70px;
+    height: 60px;
+    text-align: center;
+    font-size: 10px;
+    margin: auto;
+}
+
+.entrySpinner > div {
+    background-color: #fff;
+    height: 100%;
+    width: 6px;
+    display: inline-block;  
+    -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
+    animation: sk-stretchdelay 1.2s infinite ease-in-out;
+}
+
+.entrySpinner .rect2 {
+    -webkit-animation-delay: -1.1s;
+    animation-delay: -1.1s;
+}
+
+.entrySpinner .rect3 {
+    -webkit-animation-delay: -1.0s;
+    animation-delay: -1.0s;
+}
+
+.entrySpinner .rect4 {
+    -webkit-animation-delay: -0.9s;
+    animation-delay: -0.9s;
+}
+
+.entrySpinner .rect5 {
+    -webkit-animation-delay: -0.8s;
+    animation-delay: -0.8s;
+}
+
+@-webkit-keyframes sk-stretchdelay {
+  0%, 40%, 100% { -webkit-transform: scaleY(0.4) }  
+  20% { -webkit-transform: scaleY(1.0) }
+}
+
+@keyframes sk-stretchdelay {
+  0%, 40%, 100% { 
+    transform: scaleY(0.4);
+    -webkit-transform: scaleY(0.4);
+  }  20% { 
+    transform: scaleY(1.0);
+    -webkit-transform: scaleY(1.0);
+  }
+}
+
+
+.tab-content .tab-pane .upload_wrap {
+    width: 713px;
+}
+
+.entryPlaygroundPainterAttrFont .entryPlaygroundPainterAttrTop {
+    min-width: 120px;    
+}
+
+.entryPlaygroundPainterAttrFont .entryPlaygroundPainterAttrFontStyleArea {
+    min-width: 75px;
+}
+
+.entryTextFontSelect {
+    min-width: 120px;
+}
+
+.textProperties .fontDropdown {
+    width: 130px;
+    padding-left: 10px;
+}
+
+.textProperties .fgColorDiv {
+    margin-left: 280px;
+}
+
+.textProperties .bgColorDiv {
+    margin-left: 318px
+}
+
+.coloursWrapper {
+    margin-left: 277px !important;
+}

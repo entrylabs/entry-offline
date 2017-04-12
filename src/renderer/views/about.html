@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>엔트리</title>
+</head>
+<body>
+	<div class="container">
+		<div class="container_inner">
+			<div>
+				<img src="../../icon/app.png" />
+			</div>
+			<div>
+				<h3>엔트리</h3>
+			</div>
+			<div>
+				<p>
+					version <span id="version"></span><br/>
+					<a href="#" id="playEntryBtn">
+						https://playentry.org
+					</a>
+				</p>
+			</div>
+		</div>
+	</div>
+	<link rel='stylesheet'  href='../css/about.css' />
+	<script>
+		window.$ = window.jQuery = require('../bower_components/jquery/dist/jquery.js');
+		import { shell, remote } from 'electron';
+		const { app } = remote;
+		const aboutWindow = remote.getCurrentWindow();
+
+		$(function () {
+			$('body').on('click', function () {
+				aboutWindow.hide();	
+			});
+
+			$('#playEntryBtn').on('click', function (e) {
+				e.preventDefault();
+				shell.openExternal('https://playentry.org');
+			});
+
+            $("#version").text(app.getVersion());
+		});
+	</script>
+</body>
+</html>
