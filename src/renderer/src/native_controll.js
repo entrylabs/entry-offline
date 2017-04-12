@@ -300,11 +300,14 @@ Entry.plugin = (function () {
 
     that.getHardwareManual = function(callback) {
         let fileName = '';
+        let fileNamePath = '';
 
         if(isOsx) {
             fileName = '[매뉴얼]엔트리 하드웨어 연결(맥).pdf';
+            fileNamePath = 'hardware-osx.pdf';
         } else {
             fileName = '[매뉴얼]엔트리 하드웨어 연결(윈도우).pdf';
+            fileNamePath = 'hardware-win.pdf';
         }
 
         dialog.showSaveDialog({
@@ -315,7 +318,7 @@ Entry.plugin = (function () {
         }, function (filePath) {    
             if(filePath) {
                 var fs = require("fs");
-                fs.readFile(path.resolve(_real_path, 'static', 'guide', fileName), function (err, stream) {
+                fs.readFile(path.resolve(_real_path, 'static', 'guide', fileNamePath), function (err, stream) {
                     fs.writeFile(filePath, stream, 'utf8', function (err) {
                         if (err)
                             alert("Unable to save file");
