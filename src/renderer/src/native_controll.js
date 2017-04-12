@@ -299,15 +299,23 @@ Entry.plugin = (function () {
     }
 
     that.getHardwareManual = function(callback) {
+        let fileName = '';
+
+        if(isOsx) {
+            fileName = '[매뉴얼]엔트리 하드웨어 연결(맥).pdf';
+        } else {
+            fileName = '[매뉴얼]엔트리 하드웨어 연결(윈도우).pdf';
+        }
+
         dialog.showSaveDialog({
-            defaultPath: '엔트리 하드웨어 연결 매뉴얼(오프라인용).pdf',
+            defaultPath: fileName,
             filters: [
                 { name: '*.pdf', extensions: ['pdf'] }
             ]
         }, function (filePath) {    
             if(filePath) {
                 var fs = require("fs");
-                fs.readFile(path.resolve(_real_path, 'static', 'guide', '엔트리 하드웨어 연결 매뉴얼(오프라인용).pdf'), function (err, stream) {
+                fs.readFile(path.resolve(_real_path, 'static', 'guide', fileName), function (err, stream) {
                     fs.writeFile(filePath, stream, 'utf8', function (err) {
                         if (err)
                             alert("Unable to save file");
