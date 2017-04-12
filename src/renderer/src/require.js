@@ -28,3 +28,18 @@ const filbert = parser;
 
 import util from './src/sources/util';
 const Util = util;
+
+document.fonts.ready.then(()=> {
+    try{
+        if(Entry) {
+            Entry.requestUpdate = true;
+        }
+    } catch(e) {}
+});
+document.fonts.onloadingdone = (fontFaceSetEvent)=> {
+    try{
+        if(Entry) {
+            Entry.requestUpdate = true;
+        }
+    } catch(e) {}
+};
