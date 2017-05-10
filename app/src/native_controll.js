@@ -521,39 +521,37 @@ Entry.plugin = (function () {
 
     // 프로젝트 저장
     that.saveProject = function(filePath, data, cb, enc) {
-        blocklyConverter.convert(data, function (data) {
-            var string_data = JSON.stringify(data);
-            that.mkdir(path.join(_real_temp_path, 'temp'), function () {
-                fs.writeFile(path.join(_real_temp_path, 'temp', 'project.json'), string_data, {encoding: (enc || 'utf8'), mode: '0777'}, function (err) {
-                    if(err) {
-                        throw err;
-                    }
+        var string_data = JSON.stringify(data);
+        that.mkdir(path.join(_real_temp_path, 'temp'), function () {
+            fs.writeFile(path.join(_real_temp_path, 'temp', 'project.json'), string_data, {encoding: (enc || 'utf8'), mode: '0777'}, function (err) {
+                if(err) {
+                    throw err;
+                }
 
-                    var fs_reader = fstream.Reader({ 'path': path.resolve(_real_temp_path, 'temp'), 'type': 'Directory' });
+                var fs_reader = fstream.Reader({ 'path': path.resolve(_real_temp_path, 'temp'), 'type': 'Directory' });
 
-                    var fs_writer = fstream.Writer({ 'path': filePath, 'mode': '0777', 'type': 'File',  });
+                var fs_writer = fstream.Writer({ 'path': filePath, 'mode': '0777', 'type': 'File',  });
 
-                    fs_writer.on('entry', function (list) {
-                        list.props.mode = '0777';
-                        // console.log('entry');
-                    });
-                    fs_writer.on('error', function (e) {
-                        if($.isFunction(cb)){
-                            cb(e);
-                        }
-                    });
-                    fs_writer.on('end', function () {
-
-                        if($.isFunction(cb)){
-                            cb();
-                        }
-                    });
-
-                    fs_reader.pipe(tar.Pack())
-                        .pipe(zlib.Gzip())
-                        .pipe(fs_writer)
-
+                fs_writer.on('entry', function (list) {
+                    list.props.mode = '0777';
+                    // console.log('entry');
                 });
+                fs_writer.on('error', function (e) {
+                    if($.isFunction(cb)){
+                        cb(e);
+                    }
+                });
+                fs_writer.on('end', function () {
+
+                    if($.isFunction(cb)){
+                        cb();
+                    }
+                });
+
+                fs_reader.pipe(tar.Pack())
+                    .pipe(zlib.Gzip())
+                    .pipe(fs_writer)
+
             });
         });
     }

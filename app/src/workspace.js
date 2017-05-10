@@ -222,7 +222,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
 
     var lastHwConnected = false;
     $scope.hwChanged = function() {
-        if ((Entry.hw.connected && Entry.hw.hwModule && lastHwConnected) || !isMiniMode) {
+        if ((Entry.hw.connected && Entry.hw.hwModule && lastHwConnected) || isMiniMode == 'false') {
             return;
         }
         if (Entry.hw.connected && Entry.hw.hwModule) {
