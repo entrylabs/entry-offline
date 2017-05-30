@@ -127,7 +127,7 @@ if (shouldQuit) {
 
         mainWindow.once('ready-to-show', () => {
             mainWindow.show()
-        })
+        });
 
         mainWindow.setMenu(null);
         mainWindow.loadURL('file:///' + path.join(__dirname, 'renderer', 'entry_offline.html'));
@@ -172,10 +172,16 @@ if (shouldQuit) {
 
     ipcMain.on('reload', function(event, arg) {
         if(event.sender.webContents.name !== 'entry') {
-            cwm.reloadHardwareWindow();
+            return cwm.reloadHardwareWindow();
         }
 
         if(event.sender.webContents) {
+            if(process.platform === 'darwin') {
+                var menu = Menu.buildFromTemplate([]);
+                Menu.setApplicationMenu(menu);
+            } else {
+                mainWindow.setMenu(null)
+            }
             event.sender.webContents.reload();
         }
     });

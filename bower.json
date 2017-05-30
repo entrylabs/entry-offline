@@ -6,8 +6,8 @@
     "node"
   ],
   "dependencies": {
-    "entryjs": "https://github.com/entrylabs/entryjs.git#develop-offline",
-    "entry-hw": "https://github.com/entrylabs/entry-hw.git#v1.6.6_offline",
+    "entryjs": "https://github.com/entrylabs/entryjs.git#master",
+    "entry-hw": "https://github.com/entrylabs/entry-hw.git",
     "literallycanvas": "https://github.com/entrylabs/literallycanvas.git#master",
     "socket.io-client": "~1.4.5",
     "react": "~15.2.0",

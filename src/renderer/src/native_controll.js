@@ -556,6 +556,11 @@ Entry.plugin = (function () {
                 cb(e);
             }
         });
+        fs_reader.on('error', function (e) {
+            if($.isFunction(cb)) {
+                cb(e);
+            }
+        });
         fs_writer.on('end', function () {
             fs.readFile(path.resolve(_real_temp_path, 'temp', 'project.json'), enc || 'utf8', function (err, data) {
                 if(err) {
@@ -566,9 +571,18 @@ Entry.plugin = (function () {
             });
         });
 
-        fs_reader.pipe(zlib.Gunzip())
+        var gunzip = zlib.createGunzip();
+        gunzip.on('error', function (e) {
+            if($.isFunction(cb)) {
+                cb(e);
+            }
+        });
+        
+        fs_reader.pipe(gunzip)
             .pipe(tar.Parse())
-            .pipe(fs_writer);
+            .pipe(fs_writer).on('error', function (e) {
+                console.log(e);
+            });
     }
 
     that.initProjectFolder = function (cb) {

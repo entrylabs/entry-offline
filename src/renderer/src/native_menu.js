@@ -1,9 +1,12 @@
 $(document).on('mousewheel', function(e){
     if(e.originalEvent.wheelDelta /120 > 0 && e.ctrlKey) {
-        Entry.plugin.setZoomInPage();
-    }
-    else if(e.ctrlKey){
-        Entry.plugin.setZoomOutPage();
+        if(Entry) {
+            Entry.plugin.setZoomInPage();
+        }
+    } else if(e.ctrlKey) {
+        if(Entry) {
+            Entry.plugin.setZoomOutPage();
+        }
     }
 });
 
@@ -13,13 +16,17 @@ var template = [{
         label: Lang.Workspace.file_new,
         accelerator: 'CmdOrCtrl+n',
         click: function(item, focusedWindow) {
-            angular.element('[data-ng-controller="HeaderController"]').scope().newProject();
+            if(angular) {
+                angular.element('[data-ng-controller="HeaderController"]').scope().newProject();
+            }
         }
     }, {
         label: Lang.Workspace.file_upload,
         accelerator: 'CmdOrCtrl+o',
         click: function () {
-            Entry.dispatchEvent('loadWorkspace');
+            if(Entry) {
+                Entry.dispatchEvent('loadWorkspace');
+            }
         }
     }, {
         type: 'separator'
@@ -27,13 +34,17 @@ var template = [{
         label: Lang.Workspace.file_save,
         accelerator: 'CmdOrCtrl+s',
         click: function () {
-            Entry.dispatchEvent('saveWorkspace');
+            if(Entry) {
+                Entry.dispatchEvent('saveWorkspace');
+            }
         }
     }, {
         label: Lang.Workspace.file_save_as,
         accelerator: 'Shift+CmdOrCtrl+S',
         click: function () {
-            Entry.dispatchEvent('saveAsWorkspace');
+            if(Entry) {
+                Entry.dispatchEvent('saveAsWorkspace');
+            }
         }
     }]
 }, {
@@ -42,7 +53,9 @@ var template = [{
         label: Lang.Menus.offline_undo,
         accelerator: 'CmdOrCtrl+z',
         click: function(item, focusedWindow) {
-            Entry.dispatchEvent('undo');
+            if(Entry) {
+                Entry.dispatchEvent('undo');
+            }
         }
     }, {
         label: Lang.Menus.offline_redo,
@@ -53,7 +66,9 @@ var template = [{
                 return 'Ctrl+y';
         })(),
         click: function(item, focusedWindow) {
-            Entry.dispatchEvent('redo');
+            if(Entry) {
+                Entry.dispatchEvent('redo');
+            }
         }
     }]
 }, {
@@ -62,19 +77,25 @@ var template = [{
         label: Lang.Menus.actual_size,
         accelerator: 'CmdOrCtrl+0',
         click: function () {
-            Entry.plugin.setZoomLevel(0);
+            if(Entry) {
+                Entry.plugin.setZoomLevel(0);
+            }
         }
     }, {
         label: Lang.Menus.zoom_in,
         accelerator: 'CmdOrCtrl+=',
         click: function () {
-            Entry.plugin.setZoomInPage();
+            if(Entry) {
+                Entry.plugin.setZoomInPage();
+            }
         }
     }, {
         label: Lang.Menus.zoom_out,
         accelerator: 'CmdOrCtrl+-',
         click: function () {
-            Entry.plugin.setZoomOutPage();
+            if(Entry) {
+                Entry.plugin.setZoomOutPage();
+            }
         }
     }]
 }];
@@ -103,9 +124,10 @@ if (process.platform == 'darwin') {
         }, {
             label: Lang.Menus.offline_quit,
             accelerator: 'Command+Q',
-            click: function() { 
-                console.log(app);
-                app.quit(); 
+            click: function() {
+                if(app) {
+                    app.quit(); 
+                }
             }
         }]
     });
@@ -136,7 +158,9 @@ if (process.platform == 'darwin') {
             label: Lang.Menus.entry_info,
             accelerator: 'F1',
             click: function () {
-                Entry.plugin.openAboutPage();
+                if(Entry) {
+                    Entry.plugin.openAboutPage();
+                }
             }
         }]
     })

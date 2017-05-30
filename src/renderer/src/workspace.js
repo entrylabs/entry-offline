@@ -4,6 +4,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
     $scope.saveFileName = '';
     $scope.project = myProject;
     window.isNowSaving = false;
+    window.isNowLoading = false;
     var supported = !(typeof storage == 'undefined' || typeof window.JSON == 'undefined');
     var storage = (typeof window.localStorage === 'undefined') ? undefined : window.localStorage;
 
@@ -103,10 +104,10 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
             }
             var beforeUnload = window.onbeforeunload;
             window.onbeforeunload = function(e) {
-                if (window.isNowSaving === true) {
-                    alert(Lang.Workspace.quit_stop_msg);
+                if (getWorkspaceBusy() === 'saving') {
                     e.preventDefault();
                     e.returnValue = false;
+                    // alert(Lang.Workspace.quit_stop_msg);
                     return;
                 }
                 var canLoad = true;
@@ -406,6 +407,16 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
         }
     }
 
+    function getWorkspaceBusy() {
+        if(window.isNowSaving) {
+            return 'saving';
+        } else if(window.isNowLoading) {
+            return 'loading';
+        } else {
+            return undefined;
+        }
+    }
+
     // 프로젝트 세팅
     $scope.setWorkspace = function(project, b) {
         var project_name = "";
@@ -497,7 +508,9 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
         if(checkTextModeCode()) {
             return;
         }
-
+        if(getWorkspaceBusy()) {
+            return;
+        }
         window.isNowSaving = true;
         $scope.doPopupControl({
             'type': 'spinner',
@@ -521,11 +534,12 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
 
     // 새 이름으로 저장하기
     $scope.saveAsWorkspace = function() {
-
         if(checkTextModeCode()) {
             return;
         }
-
+        if(getWorkspaceBusy()) {
+            return;
+        }
         window.isNowSaving = true;
         $scope.doPopupControl({
             'type': 'spinner',
@@ -574,6 +588,10 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
     };
 
     $scope.loadProject = function(filePath) {
+        if(getWorkspaceBusy()) {
+            return;
+        }
+        window.isNowLoading = true;
         $scope.doPopupControl({
             'type': 'spinner',
             'msg': Lang.Workspace.loading_msg
@@ -587,6 +605,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                     'type': 'fail',
                     'msg': Lang.Workspace.loading_fail_msg
                 });
+                window.isNowLoading = false;
             } else {
                 var jsonObj = JSON.parse(data);
                 jsonObj.path = filePath;
@@ -639,45 +658,11 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
         });
     }
 
-    $scope.loadWorkspaceTest = function(filePath) {
-        // $scope.showSpinner();
-        $scope.doPopupControl({
-            'type': 'spinner',
-            'msg': Lang.Workspace.loading_msg
-        });
-        var canLoad = false;
-        if (!Entry.stateManager.isSaved()) {
-            canLoad = !confirm(Lang.Menus.save_dismiss);
-        }
-
-        if (!canLoad) {
-            Entry.stateManager.addStamp();
-            storage.removeItem('tempProject');
-            Entry.plugin.beforeStatus = 'load';
-            var default_path = storage.getItem('defaultPath') || '';
-
-            var pathInfo = path.parse(filePath);
-
-            if (pathInfo.ext === '.ent') {
-                var parser = path.parse(filePath);
-                storage.setItem('defaultPath', parser.dir);
-                $scope.loadProject(filePath);
-            } else {
-                alert(Lang.Workspace.check_entry_file_msg);
-                $scope.doPopupControl({
-                    'type': 'hide'
-                });
-            }
-        } else {
-            $scope.doPopupControl({
-                'type': 'hide'
-            });
-        }
-    }
-
     // 불러오기
     $scope.loadWorkspace = function() {
-        // $scope.showSpinner();
+        if(getWorkspaceBusy()) {
+            return;
+        }
         $scope.doPopupControl({
             'type': 'spinner',
             'msg': Lang.Workspace.loading_msg

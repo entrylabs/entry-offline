@@ -91,8 +91,21 @@ angular.module('workspace').controller('HeaderController', ['$scope', '$rootScop
             popup.css('display', 'none');
         };
 
+        function getWorkspaceBusy() {
+            if(window.isNowSaving) {
+                return 'saving';
+            } else if(window.isNowLoading) {
+                return 'loading';
+            } else {
+                return undefined;
+            }
+        }
+
         //새 프로젝트
         $scope.newProject = function() {
+            if(getWorkspaceBusy()) {
+                return;
+            }
             var canLoad = false;
             if (!Entry.stateManager.isSaved()) {
                 canLoad = !confirm(Lang.Menus.save_dismiss);
