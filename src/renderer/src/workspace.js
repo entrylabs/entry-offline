@@ -412,6 +412,8 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
             return 'saving';
         } else if(window.isNowLoading) {
             return 'loading';
+        } else if(window.isNewProject) {
+            return 'new';
         } else {
             return undefined;
         }

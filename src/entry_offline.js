@@ -162,7 +162,10 @@ if (shouldQuit) {
             inspectorShortcut = 'Control+Shift+i';
         }
         globalShortcut.register(inspectorShortcut, (e) => {
-            webContents.getFocusedWebContents().openDevTools(); 
+            const content = webContents.getFocusedWebContents();
+            if(content) {
+                webContents.getFocusedWebContents().openDevTools(); 
+            }
         });
 
         cwm = new ChildWindowManager(mainWindow);
@@ -180,7 +183,7 @@ if (shouldQuit) {
                 var menu = Menu.buildFromTemplate([]);
                 Menu.setApplicationMenu(menu);
             } else {
-                mainWindow.setMenu(null)
+                mainWindow.setMenu(null);
             }
             event.sender.webContents.reload();
         }

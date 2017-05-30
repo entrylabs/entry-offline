@@ -2,6 +2,7 @@
 
 angular.module('workspace').controller('HeaderController', ['$scope', '$rootScope', '$cookies', 'myProject',
     function($scope, $rootScope, $cookies, myProject) {
+        window.isNewProject = false;
         $scope.user_language = localStorage.getItem('lang') || 'ko';
         $scope.project = myProject;
         var supported = !(typeof storage == 'undefined' || typeof window.JSON == 'undefined');
@@ -96,6 +97,8 @@ angular.module('workspace').controller('HeaderController', ['$scope', '$rootScop
                 return 'saving';
             } else if(window.isNowLoading) {
                 return 'loading';
+            } else if(window.isNewProject) {
+                return 'new';
             } else {
                 return undefined;
             }
@@ -112,6 +115,7 @@ angular.module('workspace').controller('HeaderController', ['$scope', '$rootScop
             }
 
             if (!canLoad) {
+                window.isNewProject = true;
                 Entry.stateManager.addStamp();
                 storage.removeItem('tempProject');
                 Entry.plugin.beforeStatus = 'new';
