@@ -107,7 +107,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                 if (getWorkspaceBusy() === 'saving') {
                     e.preventDefault();
                     e.returnValue = false;
-                    // alert(Lang.Workspace.quit_stop_msg);
+                    alert(Lang.Workspace.quit_stop_msg);
                     return;
                 }
                 var canLoad = true;
