@@ -7,6 +7,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
     window.isNowLoading = false;
     var supported = !(typeof storage == 'undefined' || typeof window.JSON == 'undefined');
     var storage = (typeof window.localStorage === 'undefined') ? undefined : window.localStorage;
+    var beforeUnload;
 
     $scope.myProject = myProject;
 
@@ -102,32 +103,17 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                     })
                 })
             }
-            var beforeUnload = window.onbeforeunload;
-            window.onbeforeunload = function(e) {
-                if (getWorkspaceBusy() === 'saving') {
-                    e.preventDefault();
-                    e.returnValue = false;
-                    alert(Lang.Workspace.quit_stop_msg);
+
+            ipcRenderer.on('mainClose', function () {
+                if(!unloadCheckFunc()) {
                     return;
                 }
-                var canLoad = true;
-                if (!Entry.stateManager.isSaved()) {
-                    canLoad = confirm(Lang.Menus.save_dismiss);
-                }
 
-                if (canLoad) {
-                    Entry.plugin.closeAboutPage();
+                window.onbeforeunload = null;
+                ipcRenderer.send('forceClose', true);
+            });
 
-                    storage.removeItem('tempProject');
-                    beforeUnload();
-                } else {
-                    $scope.doPopupControl({
-                        'type': 'hide'
-                    });
-                    e.preventDefault();
-                    e.returnValue = false;
-                }
-            };
+            beforeUnload = window.onbeforeunload;
 
             // 아두이노 사용 (웹소켓이용)
             Entry.enableArduino();
@@ -142,6 +128,8 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
 
             $scope.setWorkspace(project);
 
+            // save 시 자동 stamp 기능 제거
+            Entry.removeAllEventListener('saveWorkspace');
             Entry.addEventListener('saveWorkspace', $scope.saveWorkspace);
             Entry.addEventListener('saveAsWorkspace', $scope.saveAsWorkspace);
             Entry.addEventListener('loadWorkspace', $scope.loadWorkspace);
@@ -191,6 +179,10 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                     $uploadWindow.css('display', 'none');
                 }, 200);
                 e.preventDefault();
+                if(!unloadCheckFunc()) {
+                    return false;
+                }
+
                 var file = e.originalEvent.dataTransfer.files[0];
                 var fileInfo = path.parse(file.path);
                 try {
@@ -199,18 +191,17 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                             'type': 'spinner',
                             'msg': Lang.Workspace.loading_msg
                         });
-
                         var filePath = file.path;
                         var parser = path.parse(filePath);
                         storage.setItem('defaultPath', parser.dir);
-
-                        $scope.loadProject(filePath);
+                        $scope.loadProject(filePath, true);
                     } else {
                         alert(Lang.Workspace.not_supported_file_msg);
                     }
                 } catch (e) {
                     alert(Lang.Workspace.broken_file_msg);
                 }
+
                 return false;
             });
         });
@@ -407,7 +398,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
         }
     }
 
-    function getWorkspaceBusy() {
+    function getWorkspaceBusy(checkList) {
         if(window.isNowSaving) {
             return 'saving';
         } else if(window.isNowLoading) {
@@ -510,9 +501,6 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
         if(checkTextModeCode()) {
             return;
         }
-        if(getWorkspaceBusy()) {
-            return;
-        }
         window.isNowSaving = true;
         $scope.doPopupControl({
             'type': 'spinner',
@@ -529,7 +517,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                 window.isNowSaving = false;
             });
         } else {
-            Entry.stateManager.cancelLastCommand();
+            // Entry.stateManager.cancelLastCommand();
             saveAsProject(Lang.Workspace.file_save);
         }
     };
@@ -537,9 +525,6 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
     // 새 이름으로 저장하기
     $scope.saveAsWorkspace = function() {
         if(checkTextModeCode()) {
-            return;
-        }
-        if(getWorkspaceBusy()) {
             return;
         }
         window.isNowSaving = true;
@@ -589,8 +574,8 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
         })(project);
     };
 
-    $scope.loadProject = function(filePath) {
-        if(getWorkspaceBusy()) {
+    $scope.loadProject = function(filePath, isUnloadCheck) {
+        if(!isUnloadCheck && !unloadCheckFunc()) {
             return;
         }
         window.isNowLoading = true;
@@ -662,57 +647,45 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
 
     // 불러오기
     $scope.loadWorkspace = function() {
-        if(getWorkspaceBusy()) {
+        if(!unloadCheckFunc()) {
             return;
         }
         $scope.doPopupControl({
             'type': 'spinner',
             'msg': Lang.Workspace.loading_msg
-        });
-        var canLoad = false;
-        if (!Entry.stateManager.isSaved()) {
-            canLoad = !confirm(Lang.Menus.save_dismiss);
-        }
+        });        
+        storage.removeItem('tempProject');
+        Entry.plugin.beforeStatus = 'load';
+        var default_path = storage.getItem('defaultPath') || '';
+        dialog.showOpenDialog({
+            defaultPath: default_path,
+            properties: [
+                'openFile'
+            ],
+            filters: [
+                { name: 'Entry File', extensions: ['ent'] }
+            ]
+        }, function(paths) {
+            if (Array.isArray(paths)) {
+                var filePath = paths[0];
+                var pathInfo = path.parse(filePath);
 
-        if (!canLoad) {
-            Entry.stateManager.addStamp();
-            storage.removeItem('tempProject');
-            Entry.plugin.beforeStatus = 'load';
-            var default_path = storage.getItem('defaultPath') || '';
-            dialog.showOpenDialog({
-                defaultPath: default_path,
-                properties: [
-                    'openFile'
-                ],
-                filters: [
-                    { name: 'Entry File', extensions: ['ent'] }
-                ]
-            }, function(paths) {
-                if (Array.isArray(paths)) {
-                    var filePath = paths[0];
-                    var pathInfo = path.parse(filePath);
-
-                    if (pathInfo.ext === '.ent') {
-                        var parser = path.parse(filePath);
-                        storage.setItem('defaultPath', parser.dir);
-                        $scope.loadProject(filePath);
-                    } else {
-                        alert(Lang.Workspace.check_entry_file_msg);
-                        $scope.doPopupControl({
-                            'type': 'hide'
-                        });
-                    }
+                if (pathInfo.ext === '.ent') {
+                    var parser = path.parse(filePath);
+                    storage.setItem('defaultPath', parser.dir);
+                    $scope.loadProject(filePath, true);
                 } else {
+                    alert(Lang.Workspace.check_entry_file_msg);
                     $scope.doPopupControl({
                         'type': 'hide'
                     });
                 }
-            });
-        } else {
-            $scope.doPopupControl({
-                'type': 'hide'
-            });
-        }
+            } else {
+                $scope.doPopupControl({
+                    'type': 'hide'
+                });
+            }
+        });
     };
 
     // 스프라이트 매니저 오픈.
@@ -1037,7 +1010,6 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
     var THUMB_SIZE = 96;
 
     $scope.saveCanvasData = function(data) {
-        console.log('saveCanvasData');
         var file = data.file;
 
         cropImageFromCanvas(data.image).then(function(trim_image_data) {
@@ -1148,6 +1120,29 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
 
 
     };
+
+    function unloadCheckFunc() {
+        if (getWorkspaceBusy() === 'saving') {
+            alert(Lang.Workspace.quit_stop_msg);
+            return false;
+        }
+        var canLoad = true;
+        if (!Entry.stateManager.isSaved()) {
+            canLoad = confirm(Lang.Menus.save_dismiss);
+        }
+
+        if (canLoad) {
+            Entry.plugin.closeAboutPage();
+            storage.removeItem('tempProject');
+            beforeUnload();
+        } else {
+            $scope.doPopupControl({
+                'type': 'hide'
+            });
+        }
+
+        return canLoad;
+    };
     /* Function Area End*/
 
 }]).service('myProject', function() {
@@ -1177,8 +1172,6 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
         //         });
         //     }
         // });
-
-        console.log(project);
 
         Entry.plugin.saveProject(path, project, function(e) {
             if ($.isFunction(cb)) {

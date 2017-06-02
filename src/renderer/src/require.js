@@ -14,6 +14,7 @@ const dialog = remote.dialog;
 const app = remote.app;
 const Menu = remote.Menu;
 const BrowserWindow = remote.BrowserWindow;
+const mainWindow = BrowserWindow.getAllWindows()[0];
 const originalFs = require('original-fs');
 window.$ = window.jQuery = require('./bower_components/jquery/dist/jquery.min.js');
 const entry = require('./bower_components/entryjs/src/workspace/block_entry.js');

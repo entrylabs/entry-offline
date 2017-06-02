@@ -69,7 +69,7 @@ for (var i = 0; i < argv.length; i++) {
 }
 
 var mainWindow = null;
-let cwm;
+let cwm, isForceClose;
 var isClose = true;
 
 app.on('window-all-closed', function() {
@@ -146,8 +146,11 @@ if (shouldQuit) {
             e.preventDefault();
         });
         mainWindow.on('close', function(e) {
-            cwm.closeHardwareWindow();
-            mainWindow.webContents.send('main-close');
+            if(!isForceClose) {
+                e.preventDefault();
+                cwm.closeHardwareWindow();
+                mainWindow.webContents.send('mainClose');
+            }
         });
         mainWindow.on('closed', function() {
             mainWindow = null;
@@ -172,6 +175,10 @@ if (shouldQuit) {
         cwm.createAboutWindow();
     });
 
+    ipcMain.on('forceClose', () => {
+        isForceClose = true;
+        mainWindow.close();
+    });
 
     ipcMain.on('reload', function(event, arg) {
         if(event.sender.webContents.name !== 'entry') {

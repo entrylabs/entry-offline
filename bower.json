@@ -6,7 +6,7 @@
     "node"
   ],
   "dependencies": {
-    "entryjs": "https://github.com/entrylabs/entryjs.git#master",
+    "entryjs": "https://github.com/entrylabs/entryjs.git#issue/6669",
     "entry-hw": "https://github.com/entrylabs/entry-hw.git",
     "literallycanvas": "https://github.com/entrylabs/literallycanvas.git#master",
     "socket.io-client": "~1.4.5",
