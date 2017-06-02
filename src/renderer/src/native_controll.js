@@ -310,7 +310,7 @@ Entry.plugin = (function () {
             fileNamePath = 'hardware-win.pdf';
         }
 
-        dialog.showSaveDialog(_mainWindow, {
+        Util.showSaveDialog({
             defaultPath: fileName,
             filters: [
                 { name: '*.pdf', extensions: ['pdf'] }
@@ -335,7 +335,7 @@ Entry.plugin = (function () {
     }
 
     that.getPythonManual = function(callback) {
-        dialog.showSaveDialog(_mainWindow, {
+        Util.showSaveDialog({
             defaultPath: 'Python.Guide.zip',
             filters: [
                 { name: '*.zip', extensions: ['zip'] }

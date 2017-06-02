@@ -35,13 +35,38 @@ class Util {
         });
     }
 
+    static showOpenDialog(option, callback) {
+        if(isOsx) {
+            dialog.showOpenDialog(option, callback);
+        } else {
+            dialog.showOpenDialog(_mainWindow, option, callback);
+        }
+    }
+
+    static showSaveDialog(option, callback) {
+        if(isOsx) {
+            dialog.showSaveDialog(option, callback);
+        } else {
+            dialog.showSaveDialog(_mainWindow, option, callback);
+        }
+    }
+
     static saveFileDialog(source, name, callback) {
-        dialog.showSaveDialog(_mainWindow, {
-            title: Lang.Workspace.file_save,
-            defaultPath: name,
-        }, (target) => {
-            this.copyFile(source, target, callback);
-        });
+        if(isOsx) {
+            dialog.showSaveDialog({
+                title: Lang.Workspace.file_save,
+                defaultPath: name,
+            }, (target) => {
+                this.copyFile(source, target, callback);
+            });
+        } else {
+            dialog.showSaveDialog(_mainWindow, {
+                title: Lang.Workspace.file_save,
+                defaultPath: name,
+            }, (target) => {
+                this.copyFile(source, target, callback);
+            });            
+        }
     }
 
     static clearTempDir(target = `${_real_temp_path}${tempDirPath}`) {
