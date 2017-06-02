@@ -20,7 +20,8 @@ addBypassChecker((filePath) => {
 });
 
 global.sharedObject = {
-    roomId: ''
+    roomId: '',
+    mainWindowId: '',
 }
 
 var language;
@@ -125,6 +126,8 @@ if (shouldQuit) {
             }
         });
 
+        global.sharedObject.mainWindowId = mainWindow.id;
+
         mainWindow.once('ready-to-show', () => {
             mainWindow.show()
         });
@@ -145,6 +148,7 @@ if (shouldQuit) {
         mainWindow.on('page-title-updated', function(e) {
             e.preventDefault();
         });
+
         mainWindow.on('close', function(e) {
             if(!isForceClose) {
                 e.preventDefault();

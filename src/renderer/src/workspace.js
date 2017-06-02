@@ -83,7 +83,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
             }
 
             Entry.playground.board._contextOptions[3].option.callback = function() {
-                dialog.showOpenDialog({
+                dialog.showOpenDialog(_mainWindow, {
                     properties: [
                         'openDirectory'
                     ],
@@ -226,7 +226,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
 
         Entry.HW.prototype.downloadSource = function() {
 
-            dialog.showSaveDialog({
+            dialog.showSaveDialog(_mainWindow, {
                 defaultPath: 'board.ino',
                 filters: [
                     { name: 'Arduino(*.ino)', extensions: ['ino'] }
@@ -444,7 +444,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
         var default_path = storage.getItem('defaultPath') || '';
         var projectName = $scope.project.name.replace(/[\\\/:*?"<>|]/gi, '');
         var savePath = path.join(default_path, projectName);
-        dialog.showSaveDialog({
+        dialog.showSaveDialog(_mainWindow, {
             defaultPath: savePath,
             title: title,
             filters: [{
@@ -657,7 +657,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
         storage.removeItem('tempProject');
         Entry.plugin.beforeStatus = 'load';
         var default_path = storage.getItem('defaultPath') || '';
-        dialog.showOpenDialog({
+        dialog.showOpenDialog(_mainWindow, {
             defaultPath: default_path,
             properties: [
                 'openFile'
@@ -1106,7 +1106,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
         var fileName = "엔트리블록.zip";
         var savePath = path.join(default_path, fileName);
 
-        dialog.showSaveDialog({
+        dialog.showSaveDialog(_mainWindow, {
             defaultPath: savePath,
             title: '블록이미지 저장하기'
         }, function(filePath) {

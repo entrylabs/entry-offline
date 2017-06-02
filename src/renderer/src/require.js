@@ -23,6 +23,8 @@ const blocklyConverter = require('./src/blockly_converter.js');
 const JSZip = require("jszip");
 const isOffline = true;
 const __rendererPath = path.resolve(__dirname);
+const mainWindowId = remote.getGlobal('sharedObject').mainWindowId;
+const _mainWindow = BrowserWindow.fromId(mainWindowId);
 
 import parser from './src/textmode/python/parser/filbert.js';
 const filbert = parser;

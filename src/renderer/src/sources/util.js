@@ -36,7 +36,7 @@ class Util {
     }
 
     static saveFileDialog(source, name, callback) {
-        dialog.showSaveDialog({
+        dialog.showSaveDialog(_mainWindow, {
             title: Lang.Workspace.file_save,
             defaultPath: name,
         }, (target) => {
