@@ -165,10 +165,10 @@ angular.module('workspace').controller('HeaderController', ['$scope', '$rootScop
 
         $scope.showPythonTooltip = function() {
             new Entry.Tooltip([
-                {content:Lang.Workspace.textcoding_tooltip1, target: $(".workspaceModeSelector"), direction: "left", style: "edge_up"},
-                {content:Lang.Workspace.textcoding_tooltip2, target: $(".propertyTabconsole"), direction: "right"},
-                {content:Lang.Workspace.textcoding_tooltip3, target: $("#helpBtn"), direction: "down"}
-            ], {dimmed: true});
+                { content: Lang.Workspace.textcoding_tooltip1, target: $(".workspaceModeSelector"), direction: "left", style: "offline" }, 
+                { content: Lang.Workspace.textcoding_tooltip2, target: $(".propertyTabconsole"), direction: "right" }, 
+                { content: Lang.Workspace.textcoding_tooltip3, target: $("#helpBtn"), direction: "down" }
+            ], { dimmed: true });
         };
 
         $scope.dict = {

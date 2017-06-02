@@ -173,3 +173,11 @@ body {
 .coloursWrapper {
     margin-left: 277px !important;
 }
+
+.entryTooltip.offline {
+    top: 20px;
+}
+
+.entryTooltip.offline:before {
+    margin-top: -56px !important;
+}
