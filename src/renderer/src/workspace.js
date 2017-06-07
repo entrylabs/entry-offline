@@ -14,6 +14,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
     $scope.initWorkspace = function() {
         window.lang = localStorage.getItem('lang');
         Entry.addEventListener('showLoadingPopup', $scope.showLoadingPopup);
+        Entry.addEventListener('errorLoadingPopup', $scope.errorLoadingPopup);
         Entry.addEventListener('hideLoadingPopup', $scope.hideLoadingPopup);
 
         var playFunc = createjs.Sound.play;
@@ -199,7 +200,14 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                         alert(Lang.Workspace.not_supported_file_msg);
                     }
                 } catch (e) {
-                    alert(Lang.Workspace.broken_file_msg);
+                    // alert(Lang.Workspace.broken_file_msg);
+                    $scope.doPopupControl({
+                        'type': 'hide'
+                    });
+                    $scope.doPopupControl({
+                        'type': 'fail',
+                        'msg': Lang.Workspace.loading_fail_msg
+                    });
                 }
 
                 return false;
@@ -290,6 +298,17 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
         $scope.doPopupControl({
             'type': 'hide'
         });
+    }
+
+    $scope.errorLoadingPopup = function() {
+        $scope.doPopupControl({
+            'type': 'hide'
+        });
+        $scope.doPopupControl({
+            'type': 'fail',
+            'msg': Lang.Workspace.loading_fail_msg
+        });
+        window.isNowLoading = false;
     }
 
     function addSpinnerPopup() {
