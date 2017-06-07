@@ -410,7 +410,9 @@ Entry.plugin = (function () {
 
                         that.loadProject(load_path, function (err, data) {
                             if(err) {
-                                throw err;
+                                Entry.dispatchEvent('errorLoadingPopup');
+                                // throw err;
+                                return cb();
                             }
 
                             var jsonObj = JSON.parse(data);
