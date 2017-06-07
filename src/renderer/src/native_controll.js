@@ -573,6 +573,7 @@ Entry.plugin = (function () {
 
         var gunzip = zlib.createGunzip();
         gunzip.on('error', function (e) {
+            this.end();
             if($.isFunction(cb)) {
                 cb(e);
             }

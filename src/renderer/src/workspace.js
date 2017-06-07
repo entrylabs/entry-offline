@@ -146,6 +146,9 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
             Entry.addEventListener('removeObject', removeObject);
             Entry.addEventListener('removePicture', removePicture);
             Entry.addEventListener('removeSound', removeSound);
+            // if (!Entry.creationChangedEvent)
+            //     Entry.creationChangedEvent = new Entry.Event(window);
+            // Entry.creationChangedEvent.attach(this, saveLocalStorageProject);
             $scope.setOfflineHW();
 
             Entry.getMainWS().changeEvent.attach(this, ()=> {
@@ -582,66 +585,78 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
             'type': 'spinner',
             'msg': Lang.Workspace.loading_msg
         });
-        Entry.plugin.loadProject(filePath, function(e, data) {
-            if (e) {
-                $scope.doPopupControl({
-                    'type': 'hide'
-                });
-                $scope.doPopupControl({
-                    'type': 'fail',
-                    'msg': Lang.Workspace.loading_fail_msg
-                });
-                window.isNowLoading = false;
-            } else {
-                var jsonObj = JSON.parse(data);
-                jsonObj.path = filePath;
-
-                jsonObj.objects.forEach(function(object) {
-                    var sprite = object.sprite;
-                    sprite.pictures.forEach(function(picture) {
-                        if (picture.fileurl) {
-                            picture.fileurl = picture.fileurl.replace(/\\/gi, '%5C');
-                            picture.fileurl = picture.fileurl.replace(/%5C/gi, '/');
-                            const tempIndex = picture.fileurl.lastIndexOf('temp');
-                            let tempPath = picture.fileurl;
-
-                            if(tempIndex > -1) {
-                                if(tempIndex > 0) {
-                                    tempPath = picture.fileurl.substr(tempIndex - 1);
-                                }
-                                picture.fileurl = path.posix.join(_real_temp_path_posix, tempPath);
-                            }
-                        }
+        try{
+            Entry.plugin.loadProject(filePath, function(e, data) {
+                if (e) {
+                    $scope.doPopupControl({
+                        'type': 'hide'
                     });
-                    sprite.sounds.forEach(function(sound) {
-                        if (sound.fileurl) {
-                            sound.fileurl = sound.fileurl.replace(/\\/gi, '%5C');
-                            sound.fileurl = sound.fileurl.replace(/%5C/gi, '/');
-                            const tempIndex = sound.fileurl.lastIndexOf('temp');
-                            let tempPath = sound.fileurl;
-
-                            if(tempIndex > -1) {
-                                if(tempIndex > 0) {
-                                    tempPath = sound.fileurl.substr(tempIndex - 1);
-                                }
-                                sound.fileurl = path.posix.join(_real_temp_path_posix, tempPath);
-                            }
-                        }
+                    $scope.doPopupControl({
+                        'type': 'fail',
+                        'msg': Lang.Workspace.loading_fail_msg
                     });
-                });
-
-                if (jsonObj.objects[0] &&
-                    jsonObj.objects[0].script.substr(0, 4) === "<xml") {
-                    blockConverter.convert(jsonObj, function(result) {
-                        storage.setItem('nativeLoadProject', JSON.stringify(result));
-                        Entry.plugin.reloadApplication();
-                    });
+                    window.isNowLoading = false;
                 } else {
-                    storage.setItem('nativeLoadProject', JSON.stringify(jsonObj));
-                    Entry.plugin.reloadApplication();
+                    var jsonObj = JSON.parse(data);
+                    jsonObj.path = filePath;
+
+                    jsonObj.objects.forEach(function(object) {
+                        var sprite = object.sprite;
+                        sprite.pictures.forEach(function(picture) {
+                            if (picture.fileurl) {
+                                picture.fileurl = picture.fileurl.replace(/\\/gi, '%5C');
+                                picture.fileurl = picture.fileurl.replace(/%5C/gi, '/');
+                                const tempIndex = picture.fileurl.lastIndexOf('temp');
+                                let tempPath = picture.fileurl;
+
+                                if(tempIndex > -1) {
+                                    if(tempIndex > 0) {
+                                        tempPath = picture.fileurl.substr(tempIndex - 1);
+                                    }
+                                    picture.fileurl = path.posix.join(_real_temp_path_posix, tempPath);
+                                }
+                            }
+                        });
+                        sprite.sounds.forEach(function(sound) {
+                            if (sound.fileurl) {
+                                sound.fileurl = sound.fileurl.replace(/\\/gi, '%5C');
+                                sound.fileurl = sound.fileurl.replace(/%5C/gi, '/');
+                                const tempIndex = sound.fileurl.lastIndexOf('temp');
+                                let tempPath = sound.fileurl;
+
+                                if(tempIndex > -1) {
+                                    if(tempIndex > 0) {
+                                        tempPath = sound.fileurl.substr(tempIndex - 1);
+                                    }
+                                    sound.fileurl = path.posix.join(_real_temp_path_posix, tempPath);
+                                }
+                            }
+                        });
+                    });
+
+                    if (jsonObj.objects[0] &&
+                        jsonObj.objects[0].script.substr(0, 4) === "<xml") {
+                        blockConverter.convert(jsonObj, function(result) {
+                            storage.setItem('nativeLoadProject', JSON.stringify(result));
+                            Entry.plugin.reloadApplication();
+                        });
+                    } else {
+                        storage.setItem('nativeLoadProject', JSON.stringify(jsonObj));
+                        Entry.plugin.reloadApplication();
+                    }
                 }
-            }
-        });
+            });
+        } catch(e) {
+            $scope.doPopupControl({
+                'type': 'hide'
+            });
+            $scope.doPopupControl({
+                'type': 'fail',
+                'msg': Lang.Workspace.loading_fail_msg
+            });
+            window.isNowLoading = false;
+        }
+        
     }
 
     // 불러오기
