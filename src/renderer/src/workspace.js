@@ -522,6 +522,9 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
         if(checkTextModeCode()) {
             return;
         }
+        if (getWorkspaceBusy()) {
+            return;
+        }
         window.isNowSaving = true;
         $scope.doPopupControl({
             'type': 'spinner',
@@ -546,6 +549,9 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
     // 새 이름으로 저장하기
     $scope.saveAsWorkspace = function() {
         if(checkTextModeCode()) {
+            return;
+        }
+        if (getWorkspaceBusy()) {
             return;
         }
         window.isNowSaving = true;
@@ -1187,10 +1193,6 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
     this.isSavedPath = '';
     this.programmingMode = 0;
     this.saveProject = function(path, cb) {
-
-        if(window.isNowLoading || window.isNewProject) {
-            return ;
-        }
 
         var project_name = this.name;
         var parent = this.parent;
