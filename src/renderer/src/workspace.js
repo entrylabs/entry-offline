@@ -1184,6 +1184,11 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
     this.isSavedPath = '';
     this.programmingMode = 0;
     this.saveProject = function(path, cb) {
+
+        if(window.isNowLoading || window.isNewProject) {
+            return ;
+        }
+
         var project_name = this.name;
         var parent = this.parent;
         //저장 수행
