@@ -545,31 +545,32 @@ Entry.plugin = (function () {
 
     // 프로젝트 불러오기
     that.loadProject = function(filePath, cb, enc) {
-        let isError = false;
-        deleteFolderRecursive(path.join(_real_temp_path, 'temp'));
+        const rs = fs.createReadStream(filePath);
+        var gunzip = zlib.createGunzip();
+        gunzip.on('error', function (e) {
+            if($.isFunction(cb)) {
+                cb(e);
+            }
+        });
 
-        var fs_reader = fstream.Reader({ 'path': filePath, 'type': 'File' });
-        var fs_writer = fstream.Writer({ 'path': _real_temp_path, 'mode': '0777', 'type': 'Directory' });
+        let buffers = [];
+        gunzip.on('data', (data)=> {
+            buffers.push(data)
+        });
 
-        fs_writer.on('entry', function (list) {
-            if(!isError) {
+        gunzip.on('end', function() {
+            var bufferStream = new stream.PassThrough();
+            deleteFolderRecursive(path.join(_real_temp_path, 'temp'));
+            var fs_writer = fstream.Writer({ 'path': _real_temp_path, 'mode': '0777', 'type': 'Directory' });
+            fs_writer.on('entry', function (list) {
                 list.props.mode = '0777';
-            }
-        });
-        fs_writer.on('error', function (e) {
-            isError = true;
-            if($.isFunction(cb)) {
-                cb(e);
-            }
-        });
-        fs_reader.on('error', function (e) {
-            isError = true;
-            if($.isFunction(cb)) {
-                cb(e);
-            }
-        });
-        fs_writer.on('end', function () {
-            if(!isError) {
+            });
+            fs_writer.on('error', function (e) {
+                if($.isFunction(cb)) {
+                    cb(e);
+                }
+            });
+            fs_writer.on('end', function () {
                 fs.readFile(path.resolve(_real_temp_path, 'temp', 'project.json'), enc || 'utf8', function (err, data) {
                     if(err) {
                         cb(err);
@@ -577,25 +578,15 @@ Entry.plugin = (function () {
                         cb(null, data);
                     }
                 });
-            }
-        });
-
-        var gunzip = zlib.createGunzip();
-        gunzip.on('error', function (e) {
-            isError = true;
-            this.end();
-            this.close();
-            fs_writer.end();
-            fs_writer.destroy();
-            fs_writer = null;
-            if($.isFunction(cb)) {
-                cb(e);
-            }
-        });
-        
-        fs_reader.pipe(gunzip)
+            });
+            
+            bufferStream.end(Buffer.concat(buffers));
+            bufferStream
             .pipe(tar.Parse())
             .pipe(fs_writer);
+        });
+
+        rs.pipe(gunzip);
     }
 
     that.initProjectFolder = function (cb) {

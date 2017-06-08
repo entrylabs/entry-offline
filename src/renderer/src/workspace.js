@@ -599,6 +599,9 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
         if(!isUnloadCheck && !unloadCheckFunc()) {
             return;
         }
+        if (getWorkspaceBusy()) {
+            return;
+        }
         window.isNowLoading = true;
         $scope.doPopupControl({
             'type': 'spinner',

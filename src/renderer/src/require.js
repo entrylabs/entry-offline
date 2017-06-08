@@ -3,6 +3,7 @@ const fse = require('fs-extra');
 const sizeOf = require('image-size');
 const path = require('path');
 const Q = require('q');
+const stream = require('stream');
 const fstream = require('fstream');
 const tar = require('tar');
 const zlib = require('zlib');
