@@ -181,7 +181,7 @@ angular.module('common').controller('SoundController',
             var file = uploadFile[i];
 
             //var isAudio = (/^audio\/mp3/).test(file.type);
-            var isAudio = file.name.toLowerCase().indexOf('.mp3') + file.name.toLowerCase().indexOf('.wav');
+            var isAudio = file.name.toLowerCase().indexOf('.mp3');
             if (isAudio < 0) {
                 alert(Lang.Workspace.check_audio_msg);
                 return false;
