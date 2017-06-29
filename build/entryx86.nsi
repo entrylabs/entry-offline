@@ -30,7 +30,7 @@
 ;--------------------------------
 
 ; The name of the installer
-Name "엔트리"
+Name "$(TEXT_ENTRY)"
 
 ; The file to write
 OutFile "${PRODUCT_NAME}_${PRODUCT_VERSION}_Setup_x86.exe"
@@ -65,6 +65,8 @@ RequestExecutionLevel admin
 ; 다국어 설정
 !insertmacro MUI_LANGUAGE "Korean" ;first language is the default language
 
+LangString TEXT_ENTRY ${LANG_KOREAN} "엔트리"
+LangString TEXT_ENTRY_DELETE ${LANG_KOREAN} "엔트리 제거"
 LangString TEXT_ENTRY_TITLE ${LANG_KOREAN} "엔트리 (필수)"
 LangString TEXT_START_MENU_TITLE ${LANG_KOREAN} "시작메뉴에 바로가기"
 LangString TEXT_DESKTOP_TITLE ${LANG_KOREAN} "바탕화면에 바로가기"
@@ -76,6 +78,8 @@ LangString SETUP_UNINSTALL_MSG ${LANG_ENGLISTH} "엔트리가 이미 설치되어 있습니다
 
 !insertmacro MUI_LANGUAGE "English"
 
+LangString TEXT_ENTRY ${LANG_ENGLISTH} "Entry"
+LangString TEXT_ENTRY_DELETE ${LANG_ENGLISTH} "Entry Uninstall"
 LangString TEXT_ENTRY_TITLE ${LANG_ENGLISTH} "Entry (required)"
 LangString TEXT_START_MENU_TITLE ${LANG_ENGLISTH} "Start menu shortcut"
 LangString TEXT_DESKTOP_TITLE ${LANG_ENGLISTH} "Desktop shortcut"
@@ -117,15 +121,15 @@ Section $(TEXT_ENTRY_TITLE) SectionEntry
   WriteRegStr HKLM "SOFTWARE\${PRODUCT_NAME}" "Install_Dir" "$INSTDIR"
   
   ; Write the uninstall keys for Windows
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" "DisplayName" "엔트리"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" "DisplayName" "$(TEXT_ENTRY)"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" "DisplayVersion" "${PRODUCT_VERSION}"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" "Publisher" "${PRODUCT_PUBLISHER}"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" "URLInfoAbout" "http://www.playentry.org"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" "UninstallString" '"$INSTDIR\엔트리 제거.exe"'
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" "UninstallString" '"$INSTDIR\$(TEXT_ENTRY_DELETE).exe"'
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" "DisplayIcon" '"$INSTDIR\icon.ico"'
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" "NoModify" 1
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" "NoRepair" 1
-  WriteUninstaller "엔트리 제거.exe"
+  WriteUninstaller "$(TEXT_ENTRY_DELETE).exe"
   
 SectionEnd
 
@@ -133,8 +137,8 @@ SectionEnd
 Section $(TEXT_START_MENU_TITLE) SectionStartMenu
 
   CreateDirectory "$SMPROGRAMS\EntryLabs\${PRODUCT_NAME}"
-  CreateShortCut "$SMPROGRAMS\EntryLabs\${PRODUCT_NAME}\엔트리 제거.lnk" "$INSTDIR\엔트리 제거.exe" "" "$INSTDIR\엔트리 제거.exe" 0
-  CreateShortCut "$SMPROGRAMS\EntryLabs\${PRODUCT_NAME}\엔트리.lnk" "$INSTDIR\${PRODUCT_NAME}.exe" "" "$INSTDIR\icon.ico" 0
+  CreateShortCut "$SMPROGRAMS\EntryLabs\${PRODUCT_NAME}\$(TEXT_ENTRY_DELETE).lnk" "$INSTDIR\$(TEXT_ENTRY_DELETE).exe" "" "$INSTDIR\$(TEXT_ENTRY_DELETE).exe" 0
+  CreateShortCut "$SMPROGRAMS\EntryLabs\${PRODUCT_NAME}\$(TEXT_ENTRY).lnk" "$INSTDIR\${PRODUCT_NAME}.exe" "" "$INSTDIR\icon.ico" 0
   
 SectionEnd
 
@@ -143,7 +147,7 @@ SectionEnd
 ; Optional section (can be disabled by the user)
 Section $(TEXT_DESKTOP_TITLE) SectionDesktop
 
-  CreateShortCut "$DESKTOP\엔트리.lnk" "$INSTDIR\${PRODUCT_NAME}.exe" "" "$INSTDIR\icon.ico" 0
+  CreateShortCut "$DESKTOP\$(TEXT_ENTRY).lnk" "$INSTDIR\${PRODUCT_NAME}.exe" "" "$INSTDIR\icon.ico" 0
   
 SectionEnd
 
@@ -172,7 +176,7 @@ Section "Uninstall"
   ; Remove shortcuts, if any
   Delete "$SMPROGRAMS\EntryLabs\${PRODUCT_NAME}\*.*"
   
-  Delete "$DESKTOP\엔트리.lnk"
+  Delete "$DESKTOP\$(TEXT_ENTRY).lnk"
 
   ; Remove directories used
   RMDir "$SMPROGRAMS\EntryLabs\${PRODUCT_NAME}"
@@ -195,20 +199,35 @@ Function .onInit
 	"Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
 	"UninstallString"
 	StrCmp $R0 "" done
+	
+    ReadRegStr $R1 HKLM "SOFTWARE\${PRODUCT_NAME}" "Install_Dir" 
+    StrCmp $R1 "" done
 
 	MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
 	$(SETUP_UNINSTALL_MSG) \
 	IDOK uninst
 	Abort
  
-	;Run the uninstaller	
+	;Run the uninstaller
 	uninst:
 		ClearErrors
-		ExecWait '$R0 _?=$INSTDIR'
-		IfErrors 0 +2
-			Abort
-			RMDir /r /REBOOTOK $R1
-	 
+		;ExecWait '$R0 _?=$INSTDIR'
+		ExecWait '$R0 _?=$R1'
+
+		;IfErrors no_remove_uninstaller done
+		;no_remove_uninstaller:
+	IfErrors 0 +2
+		Goto no_remove_uninstaller
+		RMDir /r /REBOOTOK $R1 
+		Goto done
+	  
+	no_remove_uninstaller:
+		DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
+		DeleteRegKey HKLM "SOFTWARE\${PRODUCT_NAME}"
+		DeleteRegKey HKCR ".ent"
+		DeleteRegKey HKCR "${PRODUCT_NAME}"
+		DeleteRegKey HKCR "MIME\DataBase\Content Type\application/x-entryapp"
+
 	done:
  
 FunctionEnd
