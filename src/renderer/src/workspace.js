@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootScope', '$modal', '$http', 'myProject', function($scope, $rootScope, $modal, $http, myProject) {
+angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootScope', '$modal', '$http', '$timeout', 'myProject', function($scope, $rootScope, $modal, $http, $timeout, myProject) {
     $scope.saveFileName = '';
     $scope.project = myProject;
     window.isNowSaving = false;
@@ -153,8 +153,11 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
             $scope.setOfflineHW();
 
             Entry.getMainWS().changeEvent.attach(this, ()=> {
-                myProject.programmingMode = Number(Entry.getMainWS().mode);
-                $scope.$apply();
+                $timeout(()=> {
+                    $scope.$apply(() => {
+                        myProject.programmingMode = Number(Entry.getMainWS().mode);
+                    });
+                }, 0);
             });
 
             var $body = $('body');

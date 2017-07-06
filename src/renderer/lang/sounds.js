@@ -164,4 +164,4 @@ SoundNames["피아노_01낮은솔"] = "Piano_01low sol";
 SoundNames["피아노_02낮은라"] = "Piano_02low la";
 SoundNames["피아노_03낮은시"] = "Piano_03low si";
 SoundNames["피아노_04도"] = "Piano_04 do";
-SoundNames["드럼 플로어 탐탐"] = "Drum floor Tam Tam ";
+SoundNames["드럼 플로어 탐탐"] = "Drum floor Tam Tam";
