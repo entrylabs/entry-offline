@@ -1,37 +1,47 @@
-<div class="row">
-    <div class="wrap upload_wrap">
-        <div class="file_upload_warning">{{'Menus.picture_upload_warn_1'|text}}</div>
-        <div class="spinner" ng-show="isUploading">
-            <div class="rect1"></div>
-            <div class="rect2"></div>
-            <div class="rect3"></div>
-            <div class="rect4"></div>
-            <div class="rect5"></div>
-        </div>
-        <div class="box">
-            <form>
-                <div class="image-upload boxOuter">
-                    <label for="uploadFile">
-                        <img src="./images/fileadd.png"/>
-                        <span class="workspace_upload_span"></span>
-                    </label>
-
-                    <input type="file" id="uploadFile" name="uploadFile" 
-                        data-ng-model="uploadFile" multiple="multiple"
-                        onchange="angular.element(this).scope().upload()" 
-                        title="이미지 파일 선택"/>
-                </div>
-                <div class="titleBox">{{'Workspace.upload_addfile'|text}}</div>
-            </form>
-        </div>
-        <div class="box" data-ng-repeat="picture in uploadPictures">
-            <div id="{{picture._id}}" class="boxOuter" data-ng-click="selectPicture(picture)" data-ng-dblclick="applyPicture(picture)">
-                <div class="boxInner" style="background-size:contain;background-image: url('{{picture|makeUploadThumbnail}}');">
-                </div>
-                <img class="overlay" src="./images/check_inside_new.png"/>
+<div class="fileUploadWrapper">
+    <span class="uploadAlertWrapper">
+        <img src="./images/ban_icon.png"/>
+        <div class="uploadDescBig" ng-bind-html="'Menus.file_upload_desc_1' | text | unsafe"><u></u></div>
+        <div class="uploadDesc">{{'Menus.file_upload_desc_2' | text}}</div>
+        <div class="uploadDesc">{{'Menus.file_upload_desc_3' | text}}</div>
+        <div class="uploadDesc">{{'Menus.file_upload_desc_4' | text}}</div>
+        <div class="uploadDesc">{{'Menus.file_upload_desc_5' | text}}</div>
+    </span>
+    <span class="row fileUpload">
+        <div class="wrap upload_wrap">
+            <div class="file_upload_warning">{{'Menus.picture_upload_warn_1'|text}}</div>
+            <div class="spinner" ng-show="isUploading">
+                <div class="rect1"></div>
+                <div class="rect2"></div>
+                <div class="rect3"></div>
+                <div class="rect4"></div>
+                <div class="rect5"></div>
             </div>
-            <div class="titleBox">{{picture.name}}</div>
+            <div class="box">
+                <form>
+                    <div class="image-upload boxOuter">
+                        <label for="uploadFile">
+                            <img src="./images/fileadd.png"/>
+                            <span class="workspace_upload_span"></span>
+                        </label>
+
+                        <input type="file" id="uploadFile" name="uploadFile" 
+                            data-ng-model="uploadFile" multiple="multiple"
+                            onchange="angular.element(this).scope().upload()" 
+                            title="이미지 파일 선택"/>
+                    </div>
+                    <div class="titleBox">{{'Workspace.upload_addfile'|text}}</div>
+                </form>
+            </div>
+            <div class="box" data-ng-repeat="picture in uploadPictures">
+                <div id="{{picture._id}}" class="boxOuter" data-ng-click="selectPicture(picture)" data-ng-dblclick="applyPicture(picture)">
+                    <div class="boxInner" style="background-size:contain;background-image: url('{{picture|makeUploadThumbnail}}');">
+                    </div>
+                    <img class="overlay" src="./images/check_inside_new.png"/>
+                </div>
+                <div class="titleBox">{{picture.name}}</div>
+            </div>
         </div>
-    </div>
+    </span>
 </div>
 
