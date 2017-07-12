@@ -13,7 +13,7 @@
 !define MUI_UNICON "icon.ico"
 !define PRODUCT_NAME "Entry"
 !define APP_NAME "Entry.exe"
-!define PRODUCT_VERSION "1.5.1"
+!define PRODUCT_VERSION "1.5.2"
 !define PRODUCT_PUBLISHER "EntryLabs"
 !define PRODUCT_WEB_SITE "http://www.playentry.org/"
  
@@ -73,20 +73,20 @@ LangString TEXT_DESKTOP_TITLE ${LANG_KOREAN} "바탕화면에 바로가기"
 LangString DESC_ENTRY ${LANG_KOREAN} "엔트리 기본 프로그램"
 LangString DESC_START_MENU ${LANG_KOREAN} "시작메뉴에 바로가기 아이콘이 생성됩니다."
 LangString DESC_DESKTOP ${LANG_KOREAN} "바탕화면에 바로가기 아이콘이 생성됩니다."
-LangString SETUP_UNINSTALL_MSG ${LANG_ENGLISTH} "엔트리가 이미 설치되어 있습니다. $\n$\r'확인' 버튼을 누르면 이전 버전을 삭제 후 재설치하고 '취소' 버튼을 누르면 업그레이드를 취소합니다."
+LangString SETUP_UNINSTALL_MSG ${LANG_KOREAN} "엔트리가 이미 설치되어 있습니다. $\n$\r'확인' 버튼을 누르면 이전 버전을 삭제 후 재설치하고 '취소' 버튼을 누르면 업그레이드를 취소합니다."
 
 
 !insertmacro MUI_LANGUAGE "English"
 
-LangString TEXT_ENTRY ${LANG_ENGLISTH} "Entry"
-LangString TEXT_ENTRY_DELETE ${LANG_ENGLISTH} "Entry Uninstall"
-LangString TEXT_ENTRY_TITLE ${LANG_ENGLISTH} "Entry (required)"
-LangString TEXT_START_MENU_TITLE ${LANG_ENGLISTH} "Start menu shortcut"
-LangString TEXT_DESKTOP_TITLE ${LANG_ENGLISTH} "Desktop shortcut"
-LangString DESC_ENTRY ${LANG_ENGLISTH} "Entry Program"
-LangString DESC_START_MENU ${LANG_ENGLISTH} "Create shortcut on start menu"
-LangString DESC_DESKTOP ${LANG_ENGLISTH} "Create shortcut on desktop"
-LangString SETUP_UNINSTALL_MSG ${LANG_ENGLISTH} "Entry is already installed. $\n$\nClick 'OK' to remove the previous version or 'Cancel' to cancel this upgrade."
+LangString TEXT_ENTRY ${LANG_ENGLISH} "Entry"
+LangString TEXT_ENTRY_DELETE ${LANG_ENGLISH} "Entry Uninstall"
+LangString TEXT_ENTRY_TITLE ${LANG_ENGLISH} "Entry (required)"
+LangString TEXT_START_MENU_TITLE ${LANG_ENGLISH} "Start menu shortcut"
+LangString TEXT_DESKTOP_TITLE ${LANG_ENGLISH} "Desktop shortcut"
+LangString DESC_ENTRY ${LANG_ENGLISH} "Entry Program"
+LangString DESC_START_MENU ${LANG_ENGLISH} "Create shortcut on start menu"
+LangString DESC_DESKTOP ${LANG_ENGLISH} "Create shortcut on desktop"
+LangString SETUP_UNINSTALL_MSG ${LANG_ENGLISH} "Entry is already installed. $\n$\nClick 'OK' to remove the previous version or 'Cancel' to cancel this upgrade."
 
 
 
