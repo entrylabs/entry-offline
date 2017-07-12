@@ -101,6 +101,10 @@ Lang.Blocks = {
     "ARDUINO_arduino_get_sensor_number_3": "A3",
     "ARDUINO_arduino_get_sensor_number_4": "A4",
     "ARDUINO_arduino_get_sensor_number_5": "A5",
+    "blacksmith_toggle_on": "켜기",
+    "blacksmith_toggle_off": "끄기",
+    "blacksmith_lcd_first_line": "첫 번째",
+    "blacksmith_lcd_seconds_line": "두 번째",
     "BITBRICK_light": "밝기센서",
     "BITBRICK_IR": "거리센서",
     "BITBRICK_touch": "버튼",
@@ -1418,11 +1422,33 @@ Lang.Buttons = {
     "refuse": "거절",
     "yes": "예",
     "button_no": "아니오",
-    "quiz_retry": "다시 풀어보기"
+    "quiz_retry": "다시 풀어보기",
+    "discuss_upload": "불러오기"
 };
 Lang.ko = "한국어";
 Lang.vn = "tiếng Việt";
 Lang.Menus = {
+    "no_discuss_permission": "글을 읽을 권한이 없습니다",
+    "delete_comment": "댓글을 삭제하시겠습니까?",
+    "delete_article": "게시물을 삭제하시겠습니까?",
+    "discuss_cannot_edit": "본인의 게시물이 아닙니다.",
+    "discuss_extention": "실행파일은 첨부하실 수 없습니다.",
+    "delete_discuss_picture": "사진을 삭제하시겠습니까?",
+    "delete_discuss_file": "파일을 삭제하시겠습니까?",
+    "discuss_save_question": "글을 저장하시겠습니까?",
+    "discuss_cancle_question": "작성을 취소하시겠습니까?",
+    "discuss_saved": "이 저장되었습니다.",
+    "search_lang": "검색",
+    "search_title": "제목",
+    "faq_desc": "엔트리에서 제공하는 주제별, 학년별 학습과정을 통해 차근차근 소프트웨어를 배워보세요!",
+    "faq_all": "전체보기",
+    "faq_site": "사이트 이용",
+    "faq_project": "작품 만들기",
+    "faq_hardware": "하드웨어",
+    "faq_offline": "오프라인",
+    "faq_copyright": "저작권",
+    "faq_title": "자주하는 질문",
+    "faq": "자주하는 질문",
     "fword_alert_1": "주제와 무관한 욕설이나 악플은 게시할 수 없습니다.",
     "fword_alert_2": "불건전한 단어가 포함되어 있어, 대체 문장으로 게시 됩니다.",
     "fword_replace_1": "엔트리를 통해 누구나 쉽고 재미있게 소프트웨어를 배울 수 있어요.",
@@ -2370,10 +2396,11 @@ Lang.Menus = {
     "difficulty": "난이도",
     "usage": "사용요소",
     "learning_concept": "학습개념",
-    "related_subject": "연개 교과",
+    "related_subject": "연계 교과",
     "show_more": "더보기",
     "close": "닫기",
     "latest": "최신순",
+    "viewCount": "조회수",
     "viewer": "조회순",
     "like": "좋아요순",
     "comment": "댓글순",
@@ -2463,7 +2490,7 @@ Lang.Menus = {
     "lecture_header_export_project": "내 작품으로 저장하기",
     "lecture_header_undo": "취소",
     "lecture_header_redo": "복원",
-    "lecture_header_bugs": "버그신고",
+    "lecture_er_bugs": "버그신고",
     "lecture_container_tab_object": "오브젝트",
     "lecture_container_tab_video": "강의 동영상",
     "lecture_container_tab_project": "완성된 작품",
@@ -2473,6 +2500,8 @@ Lang.Menus = {
     "commertial": "상업적인 목적을 가지고 활동",
     "explicit": "음란물",
     "other": "기타",
+    "check_one_more": "하나이상 표기해주세요.",
+    "enter_content": "기타의 내용을 입력해 주세요.",
     "report_result": "결과 회신을 원하시면 메일을 입력해 주세요.",
     "report_success": "신고하기가 정상적으로 처리 되었습니다.",
     "etc_detail": "기타 항목 선택후 입력해주세요.",
@@ -3543,7 +3572,28 @@ Lang.Menus = {
     "scholarship_example_desc": "연구용 자료를 활용하여 발표된 논문을 확인 할 수 있습니다.",
     "scholarship_see_example": "논문 다운로드",
     "Altino": "알티노",
-    "private_project": "비공개 작품입니다."
+    "private_project": "비공개 작품입니다.",
+    "learn_programming_entry_mission": "\"엔트리봇\"과 함께 미션 해결하기",
+    "learn_programming_line_mission": "\"라인레인저스\"와 샐리구하기",
+    "learn_programming_choseok": "\"마음의 소리\"의 조석과 게임 만들기",
+    "learn_programming_level_novice": "기초",
+    "learn_programming_level_inter": "중급",
+    "learn_programming_level_advanced": "고급",
+    "line_look_for": "샐리를 찾아서",
+    "line_look_for_desc_1": "라인 레인저스의 힘을 모아 강력한 악당 메피스토를 물리치고 샐리를 구해주세요!",
+    "line_save": "샐리 구하기",
+    "line_save_desc_1": "메피스토 기지에 갇힌 샐리. 라인 레인저스가 장애물을 피해 샐리를 찾아갈 수 있도록 도와주세요!",
+    "line_escape": "샐리와 탈출하기",
+    "line_escape_desc_1": "폭파되고 있는 메피스토 기지에서 샐리와 라인 레인저스가 무사히 탈출할 수 있도록 도와주세요!",
+    "solve_choseok": "가위바위보 만들기",
+    "solve_choseok_desc_1": "만화 속 조석이 가위바위보 게임을 만들 수 있도록 도와주세요!",
+    "save_modified_shape": "수정된 내용을 저장하시겠습니까?",
+    "attach_file": "첨부",
+    "enter_discuss_title": "제목을 입력해 주세요(30자 이하)",
+    "enter_discuss_title_alert": "제목을 입력해 주세요",
+    "discuss_upload_warn": "10MB이하의 파일을 올려주세요.",
+    "discuss_list": "목록보기",
+    "discuss_write_notice": "우리반 공지사항으로 지정하여 게시판 최상단에 노출합니다."
 };
 Lang.Msgs = {
     "save_canvas_alert": "저장 중입니다. 잠시후에 다시 시도해주세요.",
@@ -3876,7 +3926,9 @@ Lang.Workspace = {
     "variable_name_auto_edited_content": "변수의 이름은 10글자를 넘을 수 없습니다.",
     "list_name_auto_edited_title": "리스트 이름 자동 변경",
     "list_name_auto_edited_content": "리스트의 이름은 10글자를 넘을 수 없습니다.",
-    "cloned_scene": "복제본_"
+    "cloned_scene": "복제본_",
+    "name_already_exists": "이름이 중복 되었습니다.",
+    "enter_the_name": "이름을 입력하여 주세요."
 };
 Lang.code = "코드보기";
 Lang.EntryStatic = {
@@ -4406,7 +4458,9 @@ Lang.General = {
     "note_b": "시",
     "questions": "문제",
     "clock": "시계",
-    "counter_clock": "반시계"
+    "counter_clock": "반시계",
+    "font_size": "글자 크기",
+    "second": "초"
 };
 Lang.Fonts = {
     "batang": "바탕체",
@@ -4509,6 +4563,17 @@ Lang.template = {
     "arduino_ext_set_tone": "디지털 %1 번 핀의 버저를 %2 %3 음으로 %4 초 연주하기 %5",
     "arduino_ext_set_servo": "디지털 %1 번 핀의 서보모터를 %2 의 각도로 정하기 %3",
     "arduino_ext_get_digital": "디지털 %1 번 센서값",
+    "blacksmith_get_analog_value": "아날로그 %1 번 핀 센서 값",
+    "blacksmith_get_analog_mapping": "아날로그 %1 번 핀 센서 값의 범위를 %2 ~ %3 에서 %4 ~ %5 로 바꾼 값",
+    "blacksmith_get_digital_bluetooth": "블루투스 RX 2 핀 데이터 값",
+    "blacksmith_get_digital_ultrasonic": "초음파 Trig %1 핀 Echo %2 핀 센서 값",
+    "blacksmith_get_digital_toggle": "디지털 %1 번 핀 센서 값",
+    "blacksmith_set_digital_toggle": "디지털 %1 번 핀 %2 %3",
+    "blacksmith_set_digital_pwm": "디지털 %1 번 핀을 %2 (으)로 정하기 %3",
+    "blacksmith_set_digital_servo": "디지털 %1 번 핀의 서보모터를 %2 의 각도로 정하기 %3",
+    "blacksmith_set_digital_buzzer": "디지털 %1 번 핀의 버저를 %2 옥타브 %3 음으로 %4 초 연주하기 %5",
+    "blacksmith_set_digital_lcd": "LCD화면 %1 줄에 %2 나타내기 %3",
+    "blacksmith_set_digital_bluetooth": "블루투스 TX 3 핀에 %1 데이터 보내기 %2",
     "byrobot_dronefighter_controller_controller_value_button": "%1",
     "byrobot_dronefighter_controller_controller_value_joystick": "%1",
     "byrobot_dronefighter_controller_controller_if_button_press": "조종기 %1 눌렀을 때",
@@ -5169,7 +5234,8 @@ Lang.TextCoding = {
     "alert_list_empty_text_add_change": "리스트명에 공백(띄어쓰기)이 포함될 수 없습니다.",
     "alert_function_name_empty_text_add_change": "함수명에 공백(띄어쓰기)이 포함될 수 없습니다.",
     "alert_no_save_on_error": "문법 오류가 존재하여 작품을 저장할 수 없습니다.",
-    "warn_unnecessary_arguments": "&(calleeName)(); 는 괄호 사이에 값이 입력될 필요가 없는 명령어 입니다. (line:&(lineNumber))"
+    "warn_unnecessary_arguments": "&(calleeName)(); 는 괄호 사이에 값이 입력될 필요가 없는 명령어 입니다. (line:&(lineNumber))",
+    "python_code": " 오브젝트의 파이선 코드"
 };
 Lang.PythonHelper = {
     "when_run_button_click_desc": "[시작하기]버튼을 클릭하면 아래 명령어들을 실행합니다.<br>아래 명령어는 [Tab]키를 통해 들여쓰기합니다.",

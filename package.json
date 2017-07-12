@@ -6,14 +6,13 @@
     "clean": "rimraf dist",
     "dist": "build",
     "comp": "set NODE_ENV=production&&electron-compile ./src",
-    "dist:win": "electron-forge package --arch ia32",
-    "dist:win64": "electron-forge package --arch x64",
-    "pack:win": "electron-forge package --platform=win32",
-    "pack:win64": "electron-packager ./app Entry --platform=win32 --arch=x64 --icon=./build/icon.ico",
     "start": "electron-forge start",
     "test": "mocha test/default.js",
     "package": "electron-forge package",
+    "dist:win": "electron-forge package --arch ia32",
+    "dist:win64": "electron-forge package --arch x64",
     "pack": "electron-forge package",
+    "pack:win": "electron-forge package --platform=win32",
     "pack:win32": "electron-forge package --arch=ia32 --platform=win32",
     "make": "electron-forge make",
     "preinstall": "bower cache clean && bower install"
@@ -49,7 +48,7 @@
     "xml2js": "^0.4.17"
   },
   "main": "src/entry_offline.js",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "config": {
     "forge": "./forge.config.js"
   }

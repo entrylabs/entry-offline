@@ -119,7 +119,7 @@ angular.module('common').controller('SoundController',
     $scope.search = function() {
         $scope.searchWord = $('#searchWord').val();
         if (!$scope.searchWord || $scope.searchWord == '') {
-            alert('검색어를 입력하세요.');
+            alert(Lang.Menus.searchword_required);
             return false;
         }
 
