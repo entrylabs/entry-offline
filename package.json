@@ -16,7 +16,7 @@
     "pack:win32": "electron-forge package --arch=ia32 --platform=win32",
     "make": "electron-forge make",
     "make:win": "electron-forge package --platform=win32&&makensis ./build/entryx64.nsi",
-    "make:win32": "electron-forge package --arch=ia32 --platform=win32",
+    "make:win32": "electron-forge package --arch=ia32 --platform=win32&&makensis ./build/entryx86.nsi",
     "preinstall": "bower cache clean && bower install"
   },
   "devDependencies": {
