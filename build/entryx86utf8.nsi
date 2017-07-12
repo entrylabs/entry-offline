@@ -33,7 +33,7 @@
 Name "$(TEXT_ENTRY)"
 
 ; The file to write
-OutFile "${PRODUCT_NAME}_${PRODUCT_VERSION}_Setup.exe"
+OutFile "${PRODUCT_NAME}_${PRODUCT_VERSION}_Setup_x86.exe"
 
 ; The default installation directory
 InstallDir "C:\${PRODUCT_NAME}"
@@ -101,13 +101,13 @@ Section $(TEXT_ENTRY_TITLE) SectionEntry
 
   ; Put file there
   SetOutPath "$INSTDIR\locales"
-  File "..\out\Entry-win32-x64\locales\*.*"
+  File "..\out\Entry-win32-ia32\locales\*.*"
   
   SetOutPath "$INSTDIR\resources"
-  File /r "..\out\Entry-win32-x64\resources\*.*"
+  File /r "..\out\Entry-win32-ia32\resources\*.*"
   
   SetOutPath "$INSTDIR"
-  File "..\out\Entry-win32-x64\*.*"
+  File "..\out\Entry-win32-ia32\*.*"
   File "icon.ico"
   
   WriteRegStr HKCR ".ent" "" "${PRODUCT_NAME}"
@@ -188,7 +188,6 @@ Function LaunchLink
   Exec "${APP_NAME}"
 FunctionEnd
 
-
 Function .onInit
 	${nsProcess::FindProcess} "${APP_NAME}" $R0
 	StrCmp $R0 0 mfound notRunning
@@ -217,10 +216,10 @@ Function .onInit
 
 		;IfErrors no_remove_uninstaller done
 		;no_remove_uninstaller:
-		IfErrors 0 +2
-			Goto no_remove_uninstaller
-			RMDir /r /REBOOTOK $R1 
-			Goto done
+	IfErrors 0 +2
+		Goto no_remove_uninstaller
+		RMDir /r /REBOOTOK $R1 
+		Goto done
 	  
 	no_remove_uninstaller:
 		DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
