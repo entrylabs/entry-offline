@@ -477,7 +477,7 @@ angular.module('common').controller('SpriteController',
         } else if ($scope.currentTab === 'upload') {
             return $scope.selectedPictures;
         } else if ($scope.currentTab === 'textBox') {
-            return 'textbox';
+            return '1';
         } else {
             return null;
         }
