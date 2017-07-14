@@ -538,8 +538,18 @@ angular.module('common').controller('SpriteController',
     };
 
     $scope.setLinebreak = function(linebreak) {
+        if ($scope.linebreak == linebreak) return;
+
         $scope.linebreak = linebreak;
         $scope.fontData.lineBreak = linebreak;
+
+        if (linebreak) {
+            var text = $(".modal_textBox").eq(0).val();
+            $(".modal_textBox").eq(1).val(text);
+        } else {
+            text = $(".modal_textBox").eq(1).val();
+            $(".modal_textBox").eq(0).val(text);
+        }
     };
 
     // 적용

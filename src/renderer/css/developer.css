@@ -181,3 +181,8 @@ body {
 .entryTooltip.offline:before {
     margin-top: -56px !important;
 }
+
+.modal_textBox {
+    padding-left: 4px;
+    padding-right: 4px;
+}
