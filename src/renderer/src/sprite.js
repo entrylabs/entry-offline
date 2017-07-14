@@ -547,7 +547,7 @@ angular.module('common').controller('SpriteController',
         if (!$scope.currentSelected()) {
             alert(Lang.Workspace.select_sprite);
         } else {
-            if ($scope.currentSelected() === 'textbox') {
+            if ($scope.currentSelected() === '1') {
                 removeUploadPictures();
                 var value = jQuery('.modal_textBox').eq(0).val();
                 if ($scope.linebreak)
