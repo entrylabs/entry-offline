@@ -25,7 +25,7 @@
     "babel-preset-env": "^1.2.1",
     "babel-preset-react": "^6.23.0",
     "electron-compilers": "^5.5.1",
-    "electron-prebuilt-compile": "1.4.15",
+    "electron-prebuilt-compile": "1.6.11",
     "mocha": "^2.5.3",
     "rimraf": "^2.5.2",
     "spectron": "^3.2.3"
