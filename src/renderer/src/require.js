@@ -24,8 +24,10 @@ const blocklyConverter = require('./src/blockly_converter.js');
 const JSZip = require("jszip");
 const isOffline = true;
 const __rendererPath = path.resolve(__dirname);
-const mainWindowId = remote.getGlobal('sharedObject').mainWindowId;
+const sharedObject = remote.getGlobal('sharedObject');
+const mainWindowId = sharedObject.mainWindowId;
 const _mainWindow = BrowserWindow.fromId(mainWindowId);
+const archiver = require('archiver');
 
 import parser from './src/textmode/python/parser/filbert.js';
 const filbert = parser;
@@ -47,3 +49,25 @@ document.fonts.onloadingdone = (fontFaceSetEvent)=> {
         }
     } catch(e) {}
 };
+
+var isOsx = false;
+if (process.platform != 'darwin') {
+    isOsx = false;
+    let show = true;
+    setInterval(()=> {
+        const { free, total } = process.getSystemMemoryInfo();
+        const processMem = process.getProcessMemoryInfo();
+        let usage = 0;
+
+        if(free <= 307200 && show) {
+            show = false;
+            new Notification(Lang.Msgs.low_memory_alert_title, {
+                body: Lang.Msgs.low_memory_alert_desc
+            });
+        } else if(free >= 409600) {
+            show = true;
+        }
+    }, 10000);
+} else {
+    isOsx = true;
+}
