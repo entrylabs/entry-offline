@@ -244,7 +244,7 @@ body {
 .workspace_mode {
     float: right;
     right: 0;
-    margin-right: 30px;
+    margin-right: 15px;
 }
 
 .workspace_mode .language_wrapper {
@@ -377,6 +377,11 @@ html.practical_course_mode .entryRunButtonWorkspace_w {
 
 html.practical_course_mode .entryAddButtonWorkspace_w {
     background-image: url(../images/workspace/btn_add.png);
+}
+
+.workspace_margin {
+    display: inline-block;
+    margin-right: 10px;
 }
 
 @media screen and (min-height: 880px) {

@@ -49,9 +49,9 @@
     "icon": "app/icon/app"
   },
   "devDependencies": {
-    "electron-builder": "^10.5.0",
-    "electron-packager": "^8.3.0",
-    "electron-prebuilt": "^1.4.2",
+    "electron-builder": "10.5.0",
+    "electron-packager": "8.3.0",
+    "electron": "1.4.15",
     "mocha": "^2.5.3",
     "rimraf": "^2.5.2",
     "spectron": "^3.2.3"

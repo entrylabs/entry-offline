@@ -1164,7 +1164,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
     }
 
     this.getMode = function() {
-        return mode;
+        return this.mode;
     }
 
     this.saveProject = function(path, cb) {

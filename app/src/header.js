@@ -4,34 +4,14 @@ angular.module('workspace').controller('HeaderController', ['$scope', '$rootScop
     function($scope, $rootScope, $cookies, myProject) {
         $scope.user_language = localStorage.getItem('lang') || 'ko';
         $scope.PracticalModeName = '';
+        $scope.PracticalMode = '';
         $scope.project = myProject;
-        $scope.headerButtonImageSet = {
-            new: './images/top_icon_new_b_nor.png',
-            save: './images/top_icon_save_b_nor.png',
-            help: './images/block_help.png',
-            undo: './images/top_icon_left_b_nor.png',
-            redo: './images/top_icon_right_b_nor.png',
-        };
-        var headerImageList = {
-            default: {
-                new: './images/top_icon_new_b_nor.png',
-                save: './images/top_icon_save_b_nor.png',
-                help: './images/block_help.png',
-                undo: './images/top_icon_left_b_nor.png',
-                redo: './images/top_icon_right_b_nor.png',
-            },
-            practical_course: {
-                new: './images/ic_new.png',
-                save: './images/top_icon_save_b_nor.png',
-                help: './images/ic_q.png',
-                undo: './images/top_icon_left_b_nor.png',
-                redo: './images/top_icon_right_b_nor.png',  
-            }
-        }
+
         var supported = !(typeof storage == 'undefined' || typeof window.JSON == 'undefined');
         var storage = (typeof window.localStorage === 'undefined') ? undefined : window.localStorage;
         $scope.init = function() {
             $scope.PracticalModeName = myProject.modeName;
+            $scope.PracticalMode = myProject.mode;
 
             if (hwGuidePopup) {
                 hwGuidePopup.close();

@@ -132,6 +132,12 @@ var template = [{
     }]
 }];
 
+var isMiniMode = localStorage.getItem('isMiniMode') === 'true';
+
+if(isMiniMode) {
+    template.pop();
+}
+
 if (process.platform == 'darwin') {
     template.unshift({
         label: Lang.Menus.Entry,

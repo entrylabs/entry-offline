@@ -403,7 +403,7 @@ Entry.plugin = (function () {
 
     that.init = function (cb) {
         // 아두이노 open 블록을 제거
-        delete Entry.block.arduino_open;
+        // delete Entry.block.arduino_open;
 
         // NanumBarunGothic 폰트 로딩 시간까지 기다린다.
         var font = new FontFace("nanumBarunRegular", "url(./fonts/NanumBarunGothic.woff2)");
