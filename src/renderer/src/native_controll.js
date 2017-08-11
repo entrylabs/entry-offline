@@ -1,19 +1,12 @@
 'use strict';
-var isOsx = false;
 var nowLocale = app.getLocale();
 var options = {};
 var _real_path = __dirname;
 var _real_temp_path = app.getPath('userData');
-var _real_temp_path_posix = '';
-_real_temp_path_posix = _real_temp_path.replace(/\\/gi, '%5C').replace(/%5C/gi, '/');
+sharedObject.workingPath = _real_temp_path;
+var _real_temp_path_posix = _real_temp_path.replace(/\\/gi, '%5C').replace(/%5C/gi, '/');
 var _real_path_with_protocol = '';
 var isAsar = false;
-
-if (process.platform != 'darwin') {
-    isOsx = false;
-} else {
-    isOsx = true;
-}
 
 var _webContents = remote.getCurrentWebContents();
 var startFile = _webContents.startFile;
@@ -503,30 +496,34 @@ Entry.plugin = (function () {
                     throw err;
                 }
 
-                var fs_reader = fstream.Reader({ 'path': path.resolve(_real_temp_path, 'temp'), 'type': 'Directory' });
+                const channel = Entry.generateHash();
 
-                var fs_writer = fstream.Writer({ 'path': filePath, 'mode': '0777', 'type': 'File',  });
-
-                fs_writer.on('entry', function (list) {
-                    list.props.mode = '0777';
-                    // console.log('entry');
+                ipcRenderer.send('saveProject', {
+                    channel,
+                    sourcePath: _real_temp_path,
+                    destinationPath: filePath,
                 });
-                fs_writer.on('error', function (e) {
+
+                ipcRenderer.once(channel, (event, err)=> {
                     if($.isFunction(cb)){
-                        cb(e);
+                        cb(err);
                     }
-                });
-                fs_writer.on('end', function () {
+                });                
+            });
+        });
+    }
 
-                    if($.isFunction(cb)){
-                        cb();
-                    }
-                });
+    that.saveTempProject = function(data, cb, enc) {
+        var string_data = JSON.stringify(data);
+        that.mkdir(path.join(_real_temp_path, 'temp'), function () {
+            fs.writeFile(path.join(_real_temp_path, 'temp', 'project.json'), string_data, {encoding: (enc || 'utf8'), mode: '0777'}, function (err) {
+                if(err) {
+                    throw err;
+                }
 
-                fs_reader.pipe(tar.Pack())
-                    .pipe(zlib.Gzip())
-                    .pipe(fs_writer)
-
+                if($.isFunction(cb)){
+                    cb(err);
+                }                
             });
         });
     }
