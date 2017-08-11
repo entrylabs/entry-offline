@@ -1,6 +1,6 @@
 'use strict';
 
-import {app, BrowserWindow, Menu, globalShortcut, ipcMain, webContents, dialog} from 'electron';
+import { app, BrowserWindow, Menu, globalShortcut, ipcMain, webContents, dialog } from 'electron';
 import path from 'path';
 import fs from 'fs';
 import ChildProcess from 'child_process';
@@ -10,7 +10,7 @@ import { addBypassChecker, init } from 'electron-compile';
 
 const bypassList = ['.png', '.jpg', '.mp3', '.wav', '.gif'];
 addBypassChecker((filePath) => {
-    const { ext = ''} = path.parse(filePath);
+    const { ext = '' } = path.parse(filePath);
     return filePath.indexOf(app.getAppPath()) === -1 && bypassList.indexOf(ext) > -1;
 });
 
@@ -22,10 +22,10 @@ global.sharedObject = {
 
 function logger(text) {
     var log_path = path.join(__dirname);
-    if(!fs.existsSync(log_path)) {
+    if (!fs.existsSync(log_path)) {
         fs.mkdirSync(log_path);
     }
-    if(!fs.existsSync(path.join(log_path, 'debug.log'))) {
+    if (!fs.existsSync(path.join(log_path, 'debug.log'))) {
         fs.writeFileSync(path.join(log_path, 'debug.log'), '', 'utf8');
     }
     var data = fs.readFileSync(path.join(log_path, 'debug.log'), 'utf8');
@@ -67,19 +67,19 @@ let mainWindow = null;
 let cwm, isForceClose;
 let isClose = true;
 
-app.on('window-all-closed', function() {
+app.on('window-all-closed', function () {
     app.quit();
     process.exit(0);
 });
 
-let shouldQuit = app.makeSingleInstance(function(commandLine, workingDirectory) {
+let shouldQuit = app.makeSingleInstance(function (commandLine, workingDirectory) {
     // 어플리케이션을 중복 실행했습니다. 주 어플리케이션 인스턴스를 활성화 합니다.
     if (mainWindow) {
-        if (mainWindow.isMinimized()) 
+        if (mainWindow.isMinimized())
             mainWindow.restore();
         mainWindow.focus();
 
-        if(Array.isArray(commandLine) && commandLine[1]) {
+        if (Array.isArray(commandLine) && commandLine[1]) {
             mainWindow.webContents.send('loadProject', commandLine[1]);
         }
     }
@@ -97,8 +97,8 @@ if (shouldQuit) {
     function createMainWindow() {
         language = app.getLocale();
         let title = app.getVersion();
-        
-        if(language === 'ko') {
+
+        if (language === 'ko') {
             title = '엔트리 v' + title;
             crashedMsg.title = '오류 발생';
             crashedMsg.content = '프로그램이 예기치 못하게 종료되었습니다. 작업 중인 파일을 저장합니다.';
@@ -109,7 +109,7 @@ if (shouldQuit) {
         }
 
         mainWindow = new BrowserWindow({
-            width: 1024, 
+            width: 1024,
             height: 700,
             title: title,
             show: false,
@@ -134,14 +134,14 @@ if (shouldQuit) {
                     name: 'Entry File',
                     extensions: ['ent']
                 }]
-            }, async (destinationPath)=> {
+            }, async (destinationPath) => {
                 let err;
-                try{
+                try {
                     await mainUtils.saveProject({
                         destinationPath,
                         sourcePath: global.sharedObject.workingPath,
                     });
-                } catch(error) {
+                } catch (error) {
                     console.log(error);
                     err = error;
                 }
@@ -152,43 +152,43 @@ if (shouldQuit) {
         mainWindow.setMenu(null);
         mainWindow.loadURL('file:///' + path.join(__dirname, 'renderer', 'entry_offline.html'));
 
-        if(option.debug) {
+        if (option.debug) {
             mainWindow.webContents.openDevTools();
         }
 
-        if(option.file) {
+        if (option.file) {
             mainWindow.webContents.startFile = option.file;
         }
 
         mainWindow.webContents.name = 'entry';
 
-        mainWindow.on('page-title-updated', function(e) {
+        mainWindow.on('page-title-updated', function (e) {
             e.preventDefault();
         });
 
-        mainWindow.on('close', function(e) {
-            if(!isForceClose) {
+        mainWindow.on('close', function (e) {
+            if (!isForceClose) {
                 e.preventDefault();
                 cwm.closeHardwareWindow();
                 mainWindow.webContents.send('mainClose');
             }
         });
-        mainWindow.on('closed', function() {
+        mainWindow.on('closed', function () {
             mainWindow = null;
             app.quit();
             process.exit(0);
         });
 
         let inspectorShortcut = '';
-        if(process.platform == 'darwin') {
+        if (process.platform == 'darwin') {
             inspectorShortcut = 'Command+Alt+i';
         } else {
             inspectorShortcut = 'Control+Shift+i';
         }
         globalShortcut.register(inspectorShortcut, (e) => {
             const content = webContents.getFocusedWebContents();
-            if(content) {
-                webContents.getFocusedWebContents().openDevTools(); 
+            if (content) {
+                webContents.getFocusedWebContents().openDevTools();
             }
         });
 
@@ -196,10 +196,10 @@ if (shouldQuit) {
         cwm.createAboutWindow();
     }
 
-    app.on('open-file', function(event, pathToOpen) {
-        if(process.platform === 'darwin') {
+    app.on('open-file', function (event, pathToOpen) {
+        if (process.platform === 'darwin') {
             option.file = pathToOpen;
-            if(mainWindow) {
+            if (mainWindow) {
                 mainWindow.webContents.send('loadProject', pathToOpen);
             }
         }
@@ -212,13 +212,13 @@ if (shouldQuit) {
         mainWindow.close();
     });
 
-    ipcMain.on('reload', function(event, arg) {
-        if(event.sender.webContents.name !== 'entry') {
+    ipcMain.on('reload', function (event, arg) {
+        if (event.sender.webContents.name !== 'entry') {
             return cwm.reloadHardwareWindow();
         }
 
-        if(event.sender.webContents) {
-            if(process.platform === 'darwin') {
+        if (event.sender.webContents) {
+            if (process.platform === 'darwin') {
                 var menu = Menu.buildFromTemplate([]);
                 Menu.setApplicationMenu(menu);
             } else {
@@ -228,41 +228,41 @@ if (shouldQuit) {
         }
     });
 
-    ipcMain.on('roomId', function(event, arg) {
+    ipcMain.on('roomId', function (event, arg) {
         event.returnValue = global.sharedObject.roomId;
     });
 
-    ipcMain.on('version', function(event, arg) {
+    ipcMain.on('version', function (event, arg) {
         event.returnValue = '99';
     });
 
-    ipcMain.on('serverMode', function(event, mode) {
-        if(event.sender && event.sender.webContents) {
+    ipcMain.on('serverMode', function (event, mode) {
+        if (event.sender && event.sender.webContents) {
             event.sender.webContents.send('serverMode', mode);
         }
     });
 
-    ipcMain.on('openHardware', function(event, arg) {
+    ipcMain.on('openHardware', function (event, arg) {
         cwm.openHardwareWindow();
     });
 
-    ipcMain.on('openAboutWindow', function(event, arg) {
+    ipcMain.on('openAboutWindow', function (event, arg) {
         cwm.openAboutWindow();
     });
 
-    ipcMain.on('closeAboutWindow', function(event, arg) {
+    ipcMain.on('closeAboutWindow', function (event, arg) {
         cwm.closeAboutWindow();
     });
 
     ipcMain.on('saveProject', async (event, arg) => {
         let err;
-        try{
+        try {
             await mainUtils.saveProject(arg);
-        } catch(error) {
+        } catch (error) {
             console.log(error);
             err = error;
         }
-        if(event) {
+        if (event) {
             event.sender.send(arg.channel, err);
         }
     });

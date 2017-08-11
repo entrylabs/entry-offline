@@ -50,24 +50,4 @@ document.fonts.onloadingdone = (fontFaceSetEvent)=> {
     } catch(e) {}
 };
 
-var isOsx = false;
-if (process.platform != 'darwin') {
-    isOsx = false;
-    let show = true;
-    setInterval(()=> {
-        const { free, total } = process.getSystemMemoryInfo();
-        const processMem = process.getProcessMemoryInfo();
-        let usage = 0;
-
-        if(free <= 307200 && show) {
-            show = false;
-            new Notification(Lang.Msgs.low_memory_alert_title, {
-                body: Lang.Msgs.low_memory_alert_desc
-            });
-        } else if(free >= 409600) {
-            show = true;
-        }
-    }, 10000);
-} else {
-    isOsx = true;
-}
+const isOsx = process.platform === 'darwin';
