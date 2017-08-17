@@ -128,7 +128,6 @@ angular.module('workspace').controller('HeaderController', ['$scope', '$rootScop
         $scope.setMode = function(mode) {
             if (myProject.programmingMode === mode) return;
             applied = true;
-            myProject.programmingMode = mode;
             if (mode === 1) {
                 var isShown = localStorage.getItem('python_manual');
                 if (!isShown) {
@@ -136,7 +135,9 @@ angular.module('workspace').controller('HeaderController', ['$scope', '$rootScop
                     localStorage.setItem('python_manual', true);
                 }
             }
-            $scope._setMode(mode);
+            if($scope._setMode(mode) !== false) {
+                myProject.programmingMode = mode;
+            }
             applied = false;
         };
 
@@ -159,7 +160,7 @@ angular.module('workspace').controller('HeaderController', ['$scope', '$rootScop
             }
 
             if (Entry.getMainWS()) {
-                Entry.getMainWS().setMode(mode);
+                return Entry.getMainWS().setMode(mode);
             }
         };
 
