@@ -83,6 +83,26 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                 })
             }
 
+            Entry.playground.downloadSound = function (soundId) {
+                var sound = Entry.playground.object.getSound(soundId);
+                let fileurl;
+                let ext = sound.ext || '.mp3';
+
+                if (sound.fileurl) {
+                    fileurl = sound.fileurl;
+                } else {
+                    let url = sound.filename;
+                    fileurl = path.resolve(__rendererPath, 'node_modules', 'uploads', url.substr(0, 2), url.substr(2, 2), 'sound', `${url}${ext}`);
+                }
+                const soundInfo = path.parse(fileurl);
+
+                Util.saveFileDialog(fileurl, `${sound.name}${soundInfo.ext}`, (err)=> {
+                    if(err) {
+                        console.log(err);
+                    }
+                })
+            }
+
             Entry.playground.board._contextOptions[3].option.callback = function() {
                 Util.showOpenDialog({
                     properties: [
