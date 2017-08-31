@@ -171,7 +171,7 @@ if (shouldQuit) {
         globalShortcut.register(inspectorShortcut, (e) => {
             const content = webContents.getFocusedWebContents();
             if(content) {
-                webContents.getFocusedWebContents().openDevTools(); 
+                webContents.getFocusedWebContents().openDevTools();
             }
         });
 
