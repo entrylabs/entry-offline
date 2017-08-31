@@ -24,8 +24,10 @@ const blocklyConverter = require('./src/blockly_converter.js');
 const JSZip = require("jszip");
 const isOffline = true;
 const __rendererPath = path.resolve(__dirname);
-const mainWindowId = remote.getGlobal('sharedObject').mainWindowId;
+const sharedObject = remote.getGlobal('sharedObject');
+const mainWindowId = sharedObject.mainWindowId;
 const _mainWindow = BrowserWindow.fromId(mainWindowId);
+const archiver = require('archiver');
 
 import parser from './src/textmode/python/parser/filbert.js';
 const filbert = parser;
@@ -47,3 +49,5 @@ document.fonts.onloadingdone = (fontFaceSetEvent)=> {
         }
     } catch(e) {}
 };
+
+const isOsx = process.platform === 'darwin';

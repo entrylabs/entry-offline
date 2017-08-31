@@ -187,7 +187,11 @@ if (shouldQuit) {
         }
         globalShortcut.register(inspectorShortcut, (e) => {
             const content = webContents.getFocusedWebContents();
+<<<<<<< HEAD
+            if(content) {
+=======
             if (content) {
+>>>>>>> bf59641b4ee44c194a44ad68abb3272970258dab
                 webContents.getFocusedWebContents().openDevTools();
             }
         });

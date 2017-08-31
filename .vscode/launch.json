@@ -1,0 +1,26 @@
+{
+    // Use IntelliSense to learn about possible Node.js debug attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "protocol": "legacy",
+            "name": "Electron Main",
+            "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron-forge-vscode-nix",
+            "windows": {
+                "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron-forge-vscode-win.cmd"
+            },
+            // "port": 5858,
+            // "timeout": 10000,
+            // // runtimeArgs will be passed directly to your Electron application
+            // "runtimeArgs": [
+            //     "--inspect=5858",
+            //     "--debug"
+            // ],
+            "cwd": "${workspaceRoot}"
+        }
+    ]
+}

@@ -83,6 +83,26 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                 })
             }
 
+            Entry.playground.downloadSound = function (soundId) {
+                var sound = Entry.playground.object.getSound(soundId);
+                let fileurl;
+                let ext = sound.ext || '.mp3';
+
+                if (sound.fileurl) {
+                    fileurl = sound.fileurl;
+                } else {
+                    let url = sound.filename;
+                    fileurl = path.resolve(__rendererPath, 'node_modules', 'uploads', url.substr(0, 2), url.substr(2, 2), 'sound', `${url}${ext}`);
+                }
+                const soundInfo = path.parse(fileurl);
+
+                Util.saveFileDialog(fileurl, `${sound.name}${soundInfo.ext}`, (err)=> {
+                    if(err) {
+                        console.log(err);
+                    }
+                })
+            }
+
             Entry.playground.board._contextOptions[3].option.callback = function() {
                 Util.showOpenDialog({
                     properties: [
@@ -456,12 +476,12 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
         }
 
         Entry.loadProject(project);
-
         $scope.project.name = project_name || Lang.Workspace.new_project;
-
         myProject.name = project_name || Lang.Workspace.new_project;
-
         angular.element('#project_name').trigger('blur');
+
+        // 자동 저장 기능
+        myProject.runAutoSaveScheduler();
     }
 
     function saveAsProject(title) {
@@ -1195,6 +1215,45 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
     this.isSaved = false;
     this.isSavedPath = '';
     this.programmingMode = 0;
+    this.autoSaveInterval = -1;
+
+    this.runAutoSaveScheduler = function () {
+        this.runAutoSave();
+        Entry.addEventListener('stop', function () {
+            if(this.autoSaveInterval === -1) {
+                this.runAutoSave();
+            }
+        }.bind(this));
+    }
+
+    this.runAutoSave = function () {
+        this.saveTempProject();
+        this.autoSaveInterval = setInterval(function () {
+            if(Entry.engine.isState('stop')) {
+                this.saveTempProject();
+            } else {
+                clearInterval(this.autoSaveInterval);
+                this.autoSaveInterval = -1;
+            }
+        }.bind(this), 180000);        
+    }
+
+    this.saveTempProject = function () {
+        var project_name = this.name;
+        var parent = this.parent;
+
+        Entry.stage.handle.setVisible(false);
+        Entry.stage.update();
+
+        var project = Entry.exportProject();
+        project.name = project_name;
+        project.parent = parent;
+
+        Entry.plugin.saveTempProject(project, (e)=> {
+            console.log(`============================= ${new Date()} ::: 임시 저장 완료 =============================`);
+        });
+    };
+
     this.saveProject = function(path, cb) {
 
         var project_name = this.name;
