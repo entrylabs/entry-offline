@@ -1,13 +1,10 @@
 node_modules/
-!src/renderer/node_modules/
 cache/
 app/temp/
 dist/
 *.rej
 temp/
-*/bower_components/
 build/*.exe
 
 out/
-**/bower_components/
 .cache/
