@@ -1,5 +1,5 @@
 node_modules/
-!src/renderer/bower_components/
+!src/renderer/node_modules/
 cache/
 app/temp/
 dist/
