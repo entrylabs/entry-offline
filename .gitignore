@@ -1,4 +1,5 @@
 node_modules/
+!src/renderer/bower_components/
 cache/
 app/temp/
 dist/
