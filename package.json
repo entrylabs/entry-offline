@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "Entry",
+  "name": "entry",
   "productName": "Entry",
   "scripts": {
     "clean": "rimraf dist",
