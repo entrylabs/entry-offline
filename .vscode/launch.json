@@ -7,19 +7,21 @@
         {
             "type": "node",
             "request": "launch",
-            "protocol": "legacy",
             "name": "Electron Main",
+            "cwd": "${workspaceRoot}",
+            "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron",
+            "windows": {
+              "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
+            },
+            "args" : ["."]
+        }, {
+            "type": "node",
+            "request": "launch",
+            "name": "Electron Main2",
             "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron-forge-vscode-nix",
             "windows": {
-                "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron-forge-vscode-win.cmd"
+              "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron-forge-vscode-win.cmd"
             },
-            // "port": 5858,
-            // "timeout": 10000,
-            // // runtimeArgs will be passed directly to your Electron application
-            // "runtimeArgs": [
-            //     "--inspect=5858",
-            //     "--debug"
-            // ],
             "cwd": "${workspaceRoot}"
         }
     ]

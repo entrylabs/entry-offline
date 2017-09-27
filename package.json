@@ -4,6 +4,7 @@
   "productName": "Entry",
   "scripts": {
     "clean": "rimraf dist",
+    "debug": "./node_modules/.bin/electron-forge-vscode-nix --debug=5858",
     "dist": "build",
     "comp": "set NODE_ENV=production&&electron-compile ./src",
     "start": "electron-forge start",

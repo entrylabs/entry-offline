@@ -14,6 +14,13 @@ addBypassChecker((filePath) => {
     return filePath.indexOf(app.getAppPath()) === -1 && bypassList.indexOf(ext) > -1;
 });
 
+const downloadFilterList = {
+    'image/png': [
+        { name: 'PNG Image (*.png)', extensions: ['png'] }, 
+        { name: 'All Files (*.*)', extensions: ['*'] }
+    ],
+}
+
 global.sharedObject = {
     roomId: '',
     mainWindowId: '',
@@ -123,6 +130,23 @@ if (shouldQuit) {
 
         mainWindow.once('ready-to-show', () => {
             mainWindow.show()
+        });
+
+        mainWindow.webContents.session.on('will-download', (event, downloadItem, webContents) => {
+            const filename = downloadItem.getFilename();
+            const option = {
+                defaultPath: filename,
+            }
+            const filters = downloadFilterList[downloadItem.getMimeType()];
+            if(filters) {
+                option.filters = filters;
+            }
+            var fileName = dialog.showSaveDialog(option);
+            if (typeof fileName == "undefined") {
+                downloadItem.cancel()
+            } else {
+                downloadItem.setSavePath(fileName);
+            }
         });
 
         mainUtils = new MainUtils(mainWindow);

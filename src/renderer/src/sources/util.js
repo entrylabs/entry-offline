@@ -44,6 +44,7 @@ class Util {
     }
 
     static showSaveDialog(option, callback) {
+        console.log('dasdas?')
         if(isOsx) {
             dialog.showSaveDialog(option, callback);
         } else {
