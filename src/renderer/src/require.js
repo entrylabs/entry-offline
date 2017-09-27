@@ -18,6 +18,7 @@ const BrowserWindow = remote.BrowserWindow;
 const mainWindow = BrowserWindow.getAllWindows()[0];
 const originalFs = require('original-fs');
 window.$ = window.jQuery = require('./bower_components/jquery/dist/jquery.min.js');
+window.BigNumber = require('./bower_components/entryjs/extern/util/bignumber.min.js');
 const entry = require('./bower_components/entryjs/src/workspace/block_entry.js');
 const blockConverter = require('./src/block_converter.js');
 const blocklyConverter = require('./src/blockly_converter.js');
@@ -29,7 +30,7 @@ const mainWindowId = sharedObject.mainWindowId;
 const _mainWindow = BrowserWindow.fromId(mainWindowId);
 const archiver = require('archiver');
 
-import parser from './src/textmode/python/parser/filbert.js';
+import parser from './bower_components/entryjs/extern/util/filbert.js';
 const filbert = parser;
 
 import util from './src/sources/util';
@@ -51,3 +52,15 @@ document.fonts.onloadingdone = (fontFaceSetEvent)=> {
 };
 
 const isOsx = process.platform === 'darwin';
+
+window.entrylms = {
+    alert: function (text) {
+        alert(text);
+    },
+    confirm: function (text) {
+        var isConfirm = confirm(text);
+        return new Promise((resolve, reject) => {
+            resolve(isConfirm);
+        });
+    },
+}
