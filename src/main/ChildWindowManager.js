@@ -62,7 +62,6 @@ class ChildWindowManager {
 
         this.hardwareWindow.setMenu(null);
         this.hardwareWindow.setMenuBarVisibility(false);
-        console.log(path.join(__dirname, 'entry-hw', 'app', 'index.html'));
         this.hardwareWindow.loadURL('file:///' + path.join(__dirname, '..', 'renderer', 'bower_components', 'entry-hw', 'app', 'index.html'));
         this.hardwareWindow.on('closed', ()=> {
             this.hardwareWindow = null;
