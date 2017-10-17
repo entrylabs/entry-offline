@@ -2,6 +2,11 @@
   "private": true,
   "name": "entry",
   "productName": "Entry",
+  "main": "src/entry_offline.js",
+  "version": "1.5.4",
+  "config": {
+    "forge": "./forge.config.js"
+  },
   "scripts": {
     "clean": "rimraf dist",
     "debug": "./node_modules/.bin/electron-forge-vscode-nix --debug=5858",
@@ -54,10 +59,5 @@
     "socket.io-client": "^1.7.3",
     "tar": "2.2.1",
     "xml2js": "^0.4.17"
-  },
-  "main": "src/entry_offline.js",
-  "version": "1.5.3",
-  "config": {
-    "forge": "./forge.config.js"
   }
 }
