@@ -76,7 +76,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
 
                 const pictureInfo = path.parse(fileurl);
 
-                Util.saveFileDialog(fileurl, `${picture.name}${pictureInfo.ext}`, (err)=> {
+                Util.saveFileDialog(fileurl, `${picture.name}${pictureInfo.ext}`, 'image/png', (err)=> {
                     if(err) {
                         console.log(err);
                     }
@@ -96,7 +96,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                 }
                 const soundInfo = path.parse(fileurl);
 
-                Util.saveFileDialog(fileurl, `${sound.name}${soundInfo.ext}`, (err)=> {
+                Util.saveFileDialog(fileurl, `${sound.name}${soundInfo.ext}`, 'audio/mpeg3', (err)=> {
                     if(err) {
                         console.log(err);
                     }

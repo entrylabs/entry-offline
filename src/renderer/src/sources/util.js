@@ -7,8 +7,17 @@ const imageDirCnt = imageDirName.length;
 const thumbDirCnt = thumbDirName.length;
 
 class Util {
-    static test() {
-        console.log(fs);
+    static get downloadFilterList() {
+        return {
+            'image/png': [
+                { name: 'PNG Image (*.png)', extensions: ['png'] }, 
+                { name: 'All Files (*.*)', extensions: ['*'] }
+            ],
+            'audio/mpeg3': [
+                { name: 'MP3 Audio (*.mp3)', extensions: ['mp3'] }, 
+                { name: 'All Files (*.*)', extensions: ['*'] }
+            ],
+        }
     }
 
     static getMimeType(path) {
@@ -44,7 +53,6 @@ class Util {
     }
 
     static showSaveDialog(option, callback) {
-        console.log('dasdas?')
         if(isOsx) {
             dialog.showSaveDialog(option, callback);
         } else {
@@ -52,20 +60,26 @@ class Util {
         }
     }
 
-    static saveFileDialog(source, name, callback) {
+    static saveFileDialog(source, name, type, callback) {
+        const options = {
+            title: Lang.Workspace.file_save,
+            defaultPath: name,
+        };
+        const { [type]: filters } = this.downloadFilterList;
+        if(filters) {
+            options.filters = filters;
+        }
         if(isOsx) {
-            dialog.showSaveDialog({
-                title: Lang.Workspace.file_save,
-                defaultPath: name,
-            }, (target) => {
-                this.copyFile(source, target, callback);
+            dialog.showSaveDialog(options, (target) => {
+                if(target) {
+                    this.copyFile(source, target, callback);
+                }
             });
         } else {
-            dialog.showSaveDialog(_mainWindow, {
-                title: Lang.Workspace.file_save,
-                defaultPath: name,
-            }, (target) => {
-                this.copyFile(source, target, callback);
+            dialog.showSaveDialog(_mainWindow, options, (target) => {
+                if(target) {
+                    this.copyFile(source, target, callback);
+                }
             });            
         }
     }
