@@ -59,8 +59,11 @@ window.entrylms = {
     },
     confirm: function (text) {
         var isConfirm = confirm(text);
-        return new Promise((resolve, reject) => {
-            resolve(isConfirm);
-        });
+        var defer = new $.Deferred;
+        return defer.resolve(isConfirm);
+        // 기본 Promise로 동작시키면 then이 비동기로 동작하여 타이밍 문제 발생
+        // return new Promise((resolve, reject) => {
+        //     resolve(isConfirm);
+        // });
     },
 }
