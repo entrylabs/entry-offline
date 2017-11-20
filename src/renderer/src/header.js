@@ -4,48 +4,58 @@ angular.module('workspace').controller('HeaderController', ['$scope', '$rootScop
     function($scope, $rootScope, $cookies, myProject) {
         window.isNewProject = false;
         $scope.user_language = localStorage.getItem('lang') || 'ko';
-        $scope.project = myProject;
+        $scope.PracticalModeName = '';
+        $scope.PracticalMode = '';
+        $scope.myProject = myProject;
+        
         var supported = !(typeof storage == 'undefined' || typeof window.JSON == 'undefined');
         var storage = (typeof window.localStorage === 'undefined') ? undefined : window.localStorage;
-
-        $scope.myProject = myProject;
-
+        var applied = false;
+        
         Entry.Vim.MAZE_MODE = 1;
         Entry.Vim.WORKSPACE_MODE = 2;
-
         Entry.Workspace.MODE_BOARD = 0;
         Entry.Workspace.MODE_VIMBOARD = 1;
         Entry.Workspace.MODE_OVERLAYBOARD = 2;
-
         Entry.Vim.TEXT_TYPE_JS = 0;
-        Entry.Vim.TEXT_TYPE_PY = 1;
-        var applied = false;
+        Entry.Vim.TEXT_TYPE_PY = 1;        
 
-        $scope.init = function() {
-        };
-
+        //#region rootScope
         $rootScope.$on('loadProject', function(event, data) {
             $scope.loadProject(data);
-        });
+        })
+
+        $rootScope.$on('modeChange', function (event, data) {
+            $scope.PracticalModeName = data.modeName;
+            $scope.PracticalMode = data.mode;
+        })
+        //#endregion
+
+        //#region scope영역
+        $scope.init = function() {
+            $scope.PracticalModeName = myProject.modeName;
+            $scope.PracticalMode = myProject.mode;
+            $scope.isPracticalCourse = EntryStatic.isPracticalCourse;
+        }
 
         // 저장
         $scope.saveWorkspace = function() {
             Entry.dispatchEvent('saveWorkspace');
-        };
+        }
 
         // 새이름으로 저장
         $scope.saveAsWorkspace = function() {
             Entry.dispatchEvent('saveAsWorkspace')
-        };
+        }
 
-        // 불러오
+        // 불러오기
         $scope.loadWorkspace = function() {
             Entry.dispatchEvent('loadWorkspace')
-        };
+        }
 
         $scope.showBlockHelper = function() {
             Entry.dispatchEvent('showBlockHelper');
-        };
+        }
 
         $scope.stopPropagation = function(e) {
             e.stopPropagation();
@@ -61,13 +71,24 @@ angular.module('workspace').controller('HeaderController', ['$scope', '$rootScop
                 project.path = myProject.isSavedPath;
                 storage.setItem('localStorageProject', JSON.stringify(project));
             }
-            // location.reload(true);
             Entry.plugin.reloadApplication(true);
-        };
+        }
+
+        $scope.setWorkspaceMode = function (type) {
+            var isMiniMode = localStorage.getItem('isMiniMode') === 'true';
+            saveLocalStorageProject();
+            if (isMiniMode && type === 'default') {
+                localStorage.setItem('isMiniMode', 'false');
+                Entry.plugin.reloadApplication(true);
+            } else if (!isMiniMode && type !== 'default') {
+                localStorage.setItem('isMiniMode', 'true');
+                Entry.plugin.reloadApplication(true);
+            }
+        }
 
         $scope.blockHelperOn = function() {
             Entry.helper.blockHelperOn();
-        };
+        }
 
         $scope.getHardwareManual = function() {
             Entry.plugin.getHardwareManual();
@@ -83,30 +104,18 @@ angular.module('workspace').controller('HeaderController', ['$scope', '$rootScop
             body.css('overflow', 'hidden');
             popup.css('display', 'block');
             popup.css('top', $(document).scrollTop() + 'px');
-        };
+        }
 
         $scope.hidePopup = function(target) {
             var popup = $('#' + target);
             var body = $('body').eq(0);
             body.css('overflow', 'auto');
             popup.css('display', 'none');
-        };
-
-        function getWorkspaceBusy() {
-            if(window.isNowSaving) {
-                return 'saving';
-            } else if(window.isNowLoading) {
-                return 'loading';
-            } else if(window.isNewProject) {
-                return 'new';
-            } else {
-                return undefined;
-            }
         }
 
         //새 프로젝트
-        $scope.newProject = function() {
-            if(getWorkspaceBusy()) {
+        $scope.newProject = function () {
+            if (getWorkspaceBusy()) {
                 return;
             }
             var canLoad = false;
@@ -119,13 +128,13 @@ angular.module('workspace').controller('HeaderController', ['$scope', '$rootScop
                 Entry.stateManager.addStamp();
                 storage.removeItem('tempProject');
                 Entry.plugin.beforeStatus = 'new';
-                Entry.plugin.initProjectFolder(function() {
+                Entry.plugin.initProjectFolder(function () {
                     Entry.plugin.reloadApplication();
                 });
             }
         }
 
-        $scope.setMode = function(mode) {
+        $scope.setMode = function (mode) {
             if (myProject.programmingMode === mode) return;
             applied = true;
             if (mode === 1) {
@@ -138,8 +147,8 @@ angular.module('workspace').controller('HeaderController', ['$scope', '$rootScop
             $scope._setMode(mode);
             applied = false;
         };
-        
-        $scope._setMode = function(mode) {
+
+        $scope._setMode = function (mode) {
             var pMode = mode;
             var mode = {};
 
@@ -161,35 +170,48 @@ angular.module('workspace').controller('HeaderController', ['$scope', '$rootScop
             }
         };
 
-        $scope.showPythonTooltip = function() {
+        $scope.showPythonTooltip = function () {
             new Entry.Tooltip([
-                { content: Lang.Workspace.textcoding_tooltip1, target: $(".workspaceModeSelector"), direction: "left", style: "offline" }, 
-                { content: Lang.Workspace.textcoding_tooltip2, target: $(".propertyTabconsole"), direction: "right" }, 
+                { content: Lang.Workspace.textcoding_tooltip1, target: $(".workspaceModeSelector"), direction: "left", style: "offline" },
+                { content: Lang.Workspace.textcoding_tooltip2, target: $(".propertyTabconsole"), direction: "right" },
                 { content: Lang.Workspace.textcoding_tooltip3, target: $("#helpBtn"), direction: "down" }
             ], { dimmed: true });
         };
 
-        $scope.dict = {
-            'KO': Lang.ko,
-            'EN': Lang.en,
-            'VN': Lang.vn,
-            'CODE': Lang.code,
-            'MENUS_LOGIN': Lang.Menus.login,
-            'MENUS_JOIN': Lang.Menus.Join,
-            'USERS_PROJECT_LIST': Lang.Users.project_list,
-            'USERS_EDIT_PERSONAL': Lang.Users.edit_personal,
-            'MENUS_LOGOUT': Lang.Menus.logout,
-            'WORKSPACE_FILE_NEW': Lang.Workspace.file_new,
-            'WORKSPACE_FILE_OPEN': Lang.Workspace.file_open,
-            'WORKSPACE_FILE_UPLOAD': Lang.Workspace.file_upload,
-            'WORKSPACE_FILE_SAVE': Lang.Workspace.file_save,
-            'WORKSPACE_FILE_SAVE_AS': Lang.Workspace.file_save_as,
-            'WORKSPACE_FILE_SAVE_DOWNLOAD': Lang.Workspace.file_save_download,
-            'WORKSPACE_BLOCK_HELPER': Lang.Workspace.block_helper,
-            'WORKSPACE_HARDWARE_GUIDE': Lang.Workspace.hardware_guide,
-            'WORKSPACE_PYTHON_GUIDE': Lang.Workspace.python_guide,
-            'WORKSPACE_BLOCK_CODING': Lang.Menus.block_coding,
-            'WORKSPACE_PYTHON_CODING': Lang.Menus.python_coding,
+        //#endregion
+
+        //#region function 영역
+        function getWorkspaceBusy() {
+            if(window.isNowSaving) {
+                return 'saving';
+            } else if(window.isNowLoading) {
+                return 'loading';
+            } else if(window.isNewProject) {
+                return 'new';
+            } else {
+                return undefined;
+            }
         }
+
+        function saveLocalStorageProject() {
+            var engine = Entry.engine;
+            if (engine && engine.isState('run')) {
+                return;
+            }
+
+            var project = {};
+            var ret = Entry.exportProject(project);
+            if (!ret) {
+                return;
+            }
+            console.log($scope.myProject, $scope.myProject.name);
+            project.name = $scope.myProject.name;
+            var scopeProject = $scope.myProject;
+            project.parent = scopeProject && scopeProject.parent;
+            project._id = scopeProject && scopeProject._id;
+            project.path = $scope.myProject.isSavedPath;
+            storage.setItem('localStorageProject', JSON.stringify(project));
+        }
+        //#endregion
     }
 ]);

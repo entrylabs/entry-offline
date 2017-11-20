@@ -294,19 +294,26 @@ Entry.plugin = (function () {
     that.getHardwareManual = function(callback) {
         let fileName = '';
         let fileNamePath = '';
+        let fileFilter = '';
 
-        if(isOsx) {
+        if (EntryStatic.isPracticalCourse) {
+            fileName = '[매뉴얼]엔트리로봇연결.zip';
+            fileNamePath = '[매뉴얼]엔트리로봇연결.zip';
+            fileFilter = { name: '*.zip', extensions: ['zip'] };
+        } else if(isOsx) {
             fileName = '[매뉴얼]엔트리 하드웨어 연결(맥).pdf';
             fileNamePath = 'hardware-osx.pdf';
+            fileFilter = { name: '*.pdf', extensions: ['pdf'] };
         } else {
             fileName = '[매뉴얼]엔트리 하드웨어 연결(윈도우).pdf';
             fileNamePath = 'hardware-win.pdf';
+            fileFilter = { name: '*.pdf', extensions: ['pdf'] };
         }
 
         Util.showSaveDialog({
             defaultPath: fileName,
             filters: [
-                { name: '*.pdf', extensions: ['pdf'] }
+                fileFilter
             ]
         }, function (filePath) {    
             if(filePath) {
@@ -356,7 +363,7 @@ Entry.plugin = (function () {
 
     that.init = function (cb) {
         // 아두이노 open 블록을 제거
-        delete Entry.block.arduino_open;
+        // delete Entry.block.arduino_open;
         
         // NanumBarunGothic 폰트 로딩 시간까지 기다린다.
         var font = new FontFace("nanumBarunRegular", "url(./node_modules/fonts/NanumBarunGothic.woff2)");

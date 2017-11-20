@@ -58,8 +58,16 @@
 		<script type='text/javascript'>
 			Entry.isOffline = true;
 			Entry.painterBaseUrl = './bower_components/literallycanvas/lib/img';
+			var isMiniMode = localStorage.getItem('isMiniMode');
+			var EntryStatic;
+			if(isMiniMode === 'true') {
+				EntryStatic = require('./bower_components/entryjs/extern/util/static_mini.js').EntryStatic;
+			} else {
+				EntryStatic = require('./bower_components/entryjs/extern/util/static.js').EntryStatic;
+			}
 		</script>
 		<script type='text/javascript' src='./bower_components/entryjs/src/workspace/block_entry.js'></script>
+		<script type='text/javascript' src='./bower_components/entryjs/src/workspace/block_entry_mini.js'></script>
     	<script type='text/javascript' src='./src/jshint.js'></script>
     	<script type='text/javascript' src='./src/context.js'></script>
         <script type="text/javascript" src="./src/filters.js"></script>

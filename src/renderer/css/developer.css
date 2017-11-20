@@ -1,17 +1,17 @@
 * {
-	box-sizing : border-box;
-	margin : 0;
+    box-sizing: border-box;
+    margin: 0;
     font-family: nanumBarunRegular;
 }
 
 body {
     overflow: hidden;
-	font-family: 'Nanum Gothic';
+    font-family: 'Nanum Gothic';
 }
 
 .page-header {
-	margin : 0;
-	border : 0;
+    margin: 0;
+    border: 0;
 }
 
 .wrapper {
@@ -23,17 +23,13 @@ body {
 }
 
 .hide_contents {
-	display: none !important;
+    display: none !important;
 }
 
 .entryTextFontSelecter {
     display: inline-block;
     height: 32px;
     float: left;
-}
-
-.entryPauseButtonWorkspace_w {
-    // display: none;
 }
 
 .entryUploaderWindow {
@@ -43,7 +39,7 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0,86,132,.9);
+    background: rgba(0, 86, 132, .9);
     z-index: 250000;
     text-align: center;
     opacity: 0;
@@ -59,7 +55,8 @@ body {
     bottom: 10px;
     border: 1px dashed #fff;
 }
-.entryUploaderWindowContent h1{
+
+.entryUploaderWindowContent h1 {
     margin: -.5em 0 0;
     position: absolute;
     top: 50%;
@@ -73,7 +70,6 @@ body {
     padding: 0;
 }
 
-
 .entrySpinnerWindow {
     display: none;
     position: fixed;
@@ -81,7 +77,7 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0,0,0,.6);
+    background: rgba(0, 0, 0, .6);
     z-index: 250000;
     text-align: center;
 }
@@ -96,11 +92,11 @@ body {
     margin: auto;
 }
 
-.entrySpinner > div {
+.entrySpinner>div {
     background-color: #fff;
     height: 100%;
     width: 6px;
-    display: inline-block;  
+    display: inline-block;
     -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
     animation: sk-stretchdelay 1.2s infinite ease-in-out;
 }
@@ -126,27 +122,35 @@ body {
 }
 
 @-webkit-keyframes sk-stretchdelay {
-  0%, 40%, 100% { -webkit-transform: scaleY(0.4) }  
-  20% { -webkit-transform: scaleY(1.0) }
+    0%,
+    40%,
+    100% {
+        -webkit-transform: scaleY(0.4)
+    }
+    20% {
+        -webkit-transform: scaleY(1.0)
+    }
 }
 
 @keyframes sk-stretchdelay {
-  0%, 40%, 100% { 
-    transform: scaleY(0.4);
-    -webkit-transform: scaleY(0.4);
-  }  20% { 
-    transform: scaleY(1.0);
-    -webkit-transform: scaleY(1.0);
-  }
+    0%,
+    40%,
+    100% {
+        transform: scaleY(0.4);
+        -webkit-transform: scaleY(0.4);
+    }
+    20% {
+        transform: scaleY(1.0);
+        -webkit-transform: scaleY(1.0);
+    }
 }
-
 
 .tab-content .tab-pane .upload_wrap {
     width: 713px;
 }
 
 .entryPlaygroundPainterAttrFont .entryPlaygroundPainterAttrTop {
-    min-width: 120px;    
+    min-width: 120px;
 }
 
 .entryPlaygroundPainterAttrFont .entryPlaygroundPainterAttrFontStyleArea {
@@ -186,3 +190,326 @@ body {
     padding-left: 4px;
     padding-right: 4px;
 }
+
+
+/*#region 실과모드 스타일 */
+
+#entryCategoryhw_download {
+    background-image: url('../images/categories/touch.png');
+    background-repeat: no-repeat;
+    background-color: #C7DCDD;
+    border-bottom: #5494A3 solid 1px;
+}
+
+#entryCategoryhw_sensor {
+    background-image: url('../images/categories/others.png');
+    background-repeat: no-repeat;
+    background-color: #C7DCDD;
+    border-bottom: #5494A3 solid 1px;
+}
+
+#entryCategoryhw_led {
+    font-size: 11px;
+    background-image: url('../images/categories/diode.png');
+    background-repeat: no-repeat;
+    background-color: #C7DCDD;
+    border-bottom: #5494A3 solid 1px;
+}
+
+#entryCategoryhw_motor {
+    background-image: url('../images/categories/dcmotor.png');
+    background-repeat: no-repeat;
+    background-color: #C7DCDD;
+    border-bottom: #5494A3 solid 1px;
+}
+
+#entryCategoryhw_melody {
+    background-image: url('../images/categories/melody.png');
+    background-repeat: no-repeat;
+    background-color: #C7DCDD;
+    border-bottom: #5494A3 solid 1px;
+}
+
+#entryCategoryhw_robot {
+    background-image: url('../images/categories/robot.png');
+    background-repeat: no-repeat;
+    background-color: #C7DCDD;
+    border-bottom: #5494A3 solid 1px;
+}
+
+.workspace_mode {
+    float: right;
+    right: 0;
+    margin-right: 15px;
+}
+
+.workspace_mode .language_wrapper {
+    list-style: none;
+    margin-top: 15px;
+    padding-left: 20px;
+}
+
+.workspace_mode .dropdown-menu li {
+    text-align: left;
+}
+
+.workspace_mode .mode_text {
+    font-size: 14px;
+}
+
+.workspace_mode .practical_course_badge {
+    margin-left: 3px;
+    text-align: center;
+    line-height: 14px;
+    display: inline-block;
+    font-size: 8px;
+    color: #7b57ff;
+    width: 24px;
+    height: 12px;
+    border-radius: 100px;
+}
+
+.workspace_mode .dropdown-toggle .practical_course_badge span {
+    display: none;
+}
+
+.workspace_mode .dropdown-menu .practical_course_badge {
+    background-color: #7b57ff;
+    color: #ffffff;
+}
+
+
+/* practical mode color */
+
+html.practical_course_mode .workspaceHeader {
+    background-color: #7b57ff;
+    border-color: #7b57ff;
+}
+
+html.practical_course_mode #project_name.workspace_project_name {
+    background-color: #7b57ff;
+}
+
+html.practical_course_mode #project_name.workspace_project_name:hover,
+html.practical_course_mode #project_name.workspace_project_name:focus {
+    background-color: #fff;
+}
+
+html.practical_course_mode .entrySceneWorkspace {
+    background-color: #7b57ff;
+}
+
+html.practical_course_mode .propertyTabElement.selected {
+    background-color: #7b57ff;
+}
+
+html.practical_course_mode .propertyPanel {
+    border-top: 2px solid #7b57ff;
+}
+
+
+/*
+html.practical_course_mode .entryMouseViewWorkspace_w {
+    color: #7b57ff;
+}
+*/
+
+html.practical_course_mode .entrySceneInputCover {
+    background-color: #593ce5;
+}
+
+html.practical_course_mode .entrySceneFieldWorkspace {
+    background-color: #593ce5;
+}
+
+html.practical_course_mode .selectedScene .entrySceneInputCover {
+    background-color: #fff;
+}
+
+html.practical_course_mode .selectedScene .entrySceneFieldWorkspace {
+    background-color: #fff;
+}
+
+html.practical_course_mode .selectedScene .entrySceneLeftWorkspace {
+    background-image: url(../images/selected_tap1.png);
+    background-repeat: no-repeat;
+}
+
+html.practical_course_mode .entrySceneLeftWorkspace {
+    background-image: url(../images/tap1.png);
+    background-repeat: no-repeat;
+}
+
+html.practical_course_mode .selectedScene .entrySceneRemoveButtonCoverWorkspace {
+    background-image: url(../images/selected_tap2.png);
+    background-repeat: no-repeat;
+}
+
+html.practical_course_mode .entrySceneRemoveButtonCoverWorkspace {
+    background-image: url(../images/tap2.png);
+    background-repeat: no-repeat;
+}
+
+html.practical_course_mode .workspace_mode .dropdown-toggle .practical_course_badge {
+    text-align: center;
+    line-height: 14px;
+    display: inline-block;
+    font-size: 8px;
+    color: #7b57ff;
+    width: 24px;
+    height: 12px;
+    border-radius: 100px;
+    background-color: #ffffff;
+    vertical-align: middle;
+}
+
+html.practical_course_mode .workspace_mode .dropdown-toggle .practical_course_badge span {
+    display: inline-block;
+}
+
+html.practical_course_mode .workspace_button_group .workspace_divider {
+    background-color: #fff;
+}
+
+html.practical_course_mode .entryRunButtonWorkspace_w {
+    background-image: url(../images/workspace/btn_play.png);
+}
+
+html.practical_course_mode .entryAddButtonWorkspace_w {
+    background-image: url(../images/workspace/btn_add.png);
+}
+
+.workspace_margin {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+@media screen and (min-height: 880px) {
+    html.practical_course_mode .entryCategoryElementWorkspace {
+        height: 61px;
+        background-position: 50% 6px;
+        padding-top: 38px;
+    }
+}
+
+@media screen and (max-height: 880px) {
+    html.practical_course_mode .entryCategoryElementWorkspace {
+        height: 53px;
+        background-position: 50% 4px;
+        padding-top: 34px;
+    }
+}
+
+@media screen and (max-height: 810px) {
+    html.practical_course_mode .entryCategoryElementWorkspace {
+        height: 47px;
+        background-position: 50% 2px;
+        padding-top: 30px;
+    }
+}
+
+@media screen and (max-height: 740px) {
+    html.practical_course_mode .entryCategoryElementWorkspace {
+        height: 39px;
+        background-position: 50% 1px;
+        background-size: 35px;
+        padding-top: 23px;
+    }
+}
+
+/*#endregion 실과모드 스타일 */
+
+
+/*#region workspaceModeSelect popup */
+
+.workspaceModeSelect {
+    width: 100vw;
+    height: 100vh;
+    background-image: url(../images/workspace/bg01.png);
+    background-repeat: no-repeat;
+    background-position: 50%;
+    background-color: #d8d8d8;
+    display: flex;
+}
+
+.workspaceModeSelect .contentArea {
+    margin: auto;
+    border-radius: 10px 10px 7px 7px;
+    width: 700px;
+    height: 411px;
+    background-color: #fff;
+    box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.25);
+}
+
+.workspaceModeSelect .workspaceModeSelectTitle {
+    padding-left: 26px;
+    font-size: 18px;
+    line-height: 57px;
+    color: #fff;
+    height: 57px;
+    border-radius: 7px 7px 0 0;
+    background-color: #2a7def;
+}
+
+.workspaceModeSelect .workspaceModeSelectArea {
+    display: flex;
+    justify-content: space-between;
+    padding: 36px 59px 15px;
+}
+
+.workspaceModeSelect .workspaceModeSelectBox {
+    width: 277px;
+    height: 212px;
+    border: solid 1px #d6d6d6;
+    color: #3b3b3b;
+    text-align: center;
+    cursor: pointer;
+}
+
+.workspaceModeSelect .workspaceModeSelectBox.active {
+    background-color: #7b57ff;
+    color: #fff;
+}
+
+.workspaceModeSelect .workspaceModeSelectBox .modeTitle {
+    font-size: 20px;
+    margin: 26px 0 16px;
+}
+
+.workspaceModeSelect .workspaceModeSelectBox .modeButton {
+    width: 54px;
+    height: 54px;
+    margin: 24px auto;
+    background-image: url(../images/workspace/btn-check-off.png);
+    background-repeat: no-repeat;
+}
+
+.workspaceModeSelect .workspaceModeSelectBox.active .modeButton {
+    width: 52px;
+    height: 52px;
+    background-image: url(../images/workspace/btn-check-on.png);
+}
+
+.workspaceModeSelect .workspaceModeSelectDivideLine {
+    width: 624px;
+    height: 1px;
+    margin: auto;
+    border-top: solid 1px #d6d6d6;
+    margin-bottom: 15px;
+}
+
+.workspaceModeSelect .workspaceModeSelectCloseBtn {
+    cursor: pointer;
+    width: 118px;
+    height: 45px;
+    margin: auto;
+    text-align: center;
+    line-height: 45px;
+    color: #fff;
+    background-color: #2a7def;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+
+/*#endregion*/

@@ -1,12 +1,8 @@
 $(document).on('mousewheel', function(e){
     if(e.originalEvent.wheelDelta /120 > 0 && e.ctrlKey) {
-        if(Entry) {
-            Entry.plugin.setZoomInPage();
-        }
+        Entry && Entry.plugin.setZoomInPage();
     } else if(e.ctrlKey) {
-        if(Entry) {
-            Entry.plugin.setZoomOutPage();
-        }
+        Entry && Entry.plugin.setZoomOutPage();
     }
 });
 
@@ -16,17 +12,13 @@ var template = [{
         label: Lang.Workspace.file_new,
         accelerator: 'CmdOrCtrl+n',
         click: function(item, focusedWindow) {
-            if(angular) {
-                angular.element('[data-ng-controller="HeaderController"]').scope().newProject();
-            }
+            angular && angular.element('[data-ng-controller="HeaderController"]').scope().newProject();
         }
     }, {
         label: Lang.Workspace.file_upload,
         accelerator: 'CmdOrCtrl+o',
         click: function () {
-            if(Entry) {
-                Entry.dispatchEvent('loadWorkspace');
-            }
+            Entry && Entry.dispatchEvent('loadWorkspace');
         }
     }, {
         type: 'separator'
@@ -34,17 +26,13 @@ var template = [{
         label: Lang.Workspace.file_save,
         accelerator: 'CmdOrCtrl+s',
         click: function () {
-            if(Entry) {
-                Entry.dispatchEvent('saveWorkspace');
-            }
+            Entry && Entry.dispatchEvent('saveWorkspace');
         }
     }, {
         label: Lang.Workspace.file_save_as,
         accelerator: 'Shift+CmdOrCtrl+S',
         click: function () {
-            if(Entry) {
-                Entry.dispatchEvent('saveAsWorkspace');
-            }
+            Entry && Entry.dispatchEvent('saveAsWorkspace');
         }
     }]
 }, {
@@ -53,9 +41,7 @@ var template = [{
         label: Lang.Menus.offline_undo,
         accelerator: 'CmdOrCtrl+z',
         click: function(item, focusedWindow) {
-            if(Entry) {
-                Entry.dispatchEvent('undo');
-            }
+            Entry && Entry.dispatchEvent('undo');
         }
     }, {
         label: Lang.Menus.offline_redo,
@@ -66,9 +52,7 @@ var template = [{
                 return 'Ctrl+y';
         })(),
         click: function(item, focusedWindow) {
-            if(Entry) {
-                Entry.dispatchEvent('redo');
-            }
+            Entry && Entry.dispatchEvent('redo');
         }
     }]
 }, {
@@ -77,28 +61,53 @@ var template = [{
         label: Lang.Menus.actual_size,
         accelerator: 'CmdOrCtrl+0',
         click: function () {
-            if(Entry) {
-                Entry.plugin.setZoomLevel(0);
-            }
+            Entry && Entry.plugin.setZoomLevel(0);
         }
     }, {
         label: Lang.Menus.zoom_in,
         accelerator: 'CmdOrCtrl+=',
         click: function () {
-            if(Entry) {
-                Entry.plugin.setZoomInPage();
-            }
+            Entry && Entry.plugin.setZoomInPage();
         }
     }, {
         label: Lang.Menus.zoom_out,
         accelerator: 'CmdOrCtrl+-',
         click: function () {
-            if(Entry) {
-                Entry.plugin.setZoomOutPage();
+            Entry && Entry.plugin.setZoomOutPage();
+        }
+    }]
+}, {
+    label: Lang.Menus.language,
+    submenu: [{
+        label: Lang.Menus.korean,
+        type: 'checkbox',
+        checked: localStorage.getItem('lang') === 'ko',
+        click: function (menuItem) {
+            if (localStorage.getItem('lang') !== 'ko') {
+                angular && angular.element('[data-ng-controller=HeaderController]').scope().setLanguage('ko');
+            } else {
+                menuItem.checked = true;
+            }
+        }
+    }, {
+        label: Lang.Menus.english,
+        type: 'checkbox',
+        checked: localStorage.getItem('lang') !== 'ko',
+        click: function (menuItem) {
+            if (localStorage.getItem('lang') === 'ko') {
+                angular && angular.element('[data-ng-controller=HeaderController]').scope().setLanguage('en');
+            } else {
+                menuItem.checked = true;
             }
         }
     }]
 }];
+
+var isMiniMode = localStorage.getItem('isMiniMode') === 'true';
+
+if (isMiniMode) {
+    template.pop();
+}
 
 if (process.platform == 'darwin') {
     template.unshift({
@@ -158,9 +167,7 @@ if (process.platform == 'darwin') {
             label: Lang.Menus.entry_info,
             accelerator: 'F1',
             click: function () {
-                if(Entry) {
-                    Entry.plugin.openAboutPage();
-                }
+                Entry && Entry.plugin.openAboutPage();
             }
         }]
     })
