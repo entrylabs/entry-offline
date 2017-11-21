@@ -2,7 +2,6 @@
 
 angular.module('workspace').controller('HeaderController', ['$scope', '$rootScope', '$cookies', 'myProject',
     function($scope, $rootScope, $cookies, myProject) {
-        window.isNewProject = false;
         $scope.user_language = localStorage.getItem('lang') || 'ko';
         $scope.PracticalModeName = '';
         $scope.PracticalMode = '';
@@ -119,12 +118,12 @@ angular.module('workspace').controller('HeaderController', ['$scope', '$rootScop
                 return;
             }
             var canLoad = false;
-            if (!Entry.stateManager.isSaved()) {
+            if (myProject.checkSavedProject()) {
                 canLoad = !confirm(Lang.Menus.save_dismiss);
             }
 
             if (!canLoad) {
-                window.isNewProject = true;
+                myProject.isModeChange = false;
                 Entry.stateManager.addStamp();
                 storage.removeItem('tempProject');
                 Entry.plugin.beforeStatus = 'new';

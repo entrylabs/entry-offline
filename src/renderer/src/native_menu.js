@@ -118,12 +118,6 @@ var template = [{
 // }
 ];
 
-var isPracticalCourse = localStorage.getItem('isPracticalCourse') === 'true';
-
-if (isPracticalCourse) {
-    template.pop();
-}
-
 if (process.platform == 'darwin') {
     template.unshift({
         label: Lang.Menus.Entry,

@@ -169,7 +169,12 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
             // 아두이노 사용 (웹소켓이용)
             Entry.enableArduino();
 
-            var project = storage.getItem('nativeLoadProject') || storage.getItem('localStorageProject');
+            var project = storage.getItem('nativeLoadProject');
+            var localStorageProject = storage.getItem('localStorageProject');
+            if (localStorageProject) {
+                project = localStorageProject;
+                myProject.isModeChange = true;
+            }
 
             if (project) {
                 project = JSON.parse(project);
@@ -341,17 +346,19 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
     }
 
     $scope.doPopupControl = function(obj) {
-        if (obj.type === 'spinner') {
-            $scope.spinnerTitle.text(obj.msg);
-            $scope.popupHelper.show('workspaceSpinner');
-        } else if (obj.type === 'fail') {
-            $scope.failTitle.html(obj.msg);
-            $scope.popupHelper.show('workspaceFailed');
-        } else if (obj.type === 'hide') {
-            $scope.popupHelper.hide();
-        } else if (obj.type === 'mode') {
-            $scope.popupHelper.show('workspaceModeSelect');
-        } 
+        try{
+            if (obj.type === 'spinner') {
+                $scope.spinnerTitle.text(obj.msg);
+                $scope.popupHelper.show('workspaceSpinner');
+            } else if (obj.type === 'fail') {
+                $scope.failTitle.html(obj.msg);
+                $scope.popupHelper.show('workspaceFailed');
+            } else if (obj.type === 'hide') {
+                $scope.popupHelper.hide();
+            } else if (obj.type === 'mode') {
+                $scope.popupHelper.show('workspaceModeSelect');
+            } 
+        } catch(e) {}
     }
 
     $scope.showLoadingPopup = function() {
@@ -392,6 +399,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
         } else {
             project_name = project.name;
             if (project.path) {
+                myProject.isModeChange = false;
                 myProject.isSaved = true;
                 myProject.isSavedPath = project.path;
             }
@@ -1209,6 +1217,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                             });
                         } else {
                             Entry.stateManager.addStamp();
+                            myProject.isModeChange = false;
                             myProject.isSaved = true;
                             myProject.isSavedPath = filePath;
                             Entry.toast.success(Lang.Workspace.saved, project_name + ' ' + Lang.Workspace.saved_msg);
@@ -1402,11 +1411,12 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
             return false;
         }
         var canLoad = true;
-        if (!Entry.stateManager.isSaved()) {
+        if (myProject.checkSavedProject()) {
             canLoad = confirm(Lang.Menus.save_dismiss);
         }
-
+        
         if (canLoad) {
+            myProject.isModeChange = false;
             Entry.plugin.closeAboutPage();
             storage.removeItem('tempProject');
             beforeUnload();
@@ -1422,12 +1432,17 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
 
 }]).service('myProject', function ($rootScope) {
     this.name = '';
+    this.isModeChange = false;
     this.isSaved = false;
     this.isSavedPath = '';
     this.programmingMode = 0;
     this.autoSaveInterval = -1;
     this.mode;
     this.modeName;
+
+    this.checkSavedProject = function () {
+        return !Entry.stateManager.isSaved() || (this.isModeChange && !this.isSaved);
+    }
 
     this.runAutoSaveScheduler = function () {
         this.runAutoSave();
