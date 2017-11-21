@@ -204,7 +204,6 @@ angular.module('workspace').controller('HeaderController', ['$scope', '$rootScop
             if (!ret) {
                 return;
             }
-            console.log($scope.myProject, $scope.myProject.name);
             project.name = $scope.myProject.name;
             var scopeProject = $scope.myProject;
             project.parent = scopeProject && scopeProject.parent;
