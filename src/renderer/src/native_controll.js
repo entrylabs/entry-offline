@@ -217,13 +217,9 @@ Entry.plugin = (function () {
     var view_menus;
     that.setZoomMenuState = function (state) {
         if(!view_menus) {
-            if(isOsx) {
-                view_menus = menu.items[2].submenu.items;
-            } else {
-                view_menus = menu.items[1].submenu.items;
-            }
+            view_menus = menu.items[2].submenu.items;
         }
-
+        
         switch(state) {
             case 'default':
                 view_menus[0].enabled = false;
@@ -297,8 +293,8 @@ Entry.plugin = (function () {
         let fileFilter = '';
 
         if (EntryStatic.isPracticalCourse) {
-            fileName = '[매뉴얼]엔트리로봇연결.zip';
-            fileNamePath = '[매뉴얼]엔트리로봇연결.zip';
+            fileName = '[매뉴얼]엔트리로봇연결.zip';
+            fileNamePath = '[매뉴얼]엔트리로봇연결.zip';
             fileFilter = { name: '*.zip', extensions: ['zip'] };
         } else if(isOsx) {
             fileName = '[매뉴얼]엔트리 하드웨어 연결(맥).pdf';
