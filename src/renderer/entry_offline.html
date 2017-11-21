@@ -58,12 +58,12 @@
 		<script type='text/javascript'>
 			Entry.isOffline = true;
 			Entry.painterBaseUrl = './bower_components/literallycanvas/lib/img';
-			var isMiniMode = localStorage.getItem('isMiniMode');
+			var isPracticalCourse = localStorage.getItem('isPracticalCourse');
 			var EntryStatic;
-			if(isMiniMode === 'true') {
-				EntryStatic = require('./bower_components/entryjs/extern/util/static_mini.js').EntryStatic;
+			if(isPracticalCourse === 'true') {
+				EntryStatic = require('./src/static_mini.js').EntryStatic;
 			} else {
-				EntryStatic = require('./bower_components/entryjs/extern/util/static.js').EntryStatic;
+				EntryStatic = require('./src/static.js').EntryStatic;
 			}
 		</script>
 		<script type='text/javascript' src='./bower_components/entryjs/src/workspace/block_entry.js'></script>

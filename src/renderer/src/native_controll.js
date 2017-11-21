@@ -218,9 +218,9 @@ Entry.plugin = (function () {
     that.setZoomMenuState = function (state) {
         if(!view_menus) {
             if(isOsx) {
-                view_menus = menu.items[3].submenu.items;
-            } else {
                 view_menus = menu.items[2].submenu.items;
+            } else {
+                view_menus = menu.items[1].submenu.items;
             }
         }
 
@@ -361,10 +361,7 @@ Entry.plugin = (function () {
         return isOsx;
     }
 
-    that.init = function (cb) {
-        // 아두이노 open 블록을 제거
-        // delete Entry.block.arduino_open;
-        
+    that.init = function (cb) {        
         // NanumBarunGothic 폰트 로딩 시간까지 기다린다.
         var font = new FontFace("nanumBarunRegular", "url(./node_modules/fonts/NanumBarunGothic.woff2)");
         font.load();

@@ -76,36 +76,51 @@ var template = [{
             Entry && Entry.plugin.setZoomOutPage();
         }
     }]
-}, {
-    label: Lang.Menus.language,
-    submenu: [{
-        label: Lang.Menus.korean,
-        type: 'checkbox',
-        checked: localStorage.getItem('lang') === 'ko',
-        click: function (menuItem) {
-            if (localStorage.getItem('lang') !== 'ko') {
-                angular && angular.element('[data-ng-controller=HeaderController]').scope().setLanguage('ko');
-            } else {
-                menuItem.checked = true;
-            }
-        }
-    }, {
-        label: Lang.Menus.english,
-        type: 'checkbox',
-        checked: localStorage.getItem('lang') !== 'ko',
-        click: function (menuItem) {
-            if (localStorage.getItem('lang') === 'ko') {
-                angular && angular.element('[data-ng-controller=HeaderController]').scope().setLanguage('en');
-            } else {
-                menuItem.checked = true;
-            }
-        }
-    }]
-}];
+}, 
+// {
+//     label: Lang.Menus.language,
+//     submenu: [
+//         {
+//             label: Lang.Menus.korean,
+//             type: 'checkbox',
+//             checked: localStorage.getItem('lang') === 'ko',
+//             click: function (menuItem) {
+//                 if (localStorage.getItem('lang') !== 'ko') {
+//                     angular && angular.element('[data-ng-controller=HeaderController]').scope().setLanguage('ko');
+//                 } else {
+//                     menuItem.checked = true;
+//                 }
+//             }
+//         }, {
+//             label: Lang.Menus.english,
+//             type: 'checkbox',
+//             checked: localStorage.getItem('lang') === 'en',
+//             click: function (menuItem) {
+//                 if (localStorage.getItem('lang') !== 'en') {
+//                     angular && angular.element('[data-ng-controller=HeaderController]').scope().setLanguage('en');
+//                 } else {
+//                     menuItem.checked = true;
+//                 }
+//             }
+//         }, {
+//             label: Lang.Menus.viet,
+//             type: 'checkbox',
+//             checked: localStorage.getItem('lang') === 'vn',
+//             click: function (menuItem) {
+//                 if (localStorage.getItem('lang') !== 'vn') {
+//                     angular && angular.element('[data-ng-controller=HeaderController]').scope().setLanguage('vn');
+//                 } else {
+//                     menuItem.checked = true;
+//                 }
+//             }
+//         },
+//     ]
+// }
+];
 
-var isMiniMode = localStorage.getItem('isMiniMode') === 'true';
+var isPracticalCourse = localStorage.getItem('isPracticalCourse') === 'true';
 
-if (isMiniMode) {
+if (isPracticalCourse) {
     template.pop();
 }
 
@@ -140,7 +155,7 @@ if (process.platform == 'darwin') {
             }
         }]
     });
-    template[3].submenu.push(
+    template[2].submenu.push(
         {
             type: 'separator'
         }, {

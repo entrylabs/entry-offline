@@ -13,6 +13,28 @@
         </div>
     </div>
     <div class="headerRightWrapper">
+        <div class="workspace_language">
+            <ul class="language_wrapper" ng-if="PracticalMode != 'practical_course'">
+                <li class="dropdown" uib-dropdown>
+                    <a href class="dropdown-toggle" uib-dropdown-toggle>
+                        <span class="menu">{{user_language | text}}
+                            <b class="caret"></b>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu" uib-dropdown-menu>
+                        <li>
+                            <a href data-ng-click="setLanguage('ko')">{{'ko' | text}}</a>
+                        </li>
+                        <li>
+                            <a href data-ng-click="setLanguage('en')">{{'en' | text}}</a>
+                        </li>
+                        <li>
+                            <a href data-ng-click="setLanguage('vn')">{{'vn' | text}}</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
         <div class="workspace_mode" ng-if="user_language == 'ko'">
             <ul class="mode_wrapper">
                 <li class="dropdown" uib-dropdown>
@@ -48,6 +70,7 @@
                     </ul>
                 </li>
             </ul>
+            <div class="workspace_divider"></div>
         </div>
         <div class="workspace_button_group">
             <div class="btn-group" uib-dropdown>

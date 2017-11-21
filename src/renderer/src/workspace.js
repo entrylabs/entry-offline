@@ -9,7 +9,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
     $scope.spinnerTitle;
     $scope.failTitle;
     
-    var isMiniMode;
+    var isPracticalCourse;
     var beforeUnload;
     var supported = !(typeof storage == 'undefined' || typeof window.JSON == 'undefined');
     var storage = (typeof window.localStorage === 'undefined') ? undefined : window.localStorage;
@@ -40,17 +40,21 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
         addFailedPopup();
         addSelectModePopup();
 
-        isMiniMode = localStorage.getItem('isMiniMode');
-        if (isMiniMode === null) {
+        isPracticalCourse = localStorage.getItem('isPracticalCourse');
+        if (isPracticalCourse === null) {
+            isPracticalCourse = false;
             $scope.doPopupControl({
                 type: 'mode'
             });
             return;
-        } else if (isMiniMode === 'true') {
+        } else if (isPracticalCourse === 'true') {
+            isPracticalCourse = true;
+            addPracticalNoticePopup();
             $('html').addClass('practical_course_mode');
             myProject.setMode('practical_course');
             settingForMini();
         } else {
+            isPracticalCourse = false;
             $('html').addClass('default_mode');
             myProject.setMode('default');
         }
@@ -64,7 +68,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                 libDir: './bower_components',
                 defaultDir: './node_modules',
                 blockInjectDir: './',
-                textCodingEnable: isMiniMode !== 'true',
+                textCodingEnable: !isPracticalCourse,
                 fonts: [{
                     name: Lang.Fonts.batang,
                     family: 'KoPub Batang',
@@ -274,6 +278,8 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
 
                 return false;
             });
+
+            checkShowPracticalNoticePopup();
         });
     }
 
@@ -509,7 +515,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                         });
                     });
 
-                    localStorage.setItem('isMiniMode', jsonObj.isPracticalCourse);
+                    localStorage.setItem('isPracticalCourse', jsonObj.isPracticalCourse);
                     if (jsonObj.objects[0] &&
                         jsonObj.objects[0].script.substr(0, 4) === "<xml") {
                         blockConverter.convert(jsonObj, function (result) {
@@ -919,6 +925,26 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
     //#endregion
 
     //#region 함수 영역
+    function checkShowPracticalNoticePopup() {
+        if (isPracticalCourse === true) {
+            var practicalCourseNotice = localStorage.getItem('practicalCourseNotice');
+            if (practicalCourseNotice === null) {
+                showPracticalNoticePopup();
+                localStorage.setItem('practicalCourseNotice', 'show');
+            }
+        }
+    }
+
+    function showPracticalNoticePopup() {
+        $scope.practicalTooltip = new Entry.Tooltip([
+            { content: Lang.Workspace.practical_course_tooltip, target: $(".modeLabel"), direction: "down" }
+        ], { dimmed: false, indicator: true });
+        setTimeout(function () {
+            $scope.practicalTooltip.alignTooltips();
+        }, 800);
+        $scope.popupHelper.show('practicalCourseNotice');
+    }
+
     function settingForMini() {
         defaultInitOption = EntryStatic.initOptions;
         hwCategoryList = EntryStatic.hwCategoryList;
@@ -960,6 +986,35 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
 
                 popup.append(content);
             }
+        });
+    }
+
+    function addPracticalNoticePopup() {
+        $scope.popupHelper.addPopup('practicalCourseNotice', {
+            type: 'normal',
+            setPopupLayout: function (popup) {
+                var content = Entry.Dom('div', {
+                    class: 'contentArea'
+                });
+                var text = Entry.Dom('div', {
+                    class: 'contentText',
+                    parent: content
+                });
+                text.html(Lang.Workspace.practical_course_desc);
+                var text2 = Entry.Dom('div', {
+                    class: 'contentText2',
+                    parent: content
+                });
+                text2.html(Lang.Workspace.practical_course_desc2);
+                popup.append(content);
+            },
+            closeEvent: function (popup) {
+                if ($scope.practicalTooltip) {
+                    $scope.practicalTooltip.dispose();
+                    delete $scope.practicalTooltip;
+                }
+                $scope.popupHelper.remove('addPracticalNoticePopup');
+            },
         });
     }
 
@@ -1110,10 +1165,10 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                 });
                 close.bindOnClick(function () {
                     if (mode === 'default') {
-                        localStorage.setItem('isMiniMode', false);
+                        localStorage.setItem('isPracticalCourse', false);
                         EntryStatic = require('./bower_components/entryjs/extern/util/static.js').EntryStatic;
                     } else {
-                        localStorage.setItem('isMiniMode', true);
+                        localStorage.setItem('isPracticalCourse', true);
                         EntryStatic = require('./bower_components/entryjs/extern/util/static_mini.js').EntryStatic;
                     }
                     $scope.initWorkspace();
