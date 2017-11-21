@@ -192,6 +192,36 @@ body {
 }
 
 
+/*#region 기본 스타일 */
+
+.workspace_language ul.language_wrapper {
+    padding-left: 0px;
+}
+
+.workspace_language .language_wrapper li a {
+    font-size: 14px;
+}
+
+.workspace_language .language_wrapper .caret {
+    margin-left: 12px;
+}
+
+.workspace_language .workspace_divider {
+    display: inline-block;
+    background-color: #ffffff;
+    height: 27px;
+    width: 1px;
+    opacity: 0.5;
+    vertical-align: bottom;
+    margin-bottom: 8px;
+    margin-right: 3px;
+    margin-left: 3px;
+}
+
+
+/*#endregion 기본 스타일 */
+
+
 /*#region 실과모드 스타일 */
 
 #entryCategoryhw_download {
@@ -240,7 +270,7 @@ body {
 .workspace_mode {
     float: right;
     right: 0;
-    margin-right: 15px;
+    margin-right: 8px;
 }
 
 .workspace_mode .language_wrapper {
@@ -379,6 +409,14 @@ html.practical_course_mode .entryAddButtonWorkspace_w {
     background-image: url(../images/workspace/btn_add.png);
 }
 
+html.practical_course_mode .workspace_mode .workspace_divider {
+    display: none;
+}
+
+html.practical_course_mode .workspace_language {
+    display: none;
+}
+
 .workspace_margin {
     display: inline-block;
     margin-right: 10px;
@@ -416,6 +454,7 @@ html.practical_course_mode .entryAddButtonWorkspace_w {
         padding-top: 23px;
     }
 }
+
 
 /*#endregion 실과모드 스타일 */
 

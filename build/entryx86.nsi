@@ -219,6 +219,7 @@ Function .onInit
 	IfErrors 0 +2
 		Goto no_remove_uninstaller
 		RMDir /r /REBOOTOK $R1 
+    RMDir /r "$APPDATA\${PRODUCT_NAME}"
 		Goto done
 	  
 	no_remove_uninstaller:

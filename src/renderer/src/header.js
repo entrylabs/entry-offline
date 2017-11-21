@@ -75,13 +75,13 @@ angular.module('workspace').controller('HeaderController', ['$scope', '$rootScop
         }
 
         $scope.setWorkspaceMode = function (type) {
-            var isMiniMode = localStorage.getItem('isMiniMode') === 'true';
+            var isPracticalCourse = localStorage.getItem('isPracticalCourse') === 'true';
             saveLocalStorageProject();
-            if (isMiniMode && type === 'default') {
-                localStorage.setItem('isMiniMode', 'false');
+            if (isPracticalCourse && type === 'default') {
+                localStorage.setItem('isPracticalCourse', false);
                 Entry.plugin.reloadApplication(true);
-            } else if (!isMiniMode && type !== 'default') {
-                localStorage.setItem('isMiniMode', 'true');
+            } else if (!isPracticalCourse && type !== 'default') {
+                localStorage.setItem('isPracticalCourse', true);
                 Entry.plugin.reloadApplication(true);
             }
         }
