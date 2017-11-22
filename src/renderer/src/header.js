@@ -75,13 +75,12 @@ angular.module('workspace').controller('HeaderController', ['$scope', '$rootScop
 
         $scope.setWorkspaceMode = function (type) {
             var isPracticalCourse = localStorage.getItem('isPracticalCourse') === 'true';
-            saveLocalStorageProject();
-            if (isPracticalCourse && type === 'default') {
-                localStorage.setItem('isPracticalCourse', false);
-                Entry.plugin.reloadApplication(true);
-            } else if (!isPracticalCourse && type !== 'default') {
-                localStorage.setItem('isPracticalCourse', true);
-                Entry.plugin.reloadApplication(true);
+            if ((isPracticalCourse && type === 'default') || (!isPracticalCourse && type !== 'default')) {
+                $scope.setMode(0, ()=> {
+                    localStorage.setItem('isPracticalCourse', !isPracticalCourse);
+                    saveLocalStorageProject();
+                    Entry.plugin.reloadApplication(true);
+                });
             }
         }
 
@@ -133,18 +132,26 @@ angular.module('workspace').controller('HeaderController', ['$scope', '$rootScop
             }
         }
 
-        $scope.setMode = function (mode) {
-            if (myProject.programmingMode === mode) return;
-            applied = true;
-            if (mode === 1) {
-                var isShown = localStorage.getItem('python_manual');
-                if (!isShown) {
-                    $scope.showPythonTooltip();
-                    localStorage.setItem('python_manual', true);
+        $scope.setMode = function (mode, callback) {
+            var checkChange = true;
+            if (myProject.programmingMode !== mode) {
+                applied = true;
+                if (mode === 1) {
+                    var isShown = localStorage.getItem('python_manual');
+                    if (!isShown) {
+                        $scope.showPythonTooltip();
+                        localStorage.setItem('python_manual', true);
+                    }
+                }
+                $scope._setMode(mode);
+                applied = false;
+                if (mode !== Entry.getMainWS().getMode()) {
+                    checkChange = false;
                 }
             }
-            $scope._setMode(mode);
-            applied = false;
+            if (checkChange && callback) {
+                callback();
+            }
         };
 
         $scope._setMode = function (mode) {

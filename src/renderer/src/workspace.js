@@ -60,7 +60,17 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
         }
 
         // 기본 초기화를 수행수 동작한다.
-        Entry.plugin.init(function() {
+        Entry.plugin.init(function(isPracticalCourseMode) {
+            if (isPracticalCourseMode === true) {
+                isPracticalCourse = true;
+                addPracticalNoticePopup();                
+                myProject.setMode('practical_course');
+                settingForMini();
+            } else if (isPracticalCourseMode === false) {
+                isPracticalCourse = false;
+                myProject.setMode('default');
+            }
+
             myProject.isSavedPath = storage.getItem('defaultPath') || '';
             var workspace = document.getElementById("workspace");
             var initOptions = {
