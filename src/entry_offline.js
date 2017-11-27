@@ -25,6 +25,7 @@ global.sharedObject = {
     roomId: '',
     mainWindowId: '',
     workingPath: '',
+    isInitEntry: false,
 }
 
 function logger(text) {
@@ -191,12 +192,13 @@ if (shouldQuit) {
         });
 
         mainWindow.on('close', function (e) {
-            if (!isForceClose) {
+            if (!isForceClose && global.sharedObject.isInitEntry) {
                 e.preventDefault();
                 cwm.closeHardwareWindow();
                 mainWindow.webContents.send('mainClose');
             }
         });
+        
         mainWindow.on('closed', function () {
             mainWindow = null;
             app.quit();

@@ -61,6 +61,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
 
         // 기본 초기화를 수행수 동작한다.
         Entry.plugin.init(function(isPracticalCourseMode) {
+            sharedObject.isInitEntry = true;
             if (isPracticalCourseMode === true) {
                 isPracticalCourse = true;
                 addPracticalNoticePopup();                
@@ -165,11 +166,11 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                 })
             }
 
+
             ipcRenderer.on('mainClose', function () {
                 if(!unloadCheckFunc()) {
                     return;
                 }
-
                 window.onbeforeunload = null;
                 ipcRenderer.send('forceClose', true);
             });

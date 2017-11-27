@@ -29,6 +29,7 @@ const sharedObject = remote.getGlobal('sharedObject');
 const mainWindowId = sharedObject.mainWindowId;
 const _mainWindow = BrowserWindow.fromId(mainWindowId);
 const archiver = require('archiver');
+sharedObject.isInitEntry = false;
 
 import parser from './bower_components/entryjs/extern/util/filbert.js';
 const filbert = parser;
