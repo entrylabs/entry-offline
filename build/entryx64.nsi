@@ -181,6 +181,7 @@ Section "Uninstall"
   ; Remove directories used
   RMDir "$SMPROGRAMS\EntryLabs\${PRODUCT_NAME}"
   RMDir /r "$INSTDIR"
+  RMDir /r "$APPDATA\${PRODUCT_NAME}"
 
 SectionEnd
 
