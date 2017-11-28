@@ -70,6 +70,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
             } else if (isPracticalCourseMode === false) {
                 isPracticalCourse = false;
                 myProject.setMode('default');
+                settingForDefault();
             }
 
             myProject.isSavedPath = storage.getItem('defaultPath') || '';
@@ -967,6 +968,11 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
     function settingForMini() {
         defaultInitOption = EntryStatic.initOptions;
         hwCategoryList = EntryStatic.hwCategoryList;
+    }
+
+    function settingForDefault() {
+        defaultInitOption = {};
+        hwCategoryList = [];
     }
 
     function addSpinnerPopup() {
