@@ -411,9 +411,12 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
         } else {
             project_name = project.name;
             if (project.path) {
-                myProject.isModeChange = false;
-                myProject.isSaved = true;
-                myProject.isSavedPath = project.path;
+                var parser = path.parse(project.path);
+                if(parser.ext) {
+                    myProject.isModeChange = false;
+                    myProject.isSaved = true;
+                    myProject.isSavedPath = project.path;
+                }
             }
             sessionStorage.setItem('isDefaultProject', false);
             $scope.project.parent = project.parent;
