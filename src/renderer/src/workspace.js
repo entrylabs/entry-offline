@@ -1041,7 +1041,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                     $scope.practicalTooltip.dispose();
                     delete $scope.practicalTooltip;
                 }
-                $scope.popupHelper.remove('addPracticalNoticePopup');
+                $scope.popupHelper.remove('practicalCourseNotice');
             },
         });
     }
