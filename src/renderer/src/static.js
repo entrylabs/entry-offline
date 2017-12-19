@@ -1,4 +1,3 @@
-
 'use strict'
 
 var EntryStatic = {};
@@ -9,25 +8,25 @@ EntryStatic.objectTypes = [
 ]
 
 EntryStatic.usageList = [
-   'usage_sequence' , 'usage_repeat', 'usage_condition_repeat', 'usage_condition', 'usage_parallel', 'usage_event',
-   'usage_signal', 'usage_random', 'usage_variable', 'usage_ask_answer' , 'usage_comp_operation', 'usage_math_operation',
-   'usage_logical_operation' , 'usage_list', 'usage_function', 'usage_arrow_move', 'usage_coordinate', 'usage_rotation', 'usage_speak',
-   'usage_picture_effect', 'usage_shape', 'usage_sound', 'usage_draw','usage_confirm', 'usage_timer', 'usage_textBox', 'usage_scene',
-   'usage_clone', 'usage_hw'
+    'usage_sequence', 'usage_repeat', 'usage_condition_repeat', 'usage_condition', 'usage_parallel', 'usage_event',
+    'usage_signal', 'usage_random', 'usage_variable', 'usage_ask_answer', 'usage_comp_operation', 'usage_math_operation',
+    'usage_logical_operation', 'usage_list', 'usage_function', 'usage_arrow_move', 'usage_coordinate', 'usage_rotation', 'usage_speak',
+    'usage_picture_effect', 'usage_shape', 'usage_sound', 'usage_draw', 'usage_confirm', 'usage_timer', 'usage_textBox', 'usage_scene',
+    'usage_clone', 'usage_hw'
 ];
 
 EntryStatic.conceptList = [
-    'concept_resource_analytics', 'concept_individual', 'concept_abstractive','concept_procedual',
-     'concept_automation', 'concept_simulation', 'concept_parallel'
+    'concept_resource_analytics', 'concept_individual', 'concept_abstractive', 'concept_procedual',
+    'concept_automation', 'concept_simulation', 'concept_parallel'
 ];
 
 EntryStatic.subjectList = [
-    'subject_korean', 'subject_mathmatics',  'subject_social',
-    'subject_science', 'subject_english', 'subject_courtesy','subject_music', 'subject_paint',
-    'subject_athletic',  'subject_progmatic'
+    'subject_korean', 'subject_mathmatics', 'subject_social',
+    'subject_science', 'subject_english', 'subject_courtesy', 'subject_music', 'subject_paint',
+    'subject_athletic', 'subject_progmatic'
 ];
 
-EntryStatic.lectureLevels=[1,2,3];
+EntryStatic.lectureLevels = [1, 2, 3];
 
 // EntryStatic.lectureLevels = ['level_high', 'level_mid','level_row'];
 
@@ -42,44 +41,62 @@ EntryStatic.categoryList = [
     'category_physical', 'category_etc'
 ];
 
-EntryStatic.requiredTimes = [1,2,3,4,5];
+EntryStatic.requiredTimes = [1, 2, 3, 4, 5];
 
-EntryStatic.searchProjectOption = [
-   {
-       'key':'search_updated',
-       'lang':'search_updated',
-       'value': 'updated'
-   },
-   {
-       'key':'search_recent',
-       'lang':'search_recent',
-       'value': 'recent'
-   },
-   {
-       'key':'search_complexity',
-       'lang':'search_complexity',
-       'value':'complexity'
-   },
-   {
-       'key':'search_staffPicked',
-       'lang':'search_staffPicked',
-       'value': 'staffPicked'
-   },
-   {
-       'key':'search_childCnt',
-       'lang':'search_childCnt',
-       'value': 'childCnt'
-   },
-   {
-       'key':'search_likeCnt',
-       'lang':'search_likeCnt',
-       'value': 'recentLikeCnt'
-   }
-]
+EntryStatic.searchProjectOption = [{
+    'key': 'search_updated',
+    'lang': 'search_updated',
+    'value': 'updated'
+}, {
+    'key': 'search_recent',
+    'lang': 'search_recent',
+    'value': 'recent'
+}, {
+    'key': 'search_complexity',
+    'lang': 'search_complexity',
+    'value': 'complexity'
+}, {
+    'key': 'search_staffPicked',
+    'lang': 'search_staffPicked',
+    'value': 'staffPicked'
+}, {
+    'key': 'search_childCnt',
+    'lang': 'search_childCnt',
+    'value': 'childCnt'
+}, {
+    'key': 'search_likeCnt',
+    'lang': 'search_likeCnt',
+    'value': 'recentLikeCnt'
+}]
 
-EntryStatic.getAllBlocks = function() {
-    return [
-        {
+EntryStatic.categoryProjectOption = [{
+    'key': 'search_genre_all',
+    'lang': 'search_전체',
+    'value': '전체'
+}, {
+    'key': 'search_genre_game',
+    'lang': 'search_게임',
+    'value': '게임'
+}, {
+    'key': 'search_genre_animation',
+    'lang': 'search_애니메이션',
+    'value': '애니메이션'
+}, {
+    'key': 'search_genre_media',
+    'lang': 'search_미디어아트',
+    'value': '미디어아트'
+}, {
+    'key': 'search_genre_physical',
+    'lang': 'search_피지컬',
+    'value': '피지컬'
+}, {
+    'key': 'search_genre_etc',
+    'lang': 'search_기타',
+    'value': '기타'
+}]
+
+EntryStatic.getAllBlocks = function () {
+    return [{
             category: "start",
             blocks: [
                 "when_run_button_click",
@@ -106,8 +123,7 @@ EntryStatic.getAllBlocks = function() {
                 "wildcard_boolean",
                 "register_score"
             ]
-        },
-        {
+        }, {
             category: "flow",
             blocks: [
                 "wait_second",
@@ -125,8 +141,7 @@ EntryStatic.getAllBlocks = function() {
                 "delete_clone",
                 "remove_all_clones"
             ]
-        },
-        {
+        }, {
             category: "moving",
             blocks: [
                 "move_direction",
@@ -149,8 +164,7 @@ EntryStatic.getAllBlocks = function() {
                 "see_angle_object",
                 "move_to_angle"
             ]
-        },
-        {
+        }, {
             category: "looks",
             blocks: [
                 "show",
@@ -169,8 +183,7 @@ EntryStatic.getAllBlocks = function() {
                 "flip_y",
                 "change_object_index"
             ]
-        },
-        {
+        }, {
             category: "brush",
             blocks: [
                 "brush_stamp",
@@ -184,8 +197,7 @@ EntryStatic.getAllBlocks = function() {
                 "set_brush_tranparency",
                 "brush_erase_all"
             ]
-        },
-        {
+        }, {
             category: "text",
             blocks: [
                 "text_write",
@@ -193,8 +205,7 @@ EntryStatic.getAllBlocks = function() {
                 "text_prepend",
                 "text_flush"
             ]
-        },
-        {
+        }, {
             category: "sound",
             blocks: [
                 "sound_something_with_block",
@@ -207,8 +218,7 @@ EntryStatic.getAllBlocks = function() {
                 "sound_volume_set",
                 "sound_silent_all"
             ]
-        },
-        {
+        }, {
             category: "judgement",
             blocks: [
                 "is_clicked",
@@ -218,8 +228,7 @@ EntryStatic.getAllBlocks = function() {
                 "boolean_and_or",
                 "boolean_not"
             ]
-        },
-        {
+        }, {
             category: "calc",
             blocks: [
                 "calc_basic",
@@ -243,8 +252,7 @@ EntryStatic.getAllBlocks = function() {
                 "replace_string",
                 "change_string_case"
             ]
-        },
-        {
+        }, {
             category: "variable",
             blocks: [
                 "variableAddButton",
@@ -273,8 +281,7 @@ EntryStatic.getAllBlocks = function() {
             blocks: [
                 "functionAddButton",
             ]
-        },
-        {
+        }, {
             category: "arduino",
             blocks: [
                 "arduino_download_connector",
@@ -349,20 +356,20 @@ EntryStatic.getAllBlocks = function() {
                 "dplay_robot_stop",
                 //iboard
                 "iboard_tmp",
-				"iboard_var_res",
-				"iboard_cds",
-				"iboard_mic",
-				"iboard_button",
-				"iboard_led",
-				"iboard_rgb_led",
-				"iboard_pwm_led",
-				"iboard_set_tone",
-				"iboard_motor",
-				"iboard_get_analog_value",
-				"iboard_get_analog_value_map",
-				"iboard_get_digital",
-				"iboard_toggle_led",
-                "iboard_digital_pwm",	
+                "iboard_var_res",
+                "iboard_cds",
+                "iboard_mic",
+                "iboard_button",
+                "iboard_led",
+                "iboard_rgb_led",
+                "iboard_pwm_led",
+                "iboard_set_tone",
+                "iboard_motor",
+                "iboard_get_analog_value",
+                "iboard_get_analog_value_map",
+                "iboard_get_digital",
+                "iboard_toggle_led",
+                "iboard_digital_pwm",
                 //nemoino
                 "nemoino_get_named_sensor_value",
                 "nemoino_get_sound_status",
@@ -377,17 +384,23 @@ EntryStatic.getAllBlocks = function() {
                 //neobot
                 "neobot_sensor_value",
                 "neobot_sensor_convert_scale",
+                "neobot_equal_with_sensor",
+                "neobot_boolean_equal",
                 "neobot_left_motor",
                 "neobot_stop_left_motor",
                 "neobot_right_motor",
                 "neobot_stop_right_motor",
                 "neobot_all_motor",
+                "neobot_all_motor_iternally",
                 "neobot_stop_all_motor",
                 "neobot_set_servo",
                 "neobot_set_output",
                 "neobot_set_fnd",
                 "neobot_set_fnd_off",
                 "neobot_play_note_for",
+                "neobot_play_note_with_sensor",
+                "neobot_change_color_with_color_picker",
+                "neobot_change_color_with_sensor_value",
                 "bitbrick_sensor_value",
                 "bitbrick_convert_scale",
                 "bitbrick_is_touch_pressed",
@@ -580,6 +593,19 @@ EntryStatic.getAllBlocks = function() {
                 "sensorBoard_toggle_led",
                 "sensorBoard_toggle_pwm",
                 "sensorBoard_convert_scale",
+                //truetrue
+                "truetrue_get_linesensor",
+                "truetrue_get_proxisensor",
+                "truetrue_get_accsensor",
+                "truetrue_get_bottomcolorsensor",
+                "truetrue_get_frontcolorsensor",
+                "truetrue_set_singlemotor",
+                "truetrue_set_dualmotor",
+                "truetrue_set_colorled",
+                "truetrue_set_led_proxi",
+                "truetrue_set_led_colorsensor",
+                "truetrue_set_led_linesensor",
+                "truetrue_set_linetracer",
                 //CODEino
                 "CODEino_get_named_sensor_value",
                 "CODEino_get_sound_status",
@@ -1083,7 +1109,7 @@ EntryStatic.getAllBlocks = function() {
                 //rokoboard Blocks
                 "rokoboard_get_sensor_value_by_name",
                 "rokoboard_is_button_pressed",
-                 //Altino Blocks added
+                //Altino Blocks added
                 "altino_analogValue",
                 "altino_rear_wheel",
                 "altino_steering",
@@ -1091,7 +1117,21 @@ EntryStatic.getAllBlocks = function() {
                 "altino_light",
                 "altino_dot_display",
                 "altino_dot_display_line",
-
+                //JDKit Blocks
+                "jdkit_led",
+                "jdkit_tune",
+                "jdkit_motor",
+                "jdkit_joystick",
+                "jdkit_button",
+                "jdkit_gyro",
+                "jdkit_ultrasonic",
+                "jdkit_connect",
+                "jdkit_ready",
+                "jdkit_throttle",
+                "jdkit_altitude",
+                "jdkit_rollpitch",
+                "jdkit_yaw",
+                "jdkit_emergency",
                 // memaker Added 2017-10-01
                 "memaker_get_analog_value",
                 "memaker_get_analog_value_map",
@@ -1101,8 +1141,32 @@ EntryStatic.getAllBlocks = function() {
                 "memaker_digital_pwm",
                 "memaker_set_servo",
                 "memaker_set_lcd",
-                "memaker_lcd_command"
+                "memaker_lcd_command",
                 // memaker Added 2017-10-01
+
+                //hummingbirdduo
+                "hummingbird_sensorValue",
+                "hummingbird_temperatureValue",
+                "hummingbird_lightValue",
+                "hummingbird_distanceValue",
+                "hummingbird_rotaryValue",
+                "hummingbird_soundValue",
+                "hummingbird_vibeMotor",
+                "hummingbird_servo",
+                "hummingbird_dcMotor",
+                "hummingbird_triLED",
+                "hummingbird_led",
+
+                // EduMaker Added 2017-11-30
+                "edumaker_get_analog_value",
+                "edumaker_get_analog_value_map",
+                "edumaker_get_ultrasonic_value",
+                "edumaker_get_digital",
+                "edumaker_toggle_led",
+                "edumaker_digital_pwm",
+                "edumaker_set_tone",
+                "edumaker_set_servo",
+                // EduMaker Added 2017-11-30
             ]
         }
     ]
@@ -1128,19 +1192,19 @@ EntryStatic.blockInfo = {
         "xml": "<block type='xbot_rgb_picker'></block>",
         "class": "xbot_rgb"
     },
-     "xbot_lcd":{
+    "xbot_lcd": {
         "isNotFor": ["xbot_epor_edge"],
         "xml": "<block type='xbot_lcd'><value name='VALUE'><block type='text'><field name='NAME'>Hello</field></block></value></block>",
         "class": "xbot_sensor"
-     },
+    },
 
-     "xbot_oneWheel": {
+    "xbot_oneWheel": {
         "isNotFor": ["xbot_epor_edge"],
         "xml": "<block type='xbot_oneWheel'><value name='VALUE'><block type='text'><field name='NAME'>0</field></block></value></block>",
         "class": "xbot_motor"
     },
 
-     "xbot_twoWheel": {
+    "xbot_twoWheel": {
         "isNotFor": ["xbot_epor_edge"],
         "xml": "<block type='xbot_twoWheel'><value name='rightWheel'><block type='text'><field name='NAME'>0</field></block></value><value name='leftWheel'><block type='text'><field name='NAME'>0</field></block></value></block>",
         "class": "xbot_motor"
@@ -1480,13 +1544,13 @@ EntryStatic.blockInfo = {
         "usage": ["shape"]
     },
     "dialog_time": {
-        "xml": "<block type='dialog_time'> <value name='VALUE'> <block type='text'> <field name='NAME'>"+ Lang.Blocks.block_hi +"</field> </block> </value> <value name='SECOND'> <block type='number'><field name='NUM'>4</field></block> </value> </block>",
+        "xml": "<block type='dialog_time'> <value name='VALUE'> <block type='text'> <field name='NAME'>" + Lang.Blocks.block_hi + "</field> </block> </value> <value name='SECOND'> <block type='number'><field name='NUM'>4</field></block> </value> </block>",
         "class": "say",
         "isNotFor": ["textBox"],
         "usage": ["dialog"]
     },
     "dialog": {
-        "xml": "<block type='dialog'> <value name='VALUE'> <block type='text'> <field name='NAME'>"+ Lang.Blocks.block_hi +"</field> </block> </value> </block>",
+        "xml": "<block type='dialog'> <value name='VALUE'> <block type='text'> <field name='NAME'>" + Lang.Blocks.block_hi + "</field> </block> </value> </block>",
         "class": "say",
         "isNotFor": ["textBox"],
         "usage": ["dialog"]
@@ -2720,7 +2784,7 @@ EntryStatic.blockInfo = {
         "usage": ["arduino"],
         "class": "CODEino"
     },
-        "nemoino_get_named_sensor_value": {
+    "nemoino_get_named_sensor_value": {
         "xml": "<block type='nemoino_get_named_sensor_value'></block>",
         "isNotFor": ['nemoino'],
         "usage": ["arduino"],
@@ -2775,10 +2839,10 @@ EntryStatic.blockInfo = {
         "class": "dplay_set"
     },
     "dplay_buzzer": {
-          "xml": "<block type='dplay_buzzer'><value name='VALUE'><block type='arduino_text'><field name='NAME'>0</field></block></value></block>",
-          "isNotFor": ['dplay'],
-          "usage": ["arduino"],
-          "class": "dplay"
+        "xml": "<block type='dplay_buzzer'><value name='VALUE'><block type='arduino_text'><field name='NAME'>0</field></block></value></block>",
+        "isNotFor": ['dplay'],
+        "usage": ["arduino"],
+        "class": "dplay"
     },
     "dplay_select_led": {
         "xml": "<block type='dplay_select_led'><block type='arduino_get_port_number'></block></block>",
@@ -2787,10 +2851,10 @@ EntryStatic.blockInfo = {
         "class": "dplay"
     },
     "dplay_DCmotor": {
-          "xml": "<block type='dplay_DCmotor'></block>",
-          "isNotFor": ['dplay'],
-          "usage": ["arduino"],
-          "class": "dplay"
+        "xml": "<block type='dplay_DCmotor'></block>",
+        "isNotFor": ['dplay'],
+        "usage": ["arduino"],
+        "class": "dplay"
     },
     "dplay_servo": {
         "xml": "<block type='dplay_servo'><value name='VALUE'><block type='arduino_text'><field name='NAME'>255</field></block></value></block>",
@@ -2822,8 +2886,8 @@ EntryStatic.blockInfo = {
         "isNotFor": [""],
         "xml": "<block type='quotient_and_mod'><value name='LEFTHAND'><block type='text'><field name='NAME'>10</field></block></value><value name='RIGHTHAND'><block type='text'><field name='NAME'>10</field></block></value></block>",
         //"xmls": [
-            //"<block type='quotient_and_mod'><value name='LEFTHAND'><block type='text'><field name='NAME'>10</field></block></value><value name='RIGHTHAND'><block type='text'><field name='NAME'>10</field></block></value><field name='OPERATOR'>QUOTIENT</field></block>",
-            //"<block type='quotient_and_mod'><value name='LEFTHAND'><block type='text'><field name='NAME'>10</field></block></value><value name='RIGHTHAND'><block type='text'><field name='NAME'>10</field></block></value><field name='OPERATOR'>MOD</field></block>"
+        //"<block type='quotient_and_mod'><value name='LEFTHAND'><block type='text'><field name='NAME'>10</field></block></value><value name='RIGHTHAND'><block type='text'><field name='NAME'>10</field></block></value><field name='OPERATOR'>QUOTIENT</field></block>",
+        //"<block type='quotient_and_mod'><value name='LEFTHAND'><block type='text'><field name='NAME'>10</field></block></value><value name='RIGHTHAND'><block type='text'><field name='NAME'>10</field></block></value><field name='OPERATOR'>MOD</field></block>"
         //],
         "class": "calc"
     },
@@ -3071,150 +3135,121 @@ EntryStatic.blockInfo = {
 }
 
 EntryStatic.discussCategories = [
-   // 'notice',
-   'qna',
-   'tips',
+    // 'notice',
+    'qna',
+    'tips',
     'free',
-   'report',
-   'notice'
+    'report',
+    'notice'
 ];
 
-EntryStatic.artCategories = [
-    {
-        'key':'art_category_',
-        'lang':'art_category_all',
-        'value': ''
-    },
-    {
-        'key':'art_category_게임',
-        'lang':'art_category_game',
-        'value': '게임'
-    },
-    {
-        'key':'art_category_애니메이션',
-        'lang':'art_category_animation',
-        'value':'애니메이션'
-    },
-    {
-        'key':'art_category_미디어아트',
-        'lang':'art_category_media',
-        'value': '미디어아트'
-    },
-    {
-        'key':'art_category_피지컬',
-        'lang':'art_category_physical',
-        'value': '피지컬'
-    },
-    {
-        'key':'art_category_기타',
-        'lang':'art_category_etc',
-        'value': '기타'
-    }
-]
+EntryStatic.artCategories = [{
+    'key': 'art_category_',
+    'lang': 'art_category_all',
+    'value': ''
+}, {
+    'key': 'art_category_게임',
+    'lang': 'art_category_game',
+    'value': '게임'
+}, {
+    'key': 'art_category_애니메이션',
+    'lang': 'art_category_animation',
+    'value': '애니메이션'
+}, {
+    'key': 'art_category_미디어아트',
+    'lang': 'art_category_media',
+    'value': '미디어아트'
+}, {
+    'key': 'art_category_피지컬',
+    'lang': 'art_category_physical',
+    'value': '피지컬'
+}, {
+    'key': 'art_category_기타',
+    'lang': 'art_category_etc',
+    'value': '기타'
+}]
 
-EntryStatic.artSortOptions = [
-    {
-        'key':'art_sort_updated',
-        'lang':'art_sort_updated',
-        'value': 'updated'
-    },
-    {
-        'key':'art_sort_visit',
-        'lang':'art_sort_visit',
-        'value': 'visit'
-    },
-    {
-        'key':'art_sort_likeCnt',
-        'lang':'art_sort_likeCnt',
-        'value': 'likeCnt'
-    },
-    {
-        'key':'art_sort_comment',
-        'lang':'art_sort_comment',
-        'value': 'comment'
-    },
-]
+EntryStatic.artSortOptions = [{
+    'key': 'art_sort_updated',
+    'lang': 'art_sort_updated',
+    'value': 'updated'
+}, {
+    'key': 'art_sort_visit',
+    'lang': 'art_sort_visit',
+    'value': 'visit'
+}, {
+    'key': 'art_sort_likeCnt',
+    'lang': 'art_sort_likeCnt',
+    'value': 'likeCnt'
+}, {
+    'key': 'art_sort_comment',
+    'lang': 'art_sort_comment',
+    'value': 'comment'
+}, ]
 
-EntryStatic.discussSortOptions = [
-    {
-        'lang':'discuss_sort_created',
-        'value': 'created'
-    },
-    {
-        'lang':'discuss_sort_visit',
-        'value': 'visit'
-    },
-    {
-        'lang':'discuss_sort_likesLength',
-        'value': 'likesLength'
-    },
-    {
-        'lang':'discuss_sort_commentsLength',
-        'value': 'commentsLength'
-    },
-]
-EntryStatic.discussPeriodOptions = [
-    {
-        'key':'discuss_period_',
-        'lang':'discuss_period_all',
-        'value': ''
-    },
-    {
-        'key':'discuss_period_1',
-        'lang':'discuss_period_day',
-        'value': '1'
-    },
-    {
-        'key':'discuss_period_7',
-        'lang':'discuss_period_week',
-        'value': '7'
-    },
-    {
-        'key':'discuss_period_30',
-        'lang':'discuss_period_month',
-        'value': '30'
-    },
-    {
-        'key':'discuss_period_90',
-        'lang':'discuss_period_three_month',
-        'value': '90'
-    },
-]
+EntryStatic.discussSortOptions = [{
+    'lang': 'discuss_sort_created',
+    'value': 'created'
+}, {
+    'lang': 'discuss_sort_visit',
+    'value': 'visit'
+}, {
+    'lang': 'discuss_sort_likesLength',
+    'value': 'likesLength'
+}, {
+    'lang': 'discuss_sort_commentsLength',
+    'value': 'commentsLength'
+}]
 
+EntryStatic.discussPeriodOptions = [{
+    'key': 'discuss_period_',
+    'lang': 'discuss_period_all',
+    'value': ''
+}, {
+    'key': 'discuss_period_1',
+    'lang': 'discuss_period_day',
+    'value': '1'
+}, {
+    'key': 'discuss_period_7',
+    'lang': 'discuss_period_week',
+    'value': '7'
+}, {
+    'key': 'discuss_period_30',
+    'lang': 'discuss_period_month',
+    'value': '30'
+}, {
+    'key': 'discuss_period_90',
+    'lang': 'discuss_period_three_month',
+    'value': '90'
+}]
 
-EntryStatic.artPeriodOptions = [
-    {
-        'key':'art_period_',
-        'lang':'art_period_all',
-        'value': ''
-    },
-    {
-        'key':'art_period_1',
-        'lang':'art_period_day',
-        'value': '1'
-    },
-    {
-        'key':'art_period_7',
-        'lang':'art_period_week',
-        'value': '7'
-    },
-    {
-        'key':'art_period_30',
-        'lang':'art_period_month',
-        'value': '30'
-    },
-    {
-        'key':'art_period_90',
-        'lang':'art_period_three_month',
-        'value': '90'
-    }
-]
+EntryStatic.artPeriodOptions = [{
+    'key': 'art_period_',
+    'lang': 'art_period_all',
+    'value': ''
+}, {
+    'key': 'art_period_1',
+    'lang': 'art_period_day',
+    'value': '1'
+}, {
+    'key': 'art_period_7',
+    'lang': 'art_period_week',
+    'value': '7'
+}, {
+    'key': 'art_period_30',
+    'lang': 'art_period_month',
+    'value': '30'
+}, {
+    'key': 'art_period_90',
+    'lang': 'art_period_three_month',
+    'value': '90'
+}]
 
-EntryStatic.getCategoryByBlock = function(blockName) {
+EntryStatic.getCategoryByBlock = function (blockName) {
     if (!blockName)
         return false;
     var allBlocks = EntryStatic.getAllBlocks();
-    for (var i=0,len=allBlocks.length; i<len; i++) {
+    for (var i = 0, len = allBlocks.length; i < len; i++) {
         var blocks = allBlocks[i].blocks;
         if (blocks.indexOf(blockName) > -1) {
             return allBlocks[i].category;
@@ -3224,8 +3259,9 @@ EntryStatic.getCategoryByBlock = function(blockName) {
 }
 
 EntryStatic.objectMainCategories = ['entrybot_friends', 'people', 'animal', 'plant', 'vehicles',
-                'architect', 'food', 'environment', 'stuff', 'fantasy', 'interface',
-                'background'];
+    'architect', 'food', 'environment', 'stuff', 'fantasy', 'interface',
+    'background'
+];
 
 EntryStatic.objectSubCategories = {
     'entrybot_friends': [],
@@ -3242,40 +3278,33 @@ EntryStatic.objectSubCategories = {
     'background': ['background_outdoor', 'background_indoor', 'background_nature', 'background_others']
 };
 
-EntryStatic.fonts = [
-{
+EntryStatic.fonts = [{
     name: Lang.Fonts.batang,
     family: 'KoPub Batang',
     url: '/css/kopubbatang.css'
-},
-{
+}, {
     name: Lang.Fonts.myeongjo,
     family: 'Nanum Myeongjo',
     url: '/css/nanummyeongjo.css'
-},
-{
+}, {
     name: Lang.Fonts.gothic,
     family: 'Nanum Gothic',
     url: '/css/nanumgothic.css'
-},
-{
+}, {
     name: Lang.Fonts.pen_script,
     family: 'Nanum Pen Script',
     url: '/css/nanumpenscript.css'
-},
-{
+}, {
     name: Lang.Fonts.jeju_hallasan,
     family: 'Jeju Hallasan',
     url: '/css/jejuhallasan.css'
-},
-{
+}, {
     name: Lang.Fonts.gothic_coding,
     family: 'Nanum Gothic Coding',
     url: '/css/nanumgothiccoding.css'
-}
-];
+}];
 
-EntryStatic.getName = function(str, type) {
+EntryStatic.getName = function (str, type) {
     var dict = SpriteNames;
     if (type == 'picture')
         dict = PictureNames;
@@ -3327,7 +3356,7 @@ EntryStatic.COMMAND_TYPES = {
     'redo': 303
 };
 
-EntryStatic.getQuestionCategoryData = function() {
+EntryStatic.getQuestionCategoryData = function () {
     return {
         category: 'dummy',
         blocks: [
