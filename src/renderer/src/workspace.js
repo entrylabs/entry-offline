@@ -1194,10 +1194,10 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                 close.bindOnClick(function () {
                     if (mode === 'default') {
                         localStorage.setItem('isPracticalCourse', false);
-                        EntryStatic = require('./bower_components/entryjs/extern/util/static.js').EntryStatic;
+                        EntryStatic = require('./src/static.js').EntryStatic;
                     } else {
                         localStorage.setItem('isPracticalCourse', true);
-                        EntryStatic = require('./bower_components/entryjs/extern/util/static_mini.js').EntryStatic;
+                        EntryStatic = require('./src/static_mini.js').EntryStatic;
                     }
                     $scope.initWorkspace();
                     popupHelper.hide();

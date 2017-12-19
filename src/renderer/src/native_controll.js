@@ -451,11 +451,11 @@ Entry.plugin = (function () {
                             if (isPracticalCourse) {
                                 $('html').removeClass('default_mode');
                                 $('html').addClass('practical_course_mode');
-                                window.EntryStatic = require('./bower_components/entryjs/extern/util/static_mini.js').EntryStatic;
+                                window.EntryStatic = require('./src/static_mini.js').EntryStatic;
                             } else {
                                 $('html').removeClass('practical_course_mode');
                                 $('html').addClass('default_mode');
-                                window.EntryStatic = require('./bower_components/entryjs/extern/util/static.js').EntryStatic;                                
+                                window.EntryStatic = require('./src/static.js').EntryStatic;                                
                             }
 
                             if (jsonObj.objects[0] &&
