@@ -8,6 +8,8 @@ import ChildWindowManager from './main/ChildWindowManager';
 import MainUtils from './main/MainUtils';
 import { addBypassChecker, init } from 'electron-compile';
 
+const isDevelopment = process.env.NODE_ENV !== 'production';
+
 const bypassList = ['.png', '.jpg', '.mp3', '.wav', '.gif'];
 addBypassChecker((filePath) => {
     const { ext = '' } = path.parse(filePath);
@@ -177,7 +179,7 @@ if (shouldQuit) {
         mainWindow.setMenu(null);
         mainWindow.loadURL('file:///' + path.join(__dirname, 'renderer', 'entry_offline.html'));
 
-        if (option.debug) {
+        if (isDevelopment) {
             mainWindow.webContents.openDevTools();
         }
 

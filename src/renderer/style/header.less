@@ -1,0 +1,689 @@
+@import "./static.less";
+.workspaceHeader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 45px;
+    background-color: @blueHaneul;
+    border-color: @blueHaneul;
+    overflow: visible;
+    z-index: 1030;
+}
+
+.dropdown-menu {
+    z-index: 25000;
+}
+
+.page-header {
+    display: flex;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-width: 956px;
+}
+
+.logo {
+    width: 76px;
+    height: 31px;
+    display: inline-block;
+    position: absolute;
+    margin-left: 8px;
+    img {
+        margin: 13px 0 0 0;
+    }
+}
+
+.workspaceProjectNameWrapper {
+    width: 100%;
+    max-width: 430px;
+    height: 28px;
+    padding-left: 110px;
+    margin-right: 10px;
+}
+
+.workspace_name_wrapper {
+    width: 100%;
+    margin-top: 5px;
+    margin-left: 10px;
+    display: inline-block;
+    #project_name {
+        width: 100%;
+    }
+}
+
+.workspaceProjectNameUl {
+    list-style: none;
+}
+
+.workspace_divider-vertical {
+    width: 1px;
+    height: 28px;
+    background-color: #9acae8;
+    display: inline-block;
+}
+
+#project_name.workspace_project_name {
+    margin-top: 6px;
+    border: 1px solid @blueHaneul;
+    background-color: @blueHaneul;
+    border-radius: 3px;
+    padding-left: 6px; // width: 195px;
+    max-width: 320px;
+    min-width: 120px;
+}
+
+#project_name.workspace_project_name:hover,
+#project_name.workspace_project_name:active,
+#project_name.workspace_project_name:focus {
+    border: 1px solid #89c1e4;
+    color: black;
+    background-color: white;
+}
+
+.workspace_button_group {
+    display: block;
+    float: right;
+    .workspace_divider {
+        display: inline-block;
+        background-color: #ffffff;
+        height: 27px;
+        width: 1px;
+        opacity: 0.5;
+        vertical-align: bottom;
+        margin-bottom: 8px;
+        margin-right: 3px;
+        margin-left: 3px;
+    }
+    .btn-group {
+        .btn {
+            padding-left: 5px;
+        }
+        .btn.dropdown-toggle {
+            padding-right: 0px;
+        }
+    }
+    .btnPrint {
+        margin-right: 3px;
+    }
+    .btn_undo_workspace {
+        .btn {
+            padding-left: 3px;
+        }
+    }
+    .btn_redo_workspace {
+        margin-right: 3px;
+    }
+}
+
+.workspace_account {
+    float: right;
+    position: relative;
+}
+
+.workspace_language {
+    float: right;
+    min-height: 1px;
+    right: 0;
+    margin-right: 20px;
+}
+
+body .workspace_mode {
+    float: right;
+    right: 0;
+    height: 47px;
+    .practical_course_badge {
+        margin-left: 3px;
+        text-align: center;
+        line-height: 14px;
+        display: inline-block;
+        font-size: 8px;
+        color: #7b57ff;
+        width: 24px;
+        height: 12px;
+        border-radius: 100px;
+    }
+    .dropdown-toggle .practical_course_badge span {
+        display: none;
+    }
+    .dropdown-menu .practical_course_badge {
+        background-color: #7b57ff;
+        color: #ffffff;
+    }
+    .mode_wrapper {
+        display: inline-block;
+        list-style: none;
+        margin-top: 13px;
+        margin-right: 4px;
+        padding-left: 10px;
+        .modeLabel {
+            // width: 65px;
+            display: inline-block;
+        }
+        .dropdown-menu {
+            text-align: left;
+            min-width: 96px;
+            left: -15px;
+            top: 22px;
+        }
+    }
+    .workspace_divider {
+        display: inline-block;
+        background-color: #ffffff;
+        height: 27px;
+        width: 1px;
+        opacity: 0.5;
+        vertical-align: bottom;
+        margin-bottom: 7px;
+        margin-right: 3px;
+        margin-left: 3px;
+    }
+}
+
+.workspace_bug {
+    float: right;
+    width: 41px;
+    height: 30px;
+    right: 0;
+    position: relative;
+    top: 4px;
+    cursor: pointer;
+    background-image: url('../@{wprefix}/workspace_bug.png');
+}
+
+.workspace_account .menu-dropdown {
+    list-style: none;
+}
+
+.workspace_account .menu-dropdown li {
+    display: inline-block;
+    margin-top: 13px;
+    vertical-align: top;
+}
+
+.workspace_language .language_wrapper {
+    list-style: none;
+    margin-top: 13px;
+    padding-left: 10px;
+}
+
+.dropdown-login {
+    top: 32px;
+}
+
+.workspace_account_dropdown {
+    padding-left: 6px;
+    margin-right: 3px;
+    .divider-vertical {
+        margin-top: 9px !important;
+        display: inline-block;
+        background-color: #ffffff;
+        height: 27px;
+        width: 1px;
+        opacity: 0.5;
+    }
+    .divider-margin {
+        width: 6px;
+    }
+}
+
+.workspace_account_dropdown li a {
+    color: white;
+    font-size: 1.1em;
+    text-decoration: none;
+}
+
+.logined_wrapper {
+    padding-left: 8px;
+}
+
+.language_wrapper li a {
+    font-size: 1.1em;
+    text-decoration: none;
+}
+
+.logined_wrapper li {
+    list-style: none;
+    margin-top: 13px;
+}
+
+.logined_wrapper li a {
+    font-size: 1.1em;
+    text-decoration: none;
+}
+
+.logined_wrapper .dropdown-menu {
+    margin-left: -20px;
+    min-width: 133px;
+}
+
+.language_wrapper .dropdown-menu {
+    text-align: center;
+    margin-left: -23px;
+    min-width: 93px;
+}
+
+a.btn.dropdown-toggle {
+    padding-top: 6px;
+}
+
+
+/* For TextMode */
+
+.CodeMirror {
+    .CodeMirror-gutters {
+        min-height: 100%;
+    }
+}
+
+.workspaceModeSelector {
+    margin-right: 6px;
+}
+
+.headerLeftWrapper {
+    flex: 1;
+    padding-right: 15px;
+}
+
+.headerRightWrapper {
+    margin-right: 0px;
+    margin-top: 1px;
+}
+
+
+/* header css */
+
+.page-header .navbar-nav {
+    float: right;
+}
+
+.page-header>div>div,
+.page-header>div>ul {
+    display: inline-block;
+}
+
+.navbar-default .navbar-nav>li>a:hover {
+    color: white;
+}
+
+.account>div,
+.account>ul {
+    text-align: left;
+}
+
+.dropdown>a>span {
+    color: #fff;
+}
+
+.dropdown>a:hover>span {
+    color: #fff;
+}
+
+.navbar-default .navbar-nav>.open>a,
+.navbar-default .navbar-nav>.open>a:hover,
+.navbar-default .navbar-nav>.open>a:focus {
+    color: #fff;
+    background-color: transparent;
+}
+
+.textbox>.form_input>input:focus {
+    outline: none;
+}
+
+.logo_ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+.logo_li {
+    display: inline;
+}
+
+@media only screen and (max-width: 480px) {
+    .divider {
+        display: none;
+    }
+    .undoredo {
+        display: none;
+    }
+    .dropdown-login {
+        width: 307px;
+        height: 267px;
+        left: 0 !important;
+        margin-left: -240px;
+        padding: 0;
+        background: transparent;
+        background-image: url('../@{wprefix}/login_bg.png');
+        background-repeat: no-repeat;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+    }
+    .login-form>.textbox {
+        margin: 50px 0 0 35px;
+    }
+    .page-header {
+        padding-top: 0;
+        padding-left: 10px;
+        padding-bottom: 0;
+        margin: 0;
+        border-bottom: 0;
+    }
+    .navbar-default {
+        height: 70px;
+    }
+    .navbar-brand {
+        padding: 0;
+    }
+    img.mobile {
+        background: none;
+        max-width: 80%;
+        height: auto;
+    }
+    .navbar-default .navbar-nav>li>a {
+        color: white;
+        font-size: 1.1em;
+    }
+    .language {
+        display: none;
+    }
+    .language>.navbar-nav>.dropdown>.dropdown-menu {
+        min-width: 80px;
+        left: -50px;
+    }
+    .account>.navbar-nav>.dropdown>.dropdown-menu {
+        min-width: 80px;
+        left: -20px;
+    }
+    .account {
+        display: none;
+    }
+    .account>.toolbar {
+        margin-right: 20px;
+    }
+    .account>.menu-dropdown {
+        margin: 10px 12px;
+    }
+    .navbar .nav>li>a.brand {
+        padding-left: 20px;
+        margin-left: 0;
+    }
+    .divider-vertical {
+        margin: 0 18px;
+        width: 1px;
+        height: 28px;
+        background-color: #9acae8;
+    }
+    .textbox>.form_input {
+        width: 230px;
+        height: 34px;
+        font-size: 12px;
+        background-image: url('../@{wprefix}/signup_size1.png');
+    }
+    .textbox>.form_input>input {
+        width: 220px;
+        margin-left: 10px;
+        font-size: 12px;
+        color: rgb(179, 179, 179);
+        background: transparent;
+        border: none;
+        margin-top: 9px;
+    }
+    .textbox>.form_input_selected {
+        width: 230px;
+        height: 34px;
+        font-size: 12px;
+        background-image: url('../@{wprefix}/signup_size1(e).png')
+    }
+    .textbox>.error_wrapper {
+        height: 24px;
+    }
+    .textbox>.error_wrapper>.error {
+        color: rgb(221, 104, 104);
+        font-size: 11px;
+        margin-left: 5px;
+        line-height: 24px;
+    }
+    .textbox>a>.forgot {
+        width: 244px;
+        height: 12px;
+        color: rgb(179, 179, 179);
+        font-size: 11px;
+    }
+    .textbox>.login_bar {
+        background-image: url('../@{wprefix}/login_bar.png');
+        height: 1px;
+        width: 230px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    .textbox>.buttons>.remember_me {
+        margin-top: 12px;
+        height: 15px;
+        width: 498px;
+        float: left;
+    }
+    .rememberme_img_check {
+        height: 12px;
+        width: 12px;
+        background-image: url('../@{wprefix}/login_check.png');
+        float: left;
+        cursor: pointer;
+        margin-top: 1px;
+    }
+    .rememberme_img_checked {
+        height: 12px;
+        width: 12px;
+        background-image: url('../@{wprefix}/login_checked.png');
+        float: left;
+        cursor: pointer;
+        margin-top: 1px;
+    }
+    .rememberme_content {
+        height: 12px;
+        float: left;
+        color: rgb(179, 179, 179);
+        font-size: 11px;
+        margin-left: 3px;
+        cursor: pointer;
+    }
+    .textbox>.buttons>.submit {
+        width: 59px;
+        height: 34px;
+        float: left;
+        margin-left: 175px;
+        margin-top: -25px;
+        background-image: url('../@{wprefix}/login_go.png');
+        line-height: 33px;
+        text-align: center;
+        color: white;
+        font-weight: bold;
+        font-size: 12px;
+        position: relative;
+        cursor: pointer;
+    }
+    .logox {
+        margin-top: 3px;
+    }
+    .signin_tosave {
+        font-size: 11px;
+        color: #ff0000;
+        text-align: center;
+        margin-right: 30px;
+    }
+}
+
+@media only screen and (min-width: 481px) {
+    .divider {
+        display: block;
+    }
+    .undoredo {
+        display: block;
+    }
+    .dropdown-login {
+        width: 307px;
+        height: 267px;
+        left: 0 !important;
+        margin-left: -240px;
+        padding: 0;
+        background: transparent;
+        background-image: url('../@{wprefix}/login_bg.png');
+        background-repeat: no-repeat;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+    }
+    .login-form>.textbox {
+        margin: 50px 0 0 35px;
+    }
+    .page-header {
+        padding-top: 1px;
+        padding-left: 10px;
+        padding-bottom: 0;
+        margin: 0;
+        border-bottom: 0;
+    }
+    .navbar-default {
+        height: 45px;
+        min-height: 45px;
+    }
+    .navbar-brand {
+        padding: 0 8px;
+    }
+    img.mobile {
+        background: none;
+    }
+    .navbar-default .navbar-nav>li>a {
+        color: white;
+        font-size: 1.1em;
+    }
+    .language {
+        margin: 10px 12px;
+    }
+    .language>.navbar-nav>.dropdown>.dropdown-menu {
+        min-width: 80px;
+        left: -50px;
+    }
+    .account>.navbar-nav>.dropdown>.dropdown-menu {
+        min-width: 80px;
+        left: -20px;
+    }
+    .account {
+        text-align: right;
+        padding-left: 10px;
+    }
+    .account>.toolbar {
+        margin-right: 20px;
+    }
+    .account>.menu-dropdown {
+        margin: 10px 12px;
+    }
+    .navbar .nav>li>a.brand {
+        padding-left: 20px;
+        margin-left: 0;
+    }
+    .divider-vertical {
+        margin: 0 18px;
+        width: 1px;
+        height: 28px;
+        background-color: #9acae8;
+    }
+    .textbox>.form_input {
+        width: 230px;
+        height: 34px;
+        font-size: 12px;
+        background-image: url('../@{wprefix}/signup_size1.png');
+    }
+    .textbox>.form_input>input {
+        width: 220px;
+        margin-left: 10px;
+        font-size: 12px;
+        color: rgb(179, 179, 179);
+        background: transparent;
+        border: none;
+        margin-top: 9px;
+    }
+    .textbox>.form_input_selected {
+        width: 230px;
+        height: 34px;
+        font-size: 12px;
+        background-image: url('../@{wprefix}/signup_size1(e).png')
+    }
+    .textbox>.error_wrapper {
+        height: 24px;
+    }
+    .textbox>.error_wrapper>.error {
+        color: rgb(221, 104, 104);
+        font-size: 11px;
+        margin-left: 5px;
+        line-height: 24px;
+    }
+    .textbox>a>.forgot {
+        width: 244px;
+        height: 12px;
+        color: rgb(179, 179, 179);
+        font-size: 11px;
+    }
+    .textbox>.login_bar {
+        background-image: url('../@{wprefix}/login_bar.png');
+        height: 1px;
+        width: 230px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    .textbox>.buttons>.remember_me {
+        margin-top: 12px;
+        height: 15px;
+        width: 498px;
+        float: left;
+    }
+    .rememberme_img_check {
+        height: 12px;
+        width: 12px;
+        background-image: url('../@{wprefix}/login_check.png');
+        float: left;
+        cursor: pointer;
+        margin-top: 1px;
+    }
+    .rememberme_img_checked {
+        height: 12px;
+        width: 12px;
+        background-image: url('../@{wprefix}/login_checked.png');
+        float: left;
+        cursor: pointer;
+        margin-top: 1px;
+    }
+    .rememberme_content {
+        height: 12px;
+        float: left;
+        color: rgb(179, 179, 179);
+        font-size: 11px;
+        margin-left: 3px;
+        cursor: pointer;
+    }
+    .textbox>.buttons>.submit {
+        width: 59px;
+        height: 34px;
+        float: left;
+        margin-left: 175px;
+        margin-top: -25px;
+        background-image: url('../@{wprefix}/login_go.png');
+        line-height: 33px;
+        text-align: center;
+        color: white;
+        font-weight: bold;
+        font-size: 12px;
+        position: relative;
+        cursor: pointer;
+    }
+    .logox {
+        margin: 5px 0 0 0;
+    }
+    .signin_tosave {
+        font-size: 11px;
+        color: #ff0000;
+        text-align: center;
+        margin-right: 30px;
+    }
+}

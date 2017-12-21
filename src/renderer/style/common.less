@@ -1,0 +1,452 @@
+@import "static.less";
+@import "prefix.less";
+* {
+    font-family: nanumBarunRegular;
+}
+
+a:hover,
+a:visited,
+a:link,
+a:active {
+    text-decoration: none;
+}
+
+body {
+    min-width: 800px;
+}
+
+.entryHide {
+    visibility: hidden;
+}
+
+.selectDisable {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.selectAble {
+    -webkit-touch-cautoout: auto;
+    -webkit-user-select: auto;
+    -khtml-user-select: auto;
+    -moz-user-select: auto;
+    -ms-user-select: element;
+    user-select: auto;
+}
+
+.content {
+    margin-top: 0;
+    width: 100%;
+    min-width: 1024px;
+    background-color: #f9f8f7;
+    position: relative;
+    padding-bottom: 129px;
+}
+
+.lbr {
+    line-height: 5px;
+}
+
+.modal-body.noSubmitter {
+    overflow: hidden !important;
+}
+
+.entryButton:extend(.selectDisable) {
+    width: 102px;
+    height: 42px;
+    cursor: pointer;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 41px;
+    font-size: 15px;
+    font-family: nanumBarunBold;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+}
+
+.entryConfirmButton:extend(.entryButton) {
+    color: white;
+    background-color: #6e5ae6;
+}
+
+.entryCancelButton:extend(.entryButton) {
+    color: #9e9e9f;
+    background-color: #e5e5e5;
+}
+
+.entryLogoColor {
+    height: 43px;
+    width: 139px;
+    background-image: url('@{wprefix}/entry_logo_color.png');
+    margin-left: 84px;
+}
+
+.entryCheckBox {
+    width: 14px;
+    height: 14px;
+    margin-top: 2px;
+    border: 2px solid @more;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.entryCheckBoxChecked:extend(.entryCheckBox) {
+    background: @more;
+}
+
+.entryDefaultButton {
+    cursor: pointer;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 32px;
+    color: #b4b4b5;
+    font-size: 13px;
+    font-family: nanumBarunBold;
+    background-color: @beige;
+    border: solid 1px #b4b4b5;
+    padding: 0 10px;
+}
+
+.studentName,
+.studentUsername {
+    div {
+        width: 80px;
+    }
+}
+
+.entryEllipsis {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.entryConfirmBlueButton:extend(.entryDefaultButton) {
+    border: solid 1px @blueHaneul;
+    color: @blueHaneul;
+}
+
+#reportProject {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 1050;
+    background: rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+    display: none;
+}
+
+.reportWrapper {
+    width: 400px;
+    border-radius: 6px;
+    position: fixed;
+    top: 10%;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
+.reportHeader {
+    background: #ff9e00;
+    height: 60px;
+    font-weight: bold;
+    color: white;
+    position: relative;
+    padding: 20px 0 0 42px;
+    font-family: nanumBarunBold;
+    font-size: 26px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    font-size: 16px;
+}
+
+.reportContent {
+    background-color: white;
+    position: relative;
+    padding-top: 36px;
+    padding-bottom: 43px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    padding-left: 42px;
+    font-family: nanumBarunRegular;
+}
+
+.reportAdvice {
+    float: right;
+    margin-right: 10px;
+}
+
+#reportProjectSubmitForm>div {
+    margin-top: 20px;
+    font-size: 15px;
+    color: #888888;
+}
+
+#reportProjectSubmitForm>div>input {
+    vertical-align: top;
+    margin-top: 4px;
+    margin-right: 5px;
+}
+
+#reportProjectSubmitForm div.reportIllegal {
+    margin-top: 0;
+}
+
+#reportProjectSubmitForm div.reportEtcTextArea {
+    margin-top: 10px;
+}
+
+.etcTextArea {
+    width: 302px;
+    height: 102px;
+    resize: none;
+    padding: 8px;
+    font-size: 15px;
+}
+
+.emailArea {
+    width: 302px;
+    height: 40px;
+    font-size: 15px;
+    padding-left: 8px;
+}
+
+.emailWrapper {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.emailArea {
+    margin-top: 10px;
+}
+
+.buttonArea {
+    padding-right: 42px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.buttonArea>button {
+    margin-top: 5px;
+}
+
+.reportBtnCancel {
+    text-align: center;
+}
+
+.reportBtnSubmit {
+    margin-left: 10px;
+    background: #ff9900;
+    color: white;
+    text-align: center;
+}
+
+#reportProjectSuccessWrapper {
+    position: fixed;
+    height: 100%;
+    top: 0;
+    width: 100%;
+    z-index: 1111;
+    background: rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+    display: none;
+}
+
+.reportProjectContentSuccessWrapper {
+    width: 400px;
+    height: 576px;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+}
+
+.reportProjectSuccessTitle {
+    background: #ff9900;
+    height: 60px;
+    font-weight: bold;
+    color: white;
+    position: relative;
+    padding: 12px 0 0 42px;
+    font-family: nanumBarunBold;
+    font-size: 26px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.reportProjectSuccessBody {
+    background-color: white;
+    height: 170px;
+    position: relative;
+    padding-top: 20px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    font-family: nanumBarunRegular;
+    text-align: center;
+}
+
+.reportProjectSuccessBodyContent {
+    margin: 25px;
+    font-size: Medium;
+}
+
+.reportProjectSuccessBodyButton {
+    background: #ff9900;
+}
+
+.entryInputBox {
+    border: 2px solid @more;
+    border-radius: 3px;
+    background: white;
+}
+
+.entryInputBox:focus {
+    outline: none;
+    border: 2px solid @haneul;
+}
+
+.entryBaseWrapper {
+    width: 100%;
+    min-width: 1024px;
+    position: relative;
+}
+
+.entryBaseContainer {
+    width: 1024px;
+    left: 50%;
+    margin-left: -512px;
+    position: relative;
+}
+
+.entryCenter {
+    margin: 0 auto;
+    display: block;
+}
+
+.entryPathNorm {
+    margin-right: 18px;
+    font-family: nanumBarunBold;
+}
+
+.entryPathNorm a {
+    color: rgb(159, 159, 165);
+}
+
+.entryPathEnable a,
+.entryPathEnable {
+    color: @bora !important;
+    font-family: nanumBarunBold;
+    font-size: 18px;
+}
+
+.entryPathHigh {
+    font-family: nanumBarunBold;
+    font-size: 18px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-right: 18px;
+    position: relative;
+    display: inline-block;
+    color: #9f9fa5;
+    .down_arrow {
+        width: 9px;
+        height: 7px;
+        display: inline-block;
+        margin-top: 10px;
+        margin-left: 5px;
+        margin-right: 5px;
+        vertical-align: top;
+        background-image: url('@{wprefix}/entryPathArrow.png');
+    }
+}
+
+.entryPathHigh>a {
+    color: #9f9fa5;
+    margin-left: 5px;
+}
+
+.entryPathHigh.open {
+    background: rgb(219, 219, 219);
+}
+
+.entryPathDropdown {
+    padding: 2px;
+    border: 2px solid rgb(109, 90, 242);
+    margin-top: 5px;
+    font-size: 16px;
+    min-width: 140px;
+}
+
+.entryPathDropdown>li>a {
+    color: rgb(180, 180, 181);
+    padding-left: 10px;
+    font-size: 15px;
+}
+
+.entryPathDropdown>li>a:hover,
+.entryPathDropdown>li>a:active {
+    color: white !important;
+    background: rgb(109, 90, 242);
+}
+
+.entryRemoveMargin {
+    margin: 0;
+}
+
+.entryNotFixed {
+    position: relative;
+}
+
+.entryFixed {
+    position: fixed;
+}
+
+.entryOverflowHidden {
+    overflow: hidden;
+}
+
+.entryCenterAlign {
+    text-align: center;
+}
+
+pre {
+    white-space: pre-line;
+}
+
+.selectedUrl {
+    position: relative;
+    left: 95.5px;
+    top: 25px;
+    z-index: 36;
+    display: block;
+}
+
+.entryCommentButton {
+    float: right;
+    margin-left: 10px;
+}
+
+@media only screen and (max-device-width: 480px),
+only screen and (min-device-width: 560px) and (max-device-width: 1136px) and (-webkit-min-device-pixel-ratio: 2) {
+    body {
+        min-height: 800px;
+    }
+    .content {
+        min-width: 100%;
+    }
+}
+
+[ng-cloak] {
+    display: none !important;
+}
+
+.license {
+    width: 1024px;
+    margin: 0 auto;
+    padding-top: 60px;
+    padding-bottom: 60px;
+}
