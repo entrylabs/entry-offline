@@ -1350,27 +1350,27 @@ EntryStatic.objectSubCategories = {
 EntryStatic.fonts = [{
     name: Lang.Fonts.batang,
     family: 'KoPub Batang',
-    url: '/css/kopubbatang.css'
+    url: '/style/kopubbatang.css'
 }, {
     name: Lang.Fonts.myeongjo,
     family: 'Nanum Myeongjo',
-    url: '/css/nanummyeongjo.css'
+    url: '/style/nanummyeongjo.css'
 }, {
     name: Lang.Fonts.gothic,
     family: 'Nanum Gothic',
-    url: '/css/nanumgothic.css'
+    url: '/style/nanumgothic.css'
 }, {
     name: Lang.Fonts.pen_script,
     family: 'Nanum Pen Script',
-    url: '/css/nanumpenscript.css'
+    url: '/style/nanumpenscript.css'
 }, {
     name: Lang.Fonts.jeju_hallasan,
     family: 'Jeju Hallasan',
-    url: '/css/jejuhallasan.css'
+    url: '/style/jejuhallasan.css'
 }, {
     name: Lang.Fonts.gothic_coding,
     family: 'Nanum Gothic Coding',
-    url: '/css/nanumgothiccoding.css'
+    url: '/style/nanumgothiccoding.css'
 }];
 
 EntryStatic.getName = function (str, type) {

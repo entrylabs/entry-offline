@@ -1,8 +1,17 @@
+const lru = require('lru-cache')({ max: 256, maxAge: 250 });
 const fs = require('fs');
+var origLstat = fs.lstatSync.bind(fs);
+fs.lstatSync = function(p) {
+    let r = lru.get(p);
+    if (r) return r;
+
+    r = origLstat(p);
+    lru.set(p, r);
+    return r;
+};
 const fse = require('fs-extra');
 const sizeOf = require('image-size');
 const path = require('path');
-const Q = require('q');
 const stream = require('stream');
 const fstream = require('fstream');
 const tar = require('tar');
@@ -16,7 +25,6 @@ const app = remote.app;
 const Menu = remote.Menu;
 const BrowserWindow = remote.BrowserWindow;
 const mainWindow = BrowserWindow.getAllWindows()[0];
-const originalFs = require('original-fs');
 window.$ = window.jQuery = require('./bower_components/jquery/dist/jquery.min.js');
 window.BigNumber = require('./bower_components/entryjs/extern/util/bignumber.min.js');
 const entry = require('./bower_components/entryjs/src/workspace/block_entry.js');
