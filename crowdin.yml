@@ -1,0 +1,3 @@
+files:
+  - source: /src/renderer/lang
+    translation: /src/renderer/lang/%two_letters_code%/%original_file_name%
