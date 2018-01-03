@@ -1,3 +1,3 @@
 files:
-  - source: /src/renderer/lang
-    translation: /src/renderer/lang/%two_letters_code%/%original_file_name%
+  - source: /src/renderer/lang/offline
+    translation: /src/renderer/lang/offline/%two_letters_code%/%original_file_name%
