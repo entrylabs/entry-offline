@@ -17,5 +17,6 @@ angular.module('workspace', ['common']);
 	}
 	var user_lang = localStorage.getItem('lang');
 	window.Lang = require(`./lang/${user_lang}.js`).Lang;
+	window.Lang.Offline = require(`./lang/offline/${user_lang}.js`).Lang;
 	// $('head').append('<script src="./lang/' + user_lang + '.js">' + '</script>')
 }

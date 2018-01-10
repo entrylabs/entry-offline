@@ -1,3 +1,0 @@
-files:
-  - source: /src/renderer/lang/offline/ko.json
-    translation: /src/renderer/lang/offline/%two_letters_code%.%file_extension%

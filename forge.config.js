@@ -34,7 +34,7 @@
                 'InternalName': 'Entry'
             },
             'osxSign': {
-                'identity': 'Entry Education Laboratory INC.'
+                'identity': 'Developer ID Application: Wonchan Lee (32UL52QMCL)'
             },
             afterCopy: [
                 (buildPath, electronVersion, platform, arch, callback) => {

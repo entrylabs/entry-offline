@@ -53,12 +53,15 @@ common.filter('makeUploadThumbnail', function() {
     };
 });
 
+window.langinfo = {};
 common.filter('text', function() {
     return function(input) {
         var array = input.split('.');
         if (array.length > 1) {
             var middle = array[0];
             var key = array[1];
+            return Lang.Offline[key];
+            langinfo[key] = Lang[middle][key];
             if (middle == 'Blocks')
                 return Lang.Blocks[key];
             else if (middle == 'Menus')

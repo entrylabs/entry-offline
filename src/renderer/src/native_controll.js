@@ -176,6 +176,8 @@ Entry.plugin = (function () {
         return require('crypto').createHash('md5').update(randomStr).digest("hex");
     };
 
+    window.a = createFileId;
+
     that.reloadApplication = function (isSkip) {
         if(isSkip) {
             Entry.stateManager.addStamp();
