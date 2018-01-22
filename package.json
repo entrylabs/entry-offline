@@ -10,6 +10,7 @@
   "scripts": {
     "clean": "rimraf dist",
     "debug": "./node_modules/.bin/electron-forge-vscode-nix --debug=5858",
+    "rebuild": "electron-rebuild -v 1.7.8",
     "dist": "build",
     "comp": "set NODE_ENV=production&&electron-compile ./src",
     "start": "electron-forge start",
@@ -34,7 +35,6 @@
     "electron-prebuilt-compile": "1.7.8",
     "electron-rebuild": "^1.6.0",
     "mocha": "^2.5.3",
-    "rebuild": "electron-rebuild -v 1.7.8",
     "rimraf": "^2.5.2",
     "spectron": "^3.2.3"
   },
