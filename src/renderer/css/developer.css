@@ -552,3 +552,27 @@ html.practical_course_mode .workspace_language {
 
 
 /*#endregion*/
+
+/*#region 그림판 스타일*/
+nav.entryPlaygroundPainterTopMenu > ul {
+    top: 0;
+}
+
+nav.entryPlaygroundPainterTopMenu > ul .painterTopHeader .entryPlaygroundPainterTopMenuFileNew {
+    padding: 4px 0;
+}
+
+nav.entryPlaygroundPainterTopMenu > ul #entryPainterTopMenuFile,
+nav.entryPlaygroundPainterTopMenu > ul #entryPainterTopMenuEdit {
+    padding-top: 8px;
+}
+
+nav.entryPlaygroundPainterTopMenu > ul #entryPainterTopMenuFile {
+    width: 70px;
+}
+
+.entryPlaygroundPainterTopMenuFile:hover {
+    background-color: #3b329e !important;
+}
+
+/*#endregion*/
