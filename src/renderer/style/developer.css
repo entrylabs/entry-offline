@@ -224,49 +224,6 @@ body {
 
 /*#region 실과모드 스타일 */
 
-#entryCategoryhw_download {
-    background-image: url('../images/categories/touch.png');
-    background-repeat: no-repeat;
-    background-color: #C7DCDD;
-    border-bottom: #5494A3 solid 1px;
-}
-
-#entryCategoryhw_sensor {
-    background-image: url('../images/categories/others.png');
-    background-repeat: no-repeat;
-    background-color: #C7DCDD;
-    border-bottom: #5494A3 solid 1px;
-}
-
-#entryCategoryhw_led {
-    font-size: 11px;
-    background-image: url('../images/categories/diode.png');
-    background-repeat: no-repeat;
-    background-color: #C7DCDD;
-    border-bottom: #5494A3 solid 1px;
-}
-
-#entryCategoryhw_motor {
-    background-image: url('../images/categories/dcmotor.png');
-    background-repeat: no-repeat;
-    background-color: #C7DCDD;
-    border-bottom: #5494A3 solid 1px;
-}
-
-#entryCategoryhw_melody {
-    background-image: url('../images/categories/melody.png');
-    background-repeat: no-repeat;
-    background-color: #C7DCDD;
-    border-bottom: #5494A3 solid 1px;
-}
-
-#entryCategoryhw_robot {
-    background-image: url('../images/categories/robot.png');
-    background-repeat: no-repeat;
-    background-color: #C7DCDD;
-    border-bottom: #5494A3 solid 1px;
-}
-
 .workspace_mode {
     float: right;
     right: 0;
