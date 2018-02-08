@@ -1,19 +1,14 @@
 <!DOCTYPE html>
 <html ng-app="workspace">
 	<head>
-		<meta charset="utf-8">
-		<link rel='stylesheet'  href='./css/fonts.css' />
-		<link rel='stylesheet'  href='./css/developer.css' />
+		<meta charset="utf-8">		
+		<link rel='stylesheet' href='./bower_components/entryjs/dist/entry.css' />
 
-		<link rel='stylesheet'  href='./bower_components/codemirror/addon/hint/show-hint.css' />
-		<link rel='stylesheet'  href='./bower_components/codemirror/addon/lint/lint.css' />
-		<link rel='stylesheet'  href='./bower_components/codemirror/theme/dracula.css' />
-		<link rel='stylesheet'  href='./bower_components/codemirror/theme/mbo.css' />
-		<link rel='stylesheet'  href='./bower_components/codemirror/theme/neo.css' />
-
-		<link rel='stylesheet'  href='./bower_components/literallycanvas/lib/css/literallycanvas.css' />
-		<script type="text/javascript" src="./src/main.js"></script>
-		<script type="text/javascript" src="./src/ws.js"></script>
+		<link rel='stylesheet' href='./bower_components/codemirror/addon/hint/show-hint.css' />
+		<link rel='stylesheet' href='./bower_components/codemirror/addon/lint/lint.css' />
+		<link rel='stylesheet' href='./bower_components/bootstrap/dist/css/bootstrap.min.css' />
+		<link rel='stylesheet' href='./bower_components/literallycanvas/lib/css/literallycanvas.css' />
+		
 		<script type="text/javascript" src="./src/require.js"></script>
 		<script type='text/javascript' src='./bower_components/jquery/dist/jquery.min.js'></script>
 		<script type='text/javascript' src='./bower_components/jquery-ui/jquery-ui.min.js'></script>
@@ -76,8 +71,14 @@
         <script type="text/javascript" src="./lang/sprites.js"></script>
         <script type="text/javascript" src="./src/native_controll.js"></script>
         <script type="text/javascript" src="./src/native_menu.js"></script>
-
 		<script type="text/javascript" src="./src/directives.js"></script>
+
+		<link rel='stylesheet' href='./style/fonts.css' />
+		<link rel='stylesheet' href='./style/developer.css' />
+		<link rel='stylesheet' href='./style/workspace.less' />
+		<link rel='stylesheet' href='./style/modal.less' />
+		<link rel='stylesheet' href='./style/header.less' />
+		<link rel='stylesheet' href='./style/practical_course.less' />
 	</head>
 	<body >
 		<div class="workspaceHeader" data-ng-include="'./views/header.html'" data-role="navigation"></div>

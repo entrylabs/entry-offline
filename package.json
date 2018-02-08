@@ -14,6 +14,7 @@
     "dist": "build",
     "comp": "set NODE_ENV=production&&electron-compile ./src",
     "start": "electron-forge start",
+    "dev": "DEBUG=* npm start",
     "test": "mocha test/default.js",
     "package": "electron-forge package",
     "dist:win": "electron-forge package --arch ia32",

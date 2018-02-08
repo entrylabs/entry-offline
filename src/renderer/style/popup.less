@@ -1,0 +1,288 @@
+.entryPopupHelperWindow {
+    .entryPopupHelperWrapper {
+        .entryPopupHelperTitle {
+            background: #2a7def;
+            height: 57px;
+            min-width: 300px;
+            color: #fff;
+            font-size: 20px;
+            line-height: 57px;
+            padding-left: 20px;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+        }
+    }
+    .newVersion,
+    .hwDownload {
+        width: 494px;
+        .contentArea {
+            text-align: center;
+            background-color: #fff;
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+            padding: 20px;
+            .textArea {
+                color: #2b2b2b;
+                .text1 {
+                    margin-top: 40px;
+                    font-size: 24px;
+                    line-height: 24px;
+                }
+                .text2 {
+                    margin-top: 7px;
+                    font-size: 24px;
+                    line-height: 24px;
+                }
+                .text3 {
+                    color: #9e9e9f;
+                    margin-top: 17px;
+                    font-size: 16px;
+                }
+                .text4 {
+                    color: #9e9e9f;
+                    margin-bottom: 32px;
+                    font-size: 16px;
+                }
+            }
+            .popupDefaultBtn {
+                cursor: pointer;
+                height: 52px;
+                width: 191px;
+                font-size: 16px;
+                border-radius: 2px;
+                overflow: hidden;
+                display: inline-block;
+                line-height: 52px;
+                font-size: 16px;
+                cursor: pointer;
+                margin-bottom: 34px;
+                .download_icon {
+                    content: " ";
+                    width: 14px;
+                    height: 17px;
+                    margin-left: 7px;
+                    vertical-align: middle;
+                    display: inline-block;
+                    background-image: url('/img/assets/popup/workspace/btn_down.png');
+                }
+            }
+            .popupCancelBtn {
+                background: #dbdbdb;
+                margin-right: 8px;
+                color: #9e9e9f;
+            }
+            .popupOkBtn {
+                background: #6e5ae6;
+                margin-left: 7px;
+                color: #fff;
+            }
+        }
+    }
+    .workspaceFailed {
+        .contentArea {
+            position: relative;
+            background: url('/img/assets/popup/workspace/fail_bg.png');
+            width: 441px;
+            height: 429px;
+            padding-top: 17px;
+            .workspaceFailedCloseBtn {
+                position: absolute;
+                background: url('/img/assets/popup/workspace/fail_close.png');
+                cursor: pointer;
+                top: 16px;
+                right: 16px;
+                width: 21px;
+                height: 21px;
+            }
+            .workspaceFailedTitle {
+                font-size: 27px;
+                font-weight: bold;
+                line-height: 35px;
+                font-family: 'Nanum Gothic' !important;
+                color: #2a7def;
+                text-align: center;
+                margin-bottom: 7px;
+            }
+            .workspaceFailedSubTitle {
+                font-size: 15px;
+                line-height: 20px;
+                font-family: 'Nanum Gothic' !important;
+                color: #000000;
+                text-align: center;
+            }
+        }
+    }
+    .workspaceSpinner {
+        .workspaceSpinnerTitle {
+            position: relative;
+            background: url('/img/assets/popup/workspace/suc_txt_bg.png');
+            width: 367px;
+            height: 90px;
+            font-size: 27px;
+            font-weight: bold;
+            line-height: 27px;
+            font-family: 'Nanum Gothic' !important;
+            color: #2a7def;
+            text-align: center;
+            padding-top: 24px;
+            z-index: 10;
+        }
+        @-webkit-keyframes blink1 {
+            24% {
+                opacity: 0;
+            }
+            36% {
+                opacity: 1;
+            }
+            64% {
+                opacity: 1;
+            }
+            76% {
+                opacity: 0;
+            }
+        }
+        @keyframes blink1 {
+            24% {
+                opacity: 0;
+            }
+            36% {
+                opacity: 1;
+            }
+            64% {
+                opacity: 1;
+            }
+            76% {
+                opacity: 0;
+            }
+        }
+        @-webkit-keyframes blink2 {
+            12% {
+                opacity: 0;
+            }
+            24% {
+                opacity: 1;
+            }
+            76% {
+                opacity: 1;
+            }
+            88% {
+                opacity: 0;
+            }
+        }
+        @keyframes blink2 {
+            12% {
+                opacity: 0;
+            }
+            24% {
+                opacity: 1;
+            }
+            76% {
+                opacity: 1;
+            }
+            88% {
+                opacity: 0;
+            }
+        }
+        @-webkit-keyframes blink3 {
+            0% {
+                opacity: 0;
+            }
+            12% {
+                opacity: 1;
+            }
+            88% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+        @keyframes blink3 {
+            0% {
+                opacity: 0;
+            }
+            12% {
+                opacity: 1;
+            }
+            88% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+        .workspaceSpinnerCircle {
+            position: relative;
+            width: 327px;
+            height: 327px;
+            margin: -70px 20px 0px 20px;
+            z-index: 1;
+            .inner1 {
+                position: absolute;
+                background: url('/img/assets/popup/workspace/suc_bg02.png');
+                width: 327px;
+                height: 327px;
+                top: 0;
+                left: 0;
+                opacity: 0;
+                -webkit-animation: blink1 3s infinite;
+                animation: blink1 3s infinite;
+            }
+            .inner2 {
+                position: absolute;
+                background: url('/img/assets/popup/workspace/suc_bg01.png');
+                width: 256px;
+                height: 256px;
+                margin: 35.5px;
+                top: 0;
+                left: 0;
+                opacity: 0;
+                -webkit-animation: blink2 3s infinite;
+                animation: blink2 3s infinite;
+            }
+            .inner3 {
+                position: absolute;
+                background: url('/img/assets/popup/workspace/suc_bg00.png');
+                width: 202px;
+                height: 202px;
+                margin: 65.5px;
+                top: 0;
+                left: 0;
+                opacity: 0;
+                -webkit-animation: blink3 3s infinite;
+                animation: blink3 3s infinite;
+            }
+            .workspaceSpinnerCharacter {
+                position: absolute;
+                background: url('/img/assets/popup/workspace/suc_cha.png');
+                width: 327px;
+                height: 327px;
+                top: 0;
+                left: 0;
+            }
+        }
+        .workspaceSpinnerTitle2 {
+            position: relative;
+            background: url('/img/assets/popup/course/progress.gif');
+            background-repeat: no-repeat;
+            width: 200px;
+            height: 102px;
+            z-index: 10;
+        }
+    }
+}
+
+.entryPopupHelperWrapper {
+    .entryPopupHelperCloseButton {
+        cursor: pointer;
+        float: right;
+        content: " ";
+        width: 22px;
+        height: 57px;
+        margin-right: 20px;
+        display: block;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-image: url('/img/assets/popup/workspace/btn_close.png');
+    }
+}
