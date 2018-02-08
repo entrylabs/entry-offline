@@ -1,6 +1,15 @@
 'use strict';
 
-import { app, BrowserWindow, Menu, globalShortcut, ipcMain, webContents, dialog } from 'electron';
+import {
+    app,
+    BrowserWindow,
+    Menu,
+    globalShortcut,
+    ipcMain,
+    webContents,
+    dialog,
+    net,
+} from 'electron';
 import path from 'path';
 import fs from 'fs';
 import ChildProcess from 'child_process';
@@ -8,25 +17,29 @@ import ChildWindowManager from './main/ChildWindowManager';
 import MainUtils from './main/MainUtils';
 import { addBypassChecker, init } from 'electron-compile';
 
+let hostURI = 'playentry.org';
 const bypassList = ['.png', '.jpg', '.mp3', '.wav', '.gif'];
 addBypassChecker((filePath) => {
     const { ext = '' } = path.parse(filePath);
-    return filePath.indexOf(app.getAppPath()) === -1 && bypassList.indexOf(ext) > -1;
+    return (
+        filePath.indexOf(app.getAppPath()) === -1 &&
+        bypassList.indexOf(ext) > -1
+    );
 });
 
 const downloadFilterList = {
     'image/png': [
-        { name: 'PNG Image (*.png)', extensions: ['png'] }, 
-        { name: 'All Files (*.*)', extensions: ['*'] }
+        { name: 'PNG Image (*.png)', extensions: ['png'] },
+        { name: 'All Files (*.*)', extensions: ['*'] },
     ],
-}
+};
 
 global.sharedObject = {
     roomId: '',
     mainWindowId: '',
     workingPath: '',
     isInitEntry: false,
-}
+};
 
 function logger(text) {
     var log_path = path.join(__dirname);
@@ -42,7 +55,13 @@ function logger(text) {
 }
 
 var argv = process.argv.slice(1);
-var option = { file: null, help: null, version: null, webdriver: null, modules: [] };
+var option = {
+    file: null,
+    help: null,
+    version: null,
+    webdriver: null,
+    modules: [],
+};
 for (var i = 0; i < argv.length; i++) {
     if (argv[i] == '--version' || argv[i] == '-v') {
         option.version = true;
@@ -50,20 +69,13 @@ for (var i = 0; i < argv.length; i++) {
     } else if (argv[i].match(/^--app=/)) {
         option.file = argv[i].split('=')[1];
         break;
-    } else if (argv[i] == '--help' || argv[i] == '-h') {
-        option.help = true;
-        break;
-    } else if (argv[i] == '--test-type=webdriver') {
-        option.webdriver = true;
     } else if (argv[i] == '--debug' || argv[i] == '-d') {
         option.debug = true;
         continue;
-    } else if (argv[i] == '--require' || argv[i] == '-r') {
-        option.modules.push(argv[++i]);
+    } else if (argv[i].match(/^--host=/) || argv[i].match(/^-h=/)) {
+        hostURI = argv[i].split('=')[1];
         continue;
     } else if (argv[i][0] == '-') {
-        continue;
-    } else if (argv[i] == 'app') {
         continue;
     } else {
         option.file = argv[i];
@@ -75,16 +87,18 @@ let mainWindow = null;
 let cwm, isForceClose;
 let isClose = true;
 
-app.on('window-all-closed', function () {
+app.on('window-all-closed', function() {
     app.quit();
     process.exit(0);
 });
 
-let shouldQuit = app.makeSingleInstance(function (commandLine, workingDirectory) {
+let shouldQuit = app.makeSingleInstance(function(
+    commandLine,
+    workingDirectory
+) {
     // 어플리케이션을 중복 실행했습니다. 주 어플리케이션 인스턴스를 활성화 합니다.
     if (mainWindow) {
-        if (mainWindow.isMinimized())
-            mainWindow.restore();
+        if (mainWindow.isMinimized()) mainWindow.restore();
         mainWindow.focus();
 
         if (Array.isArray(commandLine) && commandLine[1]) {
@@ -109,11 +123,13 @@ if (shouldQuit) {
         if (language === 'ko') {
             title = '엔트리 v' + title;
             crashedMsg.title = '오류 발생';
-            crashedMsg.content = '프로그램이 예기치 못하게 종료되었습니다. 작업 중인 파일을 저장합니다.';
+            crashedMsg.content =
+                '프로그램이 예기치 못하게 종료되었습니다. 작업 중인 파일을 저장합니다.';
         } else {
             title = 'Entry v' + title;
             crashedMsg.title = 'Error occurs';
-            crashedMsg.content = 'This program has been shut down unexpectedly. Save the file you were working on.';
+            crashedMsg.content =
+                'This program has been shut down unexpectedly. Save the file you were working on.';
         }
 
         mainWindow = new BrowserWindow({
@@ -123,59 +139,70 @@ if (shouldQuit) {
             show: false,
             backgroundColor: '#e5e5e5',
             webPreferences: {
-                backgroundThrottling: false
-            }
+                backgroundThrottling: false,
+            },
         });
 
         global.sharedObject.mainWindowId = mainWindow.id;
 
         mainWindow.once('ready-to-show', () => {
-            mainWindow.show()
+            mainWindow.show();
         });
 
-        mainWindow.webContents.session.on('will-download', (event, downloadItem, webContents) => {
-            const filename = downloadItem.getFilename();
-            const option = {
-                defaultPath: filename,
+        mainWindow.webContents.session.on(
+            'will-download',
+            (event, downloadItem, webContents) => {
+                const filename = downloadItem.getFilename();
+                const option = {
+                    defaultPath: filename,
+                };
+                const filters = downloadFilterList[downloadItem.getMimeType()];
+                if (filters) {
+                    option.filters = filters;
+                }
+                var fileName = dialog.showSaveDialog(option);
+                if (typeof fileName == 'undefined') {
+                    downloadItem.cancel();
+                } else {
+                    downloadItem.setSavePath(fileName);
+                }
             }
-            const filters = downloadFilterList[downloadItem.getMimeType()];
-            if(filters) {
-                option.filters = filters;
-            }
-            var fileName = dialog.showSaveDialog(option);
-            if (typeof fileName == "undefined") {
-                downloadItem.cancel()
-            } else {
-                downloadItem.setSavePath(fileName);
-            }
-        });
+        );
 
         mainUtils = new MainUtils(mainWindow);
 
         mainWindow.webContents.on('crashed', () => {
             dialog.showErrorBox(crashedMsg.title, crashedMsg.content);
-            dialog.showSaveDialog(mainWindow, {
-                filters: [{
-                    name: 'Entry File',
-                    extensions: ['ent']
-                }]
-            }, async (destinationPath) => {
-                let err;
-                try {
-                    await mainUtils.saveProject({
-                        destinationPath,
-                        sourcePath: global.sharedObject.workingPath,
-                    });
-                } catch (error) {
-                    console.log(error);
-                    err = error;
+            dialog.showSaveDialog(
+                mainWindow,
+                {
+                    filters: [
+                        {
+                            name: 'Entry File',
+                            extensions: ['ent'],
+                        },
+                    ],
+                },
+                async (destinationPath) => {
+                    let err;
+                    try {
+                        await mainUtils.saveProject({
+                            destinationPath,
+                            sourcePath: global.sharedObject.workingPath,
+                        });
+                    } catch (error) {
+                        console.log(error);
+                        err = error;
+                    }
+                    mainWindow.reload();
                 }
-                mainWindow.reload();
-            });
+            );
         });
 
         mainWindow.setMenu(null);
-        mainWindow.loadURL('file:///' + path.join(__dirname, 'renderer', 'entry_offline.html'));
+        mainWindow.loadURL(
+            'file:///' + path.join(__dirname, 'renderer', 'entry_offline.html')
+        );
 
         if (option.debug) {
             mainWindow.webContents.openDevTools();
@@ -187,19 +214,19 @@ if (shouldQuit) {
 
         mainWindow.webContents.name = 'entry';
 
-        mainWindow.on('page-title-updated', function (e) {
+        mainWindow.on('page-title-updated', function(e) {
             e.preventDefault();
         });
 
-        mainWindow.on('close', function (e) {
+        mainWindow.on('close', function(e) {
             if (!isForceClose && global.sharedObject.isInitEntry) {
                 e.preventDefault();
                 cwm.closeHardwareWindow();
                 mainWindow.webContents.send('mainClose');
             }
         });
-        
-        mainWindow.on('closed', function () {
+
+        mainWindow.on('closed', function() {
             mainWindow = null;
             app.quit();
             process.exit(0);
@@ -222,7 +249,7 @@ if (shouldQuit) {
         cwm.createAboutWindow();
     }
 
-    app.on('open-file', function (event, pathToOpen) {
+    app.on('open-file', function(event, pathToOpen) {
         if (process.platform === 'darwin') {
             option.file = pathToOpen;
             if (mainWindow) {
@@ -238,7 +265,7 @@ if (shouldQuit) {
         mainWindow.close();
     });
 
-    ipcMain.on('reload', function (event, arg) {
+    ipcMain.on('reload', function(event, arg) {
         if (event.sender.webContents.name !== 'entry') {
             return cwm.reloadHardwareWindow();
         }
@@ -254,29 +281,29 @@ if (shouldQuit) {
         }
     });
 
-    ipcMain.on('roomId', function (event, arg) {
+    ipcMain.on('roomId', function(event, arg) {
         event.returnValue = global.sharedObject.roomId;
     });
 
-    ipcMain.on('version', function (event, arg) {
+    ipcMain.on('version', function(event, arg) {
         event.returnValue = '99';
     });
 
-    ipcMain.on('serverMode', function (event, mode) {
+    ipcMain.on('serverMode', function(event, mode) {
         if (event.sender && event.sender.webContents) {
             event.sender.webContents.send('serverMode', mode);
         }
     });
 
-    ipcMain.on('openHardware', function (event, arg) {
+    ipcMain.on('openHardware', function(event, arg) {
         cwm.openHardwareWindow();
     });
 
-    ipcMain.on('openAboutWindow', function (event, arg) {
+    ipcMain.on('openAboutWindow', function(event, arg) {
         cwm.openAboutWindow();
     });
 
-    ipcMain.on('closeAboutWindow', function (event, arg) {
+    ipcMain.on('closeAboutWindow', function(event, arg) {
         cwm.closeAboutWindow();
     });
 
@@ -291,5 +318,37 @@ if (shouldQuit) {
         if (event) {
             event.sender.send(arg.channel, err);
         }
+    });
+
+    ipcMain.on('checkUpdate', (e, msg) => {
+        const request = net.request({
+            method: 'POST',
+            host: hostURI,
+            path: '/api/checkVersion',
+        });
+        let body = '';
+        request.on('response', (res) => {
+            res.on('data', (chunk) => {
+                body += chunk.toString();
+            });
+            res.on('end', () => {
+                let data = {};
+                try {
+                    data = JSON.parse(body);
+                } catch (e) {}
+                e.sender.send('checkUpdateResult', data);
+            });
+        });
+        request.on('error', (err) => {
+            console.log(err);
+        });
+        request.setHeader('content-type', 'application/json; charset=utf-8');
+        request.write(
+            JSON.stringify({
+                category: 'hardware',
+                version: app.getVersion(),
+            })
+        );
+        request.end();
     });
 }

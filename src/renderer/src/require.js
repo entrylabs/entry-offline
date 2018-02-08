@@ -30,6 +30,23 @@ const mainWindowId = sharedObject.mainWindowId;
 const _mainWindow = BrowserWindow.fromId(mainWindowId);
 const archiver = require('archiver');
 
+const lastCheckVersion = localStorage.getItem('lastCheckVersion');
+const newVersion = localStorage.getItem('isNewVersion');
+
+if(newVersion) {
+    localStorage.removeItem('isNewVersion')
+    alert('업데이트 하자');
+} else {
+    ipcRenderer.on('checkUpdateResult', (e, { isNewVersion, version } = {}) => {
+        if (isNewVersion && version != lastCheckVersion) {
+            localStorage.setItem('isNewVersion', version);
+            localStorage.setItem('lastCheckVersion', version);
+        }
+    });
+    ipcRenderer.send('checkUpdate');
+}
+
+
 import parser from './bower_components/entryjs/extern/util/filbert.js';
 const filbert = parser;
 
