@@ -39,6 +39,7 @@ global.sharedObject = {
     mainWindowId: '',
     workingPath: '',
     isInitEntry: false,
+    appName: 'entry',
 };
 
 function logger(text) {
@@ -320,7 +321,10 @@ if (shouldQuit) {
         }
     });
 
-    ipcMain.on('checkUpdate', (e, msg) => {
+    ipcMain.on('checkUpdate', ({ sender }, msg) => {
+        if(sender.name !== 'entry') {
+            return;
+        }
         const request = net.request({
             method: 'POST',
             host: hostURI,
@@ -336,7 +340,7 @@ if (shouldQuit) {
                 try {
                     data = JSON.parse(body);
                 } catch (e) {}
-                e.sender.send('checkUpdateResult', data);
+                sender.send('checkUpdateResult', data);
             });
         });
         request.on('error', (err) => {

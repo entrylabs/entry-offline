@@ -3,7 +3,7 @@
   "name": "entry",
   "productName": "Entry",
   "main": "src/entry_offline.js",
-  "version": "1.6.3",
+  "version": "1.6.4",
   "config": {
     "forge": "./forge.config.js"
   },

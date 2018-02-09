@@ -12,7 +12,7 @@ angular.module('common').controller('SpriteController',
     $scope.fontData = {
         font: $scope.fonts[0],
         bold: false,
-        underline: false,
+        underLine: false,
         italic: false,
         strike: false,
         colour: '#000000',
