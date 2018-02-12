@@ -17,7 +17,7 @@ import ChildWindowManager from './main/ChildWindowManager';
 import MainUtils from './main/MainUtils';
 import { addBypassChecker, init } from 'electron-compile';
 
-let hostURI = 'playentry.org';
+let hostURI = 'localhost:4000';
 const bypassList = ['.png', '.jpg', '.mp3', '.wav', '.gif'];
 addBypassChecker((filePath) => {
     const { ext = '' } = path.parse(filePath);

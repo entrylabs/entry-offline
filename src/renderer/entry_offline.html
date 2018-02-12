@@ -61,6 +61,7 @@
 			} else {
 				EntryStatic = require('./src/static.js').EntryStatic;
 			}
+			const Modal = require('./src/modal/app.js').default;
 		</script>
 		<script type='text/javascript' src='./bower_components/entryjs/src/workspace/block_entry.js'></script>
 		<script type='text/javascript' src='./bower_components/entryjs/src/workspace/block_entry_mini.js'></script>
@@ -75,7 +76,7 @@
 		<script type="text/javascript" src="./src/directives.js"></script>
 
 		<link rel='stylesheet' href='./style/fonts.css' />
-		<link rel='stylesheet' href='./style/developer.css' />
+		<link rel='stylesheet' href='./style/developer.less' />
 		<link rel='stylesheet' href='./style/header.less' />
 		<link rel='stylesheet' href='./style/workspace.less' />
 		<link rel='stylesheet' href='./style/modal.less' />
@@ -92,7 +93,7 @@
 		<script type="text/javascript" src="./src/sprite.js"></script>
 		<script type="text/javascript" src="./src/header.js"></script>
 		<script type="text/javascript" src="./src/sound.js"></script>
-		<script type='text/javascript' src='./src/modal/app.js'></script>
+		<script type="text/javascript" src="./src/initialize.js"></script>
 		<div class="entryUploaderWindow">
 			<div class="entryUploaderWindowContent">
 				<h1>{{'Workspace.ent_drag_and_drop' | text}}</h1>

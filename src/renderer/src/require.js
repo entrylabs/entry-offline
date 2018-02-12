@@ -16,14 +16,8 @@ const stream = require('stream');
 const fstream = require('fstream');
 const tar = require('tar');
 const zlib = require('zlib');
-const electron = require('electron');
-const webFrame = electron.webFrame;
-const ipcRenderer = electron.ipcRenderer;
-const remote = electron.remote;
-const dialog = remote.dialog;
-const app = remote.app;
-const Menu = remote.Menu;
-const BrowserWindow = remote.BrowserWindow;
+const { webFrame, ipcRenderer, remote, shell } = require('electron');
+const { dialog, app, Menu, BrowserWindow } = remote;
 const mainWindow = BrowserWindow.getAllWindows()[0];
 window.$ = window.jQuery = require('./bower_components/jquery/dist/jquery.min.js');
 window.BigNumber = require('./bower_components/entryjs/extern/util/bignumber.min.js');
@@ -37,23 +31,6 @@ const sharedObject = remote.getGlobal('sharedObject');
 const mainWindowId = sharedObject.mainWindowId;
 const _mainWindow = BrowserWindow.fromId(mainWindowId);
 const archiver = require('archiver');
-
-const lastCheckVersion = localStorage.getItem('lastCheckVersion');
-const newVersion = localStorage.getItem('isNewVersion');
-
-if(newVersion) {
-    localStorage.removeItem('isNewVersion')
-    alert('업데이트 하자');
-} else {
-    ipcRenderer.on('checkUpdateResult', (e, { isNewVersion, version } = {}) => {
-        if (isNewVersion && version != lastCheckVersion) {
-            localStorage.setItem('isNewVersion', version);
-            localStorage.setItem('lastCheckVersion', version);
-        }
-    });
-    ipcRenderer.send('checkUpdate');
-}
-
 
 import parser from './bower_components/entryjs/extern/util/filbert.js';
 const filbert = parser;
@@ -86,9 +63,5 @@ window.entrylms = {
         var isConfirm = confirm(text);
         var defer = new $.Deferred;
         return defer.resolve(isConfirm);
-        // 기본 Promise로 동작시키면 then이 비동기로 동작하여 타이밍 문제 발생
-        // return new Promise((resolve, reject) => {
-        //     resolve(isConfirm);
-        // });
     },
 }

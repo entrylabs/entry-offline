@@ -32,7 +32,6 @@
             osxSign: {
                 identity:
                     'Developer ID Application: Connect Foundation (DLFUSDA3L5)',
-                Identifier: 'org.playentry.entryhw',
             },
             afterCopy: [
                 (buildPath, electronVersion, platform, arch, callback) => {
