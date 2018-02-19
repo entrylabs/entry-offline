@@ -11,8 +11,8 @@ class ChildWindowManager {
     createAboutWindow() {
         this.aboutWindow = new BrowserWindow({
             parent: this.mainWindow,
-            width: 300,
-            height: 200,
+            width: 380,
+            height: 290,
             resizable: false,
             movable: false,
             center: true,

@@ -57,6 +57,31 @@ class MainUtils {
             archive.finalize();
         });
     }
+
+    lpad = (str, len) => {
+        var strLen = str.length;
+        if (strLen < len) {
+            for (var i=0; i<len-strLen; i++) {
+                str = "0" + str;
+            }
+        }
+        return String(str);
+    };
+
+    getPaddedVersion = (version) => {
+        if(!version) {
+            return '';
+        }
+        version = String(version);
+
+        var padded = [];
+        var splitVersion = version.split('.');
+        splitVersion.forEach((item) => {
+            padded.push(this.lpad(item, 4));
+        });
+
+        return padded.join('.');
+    }
 }
 
 export default MainUtils;

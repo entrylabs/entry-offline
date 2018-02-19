@@ -8,7 +8,7 @@ import {
     ipcMain,
     webContents,
     dialog,
-    net,
+    net,ㅑ
 } from 'electron';
 import path from 'path';
 import fs from 'fs';
@@ -16,6 +16,8 @@ import ChildProcess from 'child_process';
 import ChildWindowManager from './main/ChildWindowManager';
 import MainUtils from './main/MainUtils';
 import { addBypassChecker, init } from 'electron-compile';
+
+const packageJson = require('../package.json');
 
 let hostURI = 'localhost:4000';
 const bypassList = ['.png', '.jpg', '.mp3', '.wav', '.gif'];
@@ -354,5 +356,11 @@ if (shouldQuit) {
             })
         );
         request.end();
+    });
+
+    ipcMain.on('checkVersion', (e, lastCheckVersion) => {
+        const version = mainUtils.getPaddedVersion(packageJson.version);
+        const lastVersion = mainUtils.getPaddedVersion(lastCheckVersion);    
+        e.sender.send('checkVersionResult', lastVersion > version);
     });
 }
