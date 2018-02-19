@@ -40,8 +40,6 @@
 		if(!localStorage.getItem('lang')) {
 			localStorage.setItem('lang', 'ko');
 		}
-		var user_lang = localStorage.getItem('lang');
-		window.Lang = require(`../lang/${user_lang}.js`).Lang;
 
 		$(function () {
 			$('body').on('click', function () {
@@ -60,10 +58,13 @@
 			});
 
 			$("#version").text(app.getVersion());
-			$(".btnVersionUpdate").text(Lang.General.recent_download2);
-			$(".txtAlreadyVersion").text(Lang.General.latest_version);
 
 			aboutWindow.on('show', () => {
+				var user_lang = localStorage.getItem('lang');
+				window.Lang = require(`../lang/${user_lang}.js`).Lang;
+				$(".btnVersionUpdate").text(Lang.General.recent_download2);
+				$(".txtAlreadyVersion").text(Lang.General.latest_version);
+
 				ipcRenderer.once('checkVersionResult', (e, hasNewVersion) => {
 					if (hasNewVersion) {
 						$('.txtAlreadyVersion').hide();
