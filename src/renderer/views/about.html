@@ -23,10 +23,8 @@
 				</div>
 				<div>
 					<div class="btnVersionUpdate">
-						최신버전 다운로드
 					</div>
 					<div class="txtAlreadyVersion">
-						최신 버전입니다.
 					</div>
 				</div>
 			</div>
@@ -39,6 +37,11 @@
 		import { shell, remote, ipcRenderer } from 'electron';
 		const { app } = remote;
 		const aboutWindow = remote.getCurrentWindow();
+		if(!localStorage.getItem('lang')) {
+			localStorage.setItem('lang', 'ko');
+		}
+		var user_lang = localStorage.getItem('lang');
+		window.Lang = require(`../lang/${user_lang}.js`).Lang;
 
 		$(function () {
 			$('body').on('click', function () {
@@ -57,6 +60,8 @@
 			});
 
 			$("#version").text(app.getVersion());
+			$(".btnVersionUpdate").text(Lang.General.recent_download2);
+			$(".txtAlreadyVersion").text(Lang.General.latest_version);
 
 			aboutWindow.on('show', () => {
 				ipcRenderer.once('checkVersionResult', (e, hasNewVersion) => {

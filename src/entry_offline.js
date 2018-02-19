@@ -19,7 +19,7 @@ import { addBypassChecker, init } from 'electron-compile';
 
 const packageJson = require('../package.json');
 
-let hostURI = 'localhost:4000';
+let hostURI = 'playentry.org';
 const bypassList = ['.png', '.jpg', '.mp3', '.wav', '.gif'];
 addBypassChecker((filePath) => {
     const { ext = '' } = path.parse(filePath);
