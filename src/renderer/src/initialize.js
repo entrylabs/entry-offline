@@ -8,7 +8,7 @@
         localStorage.removeItem('hasNewVersion');
         modal
             .alert(
-                Lang.Msgs.version_update_msg1.replace(/%1/gi, newVersion),
+                `${Lang.Msgs.version_update_msg1.replace(/%1/gi, newVersion)}\n\n${Lang.Msgs.version_update_msg3}`,
                 Lang.General.update_title,
                 {
                     positiveButtonText: Lang.General.recent_download,
