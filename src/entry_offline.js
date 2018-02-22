@@ -351,7 +351,7 @@ if (shouldQuit) {
         request.setHeader('content-type', 'application/json; charset=utf-8');
         request.write(
             JSON.stringify({
-                category: 'hardware',
+                category: 'offline',
                 version: app.getVersion(),
             })
         );
