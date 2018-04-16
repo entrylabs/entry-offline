@@ -1227,10 +1227,17 @@ EntryStatic.getAllBlocks = function() {
                 // playcode Added 2018-01-02
 
                 //creamo
-                'creamo_toggle_led',
+
                 'creamo_get_number_sensor_value',
+                'creamo_get_number_digital_value',
+
+
+                'creamo_rf_toggle_pwm',
+                'creamo_toggle_led',
                 'creamo_toggle_pwm',
+              
                 'creamo_toggle_motor',
+               
                 //creamo
                 // mechatro Added 2018-02-12
                 'mechatro_set_threshold',
