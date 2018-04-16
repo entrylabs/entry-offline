@@ -6318,12 +6318,19 @@ Lang.template = {
 
 
 
-    "creamo_get_number_sensor_value": "가변저항_블록 %1 번 센서값  ",
+    "creamo_get_number_sensor_value": "아날로그 %1 번 센서값  ",
+    "creamo_get_number_digital_value" : "디지털 %1 번 센서값  ",
+    
     "creamo_get_port_number": "%1",
     "creamo_get_pwm_port_number": "%1  ",
     "creamo_motor_port_number": "%1",
-    "creamo_toggle_led": "디지털 %1 번 핀 %2 %3",
+    "creamo_rf_number" :"%1",
+    
+    
+    "creamo_rf_toggle_pwm" :  "통신채널 %1 번 핀을 %2 (으)로 정하기 %3",
+    
     "creamo_toggle_motor": "Motor_블록 %1 번 핀 %2 %3",
+    "creamo_toggle_led": "디지털 %1 번 핀 %2 %3",
     "creamo_toggle_pwm": "디지털 %1 번 핀을 %2 (으)로 정하기 %3",
 
 
