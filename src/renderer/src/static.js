@@ -352,7 +352,6 @@ EntryStatic.getAllBlocks = function() {
                 'arduino_connected',
                 'arduino_connect',
                 'arduino_reconnect',
-                'arduino_open',
                 'arduino_cloud_pc_open',
                 'arduino_get_number_sensor_value',
                 'arduino_get_digital_value',
@@ -1228,8 +1227,10 @@ EntryStatic.getAllBlocks = function() {
                 // playcode Added 2018-01-02
 
                 //creamo
-                'creamo_toggle_led',
+
                 'creamo_get_number_sensor_value',
+                'creamo_toggle_led',
+                
                 'creamo_toggle_pwm',
                 'creamo_toggle_motor',
                 //creamo
