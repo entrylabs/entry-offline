@@ -1024,5 +1024,14 @@ Entry.plugin = (function () {
 
     }
 
+    that.executeEvent = (eventName, data) => {
+        return new Promise((resolve, reject)=> {
+            ipcRenderer.send(eventName, data);
+            ipcRenderer.once(eventName, (e, data) => {
+                resolve(data);
+            });
+        })
+    }
+
     return that;
 })();

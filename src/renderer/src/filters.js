@@ -3,53 +3,52 @@
 var common = angular.module('common');
 
 
-common.filter('makeThumbnail', function() {
-    return function(picture) {
+common.filter('makeThumbnail', () => {
+    return (picture) => {
         if (picture) {
-            // return picture.filename.substring(0,2)+'/'+picture.filename.substring(2,4)+'/thumb/'+picture.filename+'.png';
-            //
             if(picture.fileurl) {
-                var returnValue;
                 picture.fileurl = picture.fileurl.replace(/\\/gi, '/');
                 picture.fileurl = picture.fileurl.replace(/%5C/gi, '/');
-
-                // console.log(decodeURI(picture.fileurl).replace('/image/', '/thumb/'));
-                // return decodeURI(picture.fileurl).replace('/image/', '/thumb/');
-
-                var decodePath = decodeURI(picture.fileurl);
-                var lastIdx = decodePath.lastIndexOf('/image/');
+                let returnValue = decodeURI(picture.fileurl);
+                var lastIdx = returnValue.lastIndexOf('/image/');
                 if(lastIdx > -1) {
-                    let temp = decodePath.substr(lastIdx).replace('/image/', '/thumb/');
-                    returnValue = decodePath.substr(0, lastIdx) + temp;
+                    let temp = returnValue.substr(lastIdx).replace('/image/', '/thumb/');
+                    returnValue = returnValue.substr(0, lastIdx) + temp;
                 }
-
-                // console.log(picture.fileurl);
                 return returnValue;
-
             } else {
-                var extension = picture.extension || '.png';
-                return ['node_modules', 'uploads', picture.filename.substring(0,2), picture.filename.substring(2,4), 'thumb', picture.filename + extension].join('/');
+                const {extension = '.png', filename} = picture;
+                return path.join('node_modules', 'uploads', filename.substring(0,2), filename.substring(2,4), 'thumb', filename + extension);
             }
         }
-        else
+        else {
             return './images/text_icon.png';
+        }
     };
 });
 
-common.filter('makeUploadThumbnail', function() {
-    return function(picture) {
+common.filter('makeUploadThumbnail', () => {
+    return (picture) => {
         if (picture) {
-            // return picture.filename.substring(0,2)+'/'+picture.filename.substring(2,4)+'/thumb/'+picture.filename+'.png';
-            var extension = picture.extension || '.png';
-            var temp;
-
+            const { extension = '.png', filename, fileurl } = picture;
+            if (fileurl) {
+                return fileurl;
+            }
+            let temp;
             temp = _real_temp_path.replace(/\\/gi, '/');
             temp = temp.replace(/%5C/gi, '/');
 
-            return [temp, 'temp', picture.filename.substring(0,2), picture.filename.substring(2,4), 'thumb', picture.filename + extension].join('/');
-        }
-        else
+            return path.join(
+                temp,
+                'temp',
+                filename.substring(0, 2),
+                filename.substring(2, 4),
+                'thumb',
+                filename + extension
+            );
+        } else {
             return './images/text_icon.png';
+        }
     };
 });
 

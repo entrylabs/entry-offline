@@ -215,6 +215,7 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
             Entry.addEventListener('removeObject', removeObject);
             Entry.addEventListener('removePicture', removePicture);
             Entry.addEventListener('removeSound', removeSound);
+            Entry.addEventListener('exportObject', exportObject);
             // if (!Entry.creationChangedEvent)
             //     Entry.creationChangedEvent = new Entry.Event(window);
             // Entry.creationChangedEvent.attach(this, saveLocalStorageProject);
@@ -697,6 +698,47 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                     });
                 });
             } else if (selectedItems.target === 'upload') {
+                selectedItems.data.forEach(function(item, index, array) {
+                    if ('sprite' in item) {
+                        var sprite = item.sprite;
+                        var objects = sprite.objects;
+                        var functions = sprite.functions;
+                        var messages = sprite.messages;
+                        var variables = sprite.variables;
+
+                        if (Entry.getMainWS().mode === Entry.Workspace.MODE_VIMBOARD 
+                            && (!Entry.TextCodingUtil.canUsePythonVariables(variables) 
+                                || !Entry.TextCodingUtil.canUsePythonFunctions(functions))) {
+                            return entrylms.alert(Lang.Menus.object_import_syntax_error);
+                        }
+                        Entry.variableContainer.appendMessages(messages);
+                        Entry.variableContainer.appendVariables(variables);
+                        Entry.variableContainer.appendFunctions(functions);
+                        objects.forEach(function (object) {
+                            if(Entry.container.getObject(object.id)) {
+                                object.id = Entry.generateHash();
+                            }
+                            object.objectType = 'sprite';
+                            Entry.container.addObject(object, 0);
+                        });
+                    } else {
+                        if (!item.id) {
+                            item.id = Entry.generateHash();
+                        }
+                        object = {
+                            id: Entry.generateHash(),
+                            objectType: 'sprite',
+                            sprite: {
+                                name: item.name,
+                                pictures: [item],
+                                sounds: [],
+                                category: {}
+                            }
+                        };
+                        Entry.container.addObject(object, 0);
+                    }
+                });
+                return;
                 selectedItems.data.forEach(function (item, index, array) {
                     if (!item.id) {
                         item.id = Entry.generateHash();
@@ -1110,6 +1152,24 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
             Util.removeFileByUrl(fileurl);
             Util.clearTempDir();
         }
+    }
+
+    function exportObject(object) {
+        var blockList = object.script.getBlockList();
+        var objectVariable = Entry.variableContainer.getObjectVariables(blockList);
+        objectVariable.objects = [object.toJSON()];
+        
+        ipcRenderer.send('exportObject', objectVariable);
+        // $http.post('/api/exportObject', objectVariable).then(function (result) {
+        //     var data = result.data || {};
+        //     if(data.objectId) {
+        //         execDownload('/api/downloadObject/' + data.objectId + '/' + object.name);
+        //     } else {
+        //         throw new Error('Not Found Object Id');
+        //     }
+        // }).catch(function () {
+        //     entrylms.alert(Lang.Msgs.error_occured);
+        // });
     }
 
     function getWorkspaceBusy(checkList) {
