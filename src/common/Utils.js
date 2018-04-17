@@ -26,6 +26,13 @@ export const STATIC_PATH = {
     get TEMP_DIR() {
         return path.join(app.getPath('userData'), 'temp');
     },
+    get TEMP_DIR_POSIX() {
+        const regex = new RegExp(`\\${path.win32.sep}`, 'gi');
+        const userDataPath = app
+            .getPath('userData')
+            .replace(regex, path.posix.sep);
+        return path.posix.join(userDataPath, 'temp');
+    },
 };
 
 class Utils {
@@ -425,7 +432,10 @@ class Utils {
     copyPictureFilesForTemp({ pictures, object }) {
         pictures.forEach((picture) => {
             const { filename } = picture;
-            if (picture.fileurl && picture.fileurl.startsWith('/lib') !== null) {
+            if (
+                picture.fileurl &&
+                picture.fileurl.startsWith('/lib') !== null
+            ) {
                 picture.fileurl = picture.fileurl.replace(
                     '/lib',
                     './bower_components'
@@ -434,8 +444,8 @@ class Utils {
                 const { dimension = {} } = picture;
                 const { type } = dimension;
                 const ext = type ? `.${type}` : '.png';
-                picture.fileurl = path.join(
-                    STATIC_PATH.TEMP_DIR,
+                picture.fileurl = path.posix.join(
+                    STATIC_PATH.TEMP_DIR_POSIX,
                     filename.substr(0, 2),
                     filename.substr(2, 2),
                     'image',
@@ -474,8 +484,8 @@ class Utils {
                     './bower_components'
                 );
             } else if (filename) {
-                sound.fileurl = path.join(
-                    STATIC_PATH.TEMP_DIR,
+                sound.fileurl = path.posix.join(
+                    STATIC_PATH.TEMP_DIR_POSIX,
                     filename.substr(0, 2),
                     filename.substr(2, 2),
                     'sound',
