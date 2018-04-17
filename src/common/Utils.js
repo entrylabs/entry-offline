@@ -350,7 +350,7 @@ class Utils {
             decompress(source, target)
                 .then((files) => {
                     if (isRemove) {
-                        rimraf(source, (err) => {
+                        rimraf(source, '..', (err) => {
                             if (err) {
                                 return reject(err);
                             }
@@ -407,7 +407,7 @@ class Utils {
                     const parser = path.parse(source);
                     this.copyRecursiveAsync(parser.dir, target, ['object.json'])
                         .then(() => {
-                            rimraf(parser.dir, (err) => {
+                            rimraf(path.join(parser.dir, '..'), (err) => {
                                 if (err) {
                                     return reject(err);
                                 }

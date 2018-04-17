@@ -357,7 +357,6 @@ angular.module('common').controller('SpriteController', [
 
                 Promise.all([picturePromise, objectPromise])
                     .then((result) => {
-                        console.log(result);
                         const [pictureData = [], objectData = []] = result;
                         $scope.$apply(() => {
                             try{

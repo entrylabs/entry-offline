@@ -38,10 +38,7 @@ class MainUtils {
             archive.on('error', (e) => {
                 reject(e);
             });
-            archive.on('entry', () => {
-                // console.log(a.name);
-                // console.log(a, b, c);
-            });
+            archive.on('entry', () => {});
             archive.on('progress', ({ fs }) => {
                 const { totalBytes, processedBytes } = fs;
                 this.window.setProgressBar(processedBytes / totalBytes);
@@ -97,12 +94,13 @@ class MainUtils {
         const objectId = Utils.createFileId();
         const objectDirPath = path.join(
             app.getPath('userData'),
-            'object',
-            objectId
+            'import',
+            objectId,
+            'object'
         );
         const objectJsonPath = path.join(objectDirPath, 'object.json');
         const exportFileName = `${objectName}.eo`;
-        const exportFile = path.resolve(objectDirPath, exportFileName);
+        const exportFile = path.resolve(objectDirPath, '..', exportFileName);
         try {
             const savePath = await Utils.showSaveDialog({
                 defaultPath: exportFileName,
@@ -133,7 +131,6 @@ class MainUtils {
     }
 
     async importObject(e, objectFiles) {
-        console.log(objectFiles, e);
         try {
             const jobPromises = [];
             objectFiles.forEach((objectFile) => {
@@ -142,7 +139,7 @@ class MainUtils {
                         const objectId = Utils.createFileId();
                         const objectDirPath = path.join(
                             app.getPath('userData'),
-                            'object',
+                            'import',
                             objectId
                         );
                         const tempDirPath = path.join(
@@ -155,10 +152,13 @@ class MainUtils {
                             target: objectDirPath,
                         });
                         const objectJson = await Utils.copyObject({
-                            source: path.join(objectDirPath, 'object.json'),
+                            source: path.join(
+                                objectDirPath,
+                                'object',
+                                'object.json'
+                            ),
                             target: tempDirPath,
                         });
-                        console.log(objectJson);
                         resolve(objectJson);
                     } catch (e) {
                         reject(e);
@@ -168,15 +168,14 @@ class MainUtils {
             });
             Promise.all(jobPromises)
                 .then((data) => {
-                    console.log('complete', data);
                     e.sender.send('importObject', data);
                 })
-                .catch((e) => {
-                    console.error(e);
+                .catch((err) => {
                     e.sender.send('importObject', false);
                 });
         } catch (e) {
             console.error(e);
+            e.sender.send('importObject', false);
         }
     }
 }
