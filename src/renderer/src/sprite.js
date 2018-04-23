@@ -368,14 +368,32 @@ angular.module('common').controller('SpriteController', [
                                 pictureData.forEach((item) => {
                                     $scope.uploadPictures.push(item);
                                 });
-    
-                                objectData.forEach((item) => {
-                                    var objects = item.objects;
-                                    objects.forEach(({ selectedPicture = {} }) => {
-                                        selectedPicture.sprite = item;
-                                        $scope.uploadPictures.push(
-                                            selectedPicture
-                                        );
+
+                                objectData.forEach(function(item) {
+                                    const objects = item.objects;
+                                    objects.forEach(function (object) {
+                                        const { objectType } = object;
+                                        if(objectType === 'textBox') {
+                                            const { text, entity, name } = object;
+                                            const { font } = entity;
+                                            const fontIndex = _.findIndex($scope.fonts, ({ family }) => {
+                                                return font.indexOf(family) > -1;
+                                            });
+                                            const bold = font.indexOf('bold') > -1;
+                                            const italic = font.indexOf('italic') > -1;
+                                            object.selectedPicture = {
+                                                name,
+                                                text,
+                                                objectType,
+                                                options: entity,
+                                                _id: Entry.generateHash(),
+                                                sprite: item,
+                                                fileurl: './bower_components/entryjs/images/text_icon.png',
+                                            }
+                                        } else {
+                                            object.selectedPicture.sprite = item;
+                                        }
+                                        $scope.uploadPictures.push(object.selectedPicture);
                                     });
                                 });
     

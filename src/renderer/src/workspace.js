@@ -714,13 +714,27 @@ angular.module('workspace').controller("WorkspaceController", ['$scope', '$rootS
                         Entry.variableContainer.appendMessages(messages);
                         Entry.variableContainer.appendVariables(variables);
                         Entry.variableContainer.appendFunctions(functions);
-                        objects.forEach(function (object) {
-                            if(Entry.container.getObject(object.id)) {
-                                object.id = Entry.generateHash();
-                            }
-                            object.objectType = 'sprite';
+                        if(item.objectType === 'textBox') {
+                            var text = item.text ? item.text : Lang.Blocks.TEXT;
+                            var options = item.options;
+                            var object = {
+                                id: Entry.generateHash(),
+                                name: Lang.Workspace.textbox,
+                                text: text,
+                                options: options,
+                                objectType: 'textBox',
+                                sprite: {sounds:[], pictures:[]}
+                            };
                             Entry.container.addObject(object, 0);
-                        });
+                        } else {
+                            objects.forEach(function (object) {
+                                if(Entry.container.getObject(object.id)) {
+                                    object.id = Entry.generateHash();
+                                }
+                                object.objectType = 'sprite';
+                                Entry.container.addObject(object, 0);
+                            });
+                        }
                     } else {
                         if (!item.id) {
                             item.id = Entry.generateHash();
