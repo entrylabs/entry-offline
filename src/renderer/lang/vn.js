@@ -85,7 +85,7 @@ Lang.CommandTooltip = {
 Lang.Blocks = {
     "download_guide": "tải kết Hướng dẫn",
     "ARDUINO": "phần cứng",
-    "ARDUINO_download_connector": "Download Connector",
+    "ARDUINO_download_connector": "Open Connector",
     "ARDUINO_open_connector": "Open Connector",
     "ARDUINO_download_source": "đăng nhập mã Arduino",
     "ARDUINO_reconnect": "kết nối phần cứng",
