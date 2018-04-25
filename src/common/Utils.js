@@ -434,7 +434,7 @@ class Utils {
             const { filename } = picture;
             if (
                 picture.fileurl &&
-                picture.fileurl.startsWith('/lib') !== null
+                picture.fileurl.match('/lib') !== null
             ) {
                 picture.fileurl = picture.fileurl.replace(
                     '/lib',
