@@ -1,17 +1,11 @@
 [![Build Status](https://travis-ci.org/entrylabs/entry-offline.svg?branch=build)](https://travis-ci.org/entrylabs/entry-offline)
 [![Build status](https://ci.appveyor.com/api/projects/status/y3yyjagb93vf5lp5/branch/build?svg=true)](https://ci.appveyor.com/project/kimorkim/entry-offline/branch/build)
 ## Entry-Offline
- 재작성 필요.
-
-## 1. Build 
- 재작성 필요.
-
-## 2. Run
- 재작성 필요.
+[문서페이지](https://entrylabs.github.io/docs/)
 
 ## Copyright and License
 
-Entry-Offline Copyright (c) 2015 Entry Labs.
+Entry-Offline Copyright(c) 2018 CONNECT.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  You may obtain a copy of the License at
 
