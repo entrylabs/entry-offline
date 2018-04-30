@@ -131,7 +131,7 @@ function processBlock (block, thread) {
     parsedBlock.x ? parsedBlock.x = Number(parsedBlock.x) : 0;
     parsedBlock.y ? parsedBlock.y = Number(parsedBlock.y) : 0;
 
-    var keyMap = entry.block[parsedBlock.type].paramsKeyMap;
+    var keyMap = Entry.block[parsedBlock.type].paramsKeyMap;
 
     var blockValues = [];
     var fields = block.field;

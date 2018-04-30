@@ -20,6 +20,7 @@ import { addBypassChecker, init } from 'electron-compile';
 const packageJson = require('../package.json');
 
 let hostURI = 'playentry.org';
+let hostProtocol = 'https:';
 const bypassList = ['.png', '.jpg', '.mp3', '.wav', '.gif'];
 addBypassChecker((filePath) => {
     const { ext = '' } = path.parse(filePath);
@@ -77,6 +78,9 @@ for (var i = 0; i < argv.length; i++) {
         continue;
     } else if (argv[i].match(/^--host=/) || argv[i].match(/^-h=/)) {
         hostURI = argv[i].split('=')[1];
+        continue;
+    } else if (argv[i].match(/^--protocol=/) || argv[i].match(/^-p=/)) {
+        hostProtocol = argv[i].split('=')[1];
         continue;
     } else if (argv[i][0] == '-') {
         continue;
@@ -330,6 +334,7 @@ if (shouldQuit) {
         const request = net.request({
             method: 'POST',
             host: hostURI,
+            protocol: hostProtocol,
             path: '/api/checkVersion',
         });
         let body = '';
