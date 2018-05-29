@@ -102,6 +102,8 @@ Lang.Blocks = {
     "ARDUINO_arduino_get_sensor_number_3": "3",
     "ARDUINO_arduino_get_sensor_number_4": "4",
     "ARDUINO_arduino_get_sensor_number_5": "5",
+    "ARDUINO_arduino_get_sensor_number_6": "7",
+    "ARDUINO_arduino_get_sensor_number_6": "7",
     "blacksmith_toggle_on": "켜기",
     "blacksmith_toggle_off": "끄기",
     "blacksmith_lcd_first_line": "첫 번째",
@@ -458,6 +460,8 @@ Lang.Blocks = {
     "iboard_analog_number_3": "A3",
     "iboard_analog_number_4": "A4",
     "iboard_analog_number_5": "A5",
+
+
     "iboard_light": "빛센서가 ",
     "iboard_num_pin_1": "LED 상태를",
     "iboard_num_pin_2": "번 스위치가",
@@ -6317,25 +6321,32 @@ Lang.template = {
     "edumaker_toggle_led": "디지털 %1 번 핀 %2 %3",
 
 
-
-    "creamo_get_number_sensor_value": "아날로그 %1 번 센서값  ",
-    "creamo_get_number_digital_value" : "디지털 %1 번 센서값  ",
-    
-    "creamo_get_port_number": "%1",
-    "creamo_get_pwm_port_number": "%1  ",
-    "creamo_motor_port_number": "%1",
-    "creamo_rf_number" :"%1",
-    
-    
-    "creamo_rf_toggle_pwm" :  "통신채널 %1 번 핀을 %2 (으)로 정하기 %3",
-    
-    "creamo_toggle_motor": "Motor_블록 %1 번 핀 %2 %3",
-    "creamo_toggle_led": "디지털 %1 번 핀 %2 %3",
+    "creamo_get_analog": "아날로그 %1 번 센서값  ",
+    "creamo_get_number_digital_value" : "디지털 %1 번 센서값",
+    "creamo_digital_block" : " 디지털 %1 번 핀 %2 %3",
     "creamo_toggle_pwm": "디지털 %1 번 핀을 %2 (으)로 정하기 %3",
+    "creamo_RF": "RF채널 %1 번 핀을 %2 (으)로 정하기 %3",
+    "creamo_convert_scale" : "%1 값의 범위를 %2 ~ %3 에서 %4 ~ %5 (으)로 바꾼값  ",
+
+    "creamo_get_RF_number": "%1",
+    "creamo_get_port_number": "%1  ",
+    "creamo_get_analog_sensorNum" :"%1  ",
+    "creamo_get_Digital_sensorNum" : "%1  ",
+   
+  
+    "creamo_analog_number_0": "A0",
+    "creamo_analog_number_1": "A1",
+    "creamo_analog_number_2": "A2",
+    "creamo_analog_number_3": "A3",
+    "creamo_analog_number_4": "A4",
+    "creamo_analog_number_5": "A5",
+    "creamo_analog_number_5": "A6",
+    "creamo_analog_number_5": "A7",
+
+   
 
 
-
-
+    
     "mechatro_get_dc_motor_current": "%1모터 사용전류값",
     "mechatro_get_digital": "%1 디지털 값",
     "mechatro_get_sensor_value": "%1 센서값",

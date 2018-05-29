@@ -41,7 +41,6 @@
                     callback();
                 },
             ],
-            packageManager: 'yarn',
         },
         electronInstallerDMG: {
             name: 'Entry',

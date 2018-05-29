@@ -102,7 +102,11 @@ Lang.Blocks = {
     "ARDUINO_arduino_get_sensor_number_3": "3",
     "ARDUINO_arduino_get_sensor_number_4": "4",
     "ARDUINO_arduino_get_sensor_number_5": "5",
+    "ARDUINO_arduino_get_sensor_number_4": "6",
+    "ARDUINO_arduino_get_sensor_number_5": "7",
+    
     "blacksmith_toggle_on": "on",
+
     "blacksmith_toggle_off": "off",
     "blacksmith_lcd_first_line": "first",
     "blacksmith_lcd_seconds_line": "seconds",
@@ -6315,13 +6319,23 @@ Lang.template = {
     "edumaker_set_servo": "디지털 %1 번 핀의 서보모터를 %2 의 각도로 정하기 %3",
     "edumaker_set_tone": "디지털 %1 번 핀의 버저를 %2 %3 음으로 %4 초 연주하기 %5",
     "edumaker_toggle_led": "디지털 %1 번 핀 %2 %3",
-    "creamo_get_number_sensor_value": "PWM_Block %1 Sensor value",
-    "creamo_get_port_number": "%1",
-    "creamo_get_pwm_port_number": "%1",
-    "creamo_motor_port_number": "%1",
-    "creamo_toggle_led": "LED_Block %1 Pin %2 %3",
-    "creamo_toggle_motor": "Motor_Block %1 pin %2 %3",
-    "creamo_toggle_pwm": "Digital %1 Pin %2 %3",
+
+    "creamo_get_analog": "PWM_Block %1 Sensor value",
+    "creamo_get_number_digital_value" : "Digital %1 Sensor Value",
+    "creamo_digital_block" : "Digital %1 pin %2 %3",
+    "creamo_toggle_pwm"  : "Digial %1 value %2 ",
+    "creamo_RF": "RF Channel %1 pin  %2 value %3",
+    "creamo_convert_scale" : "Convert %1 value from %2~%3 to %4~%5",
+
+
+    "creamo_get_RF_number": "%1",
+    "creamo_get_port_number": "%1  ",
+    "creamo_get_analog_sensorNum" :"%1  ",
+    "creamo_get_Digital_sensorNum" : "%1  ",
+   
+
+
+    
     "mechatro_get_dc_motor_current": "Get 1%motor current",
     "mechatro_get_digital": "%1",
     "mechatro_get_sensor_value": "Analog %1 Sensor value",
