@@ -24,6 +24,22 @@ Lang.Command = {
     "122": "블록 끼워넣기",
     "123": "블록 끼워넣기",
     "201": "오브젝트 선택하기",
+    "202": "오브젝트 수정 버튼 클릭",
+    "203": "오브젝트 그림 추가",
+    "204": "오브젝트 그림 삭제",
+    "205": "오브젝트 소리 추가",
+    "206": "오브젝트 소리 삭제",
+    "207": "오브젝트 이름 수정",
+    "208": "오브젝트 추가",
+    "209": "오브젝트 삭제",
+    "210": "오브젝트 추가 버튼 클릭",
+    "211": "오브젝트 x 수정",
+    "212": "오브젝트 y 수정",
+    "213": "오브젝트 size 수정",
+    "214": "오브젝트 방향 수정",
+    "215": "오브젝트 이동 방향 수정",
+    "216": "오브젝트 회전방식 수정",
+    "217": "엔터티 모델 동기화",
     "301": "do",
     "302": "undo",
     "303": "redo",
@@ -31,6 +47,7 @@ Lang.Command = {
     "402": "그림 수정 취소하기",
     "403": "그림 수정하기",
     "404": "그림 수정 취소하기",
+    "405": "글상자 수정",
     "501": "시작하기",
     "502": "정지하기",
     "601": "컨테이너 오브젝트 선택하기",
@@ -41,7 +58,37 @@ Lang.Command = {
     "802": "변수 추가하기 버튼 클릭",
     "803": "변수 추가하기",
     "804": "변수 삭제하기",
-    "805": "변수 이름 설정"
+    "805": "변수 이름 설정",
+    "806": "메세지 이름 설정",
+    "807": "메세지 추가",
+    "808": "메세지 삭제",
+    "809": "변수 스코프 정하기",
+    "810": "변수 글로벌 체크",
+    "811": "변수 보이기 체크",
+    "812": "변수 기본값 설정",
+    "813": "변수 슬라이드로 체크",
+    "814": "변수 최솟값 정하기",
+    "815": "변수 최댓값 정하기",
+    "816": "리스트 추가 버튼 클릭",
+    "817": "리스트 추가",
+    "818": "리스트 삭제",
+    "819": "리스트 이름 정하기",
+    "820": "리스트 스코프 정하기",
+    "821": "리스트 글로벌 체크",
+    "822": "리스트 보이기 체크",
+    "823": "리스트 길이 변경",
+    "824": "리스트 기본값 설정",
+    "825": "메세지 수정 enable",
+    "826": "변수 수정 enable",
+    "827": "리스트 수정 enable",
+    "828": "변수 이름 정하기",
+    "829": "리스트 이름 정하기",
+    "900": "모달 닫기",
+    "1001": "함수 생성 시작",
+    "1002": "함수 수정 시작",
+    "1003": "함수 수정 취소",
+    "1004": "함수 생성",
+    "1005": "함수 업데이트"
 };
 Lang.CommandTooltip = {
     "101": "블록 쓰레드 추가하기",
@@ -85,7 +132,7 @@ Lang.CommandTooltip = {
 Lang.Blocks = {
     "download_guide": "Download Guide",
     "ARDUINO": "Hardware",
-    "ARDUINO_download_connector": "Open Connector",
+    "ARDUINO_download_connector": "Download Connector",
     "ARDUINO_open_connector": "Open Connector",
     "ARDUINO_download_source": "Entry Arduino code",
     "ARDUINO_reconnect": "Connect Hardware",
@@ -1713,6 +1760,7 @@ Lang.Buttons = {
 };
 Lang.ko = "한국어";
 Lang.vn = "tiếng Việt";
+Lang.jp = "日本語";
 Lang.Menus = {
     "robotis_opencm70": "Robotis Open CM70",
     "cannnot_mark_favorite": "Private project cannot be marked as a favorite.",
@@ -2560,6 +2608,7 @@ Lang.Menus = {
     "algorithmDesc_2": "Learn to code while playing.",
     "programmingLangDesc_1": "Coding is made easy with Entry.",
     "programmingLangDesc_2": "Create your own games, animation, media art and much more.",
+    "viewSupporHwVideo": "See the hardware guide videos",
     "viewSupporHw": "see which hardware connects",
     "supportHwDesc_1": "Entry connects to many physical computing devices to create awesome projects",
     "supportHwDesc_2": "that interacts with the physical world. More devices are continuously added!",
@@ -4082,7 +4131,19 @@ Lang.Menus = {
     "rangers_start_button": "Start",
     "bug_report_title": "Bug Report",
     "bug_report_content": "Please tell us about errors or good suggestions that you find when you use Entry.",
-    "object_import_syntax_error": "Since the object has syntax error blocks, it cannot be loaded. Please convert into block mode to load the object."
+    "object_import_syntax_error": "Since the object has syntax error blocks, it cannot be loaded. Please convert into block mode to load the object.",
+    "choseok_top_wrapper_panel_title": "조석과 함께 가위바위보 게임을 만들어보세요!",
+    "choseok_top_wrapper_panel_des": "마음의 소리 웹툰이 코딩파티 미션으로 탄생했습니다. <br/>만화속 조석이 (가위바위보 게임)을 만들어가는 과정에 참여하여 미션에<br/>도전해 보세요.<br/>각 단계를 통과하면서 자연스럽게 소프트웨어를 배워볼 수 있고, 미션을 모두 마치면</br>인증서와 나만의 게임을 얻을 수 있습니다.<br/>",
+    "choseok_mission_statement1": "조석을 움직여보자",
+    "choseok_mission_statement2": "가위바위보를 시작해보자",
+    "choseok_mission_statement3": "가위바위보 승부를 가려보자",
+    "choseok_mission_statement4": "가위바위보 게임을 완성해보자",
+    "choseok_mission_statement5": "자유롭게 만들어보자",
+    "choseok_mission_statement_top1": "미션 1 : 조석을 움직이기",
+    "choseok_mission_statement_top2": "미션 2 : 가위바위보를 시작하기",
+    "choseok_mission_statement_top3": "미션 3 : 가위바위보 승패 만들기",
+    "choseok_mission_statement_top4": "미션 4 : 가위바위보 결과 보여주기",
+    "choseok_mission_statement_top5": "미션 5 : 자유롭게 만들어보기"
 };
 Lang.Msgs = {
     "monthly_intro_0": "Monthly entry is an SW training magazine designed to help teachers who are unfamiliar with SW.",
@@ -6950,6 +7011,6 @@ Lang.PythonHelper = {
     "boolean_and_or_exampleDesc": "[시작하기]버튼을 클릭하고 키보드의 \"a\" 와 \"s\"키를 동시에 눌렀을 때, 색깔 효과를 10만큼 줍니다."
 };
 
-Lang.Support = ["ko", "en", "ebs", "code", "vn"];
+Lang.Support = ["ko", "en", "ebs", "code", "vn", "jp"];
 if (typeof exports == "object")
     exports.Lang = Lang;
