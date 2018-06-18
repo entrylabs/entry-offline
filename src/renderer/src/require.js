@@ -24,7 +24,7 @@ window.BigNumber = require('./bower_components/entryjs/extern/util/bignumber.min
 // const entry = require('./bower_components/entryjs/src/workspace/block_entry.js');
 const blockConverter = require('./src/block_converter.js');
 const blocklyConverter = require('./src/blockly_converter.js');
-const JSZip = require("jszip");
+const JSZip = require('jszip');
 const isOffline = true;
 const __rendererPath = path.resolve(__dirname);
 const sharedObject = remote.getGlobal('sharedObject');
@@ -38,30 +38,30 @@ const filbert = parser;
 import util from './src/sources/util';
 const Util = util;
 
-document.fonts.ready.then(()=> {
-    try{
-        if(Entry) {
+document.fonts.ready.then(() => {
+    try {
+        if (Entry) {
             Entry.requestUpdate = true;
         }
-    } catch(e) {}
+    } catch (e) {}
 });
-document.fonts.onloadingdone = (fontFaceSetEvent)=> {
-    try{
-        if(Entry) {
+document.fonts.onloadingdone = (fontFaceSetEvent) => {
+    try {
+        if (Entry) {
             Entry.requestUpdate = true;
         }
-    } catch(e) {}
+    } catch (e) {}
 };
 
 const isOsx = process.platform === 'darwin';
 
 window.entrylms = {
-    alert: function (text) {
+    alert: function(text) {
         alert(text);
     },
-    confirm: function (text) {
+    confirm: function(text) {
         var isConfirm = confirm(text);
-        var defer = new $.Deferred;
+        var defer = new $.Deferred();
         return defer.resolve(isConfirm);
     },
-}
+};
