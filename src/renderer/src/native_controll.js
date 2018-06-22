@@ -1,7 +1,6 @@
 'use strict';
 var nowLocale = app.getLocale();
 var options = {};
-var _real_path = __dirname;
 var _real_temp_path = app.getPath('userData');
 sharedObject.workingPath = _real_temp_path;
 var _real_temp_path_posix = _real_temp_path

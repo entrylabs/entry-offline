@@ -1,5 +1,7 @@
 const lru = require('lru-cache')({ max: 256, maxAge: 250 });
 const fs = require('fs');
+const _real_path = __dirname;
+window._real_path = _real_path;
 var origLstat = fs.lstatSync.bind(fs);
 fs.lstatSync = function(p) {
     let r = lru.get(p);

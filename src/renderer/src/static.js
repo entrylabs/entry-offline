@@ -1,8 +1,7 @@
 import _ from 'lodash';
 
-var { EntryStatic } = require(path.resolve(
-    'src',
-    'renderer',
+var { EntryStatic } = require(path.join(
+    _real_path,
     'bower_components',
     'entryjs',
     'extern',
