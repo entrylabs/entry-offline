@@ -1,8 +1,13 @@
 import _ from 'lodash';
 
-var { EntryStatic } = require(path.join(
-    __dirname,
-    'bower_components/entryjs/extern/util/static.js'
+var { EntryStatic } = require(path.resolve(
+    'src',
+    'renderer',
+    'bower_components',
+    'entryjs',
+    'extern',
+    'util',
+    'static.js'
 ));
 
 const originGetAllBlocks = EntryStatic.getAllBlocks;
