@@ -5,7 +5,7 @@ pipeline {
     }
   }
   stages {
-    stage('SonarQube analysis') {
+    stage('SonarQube Analysis') {
       when { 
         beforeAgent true
         expression {
@@ -33,7 +33,7 @@ pipeline {
         }
       }
     }
-    stage('SonarQube scan') {
+    stage('SonarQube Scan') {
       when { 
         beforeAgent true
         expression {
