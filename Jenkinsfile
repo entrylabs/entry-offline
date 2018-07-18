@@ -6,7 +6,12 @@ pipeline {
   }
   stages {
     stage('SonarQube analysis') {
-      when { changeRequest() }
+      when { 
+        beforeAgent true
+        expression {
+          return env.CHANGE_ID
+        }
+      }
       steps {
         script {
           def scannerHome = tool "sonarqube-scanner";
@@ -29,7 +34,12 @@ pipeline {
       }
     }
     stage('SonarQube scan') {
-      when { changeRequest() }
+      when { 
+        beforeAgent true
+        expression {
+          return env.CHANGE_ID
+        }
+      }
       steps {
         script {
           def scannerHome = tool "sonarqube-scanner";
