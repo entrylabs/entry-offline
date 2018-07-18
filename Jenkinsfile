@@ -22,7 +22,8 @@ pipeline {
             "-Dsonar.issuesReport.console.enable=true " +
             "-Dsonar.github.disableInlineComments=true " +
             "-Dsonar.github.pullRequest=${env.CHANGE_ID} " +
-            "-Dsonar.sources=app "
+            "-Dsonar.exclusions=src/renderer/node_modules/**/*,src/renderer/bower_components/**/* " +
+            "-Dsonar.sources=src "
           }
         }
       }
@@ -37,7 +38,8 @@ pipeline {
             "-Dsonar.projectKey=entry.entryOffline " +
             "-Dsonar.projectName=entryOffline " +
             "-Dsonar.sourceEncoding=UTF-8 " +
-            "-Dsonar.sources=app "
+            "-Dsonar.exclusions=src/renderer/node_modules/**/*,src/renderer/bower_components/**/* " +
+            "-Dsonar.sources=src "
           }
         }
       }
