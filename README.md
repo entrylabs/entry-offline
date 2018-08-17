@@ -1,5 +1,7 @@
 [![Build Status](https://travis-ci.org/entrylabs/entry-offline.svg?branch=build)](https://travis-ci.org/entrylabs/entry-offline)
 [![Build status](https://ci.appveyor.com/api/projects/status/y3yyjagb93vf5lp5/branch/build?svg=true)](https://ci.appveyor.com/project/kimorkim/entry-offline/branch/build)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/8034c789da8b4ce0a07489a1475a5c07)](https://www.codacy.com/project/entrylabs/entry-offline/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=entrylabs/entry-offline&amp;utm_campaign=Badge_Grade_Dashboard)
+
 ## Entry-Offline
 [문서페이지](https://entrylabs.github.io/docs/)
 
