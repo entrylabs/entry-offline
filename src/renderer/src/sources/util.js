@@ -1,5 +1,7 @@
 import path from 'path';
 import mime from 'mime-types';
+import excelBuilder from 'msexcel-builder';
+
 const tempDirPath = `${path.sep}temp${path.sep}`;
 const imageDirName = `image`;
 const thumbDirName = `${path.sep}thumb${path.sep}`;
@@ -17,6 +19,10 @@ class Util {
                 { name: 'MP3 Audio (*.mp3)', extensions: ['mp3'] }, 
                 { name: 'All Files (*.*)', extensions: ['*'] }
             ],
+            'application/vnd.ms-excel': [
+                { name: 'Excel Files (*.xlsx)', extensions: ['xlsx'] },
+                { name: 'All Files (*.*)', extensions: ['*'] }
+            ]
         }
     }
 
@@ -82,6 +88,49 @@ class Util {
                 }
             });            
         }
+    }
+
+    static downloadExcel(name, array) {
+        if(array) {
+            const saveExcelFile = (fullPath) => {
+                const workbook = excelBuilder.createWorkbook(path.dirname(fullPath), path.basename(fullPath));
+                const sheet = workbook.createSheet('sheet1', 1, array.length);
+
+                for (let i = 0; i < array.length; i++) {
+                    sheet.set(1, i + 1, array[i]);
+                }
+
+                workbook.save((err) => {
+                    if(err) {
+                        workbook.cancel();
+                        alert('엑셀 추출에 실패했습니다.')
+                    } else {
+                        alert('엑셀 추출에 성공했습니다.')
+                    }
+                });
+            };
+
+            const options = {
+                title: Lang.Workspace.file_save,
+                defaultPath: `${name}.xlsx`,
+                filters: Util.downloadFilterList
+            };
+
+            if(isOsx) {
+                dialog.showSaveDialog(options, (target) => {
+                    if(target) {
+                        saveExcelFile(target);
+                    }
+                });
+            } else {
+                dialog.showSaveDialog(_mainWindow, options, (target) => {
+                    if(target) {
+                        saveExcelFile(target);
+                    }
+                });
+            }
+        }
+
     }
 
     static clearTempDir(target = `${_real_temp_path}${tempDirPath}`) {

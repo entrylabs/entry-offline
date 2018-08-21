@@ -321,6 +321,8 @@ angular
                     Entry.addEventListener('removePicture', removePicture);
                     Entry.addEventListener('removeSound', removeSound);
                     Entry.addEventListener('exportObject', exportObject);
+                    Entry.addEventListener('openImportListModal', showImportListModal);
+                    Entry.addEventListener('openExportListModal', showExportListModal);
                     // if (!Entry.creationChangedEvent)
                     //     Entry.creationChangedEvent = new Entry.Event(window);
                     // Entry.creationChangedEvent.attach(this, saveLocalStorageProject);
@@ -1470,6 +1472,44 @@ angular
                 }
             }
 
+            function showExportListModal(array, name) {
+                new Modal().createModal([{type: 'LIST_EXPORT', theme: 'BLUE', content: array}])
+                    .on('click', function (e, data) {
+                        switch (e) {
+                            case 'copied':
+                                entrylms.alert(Lang.Menus.content_copied);
+                                break;
+                            case 'excel':
+                                Util.downloadExcel(name, data);
+                                break;
+                            default:
+                                break;
+                        }
+                    }).show();
+            }
+
+            function showImportListModal() {
+                new Modal().createModal([{ type: 'LIST_IMPORT', theme: 'BLUE' }])
+                    .on('click', (e, data) => {
+                        switch (e) {
+                            case 'save':
+                                //아무것도 입력하지 않은 경우, 빈칸 하나만 있는 것으로 처리된다.
+                                if (data.length === 1 && data[0] === '') {
+                                    entrylms.alert(Lang.Menus.nothing_to_import);
+                                } else {
+                                    const list = Entry.variableContainer.selectedList;
+                                    list.array_ = data.map(element => {
+                                        return { data: element };
+                                    });
+                                    Entry.do('listChangeLength', list.id_, list.array_.length);
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                    }).show();
+            }
+
             function exportObject(object) {
                 var blockList = object.script.getBlockList();
                 var objectVariable = Entry.variableContainer.getObjectVariables(
@@ -1478,16 +1518,6 @@ angular
                 objectVariable.objects = [object.toJSON()];
 
                 ipcRenderer.send('exportObject', objectVariable);
-                // $http.post('/api/exportObject', objectVariable).then(function (result) {
-                //     var data = result.data || {};
-                //     if(data.objectId) {
-                //         execDownload('/api/downloadObject/' + data.objectId + '/' + object.name);
-                //     } else {
-                //         throw new Error('Not Found Object Id');
-                //     }
-                // }).catch(function () {
-                //     entrylms.alert(Lang.Msgs.error_occured);
-                // });
             }
 
             function getWorkspaceBusy(checkList) {
