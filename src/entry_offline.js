@@ -8,7 +8,7 @@ import {
     ipcMain,
     webContents,
     dialog,
-    net,ㅑ
+    net,
 } from 'electron';
 import path from 'path';
 import fs from 'fs';

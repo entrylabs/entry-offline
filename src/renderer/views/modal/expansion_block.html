@@ -1,0 +1,49 @@
+
+<div data-ng-init="init()">
+    <div class="modal-content" ng-class="{'modal-lecture': parent == 'lecture', 'modal-workspace': parent == 'workspace'}">
+        <div class="modal-header">
+            <button type="button" class="close" ng-click="cancel()">
+                <img src='images/close_modal_workspace.png'/>
+            </button>
+            <h4 class="modal-title">{{::dict.WORKSPACE_LOAD_EXPANSION_BLOCK}}</h4>
+        </div>
+        <div class="modal-body" style="margin:0">
+            <div class="row">
+                <div class="col-md-9 tab-right" style="width:100%; padding-left:0; padding-right: 0">
+                    <div class="wrap wrap_sprite">
+                        <div class="box" data-ng-repeat="block in systemBlocks">
+                            <div id="{{::block.name}}" class="boxOuter {{::block.selected}}" data-ng-click="selectSystem(block)" data-ng-dblclick="applySystem(block)">
+                                <div class="boxInner" style="background-image: url('bower_components/entryjs/images/hardware/{{::block.imageName}}');"></div>
+                                <img class="overlay" src="images/check_inside_new.png"/>
+                            </div>
+                            <div class="titleBox">{{block.nameByLang}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal_choosen" style="width: 100%; margin-left: 0">
+                <div class='modal_selected_arrow modal_selected_left_arrow' ng-click='moveContainer("right")'></div>
+                <div class='modal_selected_arrow modal_selected_right_arrow' ng-click='moveContainer("left")'></div>
+                <div class="modal_selected_container">
+                    <div class="modal_selected_container_moving">
+                        <div class="box" data-ng-repeat="block in selectedSystem" ng-if="currentTab == 'system'">
+                            <div id="{{::block.name}}" class="boxOuter {{::block.selected}} boxOuterChoosen">
+                                <img class="modal_choosen_cancel" src="images/modal_choosen_cancel.png" data-ng-click="selectSystem(block)"/>
+                                <div class="boxInner" style="background-image: url('bower_components/entryjs/images/hardware/{{::block.imageName}}');"></div>
+                            </div>
+                            <div class="titleBox titleBoxChoosen">{{::block.nameByLang}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modalFilter" ng-if="selectedSystem.length > 0" style="width:100%; margin-left: 0;font-size: 14px; color: #565656; padding-right: 12px; text-align: right">
+                {{::selectedBlock.description}}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_confirm_modal" data-ng-click="ok()">{{::dict.BUTTONS_APPLY}} ({{currentSelected().length}})</button>
+                <button type="button" class="btn btn_cancel_modal" data-ng-click="cancel()">{{::dict.BUTTONS_CANCEL}}</button>
+            </div>
+        </div>
+    </div>
+

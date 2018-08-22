@@ -316,6 +316,10 @@ angular
                         'saveLocalStorageProject',
                         saveLocalStorageProject
                     );
+                    Entry.addEventListener(
+                        'openExpansionBlockManager',
+                        $scope.openExpansionBlockManager
+                    );
                     Entry.addEventListener('saveBlockImages', saveBlockImages);
                     Entry.addEventListener('removeObject', removeObject);
                     Entry.addEventListener('removePicture', removePicture);
@@ -409,6 +413,28 @@ angular
                     });
 
                     checkShowPracticalNoticePopup();
+                });
+            };
+
+            $scope.openExpansionBlockManager = function() {
+                const modalInstance = $modal.open({
+                    templateUrl: './views/modal/expansion_block.html',
+                    controller: 'ExpansionBlockController',
+                    backdrop: false,
+                    keyboard: false,
+                    resolve: {
+                        parent: function() {
+                            return "workspace";
+                        }
+                    }
+                });
+
+                modalInstance.result.then(function (selectedItems) {
+                    selectedItems.data.forEach(function(item) {
+                        item.id = Entry.generateHash();
+                        Entry.playground.addExpansionBlock(item, true, true);
+                    });
+
                 });
             };
 
