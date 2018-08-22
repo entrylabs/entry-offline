@@ -40,6 +40,24 @@ const filbert = parser;
 import util from './src/sources/util';
 const Util = util;
 
+$.get = function(url, data, callback, type){
+    if ( $.isFunction(data) ){
+        type = type || callback,
+            callback = data,
+            data = {}
+    }
+    if(/^\//.test(url)) {
+        url = `${sharedObject.hostProtocol}//${sharedObject.hostURI}${url}`;
+    }
+    return $.ajax({
+        url: url,
+        type: 'GET',
+        success: callback,
+        data: data,
+        contentType: type
+    });
+};
+
 document.fonts.ready.then(() => {
     try {
         if (Entry) {

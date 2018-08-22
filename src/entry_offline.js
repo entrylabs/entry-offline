@@ -43,6 +43,8 @@ global.sharedObject = {
     workingPath: '',
     isInitEntry: false,
     appName: 'entry',
+    hostURI: hostURI,
+    hostProtocol: hostProtocol
 };
 
 function logger(text) {
