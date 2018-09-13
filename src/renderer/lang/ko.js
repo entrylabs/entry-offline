@@ -1815,6 +1815,7 @@ Lang.Buttons = {
 Lang.ko = "한국어";
 Lang.vn = "tiếng Việt";
 Lang.jp = "日本語";
+Lang.uz = "O'zbek";
 Lang.Menus = {
     "nothing_to_import": "불러오기 할 항목이 없습니다.",
     "nothing_to_export": "내려받기 할 항목이 없습니다.",

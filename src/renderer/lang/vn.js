@@ -1815,6 +1815,7 @@ Lang.Buttons = {
 Lang.ko = "한국어";
 Lang.vn = "tiếng Việt";
 Lang.jp = "日本語";
+Lang.uz = "O'zbek";
 Lang.Menus = {
     "nothing_to_import": "There is no content to upload.",
     "nothing_to_export": "There is no content to download.",
