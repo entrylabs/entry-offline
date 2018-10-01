@@ -7118,6 +7118,6 @@ Lang.PythonHelper = {
     "get_today_temperature_exampleDesc": "[시작하기]버튼을 클릭하면 오브젝트가 오늘 서울의 00시 기온을 말합니다.​"
 };
 
-Lang.Support = ["ko", "en", "ebs", "code", "vn", "jp"];
+Lang.Support = ["ko", "en", "ebs", "code", "vn", "jp", "uz"];
 if (typeof exports == "object")
     exports.Lang = Lang;
