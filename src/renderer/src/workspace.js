@@ -1638,12 +1638,8 @@ angular
                                     'isPracticalCourse',
                                     false
                                 );
-                                EntryStatic = require('./src/static.js')
-                                    .EntryStatic;
                             } else {
                                 localStorage.setItem('isPracticalCourse', true);
-                                EntryStatic = require('./src/static_mini.js')
-                                    .EntryStatic;
                             }
                             $scope.initWorkspace();
                             popupHelper.hide();
