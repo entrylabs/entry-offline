@@ -19,9 +19,6 @@
         "package": "electron-forge package",
         "dist:win": "electron-forge package --arch ia32",
         "dist:win64": "electron-forge package --arch x64",
-        "pack": "electron-forge package",
-        "pack:win": "electron-forge package --platform=win32",
-        "pack:win32": "electron-forge package --arch=ia32 --platform=win32",
         "make": "electron-forge make",
         "make:win": "electron-forge package --platform=win32&&makensis ./build/entryx64.nsi",
         "make:win32": "electron-forge package --arch=ia32 --platform=win32&&makensis ./build/entryx86.nsi"
