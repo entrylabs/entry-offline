@@ -1355,6 +1355,14 @@ angular
             }
 
             function settingForMini() {
+                window.EntryStatic = require(path.join(
+                    _real_path,
+                    'bower_components',
+                    'entryjs',
+                    'extern',
+                    'util',
+                    'static_mini.js'
+                )).EntryStatic;
                 defaultInitOption = EntryStatic.initOptions;
                 hwCategoryList = EntryStatic.hwCategoryList;
             }

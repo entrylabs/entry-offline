@@ -6,7 +6,7 @@ var { EntryStatic } = require(path.join(
     'entryjs',
     'extern',
     'util',
-    localStorage.getItem('isPracticalCourse') === 'true' ? 'static_mini.js' : 'static.js',
+    'static.js',
 ));
 
 const originGetAllBlocks = EntryStatic.getAllBlocks;
