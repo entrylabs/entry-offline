@@ -40,6 +40,7 @@ const filbert = parser;
 import util from './src/sources/util';
 const Util = util;
 
+//TODO 2018년 11월 배포시 삭제 필수
 $.get = function(url, data, callback, type){
     if ( $.isFunction(data) ){
         type = type || callback,

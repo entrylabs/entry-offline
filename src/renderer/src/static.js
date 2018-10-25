@@ -37,6 +37,8 @@ EntryStatic.getName = function(str, type) {
     }
 };
 
+EntryStatic.baseUrl = sharedObject && `${sharedObject.hostProtocol}//${sharedObject.hostURI}`;
+
 // for server node js code
 if (typeof exports == 'object') {
     exports.blockInfo = EntryStatic.blockInfo;
