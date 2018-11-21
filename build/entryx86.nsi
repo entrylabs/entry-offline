@@ -1,9 +1,9 @@
 ﻿; example1.nsi
 ;
 ; This script is perhaps one of the simplest NSIs you can make. All of the
-; optional settings are left to their default settings. The installer simply 
+; optional settings are left to their default settings. The installer simply
 ; prompts the user asking them where to install, and drops a copy of example1.nsi
-; there. 
+; there.
 
 !include MUI2.nsh
 !include nsProcess.nsh
@@ -13,16 +13,16 @@
 !define MUI_UNICON "icon.ico"
 !define PRODUCT_NAME "Entry"
 !define APP_NAME "Entry.exe"
-!define PRODUCT_VERSION "1.6.13"
+!define PRODUCT_VERSION "1.6.14"
 !define PRODUCT_PUBLISHER "EntryLabs"
 !define PRODUCT_WEB_SITE "http://www.playentry.org/"
- 
+
 ; MUI Settings / Header
 ;!define MUI_HEADERIMAGE
 ;!define MUI_HEADERIMAGE_RIGHT
 ;!define MUI_HEADERIMAGE_BITMAP "${NSISDIR}\Contrib\Graphics\Header\orange-r-nsis.bmp"
 ;!define MUI_HEADERIMAGE_UNBITMAP "${NSISDIR}\Contrib\Graphics\Header\orange-uninstall-r-nsis.bmp"
- 
+
 ; MUI Settings / Wizard
 ;!define MUI_WELCOMEFINISHPAGE_BITMAP "${NSISDIR}\Contrib\Graphics\Wizard\orange-nsis.bmp"
 ;!define MUI_UNWELCOMEFINISHPAGE_BITMAP "${NSISDIR}\Contrib\Graphics\Wizard\orange-uninstall-nsis.bmp"
@@ -38,7 +38,7 @@ OutFile "${PRODUCT_NAME}_${PRODUCT_VERSION}_Setup_x86.exe"
 ; The default installation directory
 InstallDir "C:\${PRODUCT_NAME}"
 
-; Registry key to check for directory (so if you install again, it will 
+; Registry key to check for directory (so if you install again, it will
 ; overwrite the old one automatically)
 InstallDirRegKey HKLM "Software\${PRODUCT_NAME}" "Install_Dir"
 
@@ -94,32 +94,32 @@ LangString SETUP_UNINSTALL_MSG ${LANG_ENGLISH} "Entry is already installed. $\n$
 Section $(TEXT_ENTRY_TITLE) SectionEntry
 
   SectionIn RO
-  
+
   ; Set output path to the installation directory.
   ;SetOutPath $INSTDIR
-  
+
 
   ; Put file there
   SetOutPath "$INSTDIR\locales"
   File "..\out\Entry-win32-ia32\locales\*.*"
-  
+
   SetOutPath "$INSTDIR\resources"
   File /r "..\out\Entry-win32-ia32\resources\*.*"
-  
+
   SetOutPath "$INSTDIR"
   File "..\out\Entry-win32-ia32\*.*"
   File "icon.ico"
-  
+
   WriteRegStr HKCR ".ent" "" "${PRODUCT_NAME}"
   WriteRegStr HKCR ".ent" "Content Type" "application/x-entryapp"
   WriteRegStr HKCR "${PRODUCT_NAME}\DefaultIcon" "" "$INSTDIR\icon.ico"
   WriteRegStr HKCR "${PRODUCT_NAME}\Shell\Open" "" "&Open"
   WriteRegStr HKCR "${PRODUCT_NAME}\Shell\Open\Command" "" '"$INSTDIR\${PRODUCT_NAME}.exe" "%1"'
   WriteRegStr HKCR "MIME\DataBase\Content Type\application/x-entryapp" "Extestion" ".ent"
-  
+
   ; Write the installation path into the registry
   WriteRegStr HKLM "SOFTWARE\${PRODUCT_NAME}" "Install_Dir" "$INSTDIR"
-  
+
   ; Write the uninstall keys for Windows
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" "DisplayName" "$(TEXT_ENTRY)"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" "DisplayVersion" "${PRODUCT_VERSION}"
@@ -130,7 +130,7 @@ Section $(TEXT_ENTRY_TITLE) SectionEntry
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" "NoModify" 1
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" "NoRepair" 1
   WriteUninstaller "$(TEXT_ENTRY_DELETE).exe"
-  
+
 SectionEnd
 
 ; Optional section (can be disabled by the user)
@@ -139,7 +139,7 @@ Section $(TEXT_START_MENU_TITLE) SectionStartMenu
   CreateDirectory "$SMPROGRAMS\EntryLabs\${PRODUCT_NAME}"
   CreateShortCut "$SMPROGRAMS\EntryLabs\${PRODUCT_NAME}\$(TEXT_ENTRY_DELETE).lnk" "$INSTDIR\$(TEXT_ENTRY_DELETE).exe" "" "$INSTDIR\$(TEXT_ENTRY_DELETE).exe" 0
   CreateShortCut "$SMPROGRAMS\EntryLabs\${PRODUCT_NAME}\$(TEXT_ENTRY).lnk" "$INSTDIR\${PRODUCT_NAME}.exe" "" "$INSTDIR\icon.ico" 0
-  
+
 SectionEnd
 
 ;--------------------------------
@@ -148,7 +148,7 @@ SectionEnd
 Section $(TEXT_DESKTOP_TITLE) SectionDesktop
 
   CreateShortCut "$DESKTOP\$(TEXT_ENTRY).lnk" "$INSTDIR\${PRODUCT_NAME}.exe" "" "$INSTDIR\icon.ico" 0
-  
+
 SectionEnd
 
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
@@ -162,7 +162,7 @@ SectionEnd
 ; Uninstaller
 
 Section "Uninstall"
-  
+
   ; Remove registry keys
   DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
   DeleteRegKey HKLM "SOFTWARE\${PRODUCT_NAME}"
@@ -175,7 +175,7 @@ Section "Uninstall"
 
   ; Remove shortcuts, if any
   Delete "$SMPROGRAMS\EntryLabs\${PRODUCT_NAME}\*.*"
-  
+
   Delete "$DESKTOP\$(TEXT_ENTRY).lnk"
 
   ; Remove directories used
@@ -195,20 +195,20 @@ Function .onInit
 	mfound:
 		${nsProcess::KillProcess} "${APP_NAME}" $R0
 	notRunning:
-  
+
 	ReadRegStr $R0 HKLM \
 	"Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
 	"UninstallString"
 	StrCmp $R0 "" done
-	
-    ReadRegStr $R1 HKLM "SOFTWARE\${PRODUCT_NAME}" "Install_Dir" 
+
+    ReadRegStr $R1 HKLM "SOFTWARE\${PRODUCT_NAME}" "Install_Dir"
     StrCmp $R1 "" done
 
 	MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
 	$(SETUP_UNINSTALL_MSG) \
 	IDOK uninst
 	Abort
- 
+
 	;Run the uninstaller
 	uninst:
 		ClearErrors
@@ -219,10 +219,10 @@ Function .onInit
 		;no_remove_uninstaller:
 	IfErrors 0 +2
 		Goto no_remove_uninstaller
-		RMDir /r /REBOOTOK $R1 
+		RMDir /r /REBOOTOK $R1
     RMDir /r "$APPDATA\${PRODUCT_NAME}"
 		Goto done
-	  
+
 	no_remove_uninstaller:
 		DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 		DeleteRegKey HKLM "SOFTWARE\${PRODUCT_NAME}"
@@ -231,5 +231,5 @@ Function .onInit
 		DeleteRegKey HKCR "MIME\DataBase\Content Type\application/x-entryapp"
 
 	done:
- 
+
 FunctionEnd
