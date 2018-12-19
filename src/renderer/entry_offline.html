@@ -56,8 +56,8 @@
 		Entry.isOffline = true;
 		Entry.painterBaseUrl = './bower_components/literallycanvas/lib/img';
 
-		//TODO 2018년 11월 배포시 삭제 필수
-        ['translate', 'festival'].forEach(expansion => {
+		//TODO 2019년 1월 배포시 삭제 필수 ㅠㅠ
+        ['translate', 'festival', 'behaviorConductLifeSafety', 'behaviorConductDisaster'].forEach(expansion => {
             Entry.EXPANSION_BLOCK[expansion].api = 'https://playentry.org' + Entry.EXPANSION_BLOCK[expansion].api;
         });
         Entry.EXPANSION_BLOCK.weather.baseUrl = 'https://playentry.org' + Entry.EXPANSION_BLOCK.weather.baseUrl;
