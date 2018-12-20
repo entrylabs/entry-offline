@@ -693,6 +693,7 @@ angular
                                             /%5C/gi,
                                             '/'
                                         );
+                                        picture.fileurl = picture.fileurl.replace(/entry-js/gi, 'entryjs');
                                         const tempIndex = picture.fileurl.lastIndexOf(
                                             'temp'
                                         );
@@ -721,6 +722,7 @@ angular
                                             /%5C/gi,
                                             '/'
                                         );
+                                        sound.fileurl = sound.fileurl.replace(/entry-js/gi, 'entryjs');
                                         const tempIndex = sound.fileurl.lastIndexOf(
                                             'temp'
                                         );
