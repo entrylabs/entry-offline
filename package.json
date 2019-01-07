@@ -6,9 +6,8 @@
     "main": "src/main.js",
     "scripts": {
         "start": "electron-forge start",
-        "package": "electron-forge package",
-        "make": "electron-forge make",
-        "publish": "electron-forge publish",
+        "build": "webpack",
+        "watch": "webpack-dev-server",
         "lint": "eslint src --color"
     },
     "keywords": [],
@@ -41,7 +40,9 @@
     },
     "devDependencies": {
         "@babel/core": "^7.2.2",
+        "@babel/plugin-syntax-dynamic-import": "^7.2.0",
         "@babel/preset-env": "^7.2.3",
+        "@babel/preset-react": "^7.0.0",
         "babel-loader": "^8.0.5",
         "babel-plugin-transform-async-to-generator": "^6.24.1",
         "babel-preset-env": "^1.7.0",

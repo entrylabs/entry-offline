@@ -18,5 +18,18 @@ root.Lang = require(`./lang/${user_lang}.js`).Lang;
 // jquery
 root.$ = root.jQuery = require('jquery');
 
-// 
+// bigNumber
 root.BigNumber = require('bignumber.js');
+
+// entry-lms dummy
+root.entrylms = {
+	alert: (text) => { alert(text); },
+	confirm: (text) => {
+		const isConfirm = confirm(text);
+		const defer = new root.$.Deferred();
+		return defer.resolve(isConfirm);
+	}
+}
+
+// render workspace
+import './render.jsx';
