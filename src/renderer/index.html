@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <link rel='stylesheet' href='./bower_components/entry-js/dist/entry.css' />
+  <link rel='stylesheet' href='./bower_components/codemirror/addon/hint/show-hint.css' />
+  <link rel='stylesheet' href='./bower_components/codemirror/addon/lint/lint.css' />
+  <link rel='stylesheet' href='./bower_components/bootstrap/dist/css/bootstrap.min.css' />
+  <link rel='stylesheet' href='./bower_components/literallycanvas/lib/css/literallycanvas.css' />
+
+  <script src="./entry.js"></script>
+
+  <script type='text/javascript' src='./bower_components/jquery/dist/jquery.min.js'></script>
+  <script type='text/javascript' src='./bower_components/jquery-ui/jquery-ui.min.js'></script>
+  <script type='text/javascript' src='./bower_components/socket.io-client/socket.io.js'></script>
+  <script type='text/javascript' src='./bower_components/angular/angular.min.js'></script>
+  <script type='text/javascript' src='./bower_components/angular-cookies/angular-cookies.min.js'></script>
+  <script type='text/javascript' src='./bower_components/angular-route/angular-route.min.js'></script>
+  <script type='text/javascript' src='./bower_components/angular-resource/angular-resource.min.js'></script>
+  <script type='text/javascript' src='./bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js'></script>
+  <script type='text/javascript' src='./bower_components/angular-local-storage/dist/angular-local-storage.min.js'></script>
+  <script type='text/javascript' src='./bower_components/angular-touch/angular-touch.min.js'></script>
+  <script type='text/javascript' src='./bower_components/angular-filters/dist/angular-filters.min.js'></script>
+  <script type='text/javascript' src='./bower_components/bootstrap/dist/js/bootstrap.min.js'></script>
+  <script type='text/javascript' src='./bower_components/underscore/underscore-min.js'></script>
+  <script type='text/javascript' src='./bower_components/PreloadJS/lib/preloadjs-0.6.0.min.js'></script>
+  <script type='text/javascript' src='./bower_components/EaselJS/lib/easeljs-0.8.0.min.js'></script>
+  <script type='text/javascript' src='./bower_components/SoundJS/lib/soundjs-0.6.0.combined.js'></script>
+  <script type='text/javascript' src='./bower_components/SoundJS/lib/flashaudioplugin-0.6.0.combined.js'></script>
+  <script type='text/javascript' src='./bower_components/webfontloader/webfontloader.js'></script>
+  <script type='text/javascript' src='./bower_components/velocity/velocity.min.js'></script>
+  <script type='text/javascript' src='./bower_components/react/react.min.js'></script>
+  <script type='text/javascript' src='./bower_components/react/react-dom.min.js'></script>
+  <script type='text/javascript' src='./bower_components/literallycanvas/lib/js/literallycanvas.js'></script>
+
+  <script type='text/javascript' src='./bower_components/codemirror/lib/codemirror.js'></script>
+  <script type='text/javascript' src='./bower_components/codemirror/addon/hint/show-hint.js'></script>
+  <script type='text/javascript' src='./bower_components/codemirror/addon/lint/lint.js'></script>
+  <script type='text/javascript' src='./bower_components/codemirror/addon/selection/active-line.js'></script>
+  <script type='text/javascript' src='./bower_components/codemirror/mode/javascript/javascript.js'></script>
+  <script type='text/javascript' src='./bower_components/codemirror/addon/hint/javascript-hint.js'></script>
+  <script type='text/javascript' src='./bower_components/codemirror/mode/python/python.js'></script>
+  <script type='text/javascript' src='./bower_components/codemirror/addon/lint/javascript-lint.js'></script>
+  <script type='text/javascript' src='./bower_components/fuzzy/lib/fuzzy.js'></script>
+
+  <!-- <script type='text/javascript' src='./src/app.js'></script> -->
+  <script type='text/javascript' src='./bower_components/entry-js/extern/blockly/blockly_compressed.js'></script>
+  <script type='text/javascript' src='./bower_components/entry-js/extern/util/CanvasInput.js'></script>
+  <script type='text/javascript' src='./bower_components/entry-js/extern/util/handle.js'></script>
+  <script type='text/javascript' src='./bower_components/entry-js/extern/util/ndgmr.Collision.js'></script>
+  <script type='text/javascript' src='./bower_components/entry-js/dist/entry.min.js'></script>
+
+  <script type='text/javascript' src='./src/jshint.js'></script>
+  <script type='text/javascript' src='./src/context.js'></script>
+  <script type="text/javascript" src="./src/filters.js"></script>
+  <script type="text/javascript" src="./lang/pictures.js"></script>
+  <script type="text/javascript" src="./lang/sounds.js"></script>
+  <script type="text/javascript" src="./lang/sprites.js"></script>
+  <script type="text/javascript" src="./src/native_controll.js"></script>
+  <script type="text/javascript" src="./src/native_menu.js"></script>
+  <script type="text/javascript" src="./src/directives.js"></script>
+  <title>
+  </title>
+</head>
+
+<body>
+  <div id='workspace'></div>
+</body>
+
+<script>
+  const target = document.getElementById('workspace');
+  Entry.init(target, {
+    type: 'workspace'
+  });
+
+  Entry.loadProject();
+</script>
+
+</html>

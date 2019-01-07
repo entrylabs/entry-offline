@@ -1,0 +1,17 @@
+# common
+node_modules/
+out/
+cache/
+**/temp/
+dist/
+temp/
+
+# ide, framework
+.cache
+.idea
+
+# related to renderer process
+src/renderer/bower_components
+
+# specifics
+build/*.exe
