@@ -20,7 +20,27 @@ module.exports = {
                 exclude: [/node_modules/, /bower_components/],
                 use: [{ loader: 'babel-loader' }],
             },
-            { test: /\.less/, loader: 'style-loader!css-loader!less-loader' },
+            {
+                test: /\.(css|less)$/,
+                use: ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    use: [
+                        {
+                            loader: 'css-loader',
+                            options: {
+                                url: false,
+                                sourceMap: true,
+                            },
+                        },
+                        {
+                            loader: 'less-loader',
+                            options: {
+                                sourceMap: false,
+                            },
+                        },
+                    ],
+                }),
+            },
             {
                 test: /\.(ico|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot|cur)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
                 loader: 'url-loader',

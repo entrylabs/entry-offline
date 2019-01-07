@@ -9,9 +9,11 @@ temp/
 # ide, framework
 .cache
 .idea
+.vscode
 
 # related to renderer process
 src/renderer/bower_components
+src/renderer_build
 
 # specifics
 build/*.exe

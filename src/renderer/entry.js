@@ -12,8 +12,8 @@ root._ = require('lodash');
 if (!localStorage.getItem('lang')) {
     localStorage.setItem('lang', 'ko');
 }
-let user_lang = localStorage.getItem('lang');
-root.Lang = require(`./lang/${user_lang}.js`).Lang;
+let userLang = localStorage.getItem('lang');
+root.Lang = require(`./lang/${userLang}.js`).Lang;
 
 // jquery
 root.$ = root.jQuery = require('jquery');
@@ -32,4 +32,9 @@ root.entrylms = {
 }
 
 // render workspace
-import './render.jsx';
+
+import React from 'react';
+import ReactDom from 'react-dom';
+import Index from './components/Index.jsx';
+
+ReactDom.render(<Index />, document.getElementById('workspace'));
