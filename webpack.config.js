@@ -1,21 +1,22 @@
 'use strict';
 
-var path = require('path');
-var webpack = require('webpack');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
+const path = require('path');
+const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
     mode: 'none',
     entry: {
         init: './src/renderer/init_entry.js',
-        render: './src/renderer/render_entry.js'
+        render: './src/renderer/render_entry.js',
     },
-    devtool: "source-map",
+    devtool: 'inline-source-map',
+    resolve: {
+        extensions: ['.js', '.jsx'],
+    },
     output: {
         devtoolLineToLine: true,
         path: path.resolve(__dirname, 'src', 'renderer_build'),
-        publicPath: 'http://localhost:8080/build/',
-        sourceMapFilename: "bundle.js.map",
         filename: '[name].bundle.js',
     },
     module: {
@@ -26,24 +27,30 @@ module.exports = {
                 use: [{ loader: 'babel-loader' }],
             },
             {
-                test: /\.(css|less)$/,
+                test: /\.less$/,
                 use: ExtractTextPlugin.extract({
                     fallback: 'style-loader',
                     use: [
-                        {
-                            loader: 'css-loader',
-                            options: {
-                                url: false,
-                                sourceMap: true,
-                            },
-                        },
-                        {
-                            loader: 'less-loader',
-                            options: {
-                                sourceMap: false,
-                            },
-                        },
+                        { loader: 'css-loader', options: { importLoaders: 1 } },
+                        { loader: 'less-loader', options: { sourceMap: true } },
                     ],
+                }),
+            },
+            {
+                test: /\.scss$/,
+                use: ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    use: [
+                        { loader: 'css-loader', options: { importLoaders: 1, url: false } },
+                        { loader: 'sass-loader', options: { sourceMap: true } },
+                    ],
+                }),
+            },
+            {
+                test: /\.css$/,
+                use: ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    use: 'css-loader',
                 }),
             },
             {

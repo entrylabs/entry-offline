@@ -1,5 +1,8 @@
 {
-  "extends": ["react-app"],
+  "extends": [
+    "react-app",
+    "eslint:recommended"
+  ],
   "parserOptions": {
     "ecmaVersion": 8,
     "sourceType": "module",
@@ -126,20 +129,6 @@
     "curly": "warn",
     "keyword-spacing": "warn",
     "eqeqeq": "warn",
-    "array-bracket-newline": [
-      "warn",
-      {
-        "multiline": true,
-        "minItems": 4
-      }
-    ],
-    "array-element-newline": [
-      "warn",
-      {
-        "multiline": true,
-        "minItems": 4
-      }
-    ],
     "no-var": "error",
     "no-unused-vars": ["warn", {"caughtErrors": "none"}],
     "prefer-const": "warn",
@@ -151,5 +140,6 @@
       }
     ],
     "linebreak-style": 0
-  }
+  },
+  "react/react-in-jsx-scope": "off"
 }

@@ -1,0 +1,100 @@
+@charset "UTF-8";
+body, p, h1, h2, h3, h4, h5, h6, ul, ol, li, dl, dt, dd, table, th, td, form, fieldset, legend, input, textarea, button, select {
+  margin: 0;
+  padding: 0;
+}
+
+body, input, textarea, select, button, table {
+  font-family: NanumGothicOTF, "나눔고딕", NanumGothic, "맑은 고딕", Malgun Gothic, "Apple SD Gothic Neo", "돋움", dotum, Helvetica, arial, sans-serif;
+  font-size: 14px;
+  box-sizing: content-box;
+}
+
+
+img, fieldset, button {
+  border: 0;
+  vertical-align: top;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+em, address {
+  font-style: normal;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:hover, a:active, a:focus {
+  text-decoration: none;
+}
+
+hr, legend {
+  display: none;
+}
+
+button {
+  cursor: pointer;
+  background-color: transparent;
+}
+
+input, select, textarea, button {
+  border-radius: 0;
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  -webkit-border-radius: 0;
+  background: none;
+  outline: 0;
+}
+
+.blind {
+  overflow: hidden !important;
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  border: 0 !important;
+  padding: 0 !important;
+  clip: rect(0px, 0px, 0px, 0px) !important;
+}
+
+::-ms-clear {
+  display: none;
+}
+
+html, body {
+  height: 100%;
+}
+
+/* skip navigation */
+#u_skip {
+  position: relative;
+  z-index: 2147483647;
+}
+
+#u_skip a {
+  position: absolute;
+  top: -30px;
+  left: 0;
+  width: 138px;
+  border: 1px solid #4ec53d;
+  background: #333;
+  text-align: center;
+}
+
+#u_skip a:active, #u_skip a:focus {
+  top: 0;
+  text-decoration: none;
+}
+
+#u_skip span {
+  display: inline-block;
+  padding: 2px 6px 0 0;
+  color: #fff;
+  letter-spacing: -1px;
+  font-size: 13px;
+  line-height: 26px;
+}

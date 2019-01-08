@@ -125,6 +125,7 @@ function createMainWindow() {
         title,
         show: false,
         backgroundColor: '#e5e5e5',
+        preload: './renderer_build/init.bundle.js',
         webPreferences: {
             backgroundThrottling: false,
         },
@@ -184,7 +185,7 @@ function createMainWindow() {
     });
 
     mainWindow.setMenu(null);
-    mainWindow.loadURL(`file:///${path.join(__dirname, 'renderer', 'entry_offline.html')}`);
+    mainWindow.loadURL(`file:///${path.join(__dirname, 'main.html')}`);
 
     if (option.debug) {
         mainWindow.webContents.openDevTools();

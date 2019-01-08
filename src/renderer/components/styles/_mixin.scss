@@ -1,0 +1,61 @@
+@charset "UTF-8";
+@mixin PositionLT($position, $cnt1, $cnt2) {
+    position: $position;
+    left: $cnt1;
+    top: $cnt2;
+}
+
+@mixin PositionRT($position, $cnt1, $cnt2) {
+    position: $position;
+    right: $cnt1;
+    top: $cnt2;
+}
+
+@mixin PositionLB($position, $cnt1, $cnt2) {
+    position: $position;
+    left: $cnt1;
+    bottom: $cnt2;
+}
+@mixin PositionLTB($position, $cnt1, $cnt2, $cnt3) {
+    position: $position;
+    left: $cnt1;
+    top: $cnt2;
+    bottom: $cnt3;
+}
+@mixin PositionRTB($position, $cnt1, $cnt2, $cnt3) {
+    position: $position;
+    right: $cnt1;
+    top: $cnt2;
+    bottom: $cnt3;
+}
+@mixin PositionRB($position, $cnt1, $cnt2) {
+    position: $position;
+    right: $cnt1;
+    bottom: $cnt2;
+}
+@mixin PositionLRT($position, $cnt1, $cnt2, $cnt3) {
+    position: $position;
+    left: $cnt1;
+    right: $cnt2;
+    top: $cnt3;
+}
+@mixin PositionLRB($position, $cnt1, $cnt2, $cnt3) {
+    position: $position;
+    left: $cnt1;
+    right: $cnt2;
+    bottom: $cnt3;
+}
+@mixin PositionLRTB($position, $cnt1, $cnt2, $cnt3, $cnt4) {
+    position: $position;
+    left: $cnt1;
+    right: $cnt2;
+    top: $cnt3;
+    bottom: $cnt4;
+}
+
+@mixin input-placeholder {
+    &:-ms-input-placeholder { @content; }
+    &:-moz-placeholder { @content; }
+    &::-moz-placeholder { @content; }
+    &::-webkit-input-placeholder { @content; }
+}

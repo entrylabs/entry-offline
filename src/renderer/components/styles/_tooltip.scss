@@ -1,0 +1,338 @@
+@charset "UTF-8";
+// 공통 툴팁 박스
+.tooltip_box {
+    * {
+        box-sizing: content-box;
+    }
+    @include PositionLT(absolute, 0, 0);
+    width: 166px;
+    background-color: #fff;
+    border-radius: 6px;
+    visibility: visible;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.25);
+    .tooltip_inner {
+        overflow: hidden;
+        border-radius: 2px;
+    }
+    .arr {
+        @include PositionLB(absolute, 50%, 100%);
+        overflow: hidden;
+        width: 32px;
+        height: 16px;
+        margin-left: -16px;
+    }
+    .arr i {
+        position: absolute;
+        left: 50%;
+        top: 0;
+        width: 14px;
+        height: 14px;
+        background-color: #fff;
+        border: 1px solid #e2e2e2;
+        box-shadow: 0 1px 6px rgba(0, 0, 0, 0.25);
+        transform: translate(-50%, 50%) rotate(45deg);
+    }
+    .arr.free {
+        margin-left: 0;
+    }
+    .select_list {
+        padding: 0 8px;
+    }
+    .select_list .list_item {
+        border-top: 1px solid #f2f2f2;
+    }
+    .select_list .list_item:first-child {
+        border-top-color: #fff;
+    }
+    .select_list .list_link {
+        display: block;
+        overflow: hidden;
+        height: 15px;
+        padding: 17px 4px 14px;
+        font-weight: 600;
+        color: #2c313d;
+        letter-spacing: 0;
+        line-height: 15px;
+    }
+    &.down .arr {
+        bottom: auto;
+        top: 100%;
+    }
+    &.down .arr i {
+        transform: translate(-50%, -50%) rotate(45deg);
+    }
+}
+//컬러 피커
+.tooltip_box.color_picker {
+    user-select: none;
+    font-size: 14px;
+    width: 396px;
+    .tooltip_inner {
+        padding: 16px;
+    }
+    .color_box {
+        float: left;
+        position: relative;
+        margin: 10px 20px 0 8px;
+    }
+    .color_box .color {
+        display: block;
+        position: relative;
+        width: 54px;
+        height: 54px;
+        border-radius: 6px;
+        border: 1px solid #e2e2e2;
+    }
+    .color_box .color:before {
+        @include PositionRB(absolute, 4px, 4px);
+        width: 14px;
+        height: 14px;
+        background-color: #fff;
+        border: 1px solid #e2e2e2;
+        border-radius: 50%;
+        content: '';
+    }
+    .color_box .color_list {
+        padding-top: 4px;
+    }
+    .color_box .color_list .item {
+        margin-top: 16px;
+        height: 28px;
+    }
+    .color_box .color_list .item label {
+        display: inline-block;
+        width: 48px;
+    }
+    .color_box .color_list .item label,
+    .color_graph .graph_list .item label {
+        font-weight: 600;
+        color: #2c313d;
+        padding-right: 8px;
+        vertical-align: middle;
+    }
+    .color_box .color_list .item input[type='text'],
+    .color_graph .graph_list .item input[type='text'],
+    .color_box .color_list .item input[type='number'],
+    .color_graph .graph_list .item input[type='number'] {
+        width: 48px;
+        height: 28px;
+        border: 1px solid #e2e2e2;
+        box-sizing: border-box;
+        outline: 0;
+        border-radius: 16px;
+        color: #2c313d;
+        font-weight: 600;
+        text-align: center;
+        vertical-align: middle;
+    }
+    .color_box .color_list .item input[type='text']:focus,
+    .color_graph .graph_list .item input[type='text']:focus,
+    .color_box .color_list .item input[type='number']:focus,
+    .color_graph .graph_list .item input[type='number']:focus {
+        border: 2px solid #4f80ff;
+    }
+    .color_box .color_list .item.disabled label,
+    .color_graph .graph_list .item.disabled label {
+        color: #979797;
+    }
+    .color_box .color_list .item.disabled input[type='text'],
+    .color_graph .graph_list .item.disabled input[type='text'],
+    .color_box .color_list .item.disabled input[type='number'],
+    .color_graph .graph_list .item.disabled input[type='number'],
+    .color_box .color_list .item.disabled input[type='text']:focus,
+    .color_graph .graph_list .item.disabled input[type='text']:focus,
+    .color_box .color_list .item.disabled input[type='number']:focus,
+    .color_graph .graph_list .item.disabled input[type='number']:focus {
+        border: 1px solid #e2e2e2;
+        color: #979797;
+    }
+    .color_box .btn_picker {
+        @include PositionLT(absolute, 65px, 20px);
+        overflow: hidden;
+        font-size: 1px;
+        color: transparent;
+        text-indent: -10px;
+        width: 36px;
+        height: 36px;
+    }
+    .color_graph {
+        float: left;
+        width: 205px;
+        height: 216px;
+        padding-left: 26px;
+        border-left: 1px solid #f2f2f2;
+    }
+    .color_graph .graph_list .item {
+        margin-top: 13px;
+    }
+    .color_graph .graph_list .item:first-child {
+        margin-top: 0;
+    }
+    .color_graph .graph_list .graph_box {
+        position: relative;
+        margin-top: 10px;
+        height: 26px;
+    }
+    .color_graph .graph_list .graph_box .bar {
+        overflow: hidden;
+        height: 24px;
+        border: 1px solid #e2e2e2;
+        border-radius: 26px;
+    }
+    .color_graph .graph_list .graph_box .slider {
+        @include PositionLT(absolute, 0, 50%);
+        width: 28px;
+        height: 28px;
+        margin-top: -14px;
+        cursor: pointer;
+        z-index: 10;
+    }
+    .color_graph .graph_list .graph_box .slider.on {
+        width: 38px;
+        height: 38px;
+        margin-top: -19px;
+        margin-left: -5px;
+    }
+}
+
+// 타임박스1
+.tooltip_box.clock_box {
+    width: 406px;
+    border-color: #bfd8e6;
+    .tooltip_inner {
+        overflow: hidden;
+        position: relative;
+        padding: 16px 16px 10px 14px;
+        background-color: #d6e9f4;
+    }
+    .arr i {
+        background-color: #d6e9f4;
+        border-color: #bfd8e6;
+    }
+    .clock_board {
+        @include PositionLTB(absolute, 14px, 16px, 10px);
+        width: 160px;
+        .clock {
+            @include PositionLT(absolute, 50%, 50%);
+            margin: -80px 0 0 -80px;
+            width: 160px;
+            height: 160px;
+        }
+    }
+    .time_board {
+        width: 184px;
+        margin-left: 192px;
+        font-size: 0;
+    }
+    .time_board .btn_cnt {
+        display: inline-block;
+        width: 56px;
+        margin-right: 8px;
+        padding: 16px 0 13px;
+        border-radius: 18px;
+        background-color: #fff;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.15);
+        font-size: 18px;
+        font-weight: 600;
+        color: #606c73;
+        letter-spacing: -0.6px;
+        text-align: center;
+        line-height: 19px;
+    }
+    .time_board .btn_cnt:nth-child(3n) {
+        margin-right: 0;
+    }
+    .time_board .btn_cnt:nth-child(n + 4) {
+        margin-top: 8px;
+    }
+    .time_board .btn_del {
+        position: relative;
+        width: 184px;
+        padding: 0;
+        height: 48px;
+    }
+    .time_board .btn_del:after {
+        @include PositionLT(absolute, 50%, 50%);
+        width: 41px;
+        height: 28px;
+        margin: -14px 0 0 -20px;
+        content: '';
+    }
+}
+// 타임박스 - 시계만 있는 경우
+.tooltip_box.clock_only {
+    width: 200px;
+    height: 200px;
+    border-color: #bfd8e6;
+    .tooltip_inner {
+        overflow: hidden;
+        padding: 25px;
+        background-color: #d6e9f4;
+    }
+    .arr i {
+        background-color: #d6e9f4;
+        border-color: #bfd8e6;
+    }
+    .clock_board {
+        position: relative;
+        height: 150px;
+        .clock {
+            @include PositionLT(absolute, 50%, 50%);
+            margin: -75px 0 0 -75px;
+            width: 150px;
+            height: 150px;
+        }
+    }
+}
+// 타임박스 - 패드만 있는 경우
+.tooltip_box.pad_only {
+    width: 216px;
+    border-color: #bfd8e6;
+    .tooltip_inner {
+        overflow: hidden;
+        padding: 16px;
+        background-color: #d6e9f4;
+    }
+    .arr i {
+        background-color: #d6e9f4;
+        border-color: #bfd8e6;
+    }
+    .time_board {
+        width: 184px;
+        font-size: 0;
+    }
+    .time_board .btn_cnt {
+        display: inline-block;
+        width: 56px;
+        margin-right: 8px;
+        padding: 16px 0 13px;
+        border-radius: 18px;
+        background-color: #fff;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.15);
+        font-size: 18px;
+        font-weight: 600;
+        color: #606c73;
+        letter-spacing: -0.6px;
+        text-align: center;
+        line-height: 19px;
+    }
+    .time_board .btn_cnt:nth-child(3n) {
+        margin-right: 0;
+    }
+    .time_board .btn_cnt:nth-child(n + 4) {
+        margin-top: 8px;
+    }
+    .time_board .btn_cnt.btn_del {
+        position: relative;
+        width: 184px;
+        padding: 0;
+        height: 48px;
+    }
+    .time_board .btn_del:after {
+        @include PositionLT(absolute, 50%, 50%);
+        width: 41px;
+        height: 28px;
+        margin: -14px 0 0 -20px;
+        content: '';
+    }
+}

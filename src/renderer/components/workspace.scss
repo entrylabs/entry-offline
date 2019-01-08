@@ -1,0 +1,515 @@
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    min-height: 590px;
+    min-width: 1024px;
+}
+
+* {
+    font-family: NanumGothic, HelveticaNeue, AppleSDGothicNeo-Regular, sans-serif;
+    box-sizing: border-box;
+}
+
+#__next {
+    height: 100%;
+    > div,
+    > div > div,
+    > div > div > div {
+        height: 100%;
+        .workspace.entry {
+            height: calc(100% - 43px);
+            top: -1px;
+            div,
+            text {
+                user-select: none;
+            }
+
+            .entryVimBoard div {
+                user-select: auto;
+            }
+        }
+    }
+}
+
+$blur-width: 200px;
+$blur-size: $blur-width 100%;
+$stage-position: 20px 18px;
+$stage-width: 250px;
+$stage-height: 198px;
+$stage-skeleton: linear-gradient(#f2f2f2 $stage-height, transparent 0);
+$property-btn-left: 20px;
+$property-btn-width: 26px;
+$property-btn-height: 38px;
+$property-btn-skeleton: linear-gradient(#f2f2f2 $property-btn-height, transparent 0);
+$object-left: 56px;
+$object-width: 214px;
+$object-height: 60px;
+$object-skeleton: linear-gradient(#f2f2f2 $object-height, transparent 0);
+$category-left: 290px;
+$category-width: 62px;
+$category-height: 52px;
+$category-skeleton: linear-gradient(#f2f2f2 $category-height, transparent 0);
+$menu-top: 28px;
+$menu-width: 62px;
+$menu-height: 42px;
+$menu-skeleton: linear-gradient(#f2f2f2 $menu-height, transparent 0);
+$button-top: 18px;
+$button-width: 42px;
+$button-height: 42px;
+$button-skeleton: linear-gradient(#f2f2f2 $button-height, transparent 0);
+$blockmenu-position: 362px 80px;
+$blockmenu-width: 200px;
+$blockmenu-height: 588px;
+$blockmenu-skeleton: linear-gradient(#f2f2f2 $blockmenu-height, transparent 0);
+$playground-position: 582px 80px;
+$playground-width: 100%;
+$playground-height: 588px;
+$playground-skeleton: linear-gradient(#f2f2f2 $playground-height, transparent 0);
+$scene-background-position: 0px 0px;
+$scene-background-width: 100%;
+$scene-background-height: 37px;
+$scene-background-skeleton: linear-gradient(#d8d8d8 $scene-background-height, transparent 0);
+$scene-btn-position: 20px 0px;
+$scene-btn-width: 102px;
+$scene-btn-height: 370px;
+$scene-btn-skeleton: linear-gradient(white $scene-btn-height, transparent 0);
+$scene-text-position: 30px 11px;
+$scene-text-width: 57px;
+$scene-text-height: 15px;
+$scene-text-skeleton: linear-gradient(#e2e2e2 $scene-btn-height, transparent 0);
+
+.ws {
+    background: white;
+
+    .header {
+        height: 43px;
+        background-color: #d8d8d8;
+    }
+
+    .workspace {
+        background: white;
+        &:empty {
+            overflow: hidden;
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+        }
+        &:empty::before {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 37px;
+            background-image: $scene-text-skeleton, $scene-btn-skeleton, $scene-background-skeleton;
+            background-size: $scene-text-width $scene-text-height,
+                $scene-btn-width $scene-btn-height, $scene-background-width $scene-background-height;
+            background-position: $scene-text-position, $scene-btn-position,
+                $scene-background-position;
+            background-repeat: no-repeat;
+        }
+        &:empty::after {
+            z-index: 1000;
+            content: '';
+            display: block;
+            width: calc(100% - 20px);
+            height: 100%;
+            background-image: linear-gradient(
+                    90deg,
+                    rgba(white, 0) 0,
+                    rgba(white, 0.8) 50%,
+                    rgba(white, 0) 100%
+                ),
+                $stage-skeleton, $property-btn-skeleton, $property-btn-skeleton,
+                $property-btn-skeleton, $object-skeleton, $object-skeleton, $object-skeleton,
+                $object-skeleton, $object-skeleton, $object-skeleton, $category-skeleton,
+                $category-skeleton, $category-skeleton, $category-skeleton, $category-skeleton,
+                $category-skeleton, $category-skeleton, $category-skeleton, $category-skeleton,
+                $category-skeleton, $menu-skeleton, $menu-skeleton, $menu-skeleton, $button-skeleton,
+                $button-skeleton, $blockmenu-skeleton, $playground-skeleton;
+            background-size: $blur-size, $stage-width $stage-height,
+                $property-btn-width $property-btn-height, $property-btn-width $property-btn-height,
+                $property-btn-width $property-btn-height, $object-width $object-height,
+                $object-width $object-height, $object-width $object-height,
+                $object-width $object-height, $object-width $object-height,
+                $object-width $object-height, $category-width $category-height,
+                $category-width $category-height, $category-width $category-height,
+                $category-width $category-height, $category-width $category-height,
+                $category-width $category-height, $category-width $category-height,
+                $category-width $category-height, $category-width $category-height,
+                $category-width $category-height, $menu-width $menu-height, $menu-width $menu-height,
+                $menu-width $menu-height, $button-width $button-height, $button-width $button-height,
+                $blockmenu-width $blockmenu-height, $playground-width $playground-height;
+            background-position: -150% 0, $stage-position, $property-btn-left 238px,
+                $property-btn-left 286px, $property-btn-left 334px, $object-left 238px,
+                $object-left 308px, $object-left 378px, $object-left 448px, $object-left 518px,
+                $object-left 588px, $category-left 18px, $category-left 80px, $category-left 142px,
+                $category-left 204px, $category-left 266px, $category-left 328px,
+                $category-left 390px, $category-left 452px, $category-left 514px,
+                $category-left 576px, 360px $menu-top, 430px $menu-top, 500px $menu-top,
+                right 52px top $button-top, right 0 top $button-top, $blockmenu-position,
+                $playground-position;
+            background-repeat: no-repeat;
+            animation: loading 4s infinite;
+        }
+    }
+
+    .uploadInput {
+        display: none;
+    }
+}
+
+.modal {
+    position: absolute;
+    z-index: 9990; /* Sit on top */
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    display: none;
+}
+@keyframes loading {
+    to {
+        background-position: 350% 0, $stage-position, $property-btn-left 238px,
+            $property-btn-left 286px, $property-btn-left 334px, $object-left 238px,
+            $object-left 308px, $object-left 378px, $object-left 448px, $object-left 518px,
+            $object-left 588px, $category-left 18px, $category-left 80px, $category-left 142px,
+            $category-left 204px, $category-left 266px, $category-left 328px, $category-left 390px,
+            $category-left 452px, $category-left 514px, $category-left 576px, 360px $menu-top,
+            430px $menu-top, 500px $menu-top, right 52px top $button-top, right 0 top $button-top,
+            $blockmenu-position, $playground-position, $scene-btn-position;
+    }
+}
+
+.practical_course_mode {
+    .workspace_button_group .workspace_divider {
+        background-color: #fff;
+    }
+
+    .entryMouseViewWorkspace_w {
+        color: #8274ff;
+    }
+
+    .entrySpeedButtonWorkspace.on {
+        background-image: url(../../images/practical/speed_edit_on.png);
+    }
+
+    .entryCoordinateButtonWorkspace_w.toggleOn {
+        background-image: url(../../images/practical/layers_icon_grid_nor.png);
+    }
+}
+
+//entry popup hardware
+.entryPopupHelperWindow {
+    .entryPopupHelperWrapper {
+        .entryPopupHelperTitle {
+            background: #2a7def;
+            height: 57px;
+            min-width: 300px;
+            color: #fff;
+            font-size: 20px;
+            line-height: 57px;
+            padding-left: 20px;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+        }
+    }
+
+    .newVersion,
+    .hwDownload {
+        width: 494px;
+        .contentArea {
+            text-align: center;
+            background-color: #fff;
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+            padding: 20px;
+
+            .textArea {
+                color: #2b2b2b;
+                .text1 {
+                    margin-top: 40px;
+                    font-size: 24px;
+                    line-height: 24px;
+                }
+                .text2 {
+                    margin-top: 7px;
+                    font-size: 24px;
+                    line-height: 24px;
+                }
+                .text3 {
+                    color: #9e9e9f;
+                    margin-top: 17px;
+                    font-size: 16px;
+                }
+                .text4 {
+                    color: #9e9e9f;
+                    margin-bottom: 32px;
+                    font-size: 16px;
+                }
+            }
+
+            .popupDefaultBtn {
+                cursor: pointer;
+                height: 52px;
+                width: 191px;
+                font-size: 16px;
+                border-radius: 2px;
+                overflow: hidden;
+                display: inline-block;
+                line-height: 52px;
+                font-size: 16px;
+                cursor: pointer;
+                margin-bottom: 34px;
+
+                .download_icon {
+                    content: ' ';
+                    width: 14px;
+                    height: 17px;
+                    margin-left: 7px;
+                    vertical-align: middle;
+                    display: inline-block;
+                    background-image: url('/img/assets/popup/workspace/btn_down.png');
+                }
+            }
+
+            .popupCancelBtn {
+                background: #dbdbdb;
+                margin-right: 8px;
+                color: #9e9e9f;
+            }
+
+            .popupOkBtn {
+                background: #6e5ae6;
+                margin-left: 7px;
+                color: #fff;
+            }
+        }
+    }
+
+    .workspaceFailed {
+        .contentArea {
+            position: relative;
+            background: url('/img/assets/popup/workspace/fail_bg.png');
+            width: 441px;
+            height: 429px;
+            padding-top: 17px;
+
+            .workspaceFailedCloseBtn {
+                position: absolute;
+                background: url('/img/assets/popup/workspace/fail_close.png');
+                cursor: pointer;
+                top: 16px;
+                right: 16px;
+                width: 21px;
+                height: 21px;
+            }
+
+            .workspaceFailedTitle {
+                font-size: 27px;
+                font-weight: bold;
+                line-height: 35px;
+                font-family: NanumGothic !important;
+                color: #2a7def;
+                text-align: center;
+                margin-bottom: 7px;
+            }
+
+            .workspaceFailedSubTitle {
+                font-size: 15px;
+                line-height: 20px;
+                font-family: NanumGothic !important;
+                color: #000000;
+                text-align: center;
+            }
+        }
+    }
+
+    .workspaceSpinner {
+        .workspaceSpinnerTitle {
+            position: relative;
+            background: url('/img/assets/popup/workspace/suc_txt_bg.png');
+            width: 367px;
+            height: 90px;
+            font-size: 27px;
+            font-weight: bold;
+            line-height: 27px;
+            font-family: NanumGothic !important;
+            color: #2a7def;
+            text-align: center;
+            padding-top: 24px;
+            z-index: 10;
+        }
+
+        @-webkit-keyframes blink1 {
+            24% {
+                opacity: 0;
+            }
+            36% {
+                opacity: 1;
+            }
+            64% {
+                opacity: 1;
+            }
+            76% {
+                opacity: 0;
+            }
+        }
+
+        @keyframes blink1 {
+            24% {
+                opacity: 0;
+            }
+            36% {
+                opacity: 1;
+            }
+            64% {
+                opacity: 1;
+            }
+            76% {
+                opacity: 0;
+            }
+        }
+
+        @-webkit-keyframes blink2 {
+            12% {
+                opacity: 0;
+            }
+            24% {
+                opacity: 1;
+            }
+            76% {
+                opacity: 1;
+            }
+            88% {
+                opacity: 0;
+            }
+        }
+
+        @keyframes blink2 {
+            12% {
+                opacity: 0;
+            }
+            24% {
+                opacity: 1;
+            }
+            76% {
+                opacity: 1;
+            }
+            88% {
+                opacity: 0;
+            }
+        }
+
+        @-webkit-keyframes blink3 {
+            0% {
+                opacity: 0;
+            }
+            12% {
+                opacity: 1;
+            }
+            88% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+
+        @keyframes blink3 {
+            0% {
+                opacity: 0;
+            }
+            12% {
+                opacity: 1;
+            }
+            88% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+
+        .workspaceSpinnerCircle {
+            position: relative;
+            width: 327px;
+            height: 327px;
+            margin: -70px 20px 0px 20px;
+            z-index: 1;
+
+            .inner1 {
+                position: absolute;
+                background: url('/img/assets/popup/workspace/suc_bg02.png');
+                width: 327px;
+                height: 327px;
+                top: 0;
+                left: 0;
+                opacity: 0;
+                -webkit-animation: blink1 3s infinite;
+                animation: blink1 3s infinite;
+            }
+
+            .inner2 {
+                position: absolute;
+                background: url('/img/assets/popup/workspace/suc_bg01.png');
+                width: 256px;
+                height: 256px;
+                margin: 35.5px;
+                top: 0;
+                left: 0;
+                opacity: 0;
+                -webkit-animation: blink2 3s infinite;
+                animation: blink2 3s infinite;
+            }
+
+            .inner3 {
+                position: absolute;
+                background: url('/img/assets/popup/workspace/suc_bg00.png');
+                width: 202px;
+                height: 202px;
+                margin: 65.5px;
+                top: 0;
+                left: 0;
+                opacity: 0;
+                -webkit-animation: blink3 3s infinite;
+                animation: blink3 3s infinite;
+            }
+
+            .workspaceSpinnerCharacter {
+                position: absolute;
+                background: url('/img/assets/popup/workspace/suc_cha.png');
+                width: 327px;
+                height: 327px;
+                top: 0;
+                left: 0;
+            }
+        }
+
+        .workspaceSpinnerTitle2 {
+            position: relative;
+            background: url('/img/assets/popup/course/progress.gif');
+            background-repeat: no-repeat;
+            width: 200px;
+            height: 102px;
+            z-index: 10;
+        }
+    }
+}
+
+.entryPopupHelperWrapper {
+    .entryPopupHelperCloseButton {
+        cursor: pointer;
+        float: right;
+        content: ' ';
+        width: 22px;
+        height: 57px;
+        margin-right: 20px;
+        display: inline-block;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-image: url('/img/assets/popup/workspace/btn_close.png');
+    }
+}
