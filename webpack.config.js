@@ -6,12 +6,17 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
     mode: 'none',
-    entry: './src/renderer/entry.js',
+    entry: {
+        init: './src/renderer/init_entry.js',
+        render: './src/renderer/render_entry.js'
+    },
+    devtool: "source-map",
     output: {
+        devtoolLineToLine: true,
         path: path.resolve(__dirname, 'src', 'renderer_build'),
         publicPath: 'http://localhost:8080/build/',
-        chunkFilename: '[name].bundle.js',
-        filename: 'bundle.js',
+        sourceMapFilename: "bundle.js.map",
+        filename: '[name].bundle.js',
     },
     module: {
         rules: [
