@@ -25,6 +25,7 @@ export default class Workspace extends Component {
 
     async componentDidMount() {
         Entry.init(this.container.current, this.initOption);
+        Entry.loadProject();
     }
 
     render() {
