@@ -118,6 +118,7 @@
       "always"
     ],
     "radix": "warn",
+    "getter-return": "off",
     "id-length": ["warn", {"exceptions": ["i", "j", "k", "x", "y", "e"]}],
     "camelcase": [
       "warn",
