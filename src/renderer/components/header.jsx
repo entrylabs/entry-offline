@@ -7,9 +7,19 @@ import Utils from '../helper/RendererUtils';
 import { connect } from 'react-redux';
 import { commonAction, showPopup } from '../actions';
 import { LANGUAGE, WS_MODE } from '../actions/types';
+import { Dropdown } from 'entry-tool/component';
 
-/* global Entry */
+
+/* global Entry, EntryStatic */
 class Header extends Component {
+    constructor(props) {
+        super(props);
+        this.dropdownList = {};
+        this.state = {
+            dropdownType: undefined,
+        };
+    }
+
     get programLanguageList() {
         return [
             [Utils.getLang('Menus.block_coding'), 'block'],
@@ -68,14 +78,56 @@ class Header extends Component {
             [Utils.getLang('vn'), 'vn'],
         ];
     }
+
+    handleDropdownClick(type) {
+        this.setState((state) => {
+            const { dropdownType } = state;
+            return {
+                dropdownType: dropdownType === type ? undefined : type,
+            };
+        });
+    }
+
     getLangValue() {
         const lang = _get(this.props, 'lang');
         return _get(root.Lang, lang);
     }
 
+    makeDropdown(type, items) {
+        const { dropdownType } = this.state;
+        if (type !== dropdownType) {
+            return null;
+        }
+        const positionDom = this.dropdownList[type];
+        return (
+            <Dropdown
+                autoWidth
+                animation={false}
+                items={items}
+                positionDom={positionDom}
+                onSelectDropdown={(item) => {
+                    /*this.handleDropdownSelect(type, item);*/
+                    this.setState(() => {
+                        return {
+                            dropdownType: undefined,
+                        };
+                    });
+                }}
+                outsideExcludeDom={[positionDom]}
+                onOutsideClick={() => {
+                    this.setState(() => {
+                        return {
+                            dropdownType: undefined,
+                        };
+                    });
+                }}
+            />
+        );
+    }
+
     render() {
         const { lang, common, projectName = '' } = this.props;
-        const dropdownType = '';
+        const { dropdownType } = this.state;
         const programLanguageMode = 'block';
 
         return (
@@ -103,16 +155,16 @@ class Header extends Component {
                                     className={`btn_work_space btn_workspace_lang ${
                                         dropdownType === 'programLanguage' ? 'on' : ''
                                         } ${programLanguageMode}`}
-                                    /*ref={(dom) => (this.dropdownList.programLanguage = dom)}*/
-                                    /*onClick={() => {
+                                    ref={(dom) => (this.dropdownList.programLanguage = dom)}
+                                    onClick={() => {
                                         this.handleDropdownClick('programLanguage');
-                                    }}*/
+                                    }}
                                 >
                                     <span className={'blind'}>
                                         {'Workspace.language'}
                                     </span>
                                 </a>
-                                {/*{this.makeDropdown('programLanguage', this.programLanguageList)}*/}
+                                {this.makeDropdown('programLanguage', this.programLanguageList)}
                             </div>
                         )}
                         {(
@@ -122,16 +174,16 @@ class Header extends Component {
                                     className={`${'btn_work_space'} ${'btn_workspace_file'} ${
                                         dropdownType === 'file' ? 'on' : ''
                                         }`}
-                                    /*ref={(dom) => (this.dropdownList.file = dom)}
+                                    ref={(dom) => (this.dropdownList.file = dom)}
                                     onClick={() => {
                                         this.handleDropdownClick('file');
-                                    }}*/
+                                    }}
                                 >
                                     <span className={'blind'}>
                                         {'Workspace.file'}
                                     </span>
                                 </a>
-                                {/*{this.makeDropdown('file', this.fileList)}*/}
+                                {this.makeDropdown('file', this.fileList)}
                             </div>
                         )}
                         {(
@@ -141,16 +193,16 @@ class Header extends Component {
                                     className={`${'btn_work_space'} ${'btn_workspace_save'}  ${
                                         dropdownType === 'save' ? 'on' : ''
                                         }`}
-                                    /*ref={(dom) => (this.dropdownList.save = dom)}
+                                    ref={(dom) => (this.dropdownList.save = dom)}
                                     onClick={() => {
                                         this.handleDropdownClick('save');
-                                    }}*/
+                                    }}
                                 >
                                     <span className={'blind'}>
                                         {'Workspace.save'}
                                     </span>
                                 </a>
-                                {/*{this.makeDropdown('save', this.saveList)}*/}
+                                {this.makeDropdown('save', this.saveList)}
                             </div>
                         )}
                         {(
@@ -160,16 +212,16 @@ class Header extends Component {
                                     className={`${'btn_work_space'} ${'btn_workspace_help'} ${
                                         dropdownType === 'help' ? 'on' : ''
                                         }`}
-                                    /*ref={(dom) => (this.dropdownList.help = dom)}
+                                    ref={(dom) => (this.dropdownList.help = dom)}
                                     onClick={() => {
                                         this.handleDropdownClick('help');
-                                    }}*/
+                                    }}
                                 >
                                     <span className={'blind'}>
                                         {'Workspace.help'}
                                     </span>
                                 </a>
-                                {/*{this.makeDropdown('help', this.helpList)}*/}
+                                {this.makeDropdown('help', this.helpList)}
                             </div>
                         )}
                     </div>
@@ -204,14 +256,14 @@ class Header extends Component {
                                     className={`link_workspace_text text_work_space  ${
                                         dropdownType === 'mode' ? 'on' : ''
                                         }`}
-                                    /*ref={(dom) => (this.dropdownList.mode = dom)}
+                                    ref={(dom) => (this.dropdownList.mode = dom)}
                                     onClick={() => {
                                         this.handleDropdownClick('mode');
-                                    }}*/
+                                    }}
                                 >
                                     {this.getModeText()}
                                 </a>
-                                {/*{this.makeDropdown('mode', this.modeList)}*/}
+                                {this.makeDropdown('mode', this.modeList)}
                             </div>
                         </div>
                     )}
@@ -222,15 +274,15 @@ class Header extends Component {
                                 className={`${'select_link'} ${'ico_white_select_arr'} ${
                                     dropdownType === 'language' ? 'on' : ''
                                     }`}
-                                /*ref={(dom) => (this.dropdownList.language = dom)}
+                                ref={(dom) => (this.dropdownList.language = dom)}
                                 onClick={() => {
                                     this.handleDropdownClick('language');
-                                }}*/
+                                }}
                             >
                                 {this.getLangValue()}
                             </a>
                             <div className={'tooltip_box'}>
-                                {/*{this.makeDropdown('language', this.languageList)}*/}
+                                {this.makeDropdown('language', this.languageList)}
                             </div>
                         </div>
                     )}
