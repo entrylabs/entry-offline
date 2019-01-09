@@ -4,7 +4,7 @@
 
 .common_gnb {
     position: relative;
-    min-width: 1008px;
+    min-width: 1024px;
     padding: 8px 8px 3px;
     background-color: #4f80ff;
     z-index: 300;
@@ -253,15 +253,15 @@
             color: #fff;
         }
         .btn_workspace_print {
-            background: url(../resources/images/gnb/btn_workspace_print_textbook_mode.png) no-repeat;
+            background: url(../renderer/resources/images/gnb/btn_workspace_print_textbook_mode.png) no-repeat;
             background-size: 32px auto;
         }
         .btn_workspace_undo {
-            background: url(../resources/images/gnb/btn_workspace_undo_textbook_mode.png) no-repeat;
+            background: url(../renderer/resources/images/gnb/btn_workspace_undo_textbook_mode.png) no-repeat;
             background-size: 32px auto;
         }
         .btn_workspace_redo {
-            background: url(../resources/images/gnb/btn_workspace_redo_textbook_mode.png) no-repeat;
+            background: url(../renderer/resources/images/gnb/btn_workspace_redo_textbook_mode.png) no-repeat;
             background-size: 32px auto;
         }
     }
@@ -269,70 +269,70 @@
 
 //팝업 뒤로 가기
 .logo_gnb {
-    background: url(../resources/images/gnb/logo_gnb.png) no-repeat;
+    background: url(../renderer/resources/images/gnb/logo_gnb.png) no-repeat;
     background-size: 88px auto;
 }
 .btn_work_space:after {
-    background: url(../resources/images/gnb/btn_workspace_arr.png) no-repeat;
+    background: url(../renderer/resources/images/gnb/btn_workspace_arr.png) no-repeat;
     background-size: 6px auto;
 }
 .btn_work_space.on:after {
-    background-image: url(../resources/images/gnb/btn_workspace_arr_on.png);
+    background-image: url(../renderer/resources/images/gnb/btn_workspace_arr_on.png);
 }
 .btn_workspace_lang {
     &.python:before {
-        background: url(../resources/images/gnb/btn_workspace_python.svg) no-repeat;
+        background: url(../renderer/resources/images/gnb/btn_workspace_python.svg) no-repeat;
         background-size: 18px 18px;
     }
     &.block:before {
-        background: url(../resources/images/gnb/btn_workspace_block.svg) no-repeat;
+        background: url(../renderer/resources/images/gnb/btn_workspace_block.svg) no-repeat;
         background-size: 18px 18px;
     }
 }
 .btn_workspace_save:before {
-    background: url(../resources/images/gnb/btn_workspace_save.png) no-repeat;
+    background: url(../renderer/resources/images/gnb/btn_workspace_save.png) no-repeat;
     background-size: 18px auto;
 }
 .btn_workspace_file:before {
-    background: url(../resources/images/gnb/btn_workspace_file.png) no-repeat;
+    background: url(../renderer/resources/images/gnb/btn_workspace_file.png) no-repeat;
     background-size: 18px auto;
 }
 .btn_workspace_help:before {
-    background: url(../resources/images/gnb/btn_workspace_help.png) no-repeat;
+    background: url(../renderer/resources/images/gnb/btn_workspace_help.png) no-repeat;
     background-size: 18px auto;
 }
 .btn_workspace_print {
-    background: url(../resources/images/gnb/btn_workspace_print.png) no-repeat;
+    background: url(../renderer/resources/images/gnb/btn_workspace_print.png) no-repeat;
     background-size: 32px auto;
 }
 .btn_workspace_redo {
-    background: url(../resources/images/gnb/btn_workspace_redo.png) no-repeat;
+    background: url(../renderer/resources/images/gnb/btn_workspace_redo.png) no-repeat;
     background-size: 32px auto;
 }
 .btn_workspace_undo {
-    background: url(../resources/images/gnb/btn_workspace_undo.png) no-repeat;
+    background: url(../renderer/resources/images/gnb/btn_workspace_undo.png) no-repeat;
     background-size: 32px auto;
 }
 .ico_workspace_practical {
-    background: url(../resources/images/gnb/ico_workspace_practical.png) no-repeat;
+    background: url(../renderer/resources/images/gnb/ico_workspace_practical.png) no-repeat;
     background-size: 28px auto;
 }
 .ico_workspace_practical {
-    background: url(../resources/images/gnb/ico_workspace_practical.png) no-repeat;
+    background: url(../renderer/resources/images/gnb/ico_workspace_practical.png) no-repeat;
     background-size: 28px auto;
 }
 .ico_white_select_arr:after {
-    background: url(../resources/images/gnb/ico_white_select_arr.png) no-repeat;
+    background: url(../renderer/resources/images/gnb/ico_white_select_arr.png) no-repeat;
     background-size: 8px auto;
 }
 .ico_white_select_arr.on:after {
-    background: url(../resources/images/gnb/ico_white_select_arr_on.png) no-repeat;
+    background: url(../renderer/resources/images/gnb/ico_white_select_arr_on.png) no-repeat;
     background-size: 8px auto;
 }
 .text_work_space:after {
-    background: url(../resources/images/gnb/btn_workspace_arr.png) no-repeat;
+    background: url(../renderer/resources/images/gnb/btn_workspace_arr.png) no-repeat;
     background-size: 6px auto;
 }
 .text_work_space.on:after {
-    background-image: url(../resources/images/gnb/btn_workspace_arr_on.png);
+    background-image: url(../renderer/resources/images/gnb/btn_workspace_arr_on.png);
 }

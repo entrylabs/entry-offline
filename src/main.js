@@ -121,11 +121,12 @@ function createMainWindow() {
 
     mainWindow = new BrowserWindow({
         width: 1024,
-        height: 700,
+        minWidth: 1024,
+        height: 768,
+        minHeight: 768,
         title,
         show: false,
         backgroundColor: '#e5e5e5',
-        preload: './renderer_build/init.bundle.js',
         webPreferences: {
             backgroundThrottling: false,
         },

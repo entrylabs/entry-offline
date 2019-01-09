@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Header from './header';
+import './workspace.scss';
 
 /* global Entry */
 export default class Workspace extends Component {
@@ -28,9 +29,20 @@ export default class Workspace extends Component {
         Entry.loadProject();
     }
 
+    /**
+     * onFileAction={this.handleFileAction}
+     onSaveAction={this.handleSaveAction}
+     onReloadEntry={this.reloadEntry}
+     onProjectNameChange={this.handleProjectNameChange}
+     */
     render() {
         return (
             <div>
+                <Header
+                    projectName={'projectName'}
+                    programLanguageMode={'programLanguageMode'}
+                    lang={'ko'}
+                />
                 <input
                     className="uploadInput"
                     type="file"

@@ -7,14 +7,14 @@ import _includes from 'lodash/includes';
 
 export default class Header extends Component {
     render() {
-        const { common, projectName = '' } = this.props;
-        const { lang } = common;
-        const { dropdownType, programLanguageMode } = this.state;
+        const { lang, common, projectName = '' } = this.props;
+        const dropdownType = '';
+        const programLanguageMode = 'block';
+
         return (
+            /* eslint-disable jsx-a11y/heading-has-content */
             <header className={'common_gnb'}>
-                <h1 className={`${'logo'} ${'logo_gnb'}`}>
-                    <a href="/">Entry</a>
-                </h1>
+                <h1 className={`${'logo'} ${'logo_gnb'}`}/>
                 <div className={'srch_box'}>
                     <input
                         type="text"
@@ -29,7 +29,7 @@ export default class Header extends Component {
                 </div>
                 <div className={'group_box'}>
                     <div className={'group_inner'}>
-                        {this.isEnableNavigation('lang') && (
+                        {(
                             <div className={'work_space'}>
                                 <a
                                     title={'Workspace.language'}
@@ -130,7 +130,7 @@ export default class Header extends Component {
                         </div>
                     </div>
 
-                    {lang === 'ko' && this.isEnableNavigation('mode') && (
+                    {lang === 'ko' && (
                         <div className={'group_inner'}>
                             <div className={'work_space'}>
                                 <a
