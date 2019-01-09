@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
 import Workspace from './workspace';
 import './index.scss';
 
@@ -6,9 +7,10 @@ const Script = ({ children }) => (
     <script dangerouslySetInnerHTML={{ __html: `(${children.toString()})();` }} />
 );
 
-export default class Index extends PureComponent {
+class Index extends PureComponent {
     render() {
         const { project } = this.props;
+        console.log(this.props);
         return (
             <div>
                 <div className={`ws`}>
@@ -31,3 +33,11 @@ export default class Index extends PureComponent {
         );
     }
 }
+
+const mapStateToProps = (state) => {
+    return {
+        ...state,
+    };
+};
+
+export default connect(mapStateToProps)(Index);

@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import Header from './header';
 import './workspace.scss';
+import { connect } from 'react-redux';
+import { commonAction } from '../actions';
+import { FETCH_POPUP_ITEMS, UPDATE_PROJECT } from '../actions/types';
 
 /* global Entry */
-export default class Workspace extends Component {
+class Workspace extends Component {
     constructor(props) {
         super(props);
         this.modal = null;
@@ -56,3 +59,21 @@ export default class Workspace extends Component {
         );
     }
 }
+
+const mapStateToProps = (state) => {
+    return { ...state };
+};
+
+const mapDispatchToProps = {
+    updateProject: (data) => {
+        return commonAction(UPDATE_PROJECT, data);
+    },
+    fetchPopup: (data) => {
+        return commonAction(FETCH_POPUP_ITEMS, data);
+    },
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Workspace);

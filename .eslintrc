@@ -7,11 +7,15 @@
     "ecmaVersion": 8,
     "sourceType": "module",
     "ecmaFeatures": {
+      "experimentalObjectRestSpread": true,
       "jsx": true
     }
   },
   "env": {
     "browser": true
+  },
+  "globals": {
+    "Entry": true
   },
   "rules": {
     "no-const-assign": "warn",

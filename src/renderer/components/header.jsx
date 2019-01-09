@@ -3,9 +3,76 @@ import './header.scss';
 import root from 'window-or-global';
 import _get from 'lodash/get';
 import _includes from 'lodash/includes';
+import Utils from '../helper/RendererUtils';
+import { connect } from 'react-redux';
+import { commonAction, showPopup } from '../actions';
+import { LANGUAGE, WS_MODE } from '../actions/types';
 
+/* global Entry */
+class Header extends Component {
+    get programLanguageList() {
+        return [
+            [Utils.getLang('Menus.block_coding'), 'block'],
+            [Utils.getLang('Menus.python_coding'), 'python'],
+        ];
+    }
 
-export default class Header extends Component {
+    get fileList() {
+        return [
+            [Utils.getLang('Workspace.file_new'), 'new'],
+            [Utils.getLang('Workspace.file_upload'), 'open_offline'],
+        ];
+    }
+    get saveList() {
+        return [
+            [Utils.getLang('Workspace.file_save'), 'save_online'],
+            [Utils.getLang('Workspace.file_save_as'), 'save_as_online'],
+        ];
+    }
+    get helpList() {
+        return [
+            [Utils.getLang('Workspace.block_helper'), 'help_block'],
+            [Utils.getLang('Workspace.hardware_guide'), 'help_hardware',{ isPracticalCourse: false }],
+            [Utils.getLang('Workspace.robot_guide'), 'help_robot', { isPracticalCourse: true }],
+            [Utils.getLang('Workspace.python_guide'), 'help_python'],
+        ];
+    }
+    get modeList() {
+        return [
+            [Utils.getLang('Workspace.default_mode'), 'workspace'],
+            [
+                <div>
+                    {Utils.getLang('Workspace.practical_course_mode')}
+                    <em className={'ico_workspace_practical'}>
+                        {Utils.getLang('Workspace.practical_course')}
+                    </em>
+                </div>,
+                'practical_course',
+            ],
+        ];
+    }
+    getModeText() {
+        const { common } = this.props;
+        const { mode } = common;
+        const [modeText] = this.modeList.find((list) => {
+            return list[1] === mode;
+        });
+        return modeText;
+    }
+
+    get languageList() {
+        return [
+            [Utils.getLang('ko'), 'ko'],
+            [Utils.getLang('en'), 'en'],
+            [Utils.getLang('jp'), 'jp'],
+            [Utils.getLang('vn'), 'vn'],
+        ];
+    }
+    getLangValue() {
+        const lang = _get(this.props, 'lang');
+        return _get(root.Lang, lang);
+    }
+
     render() {
         const { lang, common, projectName = '' } = this.props;
         const dropdownType = '';
@@ -20,7 +87,7 @@ export default class Header extends Component {
                         type="text"
                         id="common_srch"
                         name="common_srch"
-                        value={projectName}
+                        defaultValue={projectName}
                         /*onChange={({ target }) => {
                             const { value } = target;
                             this.handleProjectNameChange(value);
@@ -142,7 +209,7 @@ export default class Header extends Component {
                                         this.handleDropdownClick('mode');
                                     }}*/
                                 >
-                                    {/*{this.getModeText()}*/}
+                                    {this.getModeText()}
                                 </a>
                                 {/*{this.makeDropdown('mode', this.modeList)}*/}
                             </div>
@@ -160,7 +227,7 @@ export default class Header extends Component {
                                     this.handleDropdownClick('language');
                                 }}*/
                             >
-                                {/*{this.getLangValue()}*/}
+                                {this.getLangValue()}
                             </a>
                             <div className={'tooltip_box'}>
                                 {/*{this.makeDropdown('language', this.languageList)}*/}
@@ -172,3 +239,18 @@ export default class Header extends Component {
         );
     }
 }
+
+const mapStateToProps = (state) => ({
+    ...state,
+});
+
+const mapDispatchToProps = {
+    showPopup,
+    language: (data) => commonAction(LANGUAGE, data),
+    mode: (data) => commonAction(WS_MODE, data),
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Header);

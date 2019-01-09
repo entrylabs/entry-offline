@@ -9,7 +9,6 @@ import {
     net,
 } from 'electron';
 import path from 'path';
-import fs from 'fs';
 import packageJson from '../package.json';
 import ChildWindowManager from './main/ChildWindowManager';
 import MainUtils from './main/MainUtils';
