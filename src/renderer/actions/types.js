@@ -13,6 +13,6 @@ export const SAVE_PROJECT = 'SAVE_PROJECT';
 export const UPDATE_PROJECT = 'UPDATE_PROJECT';
 export const LOAD_PROJECT = 'LOAD_PROJECT';
 
-export const LANGUAGE = 'LANGUAGE';
+export const CHANGE_LANGUAGE = 'CHANGE_LANGUAGE';
 export const WS_MODE = 'WORKSPACE_MODE';
 export const PROJECT_DATA = 'PROJECT_DATA';

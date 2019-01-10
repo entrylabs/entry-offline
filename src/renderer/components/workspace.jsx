@@ -17,7 +17,7 @@ class Workspace extends Component {
         const { name = '' } = project;
 
         this.state = {
-            projectName: name || ''
+            projectName: name || '',
         };
 
         this.initOption = {
@@ -32,25 +32,34 @@ class Workspace extends Component {
         Entry.loadProject();
     }
 
-    /**
-     * onFileAction={this.handleFileAction}
-     onSaveAction={this.handleSaveAction}
-     onReloadEntry={this.reloadEntry}
-     onProjectNameChange={this.handleProjectNameChange}
-     */
+    reloadEntry = (project) => {
+        let temp = project;
+        if (!temp) {
+            temp = Entry.exportProject();
+        }
+        Entry.disposeContainer();
+        Entry.reloadBlock();
+        Entry.init(this.container.current, this.initOption);
+        Entry.loadProject(temp);
+        // this.addEntryEvents();
+    };
+
     render() {
+        const { common = [] } = this.props;
+        const { programLanguageMode = 'block' } = this.state;
+
         return (
             <div>
                 <Header
+                    onReloadEntry={this.reloadEntry}
                     projectName={'projectName'}
-                    programLanguageMode={'programLanguageMode'}
-                    lang={'ko'}
+                    programLanguageMode={programLanguageMode}
                 />
                 <input
                     className="uploadInput"
                     type="file"
                     ref={(dom) => {
-                        return (this.uploadInput = dom);
+                        this.uploadInput = dom;
                     }}
                     accept=".ent"
                 />

@@ -1,8 +1,4 @@
-import {
-    LANGUAGE,
-    PROJECT_DATA,
-    WS_MODE,
-} from '../actions/types';
+import { CHANGE_LANGUAGE, PROJECT_DATA, WS_MODE } from '../actions/types';
 
 const defaultState = {
     lang: 'en',
@@ -10,8 +6,9 @@ const defaultState = {
 };
 
 export default (state = defaultState, action) => {
+    console.log(state, action);
     switch (action.type) {
-        case LANGUAGE:
+        case CHANGE_LANGUAGE:
         case PROJECT_DATA:
             return { ...state, ...action.payload };
         case WS_MODE:

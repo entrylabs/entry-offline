@@ -120,9 +120,8 @@ function createMainWindow() {
 
     mainWindow = new BrowserWindow({
         width: 1024,
-        minWidth: 1024,
         height: 768,
-        minHeight: 768,
+        useContentSize: true,
         title,
         show: false,
         backgroundColor: '#e5e5e5',
