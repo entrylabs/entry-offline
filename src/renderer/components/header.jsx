@@ -162,41 +162,13 @@ class Header extends Component {
     }
 
     handleProgramLanguageClick(item) {
-        const { programLanguageMode } = this.state;
+        const { onProgramLanguageChanged, programLanguageMode } = this.props;
         const key = item[1];
-        if (programLanguageMode === key) {
-            return;
-        }
-        const mode = {};
-        if (key === 'block') {
-            mode.boardType = Entry.Workspace.MODE_BOARD;
-            mode.textType = -1;
-        } else {
-            mode.boardType = Entry.Workspace.MODE_VIMBOARD;
-            mode.textType = Entry.Vim.TEXT_TYPE_PY;
-            mode.runType = Entry.Vim.WORKSPACE_MODE;
-        }
-        // Javascript in Text Coding
-        // else if (pMode == 2) {
-        //     mode.boardType = Entry.Workspace.MODE_VIMBOARD;
-        //     mode.textType = Entry.Vim.TEXT_TYPE_JS;
-        //     mode.runType = Entry.Vim.MAZE_MODE;
-        // }
-        const workspace = Entry.getMainWS();
-        let nowType = mode.boardType;
-        if (workspace) {
-            workspace.setMode(mode);
-            nowType = workspace.getMode();
-        }
-
-        if (mode.boardType === nowType) {
-            this.setState((state) => {
-                return {
-                    programLanguageMode: key,
-                };
-            });
+        if (key !== programLanguageMode) {
+            onProgramLanguageChanged(key);
         }
     }
+
     handleHelpClick(item) {
         const key = item[1];
         if (key === 'help_block') {
@@ -219,15 +191,12 @@ class Header extends Component {
     }
 
     render() {
-        const { common = [], projectName = '' } = this.props;
+        const { common = [], projectName = '', programLanguageMode } = this.props;
         const { lang } = common;
         const { dropdownType } = this.state;
-        const programLanguageMode = 'block';
-
-        console.log('header', common);
 
         return (
-            /* eslint-disable jsx-a11y/heading-has-content */
+            /* eslint-disable jsx-a11y/heading-has-content, jsx-a11y/anchor-is-valid */
             <header className={'common_gnb'}>
                 <h1 className={`${'logo'} ${'logo_gnb'}`} />
                 <div className={'srch_box'}>

@@ -1,7 +1,7 @@
 import { CHANGE_LANGUAGE, PROJECT_DATA, WS_MODE } from '../actions/types';
 
 const defaultState = {
-    lang: 'en',
+    lang: 'ko',
     mode: 'workspace',
 };
 

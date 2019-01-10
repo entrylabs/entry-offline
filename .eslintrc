@@ -19,6 +19,7 @@
     "Entry": true
   },
   "rules": {
+    "no-console": "off",
     "no-const-assign": "warn",
     "no-new-object": "warn",
     "object-shorthand": "warn",
