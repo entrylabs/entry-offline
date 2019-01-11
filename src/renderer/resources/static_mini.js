@@ -1,6 +1,4 @@
-'use strict';
-
-var EntryStatic = {};
+import { EntryStatic } from '../bower_components/entry-js/extern/util/static_mini.js';
 
 EntryStatic.isPracticalCourse = true;
 
@@ -1412,10 +1410,12 @@ EntryStatic.artPeriodOptions = [
 ];
 
 EntryStatic.getCategoryByBlock = function(blockName) {
-    if (!blockName) return false;
-    var allBlocks = EntryStatic.getAllBlocks();
-    for (var i = 0, len = allBlocks.length; i < len; i++) {
-        var blocks = allBlocks[i].blocks;
+    if (!blockName) {
+        return false;
+    }
+    const allBlocks = EntryStatic.getAllBlocks();
+    for (let i = 0, len = allBlocks.length; i < len; i++) {
+        const blocks = allBlocks[i].blocks;
         if (blocks.indexOf(blockName) > -1) {
             return allBlocks[i].category;
         }
@@ -1443,19 +1443,10 @@ EntryStatic.objectSubCategories = {
     people: [],
     animal: ['animal_flying', 'animal_land', 'animal_water', 'animal_others'],
     plant: ['plant_flower', 'plant_grass', 'plant_tree', 'plant_others'],
-    vehicles: [
-        'vehicles_flying',
-        'vehicles_land',
-        'vehicles_water',
-        'vehicles_others',
-    ],
+    vehicles: ['vehicles_flying', 'vehicles_land', 'vehicles_water', 'vehicles_others'],
     architect: ['architect_building', 'architect_monument', 'architect_others'],
     food: ['food_vegetables', 'food_meat', 'food_drink', 'food_others'],
-    environment: [
-        'environment_nature',
-        'environment_space',
-        'environment_others',
-    ],
+    environment: ['environment_nature', 'environment_space', 'environment_others'],
     stuff: ['stuff_living', 'stuff_hobby', 'stuff_others'],
     fantasy: [],
     interface: [],
@@ -1501,14 +1492,21 @@ EntryStatic.fonts = [
 ];
 
 EntryStatic.getName = function(str, type) {
-    var dict = SpriteNames;
-    if (type == 'picture') dict = PictureNames;
-    else if (type == 'sound') dict = SoundNames;
+    let dict = SpriteNames;
+    if (type == 'picture') {
+        dict = PictureNames;
+    } else if (type == 'sound') {
+        dict = SoundNames;
+    }
 
-    var lang = navigator.language ? navigator.language : 'ko';
-    if (window.lang) lang = window.lang;
+    let lang = navigator.language ? navigator.language : 'ko';
+    if (window.lang) {
+        lang = window.lang;
+    }
 
-    if (window.user && window.user.language) lang = window.user.language;
+    if (window.user && window.user.language) {
+        lang = window.user.language;
+    }
 
     if (!dict || (lang && lang.indexOf('ko') != -1)) {
         return str;
@@ -1535,11 +1533,7 @@ EntryStatic.initOptions = {
 
 EntryStatic.hwCategoryList = ['hw_motor', 'hw_melody', 'hw_sensor', 'hw_led'];
 
-EntryStatic.hwMiniSupportList = [
-    'neobot',
-    'roborobo_schoolkit',
-    'robotis_openCM70',
-];
+EntryStatic.hwMiniSupportList = ['neobot', 'roborobo_schoolkit', 'robotis_openCM70'];
 
 EntryStatic.COMMAND_TYPES = {
     addThread: 101,
@@ -1568,10 +1562,4 @@ EntryStatic.getQuestionCategoryData = function() {
     };
 };
 
-// for server node js code
-if (typeof exports == 'object') {
-    exports.blockInfo = EntryStatic.blockInfo;
-    exports.getAllBlocks = EntryStatic.getAllBlocks;
-    exports.getCategoryByBlock = EntryStatic.getCategoryByBlock;
-    exports.EntryStatic = EntryStatic;
-}
+export default EntryStatic;

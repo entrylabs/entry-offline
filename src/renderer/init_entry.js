@@ -1,19 +1,15 @@
 import root from 'window-or-global';
 import EntryStatic from './resources/static.js';
+import { EntryStatic as EntryStaticMini } from './bower_components/entry-js/extern/util/static_mini';
 import _ from 'lodash';
 import jquery from 'jquery';
 import { BigNumber } from 'bignumber.js';
 
 // EntryStatic
-root.EntryStatic = EntryStatic;
+root.EntryStatic = EntryStaticMini;
 
 // lodash
 root._ = _;
-
-//TODO lang
-if (!localStorage.getItem('lang')) {
-    localStorage.setItem('lang', 'ko');
-}
 
 // jquery
 // eslint-disable-next-line no-multi-assign, id-length
