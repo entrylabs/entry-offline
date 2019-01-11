@@ -1,15 +1,16 @@
 import { createStore, applyMiddleware } from 'redux';
 import { persistStore, persistReducer } from 'redux-persist';
-import hardSet from 'redux-persist/lib/stateReconciler/hardSet'
+import hardSet from 'redux-persist/lib/stateReconciler/hardSet';
 import createElectronStorage from 'redux-persist-electron-storage';
 import createSagaMiddleware from 'redux-saga';
 import rootReducer from './reducers';
 
 // persist store configure
 const persistConfig = {
-    key: 'storage',
+    key: 'storage', // identifier for persist
     storage: createElectronStorage(),
-    stateReconciler: hardSet,
+    stateReconciler: hardSet, // https://github.com/rt2zz/redux-persist#state-reconciler
+    whitelist: ['common'], // only this reducer key will be persisted
 };
 const persistCombinedReducer = persistReducer(persistConfig, rootReducer);
 

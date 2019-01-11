@@ -8,7 +8,7 @@ import { FETCH_POPUP_ITEMS, UPDATE_PROJECT } from '../actions/types';
 import _includes from 'lodash/includes';
 import _debounce from 'lodash/debounce';
 import fontFaceOnload from 'fontfaceonload';
-import Utils from '../helper/RendererUtils';
+import Utils from '../helper/rendererUtils';
 
 /* global Entry, EntryStatic */
 class Workspace extends Component {
@@ -222,26 +222,32 @@ class Workspace extends Component {
     }
 
     handleFileAction = (type) => {
-        console.log('isSaved', Entry.stateManager.isSaved());
-
         if (type === 'new') {
-            const { common } = this.props;
-            const { mode } = common;
-        } else if (type === 'open_online') {
-            Entry.projectPopup.show();
+            //TODO 변경감지 후 경고문 추가 필요
+            this.loadProject();
+        } else if (type === 'open_offline') {
+            console.log('load Offline');
         }
     };
+
+    /**
+     * 프로젝트를 로드한 후, 이벤트 연결을 시도한다.
+     * @param{Object?} project undefined 인 경우 신규 프로젝트로 생성
+     */
+    loadProject(project) {
+        Entry.disposeContainer();
+        Entry.reloadBlock();
+        Entry.init(this.container.current, this.initOption);
+        Entry.loadProject(project);
+        this.addEntryEvents();
+    }
 
     reloadEntry = (project) => {
         let temp = project;
         if (!temp) {
             temp = Entry.exportProject();
         }
-        Entry.disposeContainer();
-        Entry.reloadBlock();
-        Entry.init(this.container.current, this.initOption);
-        Entry.loadProject(temp);
-        this.addEntryEvents();
+        this.loadProject(temp);
     };
 
     handleProgramLanguageModeChanged = (mode) => {
@@ -284,7 +290,7 @@ class Workspace extends Component {
                     onFileAction={this.handleFileAction}
                     onReloadEntry={this.reloadEntry}
                     onProgramLanguageChanged={this.handleProgramLanguageModeChanged}
-                    onProjectNameChanged={(changedName) => this.projectName = changedName}
+                    onProjectNameChanged={(changedName) => (this.projectName = changedName)}
                     projectName={this.projectName}
                     programLanguageMode={programLanguageMode}
                 />
