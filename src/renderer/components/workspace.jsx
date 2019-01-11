@@ -9,6 +9,7 @@ import _includes from 'lodash/includes';
 import _debounce from 'lodash/debounce';
 import fontFaceOnload from 'fontfaceonload';
 import Utils from '../helper/rendererUtils';
+import LocalStorageManager from  '../helper/storageManager';
 
 /* global Entry, EntryStatic */
 class Workspace extends Component {
@@ -85,7 +86,6 @@ class Workspace extends Component {
         addEventListener('saveWorkspace', () => {
             console.log('saveWorkspace');
         });
-        //
         // exportObject
         addEventListener('exportObject', () => {
             console.log('exportObject');
@@ -154,14 +154,7 @@ class Workspace extends Component {
     }
 
     handleStorageProjectSave = _debounce((isImmediate, option = {}) => {
-        const storage =
-            typeof window.localStorage === 'undefined' ? undefined : window.localStorage;
-        const supported = !(typeof storage === 'undefined' || typeof window.JSON === 'undefined');
-
-        if (!supported) {
-            return;
-        }
-
+        console.log('saved');
         const { engine } = Entry;
         if (engine && engine.isState('run')) {
             return;
@@ -170,15 +163,19 @@ class Workspace extends Component {
         const project = Entry.exportProject();
         if (project) {
             project.name = this.projectName;
-            const { project: originProject, common } = this.props;
-            if (originProject) {
-                project.parent = originProject.parent;
-                project._id = originProject._id;
-            }
             Object.assign(project, option);
-            localStorage.setItem(this.LOCAL_STORAGE_KEY, JSON.stringify(project));
+            LocalStorageManager.saveProject(project);
         }
     }, 300);
+
+    confirmProjectWillDismiss() {
+        let confirmProjectDismiss = false;
+        if (!Entry.stateManager.isSaved()) {
+            confirmProjectDismiss = confirm(Utils.getLang('Menus.save_dismiss'));
+        }
+
+        return confirmProjectDismiss;
+    }
 
     handleHardwareChange = () => {
         const hw = Entry.hw;
@@ -223,8 +220,9 @@ class Workspace extends Component {
 
     handleFileAction = (type) => {
         if (type === 'new') {
-            //TODO 변경감지 후 경고문 추가 필요
-            this.loadProject();
+            if (this.confirmProjectWillDismiss()) {
+                this.loadProject();
+            }
         } else if (type === 'open_offline') {
             console.log('load Offline');
         }
