@@ -186,7 +186,7 @@ class Header extends Component {
 
     render() {
         const { common = [], projectName = '', programLanguageMode } = this.props;
-        const { lang } = common;
+        const { lang, mode } = common;
         const { dropdownType } = this.state;
 
         return (
@@ -209,7 +209,7 @@ class Header extends Component {
                 </div>
                 <div className={'group_box'}>
                     <div className={'group_inner'}>
-                        {
+                        { mode === 'workspace' &&
                             // 블록코딩, 엔트리파이선 모드 변경
                             <div className={'work_space'}>
                                 <a

@@ -9,12 +9,14 @@ const Script = ({ children }) => (
 
 class Index extends PureComponent {
     render() {
-        const { project } = this.props;
+        const { common = [] } = this.props;
+        const { mode } = common;
+
         console.log(this.props);
         return (
             <div>
-                <div className={`ws`}>
-                    <Workspace project={project} />
+                <div className={`ws ${mode === 'workspace' ? '' : 'practical_course_mode'}`}>
+                    <Workspace />
                 </div>
                 <Script>
                     {() => {
