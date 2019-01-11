@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import Header from './header';
 import './workspace.scss';
+import '../resources/styles/fonts.scss';
 import { connect } from 'react-redux';
 import { commonAction } from '../actions';
 import { FETCH_POPUP_ITEMS, UPDATE_PROJECT } from '../actions/types';
 import _includes from 'lodash/includes';
 import _debounce from 'lodash/debounce';
+import fontFaceOnload from 'fontfaceonload';
+import Utils from '../helper/RendererUtils';
 
 /* global Entry, EntryStatic */
 class Workspace extends Component {
@@ -23,32 +26,59 @@ class Workspace extends Component {
         this.container = React.createRef();
 
         const { project = {} } = props;
-        const { name = '' } = project;
+        const { name } = project;
 
+        this.projectName = name || Utils.getDefaultProjectName();
         this.state = {
-            projectName: name || '',
             programLanguageMode: 'block',
         };
 
         this.initOption = {
             type: 'workspace',
             libDir: 'renderer/bower_components',
+            fonts: EntryStatic.fonts,
             textCodingEnable: true,
         };
     }
 
     async componentDidMount() {
+        this.hwCategoryList = EntryStatic.hwCategoryList;
+        if (EntryStatic.initOptions) {
+            this.initOption = Object.assign({}, this.initOption, EntryStatic.initOptions, {
+                textCodingEnable: false,
+            });
+        }
+        // return;
+        this.isFontLoad();
+
         Entry.init(this.container.current, this.initOption);
         Entry.enableArduino();
         Entry.loadProject();
         this.addEntryEvents();
     }
 
+    isFontLoad() {
+        return new Promise((resolve) => {
+            console.log('1');
+            fontFaceOnload('NanumGothic', {
+                success() {
+                    console.log('font load');
+                    resolve();
+                },
+                error() {
+                    console.log('error');
+                    resolve();
+                },
+                timeout: 5000,
+            });
+        });
+    }
+
     addEntryEvents() {
         const addEventListener = Entry.addEventListener.bind(Entry);
 
         // 교과형에서 하드웨어가 바뀔때 마다 카테고리 변화
-        addEventListener('hwChanged', this.handleHardwareChange.bind(this));
+        addEventListener('hwChanged', this.handleHardwareChange);
         // 하드웨어 다운로드 탭에서 다운로드 처리
         addEventListener('hwDownload', this.handleHardwareDownload.bind(this));
         // 저장처리
@@ -139,8 +169,7 @@ class Workspace extends Component {
 
         const project = Entry.exportProject();
         if (project) {
-            const { projectName } = this.state;
-            project.name = projectName;
+            project.name = this.projectName;
             const { project: originProject, common } = this.props;
             if (originProject) {
                 project.parent = originProject.parent;
@@ -192,6 +221,17 @@ class Workspace extends Component {
         console.log(type);
     }
 
+    handleFileAction = (type) => {
+        console.log('isSaved', Entry.stateManager.isSaved());
+
+        if (type === 'new') {
+            const { common } = this.props;
+            const { mode } = common;
+        } else if (type === 'open_online') {
+            Entry.projectPopup.show();
+        }
+    };
+
     reloadEntry = (project) => {
         let temp = project;
         if (!temp) {
@@ -237,12 +277,15 @@ class Workspace extends Component {
 
     render() {
         const { programLanguageMode } = this.state;
+
         return (
             <div>
                 <Header
+                    onFileAction={this.handleFileAction}
                     onReloadEntry={this.reloadEntry}
                     onProgramLanguageChanged={this.handleProgramLanguageModeChanged}
-                    projectName={'projectName'}
+                    onProjectNameChanged={(changedName) => this.projectName = changedName}
+                    projectName={this.projectName}
                     programLanguageMode={programLanguageMode}
                 />
                 <input

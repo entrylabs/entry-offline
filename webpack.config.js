@@ -6,11 +6,12 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
     mode: 'none',
+    target: 'electron-renderer',
     entry: {
         init: './src/renderer/init_entry.js',
         render: './src/renderer/render_entry.js',
     },
-    devtool: 'inline-source-map',
+    devtool: 'source-map',
     resolve: {
         extensions: ['.js', '.jsx'],
     },

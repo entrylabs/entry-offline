@@ -90,12 +90,6 @@ class Header extends Component {
         });
     }
 
-    handleProjectNameChange(value) {
-        this.setState({
-            projectName: value,
-        });
-    }
-
     getLangValue() {
         const lang = _get(this.props, 'common.lang');
         return _get(root.Lang, lang);
@@ -200,6 +194,7 @@ class Header extends Component {
             <header className={'common_gnb'}>
                 <h1 className={`${'logo'} ${'logo_gnb'}`} />
                 <div className={'srch_box'}>
+                    {/* 작품명 */}
                     <input
                         type="text"
                         id="common_srch"
@@ -207,13 +202,15 @@ class Header extends Component {
                         defaultValue={projectName}
                         onChange={({ target }) => {
                             const { value } = target;
-                            this.handleProjectNameChange(value);
+                            const { onProjectNameChanged } = this.props;
+                            onProjectNameChanged(value);
                         }}
                     />
                 </div>
                 <div className={'group_box'}>
                     <div className={'group_inner'}>
                         {
+                            // 블록코딩, 엔트리파이선 모드 변경
                             <div className={'work_space'}>
                                 <a
                                     title={Utils.getLang('Workspace.language')}
@@ -233,6 +230,7 @@ class Header extends Component {
                             </div>
                         }
                         {
+                            // 새로만들기, 불러오기
                             <div className={'work_space'}>
                                 <a
                                     title={Utils.getLang('Workspace.file')}
@@ -252,6 +250,7 @@ class Header extends Component {
                             </div>
                         }
                         {
+                            // 저장하기, 복사본으로 저장하기
                             <div className={'work_space'}>
                                 <a
                                     title={Utils.getLang('Workspace.save')}
@@ -271,6 +270,7 @@ class Header extends Component {
                             </div>
                         }
                         {
+                            // 도움말들
                             <div className={'work_space'}>
                                 <a
                                     title={Utils.getLang('Workspace.help')}
