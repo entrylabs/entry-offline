@@ -250,8 +250,9 @@ class Workspace extends Component {
         const workspace = Entry.getMainWS();
 
         if (workspace) {
-            workspace.setMode(option);
             const expectedBoardType = option.boardType;
+
+            workspace.setMode(option);
             const actualBoardType = workspace.getMode();
 
             if (expectedBoardType === actualBoardType) {

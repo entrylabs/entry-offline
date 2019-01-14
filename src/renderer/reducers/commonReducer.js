@@ -6,7 +6,6 @@ const defaultState = {
 };
 
 export default (state = defaultState, action) => {
-    console.log(state, action);
     switch (action.type) {
         case CHANGE_LANGUAGE:
         case PROJECT_DATA:
