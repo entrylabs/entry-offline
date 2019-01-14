@@ -7,6 +7,12 @@ export default class {
     static get LOCAL_STORAGE_KEY_RELOAD() {
         return 'localStorageProjectReload';
     }
+    static get LOCAL_STORAGE_LANG() {
+        return 'lang';
+    }
+    static get LOCAL_STORAGE_WS_MODE() {
+        return 'mode';
+    }
 
     static saveProject(project) {
         const projectJson = typeof project === 'string' ? project : JSON.stringify(project);
@@ -26,5 +32,13 @@ export default class {
         const tempProject = root.localStorage.getItem(this.LOCAL_STORAGE_KEY_RELOAD);
         root.localStorage.removeItem(this.LOCAL_STORAGE_KEY_RELOAD);
         return tempProject;
+    }
+
+    static getLangType() {
+        return root.localStorage.getItem(this.LOCAL_STORAGE_LANG);
+    }
+
+    static getWorkspaceMode() {
+        return root.localStorage.getItem(this.LOCAL_STORAGE_WS_MODE);
     }
 }
