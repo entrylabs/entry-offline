@@ -7645,5 +7645,6 @@ Lang.Painter = {
 };
 
 Lang.Support = ["ko", "en", "ebs", "code", "vn", "jp"];
-if (typeof exports == "object")
+if (typeof exports == "object") {
     exports.Lang = Lang;
+}
