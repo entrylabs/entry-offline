@@ -20,6 +20,13 @@ class Workspace extends Component {
         return 'localStorageProjectReload';
     }
 
+    get initOption() {
+        return Object.assign({},
+            this.defaultInitOption,
+            EntryStatic.initOptions,
+        );
+    }
+
     constructor(props) {
         super(props);
         this.modal = null;
@@ -34,7 +41,7 @@ class Workspace extends Component {
             programLanguageMode: 'block',
         };
 
-        this.initOption = {
+        this.defaultInitOption = {
             type: 'workspace',
             libDir: 'renderer/bower_components',
             fonts: EntryStatic.fonts,
@@ -44,14 +51,7 @@ class Workspace extends Component {
 
     async componentDidMount() {
         this.hwCategoryList = EntryStatic.hwCategoryList;
-        if (EntryStatic.initOptions) {
-            this.initOption = Object.assign({}, this.initOption, EntryStatic.initOptions, {
-                textCodingEnable: false,
-            });
-        }
-        // return;
         this.isFontLoad();
-
         Entry.init(this.container.current, this.initOption);
         Entry.enableArduino();
         Entry.loadProject();

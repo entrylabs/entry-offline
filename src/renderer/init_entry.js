@@ -1,14 +1,22 @@
 import root from 'window-or-global';
 import EntryStatic from './resources/static.js';
-import { EntryStatic as EntryStaticMini } from './bower_components/entry-js/extern/util/static_mini';
 import _ from 'lodash';
 import jquery from 'jquery';
 import { BigNumber } from 'bignumber.js';
+import StorageManager from './helper/storageManager';
+
+
+// Lang
+(async() => {
+    const lastLang = StorageManager.getPersistLangType();
+    root.Lang = await import(`./resources/lang/${lastLang}.json`);
+})();
 
 // EntryStatic
-root.EntryStatic = EntryStaticMini;
+root.EntryStatic = EntryStatic;
 
 // lodash
+// eslint-disable-next-line id-length
 root._ = _;
 
 // jquery

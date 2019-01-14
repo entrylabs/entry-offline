@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { commonAction, showPopup } from '../actions';
 import { CHANGE_LANGUAGE, WS_MODE } from '../actions/types';
 import { Dropdown } from 'entry-tool/component';
+import ImportToggleHelper from '../helper/importToggleHelper';
 
 /* global Entry, EntryStatic */
 class Header extends Component {
@@ -170,16 +171,16 @@ class Header extends Component {
         }
     }
     handleChangeWsMode(item) {
+        const { mode, onReloadEntry } = this.props;
         const key = item[1];
-        if (key !== this.props.common.mode) {
-            location.href = WS_MODE_TYPE[key].href;
-        }
+        mode(key);
+        ImportToggleHelper.changeEntryStatic(key);
+        onReloadEntry();
     }
-    handleChangeLanguage(item) {
-        console.log(item);
-        const langType = item[1];
-        // root.Lang = data;
+    async handleChangeLanguage(item) {
         const { language, onReloadEntry } = this.props;
+        const langType = item[1];
+        await ImportToggleHelper.changeLang(langType);
         language({ lang: langType });
         onReloadEntry();
     }

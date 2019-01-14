@@ -34,8 +34,10 @@ export default class {
         return tempProject;
     }
 
-    static getLangType() {
-        return root.localStorage.getItem(this.LOCAL_STORAGE_LANG);
+    static getPersistLangType() {
+        const persist = root.localStorage.getItem('persist:storage');
+        const common = JSON.parse(JSON.parse(persist).common);
+        return common[this.LOCAL_STORAGE_LANG];
     }
 
     static getWorkspaceMode() {

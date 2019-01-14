@@ -1529,6 +1529,7 @@ EntryStatic.initOptions = {
     listEnable: false,
     functionEnable: false,
     sceneEditable: false,
+    textCodingEnable: false,
 };
 
 EntryStatic.hwCategoryList = ['hw_motor', 'hw_melody', 'hw_sensor', 'hw_led'];
