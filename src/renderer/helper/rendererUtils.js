@@ -29,4 +29,13 @@ export default class Utils {
     static getDefaultProjectName() {
         return `${this.getFormattedDate()}_${this.getLang('Workspace.project')}`;
     }
+
+    static confirmProjectWillDismiss() {
+        let confirmProjectDismiss = true;
+        if (!Entry.stateManager.isSaved()) {
+            confirmProjectDismiss = confirm(this.getLang('Menus.save_dismiss'));
+        }
+
+        return confirmProjectDismiss;
+    }
 }

@@ -168,15 +168,6 @@ class Workspace extends Component {
         }
     }, 300);
 
-    confirmProjectWillDismiss() {
-        let confirmProjectDismiss = true;
-        if (!Entry.stateManager.isSaved()) {
-            confirmProjectDismiss = confirm(Utils.getLang('Menus.save_dismiss'));
-        }
-
-        return confirmProjectDismiss;
-    }
-
     handleHardwareChange = () => {
         const hw = Entry.hw;
         const hwCategoryList = this.hwCategoryList;
@@ -220,7 +211,7 @@ class Workspace extends Component {
 
     handleFileAction = (type) => {
         if (type === 'new') {
-            if (this.confirmProjectWillDismiss()) {
+            if (Utils.confirmProjectWillDismiss()) {
                 this.loadProject();
             }
         } else if (type === 'open_offline') {

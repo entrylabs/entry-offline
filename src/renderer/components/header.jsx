@@ -170,13 +170,17 @@ class Header extends Component {
             Entry.dispatchEvent('showBlockHelper');
         }
     }
+
     async handleChangeWsMode(item) {
-        const { mode, onReloadProject } = this.props;
-        const key = item[1];
-        mode(key);
-        await ImportToggleHelper.changeEntryStatic(key);
-        onReloadProject();
+        if (Utils.confirmProjectWillDismiss()) {
+            const { mode, onLoadProject } = this.props;
+            const key = item[1];
+            await ImportToggleHelper.changeEntryStatic(key);
+            mode(key);
+            onLoadProject();
+        }
     }
+
     async handleChangeLanguage(item) {
         const { language, onReloadProject } = this.props;
         const langType = item[1];
