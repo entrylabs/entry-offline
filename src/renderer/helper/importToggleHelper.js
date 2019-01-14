@@ -1,6 +1,4 @@
 import root from 'window-or-global';
-import EntryStatic from '../resources/static.js';
-import { EntryStatic as EntryStaticMini } from '../bower_components/entry-js/extern/util/static_mini';
 
 export default class {
     /**
@@ -9,16 +7,20 @@ export default class {
      * TODO ko 로 진입하는 것이 불법접근인데 필요한 방어코드인지 고려
      * @param mode
      */
-    static changeEntryStatic(mode) {
-        console.log(mode);
+    static async changeEntryStatic(mode) {
+        let defaultEntryStatic;
         if (mode === 'practical_course') {
-            if (root.Lang.type !== 'ko') {
-                (async() => (await this.changeLang('ko')))();
+            if (root.Lang && root.Lang.type !== 'ko') {
+                (async() => await this.changeLang('ko'))();
             }
-            root.EntryStatic = EntryStaticMini;
+            defaultEntryStatic = await import('../bower_components/entry-js/extern/util/static_mini');
+            defaultEntryStatic = defaultEntryStatic.EntryStatic;
         } else {
-            root.EntryStatic = EntryStatic;
+            defaultEntryStatic = await import('../resources/static.js');
+            defaultEntryStatic = defaultEntryStatic.default;
         }
+
+        root.EntryStatic = defaultEntryStatic || root.EntryStatic;
     }
 
     static async changeLang(lang) {

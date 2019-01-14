@@ -40,7 +40,9 @@ export default class {
         return common[this.LOCAL_STORAGE_LANG];
     }
 
-    static getWorkspaceMode() {
-        return root.localStorage.getItem(this.LOCAL_STORAGE_WS_MODE);
+    static getPersistWorkspaceMode() {
+        const persist = root.localStorage.getItem('persist:storage');
+        const common = JSON.parse(JSON.parse(persist).common);
+        return common[this.LOCAL_STORAGE_WS_MODE];
     }
 }

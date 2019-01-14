@@ -1,19 +1,19 @@
 import root from 'window-or-global';
-import EntryStatic from './resources/static.js';
 import _ from 'lodash';
 import jquery from 'jquery';
 import { BigNumber } from 'bignumber.js';
 import StorageManager from './helper/storageManager';
+import ImportToggleHelper from './helper/importToggleHelper';
 
 
-// Lang
+// Lang, EntryStatic
+const lastLang = StorageManager.getPersistLangType() || 'ko';
+const lastWSMode = StorageManager.getPersistWorkspaceMode() || 'workspace';
+
 (async() => {
-    const lastLang = StorageManager.getPersistLangType();
-    root.Lang = await import(`./resources/lang/${lastLang}.json`);
+    await ImportToggleHelper.changeLang(lastLang);
+    await ImportToggleHelper.changeEntryStatic(lastWSMode);
 })();
-
-// EntryStatic
-root.EntryStatic = EntryStatic;
 
 // lodash
 // eslint-disable-next-line id-length

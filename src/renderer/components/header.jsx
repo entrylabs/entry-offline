@@ -170,25 +170,27 @@ class Header extends Component {
             Entry.dispatchEvent('showBlockHelper');
         }
     }
-    handleChangeWsMode(item) {
-        const { mode, onReloadEntry } = this.props;
+    async handleChangeWsMode(item) {
+        const { mode, onReloadProject } = this.props;
         const key = item[1];
         mode(key);
-        ImportToggleHelper.changeEntryStatic(key);
-        onReloadEntry();
+        await ImportToggleHelper.changeEntryStatic(key);
+        onReloadProject();
     }
     async handleChangeLanguage(item) {
-        const { language, onReloadEntry } = this.props;
+        const { language, onReloadProject } = this.props;
         const langType = item[1];
         await ImportToggleHelper.changeLang(langType);
         language({ lang: langType });
-        onReloadEntry();
+        onReloadProject();
     }
 
     render() {
         const { common = [], projectName = '', programLanguageMode } = this.props;
         const { lang, mode } = common;
         const { dropdownType } = this.state;
+
+        console.log('header', lang, mode);
 
         return (
             /* eslint-disable jsx-a11y/heading-has-content, jsx-a11y/anchor-is-valid */
@@ -292,6 +294,7 @@ class Header extends Component {
                         }
                     </div>
 
+                    {/* undo, redo */}
                     <div className={'group_inner'}>
                         <div className={'work_space'}>
                             <a
@@ -315,6 +318,7 @@ class Header extends Component {
                         </div>
                     </div>
 
+                    {/* 일반형, 교과형 모드변경 */}
                     {lang === 'ko' && (
                         <div className={'group_inner'}>
                             <div className={'work_space'}>
@@ -335,7 +339,9 @@ class Header extends Component {
                     )}
 
                     {
-                        <div className={'lang_select_box'}>
+                        /* 언어 변경 */
+                        mode === 'workspace' &&
+                        (<div className={'lang_select_box'}>
                             <a
                                 className={`${'select_link'} ${'ico_white_select_arr'} ${
                                     dropdownType === 'language' ? 'on' : ''
@@ -350,7 +356,7 @@ class Header extends Component {
                             <div className={'tooltip_box'}>
                                 {this.makeDropdown('language', this.languageList)}
                             </div>
-                        </div>
+                        </div>)
                     }
                 </div>
             </header>

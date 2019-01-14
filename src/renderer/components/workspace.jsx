@@ -169,7 +169,7 @@ class Workspace extends Component {
     }, 300);
 
     confirmProjectWillDismiss() {
-        let confirmProjectDismiss = false;
+        let confirmProjectDismiss = true;
         if (!Entry.stateManager.isSaved()) {
             confirmProjectDismiss = confirm(Utils.getLang('Menus.save_dismiss'));
         }
@@ -232,20 +232,16 @@ class Workspace extends Component {
      * 프로젝트를 로드한 후, 이벤트 연결을 시도한다.
      * @param{Object?} project undefined 인 경우 신규 프로젝트로 생성
      */
-    loadProject(project) {
+    loadProject = (project) => {
         Entry.disposeContainer();
         Entry.reloadBlock();
         Entry.init(this.container.current, this.initOption);
         Entry.loadProject(project);
         this.addEntryEvents();
-    }
+    };
 
-    reloadEntry = (project) => {
-        let temp = project;
-        if (!temp) {
-            temp = Entry.exportProject();
-        }
-        this.loadProject(temp);
+    reloadProject = () => {
+        this.loadProject(Entry.exportProject());
     };
 
     handleProgramLanguageModeChanged = (mode) => {
@@ -286,7 +282,8 @@ class Workspace extends Component {
             <div>
                 <Header
                     onFileAction={this.handleFileAction}
-                    onReloadEntry={this.reloadEntry}
+                    onReloadProject={this.reloadProject}
+                    onLoadProject={this.loadProject}
                     onProgramLanguageChanged={this.handleProgramLanguageModeChanged}
                     onProjectNameChanged={(changedName) => (this.projectName = changedName)}
                     projectName={this.projectName}
