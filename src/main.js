@@ -126,6 +126,7 @@ function createMainWindow() {
         title,
         show: false,
         backgroundColor: '#e5e5e5',
+        nodeIntegration: false,
         webPreferences: {
             backgroundThrottling: false,
         },
