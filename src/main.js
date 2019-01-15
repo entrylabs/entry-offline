@@ -12,6 +12,7 @@ import path from 'path';
 import packageJson from '../package.json';
 import ChildWindowManager from './main/ChildWindowManager';
 import MainUtils from './main/MainUtils';
+import './main/ipcMainHelper';
 
 let hostURI = 'playentry.org';
 let hostProtocol = 'https:';

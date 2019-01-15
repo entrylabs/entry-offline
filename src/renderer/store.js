@@ -10,7 +10,7 @@ import rootReducer from './reducers';
 const persistConfig = {
     key: 'storage', // identifier for persist
     storage,
-    stateReconciler: hardSet, // https://github.com/rt2zz/redux-persist#state-reconciler
+    // stateReconciler: hardSet, // https://github.com/rt2zz/redux-persist#state-reconciler
     whitelist: ['common'], // only this reducer key will be persisted
 };
 const persistCombinedReducer = persistReducer(persistConfig, rootReducer);

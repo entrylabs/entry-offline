@@ -11,7 +11,7 @@ module.exports = {
         init: './src/renderer/init_entry.js',
         render: './src/renderer/render_entry.js',
     },
-    devtool: 'source-map',
+    devtool: 'cheap-module-inline-source-map',
     resolve: {
         extensions: ['.js', '.jsx'],
     },

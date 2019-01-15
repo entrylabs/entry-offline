@@ -3,19 +3,21 @@ import Header from './header';
 import './workspace.scss';
 import '../resources/styles/fonts.scss';
 import { connect } from 'react-redux';
-import { commonAction } from '../actions';
+import { commonAction, modalProgressAction } from '../actions';
 import { FETCH_POPUP_ITEMS, UPDATE_PROJECT } from '../actions/types';
 import _includes from 'lodash/includes';
 import _debounce from 'lodash/debounce';
-import fontFaceOnload from 'fontfaceonload';
-import Utils from '../helper/rendererUtils';
-import LocalStorageManager from  '../helper/storageManager';
+import { ModalProgress } from 'entry-tool/component';
+import Utils from '../helper/rendererUtil';
+import IpcRendererHelper from '../helper/ipcRendererHelper';
+import LocalStorageManager from '../helper/storageManager';
 
 /* global Entry, EntryStatic */
 class Workspace extends Component {
     get LOCAL_STORAGE_KEY() {
         return 'localStorageProject';
     }
+
     get LOCAL_STORAGE_KEY_RELOAD() {
         return 'localStorageProjectReload';
     }
@@ -51,28 +53,10 @@ class Workspace extends Component {
 
     async componentDidMount() {
         this.hwCategoryList = EntryStatic.hwCategoryList;
-        this.isFontLoad();
         Entry.init(this.container.current, this.initOption);
         Entry.enableArduino();
         Entry.loadProject();
         this.addEntryEvents();
-    }
-
-    isFontLoad() {
-        return new Promise((resolve) => {
-            console.log('1');
-            fontFaceOnload('NanumGothic', {
-                success() {
-                    console.log('font load');
-                    resolve();
-                },
-                error() {
-                    console.log('error');
-                    resolve();
-                },
-                timeout: 5000,
-            });
-        });
     }
 
     addEntryEvents() {
@@ -124,7 +108,7 @@ class Workspace extends Component {
         if (workspace) {
             this.workspaceChangeEvent = workspace.changeEvent.attach(
                 this,
-                this.handleChangeWorkspaceMode
+                this.handleChangeWorkspaceMode,
             );
         }
     }
@@ -215,7 +199,67 @@ class Workspace extends Component {
                 this.loadProject();
             }
         } else if (type === 'open_offline') {
-            console.log('load Offline');
+            this.showModalProgress(
+                'progress',
+                Utils.getLang('Workspace.uploading_msg'),
+                Utils.getLang('Workspace.fail_contact_msg'),
+            );
+
+            // this.uploadInput.click();
+            Utils.openDialog({
+                /*defaultPath: storage.getItem('defaultPath') || '',*/
+                properties: ['openFile'],
+                filters: [{ name: 'Entry File', extensions: ['ent'] }],
+            }, async(filePaths) => {
+                if (Array.isArray(filePaths)) {
+                    const filePath = filePaths[0];
+                    const project = await IpcRendererHelper.loadProject(filePath);
+                    const analyzedProject = Utils.reviseProject(project);
+
+                    this.projectName = analyzedProject.projectName;
+                    if (analyzedProject.isPracticalCourse) {
+                        //TODO 모드변경 액션 보내고, static 모드 변경하고 로드프로젝트 하고
+                    }
+                    this.loadProject(analyzedProject.project);
+                }
+
+                this.hideModalProgress();
+            });
+        }
+    };
+
+    handleUploadChange = async() => {
+        const { files = [] } = this.uploadInput;
+        if (!files.length) {
+            console.log('files.length = 0');
+            return;
+        }
+
+        try {
+            /*
+            * 해야할 순서
+            * 1. localStorage 에 저장되어있던 데이터 정리
+            * 2. ent 파일인지 확인
+            * 3. 맞으면 ipcMain 으로 보냄
+            * 4. project 결과 받아서 리로드
+            * 4-1. 리로드하는데 교과형이면 교과형으로 리로드
+            * */
+            const filePath = files[0].path;
+            const project = await IpcRendererHelper.loadProject(filePath);
+            const analyzedProject = Utils.reviseProject(project);
+            console.log(analyzedProject);
+            // projectData 에 isPracticalCourse, name, projectObj 다들었다~
+            // this.loadProject(projectData.project);
+        } catch (e) {
+            console.error(e);
+            this.showModalProgress(
+                'error',
+                Utils.getLang('Workspace.uploading_msg'),
+                Utils.getLang('Workspace.fail_contact_msg'),
+            );
+        } finally {
+            this.uploadInput.value = '';
+            this.hideModalProgress();
         }
     };
 
@@ -267,8 +311,30 @@ class Workspace extends Component {
         }
     };
 
+    showModalProgress(type, title, description) {
+        const { modalProgressAction } = this.props;
+        modalProgressAction({
+            isShow: true,
+            data: {
+                type,
+                title,
+                description,
+            },
+        });
+    }
+
+    hideModalProgress = () => {
+        const { modalProgressAction } = this.props;
+        modalProgressAction({
+            isShow: false,
+        });
+    };
+
     render() {
         const { programLanguageMode } = this.state;
+        const { modal } = this.props;
+        const { isShow, data } = modal;
+        const { title, type, description } = data;
 
         return (
             <div>
@@ -288,10 +354,31 @@ class Workspace extends Component {
                         this.uploadInput = dom;
                     }}
                     accept=".ent"
+                    onChange={this.handleUploadChange}
+                    onClick={(event) => {
+                        const target = event.target || event.srcElement;
+                        console.log(target, 'clicked.');
+                        console.log(event);
+                        if (target.value.length === 0) {
+                            console.log('Suspect Cancel was hit, no files selected.');
+                        } else {
+                            console.log('File selected: ', target.value, target.files.length);
+                        }
+                    }}
                 />
-                <div ref={this.container} className="workspace" />
+                <div ref={this.container} className="workspace"/>
+                ;
+                {isShow && (
+                    <ModalProgress
+                        title={title}
+                        type={type}
+                        description={description}
+                        onClose={this.hideModalProgress}
+                    />
+                )}
             </div>
-        );
+        )
+            ;
     }
 }
 
@@ -300,6 +387,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
+    modalProgressAction,
     updateProject: (data) => {
         return commonAction(UPDATE_PROJECT, data);
     },
@@ -310,5 +398,5 @@ const mapDispatchToProps = {
 
 export default connect(
     mapStateToProps,
-    mapDispatchToProps
+    mapDispatchToProps,
 )(Workspace);

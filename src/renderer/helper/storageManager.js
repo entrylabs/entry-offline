@@ -36,12 +36,20 @@ export default class {
 
     static getPersistLangType() {
         const persist = root.localStorage.getItem('persist:storage');
+        if (!persist) {
+            return;
+        }
+
         const common = JSON.parse(JSON.parse(persist).common);
         return common[this.LOCAL_STORAGE_LANG];
     }
 
     static getPersistWorkspaceMode() {
         const persist = root.localStorage.getItem('persist:storage');
+        if (!persist) {
+            return;
+        }
+
         const common = JSON.parse(JSON.parse(persist).common);
         return common[this.LOCAL_STORAGE_WS_MODE];
     }

@@ -3,7 +3,7 @@ import './header.scss';
 import root from 'window-or-global';
 import _get from 'lodash/get';
 import _includes from 'lodash/includes';
-import Utils from '../helper/RendererUtils';
+import Utils from '../helper/rendererUtil';
 import { connect } from 'react-redux';
 import { commonAction, showPopup } from '../actions';
 import { CHANGE_LANGUAGE, WS_MODE } from '../actions/types';

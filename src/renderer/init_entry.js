@@ -37,3 +37,5 @@ root.entrylms = {
         return defer.resolve(isConfirm);
     },
 };
+
+root.isOsx = process.platform === 'darwin';
