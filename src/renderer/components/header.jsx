@@ -202,17 +202,19 @@ class Header extends Component {
                 <h1 className={`${'logo'} ${'logo_gnb'}`} />
                 <div className={'srch_box'}>
                     {/* 작품명 */}
-                    <input
-                        type="text"
-                        id="common_srch"
-                        name="common_srch"
-                        defaultValue={projectName}
-                        onChange={({ target }) => {
-                            const { value } = target;
-                            const { onProjectNameChanged } = this.props;
-                            onProjectNameChanged(value);
-                        }}
-                    />
+                    <div key={projectName}>
+                        <input
+                            type="text"
+                            id="common_srch"
+                            name="common_srch"
+                            defaultValue={projectName}
+                            onChange={({ target }) => {
+                                const { value } = target;
+                                const { onProjectNameChanged } = this.props;
+                                onProjectNameChanged(value);
+                            }}
+                        />
+                    </div>
                 </div>
                 <div className={'group_box'}>
                     <div className={'group_inner'}>
