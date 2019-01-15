@@ -219,7 +219,6 @@ class Workspace extends Component {
                     const analyzedProject = Utils.reviseProject(project);
 
                     this.projectName = analyzedProject.projectName;
-
                     const isToPracticalCourse = analyzedProject.isPracticalCourse;
 
                     // 현재 WS mode 와 이후 변경될 모드가 다른 경우
@@ -335,8 +334,7 @@ class Workspace extends Component {
                     />
                 )}
             </div>
-        )
-            ;
+        );
     }
 }
 

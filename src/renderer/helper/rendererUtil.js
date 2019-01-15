@@ -61,7 +61,7 @@ export default class Utils {
      * @return {Object.<{boolean}isPracticalCourse, {string}projectName, {Object}project>}
      */
     static reviseProject(project) {
-        const baseUrl = project.path;
+        const baseUrl = project.basePath;
 
         project.objects.forEach((object) => {
             const { pictures, sounds } = object.sprite;

@@ -47,7 +47,8 @@ class IpcMainHelper {
                                 e.sender.send('decompress', err);
                             } else {
                                 const project = JSON.parse(data);
-                                project.path = electronAppPath; // electron save path
+                                project.basePath = electronAppPath; // electron save path
+                                project.savedPath = filePath; // real .ent file's path
                                 e.sender.send('decompress', project);
                             }
                         },
