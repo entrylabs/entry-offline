@@ -4,13 +4,14 @@ import './workspace.scss';
 import '../resources/styles/fonts.scss';
 import { connect } from 'react-redux';
 import { commonAction, modalProgressAction } from '../actions';
-import { FETCH_POPUP_ITEMS, UPDATE_PROJECT } from '../actions/types';
+import { FETCH_POPUP_ITEMS, UPDATE_PROJECT, WS_MODE } from '../actions/types';
 import _includes from 'lodash/includes';
 import _debounce from 'lodash/debounce';
 import { ModalProgress } from 'entry-tool/component';
 import Utils from '../helper/rendererUtil';
 import IpcRendererHelper from '../helper/ipcRendererHelper';
 import LocalStorageManager from '../helper/storageManager';
+import ImportToggleHelper from '../helper/importToggleHelper';
 
 /* global Entry, EntryStatic */
 class Workspace extends Component {
@@ -199,6 +200,8 @@ class Workspace extends Component {
                 this.loadProject();
             }
         } else if (type === 'open_offline') {
+            const { changeWorkspaceMode, common } = this.props;
+            const { mode: currentWorkspaceMode } = common;
             this.showModalProgress(
                 'progress',
                 Utils.getLang('Workspace.uploading_msg'),
@@ -216,8 +219,18 @@ class Workspace extends Component {
                     const analyzedProject = Utils.reviseProject(project);
 
                     this.projectName = analyzedProject.projectName;
-                    if (analyzedProject.isPracticalCourse) {
-                        //TODO 모드변경 액션 보내고, static 모드 변경하고 로드프로젝트 하고
+
+                    const isToPracticalCourse = analyzedProject.isPracticalCourse;
+
+                    // 현재 WS mode 와 이후 변경될 모드가 다른 경우
+                    if ((currentWorkspaceMode === 'workspace') === isToPracticalCourse) {
+                        if (isToPracticalCourse) {
+                            await ImportToggleHelper.changeEntryStatic('practical_course');
+                            changeWorkspaceMode('practical_course');
+                        } else {
+                            await ImportToggleHelper.changeEntryStatic('workspace');
+                            changeWorkspaceMode('workspace');
+                        }
                     }
                     this.loadProject(analyzedProject.project);
                 }
@@ -333,6 +346,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
     modalProgressAction,
+    changeWorkspaceMode: (data) => commonAction(WS_MODE, data),
     updateProject: (data) => {
         return commonAction(UPDATE_PROJECT, data);
     },
