@@ -205,7 +205,6 @@ class Workspace extends Component {
                 Utils.getLang('Workspace.fail_contact_msg'),
             );
 
-            // this.uploadInput.click();
             Utils.openDialog({
                 /*defaultPath: storage.getItem('defaultPath') || '',*/
                 properties: ['openFile'],
@@ -225,41 +224,6 @@ class Workspace extends Component {
 
                 this.hideModalProgress();
             });
-        }
-    };
-
-    handleUploadChange = async() => {
-        const { files = [] } = this.uploadInput;
-        if (!files.length) {
-            console.log('files.length = 0');
-            return;
-        }
-
-        try {
-            /*
-            * 해야할 순서
-            * 1. localStorage 에 저장되어있던 데이터 정리
-            * 2. ent 파일인지 확인
-            * 3. 맞으면 ipcMain 으로 보냄
-            * 4. project 결과 받아서 리로드
-            * 4-1. 리로드하는데 교과형이면 교과형으로 리로드
-            * */
-            const filePath = files[0].path;
-            const project = await IpcRendererHelper.loadProject(filePath);
-            const analyzedProject = Utils.reviseProject(project);
-            console.log(analyzedProject);
-            // projectData 에 isPracticalCourse, name, projectObj 다들었다~
-            // this.loadProject(projectData.project);
-        } catch (e) {
-            console.error(e);
-            this.showModalProgress(
-                'error',
-                Utils.getLang('Workspace.uploading_msg'),
-                Utils.getLang('Workspace.fail_contact_msg'),
-            );
-        } finally {
-            this.uploadInput.value = '';
-            this.hideModalProgress();
         }
     };
 
@@ -346,25 +310,6 @@ class Workspace extends Component {
                     onProjectNameChanged={(changedName) => (this.projectName = changedName)}
                     projectName={this.projectName}
                     programLanguageMode={programLanguageMode}
-                />
-                <input
-                    className="uploadInput"
-                    type="file"
-                    ref={(dom) => {
-                        this.uploadInput = dom;
-                    }}
-                    accept=".ent"
-                    onChange={this.handleUploadChange}
-                    onClick={(event) => {
-                        const target = event.target || event.srcElement;
-                        console.log(target, 'clicked.');
-                        console.log(event);
-                        if (target.value.length === 0) {
-                            console.log('Suspect Cancel was hit, no files selected.');
-                        } else {
-                            console.log('File selected: ', target.value, target.files.length);
-                        }
-                    }}
                 />
                 <div ref={this.container} className="workspace"/>
                 ;
