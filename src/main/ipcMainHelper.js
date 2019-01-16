@@ -1,22 +1,17 @@
-import { ipcMain, app } from 'electron';
-import zlib from 'zlib';
-import fs from 'fs';
-import tar from 'tar';
-import stream from 'stream';
-import path from 'path';
-import fstream from 'fstream';
+import { ipcMain } from 'electron';
 import MainUtils from './MainUtils';
 
-/* eslint-disable new-cap */
 class IpcMainHelper {
     constructor() {
         ipcMain.on('resetDirectory', this.resetSaveDirectory.bind(this));
         ipcMain.on('loadProject', this.loadProject.bind(this));
         ipcMain.on('saveProject', this.saveProject.bind(this));
+        ipcMain.on('exportObject', MainUtils.exportObject);
+        ipcMain.on('importObject', MainUtils.importObject);
     }
 
     resetSaveDirectory() {
-        MainUtils.deleteFolderRecursive(path.resolve(app.getPath('userData'), 'temp'));
+        MainUtils.resetSaveDirectory();
     }
 
     loadProject(event, filePath) {

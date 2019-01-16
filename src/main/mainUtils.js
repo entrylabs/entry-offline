@@ -11,12 +11,14 @@ import stream from "stream";
 import tar from 'tar';
 
 export default class {
-    // constructor(window) {
-    //     this.window = window;
-    //     ipcMain.on('exportObject', this.exportObject);
-    //     ipcMain.on('importObject', this.importObject);
-    // }
-
+    /**
+     * ent 파일에서 프로젝트를 로드한다.
+     * electron directory 에 압축해제 한 후,
+     * project.json 의 object fileUrl 주소를 전부 오프라인용으로 수정한다.
+     * 최종적으로는 workspace 에 project object 를 전달한다.
+     * @param filePath ent file path
+     * @return {Promise<Object>} 성공시 project, 실패시 {Error}err
+     */
     static loadProject(filePath) {
         return new Promise((resolve, reject) => {
             const rs = fs.createReadStream(filePath);
@@ -81,6 +83,10 @@ export default class {
         });
     }
 
+    /**
+     * 일렉트론 temp 디렉토리를 삭제한다.
+     * 이는 새 엔트리 프로젝트를 만들거나 ent 파일이 새로 로드되는 경우 실행된다.
+     */
     static resetSaveDirectory() {
         this.deleteFolderRecursive(path.resolve(app.getPath('userData'), 'temp'));
     }
@@ -213,8 +219,6 @@ export default class {
         });
     }
 
-
-
     lpad(str, len) {
         const strLen = str.length;
         if (strLen < len) {
@@ -240,7 +244,7 @@ export default class {
         return padded.join('.');
     }
 
-    async exportObject(e, object) {
+    static async exportObject(e, object) {
         const { objects } = object;
         const objectName = objects[0].name;
         const objectId = Utils.createFileId();
@@ -282,7 +286,7 @@ export default class {
         }
     }
 
-    async importObject(e, objectFiles) {
+    static async importObject(e, objectFiles) {
         try {
             const jobPromises = [];
             objectFiles.forEach((objectFile) => {
