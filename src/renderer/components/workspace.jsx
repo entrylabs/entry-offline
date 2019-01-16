@@ -194,10 +194,6 @@ class Workspace extends Component {
     }
 
     handleSaveAction = async(key) => {
-        if (!Utils.confirmProjectWillDismiss()) {
-            return;
-        }
-
         const targetPath = this.projectSavedPath || '*';
         if (key === 'save') {
             // 다이얼로그 띄우고 path 없으면 리턴 있으면 this.projectSavedPath 에도 저장
@@ -238,8 +234,7 @@ class Workspace extends Component {
                 project.name = this.projectName;
                 // project.parent = parent;
 
-                console.log('ajsioejfoisef');
-                // await IpcRendererHelper.saveProject(project, filePath);
+                await IpcRendererHelper.saveProject(project, filePath);
 
                 // 파일명을 지우고 파일 경로를 저장한다.
                 this.projectSavedPath = filePath.replace(/[\\/][^\\/]*$/, '');

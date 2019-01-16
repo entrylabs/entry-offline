@@ -6,6 +6,7 @@ import zlib from 'zlib';
 import path from 'path';
 import { ProgressTypes } from './Constants';
 import { default as Utils } from '../common/Utils';
+import root from 'window-or-global';
 import stream from "stream";
 import tar from 'tar';
 
@@ -18,7 +19,65 @@ export default class {
 
     static loadProject(filePath) {
         return new Promise((resolve, reject) => {
+            const rs = fs.createReadStream(filePath);
+            const gunzip = zlib.createGunzip();
+            const electronAppPath = app.getPath('userData');
 
+            gunzip.on('error', function(err) {
+                reject(err);
+            });
+
+            const buffers = [];
+            gunzip.on('data', (data) => {
+                buffers.push(data);
+            });
+
+            gunzip.on('end', () => {
+                const bufferStream = new stream.PassThrough();
+                this.resetSaveDirectory();
+                const fsWriter = fstream.Writer({
+                    path: electronAppPath,
+                    mode: '0777',
+                    type: 'Directory',
+                });
+                fsWriter.on('entry', function(list) {
+                    list.props.mode = '0777';
+                });
+                fsWriter.on('error', function(err) {
+                    reject(err);
+                });
+                fsWriter.on('end', () => {
+                    fs.readFile(
+                        path.resolve(electronAppPath, 'temp', 'project.json'),
+                        'utf8',
+                        (err, data) => {
+                            if (err) {
+                                reject(err);
+                            } else {
+                                const project = JSON.parse(data);
+                                this.changeObjectPath(project, (fileUrl) => {
+                                    let result = fileUrl;
+                                    if (result.startsWith('.')) {
+                                        // ./bower_components/.. => renderer/bower_components/..
+                                        result = result.replace(/\./, 'renderer');
+                                    } else if (result.startsWith('temp')) {
+                                        // temp/fo/ba/.. => [ElectronAppData 경로]/temp/fo/ba/..
+                                        result = `${electronAppPath}/${result}`.replace(/\\/gi, '/');
+                                    }
+                                    return result;
+                                });
+                                project.basePath = electronAppPath; // electron save path
+                                project.savedPath = filePath; // real .ent file's path
+                                resolve(project);
+                            }
+                        }
+                    );
+                });
+
+                bufferStream.end(Buffer.concat(buffers));
+                bufferStream.pipe(tar.Parse()).pipe(fsWriter);
+            });
+            rs.pipe(gunzip);
         });
     }
 
@@ -49,23 +108,29 @@ export default class {
      * @return {Promise} 성공시 resolve(), 실패시 reject(err)
      */
     static saveProject(project, destinationPath) {
-        const focusedWindow = BrowserWindow.getFocusedWindow();
+        const mainWindow = BrowserWindow.fromId(root.sharedObject.mainWindowId);
         const sourcePath = app.getPath('userData');
 
-        this.changeObjectPath(project, (fileUrl) => {
-            let result = fileUrl;
-            result = result.replace(`${sourcePath}`, '').replace(/^(\\)/, '');
-
-            if (result.startsWith('renderer')) {
-                result = result.replace('renderer', '.');
-            }
-
-            return result;
-        });
-
-        const projectString = JSON.stringify(project);
-
         return new Promise((resolve, reject) => {
+            this.changeObjectPath(project, (fileUrl) => {
+                let result = fileUrl;
+
+                console.log('sourcePath');
+                const af = sourcePath.replace(/\\/gi, '/');
+
+                result = result
+                    .replace(af, '')
+                    .replace(/^([\\/])/, '');
+
+                if (result.startsWith('renderer')) {
+                    result = result.replace('renderer', '.');
+                }
+
+                return result;
+            });
+
+            const projectString = JSON.stringify(project);
+
             fs.writeFile(
                 path.join(sourcePath, 'temp', 'project.json'),
                 projectString,
@@ -87,7 +152,7 @@ export default class {
                         });
 
                         fsWriter.on('end', () => {
-                            focusedWindow.setProgressBar(ProgressTypes.DISABLE_PROGRESS);
+                            mainWindow.setProgressBar(ProgressTypes.DISABLE_PROGRESS);
                             resolve();
                         });
                         archive.on('error', (e) => {
@@ -96,7 +161,7 @@ export default class {
                         archive.on('entry', () => {});
                         archive.on('progress', ({ fs }) => {
                             const { totalBytes, processedBytes } = fs;
-                            focusedWindow.setProgressBar(processedBytes / totalBytes);
+                            mainWindow.setProgressBar(processedBytes / totalBytes);
                         });
 
                         archive.pipe(gzip).pipe(fsWriter);
