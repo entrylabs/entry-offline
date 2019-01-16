@@ -67,47 +67,6 @@ export default class {
         dialog.showSaveDialog(option, callback);
     }
 
-    /**
-     * 프로젝트의 이름, 교과형여부, 파일 url 등을 정리한다.
-     * @param {Object} project 엔트리 프로젝트
-     * @return {Object.<{boolean}isPracticalCourse, {string}projectName,{string}projectSavedPath, {Object}project>}
-     */
-    static reviseProject(project) {
-        //TODO blockly(XML project) 변환
-
-        return {
-            isPracticalCourse: project.isPracticalCourse,
-            projectName: project.name,
-            projectSavedPath: project.savedPath,
-            project,
-        };
-    }
-
-    /**
-     * project 내 object 들에 들어간 fileUrl 을 electron temp path 에 맞춰 수정한다.
-     * 또한 entryjs 내장 기본 오브젝트 들의 주소를 정리한다.
-     * @param {string} baseUrl 일렉트론 app path (절대경로)
-     * @param {string} fileUrl 변경될 파일 경로
-     * @return {string} 변환된 파일 경로
-     */
-    static getElectronTempPathUrl(baseUrl, fileUrl) {
-        let result = fileUrl;
-        if (result.startsWith('.')) {
-            /*
-            기본 오브젝트인 경우 (./bower_components/..)
-            renderer/bower_components/.. 로 변경
-            */
-            result = result.replace(/\./, 'renderer');
-        } else if (result.startsWith('temp')) {
-            /*
-            추가된 오브젝트인 경우 (temp/fo/ba/..);
-            [ElectronAppData 경로]/temp/fo/ba/.. 로 변경
-             */
-            result = `${baseUrl}/${result}`.replace(/\\/gi, '/');
-        }
-        return result;
-    }
-
     static confirmProjectWillDismiss() {
         let confirmProjectDismiss = true;
         if (!Entry.stateManager.isSaved()) {
