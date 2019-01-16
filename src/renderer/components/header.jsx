@@ -39,14 +39,15 @@ class Header extends Component {
         ];
     }
     get helpList() {
+        const { common } = this.props;
+        const { mode } = common;
+
         return [
             [Utils.getLang('Workspace.block_helper'), 'help_block'],
-            [
-                Utils.getLang('Workspace.hardware_guide'),
-                'help_hardware',
-                { isPracticalCourse: false },
-            ],
-            [Utils.getLang('Workspace.robot_guide'), 'help_robot', { isPracticalCourse: true }],
+            (mode === 'workspace' ?
+                [Utils.getLang('Workspace.hardware_guide'), 'help_hardware'] :
+                [Utils.getLang('Workspace.robot_guide'), 'help_robot']
+            ),
             [Utils.getLang('Workspace.python_guide'), 'help_python'],
         ];
     }
