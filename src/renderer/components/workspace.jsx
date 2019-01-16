@@ -8,7 +8,7 @@ import { FETCH_POPUP_ITEMS, UPDATE_PROJECT, WS_MODE } from '../actions/types';
 import _includes from 'lodash/includes';
 import _debounce from 'lodash/debounce';
 import { ModalProgress } from 'entry-tool/component';
-import Utils from '../helper/rendererUtil';
+import Utils from '../helper/rendererUtils';
 import IpcRendererHelper from '../helper/ipcRendererHelper';
 import LocalStorageManager from '../helper/storageManager';
 import ImportToggleHelper from '../helper/importToggleHelper';
@@ -139,7 +139,6 @@ class Workspace extends Component {
     }
 
     handleStorageProjectSave = _debounce((isImmediate, option = {}) => {
-        console.log('saved');
         const { engine } = Entry;
         if (engine && engine.isState('run')) {
             return;
@@ -194,9 +193,79 @@ class Workspace extends Component {
         console.log(type);
     }
 
+    handleSaveAction = async(key) => {
+        if (!Utils.confirmProjectWillDismiss()) {
+            return;
+        }
+
+        const targetPath = this.projectSavedPath || '*';
+        if (key === 'save') {
+            // 다이얼로그 띄우고 path 없으면 리턴 있으면 this.projectSavedPath 에도 저장
+        } else if (key === 'save_as') {
+
+        }
+
+        Utils.showSaveDialog({
+            defaultPath: `${targetPath}/${this.projectName}`,
+            filters: [{ name: 'Entry File', extensions: ['ent'] }],
+        }, async(filePath) => {
+            if (!filePath) {
+                return;
+            }
+
+            this.showModalProgress(
+                'progress',
+                Utils.getLang('Workspace.saving_msg'),
+                Utils.getLang('Workspace.fail_contact_msg'),
+            );
+
+            // 저장중 모달 표시 try - catch
+            // 여기서 프로젝트 말아올리기
+            // ipcRendererHelper 로 플젝데이터랑 타깃경로 보내기
+            // ipcMain 에서 electronAppData / temp 폴더 압축조지기
+            // 압축한거 ent 로 뱉기 writeFile
+            // 다되면 콜백으로 renderer 한테 send 하기
+            //
+            try {
+                // 프로젝트를 가져온다. 프로젝트 명과 워크스페이스 모드를 주입한다.
+                const { common } = this.props;
+                const { mode } = common;
+
+                Entry.stage.handle.setVisible(false);
+                Entry.stage.update();
+                const project = Entry.exportProject();
+                project.isPracticalCourse = mode === 'practical_course';
+                project.name = this.projectName;
+                // project.parent = parent;
+
+                console.log('ajsioejfoisef');
+                // await IpcRendererHelper.saveProject(project, filePath);
+
+                // 파일명을 지우고 파일 경로를 저장한다.
+                this.projectSavedPath = filePath.replace(/[\\/][^\\/]*$/, '');
+
+                // 모달 해제 후 엔트리 토스트로 저장처리
+                this.hideModalProgress();
+                Entry.stateManager.addStamp();
+                Entry.toast.success(
+                    Utils.getLang('Workspace.saved'),
+                    `${this.projectName} ${Utils.getLang('Workspace.saved_msg')}`
+                );
+            } catch (err) {
+                console.error(err);
+                this.showModalProgress(
+                    'error',
+                    Utils.getLang('Workspace.saving_fail_msg'),
+                    Utils.getLang('Workspace.fail_contact_msg')
+                );
+            }
+        });
+    };
+
     handleFileAction = (type) => {
         if (type === 'new') {
             if (Utils.confirmProjectWillDismiss()) {
+                IpcRendererHelper.resetDirectory();
                 this.loadProject();
             }
         } else if (type === 'open_offline') {
@@ -208,7 +277,7 @@ class Workspace extends Component {
                 Utils.getLang('Workspace.fail_contact_msg'),
             );
 
-            Utils.openDialog({
+            Utils.showOpenDialog({
                 /*defaultPath: storage.getItem('defaultPath') || '',*/
                 properties: ['openFile'],
                 filters: [{ name: 'Entry File', extensions: ['ent'] }],
@@ -216,10 +285,12 @@ class Workspace extends Component {
                 if (Array.isArray(filePaths)) {
                     const filePath = filePaths[0];
                     const project = await IpcRendererHelper.loadProject(filePath);
-                    const analyzedProject = Utils.reviseProject(project);
 
-                    this.projectName = analyzedProject.projectName;
-                    const isToPracticalCourse = analyzedProject.isPracticalCourse;
+                    console.log('load', filePath, project);
+
+                    this.projectName = project.name;
+                    this.projectSavedPath = project.savedPath;
+                    const isToPracticalCourse = project.isPracticalCourse;
 
                     // 현재 WS mode 와 이후 변경될 모드가 다른 경우
                     if ((currentWorkspaceMode === 'workspace') === isToPracticalCourse) {
@@ -231,7 +302,8 @@ class Workspace extends Component {
                             changeWorkspaceMode('workspace');
                         }
                     }
-                    this.loadProject(analyzedProject.project);
+
+                    this.loadProject(project);
                 }
 
                 this.hideModalProgress();
@@ -315,6 +387,7 @@ class Workspace extends Component {
         return (
             <div>
                 <Header
+                    onSaveAction={this.handleSaveAction}
                     onFileAction={this.handleFileAction}
                     onReloadProject={this.reloadProject}
                     onLoadProject={this.loadProject}

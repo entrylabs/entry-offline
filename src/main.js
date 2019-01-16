@@ -11,7 +11,8 @@ import {
 import path from 'path';
 import packageJson from '../package.json';
 import ChildWindowManager from './main/ChildWindowManager';
-import MainUtils from './main/MainUtils';
+import root from 'window-or-global';
+import MainUtil from './main/MainUtils';
 import './main/ipcMainHelper';
 
 let hostURI = 'playentry.org';
@@ -30,7 +31,7 @@ const downloadFilterList = {
     ],
 };
 
-global.sharedObject = {
+root.sharedObject = {
     roomId: '',
     mainWindowId: '',
     workingPath: '',
@@ -132,7 +133,7 @@ function createMainWindow() {
         },
     });
 
-    global.sharedObject.mainWindowId = mainWindow.id;
+    root.sharedObject.mainWindowId = mainWindow.id;
 
     mainWindow.once('ready-to-show', () => {
         mainWindow.show();
@@ -155,7 +156,7 @@ function createMainWindow() {
         }
     });
 
-    mainUtils = new MainUtils(mainWindow);
+    mainUtils = new MainUtil(mainWindow);
 
     mainWindow.webContents.on('crashed', () => {
         dialog.showErrorBox(crashedMsg.title, crashedMsg.content);
@@ -174,7 +175,7 @@ function createMainWindow() {
                 try {
                     await mainUtils.saveProject({
                         destinationPath,
-                        sourcePath: global.sharedObject.workingPath,
+                        sourcePath: root.sharedObject.workingPath,
                     });
                 } catch (error) {
                     console.log(error);
@@ -203,7 +204,7 @@ function createMainWindow() {
     });
 
     mainWindow.on('close', function(e) {
-        if (!isForceClose && global.sharedObject.isInitEntry) {
+        if (!isForceClose && root.sharedObject.isInitEntry) {
             e.preventDefault();
             cwm.closeHardwareWindow();
             mainWindow.webContents.send('mainClose');
@@ -266,7 +267,7 @@ ipcMain.on('reload', function(event, arg) {
 });
 
 ipcMain.on('roomId', function(event, arg) {
-    event.returnValue = global.sharedObject.roomId;
+    event.returnValue = root.sharedObject.roomId;
 });
 
 ipcMain.on('version', function(event, arg) {
@@ -289,19 +290,6 @@ ipcMain.on('openAboutWindow', function(event, arg) {
 
 ipcMain.on('closeAboutWindow', function(event, arg) {
     cwm.closeAboutWindow();
-});
-
-ipcMain.on('saveProject', async (event, arg) => {
-    let err;
-    try {
-        await mainUtils.saveProject(arg);
-    } catch (error) {
-        console.log(error);
-        err = error;
-    }
-    if (event) {
-        event.sender.send(arg.channel, err);
-    }
 });
 
 ipcMain.on('checkUpdate', ({ sender }, msg) => {

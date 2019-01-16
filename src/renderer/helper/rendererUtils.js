@@ -3,7 +3,15 @@ import root from 'window-or-global';
 import { remote } from 'electron';
 const { dialog } = remote;
 
-export default class Utils {
+export default class {
+    /**
+     * electron main process 와 연결된 오브젝트를 가져온다.
+     * @return {any}
+     */
+    static getSharedObject() {
+        return remote.getGlobal('sharedObject');
+    }
+
     /**
      * root.Lang 에서 해당 프로퍼티를 가져온다.
      * @param key{string} property chain
@@ -46,7 +54,7 @@ export default class Utils {
         return `${this.getFormattedDate()}_${this.getLang('Workspace.project')}`;
     }
 
-    static openDialog(option, callback) {
+    static showOpenDialog(option, callback) {
         if (root.isOsx) {
             dialog.showOpenDialog(option, callback);
         } else {
@@ -55,37 +63,22 @@ export default class Utils {
         }
     }
 
+    static showSaveDialog(option, callback) {
+        dialog.showSaveDialog(option, callback);
+    }
+
     /**
      * 프로젝트의 이름, 교과형여부, 파일 url 등을 정리한다.
      * @param {Object} project 엔트리 프로젝트
-     * @return {Object.<{boolean}isPracticalCourse, {string}projectName, {Object}project>}
+     * @return {Object.<{boolean}isPracticalCourse, {string}projectName,{string}projectSavedPath, {Object}project>}
      */
     static reviseProject(project) {
-        const baseUrl = project.basePath;
-
-        project.objects.forEach((object) => {
-            const { pictures, sounds } = object.sprite;
-            pictures.forEach((picture) => {
-                const fileUrl = picture.fileurl;
-                if (!fileUrl) {
-                    return;
-                }
-                picture.fileurl = this.getElectronTempPathUrl(baseUrl, fileUrl);
-            });
-            sounds.forEach((sound) => {
-                const fileUrl = sound.fileurl;
-                if (!fileUrl) {
-                    return;
-                }
-                sound.fileurl = this.getElectronTempPathUrl(baseUrl, fileUrl);
-            });
-        });
-
         //TODO blockly(XML project) 변환
 
         return {
             isPracticalCourse: project.isPracticalCourse,
             projectName: project.name,
+            projectSavedPath: project.savedPath,
             project,
         };
     }

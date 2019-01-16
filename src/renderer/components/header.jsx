@@ -3,7 +3,7 @@ import './header.scss';
 import root from 'window-or-global';
 import _get from 'lodash/get';
 import _includes from 'lodash/includes';
-import Utils from '../helper/rendererUtil';
+import Utils from '../helper/rendererUtils';
 import { connect } from 'react-redux';
 import { commonAction, showPopup } from '../actions';
 import { CHANGE_LANGUAGE, WS_MODE } from '../actions/types';
@@ -34,8 +34,8 @@ class Header extends Component {
     }
     get saveList() {
         return [
-            [Utils.getLang('Workspace.file_save'), 'save_online'],
-            [Utils.getLang('Workspace.file_save_as'), 'save_as_online'],
+            [Utils.getLang('Workspace.file_save'), 'save'],
+            [Utils.getLang('Workspace.file_save_as'), 'save_as'],
         ];
     }
     get helpList() {
@@ -194,7 +194,6 @@ class Header extends Component {
         const { lang, mode } = common;
         const { dropdownType } = this.state;
 
-        console.log('header', lang, mode);
 
         return (
             /* eslint-disable jsx-a11y/heading-has-content, jsx-a11y/anchor-is-valid */

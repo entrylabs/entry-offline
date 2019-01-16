@@ -23,8 +23,15 @@ export default class {
         root.EntryStatic = defaultEntryStatic || root.EntryStatic;
     }
 
+    /**
+     * 엔트리 오프라인에서는 다운로드 버튼이 열기 버튼으로 바뀐다. 이를 강제 치환 후,
+     * 해당 블록 함수의 프로토타입 자체를 치환해버리는 코드를 가지고 있다.
+     * @param lang
+     * @return {Promise<void>}
+     */
     static async changeLang(lang) {
-        console.log('nextLang', lang);
         root.Lang = await import(`../resources/lang/${lang}.json`);
+        root.Lang.Blocks.ARDUINO_download_connector = root.Lang.Blocks.ARDUINO_open_connector;
+
     }
 }

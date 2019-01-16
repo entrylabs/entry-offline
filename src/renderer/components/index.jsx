@@ -19,17 +19,19 @@ class Index extends PureComponent {
                     <Workspace />
                 </div>
                 <Script>
-                    {() => {
-                        const playFunc = createjs.Sound.play;
-                        createjs.Sound.play = function(a, b) {
-                            if (b) {
-                                b.pan = 0.01;
-                            } else {
-                                b = { pan: 0.01 };
-                            }
-                            return playFunc(a, b);
-                        };
-                    }}
+                    {/* eslint-disable id-length, no-undef, no-param-reassign */
+                        () => {
+                            const playFunc = createjs.Sound.play;
+                            createjs.Sound.play = function(a, b) {
+                                if (b) {
+                                    b.pan = 0.01;
+                                } else {
+                                    b = { pan: 0.01 };
+                                }
+                                return playFunc(a, b);
+                            };
+                        }
+                    }
                 </Script>
             </div>
         );
