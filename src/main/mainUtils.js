@@ -1,4 +1,4 @@
-import { app, ipcMain, BrowserWindow } from 'electron';
+import { app, BrowserWindow } from 'electron';
 import fstream from 'fstream';
 import archiver from 'archiver';
 import fs from 'fs';
@@ -10,6 +10,10 @@ import root from 'window-or-global';
 import stream from "stream";
 import tar from 'tar';
 
+/**
+ * Main Process 에서 발생하는 로직들을 담당한다.
+ * ipcMain 을 import 하여 사용하지 않는다. renderer Process 간 이벤트 관리는 ipcMainHelper 가 한다.
+ */
 export default class {
     /**
      * ent 파일에서 프로젝트를 로드한다.
@@ -347,5 +351,14 @@ export default class {
             console.error(e);
             e.sender.send('importObject', false);
         }
+    }
+
+    static staticDownload(srcFilePath, targetFilePath) {
+        const fullStaticFilePath = path.resolve(__dirname, 'static', srcFilePath);
+
+        const readStream = fs.createReadStream(fullStaticFilePath);
+        const writeStream = fs.createWriteStream(targetFilePath);
+
+        readStream.pipe(writeStream);
     }
 }

@@ -2,15 +2,15 @@ import React, { Component } from 'react';
 import './header.scss';
 import root from 'window-or-global';
 import _get from 'lodash/get';
-import _includes from 'lodash/includes';
 import Utils from '../helper/rendererUtils';
 import { connect } from 'react-redux';
 import { commonAction, showPopup } from '../actions';
 import { CHANGE_LANGUAGE, WS_MODE } from '../actions/types';
 import { Dropdown } from 'entry-tool/component';
 import ImportToggleHelper from '../helper/importToggleHelper';
+import IpcRendererHelper from '../helper/ipcRendererHelper';
 
-/* global Entry, EntryStatic */
+/* global Entry */
 class Header extends Component {
     constructor(props) {
         super(props);
@@ -169,6 +169,18 @@ class Header extends Component {
         const key = item[1];
         if (key === 'help_block') {
             Entry.dispatchEvent('showBlockHelper');
+        } else {
+            switch (key) {
+                case 'help_hardware':
+                    IpcRendererHelper.downloadHardwareGuide();
+                    break;
+                case 'help_robot':
+                    IpcRendererHelper.downloadRobotGuide();
+                    break;
+                case 'help_python':
+                    IpcRendererHelper.downloadPythonGuide();
+                    break;
+            }
         }
     }
 

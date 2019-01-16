@@ -3,6 +3,10 @@ import root from 'window-or-global';
 import { remote } from 'electron';
 const { dialog } = remote;
 
+/**
+ * Renderer Process 전역에서 사용할 수 있는 클래스.
+ * ipc 통신이 한번이상 필요한 경우 이곳에 두지 않는다.
+ */
 export default class {
     /**
      * electron main process 와 연결된 오브젝트를 가져온다.
