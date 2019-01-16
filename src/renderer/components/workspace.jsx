@@ -194,17 +194,7 @@ class Workspace extends Component {
     }
 
     handleSaveAction = async(key) => {
-        const targetPath = this.projectSavedPath || '*';
-        if (key === 'save') {
-            // 다이얼로그 띄우고 path 없으면 리턴 있으면 this.projectSavedPath 에도 저장
-        } else if (key === 'save_as') {
-
-        }
-
-        Utils.showSaveDialog({
-            defaultPath: `${targetPath}/${this.projectName}`,
-            filters: [{ name: 'Entry File', extensions: ['ent'] }],
-        }, async(filePath) => {
+        const saveFunction = async(filePath) => {
             if (!filePath) {
                 return;
             }
@@ -215,13 +205,6 @@ class Workspace extends Component {
                 Utils.getLang('Workspace.fail_contact_msg'),
             );
 
-            // 저장중 모달 표시 try - catch
-            // 여기서 프로젝트 말아올리기
-            // ipcRendererHelper 로 플젝데이터랑 타깃경로 보내기
-            // ipcMain 에서 electronAppData / temp 폴더 압축조지기
-            // 압축한거 ent 로 뱉기 writeFile
-            // 다되면 콜백으로 renderer 한테 send 하기
-            //
             try {
                 // 프로젝트를 가져온다. 프로젝트 명과 워크스페이스 모드를 주입한다.
                 const { common } = this.props;
@@ -235,9 +218,7 @@ class Workspace extends Component {
                 // project.parent = parent;
 
                 await IpcRendererHelper.saveProject(project, filePath);
-
-                // 파일명을 지우고 파일 경로를 저장한다.
-                this.projectSavedPath = filePath.replace(/[\\/][^\\/]*$/, '');
+                this.projectSavedPath = filePath;
 
                 // 모달 해제 후 엔트리 토스트로 저장처리
                 this.hideModalProgress();
@@ -254,13 +235,24 @@ class Workspace extends Component {
                     Utils.getLang('Workspace.fail_contact_msg')
                 );
             }
-        });
+        };
+
+        if (key === 'save' && this.projectSavedPath) {
+            await saveFunction(this.projectSavedPath);
+        } else {
+            const targetPath = this.projectSavedPath || '*';
+            Utils.showSaveDialog({
+                defaultPath: `${targetPath}/${this.projectName}`,
+                filters: [{ name: 'Entry File', extensions: ['ent'] }],
+            }, saveFunction);
+        }
     };
 
     handleFileAction = (type) => {
         if (type === 'new') {
             if (Utils.confirmProjectWillDismiss()) {
                 IpcRendererHelper.resetDirectory();
+                delete this.projectSavedPath;
                 this.loadProject();
             }
         } else if (type === 'open_offline') {
@@ -280,8 +272,6 @@ class Workspace extends Component {
                 if (Array.isArray(filePaths)) {
                     const filePath = filePaths[0];
                     const project = await IpcRendererHelper.loadProject(filePath);
-
-                    console.log('load', filePath, project);
 
                     this.projectName = project.name;
                     this.projectSavedPath = project.savedPath;

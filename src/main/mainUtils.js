@@ -68,7 +68,6 @@ export default class {
                                     }
                                     return result;
                                 });
-                                project.basePath = electronAppPath; // electron save path
                                 project.savedPath = filePath; // real .ent file's path
                                 resolve(project);
                             }
@@ -107,6 +106,15 @@ export default class {
         }
     }
 
+    static ensureDirectoryExistence(filePath) {
+        const dirname = path.dirname(filePath);
+        if (fs.existsSync(dirname)) {
+            return true;
+        }
+        this.ensureDirectoryExistence(dirname);
+        fs.mkdirSync(dirname);
+    }
+
     /**
      * electronPath/temp 내에 있는 프로젝트를 ent 파일로 압축하여 저장한다.
      * @param {Object}project 엔트리 프로젝트
@@ -118,10 +126,14 @@ export default class {
         const sourcePath = app.getPath('userData');
 
         return new Promise((resolve, reject) => {
+            if (destinationPath.indexOf('.ent') === -1) {
+                reject(Error('.ent only accepted'));
+                return;
+            }
+
             this.changeObjectPath(project, (fileUrl) => {
                 let result = fileUrl;
 
-                console.log('sourcePath');
                 const af = sourcePath.replace(/\\/gi, '/');
 
                 result = result
@@ -136,9 +148,11 @@ export default class {
             });
 
             const projectString = JSON.stringify(project);
+            const targetFilePath = path.join(sourcePath, 'temp', 'project.json');
+            this.ensureDirectoryExistence(targetFilePath);
 
             fs.writeFile(
-                path.join(sourcePath, 'temp', 'project.json'),
+                targetFilePath,
                 projectString,
                 { encoding: 'utf8', mode: '0777' },
                 (err) => {
@@ -172,7 +186,7 @@ export default class {
 
                         archive.pipe(gzip).pipe(fsWriter);
 
-                        archive.file(path.join(sourcePath, 'temp', 'project.json'), {
+                        archive.file(targetFilePath, {
                             name: 'temp/project.json',
                         });
                         archive.glob(
