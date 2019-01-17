@@ -1,6 +1,7 @@
 import get from 'lodash/get';
 import root from 'window-or-global';
 import { remote } from 'electron';
+import StorageManager from './storageManager';
 const { dialog } = remote;
 
 /**
@@ -75,6 +76,10 @@ export default class {
         let confirmProjectDismiss = true;
         if (!Entry.stateManager.isSaved()) {
             confirmProjectDismiss = confirm(this.getLang('Menus.save_dismiss'));
+        }
+
+        if (confirmProjectDismiss) {
+            StorageManager.saveCurrentWorkspaceInterface();
         }
 
         return confirmProjectDismiss;
