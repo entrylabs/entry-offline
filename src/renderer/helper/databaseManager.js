@@ -1,14 +1,24 @@
 import Sprites from '../resources/db/sprites.json';
+import Pictures from '../resources/db/pictures.json';
+import Sounds from '../resources/db/sounds.json';
 
 /**
  * sprite, pictures, sounds 등의 데이터베이스 추출본을 가지고 CRUD 를 흉내내는 클래스.
  *
  */
 export default class {
+    /**
+     *
+     * @param sidebar
+     * @param subMenu
+     * @param type
+     * @return {Array<string>} 결과 리스트
+     */
     static findAll({ sidebar, subMenu, type }) {
+        const table = this.selectTable(type);
         return new Promise((resolve) => {
             const findList =
-                Sprites.filter((sprite) => {
+                table.filter((sprite) => {
                     const { main, sub } = sprite.category;
                     return main === sidebar && (subMenu === 'all' || subMenu === sub);
                 }) || [];
@@ -16,6 +26,19 @@ export default class {
             console.log(findList);
             resolve(findList);
         });
+    }
+
+    static selectTable(type) {
+        switch (type) {
+            case 'picture':
+                return Pictures;
+            case 'sprite':
+                return Sprites;
+            case 'sound':
+                return Sounds;
+            default:
+                return [];
+        }
     }
 }
 
