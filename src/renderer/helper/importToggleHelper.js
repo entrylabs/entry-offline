@@ -32,6 +32,5 @@ export default class {
     static async changeLang(lang) {
         root.Lang = await import(`../resources/lang/${lang}.json`);
         root.Lang.Blocks.ARDUINO_download_connector = root.Lang.Blocks.ARDUINO_open_connector;
-
     }
 }
