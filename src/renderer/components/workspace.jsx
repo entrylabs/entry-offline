@@ -8,6 +8,7 @@ import { FETCH_POPUP_ITEMS, UPDATE_PROJECT, WS_MODE } from '../actions/types';
 import _includes from 'lodash/includes';
 import _debounce from 'lodash/debounce';
 import { ModalProgress } from 'entry-tool/component';
+import EntryUtils from '../helper/entryUtils';
 import Utils from '../helper/rendererUtils';
 import IpcRendererHelper from '../helper/ipcRendererHelper';
 import LocalStorageManager from '../helper/storageManager';
@@ -56,7 +57,14 @@ class Workspace extends Component {
         this.hwCategoryList = EntryStatic.hwCategoryList;
         Entry.init(this.container.current, this.initOption);
         Entry.enableArduino();
+
+        //TODO tempProject 에 저장된 데이터가 있는 경우, entrylms 로 불러오기 확인
+        //TODO 그렇다면 신규 프로젝트를 오픈하거나 로드하는 경우 temp 삭제해야함
         Entry.loadProject();
+
+        this.modal = document.createElement('div');
+        this.modal.className = 'modal';
+
         this.addEntryEvents();
     }
 
@@ -76,13 +84,9 @@ class Workspace extends Component {
             console.log('exportObject');
         });
         // 리스트 Import
-        addEventListener('openImportListModal', () => {
-            console.log('openImportListModal');
-        });
+        addEventListener('openImportListModal', EntryUtils.openImportListModal);
         // 리스트 Export
-        addEventListener('openExportListModal', () => {
-            console.log('openExportListModal');
-        });
+        addEventListener('openExportListModal', EntryUtils.openExportListModal);
 
         addEventListener('openPictureManager', () => {
             Entry.shapePopup.show();
@@ -107,7 +111,7 @@ class Workspace extends Component {
 
         const workspace = Entry.getMainWS();
         if (workspace) {
-            this.workspaceChangeEvent = workspace.changeEvent.attach(
+            workspace.changeEvent.attach(
                 this,
                 this.handleChangeWorkspaceMode,
             );

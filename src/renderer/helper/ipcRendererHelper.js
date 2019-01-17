@@ -33,6 +33,32 @@ export default class {
         });
     }
 
+    static downloadExcel(filename, array) {
+        return new Promise((resolve, reject) => {
+            RendererUtils.showSaveDialog({
+                title: RendererUtils.getLang('Workspace.file_save'),
+                defaultPath: `${filename}.xlsx`,
+                filters: {
+                    'application/vnd.ms-excel': [
+                        { name: 'Excel Files (*.xlsx)', extensions: ['xlsx'] },
+                        { name: 'All Files (*.*)', extensions: ['*'] },
+                    ],
+                },
+            }, (filePath) => {
+                console.log('테스트용', filePath);
+                resolve();
+                // ipcRenderer.send('saveExcel', filePath, array);
+                // ipcRenderer.once('saveExcel', (e, err) => {
+                //     if (err) {
+                //         reject(err);
+                //     } else {
+                //         resolve();
+                //     }
+                // });
+            });
+        });
+    }
+
     static resetDirectory() {
         ipcRenderer.send('resetDirectory');
     }
