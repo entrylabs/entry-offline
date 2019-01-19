@@ -273,6 +273,82 @@ class EntryModalHelper {
         });
     }
 
+    static showSoundPopup() {
+        this._switchPopup('sound', {
+            fetch: (data) => {
+                console.log(data);
+                // let url = `/api/sound/browse/default/${data.sidebar}`;
+                // if (data.subMenu && data.subMenu !== 'all') {
+                //     url = `/api/sound/browse/default/${data.sidebar}/${data.subMenu}`;
+                // }
+                // this.props.fetchPopup({
+                //     url,
+                //     popup: name,
+                //     callback: (data) => {
+                //         Entry.soundPopup.setData({ data: { data } });
+                //         this.loadSound(data);
+                //     },
+                // });
+            },
+            search: (data) => {
+                console.log(data);
+                if (data.searchQuery === '') {
+                    return;
+                }
+                // this.props.fetchPopup({
+                //     url: `/api/sound/search/${data.searchQuery}`,
+                //     callback: (data) => {
+                //         Entry.soundPopup.setData({ data: { data } });
+                //         this.loadSound(data);
+                //     },
+                // });
+            },
+            submit: (data) => {
+                console.log(data);
+                // data.selected.forEach(function(item) {
+                //     item.id = root.Entry.generateHash();
+                //     Entry.playground.addSound(item, true);
+                // });
+                // createjs.Sound.stop();
+            },
+            select: (data) => {
+                console.log(data);
+                // const item = {
+                //     id: Entry.generateHash(),
+                //     ...data.item,
+                // };
+                // Entry.playground.addSound(item, true);
+            },
+            // loaded: this.loadSound,
+            // load: this.loadSound,
+            itemoff: () => {
+                console.log('itemOff');
+                // return createjs.Sound.stop();
+            },
+            itemon: (data) => {
+                console.log(data);
+                // createjs.Sound.play(data.id);
+            },
+            uploads:(data) => {
+                console.log(data);
+                // data.uploads.forEach(function(item) {
+                //     item.id = Entry.generateHash();
+                //     Entry.playground.addSound(item, true);
+                // });
+                // createjs.Sound.stop();
+            },
+            uploadFail: (data) => {
+                root.entrylms.alert(Utils.getLang(`${data.messageParent}.${data.message}`));
+            },
+            fail: (data) => {
+                root.entrylms.alert(Utils.getLang('Msgs.error_occured'));
+            },
+            error: (data) => {
+                root.entrylms.alert(Utils.getLang('Msgs.error_occured'));
+            },
+        });
+    }
+
     /**
      * 기존 팝업을 hide, event off 후, 신규 타입의 팝업을 노출한다.
      * 
@@ -293,7 +369,7 @@ class EntryModalHelper {
 
         //TODO show(props) 하고싶은데 props = undefined 에서 부르면 Navigation component 를 부르는듯.
         popup.props = { type, baseUrl: './renderer/resources/node_modules' };
-        popup.show();
+        popup.show({ type, baseUrl: './renderer/resources/node_modules' });
     }
 
     static openImportListModal() {

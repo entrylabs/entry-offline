@@ -92,7 +92,7 @@ class Workspace extends Component {
             ModalHelper.showSpritePopup();
         });
         addEventListener('openSoundManager', () => {
-            Entry.soundPopup.show();
+            ModalHelper.showSoundPopup();
         });
         addEventListener('openExpansionBlockManager', () => {
             Entry.expansionPopup.show();
