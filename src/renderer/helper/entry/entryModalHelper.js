@@ -1,12 +1,16 @@
-import Modal from '../resources/modal/app.js';
+import Modal from '../../resources/modal/app.js';
 import root from 'window-or-global';
-import Utils from './rendererUtils';
-import IpcRendererHelper from './ipcRendererHelper';
+import Utils from '../rendererUtils';
+import IpcRendererHelper from '../ipcRendererHelper';
 
 /**
- * Entry 프로젝트 관련 로직이 많은 경우 이 클래스로 옮긴다.
+ * 이 클래스는 Entry 프로젝트에서 entry-lms, entry-tool 을 사용하여 팝업 및 모달을 출력해야 하는 경우 사용한다.
+ * entry-tool 의 팝업은 기본적으로 타겟이될 div HTMLElement 가 필요하므로 인스턴스를 만들어서 사용해야 한다.
+ *
+ * @export
+ * @class
  */
-export default class {
+class EntryModalHelper {
     static openImportListModal() {
         new Modal()
             .createModal([{ type: 'LIST_IMPORT', theme: 'BLUE' }])
@@ -56,4 +60,11 @@ export default class {
             })
             .show();
     }
+
+    static call() {
+        console.log(this.targetDiv);
+    }
 }
+EntryModalHelper.targetDiv = document.createElement('div');
+
+export default EntryModalHelper;

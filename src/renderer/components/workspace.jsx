@@ -10,7 +10,7 @@ import _debounce from 'lodash/debounce';
 import { ModalProgress } from 'entry-tool/component';
 import EntryTool from 'entry-tool';
 import root from 'window-or-global';
-import EntryUtils from '../helper/entryUtils';
+import ModalHelper from '../helper/entry/entryModalHelper';
 import Utils from '../helper/rendererUtils';
 import IpcRendererHelper from '../helper/ipcRendererHelper';
 import LocalStorageManager from '../helper/storageManager';
@@ -36,6 +36,7 @@ class Workspace extends Component {
 
     constructor(props) {
         super(props);
+
         this.modal = null;
         this.isSaving = false;
         this.container = React.createRef();
@@ -350,9 +351,9 @@ class Workspace extends Component {
             console.log('exportObject');
         });
         // 리스트 Import
-        addEventListener('openImportListModal', EntryUtils.openImportListModal);
+        addEventListener('openImportListModal', ModalHelper.openImportListModal);
         // 리스트 Export
-        addEventListener('openExportListModal', EntryUtils.openExportListModal);
+        addEventListener('openExportListModal', ModalHelper.openExportListModal);
 
         addEventListener('openPictureManager', () => {
             Entry.shapePopup.show();
