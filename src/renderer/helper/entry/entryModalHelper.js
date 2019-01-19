@@ -25,8 +25,7 @@ class EntryModalHelper {
     }
 
     static _showImagePopup(type) {
-        const popup = this.popup;
-        this._switchPopup(type, {
+        const popup = this._switchPopup(type, {
             fetch: (data) => {
                 DatabaseManager.findAll(data)
                     .then((result) => {
@@ -354,22 +353,23 @@ class EntryModalHelper {
      * 
      * @param {string}type 팝업 타입
      * @param {object}events 바인딩할 이벤트 목록들. key = eventName, value = function
+     * @return popup 자신을 반환한다. 내부 콜백에서 자신을 사용해야 하는 경우 활용가능하다.
      */
     static _switchPopup(type, events = {}) {
-        const popup = this.popup;
+        const popup = this.loadPopup(type);
         if (popup.isShow) {
             popup.hide();
         }
 
+        //TODO 돌려쓰기용 함수인데, 만약 돌려쓰기가 안된다면 이 함수를 사용하는 함수에 popup 을 직접 넣고 고정적으로 사용하도록 한다.
         popup.removeAllListeners();
 
         Object.entries(events).forEach(([eventName, func]) => {
             popup.on(eventName, func);
         });
 
-        //TODO show(props) 하고싶은데 props = undefined 에서 부르면 Navigation component 를 부르는듯.
-        popup.props = { type, baseUrl: './renderer/resources/node_modules' };
         popup.show({ type, baseUrl: './renderer/resources/node_modules' });
+        return popup;
     }
 
     static openImportListModal() {
@@ -426,21 +426,34 @@ class EntryModalHelper {
         console.log(this.targetDiv);
     }
 }
-const popupTargetElement = document.createElement('div');
-popupTargetElement.classList = 'modal';
+const popupTargetElement = () => {
+    const targetDiv = document.createElement('div');
+    targetDiv.classList = 'modal';
 
-//TODO 팝업타입을 주고 props 가 없는경우는 init 이 불가능하다
-EntryModalHelper.popup = new EntryTool({
-    container: popupTargetElement,
-    target: document.body,
-    isShow: false,
-    data: {
-        data: {
-            data: [],
-        },
-    },
-    type: 'popup',
-    props: { type: 'sprite', baseUrl: './renderer/resources/node_modules' },
-});
+    return targetDiv;
+}
+
+//TODO 렌더가 바로 되지 않는 현상이 해결되면 popup 하나로 돌려쓰기 한다.
+EntryModalHelper.loadPopup = (type) => {
+    const popup = EntryModalHelper[`${type}Popup`];
+    if (popup === undefined) {
+        EntryModalHelper[`${type}Popup`] = new EntryTool({
+            container: popupTargetElement(),
+            target: document.body,
+            isShow: false,
+            data: {
+                data: {
+                    data: [],
+                },
+            },
+            type: 'popup',
+            props: { type, baseUrl: './renderer/resources/node_modules' },
+        });
+
+        return EntryModalHelper[`${type}Popup`];
+    } else {
+        return popup;
+    }
+}
 
 export default EntryModalHelper;
