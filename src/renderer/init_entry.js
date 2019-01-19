@@ -1,5 +1,5 @@
 import root from 'window-or-global';
-import _ from 'lodash';
+import _lodash from 'lodash';
 import jquery from 'jquery';
 import { BigNumber } from 'bignumber.js';
 import StorageManager from './helper/storageManager';
@@ -17,11 +17,12 @@ const lastWSMode = StorageManager.getPersistWorkspaceMode() || 'workspace';
 
 // lodash
 // eslint-disable-next-line id-length
-root._ = _;
+root._ = _lodash;
 
 // jquery
-// eslint-disable-next-line no-multi-assign, id-length
-root.$ = root.jQuery = jquery;
+// eslint-disable-next-line id-length
+root.$ = jquery;
+root.jQuery = jquery;
 
 // bigNumber
 root.BigNumber = BigNumber;
