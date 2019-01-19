@@ -35,16 +35,15 @@ class EntryModalHelper {
                     });
             },
             search: (data) => {
-                console.log('popupSearch', data);
-                // if (data.searchQuery === '') {
-                //     return;
-                // }
-                // this.props.fetchPopup({
-                //     url: `/api/${type}/search/${data.searchQuery}`,
-                //     callback: (data) => {
-                //         Entry[name].setData({ data: { data } });
-                //     },
-                // });
+                if (data.searchQuery === '') {
+                    return;
+                }
+                DatabaseManager.search(data)
+                    .then((result) => {
+                        popup.setData({
+                            data: { data: result },
+                        });
+                    });
             },
             submit: (data) => {
                 switch (name) {
@@ -431,7 +430,7 @@ const popupTargetElement = () => {
     targetDiv.classList = 'modal';
 
     return targetDiv;
-}
+};
 
 //TODO 렌더가 바로 되지 않는 현상이 해결되면 popup 하나로 돌려쓰기 한다.
 EntryModalHelper.loadPopup = (type) => {
@@ -454,6 +453,6 @@ EntryModalHelper.loadPopup = (type) => {
     } else {
         return popup;
     }
-}
+};
 
 export default EntryModalHelper;
