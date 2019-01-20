@@ -270,8 +270,15 @@ class EntryModalHelper {
     }
 
     static showSoundPopup() {
-        this._switchPopup('sound', {
+        const popup = this._switchPopup('sound', {
             fetch: (data) => {
+                DatabaseManager.findAll(data)
+                    .then((result) => {
+                        popup.setData({
+                            data: { data: result },
+                        });
+                        Utils.loadSound(result);
+                    });
                 console.log(data);
                 // let url = `/api/sound/browse/default/${data.sidebar}`;
                 // if (data.subMenu && data.subMenu !== 'all') {
@@ -291,6 +298,13 @@ class EntryModalHelper {
                 if (data.searchQuery === '') {
                     return;
                 }
+                DatabaseManager.search(data)
+                    .then((result) => {
+                        popup.setData({
+                            data: { data: result },
+                        });
+                        Utils.loadSound(result);
+                    });
                 // this.props.fetchPopup({
                 //     url: `/api/sound/search/${data.searchQuery}`,
                 //     callback: (data) => {
@@ -301,29 +315,29 @@ class EntryModalHelper {
             },
             submit: (data) => {
                 console.log(data);
-                // data.selected.forEach(function(item) {
-                //     item.id = root.Entry.generateHash();
-                //     Entry.playground.addSound(item, true);
-                // });
-                // createjs.Sound.stop();
+                data.selected.forEach(function(item) {
+                    item.id = Entry.generateHash();
+                    Entry.playground.addSound(item, true);
+                });
+                root.createjs.Sound.stop();
             },
             select: (data) => {
                 console.log(data);
-                // const item = {
-                //     id: Entry.generateHash(),
-                //     ...data.item,
-                // };
-                // Entry.playground.addSound(item, true);
+                const item = {
+                    id: Entry.generateHash(),
+                    ...data.item,
+                };
+                Entry.playground.addSound(item, true);
             },
-            // loaded: this.loadSound,
-            // load: this.loadSound,
+            loaded: Utils.loadSound,
+            load: Utils.loadSound,
             itemoff: () => {
                 console.log('itemOff');
-                // return createjs.Sound.stop();
+                return root.createjs.Sound.stop();
             },
             itemon: (data) => {
-                console.log(data);
-                // createjs.Sound.play(data.id);
+                console.log('itemon', data);
+                root.createjs.Sound.play(data.id);
             },
             uploads:(data) => {
                 console.log(data);

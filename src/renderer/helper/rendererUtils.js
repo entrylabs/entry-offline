@@ -84,4 +84,19 @@ export default class {
 
         return confirmProjectDismiss;
     }
+
+    /**
+     * 사운드 오브젝트 (from resources/db) 를 Entry.soundQueue 에 로드한다.
+     * @param {Array<Object>} sounds
+     */
+    static loadSound(sounds = []) {
+        sounds.forEach((sound) => {
+            const path = `renderer/node_modules/uploads/${sound.filename.substring(0, 2)}/${sound.filename.substring(2,4)}/${sound.filename}${sound.ext}`;
+            Entry.soundQueue.loadFile({
+                id: sound._id,
+                src: path,
+                type: root.createjs.LoadQueue.SOUND,
+            });
+        });
+    }
 }
