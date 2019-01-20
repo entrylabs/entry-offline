@@ -4,6 +4,7 @@ import Utils from '../rendererUtils';
 import IpcRendererHelper from '../ipcRendererHelper';
 import EntryTool from 'entry-tool';
 import DatabaseManager from '../../helper/databaseManager';
+import _ from 'lodash';
 
 /**
  * 이 클래스는 Entry 프로젝트에서 entry-lms, entry-tool 을 사용하여 팝업 및 모달을 출력해야 하는 경우 사용한다.
@@ -359,15 +360,41 @@ class EntryModalHelper {
         });
     }
 
+    static showExpansionPopup() {
+        let expansionBlocks = _.uniq(_.values(Entry.EXPANSION_BLOCK_LIST));
+        expansionBlocks = _.sortBy(expansionBlocks, function(item) {
+            let result = '';
+            if (item.title) {
+                item.nameByLang = item.title[root.Lang.type];
+                result = item.title.ko.toLowerCase();
+            }
+            return result;
+        });
+
+        this._switchPopup('expansion', {
+            submit: (data) => {
+                data.selected.forEach(function(item) {
+                    item.id = Entry.generateHash();
+                    Entry.playground.addExpansionBlock(item, true, true);
+                });
+            },
+            select: (data) => {
+                data.item.id = Entry.generateHash();
+                Entry.playground.addExpansionBlock(data.item, true, true);
+            },
+        }, expansionBlocks);
+    }
+
     /**
      * 기존 팝업을 hide, event off 후, 신규 타입의 팝업을 노출한다.
      * 
      * @param {string}type 팝업 타입
      * @param {object}events 바인딩할 이벤트 목록들. key = eventName, value = function
+     * @param {*}data entry-tool popup 최초 init 시에 들어갈 data object
      * @return popup 자신을 반환한다. 내부 콜백에서 자신을 사용해야 하는 경우 활용가능하다.
      */
-    static _switchPopup(type, events = {}) {
-        const popup = this.loadPopup(type);
+    static _switchPopup(type, events = {}, data = []) {
+        const popup = this.loadPopup(type, data);
         if (popup.isShow) {
             popup.hide();
         }
@@ -432,10 +459,6 @@ class EntryModalHelper {
             })
             .show();
     }
-
-    static call() {
-        console.log(this.targetDiv);
-    }
 }
 const popupTargetElement = () => {
     const targetDiv = document.createElement('div');
@@ -445,7 +468,7 @@ const popupTargetElement = () => {
 };
 
 //TODO 렌더가 바로 되지 않는 현상이 해결되면 popup 하나로 돌려쓰기 한다.
-EntryModalHelper.loadPopup = (type) => {
+EntryModalHelper.loadPopup = (type, data) => {
     const popup = EntryModalHelper[`${type}Popup`];
     if (popup === undefined) {
         EntryModalHelper[`${type}Popup`] = new EntryTool({
@@ -454,7 +477,7 @@ EntryModalHelper.loadPopup = (type) => {
             isShow: false,
             data: {
                 data: {
-                    data: [],
+                    data,
                 },
             },
             type: 'popup',

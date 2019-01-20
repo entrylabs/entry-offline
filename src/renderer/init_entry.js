@@ -16,7 +16,6 @@ const lastWSMode = StorageManager.getPersistWorkspaceMode() || 'workspace';
 })();
 
 // lodash
-// eslint-disable-next-line id-length
 root._ = _lodash;
 
 // jquery

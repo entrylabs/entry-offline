@@ -95,7 +95,7 @@ class Workspace extends Component {
             ModalHelper.showSoundPopup();
         });
         addEventListener('openExpansionBlockManager', () => {
-            Entry.expansionPopup.show();
+            ModalHelper.showExpansionPopup();
         });
         addEventListener('openPictureImport', () => {
             Entry.paintPopup.show();

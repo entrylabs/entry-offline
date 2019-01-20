@@ -125,7 +125,7 @@
     ],
     "radix": "warn",
     "getter-return": "off",
-    "id-length": ["warn", {"exceptions": ["i", "j", "k", "x", "y", "e"]}],
+    "id-length": ["warn", {"exceptions": ["i", "j", "k", "x", "y", "e", "_"]}],
     "camelcase": [
       "warn",
       {
