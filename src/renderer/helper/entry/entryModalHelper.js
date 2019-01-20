@@ -46,58 +46,56 @@ class EntryModalHelper {
                     });
             },
             submit: (data) => {
-                switch (name) {
-                    case 'spritePopup':
+                switch (type) {
+                    case 'sprite':
                         console.log('popupSubmitSpritePopup', data);
-                        /*data.selected.forEach(function(item) {
+                        data.selected.forEach(function(item) {
                             const object = {
                                 id: Entry.generateHash(),
                                 objectType: 'sprite',
                                 sprite: item, // 스프라이트 정보
                             };
                             Entry.container.addObject(object, 0);
-                        });*/
+                        });
                         break;
-                    case 'shapePopup':
+                    case 'shape':
                         console.log('popupSubmitShapePopup', data);
-                        /*data.selected.forEach(function(object) {
+                        data.selected.forEach(function(object) {
                             object.id = Entry.generateHash();
                             Entry.playground.addPicture(object, true);
-                        });*/
+                        });
                         break;
                 }
             },
             select: (data) => {
                 console.log('popupSelectData');
-                /*switch (name) {
-                    case 'spritePopup': {
+                switch (type) {
+                    case 'sprite': {
                         const object = {
                             id: Entry.generateHash(),
                             objectType: 'sprite',
                             sprite: data.item, // 스프라이트 정보
                         };
                         Entry.container.addObject(object, 0);
+                        break;
                     }
-                    case 'shapePopup': {
+                    case 'shape': {
                         const picture = data.item;
-
                         picture.id = Entry.generateHash();
                         Entry.playground.addPicture(picture, true);
                         break;
                     }
-                }*/
+                }
             },
             draw: () => {
-                console.log('draw');
-                /*switch (name) {
-                    case 'spritePopup': {
+                console.log('draw', type);
+                switch (type) {
+                    case 'sprite': {
                         const object = {
                             id: Entry.generateHash(),
                             objectType: 'sprite',
                             sprite: {
-                                name:
-                                    Lang.Workspace.new_object +
-                                    (Entry.container.getAllObjects().length + 1),
+                                name: `${Utils.getLang('Workspace.new_object')}${Entry.container.getAllObjects().length + 1}`,
                                 pictures: [
                                     {
                                         dimension: {
@@ -105,7 +103,7 @@ class EntryModalHelper {
                                             height: 540,
                                         },
                                         fileurl: `${Entry.mediaFilePath}_1x1.png`,
-                                        name: Lang.Workspace.new_picture,
+                                        name: Utils.getLang('Workspace.new_picture'),
                                         type: '_system_',
                                     },
                                 ],
@@ -119,7 +117,7 @@ class EntryModalHelper {
                         Entry.playground.changeViewMode('picture');
                         break;
                     }
-                    case 'shapePopup': {
+                    case 'shape': {
                         const item = {
                             id: Entry.generateHash(),
                             dimension: {
@@ -127,19 +125,20 @@ class EntryModalHelper {
                                 width: 1,
                             },
                             fileurl: `${Entry.mediaFilePath}_1x1.png`,
-                            name: Lang.Workspace.new_picture,
+                            name: Utils.getLang('Workspace.new_picture'),
                         };
                         Entry.playground.addPicture(item, true);
                         break;
                     }
-                }*/
+                }
             },
-            on: (data) => {
-                /*let linebreak = true;
+            write: (data) => {
+                console.log('popupWrite', data);
+                let linebreak = true;
                 if (data.writeType === 'one') {
                     linebreak = false;
                 }
-                const text = data.text || Lang.Blocks.TEXT;
+                const text = data.text || Utils.getLang('Blocks.TEXT');
                 const object = {
                     id: Entry.generateHash(),
                     name: text, //Lang.Workspace.textbox,
@@ -158,8 +157,7 @@ class EntryModalHelper {
                     objectType: 'textBox',
                     sprite: { sounds: [], pictures: [] },
                 };
-                Entry.container.addObject(object, 0);*/
-                console.log('popupWrite', data);
+                Entry.container.addObject(object, 0);
             },
             uploads: (data) => {
                 console.log('popupUploads', data);
