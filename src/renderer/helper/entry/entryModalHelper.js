@@ -228,15 +228,13 @@ class EntryModalHelper {
     static showShapePopup() {
         const popup = this._switchPopup('shape', {
             fetch: (data) => {
-                DatabaseManager.findAll(data)
-                    .then((objects) => {
-                        const pictures = [];
-                        objects.forEach((object) => {
-                            pictures.push(...object.pictures);
-                        });
-
+                DatabaseManager.findAll({
+                    ...data,
+                    type: 'picture',
+                })
+                    .then((result) => {
                         popup.setData({
-                            data: { data: pictures },
+                            data: { data: result },
                         });
                     });
             },
@@ -244,7 +242,10 @@ class EntryModalHelper {
                 if (data.searchQuery === '') {
                     return;
                 }
-                DatabaseManager.search(data)
+                DatabaseManager.search({
+                    ...data,
+                    type: 'picture',
+                })
                     .then((result) => {
                         popup.setData({
                             data: { data: result },
@@ -415,7 +416,10 @@ class EntryModalHelper {
         });
     }
 
-
+    /**
+     * 소리 추가 팝업을 노출한다.
+     * 소리는 추가됨과 동시에 loadSound 함수를 통해 실제 mp3 파일을 Entry 에 추가한다.
+     */
     static showSoundPopup() {
         const popup = this._switchPopup('sound', {
             fetch: (data) => {
@@ -506,6 +510,9 @@ class EntryModalHelper {
         });
     }
 
+    /**
+     * 확장블록 리스트를 가져와, 확장블록 추가 팝업을 노출한다.
+     */
     static showExpansionPopup() {
         let expansionBlocks = _.uniq(_.values(Entry.EXPANSION_BLOCK_LIST));
         expansionBlocks = _.sortBy(expansionBlocks, function(item) {
@@ -529,6 +536,64 @@ class EntryModalHelper {
                 Entry.playground.addExpansionBlock(data.item, true, true);
             },
         }, expansionBlocks);
+    }
+
+    /**
+     * 그림판의 편집 > 가져오기 시 팝업을 노출한다. showShapePopup 과 동일한 DB table 이다.
+     * 검색기능이 없다.
+     */
+    static showPaintPopup() {
+        const popup = this._switchPopup('getShape', {
+            fetch: (data) => {
+                DatabaseManager.findAll({
+                    ...data,
+                    type: 'picture',
+                })
+                    .then((result) => {
+                        popup.setData({
+                            data: { data: result },
+                        });
+                    });
+            },
+            submit: (data) => {
+                const item = data.selected[0];
+                if (item) {
+                    item.id = Entry.generateHash();
+                    Entry.dispatchEvent('pictureImport', item);
+                }
+            },
+            select: (data) => {
+                const item = data.item;
+                if (item) {
+                    item.id = Entry.generateHash();
+                    Entry.dispatchEvent('pictureImport', item);
+                }
+            },
+            uploads: (data) => {
+                console.log(data);
+                //     data.uploads.forEach(function(item) {
+                //     if (item.sprite) {
+                //         const obj = item.sprite.objects[0];
+                //         obj.id = Entry.generateHash();
+                //         Entry.container.addObject(obj, 0);
+                //         return;
+                //     }
+                //     if (!item.id) {
+                //         item.id = Entry.generateHash();
+                //     }
+                //     Entry.dispatchEvent('pictureImport', item);
+                // });
+            },
+            uploadFail: (data) => {
+                root.entrylms.alert(Utils.getLang(`${data.messageParent}.${data.message}`));
+            },
+            fail: (data) => {
+                root.entrylms.alert(Utils.getLang('Msgs.error_occured'));
+            },
+            error: (data) => {
+                root.entrylms.alert(Utils.getLang('Msgs.error_occured'));
+            },
+        });
     }
 
     /**

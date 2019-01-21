@@ -99,7 +99,7 @@ class Workspace extends Component {
             ModalHelper.showExpansionPopup();
         });
         addEventListener('openPictureImport', () => {
-            Entry.paintPopup.show();
+            ModalHelper.showPaintPopup();
         });
 
         if (!Entry.creationChangedEvent) {

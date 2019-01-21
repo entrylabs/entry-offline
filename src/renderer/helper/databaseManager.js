@@ -22,11 +22,14 @@ export default class {
         return new Promise((resolve) => {
             const findList =
                 table.filter((object) => {
-                    const { main, sub } = object.category;
+                    if (!object.category) {
+                        return false;
+                    }
+
+                    const { main = '', sub = '' } = object.category;
                     return main === sidebar && (subMenu === 'all' || subMenu === sub);
                 }) || [];
 
-            console.log(findList);
             resolve(findList);
         });
     }
@@ -39,16 +42,15 @@ export default class {
      */
     static search({ type, searchQuery }) {
         const table = this._selectTable(type);
+        const lowerCaseSearchQuery = searchQuery.toString().toLowerCase();
 
         return new Promise((resolve) => {
             const findList = table.filter((object) => {
                 const { label = {}, name = '' }  = object;
                 const objectName = label[root.Lang.type] || name;
 
-                return objectName
-                    .toString()
-                    .toLowerCase()
-                    .indexOf(searchQuery) > -1;
+                return objectName.toString().toLowerCase()
+                    .indexOf(lowerCaseSearchQuery) > -1;
             }) || [];
 
             resolve(findList);
@@ -58,7 +60,6 @@ export default class {
     static _selectTable(type) {
         switch (type) {
             case 'picture':
-            case 'shape':
                 return Pictures;
             case 'sprite':
                 return Sprites;
