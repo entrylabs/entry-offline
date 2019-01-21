@@ -13,20 +13,13 @@ import _ from 'lodash';
  * @export
  * @class
  */
+//TODO object fetch result sort 필요?
 class EntryModalHelper {
     /**
      * 오브젝트 추가 팝업을 노출한다
      */
     static showSpritePopup() {
-        this._showImagePopup('sprite');
-    }
-
-    static showShapePopup() {
-        this._showImagePopup('shape');
-    }
-
-    static _showImagePopup(type) {
-        const popup = this._switchPopup(type, {
+        const popup = this._switchPopup('sprite', {
             fetch: (data) => {
                 DatabaseManager.findAll(data)
                     .then((result) => {
@@ -47,91 +40,49 @@ class EntryModalHelper {
                     });
             },
             submit: (data) => {
-                switch (type) {
-                    case 'sprite':
-                        console.log('popupSubmitSpritePopup', data);
-                        data.selected.forEach(function(item) {
-                            const object = {
-                                id: Entry.generateHash(),
-                                objectType: 'sprite',
-                                sprite: item, // 스프라이트 정보
-                            };
-                            Entry.container.addObject(object, 0);
-                        });
-                        break;
-                    case 'shape':
-                        console.log('popupSubmitShapePopup', data);
-                        data.selected.forEach(function(object) {
-                            object.id = Entry.generateHash();
-                            Entry.playground.addPicture(object, true);
-                        });
-                        break;
-                }
+                console.log('popupSubmitSpritePopup', data);
+                data.selected.forEach(function(item) {
+                    const object = {
+                        id: Entry.generateHash(),
+                        objectType: 'sprite',
+                        sprite: item, // 스프라이트 정보
+                    };
+                    Entry.container.addObject(object, 0);
+                });
             },
             select: (data) => {
-                console.log('popupSelectData');
-                switch (type) {
-                    case 'sprite': {
-                        const object = {
-                            id: Entry.generateHash(),
-                            objectType: 'sprite',
-                            sprite: data.item, // 스프라이트 정보
-                        };
-                        Entry.container.addObject(object, 0);
-                        break;
-                    }
-                    case 'shape': {
-                        const picture = data.item;
-                        picture.id = Entry.generateHash();
-                        Entry.playground.addPicture(picture, true);
-                        break;
-                    }
-                }
+                const object = {
+                    id: Entry.generateHash(),
+                    objectType: 'sprite',
+                    sprite: data.item, // 스프라이트 정보
+                };
+                Entry.container.addObject(object, 0);
             },
             draw: () => {
-                console.log('draw', type);
-                switch (type) {
-                    case 'sprite': {
-                        const object = {
-                            id: Entry.generateHash(),
-                            objectType: 'sprite',
-                            sprite: {
-                                name: `${Utils.getLang('Workspace.new_object')}${Entry.container.getAllObjects().length + 1}`,
-                                pictures: [
-                                    {
-                                        dimension: {
-                                            width: 960,
-                                            height: 540,
-                                        },
-                                        fileurl: `${Entry.mediaFilePath}_1x1.png`,
-                                        name: Utils.getLang('Workspace.new_picture'),
-                                        type: '_system_',
-                                    },
-                                ],
-                                sounds: [],
-                                category: {
-                                    main: 'new',
+                const object = {
+                    id: Entry.generateHash(),
+                    objectType: 'sprite',
+                    sprite: {
+                        name: `${Utils.getLang('Workspace.new_object')}${Entry.container.getAllObjects().length + 1}`,
+                        pictures: [
+                            {
+                                dimension: {
+                                    width: 960,
+                                    height: 540,
                                 },
+                                fileurl: `${Entry.mediaFilePath}_1x1.png`,
+                                name: Utils.getLang('Workspace.new_picture'),
+                                type: '_system_',
                             },
-                        };
-                        Entry.container.addObject(object, 0);
-                        Entry.playground.changeViewMode('picture');
-                        break;
-                    }
-                    case 'shape': {
-                        const item = {
-                            id: Entry.generateHash(),
-                            dimension: {
-                                height: 1,
-                                width: 1,
-                            },
-                            fileurl: `${Entry.mediaFilePath}_1x1.png`,
-                            name: Utils.getLang('Workspace.new_picture'),
-                        };
-                        Entry.playground.addPicture(item, true);
-                        break;
-                    }
-                }
+                        ],
+                        sounds: [],
+                        category: {
+                            main: 'new',
+                        },
+                    },
+                };
+                Entry.container.addObject(object, 0);
+                Entry.playground.changeViewMode('picture');
             },
             write: (data) => {
                 console.log('popupWrite', data);
@@ -270,6 +221,201 @@ class EntryModalHelper {
         });
     }
 
+    /**
+     * 모양 추가 팝업을 노출한다.
+     * fetch 시 Object 와 동일하나, Object 내의 Pictures 를 전부 까서 보여주는 차이가 있다.
+     */
+    static showShapePopup() {
+        const popup = this._switchPopup('shape', {
+            fetch: (data) => {
+                DatabaseManager.findAll(data)
+                    .then((objects) => {
+                        const pictures = [];
+                        objects.forEach((object) => {
+                            pictures.push(...object.pictures);
+                        });
+
+                        popup.setData({
+                            data: { data: pictures },
+                        });
+                    });
+            },
+            search: (data) => {
+                if (data.searchQuery === '') {
+                    return;
+                }
+                DatabaseManager.search(data)
+                    .then((result) => {
+                        popup.setData({
+                            data: { data: result },
+                        });
+                    });
+            },
+            submit: (data) => {
+                console.log('popupSubmitShapePopup', data);
+                data.selected.forEach(function(object) {
+                    object.id = Entry.generateHash();
+                    console.log('여기까진 잘됨', object.filename);
+                    Entry.playground.addPicture(object, true);
+                    console.log('여기서 문제발생');
+                });
+            },
+            select: (data) => {
+                const picture = data.item;
+                picture.id = Entry.generateHash();
+                Entry.playground.addPicture(picture, true);
+            },
+            draw: () => {
+                console.log('draw', type);
+                const item = {
+                    id: Entry.generateHash(),
+                    dimension: {
+                        height: 1,
+                        width: 1,
+                    },
+                    fileurl: `${Entry.mediaFilePath}_1x1.png`,
+                    name: Utils.getLang('Workspace.new_picture'),
+                };
+                Entry.playground.addPicture(item, true);
+            },
+            write: (data) => {
+                console.log('popupWrite', data);
+                let linebreak = true;
+                if (data.writeType === 'one') {
+                    linebreak = false;
+                }
+                const text = data.text || Utils.getLang('Blocks.TEXT');
+                const object = {
+                    id: Entry.generateHash(),
+                    name: text, //Lang.Workspace.textbox,
+                    text,
+                    options: {
+                        font: data.font,
+                        bold: false,
+                        underLine: false,
+                        italic: false,
+                        strike: data.effects.through || false,
+                        colour: data.effects.color || '#000000',
+                        background: data.effects.backgroundColor || '#ffffff',
+                        lineBreak: linebreak,
+                        ...data.effects,
+                    },
+                    objectType: 'textBox',
+                    sprite: { sounds: [], pictures: [] },
+                };
+                Entry.container.addObject(object, 0);
+            },
+            uploads: (data) => {
+                console.log('popupUploads', data);
+                /*switch (name) {
+                    case 'spritePopup':
+                        data.uploads.forEach(function(item) {
+                            const { sprite } = item;
+                            if (sprite) {
+                                const objects = sprite.objects;
+                                const functions = sprite.functions;
+                                const messages = sprite.messages;
+                                const variables = sprite.variables;
+
+                                if (
+                                    Entry.getMainWS().mode === Entry.Workspace.MODE_VIMBOARD &&
+                                    (!Entry.TextCodingUtil.canUsePythonVariables(variables) ||
+                                        !Entry.TextCodingUtil.canUsePythonFunctions(functions))
+                                ) {
+                                    return entrylms.alert(Lang.Menus.object_import_syntax_error);
+                                }
+                                const objectIdMap = {};
+                                variables.forEach((variable) => {
+                                    const { object } = variable;
+                                    if (object) {
+                                        const id = variable.id;
+                                        const idMap = objectIdMap[object];
+                                        variable.id = Entry.generateHash();
+                                        if (!idMap) {
+                                            variable.object = Entry.generateHash();
+                                            objectIdMap[object] = {
+                                                objectId: variable.object,
+                                                variableOriginId: [id],
+                                                variableId: [variable.id],
+                                            };
+                                        } else {
+                                            variable.object = idMap.objectId;
+                                            idMap.variableOriginId.push(id);
+                                            idMap.variableId.push(variable.id);
+                                        }
+                                    }
+                                });
+                                Entry.variableContainer.appendMessages(messages);
+                                Entry.variableContainer.appendVariables(variables);
+                                Entry.variableContainer.appendFunctions(functions);
+
+                                objects.forEach(function(object) {
+                                    const idMap = objectIdMap[object.id];
+                                    if (idMap) {
+                                        let script = object.script;
+                                        idMap.variableOriginId.forEach((id, idx) => {
+                                            const regex = new RegExp(id, 'gi');
+                                            script = script.replace(regex, idMap.variableId[idx]);
+                                        });
+                                        object.script = script;
+                                        object.id = idMap.objectId;
+                                    } else if (Entry.container.getObject(object.id)) {
+                                        object.id = Entry.generateHash();
+                                    }
+                                    if (item.objectType === 'textBox') {
+                                        const text = item.text ? item.text : Lang.Blocks.TEXT;
+                                        const options = item.options;
+                                        object.objectType = 'textBox';
+                                        Object.assign(object, {
+                                            text,
+                                            options,
+                                            name: Lang.Workspace.textbox,
+                                        });
+                                    } else {
+                                        object.objectType = 'sprite';
+                                    }
+                                    Entry.container.addObject(object, 0);
+                                });
+                            } else {
+                                if (!item.id) {
+                                    item.id = Entry.generateHash();
+                                }
+
+                                const object = {
+                                    id: Entry.generateHash(),
+                                    objectType: 'sprite',
+                                    sprite: {
+                                        name: item.name,
+                                        pictures: [item],
+                                        sounds: [],
+                                        category: {},
+                                    },
+                                };
+                                Entry.container.addObject(object, 0);
+                            }
+                        });
+                        break;
+                    case 'shapePopup':
+                        data.uploads.forEach(function(item) {
+                            item.id = Entry.generateHash();
+                            Entry.playground.addPicture(item, true);
+                        });
+                        break;
+                }*/
+            },
+            uploadFail: (data) => {
+                root.entrylms.alert(Utils.getLang(`${data.messageParent}.${data.message}`));
+            },
+            fail: (data) => {
+                root.entrylms.alert(Utils.getLang('Msgs.error_occured'));
+            },
+            error: (data) => {
+                root.entrylms.alert(Utils.getLang('Msgs.error_occured'));
+            },
+        });
+    }
+
+
     static showSoundPopup() {
         const popup = this._switchPopup('sound', {
             fetch: (data) => {
@@ -387,7 +533,7 @@ class EntryModalHelper {
 
     /**
      * 기존 팝업을 hide, event off 후, 신규 타입의 팝업을 노출한다.
-     * 
+     *
      * @param {string}type 팝업 타입
      * @param {object}events 바인딩할 이벤트 목록들. key = eventName, value = function
      * @param {*}data entry-tool popup 최초 init 시에 들어갈 data object

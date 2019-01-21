@@ -33,7 +33,7 @@ class Workspace extends Component {
 
     constructor(props) {
         super(props);
-        
+
         this.isSaving = false;
         this.container = React.createRef();
 
@@ -48,6 +48,7 @@ class Workspace extends Component {
         this.defaultInitOption = {
             type: 'workspace',
             libDir: 'renderer/bower_components',
+            defaultDir: 'renderer/resources/node_modules',
             fonts: EntryStatic.fonts,
             textCodingEnable: true,
         };
