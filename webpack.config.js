@@ -28,6 +28,7 @@ module.exports = {
                     /node_modules/,
                     /bower_components/,
                     /modal[\\/]app\.js/,
+                    /entry-tool/,
                 ],
                 use: [{ loader: 'babel-loader' }],
             },
