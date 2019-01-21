@@ -2,6 +2,7 @@ import get from 'lodash/get';
 import root from 'window-or-global';
 import { remote } from 'electron';
 import StorageManager from './storageManager';
+
 const { dialog } = remote;
 
 /**
@@ -91,7 +92,8 @@ export default class {
      */
     static loadSound(sounds = []) {
         sounds.forEach((sound) => {
-            const path = `renderer/node_modules/uploads/${sound.filename.substring(0, 2)}/${sound.filename.substring(2,4)}/${sound.filename}${sound.ext}`;
+            const path = 'renderer/resources/node_modules/uploads/' +
+            `${sound.filename.substring(0, 2)}/${sound.filename.substring(2, 4)}/${sound.filename}${sound.ext}`;
             Entry.soundQueue.loadFile({
                 id: sound._id,
                 src: path,
