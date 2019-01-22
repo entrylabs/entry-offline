@@ -1,6 +1,11 @@
 import _ from 'lodash';
 import root from 'window-or-global';
+import Utils from '../helper/rendererUtils';
 import { EntryStatic } from '../bower_components/entry-js/extern/util/static.js';
+
+/**
+ * entryjs 내 포함되어있는 EntryStatic 에 추가적인 코드를 덮어쓰기 하는 로직
+ */
 
 const originGetAllBlocks = EntryStatic.getAllBlocks;
 EntryStatic.getAllBlocks = (() =>
@@ -36,5 +41,6 @@ EntryStatic.getName = function(str, type) {
     return dict[str] ? dict[str] : str;
 };
 
-// EntryStatic.baseUrl = sharedObject && `${sharedObject.hostProtocol}//${sharedObject.hostURI}`;
+const sharedObject = Utils.getSharedObject();
+EntryStatic.baseUrl = sharedObject && `${sharedObject.hostProtocol}//${sharedObject.hostURI}`;
 export default EntryStatic;
