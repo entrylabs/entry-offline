@@ -9,10 +9,11 @@ import _includes from 'lodash/includes';
 import _debounce from 'lodash/debounce';
 import { ModalProgress } from 'entry-tool/component';
 import ModalHelper from '../helper/entry/entryModalHelper';
-import Utils from '../helper/rendererUtils';
+import RendererUtils from '../helper/rendererUtils';
 import IpcRendererHelper from '../helper/ipcRendererHelper';
 import LocalStorageManager from '../helper/storageManager';
 import ImportToggleHelper from '../helper/importToggleHelper';
+import EntryUtils from '../helper/entry/entryUtils';
 
 /* global Entry, EntryStatic */
 class Workspace extends Component {
@@ -40,7 +41,7 @@ class Workspace extends Component {
         const { project = {} } = props;
         const { name } = project;
 
-        this.projectName = name || Utils.getDefaultProjectName();
+        this.projectName = name || RendererUtils.getDefaultProjectName();
         this.state = {
             programLanguageMode: 'block',
         };
@@ -203,8 +204,8 @@ class Workspace extends Component {
 
             this.showModalProgress(
                 'progress',
-                Utils.getLang('Workspace.saving_msg'),
-                Utils.getLang('Workspace.fail_contact_msg'),
+                RendererUtils.getLang('Workspace.saving_msg'),
+                RendererUtils.getLang('Workspace.fail_contact_msg'),
             );
 
             try {
@@ -226,15 +227,15 @@ class Workspace extends Component {
                 this.hideModalProgress();
                 Entry.stateManager.addStamp();
                 Entry.toast.success(
-                    Utils.getLang('Workspace.saved'),
-                    `${this.projectName} ${Utils.getLang('Workspace.saved_msg')}`
+                    RendererUtils.getLang('Workspace.saved'),
+                    `${this.projectName} ${RendererUtils.getLang('Workspace.saved_msg')}`
                 );
             } catch (err) {
                 console.error(err);
                 this.showModalProgress(
                     'error',
-                    Utils.getLang('Workspace.saving_fail_msg'),
-                    Utils.getLang('Workspace.fail_contact_msg')
+                    RendererUtils.getLang('Workspace.saving_fail_msg'),
+                    RendererUtils.getLang('Workspace.fail_contact_msg')
                 );
             }
         };
@@ -243,7 +244,7 @@ class Workspace extends Component {
             await saveFunction(this.projectSavedPath);
         } else {
             const targetPath = this.projectSavedPath || '*';
-            Utils.showSaveDialog({
+            RendererUtils.showSaveDialog({
                 defaultPath: `${targetPath}/${this.projectName}`,
                 filters: [{ name: 'Entry File', extensions: ['ent'] }],
             }, saveFunction);
@@ -252,7 +253,7 @@ class Workspace extends Component {
 
     handleFileAction = (type) => {
         if (type === 'new') {
-            if (Utils.confirmProjectWillDismiss()) {
+            if (EntryUtils.confirmProjectWillDismiss()) {
                 IpcRendererHelper.resetDirectory();
                 delete this.projectSavedPath;
                 this.loadProject();
@@ -262,11 +263,11 @@ class Workspace extends Component {
             const { mode: currentWorkspaceMode } = common;
             this.showModalProgress(
                 'progress',
-                Utils.getLang('Workspace.uploading_msg'),
-                Utils.getLang('Workspace.fail_contact_msg'),
+                RendererUtils.getLang('Workspace.uploading_msg'),
+                RendererUtils.getLang('Workspace.fail_contact_msg'),
             );
 
-            Utils.showOpenDialog({
+            RendererUtils.showOpenDialog({
                 /*defaultPath: storage.getItem('defaultPath') || '',*/
                 properties: ['openFile'],
                 filters: [{ name: 'Entry File', extensions: ['ent'] }],

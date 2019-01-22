@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import './header.scss';
 import root from 'window-or-global';
 import _get from 'lodash/get';
-import Utils from '../helper/rendererUtils';
+import RendererUtils from '../helper/rendererUtils';
+import EntryUtils from '../helper/entry/entryUtils';
 import { connect } from 'react-redux';
 import { commonAction, showPopup } from '../actions';
 import { CHANGE_LANGUAGE, WS_MODE } from '../actions/types';
@@ -22,20 +23,20 @@ class Header extends Component {
 
     get programLanguageList() {
         return [
-            [Utils.getLang('Menus.block_coding'), 'block'],
-            [Utils.getLang('Menus.python_coding'), 'python'],
+            [RendererUtils.getLang('Menus.block_coding'), 'block'],
+            [RendererUtils.getLang('Menus.python_coding'), 'python'],
         ];
     }
     get fileList() {
         return [
-            [Utils.getLang('Workspace.file_new'), 'new'],
-            [Utils.getLang('Workspace.file_upload'), 'open_offline'],
+            [RendererUtils.getLang('Workspace.file_new'), 'new'],
+            [RendererUtils.getLang('Workspace.file_upload'), 'open_offline'],
         ];
     }
     get saveList() {
         return [
-            [Utils.getLang('Workspace.file_save'), 'save'],
-            [Utils.getLang('Workspace.file_save_as'), 'save_as'],
+            [RendererUtils.getLang('Workspace.file_save'), 'save'],
+            [RendererUtils.getLang('Workspace.file_save_as'), 'save_as'],
         ];
     }
     get helpList() {
@@ -43,22 +44,22 @@ class Header extends Component {
         const { mode } = common;
 
         return [
-            [Utils.getLang('Workspace.block_helper'), 'help_block'],
+            [RendererUtils.getLang('Workspace.block_helper'), 'help_block'],
             (mode === 'workspace' ?
-                [Utils.getLang('Workspace.hardware_guide'), 'help_hardware'] :
-                [Utils.getLang('Workspace.robot_guide'), 'help_robot']
+                [RendererUtils.getLang('Workspace.hardware_guide'), 'help_hardware'] :
+                [RendererUtils.getLang('Workspace.robot_guide'), 'help_robot']
             ),
-            [Utils.getLang('Workspace.python_guide'), 'help_python'],
+            [RendererUtils.getLang('Workspace.python_guide'), 'help_python'],
         ];
     }
     get modeList() {
         return [
-            [Utils.getLang('Workspace.default_mode'), 'workspace'],
+            [RendererUtils.getLang('Workspace.default_mode'), 'workspace'],
             [
                 <div>
-                    {Utils.getLang('Workspace.practical_course_mode')}
+                    {RendererUtils.getLang('Workspace.practical_course_mode')}
                     <em className={'ico_workspace_practical'}>
-                        {Utils.getLang('Workspace.practical_course')}
+                        {RendererUtils.getLang('Workspace.practical_course')}
                     </em>
                 </div>,
                 'practical_course',
@@ -67,10 +68,10 @@ class Header extends Component {
     }
     get languageList() {
         return [
-            [Utils.getLang('ko'), 'ko'],
-            [Utils.getLang('en'), 'en'],
-            [Utils.getLang('jp'), 'jp'],
-            [Utils.getLang('vn'), 'vn'],
+            [RendererUtils.getLang('ko'), 'ko'],
+            [RendererUtils.getLang('en'), 'en'],
+            [RendererUtils.getLang('jp'), 'jp'],
+            [RendererUtils.getLang('vn'), 'vn'],
         ];
     }
 
@@ -185,7 +186,7 @@ class Header extends Component {
     }
 
     async handleChangeWsMode(item) {
-        if (Utils.confirmProjectWillDismiss()) {
+        if (EntryUtils.confirmProjectWillDismiss()) {
             const { mode, onLoadProject } = this.props;
             const key = item[1];
             await ImportToggleHelper.changeEntryStatic(key);
@@ -234,7 +235,7 @@ class Header extends Component {
                             // 블록코딩, 엔트리파이선 모드 변경
                             <div className={'work_space'}>
                                 <a
-                                    title={Utils.getLang('Workspace.language')}
+                                    title={RendererUtils.getLang('Workspace.language')}
                                     className={`btn_work_space btn_workspace_lang ${
                                         dropdownType === 'programLanguage' ? 'on' : ''
                                     } ${programLanguageMode}`}
@@ -244,7 +245,7 @@ class Header extends Component {
                                     }}
                                 >
                                     <span className={'blind'}>
-                                        {Utils.getLang('Workspace.language')}
+                                        {RendererUtils.getLang('Workspace.language')}
                                     </span>
                                 </a>
                                 {this.makeDropdown('programLanguage', this.programLanguageList)}
@@ -254,7 +255,7 @@ class Header extends Component {
                             // 새로만들기, 불러오기
                             <div className={'work_space'}>
                                 <a
-                                    title={Utils.getLang('Workspace.file')}
+                                    title={RendererUtils.getLang('Workspace.file')}
                                     className={`${'btn_work_space'} ${'btn_workspace_file'} ${
                                         dropdownType === 'file' ? 'on' : ''
                                     }`}
@@ -264,7 +265,7 @@ class Header extends Component {
                                     }}
                                 >
                                     <span className={'blind'}>
-                                        {Utils.getLang('Workspace.file')}
+                                        {RendererUtils.getLang('Workspace.file')}
                                     </span>
                                 </a>
                                 {this.makeDropdown('file', this.fileList)}
@@ -274,7 +275,7 @@ class Header extends Component {
                             // 저장하기, 복사본으로 저장하기
                             <div className={'work_space'}>
                                 <a
-                                    title={Utils.getLang('Workspace.save')}
+                                    title={RendererUtils.getLang('Workspace.save')}
                                     className={`${'btn_work_space'} ${'btn_workspace_save'}  ${
                                         dropdownType === 'save' ? 'on' : ''
                                     }`}
@@ -284,7 +285,7 @@ class Header extends Component {
                                     }}
                                 >
                                     <span className={'blind'}>
-                                        {Utils.getLang('Workspace.save')}
+                                        {RendererUtils.getLang('Workspace.save')}
                                     </span>
                                 </a>
                                 {this.makeDropdown('save', this.saveList)}
@@ -294,7 +295,7 @@ class Header extends Component {
                             // 도움말들
                             <div className={'work_space'}>
                                 <a
-                                    title={Utils.getLang('Workspace.help')}
+                                    title={RendererUtils.getLang('Workspace.help')}
                                     className={`${'btn_work_space'} ${'btn_workspace_help'} ${
                                         dropdownType === 'help' ? 'on' : ''
                                     }`}
@@ -304,7 +305,7 @@ class Header extends Component {
                                     }}
                                 >
                                     <span className={'blind'}>
-                                        {Utils.getLang('Workspace.help')}
+                                        {RendererUtils.getLang('Workspace.help')}
                                     </span>
                                 </a>
                                 {this.makeDropdown('help', this.helpList)}
@@ -316,22 +317,22 @@ class Header extends Component {
                     <div className={'group_inner'}>
                         <div className={'work_space'}>
                             <a
-                                title={Utils.getLang('Workspace.undo')}
+                                title={RendererUtils.getLang('Workspace.undo')}
                                 className={'btn_workspace_undo'}
                                 onClick={() => {
                                     Entry.dispatchEvent('undo');
                                 }}
                             >
-                                <span className={'blind'}>{Utils.getLang('Workspace.undo')}</span>
+                                <span className={'blind'}>{RendererUtils.getLang('Workspace.undo')}</span>
                             </a>
                             <a
-                                title={Utils.getLang('Workspace.redo')}
+                                title={RendererUtils.getLang('Workspace.redo')}
                                 className={'btn_workspace_redo'}
                                 onClick={() => {
                                     Entry.dispatchEvent('redo');
                                 }}
                             >
-                                <span className={'blind'}>{Utils.getLang('Workspace.redo')}</span>
+                                <span className={'blind'}>{RendererUtils.getLang('Workspace.redo')}</span>
                             </a>
                         </div>
                     </div>

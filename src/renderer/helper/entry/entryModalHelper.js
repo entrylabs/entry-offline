@@ -1,10 +1,11 @@
 import Modal from '../../resources/modal/app.js';
 import root from 'window-or-global';
-import Utils from '../rendererUtils';
+import RendererUtils from '../rendererUtils';
 import IpcRendererHelper from '../ipcRendererHelper';
 import EntryTool from 'entry-tool';
 import DatabaseManager from '../../helper/databaseManager';
 import _ from 'lodash';
+import EntryUtils from './entryUtils';
 
 /**
  * 이 클래스는 Entry 프로젝트에서 entry-lms, entry-tool 을 사용하여 팝업 및 모달을 출력해야 하는 경우 사용한다.
@@ -63,7 +64,7 @@ class EntryModalHelper {
                     id: Entry.generateHash(),
                     objectType: 'sprite',
                     sprite: {
-                        name: `${Utils.getLang('Workspace.new_object')}${Entry.container.getAllObjects().length + 1}`,
+                        name: `${RendererUtils.getLang('Workspace.new_object')}${Entry.container.getAllObjects().length + 1}`,
                         pictures: [
                             {
                                 dimension: {
@@ -71,7 +72,7 @@ class EntryModalHelper {
                                     height: 540,
                                 },
                                 fileurl: `${Entry.mediaFilePath}_1x1.png`,
-                                name: Utils.getLang('Workspace.new_picture'),
+                                name: RendererUtils.getLang('Workspace.new_picture'),
                                 type: '_system_',
                             },
                         ],
@@ -90,7 +91,7 @@ class EntryModalHelper {
                 if (data.writeType === 'one') {
                     linebreak = false;
                 }
-                const text = data.text || Utils.getLang('Blocks.TEXT');
+                const text = data.text || RendererUtils.getLang('Blocks.TEXT');
                 const object = {
                     id: Entry.generateHash(),
                     name: text, //Lang.Workspace.textbox,
@@ -210,13 +211,13 @@ class EntryModalHelper {
                 }*/
             },
             uploadFail: (data) => {
-                root.entrylms.alert(Utils.getLang(`${data.messageParent}.${data.message}`));
+                root.entrylms.alert(RendererUtils.getLang(`${data.messageParent}.${data.message}`));
             },
             fail: (data) => {
-                root.entrylms.alert(Utils.getLang('Msgs.error_occured'));
+                root.entrylms.alert(RendererUtils.getLang('Msgs.error_occured'));
             },
             error: (data) => {
-                root.entrylms.alert(Utils.getLang('Msgs.error_occured'));
+                root.entrylms.alert(RendererUtils.getLang('Msgs.error_occured'));
             },
         });
     }
@@ -272,7 +273,7 @@ class EntryModalHelper {
                         width: 1,
                     },
                     fileurl: `${Entry.mediaFilePath}_1x1.png`,
-                    name: Utils.getLang('Workspace.new_picture'),
+                    name: RendererUtils.getLang('Workspace.new_picture'),
                 };
                 Entry.playground.addPicture(item, true);
             },
@@ -282,7 +283,7 @@ class EntryModalHelper {
                 if (data.writeType === 'one') {
                     linebreak = false;
                 }
-                const text = data.text || Utils.getLang('Blocks.TEXT');
+                const text = data.text || RendererUtils.getLang('Blocks.TEXT');
                 const object = {
                     id: Entry.generateHash(),
                     name: text, //Lang.Workspace.textbox,
@@ -402,13 +403,13 @@ class EntryModalHelper {
                 }*/
             },
             uploadFail: (data) => {
-                root.entrylms.alert(Utils.getLang(`${data.messageParent}.${data.message}`));
+                root.entrylms.alert(RendererUtils.getLang(`${data.messageParent}.${data.message}`));
             },
             fail: (data) => {
-                root.entrylms.alert(Utils.getLang('Msgs.error_occured'));
+                root.entrylms.alert(RendererUtils.getLang('Msgs.error_occured'));
             },
             error: (data) => {
-                root.entrylms.alert(Utils.getLang('Msgs.error_occured'));
+                root.entrylms.alert(RendererUtils.getLang('Msgs.error_occured'));
             },
         });
     }
@@ -425,7 +426,7 @@ class EntryModalHelper {
                         popup.setData({
                             data: { data: result },
                         });
-                        Utils.loadSound(result);
+                        EntryUtils.loadSound(result);
                     });
                 console.log(data);
                 // let url = `/api/sound/browse/default/${data.sidebar}`;
@@ -451,7 +452,7 @@ class EntryModalHelper {
                         popup.setData({
                             data: { data: result },
                         });
-                        Utils.loadSound(result);
+                        EntryUtils.loadSound(result);
                     });
                 // this.props.fetchPopup({
                 //     url: `/api/sound/search/${data.searchQuery}`,
@@ -477,8 +478,8 @@ class EntryModalHelper {
                 };
                 Entry.playground.addSound(item, true);
             },
-            loaded: Utils.loadSound,
-            load: Utils.loadSound,
+            loaded: EntryUtils.loadSound,
+            load: EntryUtils.loadSound,
             itemoff: () => {
                 console.log('itemOff');
                 return root.createjs.Sound.stop();
@@ -496,13 +497,13 @@ class EntryModalHelper {
                 // createjs.Sound.stop();
             },
             uploadFail: (data) => {
-                root.entrylms.alert(Utils.getLang(`${data.messageParent}.${data.message}`));
+                root.entrylms.alert(RendererUtils.getLang(`${data.messageParent}.${data.message}`));
             },
             fail: (data) => {
-                root.entrylms.alert(Utils.getLang('Msgs.error_occured'));
+                root.entrylms.alert(RendererUtils.getLang('Msgs.error_occured'));
             },
             error: (data) => {
-                root.entrylms.alert(Utils.getLang('Msgs.error_occured'));
+                root.entrylms.alert(RendererUtils.getLang('Msgs.error_occured'));
             },
         });
     }
@@ -582,13 +583,13 @@ class EntryModalHelper {
                 // });
             },
             uploadFail: (data) => {
-                root.entrylms.alert(Utils.getLang(`${data.messageParent}.${data.message}`));
+                root.entrylms.alert(RendererUtils.getLang(`${data.messageParent}.${data.message}`));
             },
             fail: (data) => {
-                root.entrylms.alert(Utils.getLang('Msgs.error_occured'));
+                root.entrylms.alert(RendererUtils.getLang('Msgs.error_occured'));
             },
             error: (data) => {
-                root.entrylms.alert(Utils.getLang('Msgs.error_occured'));
+                root.entrylms.alert(RendererUtils.getLang('Msgs.error_occured'));
             },
         });
     }
@@ -599,7 +600,6 @@ class EntryModalHelper {
      * @param {string}type 팝업 타입
      * @param {Object}events 바인딩할 이벤트 목록들. key = eventName, value = function
      * @param {*}data entry-tool popup 최초 init 시에 들어갈 data object
-     * @param {Object?}props props 에 추가하고자 하는 값이 있다면 추가
      * @return popup 자신을 반환한다. 내부 콜백에서 자신을 사용해야 하는 경우 활용가능하다.
      */
     static _switchPopup(type, events = {}, data = []) {
@@ -627,7 +627,7 @@ class EntryModalHelper {
                     case 'save':
                         //아무것도 입력하지 않은 경우, 빈칸 하나만 있는 것으로 처리된다.
                         if (data.length === 1 && data[0] === '') {
-                            root.entrylms.alert(Utils.getLang('Menus.nothing_to_import'));
+                            root.entrylms.alert(RendererUtils.getLang('Menus.nothing_to_import'));
                         } else {
                             const list = Entry.variableContainer.selected;
                             list.array_ = data.map((element) => {
@@ -649,7 +649,7 @@ class EntryModalHelper {
             .on('click', function(e, data) {
                 switch (e) {
                     case 'copied':
-                        root.entrylms.alert(Utils.getLang('Menus.content_copied'));
+                        root.entrylms.alert(RendererUtils.getLang('Menus.content_copied'));
                         break;
                     case 'excel':
                         //TODO 추출중입니다 이런 ModalProgress 문구가 있으면 더 좋을것 같음.

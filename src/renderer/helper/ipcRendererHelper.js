@@ -33,6 +33,10 @@ export default class {
         });
     }
 
+    static resetDirectory() {
+        ipcRenderer.send('resetDirectory');
+    }
+
     static downloadExcel(filename, array) {
         return new Promise((resolve, reject) => {
             RendererUtils.showSaveDialog({
@@ -57,10 +61,6 @@ export default class {
                 // });
             });
         });
-    }
-
-    static resetDirectory() {
-        ipcRenderer.send('resetDirectory');
     }
 
     static downloadHardwareGuide() {
