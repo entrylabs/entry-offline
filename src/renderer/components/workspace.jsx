@@ -79,9 +79,7 @@ class Workspace extends Component {
             console.log('saveWorkspace');
         });
         // exportObject
-        addEventListener('exportObject', () => {
-            console.log('exportObject');
-        });
+        addEventListener('exportObject', EntryUtils.exportObject);
         // 리스트 Import
         addEventListener('openImportListModal', ModalHelper.openImportListModal);
         // 리스트 Export

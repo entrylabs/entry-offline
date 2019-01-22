@@ -7,14 +7,9 @@ import zlib from 'zlib';
 import rimraf from 'rimraf';
 import decompress from 'decompress';
 import { dialog, app } from 'electron';
+import Constants from './constants';
 
 export const STATIC_PATH = {
-    DEFAULT_SOUND: ['./bower_components/entryjs/images/media/bark.mp3'],
-    DEFAULT_PICTURE: [
-        './bower_components/entryjs/images/media/entrybot1.png',
-        './bower_components/entryjs/images/media/entrybot2.png',
-        './bower_components/entryjs/images/_1x1.png',
-    ],
     get UPLOADS_DIR() {
         return path.join(path.dirname(__dirname), 'renderer', 'node_modules', 'uploads');
     },
@@ -39,7 +34,7 @@ class Utils {
 
     mkdirRecursive(target) {
         return new Promise((resolve, reject) => {
-            fs.stat(target, async (err, stats) => {
+            fs.stat(target, async(err, stats) => {
                 if (err) {
                     if (err.code === 'ENOENT') {
                         try {
@@ -98,9 +93,10 @@ class Utils {
     }
 
     copySoundFiles({ sound, objectDirPath }) {
-        return new Promise(async (resolve, reject) => {
+        return new Promise(async(resolve, reject) => {
             try {
-                if (STATIC_PATH.DEFAULT_SOUND.indexOf(sound.fileurl) >= 0) {
+                console.log(sound.fileurl);
+                if (Constants.defaultSoundPath.indexOf(sound.fileurl) >= 0) {
                     resolve(sound);
                 } else {
                     const fileId = sound.filename;
@@ -134,15 +130,10 @@ class Utils {
         });
     }
 
-    isDefaultObject(objects, filename) {
-        return objects.some(function(object) {
-            return object.filename === filename;
-        });
-    }
-
     async copyPictureFiles({ picture, objectDirPath }) {
-        return new Promise(async (resolve, reject) => {
-            if (STATIC_PATH.DEFAULT_PICTURE.indexOf(picture.fileurl) >= 0) {
+        return new Promise(async(resolve, reject) => {
+            console.log(picture.fileurl);
+            if (Constants.defaultPicturePath.indexOf(picture.fileurl) >= 0) {
                 resolve(picture);
             } else {
                 try {
@@ -260,20 +251,9 @@ class Utils {
         });
     }
 
-    copyObjectFiles({ object, objectDirPath }) {
-        return new Promise(async (resolve, reject) => {
+    copyObjectFiles(object, objectDirPath) {
+        return new Promise((resolve, reject) => {
             try {
-                const jsonDir = path.join(path.dirname(__dirname), 'renderer', 'resource_map');
-                const soundInfo = await this.readFileSync(
-                    path.join(jsonDir, 'sounds.json'),
-                    'utf8',
-                    true
-                );
-                const pictureInfo = await this.readFileSync(
-                    path.join(jsonDir, 'pictures.json'),
-                    'utf8',
-                    true
-                );
                 const copyObjectPromise = [];
 
                 object.objects.forEach((object) => {

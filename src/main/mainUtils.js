@@ -6,6 +6,7 @@ import zlib from 'zlib';
 import path from 'path';
 import { ProgressTypes } from './Constants';
 import { default as Utils } from '../common/Utils';
+import FileUtils from './fileUtils';
 import root from 'window-or-global';
 import stream from "stream";
 import tar from 'tar';
@@ -110,15 +111,6 @@ export default class {
         }
     }
 
-    static ensureDirectoryExistence(filePath) {
-        const dirname = path.dirname(filePath);
-        if (fs.existsSync(dirname)) {
-            return true;
-        }
-        this.ensureDirectoryExistence(dirname);
-        fs.mkdirSync(dirname);
-    }
-
     /**
      * electronPath/temp 내에 있는 프로젝트를 ent 파일로 압축하여 저장한다.
      * @param {Object}project 엔트리 프로젝트
@@ -153,7 +145,7 @@ export default class {
 
             const projectString = JSON.stringify(project);
             const targetFilePath = path.join(sourcePath, 'temp', 'project.json');
-            this.ensureDirectoryExistence(targetFilePath);
+            FileUtils.ensureDirectoryExistence(targetFilePath);
 
             fs.writeFile(
                 targetFilePath,
@@ -237,68 +229,26 @@ export default class {
         });
     }
 
-    lpad(str, len) {
-        const strLen = str.length;
-        if (strLen < len) {
-            for (let i = 0; i < len - strLen; i++) {
-                str = `0${  str}`;
-            }
-        }
-        return String(str);
-    }
-
-    getPaddedVersion(version) {
-        if (!version) {
-            return '';
-        }
-        version = String(version);
-
-        const padded = [];
-        const splitVersion = version.split('.');
-        splitVersion.forEach((item) => {
-            padded.push(this.lpad(item, 4));
-        });
-
-        return padded.join('.');
-    }
-
-    static async exportObject(e, object) {
+    //TODO 개선필요
+    static async exportObject(e, filePath, object) {
         const { objects } = object;
-        const objectName = objects[0].name;
+
         const objectId = Utils.createFileId();
-        const objectDirPath = path.join(
-            app.getPath('userData'),
-            'import',
-            objectId,
-            'object'
-        );
-        const objectJsonPath = path.join(objectDirPath, 'object.json');
+        const objectName = objects[0].name;
+        const objectData = typeof object === 'string' ? object : JSON.stringify(object);
+
+        const objectTempDirPath = path.join(app.getPath('userData'), 'import', objectId, 'object');
+        const objectJsonPath = path.join(objectTempDirPath, 'object.json');
+
         const exportFileName = `${objectName}.eo`;
-        const exportFile = path.resolve(objectDirPath, '..', exportFileName);
+        const exportFile = path.resolve(objectTempDirPath, '..', exportFileName);
+
         try {
-            const savePath = await Utils.showSaveDialog({
-                defaultPath: exportFileName,
-                filters: [
-                    {
-                        name: 'Entry object file(.eo)',
-                        extensions: ['eo'],
-                    },
-                ],
-            });
-            if (savePath) {
-                await Utils.mkdirRecursive(objectDirPath);
-                await Utils.copyObjectFiles({ object, objectDirPath });
-                const objectData =
-                    typeof object === 'string'
-                        ? object
-                        : JSON.stringify(object);
-                await Utils.writeFile(objectJsonPath, objectData);
-                await Utils.filePack({
-                    source: exportFile,
-                    target: savePath,
-                    isRemove: true,
-                });
-            }
+            await FileUtils.mkdirRecursive(objectTempDirPath);
+            await Utils.copyObjectFiles(object, objectTempDirPath);
+            await FileUtils.writeFile(objectData, objectJsonPath);
+            await FileUtils.compressDirectoryToFile(exportFile, filePath);
+            FileUtils.removeDirectoryRecursive(path.join(app.getPath('userData'), 'import'));
         } catch (e) {
             console.error(e);
         }

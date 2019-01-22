@@ -1,6 +1,7 @@
 import IpcRendererHelper from '../ipcRendererHelper';
 import StorageManager from '../storageManager';
 import RendererUtils from '../rendererUtils';
+import Constants from '../constants';
 import root from 'window-or-global';
 
 /**
@@ -27,12 +28,27 @@ export default class {
      */
     static loadSound(sounds = []) {
         sounds.forEach((sound) => {
-            const path = `${RendererUtils.resolveResourceFilePath(sound.filename)}${sound.filename}${sound.ext}`;
+            const path = `${Constants.resourceSoundPath(sound.filename)}${sound.filename}${sound.ext}`;
             Entry.soundQueue.loadFile({
                 id: sound._id,
                 src: path,
                 type: root.createjs.LoadQueue.SOUND,
             });
+        });
+    }
+
+    static exportObject(object) {
+        const { name, script } = object;
+
+        const blockList = script.getBlockList();
+        const objectVariable = Entry.variableContainer.getObjectVariables(blockList);
+        objectVariable.objects = [object.toJSON()];
+
+        RendererUtils.showSaveDialog({
+            defaultPath: name,
+            filters: [{ name: 'Entry object file(.eo)', extensions: ['eo'] }],
+        }, (filePath) => {
+            IpcRendererHelper.exportObject(filePath, objectVariable);
         });
     }
 }

@@ -111,4 +111,21 @@ export default class {
             }
         });
     }
+
+    /**
+     *
+     * @param filePath 저장할 파일 전체경로
+     * @param objectVariable
+     */
+    static exportObject(filePath, objectVariable) {
+        console.log('ipcrendererExportObject', filePath, objectVariable);
+        ipcRenderer.send('exportObject', filePath, objectVariable);
+        // return new Promise((resolve, reject) => {
+        //     ipcRenderer.send('exportObject', filePath, objectVariable);
+        //     //NOTE Entry.Toast 라도 주면 좋겠는데 real 에도 아무반응 없네요.
+        //     // ipcRenderer.once('exportObject', (result) => {
+        //     //     console.log(result);
+        //     // });
+        // }) ;
+    }
 }
