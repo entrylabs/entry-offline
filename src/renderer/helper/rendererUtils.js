@@ -1,6 +1,7 @@
 import get from 'lodash/get';
 import root from 'window-or-global';
 import { remote } from 'electron';
+import Constants from './constants';
 import StorageManager from './storageManager';
 
 const { dialog } = remote;
@@ -58,6 +59,15 @@ export default class {
      */
     static getDefaultProjectName() {
         return `${this.getFormattedDate()}_${this.getLang('Workspace.project')}`;
+    }
+
+    /**
+     * filename 을 통해 경로를 반환한다. 예를들어,
+     * efa8f27cabfa27bbf260e663f62ed55f 라는 인자를 받으면
+     * renderer/resources/node_modules/uploads/ef/a8/ 을 반환한다.
+     */
+    static resolveResourceFilePath(fileName) {
+        return `${Constants.resourcePath}${fileName.substring(0, 2)}/${fileName.substring(2, 4)}/`;
     }
 
     static showOpenDialog(option, callback) {

@@ -1,3 +1,4 @@
+import IpcRendererHelper from '../ipcRendererHelper';
 import StorageManager from '../storageManager';
 import RendererUtils from '../rendererUtils';
 import root from 'window-or-global';
@@ -26,8 +27,7 @@ export default class {
      */
     static loadSound(sounds = []) {
         sounds.forEach((sound) => {
-            const path = 'renderer/resources/node_modules/uploads/' +
-                `${sound.filename.substring(0, 2)}/${sound.filename.substring(2, 4)}/${sound.filename}${sound.ext}`;
+            const path = `${RendererUtils.resolveResourceFilePath(sound.filename)}${sound.filename}${sound.ext}`;
             Entry.soundQueue.loadFile({
                 id: sound._id,
                 src: path,
