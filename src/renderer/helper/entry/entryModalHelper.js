@@ -256,9 +256,7 @@ class EntryModalHelper {
                 console.log('popupSubmitShapePopup', data);
                 data.selected.forEach(function(object) {
                     object.id = Entry.generateHash();
-                    console.log('여기까진 잘됨', object.filename);
                     Entry.playground.addPicture(object, true);
-                    console.log('여기서 문제발생');
                 });
             },
             select: (data) => {
@@ -267,7 +265,6 @@ class EntryModalHelper {
                 Entry.playground.addPicture(picture, true);
             },
             draw: () => {
-                console.log('draw', type);
                 const item = {
                     id: Entry.generateHash(),
                     dimension: {
@@ -600,8 +597,9 @@ class EntryModalHelper {
      * 기존 팝업을 hide, event off 후, 신규 타입의 팝업을 노출한다.
      *
      * @param {string}type 팝업 타입
-     * @param {object}events 바인딩할 이벤트 목록들. key = eventName, value = function
+     * @param {Object}events 바인딩할 이벤트 목록들. key = eventName, value = function
      * @param {*}data entry-tool popup 최초 init 시에 들어갈 data object
+     * @param {Object?}props props 에 추가하고자 하는 값이 있다면 추가
      * @return popup 자신을 반환한다. 내부 콜백에서 자신을 사용해야 하는 경우 활용가능하다.
      */
     static _switchPopup(type, events = {}, data = []) {
@@ -679,7 +677,15 @@ const popupTargetElement = () => {
 };
 
 //TODO 렌더가 바로 되지 않는 현상이 해결되면 popup 하나로 돌려쓰기 한다.
-EntryModalHelper.loadPopup = (type, data) => {
+/**
+ * 팝업을 로드한다. 두번째부터는 기존 팝업을 그대로 사용한다.
+ *
+ * @param type!
+ * @param data?
+ * @param props?
+ * @return {Object} popup
+ */
+EntryModalHelper.loadPopup = (type, data, props) => {
     const popup = EntryModalHelper[`${type}Popup`];
     if (popup === undefined) {
         EntryModalHelper[`${type}Popup`] = new EntryTool({
@@ -690,6 +696,8 @@ EntryModalHelper.loadPopup = (type, data) => {
                 data: {
                     data,
                 },
+                isOffline: true,
+                imageBaseUrl: './renderer/bower_components/entry-js/images/hardware/',
             },
             type: 'popup',
             props: { type, baseUrl: './renderer/resources/node_modules' },
