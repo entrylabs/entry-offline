@@ -259,7 +259,7 @@ export default class {
 
         try {
             await FileUtils.mkdirRecursive(objectTempDirPath);
-            await FileUtils.copyObjectFiles(object, objectTempDirPath);
+            await FileUtils.copyObjectResourceFileTo(object, objectTempDirPath);
             await FileUtils.writeFile(objectData, objectJsonPath);
             await FileUtils.compressDirectoryToFile(exportFile, filePath);
             await FileUtils.removeDirectoryRecursive(path.join(objectTempDirPath, '..'));

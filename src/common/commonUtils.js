@@ -1,22 +1,11 @@
 import path from 'path';
 import fs from 'fs';
-import archiver from 'archiver';
-import fstream from 'fstream';
-import tar from 'tar';
-import zlib from 'zlib';
 import rimraf from 'rimraf';
 import decompress from 'decompress';
 import { dialog, app } from 'electron';
-import Constants from '../main/constants';
 import FileUtils from '../main/fileUtils';
 
 export const STATIC_PATH = {
-    get UPLOADS_DIR() {
-        return path.join(path.dirname(__dirname), 'renderer', 'node_modules', 'uploads');
-    },
-    get TEMP_DIR() {
-        return path.join(app.getPath('userData'), 'temp');
-    },
     get TEMP_DIR_POSIX() {
         const regex = new RegExp(`\\${path.win32.sep}`, 'gi');
         const userDataPath = app.getPath('userData').replace(regex, path.posix.sep);
@@ -60,17 +49,6 @@ class CommonUtils {
         });
     }
 
-    writeFile(destination, source) {
-        return new Promise((resolve, reject) => {
-            fs.writeFile(destination, source, (err) => {
-                if (err) {
-                    return reject(err);
-                }
-                resolve(true);
-            });
-        });
-    }
-
     readDir(target) {
         return new Promise((resolve, reject) => {
             fs.readdir(target, (err, files) => {
@@ -90,135 +68,6 @@ class CommonUtils {
                 }
                 resolve();
             });
-        });
-    }
-
-    copySoundFiles({ sound, objectDirPath }) {
-        return new Promise(async(resolve, reject) => {
-            try {
-                console.log(sound.fileurl);
-                if (Constants.defaultSoundPath.indexOf(sound.fileurl) >= 0) {
-                    resolve(sound);
-                } else {
-                    const fileId = sound.filename;
-                    let extname = sound.ext || '.mp3';
-                    if (!extname.startsWith('.')) {
-                        extname = `.${extname}`;
-                    }
-                    const filePath = path.join(
-                        fileId.substr(0, 2),
-                        fileId.substr(2, 2),
-                        'sound',
-                        fileId + extname
-                    );
-                    const source = path.join(STATIC_PATH.TEMP_DIR, filePath);
-
-                    const filename = this.createFileId();
-                    const soundPath = path.join(
-                        filename.substr(0, 2),
-                        filename.substr(2, 2),
-                        'sound'
-                    );
-                    const uploadDir = path.join(objectDirPath, soundPath);
-                    sound.filename = filename;
-                    await this.copyObjectFile({ uploadDir, source, filename });
-                    sound.fileurl = undefined;
-                    resolve(sound);
-                }
-            } catch (e) {
-                reject(e);
-            }
-        });
-    }
-
-    async copyPictureFiles({ picture, objectDirPath }) {
-        return new Promise(async(resolve, reject) => {
-            console.log(picture.fileurl);
-            if (Constants.defaultPicturePath.indexOf(picture.fileurl) >= 0) {
-                resolve(picture);
-            } else {
-                try {
-                    const fileId = picture.filename;
-                    let extname = picture.ext || '.png';
-                    if (!extname.startsWith('.')) {
-                        extname = `.${extname}`;
-                    }
-                    const imageSource = path.join(
-                        STATIC_PATH.TEMP_DIR,
-                        fileId.substr(0, 2),
-                        fileId.substr(2, 2),
-                        'image',
-                        fileId + extname
-                    );
-                    const thumbSource = path.join(
-                        STATIC_PATH.TEMP_DIR,
-                        fileId.substr(0, 2),
-                        fileId.substr(2, 2),
-                        'thumb',
-                        fileId + extname
-                    );
-
-                    const filename = this.createFileId();
-                    const imageUploadDir = path.join(
-                        objectDirPath,
-                        filename.substr(0, 2),
-                        filename.substr(2, 2),
-                        'image'
-                    );
-                    const thumbUploadDir = path.join(
-                        objectDirPath,
-                        filename.substr(0, 2),
-                        filename.substr(2, 2),
-                        'thumb'
-                    );
-                    picture.filename = filename;
-                    await this.copyObjectFile({
-                        uploadDir: imageUploadDir,
-                        source: imageSource,
-                        filename,
-                    });
-                    await this.copyObjectFile({
-                        uploadDir: thumbUploadDir,
-                        source: thumbSource,
-                        filename,
-                    });
-                    picture.fileurl = undefined;
-                    resolve(picture);
-                } catch (e) {
-                    reject(e);
-                }
-            }
-        });
-    }
-
-    async copyObjectFile({ uploadDir, source, filename }) {
-        return new Promise(async(resolve, reject) => {
-            try {
-                await this.mkdirRecursive(uploadDir);
-                fs.stat(source, function(err, stats) {
-                    if (err && err.errno == -2) {
-                        source = path.resolve(
-                            path.dirname(__dirname),
-                            'renderer',
-                            'bower_components',
-                            'entryjs',
-                            'images',
-                            '_1x1.png'
-                        );
-                    }
-                    const extname = path.extname(source);
-                    const rStream = fs.createReadStream(source);
-                    rStream.pipe(fs.createWriteStream(path.resolve(uploadDir, filename + extname)));
-                    rStream.on('error', function(err) {
-                        reject(err);
-                    });
-                    rStream.on('close', function(err) {
-                        resolve();
-                    });
-                });
-            } catch (e) {
-                reject(e);
-            }
         });
     }
 
