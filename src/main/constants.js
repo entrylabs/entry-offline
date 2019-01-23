@@ -1,4 +1,5 @@
-import { app } from 'electron'
+import { app } from 'electron';
+import path from 'path';
 
 export default class {
     static get defaultSoundPath() {
@@ -14,35 +15,42 @@ export default class {
     }
 
     static get resourcePath() {
-        return 'renderer/resources/node_modules/uploads/';
-    }
-
-    static get tempPath() {
-        return `${app.getPath('userData')}/temp`;
-    }
-
-    static tempImagePath(filename) {
-        return `${this.tempPath}${filename.substr(0, 2)}/${filename.substr(2, 2)}/image/`;
-    }
-
-    static tempThumbnailPath(filename) {
-        return `${this.tempPath}${filename.substr(0, 2)}/${filename.substr(2, 2)}/thumb/`;
-    }
-
-    // resourceSoundPath 와 다르다.
-    static tempSoundPath(filename) {
-        return `${this.tempPath}${filename.substr(0, 2)}/${filename.substr(2, 2)}/sound/`;
+        return path.join(
+            __dirname, '..', 'renderer', 'resources', 'node_modules', 'uploads', path.sep
+        );
     }
 
     static resourceImagePath(filename) {
-        return `${this.resourcePath}${filename.substr(0, 2)}/${filename.substr(2, 2)}/image/`;
+        return path.join(
+            this.resourcePath,
+            this.resourceSubDirectoryPath(filename),
+            'image',
+            path.sep
+        );
     }
 
     static resourceThumbnailPath(filename) {
-        return `${this.resourcePath}${filename.substr(0, 2)}/${filename.substr(2, 2)}/thumb/`;
+        return path.join(
+            this.resourcePath,
+            this.resourceSubDirectoryPath(filename),
+            'thumb',
+            path.sep
+        );
     }
 
     static resourceSoundPath(filename) {
-        return `${this.resourcePath}${filename.substr(0, 2)}/${filename.substr(2, 2)}/`;
+        return path.join(
+            this.resourcePath,
+            this.resourceSubDirectoryPath(filename),
+            path.sep
+        );
+    }
+
+    static resourceSubDirectoryPath(filename) {
+        return path.join(
+            filename.substr(0, 2),
+            filename.substr(2, 2),
+            path.sep
+        );
     }
 }

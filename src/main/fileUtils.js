@@ -1,8 +1,9 @@
-import path from "path";
-import fs from "fs";
+import path from 'path';
+import fs from 'fs';
+import rimraf from 'rimraf';
 import fstream from 'fstream';
 import archiver from 'archiver';
-import zlib from "zlib";
+import zlib from 'zlib';
 import Constants from './constants';
 import CommonUtils from '../common/commonUtils';
 
@@ -47,22 +48,16 @@ export default class {
     }
 
     static removeDirectoryRecursive(dirPath) {
-        const list = fs.readdirSync(dirPath);
-        for (let i = 0; i < list.length; i++) {
-            const filename = path.join(dirPath, list[i]);
-            const stat = fs.statSync(filename);
-
-            if (filename === '.' || filename === '..') {
-                continue;
-            }
-
-            if (stat.isDirectory()) {
-                this.removeDirectoryRecursive(filename);
-            } else {
-                fs.unlinkSync(filename);
-            }
-        }
-        fs.rmdirSync(dirPath);
+        return new Promise((resolve, reject) => {
+            rimraf(dirPath, (err) => {
+                console.log('deleteDir', dirPath, err);
+                if (!err) {
+                    resolve();
+                } else {
+                    reject(err);
+                }
+            });
+        });
     }
 
     /**
@@ -97,16 +92,73 @@ export default class {
                 resolve();
             });
 
-            archive.pipe(gzip).pipe(fsWriter);
+            archive.pipe(gzip)
+                .pipe(fsWriter);
 
             archive.directory(parser.dir, false);
             archive.finalize();
         });
     }
 
-    static copyPictureFileToTemp(picture) {
+    static copyObjectFiles(object, targetDir) {
+        return new Promise((resolve, reject) => {
+            try {
+                const copyObjectPromise = [];
+
+                object.objects.forEach((object) => {
+                    object.sprite.sounds.forEach((sound) => {
+                        copyObjectPromise.push(this.copySoundResourceFileTo(sound, targetDir));
+                    });
+                    object.sprite.pictures.forEach((picture) => {
+                        copyObjectPromise.push(this.copyPictureResourceFileTo(picture, targetDir));
+                    });
+                });
+
+                Promise.all(copyObjectPromise)
+                    .then(function() {
+                        resolve(true);
+                    })
+                    .catch(function(err) {
+                        reject(err);
+                    });
+            } catch (e) {
+                reject(e);
+            }
+        });
+    }
+
+    static copySoundResourceFileTo(sound, targetDir) {
         return new Promise(async(resolve, reject) => {
-            console.log(picture.fileurl);
+            if (Constants.defaultPicturePath.includes(sound.fileurl)) {
+                resolve(sound);
+            } else {
+                const fileId = sound.filename;
+                let ext = sound.ext || '.png';
+                if (!ext.startsWith('.')) {
+                    ext = `.${ext}`;
+                }
+
+                try {
+                    const resourceImagePath = `${Constants.resourceSoundPath(fileId)}${fileId}${ext}`;
+
+                    const newFileName = CommonUtils.createFileId();
+                    const tempImagePath = `${targetDir}${Constants.resourceSubDirectoryPath(newFileName)
+                    }${newFileName}${ext}`;
+
+                    sound.filename = newFileName;
+
+                    await this.copyFile(resourceImagePath, tempImagePath);
+                    sound.fileurl = undefined;
+                    resolve(sound);
+                } catch (e) {
+                    reject(e);
+                }
+            }
+        });
+    }
+
+    static copyPictureResourceFileTo(picture, targetDir) {
+        return new Promise(async(resolve, reject) => {
             if (Constants.defaultPicturePath.includes(picture.fileurl)) {
                 resolve(picture);
             } else {
@@ -121,8 +173,11 @@ export default class {
                     const resourceThumbnailPath = `${Constants.resourceThumbnailPath(fileId)}${fileId}${ext}`;
 
                     const newFileName = CommonUtils.createFileId();
-                    const tempImagePath = `${Constants.tempImagePath(newFileName)}${newFileName}${ext}`;
-                    const tempThumbnailPath = `${Constants.tempThumbnailPath(newFileName)}${newFileName}${ext}`;
+
+                    const tempImagePath = `${targetDir}${Constants.resourceSubDirectoryPath(newFileName)
+                    }image${path.sep}${newFileName}${ext}`;
+                    const tempThumbnailPath = `${targetDir}${Constants.resourceSubDirectoryPath(newFileName)
+                    }thumb${path.sep}${newFileName}${ext}`;
 
                     picture.filename = newFileName;
 

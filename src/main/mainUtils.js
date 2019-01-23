@@ -7,7 +7,7 @@ import path from 'path';
 import { default as Utils } from '../common/commonUtils';
 import FileUtils from './fileUtils';
 import root from 'window-or-global';
-import stream from "stream";
+import stream from 'stream';
 import tar from 'tar';
 
 /**
@@ -68,7 +68,10 @@ export default class {
                                         result = result.replace(/\./, 'renderer');
                                     } else if (result.startsWith('temp')) {
                                         // temp/fo/ba/.. => [ElectronAppData 경로]/temp/fo/ba/..
-                                        result = `${electronAppPath}/${result}`.replace(/\\/gi, '/');
+                                        result = `${electronAppPath}/${result}`.replace(
+                                            /\\/gi,
+                                            '/'
+                                        );
                                     }
                                     return result;
                                 });
@@ -131,9 +134,7 @@ export default class {
 
                 const af = sourcePath.replace(/\\/gi, '/');
 
-                result = result
-                    .replace(af, '')
-                    .replace(/^([\\/])/, '');
+                result = result.replace(af, '').replace(/^([\\/])/, '');
 
                 if (result.startsWith('renderer')) {
                     result = result.replace('renderer', '.');
@@ -196,7 +197,7 @@ export default class {
                         );
                         archive.finalize();
                     }
-                },
+                }
             );
         });
     }
@@ -244,7 +245,13 @@ export default class {
         });
         const objectData = typeof object === 'string' ? object : JSON.stringify(object);
 
-        const objectTempDirPath = path.join(app.getPath('userData'), 'import', objectId, 'object');
+        const objectTempDirPath = path.join(
+            app.getPath('userData'),
+            'import',
+            objectId,
+            'object',
+            path.sep
+        );
         const objectJsonPath = path.join(objectTempDirPath, 'object.json');
 
         const exportFileName = `${objectName}.eo`;
@@ -252,10 +259,10 @@ export default class {
 
         try {
             await FileUtils.mkdirRecursive(objectTempDirPath);
-            await Utils.copyObjectFiles(object, objectTempDirPath);
+            await FileUtils.copyObjectFiles(object, objectTempDirPath);
             await FileUtils.writeFile(objectData, objectJsonPath);
             await FileUtils.compressDirectoryToFile(exportFile, filePath);
-            // FileUtils.removeDirectoryRecursive(path.join(app.getPath('userData'), 'import'));
+            await FileUtils.removeDirectoryRecursive(path.join(objectTempDirPath, '..'));
         } catch (e) {
             console.error(e);
         }
@@ -273,21 +280,14 @@ export default class {
                             'import',
                             objectId
                         );
-                        const tempDirPath = path.join(
-                            app.getPath('userData'),
-                            'temp'
-                        );
+                        const tempDirPath = path.join(app.getPath('userData'), 'temp');
                         await Utils.mkdirRecursive(objectDirPath);
                         await Utils.fileUnPack({
                             source: objectFile.path,
                             target: objectDirPath,
                         });
                         const objectJson = await Utils.copyObject({
-                            source: path.join(
-                                objectDirPath,
-                                'object',
-                                'object.json'
-                            ),
+                            source: path.join(objectDirPath, 'object', 'object.json'),
                             target: tempDirPath,
                         });
                         resolve(objectJson);

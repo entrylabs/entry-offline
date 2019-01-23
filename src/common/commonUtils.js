@@ -192,7 +192,7 @@ class CommonUtils {
     }
 
     async copyObjectFile({ uploadDir, source, filename }) {
-        return new Promise(async (resolve, reject) => {
+        return new Promise(async(resolve, reject) => {
             try {
                 await this.mkdirRecursive(uploadDir);
                 fs.stat(source, function(err, stats) {
@@ -252,68 +252,6 @@ class CommonUtils {
         });
     }
 
-    copyObjectFiles(object, objectDirPath) {
-        return new Promise((resolve, reject) => {
-            try {
-                const copyObjectPromise = [];
-
-                object.objects.forEach((object) => {
-                    console.log('copyObjectFiles', objectDirPath);
-                    // object.sprite.sounds.forEach((sound) => {
-                    //     copyObjectPromise.push(this.copySoundFiles({ sound, objectDirPath }));
-                    // });
-                    object.sprite.pictures.forEach((picture) => {
-                        // copyObjectPromise.push(this.copyPictureFiles({ picture, objectDirPath }));
-                        copyObjectPromise.push(FileUtils.copyPictureFileToTemp(picture));
-                    });
-                });
-
-                Promise.all(copyObjectPromise)
-                    .then(function() {
-                        resolve(true);
-                    })
-                    .catch(function(err) {
-                        reject(err);
-                    });
-            } catch (e) {
-                reject(e);
-            }
-        });
-    }
-
-    filePack({ source, target, isRemove }) {
-        return new Promise((resolve, reject) => {
-            const parser = path.parse(source);
-            const fsWriter = fstream.Writer({ path: target, type: 'File' });
-            const archive = archiver('tar');
-            const gzip = zlib.createGzip();
-            fsWriter.on('error', reject);
-            archive.on('error', reject);
-            gzip.on('error', reject);
-            fsWriter.on('close', () => {
-                try {
-                    if (isRemove) {
-                        rimraf(parser.dir, (err) => {
-                            if (err) {
-                                return reject(err);
-                            }
-                            resolve();
-                        });
-                    } else {
-                        resolve();
-                    }
-                } catch (e) {
-                    reject(e);
-                }
-            });
-
-            archive.pipe(gzip).pipe(fsWriter);
-
-            archive.directory(parser.dir, false);
-            archive.finalize();
-        });
-    }
-
     fileUnPack({ source, target, isRemove }) {
         return new Promise((resolve, reject) => {
             decompress(source, target)
@@ -361,7 +299,7 @@ class CommonUtils {
                 }
                 const data = JSON.parse(stringData);
 
-                data.objects.forEach(async (object) => {
+                data.objects.forEach(async(object) => {
                     const { sprite = {} } = object;
                     const { pictures = [] } = sprite;
                     const { sounds = [] } = sprite;
@@ -450,7 +388,7 @@ class CommonUtils {
     }
 
     copyRecursiveAsync(source, target, ignore = []) {
-        return new Promise(async (resolve, reject) => {
+        return new Promise(async(resolve, reject) => {
             try {
                 const stats = await this.getStatsByPath(source);
                 const isDirectory = stats ? stats.isDirectory() : false;
