@@ -118,7 +118,6 @@ export default class {
      * @param objectVariable
      */
     static exportObject(filePath, objectVariable) {
-        console.log('ipcrendererExportObject', filePath, objectVariable);
         ipcRenderer.send('exportObject', filePath, objectVariable);
         // return new Promise((resolve, reject) => {
         //     ipcRenderer.send('exportObject', filePath, objectVariable);
@@ -127,5 +126,15 @@ export default class {
         //     //     console.log(result);
         //     // });
         // }) ;
+    }
+
+    static importPicture(filePath) {
+        return new Promise((resolve, reject) => {
+            ipcRenderer.send('importPicture', filePath);
+            ipcRenderer.once('importPicture', (e, object) => {
+                console.log('ipcrendererhelper', object);
+                resolve(object);
+            });
+        });
     }
 }

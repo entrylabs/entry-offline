@@ -304,6 +304,39 @@ class EntryModalHelper {
                 };
                 Entry.container.addObject(object, 0);
             },
+            dummyUploads: async(data) => {
+                const files = data.values(); // keyName : ...uploadFile${idx}
+
+                try {
+                    const uploadFilePromises = [];
+                    for (const value of files) {
+                        if (value instanceof File) {
+                            uploadFilePromises.push(
+                                IpcRendererHelper.importPicture(value.path)
+                            );
+                        }
+                    }
+
+                    const results = await Promise.all(uploadFilePromises);
+                    console.log('dummyUploads', results);
+                    popup.setData({
+                        data: {
+                            uploads: results,
+                        },
+                    });
+                    results.forEach((picture) => {
+                        Entry.playground.addPicture(picture, true);
+                    });
+                } catch (e) {
+                    console.error(e);
+                }
+
+                // popup.setData({
+                //     data: {
+                //         uploads: files,
+                //     },
+                // });
+            },
             uploads: (data) => {
                 console.log('popupUploads', data);
                 /*switch (name) {

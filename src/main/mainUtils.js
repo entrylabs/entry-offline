@@ -6,6 +6,8 @@ import zlib from 'zlib';
 import path from 'path';
 import { default as Utils } from '../common/commonUtils';
 import FileUtils from './fileUtils';
+import Constants from './constants';
+import imageSizeOf from 'image-size';
 import root from 'window-or-global';
 import stream from 'stream';
 import tar from 'tar';
@@ -229,7 +231,6 @@ export default class {
         });
     }
 
-    //TODO 개선필요
     static async exportObject(e, filePath, object) {
         const { objects } = object;
 
@@ -308,6 +309,41 @@ export default class {
             console.error(e);
             e.sender.send('importObject', false);
         }
+    }
+
+    /**
+     * filePath 에 있는 파일을 가져와 temp 에 담는다. 이후 Entry object 프로퍼티 스펙대로 맞춰
+     * 오브젝트를 생성한뒤 전달한다.
+     * @param filePath 이미지 파일 경로
+     * @return {Promise<Object>}
+     */
+    static importPicture(filePath) {
+        return new Promise(async(resolve, reject) => {
+            const originalFileExt = path.extname(filePath);
+            const originalFileName = path.basename(filePath, originalFileExt);
+            const newFileId = Utils.createFileId();
+            const newFileName = newFileId + originalFileExt;
+            const newPicturePath = path.join(Constants.tempImagePath(newFileId), newFileName);
+            const newThumbnailPath = path.join(Constants.tempThumbnailPath(newFileId), newFileName);
+
+            try {
+                await FileUtils.copyFile(filePath, newPicturePath);
+                //TODO thumbnail image make + copy
+
+                resolve({
+                    _id: Utils.generateHash(),
+                    type: 'user',
+                    name: originalFileName,
+                    filename: newFileId,
+                    fileurl: encodeURI(newPicturePath),
+                    extension: originalFileExt,
+                    dimension: imageSizeOf(newPicturePath),
+                });
+            } catch (e) {
+                console.error(e);
+                reject(e);
+            }
+        });
     }
 
     static staticDownload(srcFilePath, targetFilePath) {

@@ -17,6 +17,7 @@ class IpcMainHelper {
             await MainUtils.exportObject(e, filePath, object);
         });
         ipcMain.on('importObject', MainUtils.importObject);
+        ipcMain.on('importPicture', this.importPicture.bind(this));
     }
 
     resetSaveDirectory() {
@@ -45,6 +46,16 @@ class IpcMainHelper {
             })
             .catch((err) => {
                 event.sender.send('saveProject', err);
+            });
+    }
+
+    importPicture(event, filePath) {
+        MainUtils.importPicture(filePath)
+            .then((object) => {
+                event.sender.send('importPicture', object);
+            })
+            .catch((err) => {
+                console.error(err);
             });
     }
 }

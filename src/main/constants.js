@@ -14,6 +14,39 @@ export default class {
         ];
     }
 
+    static get tempPath() {
+        return path.join(
+            app.getPath('userData'),
+            'temp'
+        );
+    }
+
+    static tempImagePath(filename) {
+        return path.join(
+            this.tempPath,
+            this.resourceSubDirectoryPath(filename),
+            'image',
+            path.sep
+        );
+    }
+
+    static tempThumbnailPath(filename) {
+        return path.join(
+            this.tempPath,
+            this.resourceSubDirectoryPath(filename),
+            'thumb',
+            path.sep
+        );
+    }
+
+    static tempSoundPath(filename) {
+        return path.join(
+            this.tempPath,
+            this.resourceSubDirectoryPath(filename),
+            path.sep
+        );
+    }
+
     static get resourcePath() {
         return path.join(
             __dirname, '..', 'renderer', 'resources', 'node_modules', 'uploads', path.sep

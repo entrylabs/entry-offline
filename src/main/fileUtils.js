@@ -146,7 +146,7 @@ export default class {
      */
     static copySoundResourceFileTo(sound, targetDir) {
         return new Promise(async(resolve, reject) => {
-            if (Constants.defaultPicturePath.includes(sound.fileurl)) {
+            if (Constants.defaultSoundPath.includes(sound.fileurl)) {
                 resolve(sound);
             } else {
                 const fileId = sound.filename;
