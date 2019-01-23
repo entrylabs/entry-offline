@@ -4,8 +4,7 @@ import archiver from 'archiver';
 import fs from 'fs';
 import zlib from 'zlib';
 import path from 'path';
-import { ProgressTypes } from './Constants';
-import { default as Utils } from '../common/Utils';
+import { default as Utils } from '../common/commonUtils';
 import FileUtils from './fileUtils';
 import root from 'window-or-global';
 import stream from "stream";
@@ -168,7 +167,7 @@ export default class {
                         });
 
                         fsWriter.on('end', () => {
-                            mainWindow.setProgressBar(ProgressTypes.DISABLE_PROGRESS);
+                            mainWindow.setProgressBar(-1);
                             resolve();
                         });
                         archive.on('error', (e) => {
@@ -235,6 +234,14 @@ export default class {
 
         const objectId = Utils.createFileId();
         const objectName = objects[0].name;
+        // renderer/bower_components 를 ./bower_components 로 치환
+        this.changeObjectPath(object, (fileUrl) => {
+            let result = fileUrl;
+            if (result.startsWith('renderer')) {
+                result = result.replace('renderer', '.');
+            }
+            return result;
+        });
         const objectData = typeof object === 'string' ? object : JSON.stringify(object);
 
         const objectTempDirPath = path.join(app.getPath('userData'), 'import', objectId, 'object');
@@ -248,7 +255,7 @@ export default class {
             await Utils.copyObjectFiles(object, objectTempDirPath);
             await FileUtils.writeFile(objectData, objectJsonPath);
             await FileUtils.compressDirectoryToFile(exportFile, filePath);
-            FileUtils.removeDirectoryRecursive(path.join(app.getPath('userData'), 'import'));
+            // FileUtils.removeDirectoryRecursive(path.join(app.getPath('userData'), 'import'));
         } catch (e) {
             console.error(e);
         }

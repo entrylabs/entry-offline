@@ -13,7 +13,9 @@ class IpcMainHelper {
         ipcMain.on('resetDirectory', this.resetSaveDirectory.bind(this));
         ipcMain.on('loadProject', this.loadProject.bind(this));
         ipcMain.on('saveProject', this.saveProject.bind(this));
-        ipcMain.on('exportObject', MainUtils.exportObject);
+        ipcMain.on('exportObject', async(e, filePath, object) => {
+            await MainUtils.exportObject(e, filePath, object);
+        });
         ipcMain.on('importObject', MainUtils.importObject);
     }
 

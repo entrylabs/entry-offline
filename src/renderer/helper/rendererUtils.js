@@ -1,8 +1,6 @@
 import get from 'lodash/get';
 import root from 'window-or-global';
 import { remote } from 'electron';
-import Constants from '../../common/constants';
-import StorageManager from './storageManager';
 
 const { dialog } = remote;
 

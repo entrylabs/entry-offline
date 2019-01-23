@@ -7,7 +7,8 @@ import zlib from 'zlib';
 import rimraf from 'rimraf';
 import decompress from 'decompress';
 import { dialog, app } from 'electron';
-import Constants from './constants';
+import Constants from '../main/constants';
+import FileUtils from '../main/fileUtils';
 
 export const STATIC_PATH = {
     get UPLOADS_DIR() {
@@ -23,7 +24,7 @@ export const STATIC_PATH = {
     },
 };
 
-class Utils {
+class CommonUtils {
     createFileId() {
         const randomStr = `${Math.random().toString(16)}000000000`.substr(2, 8);
         return require('crypto')
@@ -257,11 +258,13 @@ class Utils {
                 const copyObjectPromise = [];
 
                 object.objects.forEach((object) => {
-                    object.sprite.sounds.forEach((sound) => {
-                        copyObjectPromise.push(this.copySoundFiles({ sound, objectDirPath }));
-                    });
+                    console.log('copyObjectFiles', objectDirPath);
+                    // object.sprite.sounds.forEach((sound) => {
+                    //     copyObjectPromise.push(this.copySoundFiles({ sound, objectDirPath }));
+                    // });
                     object.sprite.pictures.forEach((picture) => {
-                        copyObjectPromise.push(this.copyPictureFiles({ picture, objectDirPath }));
+                        // copyObjectPromise.push(this.copyPictureFiles({ picture, objectDirPath }));
+                        copyObjectPromise.push(FileUtils.copyPictureFileToTemp(picture));
                     });
                 });
 
@@ -477,7 +480,7 @@ class Utils {
                     if (ignore.indexOf(parser.base) > -1) {
                         resolve();
                     } else {
-                        const result = await this.copyFile(source, target);
+                        const result = await FileUtils.copyFile(source, target);
                         resolve(result);
                     }
                 }
@@ -486,25 +489,6 @@ class Utils {
             }
         });
     }
-
-    copyFile(src, dest) {
-        return new Promise((resolve, reject) => {
-            const crs = fs.createReadStream(src);
-            const cws = fs.createWriteStream(dest);
-            new Promise((res, rej) => {
-                crs.on('error', rej);
-                cws.on('error', rej);
-                cws.on('finish', res);
-                crs.pipe(cws);
-            })
-                .then(resolve)
-                .catch((err) => {
-                    crs.destroy();
-                    cws.end();
-                    reject(err);
-                });
-        });
-    }
 }
 
-export default new Utils();
+export default new CommonUtils();
