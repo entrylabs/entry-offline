@@ -318,128 +318,25 @@ class EntryModalHelper {
                     }
 
                     const results = await Promise.all(uploadFilePromises);
-                    console.log('dummyUploads', results);
                     popup.setData({
                         data: {
-                            uploads: results.map((pic) => {
-                                pic.fileurl = decodeURI(pic.fileurl);
-                                return pic;
+                            data: [], // 없으면 에러남. entry-tool 의 수정필요
+                            uploads: results.map((picture) => {
+                                return picture;
                             }),
                         },
                     });
-                    // results.forEach((picture) => {
-                    //     Entry.playground.addPicture(picture, true);
-                    // });
                 } catch (e) {
                     console.error(e);
                 }
-
-                // popup.setData({
-                //     data: {
-                //         uploads: files,
-                //     },
-                // });
             },
             uploads: (data) => {
-                console.log('popupUploads', data);
+                // upload 된 데이터의 submit 과 동일
                 data.uploads.forEach((picture) => {
+                    // css 에 들어갈 background-url fileUrl 의 경우, windows 에서도 / 여야 한다.
+                    picture.fileurl = picture.fileurl.replace(/\\/gi, '/');
                     Entry.playground.addPicture(picture, true);
                 });
-                /*switch (name) {
-                    case 'spritePopup':
-                        data.uploads.forEach(function(item) {
-                            const { sprite } = item;
-                            if (sprite) {
-                                const objects = sprite.objects;
-                                const functions = sprite.functions;
-                                const messages = sprite.messages;
-                                const variables = sprite.variables;
-
-                                if (
-                                    Entry.getMainWS().mode === Entry.Workspace.MODE_VIMBOARD &&
-                                    (!Entry.TextCodingUtil.canUsePythonVariables(variables) ||
-                                        !Entry.TextCodingUtil.canUsePythonFunctions(functions))
-                                ) {
-                                    return entrylms.alert(Lang.Menus.object_import_syntax_error);
-                                }
-                                const objectIdMap = {};
-                                variables.forEach((variable) => {
-                                    const { object } = variable;
-                                    if (object) {
-                                        const id = variable.id;
-                                        const idMap = objectIdMap[object];
-                                        variable.id = Entry.generateHash();
-                                        if (!idMap) {
-                                            variable.object = Entry.generateHash();
-                                            objectIdMap[object] = {
-                                                objectId: variable.object,
-                                                variableOriginId: [id],
-                                                variableId: [variable.id],
-                                            };
-                                        } else {
-                                            variable.object = idMap.objectId;
-                                            idMap.variableOriginId.push(id);
-                                            idMap.variableId.push(variable.id);
-                                        }
-                                    }
-                                });
-                                Entry.variableContainer.appendMessages(messages);
-                                Entry.variableContainer.appendVariables(variables);
-                                Entry.variableContainer.appendFunctions(functions);
-
-                                objects.forEach(function(object) {
-                                    const idMap = objectIdMap[object.id];
-                                    if (idMap) {
-                                        let script = object.script;
-                                        idMap.variableOriginId.forEach((id, idx) => {
-                                            const regex = new RegExp(id, 'gi');
-                                            script = script.replace(regex, idMap.variableId[idx]);
-                                        });
-                                        object.script = script;
-                                        object.id = idMap.objectId;
-                                    } else if (Entry.container.getObject(object.id)) {
-                                        object.id = Entry.generateHash();
-                                    }
-                                    if (item.objectType === 'textBox') {
-                                        const text = item.text ? item.text : Lang.Blocks.TEXT;
-                                        const options = item.options;
-                                        object.objectType = 'textBox';
-                                        Object.assign(object, {
-                                            text,
-                                            options,
-                                            name: Lang.Workspace.textbox,
-                                        });
-                                    } else {
-                                        object.objectType = 'sprite';
-                                    }
-                                    Entry.container.addObject(object, 0);
-                                });
-                            } else {
-                                if (!item.id) {
-                                    item.id = Entry.generateHash();
-                                }
-
-                                const object = {
-                                    id: Entry.generateHash(),
-                                    objectType: 'sprite',
-                                    sprite: {
-                                        name: item.name,
-                                        pictures: [item],
-                                        sounds: [],
-                                        category: {},
-                                    },
-                                };
-                                Entry.container.addObject(object, 0);
-                            }
-                        });
-                        break;
-                    case 'shapePopup':
-                        data.uploads.forEach(function(item) {
-                            item.id = Entry.generateHash();
-                            Entry.playground.addPicture(item, true);
-                        });
-                        break;
-                }*/
             },
             uploadFail: (data) => {
                 root.entrylms.alert(RendererUtils.getLang(`${data.messageParent}.${data.message}`));
@@ -467,22 +364,8 @@ class EntryModalHelper {
                         });
                         EntryUtils.loadSound(result);
                     });
-                console.log(data);
-                // let url = `/api/sound/browse/default/${data.sidebar}`;
-                // if (data.subMenu && data.subMenu !== 'all') {
-                //     url = `/api/sound/browse/default/${data.sidebar}/${data.subMenu}`;
-                // }
-                // this.props.fetchPopup({
-                //     url,
-                //     popup: name,
-                //     callback: (data) => {
-                //         Entry.soundPopup.setData({ data: { data } });
-                //         this.loadSound(data);
-                //     },
-                // });
             },
             search: (data) => {
-                console.log(data);
                 if (data.searchQuery === '') {
                     return;
                 }
@@ -493,13 +376,6 @@ class EntryModalHelper {
                         });
                         EntryUtils.loadSound(result);
                     });
-                // this.props.fetchPopup({
-                //     url: `/api/sound/search/${data.searchQuery}`,
-                //     callback: (data) => {
-                //         Entry.soundPopup.setData({ data: { data } });
-                //         this.loadSound(data);
-                //     },
-                // });
             },
             submit: (data) => {
                 console.log(data);
@@ -520,11 +396,9 @@ class EntryModalHelper {
             loaded: EntryUtils.loadSound,
             load: EntryUtils.loadSound,
             itemoff: () => {
-                console.log('itemOff');
                 return root.createjs.Sound.stop();
             },
             itemon: (data) => {
-                console.log('itemon', data);
                 root.createjs.Sound.play(data.id);
             },
             uploads:(data) => {

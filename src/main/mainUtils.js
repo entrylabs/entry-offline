@@ -335,7 +335,7 @@ export default class {
                     type: 'user',
                     name: originalFileName,
                     filename: newFileId,
-                    fileurl: encodeURI(newPicturePath),
+                    fileurl: newPicturePath,
                     extension: originalFileExt,
                     dimension: imageSizeOf(newPicturePath),
                 });
