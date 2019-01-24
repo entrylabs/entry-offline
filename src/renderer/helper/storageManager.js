@@ -20,7 +20,11 @@ export default class {
     }
 
     static loadProject() {
-        return root.localStorage.getItem(this.LOCAL_STORAGE_KEY);
+        return JSON.parse(root.localStorage.getItem(this.LOCAL_STORAGE_KEY));
+    }
+
+    static removeProject() {
+        return root.localStorage.removeItem(this.LOCAL_STORAGE_KEY);
     }
 
     static saveTempProject(project) {
@@ -29,7 +33,7 @@ export default class {
     }
 
     static loadTempProject() {
-        const tempProject = root.localStorage.getItem(this.LOCAL_STORAGE_KEY_RELOAD);
+        const tempProject = JSON.parse(root.localStorage.getItem(this.LOCAL_STORAGE_KEY_RELOAD));
         root.localStorage.removeItem(this.LOCAL_STORAGE_KEY_RELOAD);
         return tempProject;
     }

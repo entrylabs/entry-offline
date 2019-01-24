@@ -35,7 +35,6 @@ class Workspace extends Component {
     constructor(props) {
         super(props);
 
-        this.isSaving = false;
         this.container = React.createRef();
 
         const { project = {} } = props;
@@ -55,16 +54,18 @@ class Workspace extends Component {
         };
     }
 
-    async componentDidMount() {
+    componentDidMount() {
         this.hwCategoryList = EntryStatic.hwCategoryList;
-        Entry.init(this.container.current, this.initOption);
-        Entry.enableArduino();
 
-        //TODO tempProject 에 저장된 데이터가 있는 경우, entrylms 로 불러오기 확인
-        //TODO 그렇다면 신규 프로젝트를 오픈하거나 로드하는 경우 temp 삭제해야함
-        Entry.loadProject();
-
-        this.addEntryEvents();
+        EntryUtils.getSavedProject()
+            .then((project) => {
+                Entry.init(this.container.current, this.initOption);
+                Entry.enableArduino();
+                Entry.loadProject(project);
+            })
+            .finally(() => {
+                this.addEntryEvents();
+            });
     }
 
     addEntryEvents() {
@@ -76,7 +77,13 @@ class Workspace extends Component {
         addEventListener('hwDownload', this.handleHardwareDownload.bind(this));
         // 저장처리
         addEventListener('saveWorkspace', () => {
-            console.log('saveWorkspace');
+            this.handleSaveAction('save');
+        });
+        addEventListener('saveAsWorkspace', () => {
+            this.handleSaveAction('saveAs');
+        });
+        addEventListener('saveCanvasImage', () => {
+            console.log('saveCanvasImage');
         });
         // exportObject
         addEventListener('exportObject', EntryUtils.exportObject);
@@ -145,6 +152,7 @@ class Workspace extends Component {
             return;
         }
 
+        console.log('handleStorageProjectSave called');
         const project = Entry.exportProject();
         if (project) {
             project.name = this.projectName;
