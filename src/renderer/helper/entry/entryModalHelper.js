@@ -304,8 +304,8 @@ class EntryModalHelper {
                 };
                 Entry.container.addObject(object, 0);
             },
-            dummyUploads: async(data) => {
-                const files = data.values(); // keyName : ...uploadFile${idx}
+            dummyUploads: async({ formData }) => {
+                const files = formData.values(); // keyName : ...uploadFile${idx}
 
                 try {
                     const uploadFilePromises = [];
@@ -321,12 +321,15 @@ class EntryModalHelper {
                     console.log('dummyUploads', results);
                     popup.setData({
                         data: {
-                            uploads: results,
+                            uploads: results.map((pic) => {
+                                pic.fileurl = decodeURI(pic.fileurl);
+                                return pic;
+                            }),
                         },
                     });
-                    results.forEach((picture) => {
-                        Entry.playground.addPicture(picture, true);
-                    });
+                    // results.forEach((picture) => {
+                    //     Entry.playground.addPicture(picture, true);
+                    // });
                 } catch (e) {
                     console.error(e);
                 }
@@ -339,6 +342,9 @@ class EntryModalHelper {
             },
             uploads: (data) => {
                 console.log('popupUploads', data);
+                data.uploads.forEach((picture) => {
+                    Entry.playground.addPicture(picture, true);
+                });
                 /*switch (name) {
                     case 'spritePopup':
                         data.uploads.forEach(function(item) {
