@@ -321,9 +321,7 @@ class EntryModalHelper {
                     popup.setData({
                         data: {
                             data: [], // 없으면 에러남. entry-tool 의 수정필요
-                            uploads: results.map((picture) => {
-                                return picture;
-                            }),
+                            uploads: results,
                         },
                     });
                 } catch (e) {
@@ -401,13 +399,40 @@ class EntryModalHelper {
             itemon: (data) => {
                 root.createjs.Sound.play(data.id);
             },
+            dummyUploads: async({ formData }) => {
+                const files = formData.values(); // keyName : ...uploadFile${idx}
+
+                try {
+                    const uploadFilePromises = [];
+                    for (const value of files) {
+                        if (value instanceof File) {
+                            uploadFilePromises.push(
+                                IpcRendererHelper.importSound(value.path)
+                            );
+                        }
+                    }
+
+                    const results = await Promise.all(uploadFilePromises);
+                    createjs.Sound.stop();
+
+                    EntryUtils.loadSound(results);
+                    popup.setData({
+                        data: {
+                            data: [], // 없으면 에러남. entry-tool 의 수정필요
+                            uploads: results,
+                        },
+                    });
+                } catch (e) {
+                    console.error(e);
+                }
+            },
             uploads:(data) => {
                 console.log(data);
-                // data.uploads.forEach(function(item) {
-                //     item.id = Entry.generateHash();
-                //     Entry.playground.addSound(item, true);
-                // });
-                // createjs.Sound.stop();
+                data.uploads.forEach(function(item) {
+                    item.id = Entry.generateHash();
+                    Entry.playground.addSound(item, true);
+                });
+                createjs.Sound.stop();
             },
             uploadFail: (data) => {
                 root.entrylms.alert(RendererUtils.getLang(`${data.messageParent}.${data.message}`));

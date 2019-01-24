@@ -8,6 +8,7 @@ import { default as Utils } from '../common/commonUtils';
 import FileUtils from './fileUtils';
 import Constants from './constants';
 import imageSizeOf from 'image-size';
+import soundDuration from 'mp3-duration';
 import root from 'window-or-global';
 import stream from 'stream';
 import tar from 'tar';
@@ -342,6 +343,41 @@ export default class {
             } catch (e) {
                 console.error(e);
                 reject(e);
+            }
+        });
+    }
+
+    static importSound(filePath) {
+        return new Promise(async(resolve, reject) => {
+            const originalFileExt = path.extname(filePath);
+            const originalFileName = path.basename(filePath, originalFileExt);
+            const newFileId = Utils.createFileId();
+            const newFileName = newFileId + originalFileExt;
+            const newSoundPath = path.join(Constants.tempSoundPath(newFileId), newFileName);
+
+            try {
+                await FileUtils.copyFile(filePath, newSoundPath);
+
+                soundDuration(newSoundPath, (err, duration) => {
+                    if (err) {
+                        reject(err);
+                        return;
+                    }
+
+                    resolve({
+                        _id: Utils.generateHash(),
+                        type: 'user',
+                        name: originalFileName,
+                        filename: newFileId,
+                        ext: originalFileExt,
+                        fileurl: newSoundPath,
+                        path: newSoundPath, //See EntryUtils#loadSound
+                        duration: Math.floor(duration * 10) / 10,
+                    });
+                });
+            } catch (err) {
+                console.error(err);
+                reject(err);
             }
         });
     }

@@ -18,6 +18,7 @@ class IpcMainHelper {
         });
         ipcMain.on('importObject', MainUtils.importObject);
         ipcMain.on('importPicture', this.importPicture.bind(this));
+        ipcMain.on('importSound', this.importSound.bind(this));
     }
 
     resetSaveDirectory() {
@@ -53,6 +54,16 @@ class IpcMainHelper {
         MainUtils.importPicture(filePath)
             .then((object) => {
                 event.sender.send('importPicture', object);
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+    }
+
+    importSound(event, filePath) {
+        MainUtils.importSound(filePath)
+            .then((object) => {
+                event.sender.send('importSound', object);
             })
             .catch((err) => {
                 console.error(err);

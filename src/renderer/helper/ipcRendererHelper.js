@@ -132,7 +132,15 @@ export default class {
         return new Promise((resolve, reject) => {
             ipcRenderer.send('importPicture', filePath);
             ipcRenderer.once('importPicture', (e, object) => {
-                console.log('ipcrendererhelper', object);
+                resolve(object);
+            });
+        });
+    }
+
+    static importSound(filePath) {
+        return new Promise((resolve, reject) => {
+            ipcRenderer.send('importSound', filePath);
+            ipcRenderer.once('importSound', (e, object) => {
                 resolve(object);
             });
         });

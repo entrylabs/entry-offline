@@ -71,7 +71,7 @@ export default class {
      */
     static loadSound(sounds = []) {
         sounds.forEach((sound) => {
-            const path = `${Constants.resourceSoundPath(sound.filename)}${sound.filename}${sound.ext}`;
+            const path = sound.path || `${Constants.resourceSoundPath(sound.filename)}${sound.filename}${sound.ext}`;
             Entry.soundQueue.loadFile({
                 id: sound._id,
                 src: path,
