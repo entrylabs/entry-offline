@@ -130,13 +130,13 @@ export default class {
 
     /**
      * 업로드 파일 경로를 temp 로 가져온다.
-     * @param {string!}filePath 이미지 파일 경로
+     * @param {Array!}filePaths 이미지 파일 경로
      * @return {Promise<Object>} 신규생성된 오브젝트 메타데이터
      */
-    static importPicture(filePath) {
+    static importPictures(filePaths) {
         return new Promise((resolve, reject) => {
-            ipcRenderer.send('importPicture', filePath);
-            ipcRenderer.once('importPicture', (e, object) => {
+            ipcRenderer.send('importPictures', filePaths);
+            ipcRenderer.once('importPictures', (e, object) => {
                 resolve(object);
             });
         });

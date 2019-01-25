@@ -17,7 +17,7 @@ class IpcMainHelper {
             await MainUtils.exportObject(e, filePath, object);
         });
         ipcMain.on('importObject', MainUtils.importObject);
-        ipcMain.on('importPicture', this.importPicture.bind(this));
+        ipcMain.on('importPictures', this.importPictures.bind(this));
         ipcMain.on('importSound', this.importSound.bind(this));
         ipcMain.on('importPicturesFromResource', this.importPicturesFromResource.bind(this));
     }
@@ -52,10 +52,10 @@ class IpcMainHelper {
     }
 
     // 외부 이미지 업로드시.
-    importPicture(event, filePath) {
-        MainUtils.importPictureToTemp(filePath)
+    importPictures(event, filePaths) {
+        MainUtils.importPicturesToTemp(filePaths)
             .then((object) => {
-                event.sender.send('importPicture', object);
+                event.sender.send('importPictures', object);
             })
             .catch((err) => {
                 console.error(err);

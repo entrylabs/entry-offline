@@ -49,7 +49,7 @@ export default class {
                         } else {
                             resolve(undefined);
                         }
-                        RendererUtils.clearTempProject();
+                        RendererUtils.clearTempProject({ saveTemp: confirm });
                     })
                     .catch((err) => {
                         console.error(err);

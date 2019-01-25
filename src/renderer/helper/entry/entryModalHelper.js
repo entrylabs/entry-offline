@@ -309,16 +309,14 @@ class EntryModalHelper {
                 const files = formData.values(); // keyName : ...uploadFile${idx}
 
                 try {
-                    const uploadFilePromises = [];
+                    const uploadFilePaths = [];
                     for (const value of files) {
                         if (value instanceof File) {
-                            uploadFilePromises.push(
-                                IpcRendererHelper.importPicture(value.path)
-                            );
+                            uploadFilePaths.push(value.path);
                         }
                     }
 
-                    const results = await Promise.all(uploadFilePromises);
+                    const results = await IpcRendererHelper.importPictures(uploadFilePaths);
                     popup.setData({
                         data: {
                             data: [], // 없으면 에러남. entry-tool 의 수정필요

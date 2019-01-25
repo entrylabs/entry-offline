@@ -409,53 +409,57 @@ export default class MainUtils {
     }
 
     /**
-     * filePath 에 있는 파일을 가져와 temp 에 담는다. 이후 Entry object 프로퍼티 스펙대로 맞춰
-     * 오브젝트를 생성한뒤 전달한다.
-     * @param {string!}filePath 이미지 파일 경로
-     * @param {string?}thumbnailPath 섬네일 파일 경로. 없으면 이미지에서 만들어낸다.
-     * @return {Promise<Object>}
+     * 여러 picture 들을 가져온다. 이 경우 thumbnail 을 개별설정 하지 못한다.
+     * 로직 수정을 통해 구현할 수 있다.
+     * @param {Array<string>}filePaths
+     * @return {Promise<any[]>}
      */
-    static importPictureToTemp(filePath, thumbnailPath) {
-        return new Promise(async(resolve, reject) => {
-            const originalFileExt = path.extname(filePath);
-            const originalFileName = path.basename(filePath, originalFileExt);
-            const newFileId = CommonUtils.createFileId();
-            const newFileName = newFileId + originalFileExt;
-            const newPicturePath = path.join(Constants.tempImagePath(newFileId), newFileName);
-            const newThumbnailPath = path.join(Constants.tempThumbnailPath(newFileId), newFileName);
-
-            try {
-                await FileUtils.copyFile(filePath, newPicturePath);
-                if (thumbnailPath) {
-                    await FileUtils.copyFile(thumbnailPath, newThumbnailPath);
-                } else {
-                    // 이미지를 리사이즈 한다.
-                    // 카피파일한다
-                    const thumbnailBuffer = nativeImage.createFromPath(filePath)
-                        .resize({
-                            width: 96,
-                            quality: 'better',
-                        })
-                        .toPNG();
-                    await FileUtils.writeFile(thumbnailBuffer, newThumbnailPath);
-                }
-
-                resolve({
-                    _id: CommonUtils.generateHash(),
-                    type: 'user',
-                    name: originalFileName,
-                    filename: newFileId,
-                    fileurl: newPicturePath.replace(/\\/gi, '/'),
-                    extension: originalFileExt,
-                    dimension: imageSizeOf(newPicturePath),
-                });
-            } catch (e) {
-                console.error(e);
-                reject(e);
-            }
-        });
+    static importPicturesToTemp(filePaths) {
+        return Promise.all(filePaths.map(async(filePath) => {
+            return await this.importPictureToTemp(filePath);
+        }));
     }
 
+    /**
+     * filePath 에 있는 파일을 가져와 temp 에 담는다. 이후 Entry object 프로퍼티 스펙대로 맞춰
+     * 오브젝트를 생성한뒤 전달한다.
+     * @param {string}filePath 이미지 파일 경로
+     * @param {string=}thumbnailPath 섬네일 파일 경로. 없으면 이미지에서 만들어낸다.
+     * @return {Promise<Object>}
+     */
+    static async importPictureToTemp(filePath, thumbnailPath) {
+        const originalFileExt = path.extname(filePath);
+        const originalFileName = path.basename(filePath, originalFileExt);
+        const newFileId = CommonUtils.createFileId();
+        const newFileName = newFileId + originalFileExt;
+        const newPicturePath = path.join(Constants.tempImagePath(newFileId), newFileName);
+        const newThumbnailPath = path.join(Constants.tempThumbnailPath(newFileId), newFileName);
+
+        await FileUtils.copyFile(filePath, newPicturePath);
+        if (thumbnailPath) {
+            await FileUtils.copyFile(thumbnailPath, newThumbnailPath);
+        } else {
+            // 이미지를 리사이즈 한다.
+            // 카피파일한다
+            const thumbnailBuffer = nativeImage.createFromPath(filePath)
+                .resize({
+                    width: 96,
+                    quality: 'better',
+                })
+                .toPNG();
+            await FileUtils.writeFile(thumbnailBuffer, newThumbnailPath);
+        }
+
+        return {
+            _id: CommonUtils.generateHash(),
+            type: 'user',
+            name: originalFileName,
+            filename: newFileId,
+            fileurl: newPicturePath.replace(/\\/gi, '/'),
+            extension: originalFileExt,
+            dimension: imageSizeOf(newPicturePath),
+        };
+    }
     /**
      * 여러 picture object 들을 resource 에서 추가한다.
      * @param {Array<Object>}pictures

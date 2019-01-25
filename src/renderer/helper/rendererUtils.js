@@ -19,8 +19,15 @@ export default class {
         return remote.getGlobal('sharedObject');
     }
 
-    static clearTempProject() {
-        IpcRendererHelper.resetDirectory();
+    /**
+     * localStorage, Electron temp 폴더를 삭제한다.
+     * @param {Object=} options
+     * @property saveTemp temp 폴더를 그대로 두는 경우. 이전 리소스가 남아있을지 모르는 상태일때 사용
+     */
+    static clearTempProject({ saveTemp }) {
+        if (!saveTemp) {
+            IpcRendererHelper.resetDirectory();
+        }
         StorageManager.removeProject();
     }
 

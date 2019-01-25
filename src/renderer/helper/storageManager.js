@@ -15,6 +15,10 @@ export default class {
     }
 
     static saveProject(project) {
+        if (!project) {
+            this.removeProject();
+            return;
+        }
         const projectJson = typeof project === 'string' ? project : JSON.stringify(project);
         root.localStorage.setItem(this.LOCAL_STORAGE_KEY, projectJson);
     }
