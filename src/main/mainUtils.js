@@ -479,6 +479,10 @@ export default class MainUtils {
         }));
     }
 
+    static importSounds(filePaths) {
+        return Promise.all(filePaths.map(this.importSound));
+    }
+
     static importSound(filePath) {
         return new Promise(async(resolve, reject) => {
             const originalFileExt = path.extname(filePath);

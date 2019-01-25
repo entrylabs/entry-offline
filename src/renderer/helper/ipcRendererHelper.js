@@ -156,10 +156,10 @@ export default class {
         });
     }
 
-    static importSound(filePath) {
+    static importSounds(filePath) {
         return new Promise((resolve, reject) => {
-            ipcRenderer.send('importSound', filePath);
-            ipcRenderer.once('importSound', (e, object) => {
+            ipcRenderer.send('importSounds', filePath);
+            ipcRenderer.once('importSounds', (e, object) => {
                 resolve(object);
             });
         });

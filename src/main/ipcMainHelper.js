@@ -18,7 +18,7 @@ class IpcMainHelper {
         });
         ipcMain.on('importObject', MainUtils.importObject);
         ipcMain.on('importPictures', this.importPictures.bind(this));
-        ipcMain.on('importSound', this.importSound.bind(this));
+        ipcMain.on('importSounds', this.importSounds.bind(this));
         ipcMain.on('importPicturesFromResource', this.importPicturesFromResource.bind(this));
     }
 
@@ -72,10 +72,10 @@ class IpcMainHelper {
             });
     }
 
-    importSound(event, filePath) {
-        MainUtils.importSound(filePath)
+    importSounds(event, filePath) {
+        MainUtils.importSounds(filePath)
             .then((object) => {
-                event.sender.send('importSound', object);
+                event.sender.send('importSounds', object);
             })
             .catch((err) => {
                 console.error(err);

@@ -402,16 +402,14 @@ class EntryModalHelper {
                 const files = formData.values(); // keyName : ...uploadFile${idx}
 
                 try {
-                    const uploadFilePromises = [];
+                    const uploadFilePaths = [];
                     for (const value of files) {
                         if (value instanceof File) {
-                            uploadFilePromises.push(
-                                IpcRendererHelper.importSound(value.path)
-                            );
+                            uploadFilePaths.push(value.path);
                         }
                     }
 
-                    const results = await Promise.all(uploadFilePromises);
+                    const results = await IpcRendererHelper.importSounds(uploadFilePaths);
                     createjs.Sound.stop();
 
                     EntryUtils.loadSound(results);
