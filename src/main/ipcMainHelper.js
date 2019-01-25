@@ -19,7 +19,7 @@ class IpcMainHelper {
         ipcMain.on('importObject', MainUtils.importObject);
         ipcMain.on('importPicture', this.importPicture.bind(this));
         ipcMain.on('importSound', this.importSound.bind(this));
-        ipcMain.on('importPictureFromResource', this.importPictureFromResource.bind(this));
+        ipcMain.on('importPicturesFromResource', this.importPicturesFromResource.bind(this));
     }
 
     resetSaveDirectory() {
@@ -62,10 +62,10 @@ class IpcMainHelper {
             });
     }
 
-    importPictureFromResource(event, picture) {
-        MainUtils.importPictureFromResource(picture)
+    importPicturesFromResource(event, pictures) {
+        MainUtils.importPicturesFromResource(pictures)
             .then((object) => {
-                event.sender.send('importPictureFromResource', object);
+                event.sender.send('importPicturesFromResource', object);
             })
             .catch((err) => {
                 console.log(err);

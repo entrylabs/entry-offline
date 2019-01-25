@@ -144,13 +144,13 @@ export default class {
 
     /**
      * 리소스 디렉토리에서 파일을 temp 로 가져온다.
-     * @param {Object}picture DB 에서 가져온 이미지 정보 오브젝트
+     * @param {Array}pictures DB 에서 가져온 이미지 정보 오브젝트
      * @return {Promise<Object>} 파일명이 변경된 이미지 정보 오브젝트
      */
-    static importPictureFromResource(picture) {
+    static importPicturesFromResource(pictures) {
         return new Promise((resolve, reject) => {
-            ipcRenderer.send('importPictureFromResource', picture);
-            ipcRenderer.once('importPictureFromResource', (e, object) => {
+            ipcRenderer.send('importPicturesFromResource', pictures);
+            ipcRenderer.once('importPicturesFromResource', (e, object) => {
                 resolve(object);
             });
         });

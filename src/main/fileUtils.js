@@ -104,43 +104,6 @@ export default class {
     }
 
     /**
-     * 오브젝트에 관련된 picture, sound 전체 데이터를 복사한다.
-     * @param {Object}object 엔트리 오브젝트 메타데이터
-     * @param targetDir 저장할 위치
-     * @return {Promise<any>}
-     */
-    static exportObjectFileTo(object, targetDir) {
-        return new Promise((resolve, reject) => {
-            try {
-                const copyObjectPromise = [];
-
-                object.objects.forEach((object) => {
-                    // object.sprite.sounds.forEach((sound) => {
-                    //     copyObjectPromise.push(this.copySoundTempFileTo(
-                    //         sound, targetDir, { deleteFileUrl: true }
-                    //     ));
-                    // });
-                    object.sprite.pictures.forEach((picture) => {
-                        copyObjectPromise.push(this.copyPictureTempFileTo(
-                            picture, targetDir, { deleteFileUrl: true }
-                        ));
-                    });
-                });
-
-                Promise.all(copyObjectPromise)
-                    .then(function() {
-                        resolve();
-                    })
-                    .catch(function(err) {
-                        reject(err);
-                    });
-            } catch (e) {
-                reject(e);
-            }
-        });
-    }
-
-    /**
      * resource 에 있는 소리파일을 targetDir 로 복사한다.
      * 가져오는 위치는 /ab/cd/fileName.mp3 이지만,
      * 복사 위치는 /ab/cd/sound/fileName.mp3 이다. (개발상 히스토리 있습니다.)

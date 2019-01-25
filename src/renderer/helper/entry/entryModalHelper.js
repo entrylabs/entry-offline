@@ -254,11 +254,11 @@ class EntryModalHelper {
                         });
                     });
             },
-            submit: (data) => {
-                data.selected.forEach(async(object) => {
+            submit: async(data) => {
+                const pictures = await IpcRendererHelper.importPicturesFromResource(data.selected);
+                pictures.forEach((object) => {
                     object.id = Entry.generateHash();
-                    const fileNameChangedObject = await IpcRendererHelper.importPictureFromResource(object);
-                    Entry.playground.addPicture(fileNameChangedObject, true);
+                    Entry.playground.addPicture(object, true);
                 });
             },
             select: (data) => {

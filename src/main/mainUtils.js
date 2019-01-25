@@ -4,7 +4,6 @@ import archiver from 'archiver';
 import fs from 'fs';
 import zlib from 'zlib';
 import path from 'path';
-import { default as Utils } from '../common/commonUtils';
 import FileUtils from './fileUtils';
 import Constants from './constants';
 import imageSizeOf from 'image-size';
@@ -12,12 +11,13 @@ import soundDuration from 'mp3-duration';
 import root from 'window-or-global';
 import stream from 'stream';
 import tar from 'tar';
+import CommonUtils from '../common/commonUtils';
 
 /**
  * Main Process 에서 발생하는 로직들을 담당한다.
  * ipcMain 을 import 하여 사용하지 않는다. renderer Process 간 이벤트 관리는 ipcMainHelper 가 한다.
  */
-export default class {
+export default class MainUtils {
     /**
      * ent 파일에서 프로젝트를 로드한다.
      * electron directory 에 압축해제 한 후,
@@ -236,13 +236,15 @@ export default class {
     static async exportObject(e, filePath, object) {
         const { objects } = object;
 
-        const objectId = Utils.createFileId();
+        const objectId = CommonUtils.createFileId();
         const objectName = objects[0].name;
         // renderer/bower_components 를 ./bower_components 로 치환
         this.changeObjectPath(object, (fileUrl) => {
             let result = fileUrl;
             if (result.startsWith('renderer')) {
                 result = result.replace('renderer', '.');
+            } else {
+                result = undefined;
             }
             return result;
         });
@@ -257,7 +259,7 @@ export default class {
 
         try {
             await FileUtils.ensureDirectoryExistence(objectJsonPath);
-            await FileUtils.exportObjectFileTo(object, exportDirectoryPath);
+            await this.exportObjectTempFileTo(object, exportDirectoryPath);
             await FileUtils.writeFile(objectData, objectJsonPath);
             await FileUtils.compressDirectoryToFile(exportFile, filePath);
             await FileUtils.removeDirectoryRecursive(path.join(exportDirectoryPath, '..'));
@@ -266,7 +268,102 @@ export default class {
         }
     }
 
-    // static async exportPictureTo()
+    /**
+     * 오브젝트를 외부에 내보낼 수 있도록 정리한다.
+     * 예를들어 기본 에셋의 경로 를 ./bower_component 로 시작하도록 수정하고,
+     * 추가된 오브젝트들의 이미지, 사운드의 fileurl 을 삭제하고 filename 을 재정의한다.
+     * 이 재정의된 filename 은 export 시 동일 데이터임에도 겹치지 않도록 만드는 용도이다.
+     * @param {Object}object 엔트리 오브젝트
+     */
+    static sanitizeProjectForExport(object) {
+        this.changeObjectPath(object, (fileUrl) => {
+            let result = fileUrl;
+            if (result.startsWith('renderer')) {
+                result = result.replace('renderer', '.');
+            } else {
+                result = undefined;
+            }
+            return result;
+        });
+
+        object.sprite.sounds.forEach((sound) => {
+            sound.filename = CommonUtils.createFileId();
+            sound.fileurl = undefined;
+        });
+        object.sprite.pictures.forEach((picture) => {
+            picture.filename = CommonUtils.createFileId();
+            picture.fileurl = undefined;
+        });
+    }
+
+    /**
+     * temp 에 있는 picture, sound 전체 데이터를 복사한다.
+     * @param {Object}object 엔트리 오브젝트 메타데이터
+     * @param targetDir 저장할 위치
+     * @return {Promise<any>}
+     */
+    static exportObjectTempFileTo(object, targetDir) {
+        return new Promise((resolve, reject) => {
+            try {
+                const copyObjectPromise = [];
+
+                object.objects.forEach((object) => {
+                    // object.sprite.sounds.forEach((sound) => {
+                    //     copyObjectPromise.push(this.copySoundTempFileTo(
+                    //         sound, targetDir, { deleteFileUrl: true }
+                    //     ));
+                    // });
+                    object.sprite.pictures.forEach((picture) => {
+                        copyObjectPromise.push(this.exportPictureTempFileTo(picture, targetDir));
+                    });
+                });
+
+                Promise.all(copyObjectPromise)
+                    .then(function() {
+                        resolve();
+                    })
+                    .catch(function(err) {
+                        reject(err);
+                    });
+            } catch (e) {
+                reject(e);
+            }
+        });
+    }
+
+    /**
+     * temp 에 있는 picture 데이터를 target 으로 복사한다.
+     * @param picture 엔트리 이미지 오브젝트. filename, ext 가 필요하다.
+     * @param targetDir 복사할 경로. 해당 경로 아래 /ab/cd/images 와 thumb 가 생성된다.
+     * @return {Promise<void>} 반환값 없음
+     */
+    static async exportPictureTempFileTo(picture, targetDir) {
+        if (Constants.defaultPicturePath.includes(picture.fileurl)) {
+            return;
+        }
+        const fileId = picture.filename;
+        let ext = picture.ext || '.png';
+        if (!ext.startsWith('.')) {
+            ext = `.${ext}`;
+        }
+        const fileName = `${fileId}${ext}`;
+        const newFileId = CommonUtils.createFileId();
+        const newFileName = `${newFileId}${ext}`;
+
+        const tempImagePath = `${Constants.tempImagePath(fileId)}${fileName}`;
+        const tempThumbnailPath = `${Constants.tempThumbnailPath(fileId)}${fileName}`;
+
+        const targetImagePath = `${targetDir}${Constants.subDirectoryPath(newFileId)
+        }image${path.sep}${newFileName}`;
+        const targetThumbnailPath = `${targetDir}${Constants.subDirectoryPath(newFileId)
+        }thumb${path.sep}${newFileName}`;
+
+        await FileUtils.copyFile(tempImagePath, targetImagePath);
+        await FileUtils.copyFile(tempThumbnailPath, targetThumbnailPath);
+
+        picture.filename = newFileId;
+        return picture;
+    }
 
     //TODO 개선 필요. MainUtils 는 e.sender 를 쓰지 않아야 한다.
     static async importObject(e, objectFiles) {
@@ -275,19 +372,19 @@ export default class {
             objectFiles.forEach((objectFile) => {
                 const job = new Promise(async(resolve, reject) => {
                     try {
-                        const objectId = Utils.createFileId();
+                        const objectId = CommonUtils.createFileId();
                         const objectDirPath = path.join(
                             app.getPath('userData'),
                             'import',
                             objectId
                         );
                         const tempDirPath = path.join(app.getPath('userData'), 'temp');
-                        await Utils.mkdirRecursive(objectDirPath);
-                        await Utils.fileUnPack({
+                        await CommonUtils.mkdirRecursive(objectDirPath);
+                        await CommonUtils.fileUnPack({
                             source: objectFile.path,
                             target: objectDirPath,
                         });
-                        const objectJson = await Utils.copyObject({
+                        const objectJson = await CommonUtils.copyObject({
                             source: path.join(objectDirPath, 'object', 'object.json'),
                             target: tempDirPath,
                         });
@@ -322,7 +419,7 @@ export default class {
         return new Promise(async(resolve, reject) => {
             const originalFileExt = path.extname(filePath);
             const originalFileName = path.basename(filePath, originalFileExt);
-            const newFileId = Utils.createFileId();
+            const newFileId = CommonUtils.createFileId();
             const newFileName = newFileId + originalFileExt;
             const newPicturePath = path.join(Constants.tempImagePath(newFileId), newFileName);
             const newThumbnailPath = path.join(Constants.tempThumbnailPath(newFileId), newFileName);
@@ -344,7 +441,7 @@ export default class {
                 }
 
                 resolve({
-                    _id: Utils.generateHash(),
+                    _id: CommonUtils.generateHash(),
                     type: 'user',
                     name: originalFileName,
                     filename: newFileId,
@@ -359,23 +456,30 @@ export default class {
         });
     }
 
-    static async importPictureFromResource(picture) {
-        const imageResourcePath =
-            path.join(Constants.resourceImagePath(picture.filename), picture.filename + (picture.ext || '.png'));
-        const thumbnailResourcePath =
-            path.join(Constants.resourceThumbnailPath(picture.filename), picture.filename + (picture.ext || '.png'));
-        const newObject = await this.importPictureToTemp(imageResourcePath, thumbnailResourcePath);
+    /**
+     * 여러 picture object 들을 resource 에서 추가한다.
+     * @param {Array<Object>}pictures
+     * @return {Promise<Array>}
+     */
+    static importPicturesFromResource(pictures) {
+        return Promise.all(pictures.map(async(picture) => {
+            const fileName = picture.filename + (picture.ext || '.png');
+            const imageResourcePath = path.join(Constants.resourceImagePath(picture.filename), fileName);
+            const thumbnailResourcePath = path.join(Constants.resourceThumbnailPath(picture.filename), fileName);
+            const newObject = await MainUtils.importPictureToTemp(imageResourcePath, thumbnailResourcePath);
 
-        picture.filename = newObject.filename;
-        picture.fileurl = newObject.fileurl;
-        return picture;
+            picture.filename = newObject.filename;
+            picture.fileurl = newObject.fileurl;
+
+            return picture;
+        }));
     }
 
     static importSound(filePath) {
         return new Promise(async(resolve, reject) => {
             const originalFileExt = path.extname(filePath);
             const originalFileName = path.basename(filePath, originalFileExt);
-            const newFileId = Utils.createFileId();
+            const newFileId = CommonUtils.createFileId();
             const newFileName = newFileId + originalFileExt;
             const newSoundPath = path.join(Constants.tempSoundPath(newFileId), newFileName);
 
@@ -389,7 +493,7 @@ export default class {
                     }
 
                     resolve({
-                        _id: Utils.generateHash(),
+                        _id: CommonUtils.generateHash(),
                         type: 'user',
                         name: originalFileName,
                         filename: newFileId,
