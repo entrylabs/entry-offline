@@ -136,12 +136,12 @@ export default class MainUtils {
                 let result = fileUrl;
 
                 const af = sourcePath.replace(/\\/gi, '/');
-
                 result = result.replace(af, '').replace(/^([\\/])/, '');
 
                 if (result.startsWith('renderer')) {
                     result = result.replace('renderer', '.');
                 }
+                result = result.substring(result.indexOf('temp'));
 
                 return result;
             });

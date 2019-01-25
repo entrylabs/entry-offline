@@ -24,8 +24,8 @@ export default class {
      * @param {Object=} options
      * @property saveTemp temp 폴더를 그대로 두는 경우. 이전 리소스가 남아있을지 모르는 상태일때 사용
      */
-    static clearTempProject({ saveTemp }) {
-        if (!saveTemp) {
+    static clearTempProject(options = {}) {
+        if (!options.saveTemp) {
             IpcRendererHelper.resetDirectory();
         }
         StorageManager.removeProject();
