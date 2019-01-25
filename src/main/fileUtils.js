@@ -109,23 +109,27 @@ export default class {
      * @param targetDir 저장할 위치
      * @return {Promise<any>}
      */
-    static copyObjectResourceFileTo(object, targetDir) {
+    static exportObjectFileTo(object, targetDir) {
         return new Promise((resolve, reject) => {
             try {
                 const copyObjectPromise = [];
 
                 object.objects.forEach((object) => {
-                    object.sprite.sounds.forEach((sound) => {
-                        copyObjectPromise.push(this.copySoundResourceFileTo(sound, targetDir));
-                    });
+                    // object.sprite.sounds.forEach((sound) => {
+                    //     copyObjectPromise.push(this.copySoundTempFileTo(
+                    //         sound, targetDir, { deleteFileUrl: true }
+                    //     ));
+                    // });
                     object.sprite.pictures.forEach((picture) => {
-                        copyObjectPromise.push(this.copyPictureResourceFileTo(picture, targetDir));
+                        copyObjectPromise.push(this.copyPictureTempFileTo(
+                            picture, targetDir, { deleteFileUrl: true }
+                        ));
                     });
                 });
 
                 Promise.all(copyObjectPromise)
                     .then(function() {
-                        resolve(true);
+                        resolve();
                     })
                     .catch(function(err) {
                         reject(err);
@@ -142,9 +146,11 @@ export default class {
      * 복사 위치는 /ab/cd/sound/fileName.mp3 이다. (개발상 히스토리 있습니다.)
      * @param {Object}sound 복사할 파일
      * @param {string}targetDir 복사될 위치
+     * @param {Object?}options
+     * @property {boolean}deleteFileUrl fileUrl 삭제여부. 외부로 나가는 파일의 경우 삭제가 필요하다.
      * @return {Promise<any>}
      */
-    static copySoundResourceFileTo(sound, targetDir) {
+    static copySoundTempFileTo(sound, targetDir, options = {}) {
         return new Promise(async(resolve, reject) => {
             if (Constants.defaultSoundPath.includes(sound.fileurl)) {
                 resolve(sound);
@@ -156,23 +162,27 @@ export default class {
                 }
 
                 try {
-                    const resourceImagePath = path.join(
-                        Constants.resourceSoundPath(fileId),
+                    const resourceSoundPath = path.join(
+                        Constants.tempSoundPath(fileId),
                         `${fileId}${ext}`,
                     );
 
                     const newFileName = CommonUtils.createFileId();
-                    const tempImagePath = path.join(
+                    const tempSoundPath = path.join(
                         targetDir,
-                        Constants.resourceSubDirectoryPath(newFileName),
+                        Constants.subDirectoryPath(newFileName),
                         'sound',
                         `${newFileName}${ext}`,
                     );
 
                     sound.filename = newFileName;
+                    if (options.deleteFileUrl) {
+                        sound.fileurl = undefined;
+                    } else {
+                        sound.fileurl = tempSoundPath.replace(/\\/gi, '/');
+                    }
 
-                    await this.copyFile(resourceImagePath, tempImagePath);
-                    sound.fileurl = undefined;
+                    await this.copyFile(resourceSoundPath, tempSoundPath);
                     resolve(sound);
                 } catch (e) {
                     reject(e);
@@ -185,9 +195,11 @@ export default class {
      * resource 에 있는 사진파일을 targetDir 로 복사한다.
      * @param {Object}picture 복사할 파일
      * @param {string}targetDir 복사 위치. [해당 경로]/ab/cd/abcd...png 식으로 저장된다.
-     * @return {Promise<any>}
+     * @param {Object?}options
+     * @property {boolean}deleteFileUrl fileUrl 삭제여부. 외부로 나가는 파일의 경우 삭제가 필요하다.
+     * @return {Promise<Object>} fileName 이 변경된 picture object. 동일 파일명으로 덮어쓰는 것을 방지
      */
-    static copyPictureResourceFileTo(picture, targetDir) {
+    static copyPictureTempFileTo(picture, targetDir, options = {}) {
         return new Promise(async(resolve, reject) => {
             if (Constants.defaultPicturePath.includes(picture.fileurl)) {
                 resolve(picture);
@@ -204,16 +216,21 @@ export default class {
 
                     const newFileName = CommonUtils.createFileId();
 
-                    const tempImagePath = `${targetDir}${Constants.resourceSubDirectoryPath(newFileName)
+                    const tempImagePath = `${targetDir}${Constants.subDirectoryPath(newFileName)
                     }image${path.sep}${newFileName}${ext}`;
-                    const tempThumbnailPath = `${targetDir}${Constants.resourceSubDirectoryPath(newFileName)
+                    const tempThumbnailPath = `${targetDir}${Constants.subDirectoryPath(newFileName)
                     }thumb${path.sep}${newFileName}${ext}`;
 
                     picture.filename = newFileName;
 
+                    if (options.deleteFileUrl) {
+                        picture.fileurl = undefined;
+                    } else {
+                        picture.fileurl = tempImagePath.replace(/\\/gi, '/');
+                    }
+
                     await this.copyFile(resourceImagePath, tempImagePath);
                     await this.copyFile(resourceThumbnailPath, tempThumbnailPath);
-                    picture.fileurl = undefined;
                     resolve(picture);
                 } catch (e) {
                     reject(e);
@@ -225,12 +242,13 @@ export default class {
 
     /**
      * 파일을 생성한다.
-     * @param {any}contents 작성할 내용
+     * @param contents 작성할 내용
      * @param {string}filePath 파일명
      * @return {Promise<>}
      */
     static writeFile(contents, filePath) {
         return new Promise((resolve, reject) => {
+            this.ensureDirectoryExistence(filePath);
             fs.writeFile(filePath, contents, (err) => {
                 if (err) {
                     return reject(err);

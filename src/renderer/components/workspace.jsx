@@ -260,7 +260,7 @@ class Workspace extends Component {
     handleFileAction = (type) => {
         if (type === 'new') {
             if (EntryUtils.confirmProjectWillDismiss()) {
-                IpcRendererHelper.resetDirectory();
+                RendererUtils.clearTempProject();
                 delete this.projectSavedPath;
                 this.loadProject();
             }

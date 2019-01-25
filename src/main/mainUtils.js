@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron';
+import { app, nativeImage, BrowserWindow } from 'electron';
 import fstream from 'fstream';
 import archiver from 'archiver';
 import fs from 'fs';
@@ -232,6 +232,7 @@ export default class {
         });
     }
 
+    //TODO 개선 필요. MainUtils 는 e.sender 를 쓰지 않아야 한다.
     static async exportObject(e, filePath, object) {
         const { objects } = object;
 
@@ -245,31 +246,29 @@ export default class {
             }
             return result;
         });
+
         const objectData = typeof object === 'string' ? object : JSON.stringify(object);
 
-        const objectTempDirPath = path.join(
-            app.getPath('userData'),
-            'import',
-            objectId,
-            'object',
-            path.sep
-        );
-        const objectJsonPath = path.join(objectTempDirPath, 'object.json');
+        const exportDirectoryPath = Constants.tempPathForExport(objectId);
+        const objectJsonPath = path.join(exportDirectoryPath, 'object.json');
 
         const exportFileName = `${objectName}.eo`;
-        const exportFile = path.resolve(objectTempDirPath, '..', exportFileName);
+        const exportFile = path.resolve(exportDirectoryPath, '..', exportFileName);
 
         try {
-            await FileUtils.mkdirRecursive(objectTempDirPath);
-            await FileUtils.copyObjectResourceFileTo(object, objectTempDirPath);
+            await FileUtils.ensureDirectoryExistence(objectJsonPath);
+            await FileUtils.exportObjectFileTo(object, exportDirectoryPath);
             await FileUtils.writeFile(objectData, objectJsonPath);
             await FileUtils.compressDirectoryToFile(exportFile, filePath);
-            await FileUtils.removeDirectoryRecursive(path.join(objectTempDirPath, '..'));
+            await FileUtils.removeDirectoryRecursive(path.join(exportDirectoryPath, '..'));
         } catch (e) {
             console.error(e);
         }
     }
 
+    // static async exportPictureTo()
+
+    //TODO 개선 필요. MainUtils 는 e.sender 를 쓰지 않아야 한다.
     static async importObject(e, objectFiles) {
         try {
             const jobPromises = [];
@@ -315,10 +314,11 @@ export default class {
     /**
      * filePath 에 있는 파일을 가져와 temp 에 담는다. 이후 Entry object 프로퍼티 스펙대로 맞춰
      * 오브젝트를 생성한뒤 전달한다.
-     * @param filePath 이미지 파일 경로
+     * @param {string!}filePath 이미지 파일 경로
+     * @param {string?}thumbnailPath 섬네일 파일 경로. 없으면 이미지에서 만들어낸다.
      * @return {Promise<Object>}
      */
-    static importPicture(filePath) {
+    static importPictureToTemp(filePath, thumbnailPath) {
         return new Promise(async(resolve, reject) => {
             const originalFileExt = path.extname(filePath);
             const originalFileName = path.basename(filePath, originalFileExt);
@@ -329,14 +329,26 @@ export default class {
 
             try {
                 await FileUtils.copyFile(filePath, newPicturePath);
-                //TODO thumbnail image make + copy
+                if (thumbnailPath) {
+                    await FileUtils.copyFile(thumbnailPath, newThumbnailPath);
+                } else {
+                    // 이미지를 리사이즈 한다.
+                    // 카피파일한다
+                    const thumbnailBuffer = nativeImage.createFromPath(filePath)
+                        .resize({
+                            width: 96,
+                            quality: 'better',
+                        })
+                        .toPNG();
+                    await FileUtils.writeFile(thumbnailBuffer, newThumbnailPath);
+                }
 
                 resolve({
                     _id: Utils.generateHash(),
                     type: 'user',
                     name: originalFileName,
                     filename: newFileId,
-                    fileurl: newPicturePath,
+                    fileurl: newPicturePath.replace(/\\/gi, '/'),
                     extension: originalFileExt,
                     dimension: imageSizeOf(newPicturePath),
                 });
@@ -345,6 +357,18 @@ export default class {
                 reject(e);
             }
         });
+    }
+
+    static async importPictureFromResource(picture) {
+        const imageResourcePath =
+            path.join(Constants.resourceImagePath(picture.filename), picture.filename + (picture.ext || '.png'));
+        const thumbnailResourcePath =
+            path.join(Constants.resourceThumbnailPath(picture.filename), picture.filename + (picture.ext || '.png'));
+        const newObject = await this.importPictureToTemp(imageResourcePath, thumbnailResourcePath);
+
+        picture.filename = newObject.filename;
+        picture.fileurl = newObject.fileurl;
+        return picture;
     }
 
     static importSound(filePath) {

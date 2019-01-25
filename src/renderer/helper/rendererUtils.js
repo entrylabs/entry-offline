@@ -1,6 +1,8 @@
 import get from 'lodash/get';
 import root from 'window-or-global';
 import { remote } from 'electron';
+import IpcRendererHelper from './ipcRendererHelper';
+import StorageManager from './storageManager';
 
 const { dialog } = remote;
 
@@ -15,6 +17,11 @@ export default class {
      */
     static getSharedObject() {
         return remote.getGlobal('sharedObject');
+    }
+
+    static clearTempProject() {
+        IpcRendererHelper.resetDirectory();
+        StorageManager.removeProject();
     }
 
     /**

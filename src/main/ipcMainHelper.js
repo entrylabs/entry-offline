@@ -19,6 +19,7 @@ class IpcMainHelper {
         ipcMain.on('importObject', MainUtils.importObject);
         ipcMain.on('importPicture', this.importPicture.bind(this));
         ipcMain.on('importSound', this.importSound.bind(this));
+        ipcMain.on('importPictureFromResource', this.importPictureFromResource.bind(this));
     }
 
     resetSaveDirectory() {
@@ -50,13 +51,24 @@ class IpcMainHelper {
             });
     }
 
+    // 외부 이미지 업로드시.
     importPicture(event, filePath) {
-        MainUtils.importPicture(filePath)
+        MainUtils.importPictureToTemp(filePath)
             .then((object) => {
                 event.sender.send('importPicture', object);
             })
             .catch((err) => {
                 console.error(err);
+            });
+    }
+
+    importPictureFromResource(event, picture) {
+        MainUtils.importPictureFromResource(picture)
+            .then((object) => {
+                event.sender.send('importPictureFromResource', object);
+            })
+            .catch((err) => {
+                console.log(err);
             });
     }
 

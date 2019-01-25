@@ -128,10 +128,29 @@ export default class {
         // }) ;
     }
 
+    /**
+     * 업로드 파일 경로를 temp 로 가져온다.
+     * @param {string!}filePath 이미지 파일 경로
+     * @return {Promise<Object>} 신규생성된 오브젝트 메타데이터
+     */
     static importPicture(filePath) {
         return new Promise((resolve, reject) => {
             ipcRenderer.send('importPicture', filePath);
             ipcRenderer.once('importPicture', (e, object) => {
+                resolve(object);
+            });
+        });
+    }
+
+    /**
+     * 리소스 디렉토리에서 파일을 temp 로 가져온다.
+     * @param {Object}picture DB 에서 가져온 이미지 정보 오브젝트
+     * @return {Promise<Object>} 파일명이 변경된 이미지 정보 오브젝트
+     */
+    static importPictureFromResource(picture) {
+        return new Promise((resolve, reject) => {
+            ipcRenderer.send('importPictureFromResource', picture);
+            ipcRenderer.once('importPictureFromResource', (e, object) => {
                 resolve(object);
             });
         });

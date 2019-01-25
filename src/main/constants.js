@@ -14,76 +14,87 @@ export default class {
         ];
     }
 
+    static tempPathForExport(objectId) {
+        return path.join(
+            app.getPath('userData'),
+            'import',
+            objectId,
+            'object',
+            path.sep,
+        );
+    }
+
     static get tempPath() {
         return path.join(
             app.getPath('userData'),
-            'temp'
+            'temp',
+            path.sep,
         );
     }
 
     static tempImagePath(filename) {
         return path.join(
             this.tempPath,
-            this.resourceSubDirectoryPath(filename),
+            this.subDirectoryPath(filename),
             'image',
-            path.sep
+            path.sep,
         );
     }
 
     static tempThumbnailPath(filename) {
         return path.join(
             this.tempPath,
-            this.resourceSubDirectoryPath(filename),
+            this.subDirectoryPath(filename),
             'thumb',
-            path.sep
+            path.sep,
         );
     }
 
     static tempSoundPath(filename) {
         return path.join(
             this.tempPath,
-            this.resourceSubDirectoryPath(filename),
-            path.sep
+            this.subDirectoryPath(filename),
+            path.sep,
         );
     }
 
     static get resourcePath() {
         return path.join(
-            __dirname, '..', 'renderer', 'resources', 'node_modules', 'uploads', path.sep
+            __dirname, '..', 'renderer', 'resources', 'node_modules', 'uploads', path.sep,
         );
     }
 
     static resourceImagePath(filename) {
         return path.join(
             this.resourcePath,
-            this.resourceSubDirectoryPath(filename),
+            this.subDirectoryPath(filename),
             'image',
-            path.sep
+            path.sep,
         );
     }
 
     static resourceThumbnailPath(filename) {
         return path.join(
             this.resourcePath,
-            this.resourceSubDirectoryPath(filename),
+            this.subDirectoryPath(filename),
             'thumb',
-            path.sep
+            path.sep,
         );
     }
 
     static resourceSoundPath(filename) {
         return path.join(
             this.resourcePath,
-            this.resourceSubDirectoryPath(filename),
-            path.sep
+            this.subDirectoryPath(filename),
+            path.sep,
         );
     }
 
-    static resourceSubDirectoryPath(filename) {
+    static subDirectoryPath(filename) {
         return path.join(
             filename.substr(0, 2),
             filename.substr(2, 2),
-            path.sep
+            path.sep,
         );
     }
 }

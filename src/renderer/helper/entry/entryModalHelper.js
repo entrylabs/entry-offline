@@ -4,6 +4,7 @@ import RendererUtils from '../rendererUtils';
 import IpcRendererHelper from '../ipcRendererHelper';
 import EntryTool from 'entry-tool';
 import DatabaseManager from '../../helper/databaseManager';
+import Constants from '../../helper/constants';
 import _ from 'lodash';
 import EntryUtils from './entryUtils';
 
@@ -254,10 +255,10 @@ class EntryModalHelper {
                     });
             },
             submit: (data) => {
-                console.log('popupSubmitShapePopup', data);
-                data.selected.forEach(function(object) {
+                data.selected.forEach(async(object) => {
                     object.id = Entry.generateHash();
-                    Entry.playground.addPicture(object, true);
+                    const fileNameChangedObject = await IpcRendererHelper.importPictureFromResource(object);
+                    Entry.playground.addPicture(fileNameChangedObject, true);
                 });
             },
             select: (data) => {

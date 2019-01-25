@@ -1,17 +1,27 @@
+import root from 'window-or-global';
+
 export default class {
+    static get sep() {
+        return root.isOsx ? '/' : '\\';
+    }
+
     static get resourcePath() {
-        return 'renderer/resources/node_modules/uploads/';
+        return `renderer${this.sep}resources${this.sep}node_modules${this.sep}uploads${this.sep}`;
     }
 
     static resourceImagePath(filename) {
-        return `${this.resourcePath}${filename.substr(0, 2)}/${filename.substr(2, 2)}/image/`;
+        return `${this.resourcePath}${filename.substr(0, 2)}${this.sep}${filename.substr(2, 2)}${this.sep}image${this.sep}`;
     }
 
     static resourceThumbnailPath(filename) {
-        return `${this.resourcePath}${filename.substr(0, 2)}/${filename.substr(2, 2)}/thumb/`;
+        return `${this.resourcePath}${this.resourceSubDirectoryPath(filename)}thumb${this.sep}`;
     }
 
     static resourceSoundPath(filename) {
-        return `${this.resourcePath}${filename.substr(0, 2)}/${filename.substr(2, 2)}/`;
+        return `${this.resourcePath}${this.resourceSubDirectoryPath(filename)}`;
+    }
+
+    static resourceSubDirectoryPath(filename) {
+        return `${filename.substr(0, 2)}${this.sep}${filename.substr(2, 2)}${this.sep}`;
     }
 }

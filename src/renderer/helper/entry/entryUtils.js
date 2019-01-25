@@ -45,22 +45,19 @@ export default class {
                 )
                     .then((confirm) => {
                         if (confirm) {
-                            StorageManager.removeProject();
                             resolve(project);
                         } else {
-                            IpcRendererHelper.resetDirectory();
-                            StorageManager.removeProject();
                             resolve(undefined);
                         }
+                        RendererUtils.clearTempProject();
                     })
                     .catch((err) => {
                         console.error(err);
                         resolve(undefined);
                     });
             } else {
-                IpcRendererHelper.resetDirectory();
-                StorageManager.removeProject();
                 resolve(undefined);
+                RendererUtils.clearTempProject();
             }
         }));
     }
