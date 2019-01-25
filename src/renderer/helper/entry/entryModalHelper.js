@@ -374,9 +374,9 @@ class EntryModalHelper {
                         EntryUtils.loadSound(result);
                     });
             },
-            submit: (data) => {
-                console.log(data);
-                data.selected.forEach(function(item) {
+            submit: async(data) => {
+                const sounds = await IpcRendererHelper.importSoundsFromResource(data.selected);
+                sounds.forEach(function(item) {
                     item.id = Entry.generateHash();
                     Entry.playground.addSound(item, true);
                 });

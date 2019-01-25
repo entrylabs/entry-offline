@@ -164,4 +164,13 @@ export default class {
             });
         });
     }
+
+    static importSoundsFromResource(sounds) {
+        return new Promise((resolve, reject) => {
+            ipcRenderer.send('importSoundsFromResource', sounds);
+            ipcRenderer.once('importSoundsFromResource', (e, object) => {
+                resolve(object);
+            });
+        });
+    }
 }

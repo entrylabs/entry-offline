@@ -18,8 +18,9 @@ class IpcMainHelper {
         });
         ipcMain.on('importObject', MainUtils.importObject);
         ipcMain.on('importPictures', this.importPictures.bind(this));
-        ipcMain.on('importSounds', this.importSounds.bind(this));
         ipcMain.on('importPicturesFromResource', this.importPicturesFromResource.bind(this));
+        ipcMain.on('importSounds', this.importSounds.bind(this));
+        ipcMain.on('importSoundsFromResource', this.importSoundsFromResource.bind(this));
     }
 
     resetSaveDirectory() {
@@ -73,9 +74,19 @@ class IpcMainHelper {
     }
 
     importSounds(event, filePath) {
-        MainUtils.importSounds(filePath)
+        MainUtils.importSoundsToTemp(filePath)
             .then((object) => {
                 event.sender.send('importSounds', object);
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+    }
+
+    importSoundsFromResource(event, sounds) {
+        MainUtils.importSoundsFromResource(sounds)
+            .then((object) => {
+                event.sender.send('importSoundsFromResource', object);
             })
             .catch((err) => {
                 console.error(err);

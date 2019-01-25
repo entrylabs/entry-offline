@@ -479,11 +479,11 @@ export default class MainUtils {
         }));
     }
 
-    static importSounds(filePaths) {
-        return Promise.all(filePaths.map(this.importSound));
+    static importSoundsToTemp(filePaths) {
+        return Promise.all(filePaths.map(this.importSoundToTemp));
     }
 
-    static importSound(filePath) {
+    static importSoundToTemp(filePath) {
         return new Promise(async(resolve, reject) => {
             const originalFileExt = path.extname(filePath);
             const originalFileName = path.basename(filePath, originalFileExt);
@@ -516,6 +516,19 @@ export default class MainUtils {
                 reject(err);
             }
         });
+    }
+
+    static importSoundsFromResource(sounds) {
+        return Promise.all(sounds.map(async(sound) => {
+            const fileName = sound.filename + (sound.ext || '.mpg');
+            const soundResourcePath = path.join(Constants.resourceSoundPath(sound.filename), fileName);
+            const newObject = await MainUtils.importSoundToTemp(soundResourcePath);
+
+            sound.filename = newObject.filename;
+            sound.fileurl = newObject.fileurl;
+
+            return sound;
+        }));
     }
 
     static staticDownload(srcFilePath, targetFilePath) {
