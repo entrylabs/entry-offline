@@ -232,40 +232,42 @@ export default class MainUtils {
         });
     }
 
-    //TODO 개선 필요. MainUtils 는 e.sender 를 쓰지 않아야 한다.
-    static async exportObject(e, filePath, object) {
-        const { objects } = object;
+    static exportObject(filePath, object) {
+        return new Promise(async(resolve, reject) => {
+            const { objects } = object;
 
-        const objectId = CommonUtils.createFileId();
-        const objectName = objects[0].name;
-        // renderer/bower_components 를 ./bower_components 로 치환
-        this.changeObjectPath(object, (fileUrl) => {
-            let result = fileUrl;
-            if (result.startsWith('renderer')) {
-                result = result.replace('renderer', '.');
-            } else {
-                result = undefined;
+            const objectId = CommonUtils.createFileId();
+            const objectName = objects[0].name;
+            // renderer/bower_components 를 ./bower_components 로 치환
+            this.changeObjectPath(object, (fileUrl) => {
+                let result = fileUrl;
+                if (result.startsWith('renderer')) {
+                    result = result.replace('renderer', '.');
+                } else {
+                    result = undefined;
+                }
+                return result;
+            });
+    
+            const objectData = typeof object === 'string' ? object : JSON.stringify(object);
+    
+            const exportDirectoryPath = Constants.tempPathForExport(objectId);
+            const objectJsonPath = path.join(exportDirectoryPath, 'object.json');
+    
+            const exportFileName = `${objectName}.eo`;
+            const exportFile = path.resolve(exportDirectoryPath, '..', exportFileName);
+    
+            try {
+                await FileUtils.ensureDirectoryExistence(objectJsonPath);
+                await this.exportObjectTempFileTo(object, exportDirectoryPath);
+                await FileUtils.writeFile(objectData, objectJsonPath);
+                await FileUtils.compressDirectoryToFile(exportFile, filePath);
+                await FileUtils.removeDirectoryRecursive(path.join(exportDirectoryPath, '..'));
+                resolve();
+            } catch (e) {
+                reject(e);
             }
-            return result;
         });
-
-        const objectData = typeof object === 'string' ? object : JSON.stringify(object);
-
-        const exportDirectoryPath = Constants.tempPathForExport(objectId);
-        const objectJsonPath = path.join(exportDirectoryPath, 'object.json');
-
-        const exportFileName = `${objectName}.eo`;
-        const exportFile = path.resolve(exportDirectoryPath, '..', exportFileName);
-
-        try {
-            await FileUtils.ensureDirectoryExistence(objectJsonPath);
-            await this.exportObjectTempFileTo(object, exportDirectoryPath);
-            await FileUtils.writeFile(objectData, objectJsonPath);
-            await FileUtils.compressDirectoryToFile(exportFile, filePath);
-            await FileUtils.removeDirectoryRecursive(path.join(exportDirectoryPath, '..'));
-        } catch (e) {
-            console.error(e);
-        }
     }
 
     /**

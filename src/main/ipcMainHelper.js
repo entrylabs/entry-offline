@@ -42,6 +42,16 @@ class IpcMainHelper {
             });
     }
 
+    exportObject(event, filePath, object) {
+        MainUtils.exportObject(filePath, object)
+            .then(() => {
+                event.sender.send('exportObject');
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+    }
+
     saveProject(event, project, targetPath) {
         MainUtils.saveProject(project, targetPath)
             .then(() => {
