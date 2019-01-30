@@ -88,7 +88,9 @@ export default class {
             defaultPath: name,
             filters: [{ name: 'Entry object file(.eo)', extensions: ['eo'] }],
         }, (filePath) => {
-            IpcRendererHelper.exportObject(filePath, objectVariable);
+            if (filePath) {
+                IpcRendererHelper.exportObject(filePath, objectVariable);
+            }
         });
     }
 }
