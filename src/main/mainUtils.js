@@ -270,34 +270,6 @@ export default class MainUtils {
     }
 
     /**
-     * 오브젝트를 외부에 내보낼 수 있도록 정리한다.
-     * 예를들어 기본 에셋의 경로 를 ./bower_component 로 시작하도록 수정하고,
-     * 추가된 오브젝트들의 이미지, 사운드의 fileurl 을 삭제하고 filename 을 재정의한다.
-     * 이 재정의된 filename 은 export 시 동일 데이터임에도 겹치지 않도록 만드는 용도이다.
-     * @param {Object}object 엔트리 오브젝트
-     */
-    static sanitizeProjectForExport(object) {
-        this.changeObjectPath(object, (fileUrl) => {
-            let result = fileUrl;
-            if (result.startsWith('renderer')) {
-                result = result.replace('renderer', '.');
-            } else {
-                result = undefined;
-            }
-            return result;
-        });
-
-        object.sprite.sounds.forEach((sound) => {
-            sound.filename = CommonUtils.createFileId();
-            sound.fileurl = undefined;
-        });
-        object.sprite.pictures.forEach((picture) => {
-            picture.filename = CommonUtils.createFileId();
-            picture.fileurl = undefined;
-        });
-    }
-
-    /**
      * temp 에 있는 picture, sound 전체 데이터를 복사한다.
      * @param {Object}object 엔트리 오브젝트 메타데이터
      * @param targetDir 저장할 위치
