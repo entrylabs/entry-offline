@@ -248,18 +248,17 @@ export default class MainUtils {
                 }
                 return result;
             });
-    
-            const objectData = typeof object === 'string' ? object : JSON.stringify(object);
-    
             const exportDirectoryPath = Constants.tempPathForExport(objectId);
             const objectJsonPath = path.join(exportDirectoryPath, 'object.json');
-    
+
             const exportFileName = `${objectName}.eo`;
             const exportFile = path.resolve(exportDirectoryPath, '..', exportFileName);
-    
+
             try {
                 await FileUtils.ensureDirectoryExistence(objectJsonPath);
                 await this.exportObjectTempFileTo(object, exportDirectoryPath);
+
+                const objectData = typeof object === 'string' ? object : JSON.stringify(object);
                 await FileUtils.writeFile(objectData, objectJsonPath);
                 await FileUtils.compressDirectoryToFile(exportFile, filePath);
                 await FileUtils.removeDirectoryRecursive(path.join(exportDirectoryPath, '..'));
@@ -310,11 +309,9 @@ export default class MainUtils {
                 const copyObjectPromise = [];
 
                 object.objects.forEach((object) => {
-                    // object.sprite.sounds.forEach((sound) => {
-                    //     copyObjectPromise.push(this.copySoundTempFileTo(
-                    //         sound, targetDir, { deleteFileUrl: true }
-                    //     ));
-                    // });
+                    object.sprite.sounds.forEach((sound) => {
+                        copyObjectPromise.push(this.exportSoundTempFileTo(sound, targetDir));
+                    });
                     object.sprite.pictures.forEach((picture) => {
                         copyObjectPromise.push(this.exportPictureTempFileTo(picture, targetDir));
                     });
@@ -334,14 +331,44 @@ export default class MainUtils {
     }
 
     /**
+     * temp 에 있는 sound 데이터를 target 으로 복사한다.
+     * @param sound 엔트리 사운드 오브젝트. filename, ext 가 필요하다.
+     * @param targetDir 복사할 경로. 해당 경로 아래 /ab/cd/sound 가 생성된다.
+     * @return {Promise<Object>} filename 이 변환된 sound object
+     */
+    static async exportSoundTempFileTo(sound, targetDir) {
+        if (Constants.defaultSoundPath.includes(sound.fileurl)) {
+            return sound;
+        }
+        const fileId = sound.filename;
+        let ext = sound.ext || '.mp3';
+        if (!ext.startsWith('.')) {
+            ext = `.${ext}`;
+        }
+        const fileName = `${fileId}${ext}`;
+        const newFileId = CommonUtils.createFileId();
+        const newFileName = `${newFileId}${ext}`;
+
+        const tempSoundPath = `${Constants.tempSoundPath(fileId)}${fileName}`;
+
+        const targetSoundPath = `${targetDir}${Constants.subDirectoryPath(newFileId)
+        }sound${path.sep}${newFileName}`;
+
+        await FileUtils.copyFile(tempSoundPath, targetSoundPath);
+
+        sound.filename = newFileId;
+        return sound;
+    }
+
+    /**
      * temp 에 있는 picture 데이터를 target 으로 복사한다.
      * @param picture 엔트리 이미지 오브젝트. filename, ext 가 필요하다.
      * @param targetDir 복사할 경로. 해당 경로 아래 /ab/cd/images 와 thumb 가 생성된다.
-     * @return {Promise<void>} 반환값 없음
+     * @return {Promise<Object>} filename 이 변환된 picture object
      */
     static async exportPictureTempFileTo(picture, targetDir) {
         if (Constants.defaultPicturePath.includes(picture.fileurl)) {
-            return;
+            return picture;
         }
         const fileId = picture.filename;
         let ext = picture.ext || '.png';

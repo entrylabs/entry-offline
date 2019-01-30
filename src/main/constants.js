@@ -54,6 +54,7 @@ export default class {
         return path.join(
             this.tempPath,
             this.subDirectoryPath(filename),
+            'sound',
             path.sep,
         );
     }
