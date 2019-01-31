@@ -113,19 +113,22 @@ export default class {
     }
 
     /**
+     * 오브젝트를 eo 파일로 만들어서 외부로 저장한다.
+     * 이 이벤트는 일반적으로 entryUtils 를 거쳐서 발생된다.
+     * 인식가능한 형태로 만들기 전에 선처리 로직이 있기 때문이다.
      *
+     * @see entryUtils.exportObject
      * @param filePath 저장할 파일 전체경로
      * @param objectVariable
      */
     static exportObject(filePath, objectVariable) {
-        ipcRenderer.send('exportObject', filePath, objectVariable);
-        // return new Promise((resolve, reject) => {
-        //     ipcRenderer.send('exportObject', filePath, objectVariable);
-        //     //NOTE Entry.Toast 라도 주면 좋겠는데 real 에도 아무반응 없네요.
-        //     // ipcRenderer.once('exportObject', (result) => {
-        //     //     console.log(result);
-        //     // });
-        // }) ;
+        return new Promise((resolve, reject) => {
+            ipcRenderer.send('exportObject', filePath, objectVariable);
+            ipcRenderer.once('exportObject', (result) => {
+                //NOTE Entry.Toast 라도 주면 좋겠는데 real 에도 아무반응 없네요.
+                resolve();
+            });
+        }) ;
     }
 
     static importObjects(filePaths) {

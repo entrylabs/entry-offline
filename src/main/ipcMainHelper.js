@@ -13,7 +13,6 @@ class IpcMainHelper {
         ipcMain.on('loadProject', this.loadProject.bind(this));
         ipcMain.on('resetDirectory', this.resetSaveDirectory.bind(this));
         ipcMain.on('exportObject', this.exportObject.bind(this));
-        // ipcMain.on('importObjects', this.importObjects.bind(this));
         ipcMain.on('importObjects', this.importObjects.bind(this));
         ipcMain.on('importPictures', this.importPictures.bind(this));
         ipcMain.on('importPicturesFromResource', this.importPicturesFromResource.bind(this));

@@ -9,6 +9,13 @@ import root from 'window-or-global';
  * rendererUtils 와 다른 점은 Entry 관련 코드가 포함되면 이쪽.
  */
 export default class {
+    /**
+     * 현재 엔트리 프로젝트가 변경점이 있는 경우,
+     * 정말로 종료할 것인지 묻는다. 종료를 선택한 경우 현재 WS 의 레이아웃 크기를 저장한다.
+     * 저장을 해주지는 않는다.
+     *
+     * @return {boolean} 저장확인여부
+     */
     static confirmProjectWillDismiss() {
         let confirmProjectDismiss = true;
         if (!Entry.stateManager.isSaved()) {
@@ -77,6 +84,10 @@ export default class {
         });
     }
 
+    /**
+     * 오브젝트를 eo 파일로 만들어서 외부로 저장한다.
+     * @param object 저장할 엔트리 오브젝트
+     */
     static exportObject(object) {
         const { name, script } = object;
 
@@ -89,8 +100,111 @@ export default class {
             filters: [{ name: 'Entry object file(.eo)', extensions: ['eo'] }],
         }, (filePath) => {
             if (filePath) {
-                IpcRendererHelper.exportObject(filePath, objectVariable);
+                IpcRendererHelper.exportObject(filePath, objectVariable)
+                    .then(() => {
+                        console.log('object exported successfully');
+                    });
             }
         });
+    }
+
+    /**
+     * 오브젝트를 엔트리에 추가한다.
+     *
+     * @param {Object}model 엔트리 외부 import 용 오브젝트
+     * @property {Object}objects 오브젝트 목록
+     * @property {Object}functions 오브젝트에서 사용된 함수목록
+     * @property {Object}messages 오브젝트에서 사용된 메세지목록
+     * @property {Object}variables 오브젝트에서 사용된 변수목록
+     */
+    static addObjectToEntry(model) {
+        if (!model.sprite) {
+            console.error('object structure is not valid');
+            return;
+        }
+
+        const { objects, functions, messages, variables } = model.sprite;
+
+        if (Entry.getMainWS().mode === Entry.Workspace.MODE_VIMBOARD &&
+        (
+            !Entry.TextCodingUtil.canUsePythonVariables(variables) ||
+            !Entry.TextCodingUtil.canUsePythonFunctions(functions)
+        )) {
+            return root.entrylms.alert(RendererUtils.getLang('Menus.object_import_syntax_error'));
+        }
+
+        const objectIdMap = {};
+        variables.forEach((variable) => {
+            const { object } = variable;
+            if (object) {
+                const id = variable.id;
+                const idMap = objectIdMap[object];
+                variable.id = Entry.generateHash();
+                if (!idMap) {
+                    variable.object = Entry.generateHash();
+                    objectIdMap[object] = {
+                        objectId: variable.object,
+                        variableOriginId: [id],
+                        variableId: [variable.id],
+                    };
+                } else {
+                    variable.object = idMap.objectId;
+                    idMap.variableOriginId.push(id);
+                    idMap.variableId.push(variable.id);
+                }
+            }
+        });
+
+        Entry.variableContainer.appendMessages(messages);
+        Entry.variableContainer.appendVariables(variables);
+        Entry.variableContainer.appendFunctions(functions);
+
+        objects.forEach(function(object) {
+            const idMap = objectIdMap[object.id];
+            if (idMap) {
+                let script = object.script;
+                idMap.variableOriginId.forEach((id, idx) => {
+                    const regex = new RegExp(id, 'gi');
+                    script = script.replace(regex, idMap.variableId[idx]);
+                });
+                object.script = script;
+                object.id = idMap.objectId;
+            } else if (Entry.container.getObject(object.id)) {
+                object.id = Entry.generateHash();
+            }
+            if (model.objectType === 'textBox') {
+                const text = model.text ? model.text : RendererUtils.getLang('Blocks.TEXT');
+                const options = model.options;
+                object.objectType = 'textBox';
+                Object.assign(object, {
+                    text,
+                    options,
+                    name: RendererUtils.getLang('Workspace.textbox'),
+                });
+            } else {
+                object.objectType = 'sprite';
+            }
+
+            Entry.container.addObject(object, 0);
+        });
+    }
+
+    static addPictureObjectToEntry(picture) {
+        if (!picture.id) {
+            picture.id = Entry.generateHash();
+        }
+
+        const object = {
+            id: Entry.generateHash(),
+            objectType: 'sprite',
+            sprite: {
+                name: picture.name,
+                pictures: [picture],
+                sounds: [],
+                category: {},
+            },
+        };
+
+        Entry.container.addObject(object, 0);
     }
 }

@@ -218,7 +218,7 @@ export default class MainUtils {
             const objectId = CommonUtils.createFileId();
             const objectName = objects[0].name;
             // renderer/bower_components 를 ./bower_components 로 치환
-            MainUtils.changeObjectsPath([object], Constants.replaceStrategy.toExternalDeleteUrl);
+            MainUtils.changeObjectsPath(objects, Constants.replaceStrategy.toExternalDeleteUrl);
             const exportDirectoryPath = path.join(Constants.tempPathForExport(objectId), 'object');
             const objectJsonPath = path.join(exportDirectoryPath, 'object.json');
 
@@ -292,10 +292,10 @@ export default class MainUtils {
         const newFileId = CommonUtils.createFileId();
         const newFileName = `${newFileId}${ext}`;
 
-        const tempSoundPath = `${Constants.tempSoundPath(fileId)}${fileName}`;
+        const tempSoundPath = path.join(Constants.tempSoundPath(fileId), fileName);
 
-        const targetSoundPath = `${targetDir}${Constants.subDirectoryPath(newFileId)
-        }sound${path.sep}${newFileName}`;
+        const targetSoundPath = path.join(targetDir,
+            Constants.subDirectoryPath(newFileId), 'sound', newFileName);
 
         await FileUtils.copyFile(tempSoundPath, targetSoundPath);
 
@@ -322,13 +322,13 @@ export default class MainUtils {
         const newFileId = CommonUtils.createFileId();
         const newFileName = `${newFileId}${ext}`;
 
-        const tempImagePath = `${Constants.tempImagePath(fileId)}${fileName}`;
-        const tempThumbnailPath = `${Constants.tempThumbnailPath(fileId)}${fileName}`;
+        const tempImagePath = path.join(Constants.tempImagePath(fileId), fileName);
+        const tempThumbnailPath = path.join(Constants.tempThumbnailPath(fileId), fileName);
 
-        const targetImagePath = `${targetDir}${Constants.subDirectoryPath(newFileId)
-        }image${path.sep}${newFileName}`;
-        const targetThumbnailPath = `${targetDir}${Constants.subDirectoryPath(newFileId)
-        }thumb${path.sep}${newFileName}`;
+        const targetImagePath = path.join(targetDir,
+            Constants.subDirectoryPath(newFileId), 'image', newFileName);
+        const targetThumbnailPath = path.join(targetDir,
+            Constants.subDirectoryPath(newFileId), 'thumb', newFileName);
 
         await FileUtils.copyFile(tempImagePath, targetImagePath);
         await FileUtils.copyFile(tempThumbnailPath, targetThumbnailPath);
