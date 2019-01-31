@@ -19,6 +19,7 @@ class IpcMainHelper {
         ipcMain.on('importSounds', this.importSounds.bind(this));
         ipcMain.on('importSoundsFromResource', this.importSoundsFromResource.bind(this));
         ipcMain.on('staticDownload', this.staticDownload.bind(this));
+        ipcMain.on('saveExcel', this.saveExcel.bind(this));
     }
 
     saveProject(event, project, targetPath) {
@@ -121,6 +122,16 @@ class IpcMainHelper {
     staticDownload(event, unresolvedFilePathArray, targetFilePath) {
         const resolvedFilePath = path.join(...unresolvedFilePathArray);
         MainUtils.staticDownload(resolvedFilePath, targetFilePath);
+    }
+
+    saveExcel(event, filePath, array) {
+        MainUtils.saveExcel(filePath, array)
+            .then(() => {
+                event.sender.send('saveExcel');
+            })
+            .catch((err) => {
+                event.sender.send('saveExcel', err);
+            });
     }
 }
 

@@ -4,13 +4,14 @@ import archiver from 'archiver';
 import fs from 'fs';
 import zlib from 'zlib';
 import path from 'path';
-import FileUtils from './fileUtils';
-import Constants from './constants';
+import xl from 'excel4node';
 import imageSizeOf from 'image-size';
 import soundDuration from 'mp3-duration';
 import root from 'window-or-global';
 import stream from 'stream';
 import tar from 'tar';
+import FileUtils from './fileUtils';
+import Constants from './constants';
 import CommonUtils from '../common/commonUtils';
 
 /**
@@ -584,5 +585,25 @@ export default class MainUtils {
         const writeStream = fs.createWriteStream(targetFilePath);
 
         readStream.pipe(writeStream);
+    }
+
+    static saveExcel(filePath, array) {
+        return new Promise((resolve, reject) => {
+            const workbook = new xl.Workbook();
+            const sheet = workbook.addWorksheet('sheet1');
+
+            for (let i = 0 ; i < array.length ; i++) {
+                sheet.cell(i + 1, 1).string(array[i]);
+            }
+
+            workbook.write(filePath, (err, stats) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    console.log('excel file saved.', stats);
+                    resolve();
+                }
+            });
+        });
     }
 }

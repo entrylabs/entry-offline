@@ -49,16 +49,14 @@ export default class {
                     ],
                 },
             }, (filePath) => {
-                console.log('테스트용', filePath);
-                resolve();
-                // ipcRenderer.send('saveExcel', filePath, array);
-                // ipcRenderer.once('saveExcel', (e, err) => {
-                //     if (err) {
-                //         reject(err);
-                //     } else {
-                //         resolve();
-                //     }
-                // });
+                ipcRenderer.send('saveExcel', filePath, array);
+                ipcRenderer.once('saveExcel', (err) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve();
+                    }
+                });
             });
         });
     }
