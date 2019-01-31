@@ -132,4 +132,17 @@ export default class {
             }
         });
     }
+
+    /**
+     * 이미지를 저장한다. 블록 스레드 이미지를 저장하는데 사용된다.
+     * @param data buffer 화 되지 않은 엘리먼트의 src
+     * @param filePath 저장할 위치
+     */
+    static writeImage(data, filePath) {
+        const buffer = Buffer.from(
+            data.replace(/^data:image\/(png|gif|jpeg);base64,/, ''), 'base64'
+        );
+
+        IpcRendererHelper.writeFile(buffer, filePath);
+    }
 }

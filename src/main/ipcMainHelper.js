@@ -26,6 +26,7 @@ class IpcMainHelper {
         ipcMain.on('staticDownload', this.staticDownload.bind(this));
         ipcMain.on('tempResourceDownload', this.tempResourceDownload.bind(this));
         ipcMain.on('saveExcel', this.saveExcel.bind(this));
+        ipcMain.on('writeFile', this.writeFile.bind(this));
     }
 
     saveProject(event, project, targetPath) {
@@ -194,6 +195,16 @@ class IpcMainHelper {
             })
             .catch((err) => {
                 event.sender.send('saveExcel', err);
+            });
+    }
+
+    writeFile(event, data, filePath) {
+        MainUtils.writeFile(data, filePath)
+            .then(() => {
+                event.sender.send('writeFile');
+            })
+            .catch((err) => {
+                event.sender.send('writeFile', err);
             });
     }
 }

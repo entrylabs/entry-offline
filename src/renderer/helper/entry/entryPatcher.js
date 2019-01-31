@@ -1,4 +1,5 @@
 import root from 'window-or-global';
+import Constants from '../constants';
 import RendererUtils from '../rendererUtils';
 import IpcRendererHelper from '../ipcRendererHelper';
 import CommonUtils from '../../../common/commonUtils';
@@ -47,37 +48,29 @@ export default function() {
             IpcRendererHelper.tempResourceDownload(sound, 'sound', filePath);
         });
     };
-    //
-    // Entry.playground.board._contextOptions[3].option.callback = function() {
-    //     Util.showOpenDialog(
-    //         {
-    //             properties: ['openDirectory'],
-    //             filters: [
-    //                 { name: 'Image', extensions: ['png'] },
-    //             ],
-    //         },
-    //         function(paths) {
-    //             Entry.playground.board.code
-    //                 .getThreads()
-    //                 .forEach(function(t, index) {
-    //                     var topBlock = t.getFirstBlock();
-    //                     if (!topBlock) return;
-    //                     (function(i) {
-    //                         topBlock.view
-    //                             .getDataUrl()
-    //                             .then(function(data) {
-    //                                 var savePath = path.resolve(
-    //                                     paths[0],
-    //                                     i + '.png'
-    //                                 );
-    //                                 Entry.plugin.saveImage(
-    //                                     data.src,
-    //                                     savePath
-    //                                 );
-    //                             });
-    //                     })(++index);
-    //                 });
-    //         }
-    //     );
-    // };
+
+    Entry.playground.board._contextOptions[3].option.callback = function() {
+        RendererUtils.showOpenDialog({
+            properties: ['openDirectory'],
+            filters: { name: 'Image', extensions: ['png'] },
+        }, (dirPath) => {
+            Entry.playground.board.code.getThreads()
+                .forEach(function(thread, index) {
+                    const topBlock = thread.getFirstBlock();
+                    if (!topBlock) {
+                        return;
+                    }
+
+                    /* eslint-disable */
+                    (function(i) {
+                        topBlock.view.getDataUrl()
+                            .then(function(data) {
+                                const savePath = `${dirPath[0]}${Constants.sep}${i}${'.png'}`;
+                                RendererUtils.writeImage(data.src, savePath);
+                            });
+                    })(++index);
+                    /* eslint-enable */
+                });
+        });
+    };
 }

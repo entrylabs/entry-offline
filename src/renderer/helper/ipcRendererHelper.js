@@ -49,7 +49,7 @@ export default class {
                 },
             }, (filePath) => {
                 ipcRenderer.send('saveExcel', filePath, array);
-                ipcRenderer.once('saveExcel', (err) => {
+                ipcRenderer.once('saveExcel', (e, err) => {
                     if (err) {
                         reject(err);
                     } else {
@@ -68,6 +68,15 @@ export default class {
         ipcRenderer.send('tempResourceDownload', entryObject, type, targetFilePath);
     }
 
+    static writeFile(data, filePath) {
+        ipcRenderer.send('writeFile', data, filePath);
+        ipcRenderer.once('writeFile', (e, err) => {
+            if (err) {
+                console.error(err);
+            }
+        });
+    }
+
     /**
      * 오브젝트를 eo 파일로 만들어서 외부로 저장한다.
      * 이 이벤트는 일반적으로 entryUtils 를 거쳐서 발생된다.
@@ -80,7 +89,7 @@ export default class {
     static exportObject(filePath, objectVariable) {
         return new Promise((resolve, reject) => {
             ipcRenderer.send('exportObject', filePath, objectVariable);
-            ipcRenderer.once('exportObject', (result) => {
+            ipcRenderer.once('exportObject', (e, result) => {
                 //NOTE Entry.Toast 라도 주면 좋겠는데 real 에도 아무반응 없네요.
                 resolve();
             });

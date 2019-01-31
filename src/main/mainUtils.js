@@ -590,6 +590,10 @@ export default class MainUtils {
         return FileUtils.copyFile(srcFilePath, targetFilePath);
     }
 
+    static writeFile(data, targetFilePath) {
+        return FileUtils.writeFile(data, targetFilePath);
+    }
+
     static saveExcel(filePath, array) {
         return new Promise((resolve, reject) => {
             const workbook = new xl.Workbook();
