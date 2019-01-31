@@ -1,4 +1,4 @@
-import { app, nativeImage, BrowserWindow } from 'electron';
+import { app, BrowserWindow, nativeImage } from 'electron';
 import fstream from 'fstream';
 import archiver from 'archiver';
 import fs from 'fs';
@@ -30,7 +30,7 @@ export default class MainUtils {
         return new Promise((resolve, reject) => {
             const rs = fs.createReadStream(filePath);
             const gunzip = zlib.createGunzip();
-            const electronAppPath = app.getPath('userData');
+            const baseAppPath = Constants.appPath;
 
             gunzip.on('error', function(err) {
                 reject(err);
@@ -43,9 +43,9 @@ export default class MainUtils {
 
             gunzip.on('end', () => {
                 const bufferStream = new stream.PassThrough();
-                this.resetSaveDirectory();
+                MainUtils.resetSaveDirectory();
                 const fsWriter = fstream.Writer({
-                    path: electronAppPath,
+                    path: baseAppPath,
                     mode: '0777',
                     type: 'Directory',
                 });
@@ -57,27 +57,14 @@ export default class MainUtils {
                 });
                 fsWriter.on('end', () => {
                     fs.readFile(
-                        path.resolve(electronAppPath, 'temp', 'project.json'),
+                        path.resolve(baseAppPath, 'temp', 'project.json'),
                         'utf8',
                         (err, data) => {
                             if (err) {
                                 reject(err);
                             } else {
                                 const project = JSON.parse(data);
-                                this.changeObjectPath(project, (fileUrl) => {
-                                    let result = fileUrl;
-                                    if (result.startsWith('.')) {
-                                        // ./bower_components/.. => renderer/bower_components/..
-                                        result = result.replace(/\./, 'renderer');
-                                    } else if (result.startsWith('temp')) {
-                                        // temp/fo/ba/.. => [ElectronAppData 경로]/temp/fo/ba/..
-                                        result = `${electronAppPath}/${result}`.replace(
-                                            /\\/gi,
-                                            '/'
-                                        );
-                                    }
-                                    return result;
-                                });
+                                MainUtils.changeObjectsPath(project.objects, Constants.replaceStrategy.fromExternal);
                                 project.savedPath = filePath; // real .ent file's path
                                 resolve(project);
                             }
@@ -97,7 +84,7 @@ export default class MainUtils {
      * 이는 새 엔트리 프로젝트를 만들거나 ent 파일이 새로 로드되는 경우 실행된다.
      */
     static resetSaveDirectory() {
-        this.deleteFolderRecursive(path.resolve(app.getPath('userData'), 'temp'));
+        MainUtils.deleteFolderRecursive(path.resolve(app.getPath('userData'), 'temp'));
     }
 
     static deleteFolderRecursive(localPath) {
@@ -106,7 +93,7 @@ export default class MainUtils {
                 const curPath = path.resolve(localPath, file);
                 if (fs.lstatSync(curPath).isDirectory()) {
                     // recurse
-                    this.deleteFolderRecursive(curPath);
+                    MainUtils.deleteFolderRecursive(curPath);
                 } else {
                     // delete file
                     fs.unlinkSync(curPath);
@@ -132,17 +119,7 @@ export default class MainUtils {
                 return;
             }
 
-            this.changeObjectPath(project, (fileUrl) => {
-                let result = fileUrl;
-
-                if (result.startsWith('renderer')) {
-                    result = result.replace('renderer', '.');
-                }
-                result = result.substring(result.indexOf('temp'));
-                result = result.replace(/[\\/]/gi, '/');
-
-                return result;
-            });
+            MainUtils.changeObjectsPath(project.objects, Constants.replaceStrategy.toExternal);
 
             const projectString = JSON.stringify(project);
             const targetFilePath = path.join(sourcePath, 'temp', 'project.json');
@@ -204,15 +181,19 @@ export default class MainUtils {
     }
 
     /**
-     * ent 파일로 만들어지기 전, 오프라인 프로젝트 경로에 맞춰놨던 오브젝트 경로들을
-     * 전부 엔트리 온라인 경로로 변경한다.
-     * @param {object}project 엔트리 프로젝트
-     * @param {function}replaceStrategy(fileUrl) 변경방법
+     * 오프라인 <-> 엔트리 간 파일경로 동기화.
+     * @param {Array<object>} objects 엔트리 프로젝트 내 오브젝트목록.
+     * @param {function}replaceStrategy(fileUrl) 변경방법. 기본 전략패턴이 Constants 에 존재
+     * @see Constants.replaceStrategy
      * @return {object} 인자로 받은 project 를 그대로 반환한다.
      */
-    static changeObjectPath(project, replaceStrategy) {
-        project.objects.forEach((object) => {
-            const { pictures, sounds } = object.sprite;
+    static changeObjectsPath(objects = [], replaceStrategy) {
+        objects.forEach((object) => {
+            if (!object.sprite) {
+                return;
+            }
+
+            const { pictures = [], sounds = [] } = object.sprite;
             pictures.forEach((picture) => {
                 const fileUrl = picture.fileurl;
                 if (!fileUrl) {
@@ -237,16 +218,8 @@ export default class MainUtils {
             const objectId = CommonUtils.createFileId();
             const objectName = objects[0].name;
             // renderer/bower_components 를 ./bower_components 로 치환
-            this.changeObjectPath(object, (fileUrl) => {
-                let result = fileUrl;
-                if (result.startsWith('renderer')) {
-                    result = result.replace('renderer', '.');
-                } else {
-                    result = undefined;
-                }
-                return result;
-            });
-            const exportDirectoryPath = Constants.tempPathForExport(objectId);
+            MainUtils.changeObjectsPath([object], Constants.replaceStrategy.toExternalDeleteUrl);
+            const exportDirectoryPath = path.join(Constants.tempPathForExport(objectId), 'object');
             const objectJsonPath = path.join(exportDirectoryPath, 'object.json');
 
             const exportFileName = `${objectName}.eo`;
@@ -254,11 +227,11 @@ export default class MainUtils {
 
             try {
                 await FileUtils.ensureDirectoryExistence(objectJsonPath);
-                await this.exportObjectTempFileTo(object, exportDirectoryPath);
+                await MainUtils.exportObjectTempFileTo(object, exportDirectoryPath);
 
                 const objectData = typeof object === 'string' ? object : JSON.stringify(object);
                 await FileUtils.writeFile(objectData, objectJsonPath);
-                await FileUtils.compressDirectoryToFile(exportFile, filePath);
+                await FileUtils.pack(exportFile, filePath);
                 await FileUtils.removeDirectoryRecursive(path.join(exportDirectoryPath, '..'));
                 resolve();
             } catch (e) {
@@ -280,10 +253,10 @@ export default class MainUtils {
 
                 object.objects.forEach((object) => {
                     object.sprite.sounds.forEach((sound) => {
-                        copyObjectPromise.push(this.exportSoundTempFileTo(sound, targetDir));
+                        copyObjectPromise.push(MainUtils.exportSoundTempFileTo(sound, targetDir));
                     });
                     object.sprite.pictures.forEach((picture) => {
-                        copyObjectPromise.push(this.exportPictureTempFileTo(picture, targetDir));
+                        copyObjectPromise.push(MainUtils.exportPictureTempFileTo(picture, targetDir));
                     });
                 });
 
@@ -364,47 +337,113 @@ export default class MainUtils {
         return picture;
     }
 
-    //TODO 개선 필요. MainUtils 는 e.sender 를 쓰지 않아야 한다.
-    static async importObject(e, objectFiles) {
-        try {
-            const jobPromises = [];
-            objectFiles.forEach((objectFile) => {
-                const job = new Promise(async(resolve, reject) => {
-                    try {
-                        const objectId = CommonUtils.createFileId();
-                        const objectDirPath = path.join(
-                            app.getPath('userData'),
-                            'import',
-                            objectId
-                        );
-                        const tempDirPath = path.join(app.getPath('userData'), 'temp');
-                        await CommonUtils.mkdirRecursive(objectDirPath);
-                        await CommonUtils.fileUnPack({
-                            source: objectFile.path,
-                            target: objectDirPath,
-                        });
-                        const objectJson = await CommonUtils.copyObject({
-                            source: path.join(objectDirPath, 'object', 'object.json'),
-                            target: tempDirPath,
-                        });
-                        resolve(objectJson);
-                    } catch (e) {
-                        reject(e);
-                    }
-                });
-                jobPromises.push(job);
-            });
-            Promise.all(jobPromises)
-                .then((data) => {
-                    e.sender.send('importObject', data);
-                })
-                .catch((err) => {
-                    e.sender.send('importObject', false);
-                });
-        } catch (e) {
-            console.error(e);
-            e.sender.send('importObject', false);
-        }
+    static async importObjects(objectPaths) {
+        return Promise.all(objectPaths.map((objectPath) => {
+            return MainUtils.importObject(objectPath);
+        }));
+    }
+
+    static importObject(objectPath) {
+        return new Promise(async(resolve, reject) => {
+            const newObjectId = CommonUtils.createFileId();
+            const unpackDirectoryPath = Constants.tempPathForExport(newObjectId);
+            const unpackedDirectoryPath = path.join(unpackDirectoryPath, 'object');
+
+            try {
+                await FileUtils.mkdirRecursive(unpackDirectoryPath); // import 용 디렉토리 생성
+                await FileUtils.unpack(objectPath, unpackDirectoryPath); // 압축 해제
+                // object.json 읽어오기
+                const objectResult = JSON.parse(
+                    await FileUtils.readFile(path.join(unpackedDirectoryPath, 'object.json'))
+                );
+
+                // 파일 복사 로직
+                await Promise.all(objectResult.objects.map(async(object) => {
+                    const { sprite = {} } = object;
+                    const { pictures = [], sounds = [] } = sprite;
+
+                    // 이미지 파일 옮김
+                    const newPictures = await Promise.all(
+                        pictures.map(async(picture) => {
+                            if (Constants.defaultPicturePath.includes(picture.fileurl)) {
+                                // selectedPicture 체크로직
+                                const selectedPictureId = object.selectedPictureId;
+                                if (picture.id === selectedPictureId) {
+                                    object.selectedPicture = picture;
+                                }
+
+                                return picture;
+                            }
+
+                            let ext = picture.ext || '.png';
+                            if (!ext.startsWith('.')) {
+                                ext = `.${ext}`;
+                            }
+                            const newImageFilePath = path.join(
+                                unpackedDirectoryPath,
+                                Constants.subDirectoryPath(picture.filename),
+                                'image',
+                                `${picture.filename}${ext}`,
+                            );
+                            const newThumbnailFilePath = path.join(
+                                unpackedDirectoryPath,
+                                Constants.subDirectoryPath(picture.filename),
+                                'thumb',
+                                `${picture.filename}${ext}`,
+                            );
+
+                            const newPicture = await MainUtils.importPictureToTemp(
+                                newImageFilePath, newThumbnailFilePath,
+                            );
+                            newPicture.name = picture.name;
+                            //TODO _id 가 없는 경우 entry-tool 에서 난리가 나는 듯 합니다.
+
+                            // selectedPicture 체크로직
+                            const selectedPictureId = object.selectedPictureId;
+                            if (picture.id === selectedPictureId) {
+                                object.selectedPicture = newPicture;
+                                object.selectedPictureId = newPicture.id;
+                            }
+
+                            return newPicture;
+                        }));
+
+                    // 사운드 파일 옮김
+                    const newSounds = await Promise.all(
+                        sounds.map(async(sound) => {
+                            if (Constants.defaultSoundPath.includes(sound.fileurl)) {
+                                return sound;
+                            }
+
+                            let ext = sound.ext || '.mp3';
+                            if (!ext.startsWith('.')) {
+                                ext = `.${ext}`;
+                            }
+
+                            const newSound = await MainUtils.importSoundToTemp(path.join(
+                                unpackedDirectoryPath,
+                                Constants.subDirectoryPath(sound.filename),
+                                'sound',
+                                `${sound.filename}${ext}`,
+                            ));
+                            newSound.name = sound.name;
+                            return newSound;
+                        }),
+                    );
+
+                    // 경로 동기화
+                    object.sprite.pictures = newPictures;
+                    object.sprite.sounds = newSounds;
+                    MainUtils.changeObjectsPath([object], Constants.replaceStrategy.fromExternal);
+                    return object;
+                }));
+
+                await FileUtils.removeDirectoryRecursive(path.join(unpackDirectoryPath, '..'));
+                resolve(objectResult);
+            } catch (err) {
+                reject(err);
+            }
+        });
     }
 
     /**
@@ -415,7 +454,7 @@ export default class MainUtils {
      */
     static importPicturesToTemp(filePaths) {
         return Promise.all(filePaths.map(async(filePath) => {
-            return await this.importPictureToTemp(filePath);
+            return await MainUtils.importPictureToTemp(filePath);
         }));
     }
 
@@ -451,6 +490,7 @@ export default class MainUtils {
 
         return {
             _id: CommonUtils.generateHash(),
+            id: CommonUtils.generateHash(),
             type: 'user',
             name: originalFileName,
             filename: newFileId,
@@ -479,9 +519,16 @@ export default class MainUtils {
     }
 
     static importSoundsToTemp(filePaths) {
-        return Promise.all(filePaths.map(this.importSoundToTemp));
+        return Promise.all(filePaths.map(MainUtils.importSoundToTemp));
     }
 
+    /**
+     * 사운드 파일을 temp 로 복사하고, 신규생성된 엔트리 사운드 오브젝트를 반환한다.
+     * 이때 이름은 결정할 수 없으며 외부에서 수정해야 한다.
+     *
+     * @param filePath 사운드 파일 경로
+     * @return {Promise<Object>} 엔트리 사운드 오브젝트
+     */
     static importSoundToTemp(filePath) {
         return new Promise(async(resolve, reject) => {
             const originalFileExt = path.extname(filePath);

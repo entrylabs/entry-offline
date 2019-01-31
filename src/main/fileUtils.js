@@ -4,8 +4,7 @@ import rimraf from 'rimraf';
 import fstream from 'fstream';
 import archiver from 'archiver';
 import zlib from 'zlib';
-import Constants from './constants';
-import CommonUtils from '../common/commonUtils';
+import decompress from 'decompress';
 
 /**
  * 파일 및 디렉토리의 생성 / 삭제와 압축등 IO 와 관련된 일을 담당한다.
@@ -75,12 +74,21 @@ export default class {
     }
 
     /**
+     * 파일을 압축해제하여 디렉토리 위치에 저장한다.
+     * @param sourcePath 압축해제할 파일. 일반적으로는 eo 확장자 파일.
+     * @param targetPath 디렉
+     * @return {Promise<>}
+     */
+    static unpack(sourcePath, targetPath) {
+        return decompress(sourcePath, targetPath);
+    }
+    /**
      * 폴더를 압축하여 파일 하나로 압축해 저장한다.
      * @param sourcePath 압축할 폴더 위치
      * @param targetPath 저장될 파일 경로
      * @return {Promise<any>}
      */
-    static compressDirectoryToFile(sourcePath, targetPath) {
+    static pack(sourcePath, targetPath) {
         return new Promise((resolve, reject) => {
             const parser = path.parse(sourcePath);
             const fsWriter = fstream.Writer({ path: targetPath, type: 'File' });
@@ -106,7 +114,7 @@ export default class {
     /**
      * 파일을 생성한다.
      * @param contents 작성할 내용
-     * @param {string}filePath 파일명
+     * @param {string}filePath 파일 경로
      * @return {Promise<>}
      */
     static writeFile(contents, filePath) {
@@ -117,6 +125,23 @@ export default class {
                     return reject(err);
                 }
                 resolve();
+            });
+        });
+    }
+
+    /**
+     * 파일을 읽어서 데이터를 반환한다.
+     * @param {string}filePath 파일 경로
+     * @return {Promise<any>}
+     */
+    static readFile(filePath) {
+        return new Promise((resolve, reject) => {
+            fs.readFile(filePath, 'utf8', (err, data) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(data);
+                }
             });
         });
     }

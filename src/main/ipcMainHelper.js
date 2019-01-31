@@ -9,45 +9,17 @@ import MainUtils from './MainUtils';
  */
 class IpcMainHelper {
     constructor() {
-        ipcMain.on('staticDownload', this.staticDownload.bind(this));
-        ipcMain.on('resetDirectory', this.resetSaveDirectory.bind(this));
-        ipcMain.on('loadProject', this.loadProject.bind(this));
         ipcMain.on('saveProject', this.saveProject.bind(this));
+        ipcMain.on('loadProject', this.loadProject.bind(this));
+        ipcMain.on('resetDirectory', this.resetSaveDirectory.bind(this));
         ipcMain.on('exportObject', this.exportObject.bind(this));
-        ipcMain.on('importObject', MainUtils.importObject);
+        // ipcMain.on('importObjects', this.importObjects.bind(this));
+        ipcMain.on('importObjects', this.importObjects.bind(this));
         ipcMain.on('importPictures', this.importPictures.bind(this));
         ipcMain.on('importPicturesFromResource', this.importPicturesFromResource.bind(this));
         ipcMain.on('importSounds', this.importSounds.bind(this));
         ipcMain.on('importSoundsFromResource', this.importSoundsFromResource.bind(this));
-    }
-
-    resetSaveDirectory() {
-        MainUtils.resetSaveDirectory();
-    }
-
-    staticDownload(event, unresolvedFilePathArray, targetFilePath) {
-        const resolvedFilePath = path.join(...unresolvedFilePathArray);
-        MainUtils.staticDownload(resolvedFilePath, targetFilePath);
-    }
-
-    loadProject(event, filePath) {
-        MainUtils.loadProject(filePath)
-            .then((project) => {
-                event.sender.send('loadProject', project);
-            })
-            .catch((err) => {
-                event.sender.send('loadProject', err);
-            });
-    }
-
-    exportObject(event, filePath, object) {
-        MainUtils.exportObject(filePath, object)
-            .then(() => {
-                event.sender.send('exportObject');
-            })
-            .catch((err) => {
-                console.error(err);
-            });
+        ipcMain.on('staticDownload', this.staticDownload.bind(this));
     }
 
     saveProject(event, project, targetPath) {
@@ -60,8 +32,50 @@ class IpcMainHelper {
             });
     }
 
+    loadProject(event, filePath) {
+        MainUtils.loadProject(filePath)
+            .then((project) => {
+                event.sender.send('loadProject', project);
+            })
+            .catch((err) => {
+                event.sender.send('loadProject', err);
+            });
+    }
+
+    resetSaveDirectory() {
+        MainUtils.resetSaveDirectory();
+    }
+
+    exportObject(event, filePath, object) {
+        MainUtils.exportObject(filePath, object)
+            .then(() => {
+                event.sender.send('exportObject');
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+    }
+
+    importObjects(event, filePaths) {
+        if (!filePaths || filePaths.length === 0) {
+            event.sender.send('importObjects', []);
+        }
+
+        MainUtils.importObjects(filePaths)
+            .then((objects) => {
+                event.sender.send('importObjects', objects);
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+    }
+
     // 외부 이미지 업로드시.
     importPictures(event, filePaths) {
+        if (!filePaths || filePaths.length === 0) {
+            event.sender.send('importPictures', []);
+        }
+
         MainUtils.importPicturesToTemp(filePaths)
             .then((object) => {
                 event.sender.send('importPictures', object);
@@ -81,8 +95,12 @@ class IpcMainHelper {
             });
     }
 
-    importSounds(event, filePath) {
-        MainUtils.importSoundsToTemp(filePath)
+    importSounds(event, filePaths) {
+        if (!filePaths || filePaths.length === 0) {
+            event.sender.send('importSounds', []);
+        }
+
+        MainUtils.importSoundsToTemp(filePaths)
             .then((object) => {
                 event.sender.send('importSounds', object);
             })
@@ -99,6 +117,11 @@ class IpcMainHelper {
             .catch((err) => {
                 console.error(err);
             });
+    }
+
+    staticDownload(event, unresolvedFilePathArray, targetFilePath) {
+        const resolvedFilePath = path.join(...unresolvedFilePathArray);
+        MainUtils.staticDownload(resolvedFilePath, targetFilePath);
     }
 }
 

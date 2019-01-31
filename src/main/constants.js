@@ -2,6 +2,41 @@ import { app } from 'electron';
 import path from 'path';
 
 export default class {
+    static get replaceStrategy() {
+        return {
+            fromExternal(fileUrl) {
+                let result = fileUrl;
+                if (result.startsWith('.')) {
+                    result = result.replace(/\./, 'renderer');
+                } else if (result.startsWith('temp')) {
+                    result = path.join(this.appPath, result)
+                        .replace(/\\/gi, '/');
+                }
+                return result;
+            },
+            toExternal(fileUrl) {
+                let result = fileUrl;
+
+                if (result.startsWith('renderer')) {
+                    result = result.replace('renderer', '.');
+                }
+                result = result.substring(result.indexOf('temp'));
+                result = result.replace(/\\/gi, '/');
+
+                return result;
+            },
+            toExternalDeleteUrl(fileUrl) {
+                let result = fileUrl;
+                if (result.startsWith('renderer')) {
+                    result = result.replace('renderer', '.');
+                } else {
+                    result = undefined;
+                }
+                return result;
+            },
+        };
+    }
+
     static get defaultSoundPath() {
         return ['./bower_components/entry-js/images/media/bark.mp3'];
     }
@@ -14,19 +49,22 @@ export default class {
         ];
     }
 
+    static get appPath() {
+        return app.getPath('userData');
+    }
+
     static tempPathForExport(objectId) {
         return path.join(
-            app.getPath('userData'),
+            this.appPath,
             'import',
             objectId,
-            'object',
             path.sep,
         );
     }
 
     static get tempPath() {
         return path.join(
-            app.getPath('userData'),
+            this.appPath,
             'temp',
             path.sep,
         );

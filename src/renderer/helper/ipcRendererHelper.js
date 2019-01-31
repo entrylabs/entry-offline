@@ -128,6 +128,15 @@ export default class {
         // }) ;
     }
 
+    static importObjects(filePaths) {
+        return new Promise((resolve, reject) => {
+            ipcRenderer.send('importObjects', filePaths);
+            ipcRenderer.once('importObjects', (e, object) => {
+                resolve(object);
+            });
+        });
+    }
+
     /**
      * 업로드 파일 경로를 temp 로 가져온다.
      * @param {Array!}filePaths 이미지 파일 경로

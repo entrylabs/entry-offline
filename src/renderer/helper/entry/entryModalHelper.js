@@ -21,6 +21,7 @@ class EntryModalHelper {
      * 오브젝트 추가 팝업을 노출한다
      */
     static showSpritePopup() {
+        console.log('object popup show');
         const popup = this._switchPopup('sprite', {
             fetch: (data) => {
                 DatabaseManager.findAll(data)
@@ -65,7 +66,8 @@ class EntryModalHelper {
                     id: Entry.generateHash(),
                     objectType: 'sprite',
                     sprite: {
-                        name: `${RendererUtils.getLang('Workspace.new_object')}${Entry.container.getAllObjects().length + 1}`,
+                        name: `${RendererUtils.getLang('Workspace.new_object')
+                        }${Entry.container.getAllObjects().length + 1}`,
                         pictures: [
                             {
                                 dimension: {
@@ -113,103 +115,129 @@ class EntryModalHelper {
                 };
                 Entry.container.addObject(object, 0);
             },
+            dummyUploads: async({ formData, objectData }) => {
+                const pictures = formData.values();
+                const objects = objectData.values();
+
+                const uploadPicturesPaths = [];
+                const uploadObjectPaths = [];
+                // picture files
+                for (const value of pictures) {
+                    if (value.path) {
+                        uploadPicturesPaths.push(value.path);
+                    }
+                }
+
+                // eo files
+                for (const value of objects) {
+                    if (value.path) {
+                        uploadObjectPaths.push(value.path);
+                    }
+                }
+
+                const results = await IpcRendererHelper.importPictures(uploadPicturesPaths);
+                const objectResults = await IpcRendererHelper.importObjects(uploadObjectPaths);
+
+                popup.setData({
+                    data: {
+                        data: [],
+                        uploads: results.concat(
+                            objectResults.map((object) => {
+                                // thumbnail 용으로 쓸 selectedPicture 표기. 본 데이터는 sprite
+                                const selected = object.objects[0].selectedPicture;
+                                selected.sprite = object;
+                                return selected;
+                            })
+                        ),
+                    },
+                });
+            },
             uploads: (data) => {
-                console.log('popupUploads', data);
-                /*switch (name) {
-                    case 'spritePopup':
-                        data.uploads.forEach(function(item) {
-                            const { sprite } = item;
-                            if (sprite) {
-                                const objects = sprite.objects;
-                                const functions = sprite.functions;
-                                const messages = sprite.messages;
-                                const variables = sprite.variables;
+                data.uploads.forEach(function(item) {
+                    const { sprite } = item;
+                    if (sprite) {
+                        const objects = sprite.objects;
+                        const functions = sprite.functions;
+                        const messages = sprite.messages;
+                        const variables = sprite.variables;
 
-                                if (
-                                    Entry.getMainWS().mode === Entry.Workspace.MODE_VIMBOARD &&
-                                    (!Entry.TextCodingUtil.canUsePythonVariables(variables) ||
-                                        !Entry.TextCodingUtil.canUsePythonFunctions(functions))
-                                ) {
-                                    return entrylms.alert(Lang.Menus.object_import_syntax_error);
+                        if (
+                            Entry.getMainWS().mode === Entry.Workspace.MODE_VIMBOARD &&
+                            (!Entry.TextCodingUtil.canUsePythonVariables(variables) ||
+                                !Entry.TextCodingUtil.canUsePythonFunctions(functions))
+                        ) {
+                            return entrylms.alert(Lang.Menus.object_import_syntax_error);
+                        }
+                        const objectIdMap = {};
+                        variables.forEach((variable) => {
+                            const { object } = variable;
+                            if (object) {
+                                const id = variable.id;
+                                const idMap = objectIdMap[object];
+                                variable.id = Entry.generateHash();
+                                if (!idMap) {
+                                    variable.object = Entry.generateHash();
+                                    objectIdMap[object] = {
+                                        objectId: variable.object,
+                                        variableOriginId: [id],
+                                        variableId: [variable.id],
+                                    };
+                                } else {
+                                    variable.object = idMap.objectId;
+                                    idMap.variableOriginId.push(id);
+                                    idMap.variableId.push(variable.id);
                                 }
-                                const objectIdMap = {};
-                                variables.forEach((variable) => {
-                                    const { object } = variable;
-                                    if (object) {
-                                        const id = variable.id;
-                                        const idMap = objectIdMap[object];
-                                        variable.id = Entry.generateHash();
-                                        if (!idMap) {
-                                            variable.object = Entry.generateHash();
-                                            objectIdMap[object] = {
-                                                objectId: variable.object,
-                                                variableOriginId: [id],
-                                                variableId: [variable.id],
-                                            };
-                                        } else {
-                                            variable.object = idMap.objectId;
-                                            idMap.variableOriginId.push(id);
-                                            idMap.variableId.push(variable.id);
-                                        }
-                                    }
-                                });
-                                Entry.variableContainer.appendMessages(messages);
-                                Entry.variableContainer.appendVariables(variables);
-                                Entry.variableContainer.appendFunctions(functions);
-
-                                objects.forEach(function(object) {
-                                    const idMap = objectIdMap[object.id];
-                                    if (idMap) {
-                                        let script = object.script;
-                                        idMap.variableOriginId.forEach((id, idx) => {
-                                            const regex = new RegExp(id, 'gi');
-                                            script = script.replace(regex, idMap.variableId[idx]);
-                                        });
-                                        object.script = script;
-                                        object.id = idMap.objectId;
-                                    } else if (Entry.container.getObject(object.id)) {
-                                        object.id = Entry.generateHash();
-                                    }
-                                    if (item.objectType === 'textBox') {
-                                        const text = item.text ? item.text : Lang.Blocks.TEXT;
-                                        const options = item.options;
-                                        object.objectType = 'textBox';
-                                        Object.assign(object, {
-                                            text,
-                                            options,
-                                            name: Lang.Workspace.textbox,
-                                        });
-                                    } else {
-                                        object.objectType = 'sprite';
-                                    }
-                                    Entry.container.addObject(object, 0);
-                                });
-                            } else {
-                                if (!item.id) {
-                                    item.id = Entry.generateHash();
-                                }
-
-                                const object = {
-                                    id: Entry.generateHash(),
-                                    objectType: 'sprite',
-                                    sprite: {
-                                        name: item.name,
-                                        pictures: [item],
-                                        sounds: [],
-                                        category: {},
-                                    },
-                                };
-                                Entry.container.addObject(object, 0);
                             }
                         });
-                        break;
-                    case 'shapePopup':
-                        data.uploads.forEach(function(item) {
-                            item.id = Entry.generateHash();
-                            Entry.playground.addPicture(item, true);
+                        Entry.variableContainer.appendMessages(messages);
+                        Entry.variableContainer.appendVariables(variables);
+                        Entry.variableContainer.appendFunctions(functions);
+
+                        objects.forEach(function(object) {
+                            const idMap = objectIdMap[object.id];
+                            if (idMap) {
+                                let script = object.script;
+                                idMap.variableOriginId.forEach((id, idx) => {
+                                    const regex = new RegExp(id, 'gi');
+                                    script = script.replace(regex, idMap.variableId[idx]);
+                                });
+                                object.script = script;
+                                object.id = idMap.objectId;
+                            } else if (Entry.container.getObject(object.id)) {
+                                object.id = Entry.generateHash();
+                            }
+                            if (item.objectType === 'textBox') {
+                                const text = item.text ? item.text : Lang.Blocks.TEXT;
+                                const options = item.options;
+                                object.objectType = 'textBox';
+                                Object.assign(object, {
+                                    text,
+                                    options,
+                                    name: Lang.Workspace.textbox,
+                                });
+                            } else {
+                                object.objectType = 'sprite';
+                            }
+                            Entry.container.addObject(object, 0);
                         });
-                        break;
-                }*/
+                    } else {
+                        if (!item.id) {
+                            item.id = Entry.generateHash();
+                        }
+
+                        const object = {
+                            id: Entry.generateHash(),
+                            objectType: 'sprite',
+                            sprite: {
+                                name: item.name,
+                                pictures: [item],
+                                sounds: [],
+                                category: {},
+                            },
+                        };
+                        Entry.container.addObject(object, 0);
+                    }
+                });
             },
             uploadFail: (data) => {
                 root.entrylms.alert(RendererUtils.getLang(`${data.messageParent}.${data.message}`));
