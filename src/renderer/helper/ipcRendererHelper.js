@@ -1,5 +1,4 @@
 import { ipcRenderer } from 'electron';
-import root from 'window-or-global';
 import RendererUtils from './rendererUtils';
 
 /**
@@ -63,6 +62,10 @@ export default class {
 
     static staticDownload(unresolvedPath, targetFilePath) {
         ipcRenderer.send('staticDownload', unresolvedPath, targetFilePath);
+    }
+
+    static tempResourceDownload(entryObject, type, targetFilePath) {
+        ipcRenderer.send('tempResourceDownload', entryObject, type, targetFilePath);
     }
 
     /**

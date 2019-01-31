@@ -7,6 +7,7 @@ import { commonAction, modalProgressAction } from '../actions';
 import { FETCH_POPUP_ITEMS, UPDATE_PROJECT, WS_MODE } from '../actions/types';
 import _includes from 'lodash/includes';
 import _debounce from 'lodash/debounce';
+import entryPatch from '../helper/entry/entryPatcher';
 import { ModalProgress } from 'entry-tool/component';
 import ModalHelper from '../helper/entry/entryModalHelper';
 import RendererUtils from '../helper/rendererUtils';
@@ -60,6 +61,7 @@ class Workspace extends Component {
         EntryUtils.getSavedProject()
             .then((project) => {
                 Entry.init(this.container.current, this.initOption);
+                entryPatch();
                 Entry.enableArduino();
                 Entry.loadProject(project);
             })
@@ -313,6 +315,7 @@ class Workspace extends Component {
         Entry.disposeContainer();
         Entry.reloadBlock();
         Entry.init(this.container.current, this.initOption);
+        entryPatch();
         Entry.loadProject(project);
         this.addEntryEvents();
     };

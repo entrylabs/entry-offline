@@ -579,13 +579,15 @@ export default class MainUtils {
         }));
     }
 
-    static staticDownload(srcFilePath, targetFilePath) {
-        const fullStaticFilePath = path.resolve(__dirname, 'static', srcFilePath);
-
-        const readStream = fs.createReadStream(fullStaticFilePath);
-        const writeStream = fs.createWriteStream(targetFilePath);
-
-        readStream.pipe(writeStream);
+    /**
+     * 파일을 복사한다.
+     * 단순 복사 기능이지만 ipcMainHelper -> mainUtils -> fileUtils depth 를 지키기위해 만들었다.
+     * @param srcFilePath
+     * @param targetFilePath
+     * @return {Promise<any>}
+     */
+    static downloadFile(srcFilePath, targetFilePath) {
+        return FileUtils.copyFile(srcFilePath, targetFilePath);
     }
 
     static saveExcel(filePath, array) {
