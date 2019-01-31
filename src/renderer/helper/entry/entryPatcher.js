@@ -54,23 +54,62 @@ export default function() {
             properties: ['openDirectory'],
             filters: { name: 'Image', extensions: ['png'] },
         }, (dirPath) => {
-            Entry.playground.board.code.getThreads()
-                .forEach(function(thread, index) {
-                    const topBlock = thread.getFirstBlock();
-                    if (!topBlock) {
-                        return;
-                    }
+            if (dirPath) {
+                Entry.playground.board.code.getThreads()
+                    .forEach(function(thread, index) {
+                        const topBlock = thread.getFirstBlock();
+                        if (!topBlock) {
+                            return;
+                        }
 
-                    /* eslint-disable */
-                    (function(i) {
-                        topBlock.view.getDataUrl()
-                            .then(function(data) {
-                                const savePath = `${dirPath[0]}${Constants.sep}${i}${'.png'}`;
-                                RendererUtils.writeImage(data.src, savePath);
-                            });
-                    })(++index);
-                    /* eslint-enable */
-                });
+                        /* eslint-disable */
+                        (function(i) {
+                            topBlock.view.getDataUrl()
+                                .then(function(data) {
+                                    const savePath = `${dirPath[0]}${Constants.sep}${i}${'.png'}`;
+                                    RendererUtils.writeImage(data.src, savePath);
+                                });
+                        })(++index);
+                        /* eslint-enable */
+                    });
+            }
+        });
+    };
+
+    // Entry.HW.prototype.downloadConnector = function() {
+    //     remote.getGlobal('sharedObject').roomId = [
+    //         localStorage.getItem('entryhwRoomId'),
+    //     ];
+    //     Entry.plugin.openHardwarePage();
+    //     Entry.hw.initSocket();
+    // };
+    //
+    // Entry.HW.prototype.openHardwareProgram = function() {
+    //     remote.getGlobal('sharedObject').roomId = [
+    //         localStorage.getItem('entryhwRoomId'),
+    //     ];
+    //     Entry.plugin.openHardwarePage();
+    //     Entry.hw.initSocket();
+    // };
+
+    Entry.HW.prototype.downloadGuide = function() {
+        if (root.EntryStatic.isPracticalCourse) {
+            RendererUtils.downloadRobotGuide();
+        } else {
+            RendererUtils.downloadHardwareGuide();
+        }
+    };
+
+    Entry.HW.prototype.downloadSource = function() {
+        RendererUtils.showSaveDialog({
+            defaultPath: 'board.ino',
+            filters: [
+                { name: 'Arduino(*.ino)', extensions: ['ino'] },
+            ],
+        }, (filePath) => {
+            if (filePath) {
+                IpcRendererHelper.staticDownload(['source', 'board.ino'], filePath);
+            }
         });
     };
 }
