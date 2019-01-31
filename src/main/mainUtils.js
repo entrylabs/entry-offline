@@ -10,6 +10,7 @@ import soundDuration from 'mp3-duration';
 import root from 'window-or-global';
 import stream from 'stream';
 import tar from 'tar';
+import crypto from 'crypto';
 import FileUtils from './fileUtils';
 import Constants from './constants';
 import CommonUtils from '../common/commonUtils';
@@ -25,7 +26,7 @@ export default class MainUtils {
      */
     static createFileId() {
         const randomStr = `${Math.random().toString(16)}000000000`.substr(2, 8);
-        return require('crypto')
+        return crypto
             .createHash('md5')
             .update(randomStr)
             .digest('hex');
