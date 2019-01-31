@@ -61,53 +61,8 @@ export default class {
         });
     }
 
-    static downloadHardwareGuide() {
-        const osType = root.isOsx ? {
-            saveName: '(맥)',
-            filePath: ['guide', 'hardware-osx.pdf'],
-        } : {
-            saveName: '(윈도우)',
-            filePath: ['guide', 'hardware-win.pdf'],
-        };
-
-        RendererUtils.showSaveDialog({
-            defaultPath: `[매뉴얼]엔트리 하드웨어 연결${osType.saveName}.pdf`,
-            filters: [{ name: '*.pdf', extensions: ['pdf'] }],
-        }, (filePath) => {
-            if (filePath) {
-                ipcRenderer.send('staticDownload', osType.filePath, filePath);
-            }
-        });
-    }
-
-    static downloadRobotGuide() {
-        RendererUtils.showSaveDialog({
-            defaultPath: '[매뉴얼]엔트리로봇연결.zip',
-            filters: [{ name: '*.zip', extensions: ['zip'] }],
-        }, (filePath) => {
-            if (filePath) {
-                ipcRenderer.send(
-                    'staticDownload',
-                    ['guide', '[매뉴얼]엔트리로봇연결.zip'],
-                    filePath,
-                );
-            }
-        });
-    }
-
-    static downloadPythonGuide() {
-        RendererUtils.showSaveDialog({
-            defaultPath: 'Python.Guide.zip',
-            filters: [{ name: '*.zip', extensions: ['zip'] }],
-        }, (filePath) => {
-            if (filePath) {
-                ipcRenderer.send(
-                    'staticDownload',
-                    ['guide', 'Python.Guide.zip'],
-                    filePath,
-                );
-            }
-        });
+    static staticDownload(unresolvedPath, targetFilePath) {
+        ipcRenderer.send('staticDownload', unresolvedPath, targetFilePath);
     }
 
     /**

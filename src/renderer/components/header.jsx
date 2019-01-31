@@ -173,13 +173,13 @@ class Header extends Component {
         } else {
             switch (key) {
                 case 'help_hardware':
-                    IpcRendererHelper.downloadHardwareGuide();
+                    RendererUtils.downloadHardwareGuide();
                     break;
                 case 'help_robot':
-                    IpcRendererHelper.downloadRobotGuide();
+                    RendererUtils.downloadRobotGuide();
                     break;
                 case 'help_python':
-                    IpcRendererHelper.downloadPythonGuide();
+                    RendererUtils.downloadPythonGuide();
                     break;
             }
         }

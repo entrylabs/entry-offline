@@ -85,4 +85,51 @@ export default class {
     static showSaveDialog(option, callback) {
         dialog.showSaveDialog(option, callback);
     }
+
+    static downloadHardwareGuide() {
+        const osType = root.isOsx ? {
+            saveName: '(맥)',
+            filePath: ['guide', 'hardware-osx.pdf'],
+        } : {
+            saveName: '(윈도우)',
+            filePath: ['guide', 'hardware-win.pdf'],
+        };
+
+        this.showSaveDialog({
+            defaultPath: `[매뉴얼]엔트리 하드웨어 연결${osType.saveName}.pdf`,
+            filters: [{ name: '*.pdf', extensions: ['pdf'] }],
+        }, (filePath) => {
+            if (filePath) {
+                IpcRendererHelper.staticDownload(osType.filePath, filePath);
+            }
+        });
+    }
+
+    static downloadRobotGuide() {
+        this.showSaveDialog({
+            defaultPath: '[매뉴얼]엔트리로봇연결.zip',
+            filters: [{ name: '*.zip', extensions: ['zip'] }],
+        }, (filePath) => {
+            if (filePath) {
+                IpcRendererHelper.staticDownload(
+                    ['guide', '[매뉴얼]엔트리로봇연결.zip'],
+                    filePath,
+                );
+            }
+        });
+    }
+
+    static downloadPythonGuide() {
+        this.showSaveDialog({
+            defaultPath: 'Python.Guide.zip',
+            filters: [{ name: '*.zip', extensions: ['zip'] }],
+        }, (filePath) => {
+            if (filePath) {
+                IpcRendererHelper.staticDownload(
+                    ['guide', 'Python.Guide.zip'],
+                    filePath,
+                );
+            }
+        });
+    }
 }
