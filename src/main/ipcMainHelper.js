@@ -10,6 +10,7 @@ import CommonUtils from '../common/commonUtils';
  * MVC 의 Controller 와 비슷한 역할을 한다.
  * 추가하는 로직은 일반적으로 다음 프로세스에 들어갈 인자의 가공이다.
  *
+ * main.js 에서 선언되어있다.
  * TODO 추가적으로 MainUtils 에서 더 공통으로 뺄 수 있는 부분은 common.utils 를 활용하도록 할 예정
  */
 class IpcMainHelper {

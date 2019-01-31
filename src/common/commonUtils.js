@@ -66,6 +66,32 @@ class CommonUtils {
 
         return `${filename}${extension}`;
     }
+
+    static lpad(str, len) {
+        const strLen = str.length;
+        let paddedString = str;
+        if (strLen < len) {
+            for (let i = 0; i < len - strLen; i++) {
+                paddedString = `0${str}`;
+            }
+        }
+        return String(paddedString);
+    }
+
+    static getPaddedVersion(version) {
+        if (!version) {
+            return '';
+        }
+        const versionString = String(version);
+
+        const padded = [];
+        const splitVersion = versionString.split('.');
+        splitVersion.forEach((item) => {
+            padded.push(this.lpad(item, 4));
+        });
+
+        return padded.join('.');
+    }
 }
 
 export default CommonUtils;
