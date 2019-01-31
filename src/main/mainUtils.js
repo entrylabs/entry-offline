@@ -20,6 +20,18 @@ import CommonUtils from '../common/commonUtils';
  */
 export default class MainUtils {
     /**
+     * 16진수의 랜덤값을 설정한다. 이 값은 겹치지 않은 신규 파일명을 생성하는데 쓴다.
+     * @return {string}
+     */
+    static createFileId() {
+        const randomStr = `${Math.random().toString(16)}000000000`.substr(2, 8);
+        return require('crypto')
+            .createHash('md5')
+            .update(randomStr)
+            .digest('hex');
+    }
+
+    /**
      * ent 파일에서 프로젝트를 로드한다.
      * electron directory 에 압축해제 한 후,
      * project.json 의 object fileUrl 주소를 전부 오프라인용으로 수정한다.
@@ -216,7 +228,7 @@ export default class MainUtils {
         return new Promise(async(resolve, reject) => {
             const { objects } = object;
 
-            const objectId = CommonUtils.createFileId();
+            const objectId = MainUtils.createFileId();
             const objectName = objects[0].name;
             // renderer/bower_components 를 ./bower_components 로 치환
             MainUtils.changeObjectsPath(objects, Constants.replaceStrategy.toExternalDeleteUrl);
@@ -285,12 +297,9 @@ export default class MainUtils {
             return sound;
         }
         const fileId = sound.filename;
-        let ext = sound.ext || '.mp3';
-        if (!ext.startsWith('.')) {
-            ext = `.${ext}`;
-        }
+        const ext = CommonUtils.sanitizeExtension(sound.ext, '.mp3');
         const fileName = `${fileId}${ext}`;
-        const newFileId = CommonUtils.createFileId();
+        const newFileId = MainUtils.createFileId();
         const newFileName = `${newFileId}${ext}`;
 
         const tempSoundPath = path.join(Constants.tempSoundPath(fileId), fileName);
@@ -315,12 +324,9 @@ export default class MainUtils {
             return picture;
         }
         const fileId = picture.filename;
-        let ext = picture.ext || '.png';
-        if (!ext.startsWith('.')) {
-            ext = `.${ext}`;
-        }
+        const ext = CommonUtils.sanitizeExtension(picture.ext, '.png');
         const fileName = `${fileId}${ext}`;
-        const newFileId = CommonUtils.createFileId();
+        const newFileId = MainUtils.createFileId();
         const newFileName = `${newFileId}${ext}`;
 
         const tempImagePath = path.join(Constants.tempImagePath(fileId), fileName);
@@ -346,7 +352,7 @@ export default class MainUtils {
 
     static importObject(objectPath) {
         return new Promise(async(resolve, reject) => {
-            const newObjectId = CommonUtils.createFileId();
+            const newObjectId = MainUtils.createFileId();
             const unpackDirectoryPath = Constants.tempPathForExport(newObjectId);
             const unpackedDirectoryPath = path.join(unpackDirectoryPath, 'object');
 
@@ -376,10 +382,7 @@ export default class MainUtils {
                                 return picture;
                             }
 
-                            let ext = picture.ext || '.png';
-                            if (!ext.startsWith('.')) {
-                                ext = `.${ext}`;
-                            }
+                            const ext = CommonUtils.sanitizeExtension(picture.ext, '.png');
                             const newImageFilePath = path.join(
                                 unpackedDirectoryPath,
                                 Constants.subDirectoryPath(picture.filename),
@@ -416,10 +419,7 @@ export default class MainUtils {
                                 return sound;
                             }
 
-                            let ext = sound.ext || '.mp3';
-                            if (!ext.startsWith('.')) {
-                                ext = `.${ext}`;
-                            }
+                            const ext = CommonUtils.sanitizeExtension(sound.ext, '.mp3');
 
                             const newSound = await MainUtils.importSoundToTemp(path.join(
                                 unpackedDirectoryPath,
@@ -469,7 +469,7 @@ export default class MainUtils {
     static async importPictureToTemp(filePath, thumbnailPath) {
         const originalFileExt = path.extname(filePath);
         const originalFileName = path.basename(filePath, originalFileExt);
-        const newFileId = CommonUtils.createFileId();
+        const newFileId = MainUtils.createFileId();
         const newFileName = newFileId + originalFileExt;
         const newPicturePath = path.join(Constants.tempImagePath(newFileId), newFileName);
         const newThumbnailPath = path.join(Constants.tempThumbnailPath(newFileId), newFileName);
@@ -534,7 +534,7 @@ export default class MainUtils {
         return new Promise(async(resolve, reject) => {
             const originalFileExt = path.extname(filePath);
             const originalFileName = path.basename(filePath, originalFileExt);
-            const newFileId = CommonUtils.createFileId();
+            const newFileId = MainUtils.createFileId();
             const newFileName = newFileId + originalFileExt;
             const newSoundPath = path.join(Constants.tempSoundPath(newFileId), newFileName);
 
