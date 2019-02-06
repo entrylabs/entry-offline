@@ -7,6 +7,8 @@ import { PersistGate } from 'redux-persist/integration/react';
 import configureStore from './store';
 import Index from './components/Index.jsx';
 
+import './nativeMenu.js';
+
 const { store, persistor } = configureStore();
 
 ReactDom.render(

@@ -77,6 +77,12 @@ class Workspace extends Component {
         addEventListener('hwChanged', this.handleHardwareChange);
         // 하드웨어 다운로드 탭에서 다운로드 처리
         addEventListener('hwDownload', this.handleHardwareDownload.bind(this));
+        addEventListener('newWorkspace', () => {
+            this.handleFileAction('new');
+        });
+        addEventListener('loadWorkspace', () => {
+            this.handleFileAction('open_offline');
+        });
         // 저장처리
         addEventListener('saveWorkspace', () => {
             this.handleSaveAction('save');
