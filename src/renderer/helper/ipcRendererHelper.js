@@ -150,4 +150,8 @@ export default class {
             });
         });
     }
+
+    static quitApplication() {
+        ipcRenderer.send('quit');
+    }
 }

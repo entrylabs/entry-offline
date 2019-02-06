@@ -1,4 +1,4 @@
-import { ipcMain } from 'electron';
+import { app, ipcMain } from 'electron';
 import path from 'path';
 import MainUtils from './MainUtils';
 import Constants from './constants';
@@ -28,6 +28,7 @@ class IpcMainHelper {
         ipcMain.on('tempResourceDownload', this.tempResourceDownload.bind(this));
         ipcMain.on('saveExcel', this.saveExcel.bind(this));
         ipcMain.on('writeFile', this.writeFile.bind(this));
+        ipcMain.on('quit', this.quitApplication.bind(this));
     }
 
     saveProject(event, project, targetPath) {
@@ -207,6 +208,10 @@ class IpcMainHelper {
             .catch((err) => {
                 event.sender.send('writeFile', err);
             });
+    }
+
+    quitApplication(event) {
+        app.quit();
     }
 }
 
