@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>엔트리</title>
+	<link rel='stylesheet' href='../resources/styles/fonts.css'/>
+	<link rel='stylesheet' href='../resources/styles/about.css'/>
+</head>
+
+<body>
+<div class="container">
+	<div class="container_inner">
+		<div class="logo_wrapper">
+			<img src="../resources/images/about/logo.png" class="logo"/>
+		</div>
+		<div>
+			<div class="txtVersion">
+				Version
+				<span id="version"/>
+				<div>모야</div>
+				<a href="#" id="playEntryBtn">
+					https://playentry.org
+				</a>
+			</div>
+			<div>
+				<div class="btnVersionUpdate">
+				</div>
+				<div class="txtAlreadyVersion">
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+    window.$ = window.jQuery = require('jquery');
+    import { shell, remote, ipcRenderer } from 'electron';
+
+    $(document).ready(() => {
+        const { app } = remote;
+        const aboutWindow = remote.getCurrentWindow();
+        if (!localStorage.getItem('lang')) {
+            localStorage.setItem('lang', 'ko');
+        }
+        console.log(aboutWindow);
+        $(window).keyup((event) => {
+            //esc
+            if (event.which === 27) {
+                aboutWindow.hide();
+            }
+        });
+
+        $('body')
+            .on('click', function() {
+                aboutWindow.hide();
+            });
+
+        $('#playEntryBtn')
+            .on('click', function(e) {
+                e.preventDefault();
+                shell.openExternal('https://playentry.org');
+            });
+
+        $('.btnVersionUpdate')
+            .on('click', () => {
+                shell.openExternal(
+                    'https://playentry.org/#!/offlineEditor',
+                );
+            });
+
+        $("#version")
+            .text(app.getVersion());
+
+        aboutWindow.on('show', () => {
+            console.log('show');
+
+            const langType = localStorage.getItem('lang');
+            window.Lang = require(`../resources/lang/${langType}.js`).Lang;
+            $(".btnVersionUpdate")
+                .text(Lang.General.recent_download2);
+            $(".txtAlreadyVersion")
+                .text(Lang.General.latest_version);
+
+            ipcRenderer.once('checkVersion', (e, hasNewVersion) => {
+                console.log(hasNewVersion);
+                if (hasNewVersion) {
+                    $('.txtAlreadyVersion')
+                        .hide();
+                    $('.btnVersionUpdate')
+                        .show();
+                } else {
+                    $('.btnVersionUpdate')
+                        .hide();
+                    $('.txtAlreadyVersion')
+                        .show();
+                }
+            });
+
+            alert('send To version');
+            ipcRenderer.send('checkVersion',
+                localStorage.getItem('lastCheckVersion') || '0.0.0');
+        });
+    });
+</script>
+</body>
+
+</html>

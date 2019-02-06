@@ -74,7 +74,8 @@ if (process.platform === 'darwin') {
             {
                 label: RendererUtils.getLang('Menus.help'),
                 click() {
-                    Entry && Entry.plugin.openAboutPage();
+                    const currentWindow = remote.getCurrentWindow();
+                    IpcRendererHelper.openAboutPage(currentWindow);
                 },
             },
             {
@@ -136,7 +137,8 @@ if (process.platform === 'darwin') {
                 label: RendererUtils.getLang('Menus.entry_info'),
                 accelerator: 'F1',
                 click() {
-                    Entry && Entry.plugin.openAboutPage();
+                    const currentWindow = remote.getCurrentWindow();
+                    IpcRendererHelper.openAboutPage(currentWindow);
                 },
             },
         ],

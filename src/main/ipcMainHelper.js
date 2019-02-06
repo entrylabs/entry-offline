@@ -3,6 +3,8 @@ import path from 'path';
 import MainUtils from './MainUtils';
 import Constants from './constants';
 import CommonUtils from '../common/commonUtils';
+import AboutWindowManager from "./views/aboutWindowManager";
+import packageJson from "../../package";
 
 /**
  * ipc process 의 이벤트를 등록한다.
@@ -29,6 +31,8 @@ class IpcMainHelper {
         ipcMain.on('saveExcel', this.saveExcel.bind(this));
         ipcMain.on('writeFile', this.writeFile.bind(this));
         ipcMain.on('quit', this.quitApplication.bind(this));
+        ipcMain.on('openAboutPage', this.openAboutPage.bind(this));
+        ipcMain.on('checkVersion', this.checkVersion.bind(this));
     }
 
     saveProject(event, project, targetPath) {
@@ -213,7 +217,18 @@ class IpcMainHelper {
     quitApplication(event) {
         app.quit();
     }
+
+    openAboutPage(event, parentWindow) {
+        AboutWindowManager.openAboutWindow(parentWindow);
+    }
+
+    checkVersion(event, lastCheckVersion) {
+        console.log(lastCheckVersion);
+        const version = CommonUtils.getPaddedVersion(packageJson.version);
+        const lastVersion = CommonUtils.getPaddedVersion(lastCheckVersion);
+        event.sender.send('checkVersion', lastVersion > version);
+    }
 }
 
-new IpcMainHelper();
-export default IpcMainHelper;
+const helper = new IpcMainHelper();
+export default helper;

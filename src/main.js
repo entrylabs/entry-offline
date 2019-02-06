@@ -324,10 +324,4 @@ if (!singleInstanceLock) {
         );
         request.end();
     });
-
-    ipcMain.on('checkVersion', (e, lastCheckVersion) => {
-        const version = CommonUtils.getPaddedVersion(packageJson.version);
-        const lastVersion = CommonUtils.getPaddedVersion(lastCheckVersion);
-        e.sender.send('checkVersionResult', lastVersion > version);
-    });
 }

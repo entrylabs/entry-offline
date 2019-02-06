@@ -154,4 +154,8 @@ export default class {
     static quitApplication() {
         ipcRenderer.send('quit');
     }
+
+    static openAboutPage(currentWindow) {
+        ipcRenderer.send('openAboutPage', currentWindow);
+    }
 }
