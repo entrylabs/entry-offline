@@ -14,4 +14,4 @@ export const modalProgressAction = (data) => {
     };
 };
 
-export { showPopup, hidePopup, goTo } from './PopupAction';
+export { showPopup, hidePopup, goTo } from './popupAction';

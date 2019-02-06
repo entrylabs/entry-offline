@@ -8,8 +8,8 @@ module.exports = {
     mode: 'none',
     target: 'electron-renderer',
     entry: {
-        init: './src/renderer/init_entry.js',
-        render: './src/renderer/render_entry.js',
+        init: './src/renderer/initEntry.js',
+        render: './src/renderer/renderEntry.js',
     },
     devtool: 'source-map',
     resolve: {
