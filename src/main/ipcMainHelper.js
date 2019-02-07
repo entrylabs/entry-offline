@@ -13,7 +13,7 @@ import packageJson from "../../package";
  * 추가하는 로직은 일반적으로 다음 프로세스에 들어갈 인자의 가공이다.
  *
  * main.js 에서 선언되어있다.
- * TODO 추가적으로 MainUtils 에서 더 공통으로 뺄 수 있는 부분은 common.utils 를 활용하도록 할 예정
+ * 이 클래스의 ipc event 들은 mainWindow, workspace 와 관련이 있다.
  */
 class IpcMainHelper {
     constructor() {
@@ -31,7 +31,6 @@ class IpcMainHelper {
         ipcMain.on('saveExcel', this.saveExcel.bind(this));
         ipcMain.on('writeFile', this.writeFile.bind(this));
         ipcMain.on('quit', this.quitApplication.bind(this));
-        ipcMain.on('checkVersion', this.checkVersion.bind(this));
     }
 
     saveProject(event, project, targetPath) {
@@ -215,13 +214,6 @@ class IpcMainHelper {
 
     quitApplication(event) {
         app.quit();
-    }
-
-    checkVersion(event, lastCheckVersion) {
-        console.log(lastCheckVersion);
-        const version = CommonUtils.getPaddedVersion(packageJson.version);
-        const lastVersion = CommonUtils.getPaddedVersion(lastCheckVersion);
-        event.sender.send('checkVersion', lastVersion > version);
     }
 }
 

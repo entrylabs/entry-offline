@@ -19,6 +19,9 @@
     },
     "dependencies": {
         "@babel/runtime": "^7.2.0",
+        "@serialport/binding-abstract": "^2.0.4",
+        "@serialport/parser-readline": "^2.0.2",
+        "@serialport/stream": "^2.0.4",
         "archiver": "^3.0.0",
         "bignumber.js": "^8.0.1",
         "debug": "^4.1.1",

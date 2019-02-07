@@ -158,4 +158,8 @@ export default class {
     static openAboutPage() {
         ipcRenderer.send('openAboutWindow');
     }
+
+    static openHardwarePage() {
+        ipcRenderer.send('openHardwareWindow');
+    }
 }

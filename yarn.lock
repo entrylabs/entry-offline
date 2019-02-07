@@ -728,6 +728,41 @@
     vue-template-compiler "^2.0.0-alpha.8"
     vue-template-es2015-compiler "^1.4.2"
 
+"@serialport/binding-abstract@^2.0.4":
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/@serialport/binding-abstract/-/binding-abstract-2.0.4.tgz#49e1d455f6515cae9007be686a177e5c54c548fb"
+  integrity sha512-0ZcSB6Gdxal55R/5McB0O359coXrO/GrmJlZ13cwN67gLsvmhmexCsd8b+H9CQ7dAbLih4HZSbfG9v8crrB0Gg==
+  dependencies:
+    debug "^4.1.0"
+
+"@serialport/binding-mock@^2.0.4":
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/@serialport/binding-mock/-/binding-mock-2.0.4.tgz#a84f30bac388956154e073e49c789a2c9d46ed9c"
+  integrity sha512-7c2dzVwwQIZKk+NFqC1mG0sTAwWR/GJY/4QbTn1Au3TnXhTj8nESYW/dURwsq6dGyl8+ZIPpKlRNu5Pr2tNxAQ==
+  dependencies:
+    "@serialport/binding-abstract" "^2.0.4"
+    debug "^4.1.0"
+
+"@serialport/parser-delimiter@^2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@serialport/parser-delimiter/-/parser-delimiter-2.0.2.tgz#2765b37c8227c22e1e48f51f8c84cdeb2c650988"
+  integrity sha512-zB02LahFfyZmJqak9l37vP/F1K+KCUxd1KQj35OhD1+0q/unMjVTZmsfkxFSM4gkaxP9j7+8USk+LQJ3V8U26Q==
+
+"@serialport/parser-readline@^2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@serialport/parser-readline/-/parser-readline-2.0.2.tgz#850882a8abd6df50ac538301ae53e374fd510277"
+  integrity sha512-thL26dGEHB+eINNydJmzcLLhiqcBQkF+wNTbRaYblTP/6dm7JsfjYSud7bTkN63AgE0xpe9tKXBFqc8zgJ1VKg==
+  dependencies:
+    "@serialport/parser-delimiter" "^2.0.2"
+
+"@serialport/stream@^2.0.4":
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/@serialport/stream/-/stream-2.0.4.tgz#9bc9cf9b2a8bbc3521b8f8eb74afa3c97fb09d4f"
+  integrity sha512-x1OzTGGTA/ioE/wx7sM11KVxkZr5MqZNVTQXezl6wySCl5BkQTj1nc37e99p6aRQjMxAoY8BfIDJKXWwT5LSsA==
+  dependencies:
+    "@serialport/binding-mock" "^2.0.4"
+    debug "^4.1.0"
+
 "@types/events@*":
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@types/events/-/events-1.2.0.tgz#81a6731ce4df43619e5c8c945383b3e62a89ea86"
@@ -4237,7 +4272,7 @@ electron-packager@^11.0.0:
     semver "^5.3.0"
     yargs-parser "^9.0.2"
 
-electron-prebuilt-compile@^4.0.0:
+electron-prebuilt-compile@4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/electron-prebuilt-compile/-/electron-prebuilt-compile-4.0.0.tgz#3262fe69fa343022353e4c8bd16c60e8f181c47e"
   integrity sha512-mIQSctVTH6zq0P5oBb5XI+aT6grCIXIF3ntIxx45HNoAQggMUmA9Gf1dUquila3gSHzMN6pcN7ClpEPXPvFm+w==

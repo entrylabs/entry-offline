@@ -4,7 +4,7 @@ import {
     ipcMain,
     net,
 } from 'electron';
-import ChildWindowManager from './main/ChildWindowManager';
+import HardwareWindowManager from './main/views/hardwareWindowManager';
 import MainWindowManager from './main/views/mainWindowManager';
 import AboutWindowManager from './main/views/aboutWindowManager';
 import root from 'window-or-global';
@@ -12,6 +12,8 @@ import commandLineResolve from './main/electron/commandLineResolver';
 
 import './main/ipcMainHelper';
 import './main/electron/globalShortCutRegister';
+import CommonUtils from './common/commonUtils';
+import packageJson from '../package';
 
 root.sharedObject = {
     roomId: '',
@@ -33,51 +35,58 @@ app.on('window-all-closed', function() {
 if (!app.requestSingleInstanceLock()) {
     app.quit();
 } else {
-    let mainWindow = undefined;
-    let aboutWindow = undefined;
-    let cwm;
-
-    app.on('second-instance', (event, commandLine, workingDirectory) => {
-        // 어플리케이션을 중복 실행했습니다. 주 어플리케이션 인스턴스를 활성화 합니다.
-        if (mainWindow) {
-            mainWindow.secondInstanceLoaded(commandLine);
-        }
-    });
-
-    app.on('open-file', function(event, pathToOpen) {
-        if (process.platform === 'darwin') {
-            option.file = pathToOpen;
-            if (mainWindow) {
-                mainWindow.loadProjectFromPath(pathToOpen);
-            }
-        }
-    });
-
     app.once('ready', () => {
-        mainWindow = new MainWindowManager(option);
-        cwm = new ChildWindowManager(mainWindow.window);
-        aboutWindow = new AboutWindowManager(mainWindow.window);
-        cwm.createAboutWindow();
-    });
+        const mainWindow = new MainWindowManager(option);
+        const hardwareWindow = new HardwareWindowManager(mainWindow.window);
+        const aboutWindow = new AboutWindowManager(mainWindow.window);
 
-    ipcMain.on('forceClose', () => {
-        mainWindow.close({ isForceClose : true });
-    });
-
-    ipcMain.on('reload', function(event, arg) {
-        if (event.sender.webContents.name !== 'entry') {
-            return cwm.reloadHardwareWindow();
-        }
-
-        if (event.sender.webContents) {
-            if (process.platform === 'darwin') {
-                const menu = Menu.buildFromTemplate([]);
-                Menu.setApplicationMenu(menu);
-            } else {
-                mainWindow.setMenu(null);
+        app.on('second-instance', (event, commandLine, workingDirectory) => {
+            // 어플리케이션을 중복 실행했습니다. 주 어플리케이션 인스턴스를 활성화 합니다.
+            if (mainWindow) {
+                mainWindow.secondInstanceLoaded(commandLine);
             }
-            event.sender.webContents.reload();
-        }
+        });
+
+        app.on('open-file', function(event, pathToOpen) {
+            if (process.platform === 'darwin') {
+                option.file = pathToOpen;
+                if (mainWindow) {
+                    mainWindow.loadProjectFromPath(pathToOpen);
+                }
+            }
+        });
+
+        ipcMain.on('forceClose', () => {
+            mainWindow.close({ isForceClose : true });
+        });
+
+        ipcMain.on('reload', function(event, arg) {
+            if (event.sender.webContents.name !== 'entry') {
+                return hardwareWindow.reloadHardwareWindow();
+            }
+
+            if (event.sender.webContents) {
+                if (process.platform === 'darwin') {
+                    const menu = Menu.buildFromTemplate([]);
+                    Menu.setApplicationMenu(menu);
+                } else {
+                    mainWindow.setMenu(null);
+                }
+                event.sender.webContents.reload();
+            }
+        });
+
+        ipcMain.on('openHardwareWindow', function(event, arg) {
+            hardwareWindow.openHardwareWindow();
+        });
+
+        ipcMain.on('openAboutWindow', function(event, arg) {
+            aboutWindow.openAboutWindow();
+        });
+
+        ipcMain.on('closeAboutWindow', function(event, arg) {
+            aboutWindow.closeAboutWindow();
+        });
     });
 
     ipcMain.on('roomId', function(event, arg) {
@@ -94,16 +103,10 @@ if (!app.requestSingleInstanceLock()) {
         }
     });
 
-    ipcMain.on('openHardware', function(event, arg) {
-        cwm.openHardwareWindow();
-    });
-
-    ipcMain.on('openAboutWindow', function(event, arg) {
-        aboutWindow.openAboutWindow();
-    });
-
-    ipcMain.on('closeAboutWindow', function(event, arg) {
-        aboutWindow.closeAboutWindow();
+    ipcMain.on('checkVersion', (event, lastCheckVersion) => {
+        const version = CommonUtils.getPaddedVersion(packageJson.version);
+        const lastVersion = CommonUtils.getPaddedVersion(lastCheckVersion);
+        event.sender.send('checkVersion', lastVersion > version);
     });
 
     ipcMain.on('checkUpdate', ({ sender }, msg) => {

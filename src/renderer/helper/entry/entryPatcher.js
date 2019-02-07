@@ -76,21 +76,16 @@ export default function() {
         });
     };
 
-    // Entry.HW.prototype.downloadConnector = function() {
-    //     remote.getGlobal('sharedObject').roomId = [
-    //         localStorage.getItem('entryhwRoomId'),
-    //     ];
-    //     Entry.plugin.openHardwarePage();
-    //     Entry.hw.initSocket();
-    // };
-    //
-    // Entry.HW.prototype.openHardwareProgram = function() {
-    //     remote.getGlobal('sharedObject').roomId = [
-    //         localStorage.getItem('entryhwRoomId'),
-    //     ];
-    //     Entry.plugin.openHardwarePage();
-    //     Entry.hw.initSocket();
-    // };
+    const openHardwarePage = function() {
+        RendererUtils.getSharedObject().roomId = [
+            localStorage.getItem('entryhwRoomId'),
+        ];
+        IpcRendererHelper.openHardwarePage();
+        Entry.hw.initSocket();
+    };
+
+    Entry.HW.prototype.downloadConnector = openHardwarePage;
+    Entry.HW.prototype.openHardwareProgram = openHardwarePage;
 
     Entry.HW.prototype.downloadGuide = function() {
         if (root.EntryStatic.isPracticalCourse) {

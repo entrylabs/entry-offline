@@ -4,10 +4,6 @@ import MainUtils from '../mainUtils';
 import path from 'path';
 
 export default class {
-    get webContents() {
-        return this.mainWindow.webContents;
-    }
-
     get window() {
         return this.mainWindow;
     }
