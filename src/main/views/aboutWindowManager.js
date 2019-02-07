@@ -2,9 +2,13 @@ import { BrowserWindow } from "electron";
 import path from 'path';
 
 export default class {
-    static createAboutWindow(parentWindow) {
+    constructor(parentWindow) {
+        this.parentWindow = parentWindow;
+        this.createAboutWindow();
+    }
+    createAboutWindow() {
         this.aboutWindow = new BrowserWindow({
-            parent: parentWindow,
+            parent: this.parentWindow,
             width: 380,
             height: 290,
             resizable: false,
@@ -29,15 +33,15 @@ export default class {
         )}`);
     }
 
-    static openAboutWindow(parentWindow) {
+    openAboutWindow() {
         if (!this.aboutWindow) {
-            this.createAboutWindow(parentWindow);
+            this.createAboutWindow();
         }
 
         this.aboutWindow.show();
     }
 
-    static closeAboutWindow() {
+    closeAboutWindow() {
         if (this.aboutWindow) {
             this.aboutWindow.hide();
         }

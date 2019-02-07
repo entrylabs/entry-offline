@@ -31,7 +31,6 @@ class IpcMainHelper {
         ipcMain.on('saveExcel', this.saveExcel.bind(this));
         ipcMain.on('writeFile', this.writeFile.bind(this));
         ipcMain.on('quit', this.quitApplication.bind(this));
-        ipcMain.on('openAboutPage', this.openAboutPage.bind(this));
         ipcMain.on('checkVersion', this.checkVersion.bind(this));
     }
 
@@ -216,10 +215,6 @@ class IpcMainHelper {
 
     quitApplication(event) {
         app.quit();
-    }
-
-    openAboutPage(event, parentWindow) {
-        AboutWindowManager.openAboutWindow(parentWindow);
     }
 
     checkVersion(event, lastCheckVersion) {

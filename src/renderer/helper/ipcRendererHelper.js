@@ -155,8 +155,7 @@ export default class {
         ipcRenderer.send('quit');
     }
 
-    static openAboutPage(currentWindow) {
-        // ipcRenderer.send('openAboutPage', currentWindow);
+    static openAboutPage() {
         ipcRenderer.send('openAboutWindow');
     }
 }
