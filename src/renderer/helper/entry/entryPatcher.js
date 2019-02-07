@@ -67,7 +67,7 @@ export default function() {
                             topBlock.view.getDataUrl()
                                 .then(function(data) {
                                     const savePath = `${dirPath[0]}${Constants.sep}${i}${'.png'}`;
-                                    RendererUtils.writeImage(data.src, savePath);
+                                    RendererUtils.saveBlockImage(data.src, savePath);
                                 });
                         })(++index);
                         /* eslint-enable */

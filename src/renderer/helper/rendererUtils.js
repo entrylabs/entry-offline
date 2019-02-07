@@ -138,7 +138,7 @@ export default class {
      * @param data buffer 화 되지 않은 엘리먼트의 src
      * @param filePath 저장할 위치
      */
-    static writeImage(data, filePath) {
+    static saveBlockImage(data, filePath) {
         const buffer = Buffer.from(
             data.replace(/^data:image\/(png|gif|jpeg);base64,/, ''), 'base64'
         );
