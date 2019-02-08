@@ -207,4 +207,58 @@ export default class {
 
         Entry.container.addObject(object, 0);
     }
+
+    /**
+     * 그림판 영역에서 편집 혹은 신규생성된 이미지를 저장한다.
+     * 편집인 경우 해당 오브젝트 > 이미지의 이전 이미지가 존재하는지 확인하고
+     * 기본 이미지가 아닌 경우 삭제한다.
+     * @param data
+     * @property file 오브젝트 및 현재 행동 메타데이터.
+     * @property image image src. base64 이미지이다.
+     */
+    static async saveCanvasImage(data) {
+        const { file, image } = data;
+        const { id, name, objectId, mode } = file;
+
+        try {
+            const croppedImageData = await RendererUtils.cropImageFromCanvas(image);
+            const imageBuffer = Buffer.from(
+                croppedImageData.replace(/^data:image\/(png|gif|jpeg);base64,/, ''), 'base64'
+            );
+
+            // 만약 이전 파일명이 존재하는 경우 삭제처리를 위함
+            file.prevFilename = Entry.container
+                .getObject(objectId)
+                .getPicture(id)
+                .filename;
+
+            const newPicture = await IpcRendererHelper.importPictureFromCanvas({ file, image: imageBuffer });
+            // 엔트리에 이미지 추가
+
+            if (mode === 'new') {
+                newPicture.name = RendererUtils.getLang('Workspace.new_picture');
+                Entry.playground.addPicture(newPicture, true);
+            } else {
+                newPicture.id = id;
+                newPicture.name = name;
+                Entry.playground.setPicture(newPicture);
+            }
+
+            // 엔트리 워크스페이스 내 이미지 캐싱
+            const imageElement = new Image();
+            imageElement.src = newPicture.fileurl;
+            imageElement.onload = () => {
+                const entityId = Entry.playground.object.entity.id;
+                const painterFileId = Entry.playground.painter.file.id;
+                const cacheId = `${newPicture.id}${entityId}`;
+
+                Entry.container.cachePicture(cacheId, imageElement);
+                if (painterFileId === newPicture.id) {
+                    Entry.playground.selectPicture(newPicture);
+                }
+            };
+        } catch (e) {
+            console.error(e);
+        }
+    }
 }

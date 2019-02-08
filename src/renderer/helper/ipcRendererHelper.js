@@ -77,6 +77,15 @@ export default class {
         });
     }
 
+    static importPictureFromCanvas(data) {
+        return new Promise((resolve) => {
+            ipcRenderer.send('importPictureFromCanvas', data);
+            ipcRenderer.once('importPictureFromCanvas', (e, object) => {
+                resolve(object);
+            });
+        });
+    }
+
     /**
      * 오브젝트를 eo 파일로 만들어서 외부로 저장한다.
      * 이 이벤트는 일반적으로 entryUtils 를 거쳐서 발생된다.

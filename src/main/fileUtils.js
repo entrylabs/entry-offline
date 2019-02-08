@@ -5,6 +5,7 @@ import fstream from 'fstream';
 import archiver from 'archiver';
 import zlib from 'zlib';
 import decompress from 'decompress';
+import { nativeImage } from 'electron';
 
 /**
  * 파일 및 디렉토리의 생성 / 삭제와 압축등 IO 와 관련된 일을 담당한다.
@@ -112,6 +113,25 @@ export default class {
     }
 
     /**
+     * 이미지 버퍼를 섬네일용으로 리사이징한다.
+     * 섬네일은 width 96px 기준으로, png 파일 확장자를 가진다.
+     * @param {Buffer||string}imageData 원본 이미지 버퍼 혹은 원본 이미지 주소
+     */
+    static createThumbnailBuffer(imageData) {
+        let imageResizeStrategy = nativeImage.createFromPath;
+        if (imageData instanceof Buffer) {
+            imageResizeStrategy = nativeImage.createFromBuffer;
+        }
+
+        return imageResizeStrategy(imageData)
+            .resize({
+                width: 96,
+                quality: 'better',
+            })
+            .toPNG();
+    }
+
+    /**
      * 파일을 생성한다.
      * @param contents 작성할 내용
      * @param {string}filePath 파일 경로
@@ -125,6 +145,25 @@ export default class {
                     return reject(err);
                 }
                 resolve();
+            });
+        });
+    }
+
+    /**
+     * 파일을 삭제한다.
+     * 삭제상 에러가 발생한 경우는 로그만 출력 후 종료된다.
+     * 삭제가 되지 않은 케이스는 크리티컬하지 않아서이다.
+     * @param filePath
+     */
+    static deleteFile(filePath) {
+        return new Promise((resolve) => {
+            fs.unlink(filePath, (err) => {
+                if (err) {
+                    console.error(err);
+                    resolve();
+                } else {
+                    resolve();
+                }
             });
         });
     }

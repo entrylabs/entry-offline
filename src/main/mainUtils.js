@@ -1,4 +1,4 @@
-import { app, BrowserWindow, nativeImage } from 'electron';
+import { app, BrowserWindow } from 'electron';
 import fstream from 'fstream';
 import archiver from 'archiver';
 import fs from 'fs';
@@ -7,6 +7,7 @@ import path from 'path';
 import xl from 'excel4node';
 import imageSizeOf from 'image-size';
 import soundDuration from 'mp3-duration';
+import { performance } from 'perf_hooks';
 import root from 'window-or-global';
 import stream from 'stream';
 import tar from 'tar';
@@ -14,7 +15,6 @@ import crypto from 'crypto';
 import FileUtils from './fileUtils';
 import Constants from './constants';
 import CommonUtils from '../common/commonUtils';
-
 /**
  * Main Process 에서 발생하는 로직들을 담당한다.
  * ipcMain 을 import 하여 사용하지 않는다. renderer Process 간 이벤트 관리는 ipcMainHelper 가 한다.
@@ -476,18 +476,15 @@ export default class MainUtils {
         const newThumbnailPath = path.join(Constants.tempThumbnailPath(newFileId), newFileName);
 
         await FileUtils.copyFile(filePath, newPicturePath);
+
+        // 섬네일 이미지가 이미 있는 경우는 해당 이미지를 가져다 쓰고, 없는 경우 원본을 리사이징
         if (thumbnailPath) {
             await FileUtils.copyFile(thumbnailPath, newThumbnailPath);
         } else {
-            // 이미지를 리사이즈 한다.
-            // 카피파일한다
-            const thumbnailBuffer = nativeImage.createFromPath(filePath)
-                .resize({
-                    width: 96,
-                    quality: 'better',
-                })
-                .toPNG();
-            await FileUtils.writeFile(thumbnailBuffer, newThumbnailPath);
+            await FileUtils.writeFile(
+                FileUtils.createThumbnailBuffer(filePath),
+                newThumbnailPath,
+            );
         }
 
         return {
@@ -518,6 +515,54 @@ export default class MainUtils {
 
             return picture;
         }));
+    }
+
+    static importPictureFromCanvas(data) {
+        return new Promise(async(resolve, reject) => {
+            const { file,  image } = data;
+            const { prevFilename, mode } = file;
+            let pictureId = MainUtils.createFileId();
+
+            try {
+                if (prevFilename && mode === 'edit') {
+                    pictureId = prevFilename;
+                }
+
+                const imagePath = path.join(Constants.tempImagePath(pictureId), `${pictureId}.png`);
+                const thumbnailPath = path.join(Constants.tempThumbnailPath(pictureId), `${pictureId}.png`);
+
+                // 편집된 이미지를 저장한다
+                await Promise.all([
+                    FileUtils.writeFile(image, imagePath),
+                    FileUtils.writeFile(
+                        FileUtils.createThumbnailBuffer(image),
+                        thumbnailPath),
+                ]);
+
+                // 만약 이전 데이터가 있다면 데이터를 삭제한다.
+                // if (prevFilename) {
+                //     console.log('delete prevImageFile ', prevFilename);
+                //     const prevImagePath = Constants.tempImagePath(prevFilename);
+                //     const prevThumbnailPath = Constants.tempThumbnailPath(prevFilename);
+                //
+                //     await Promise.all([
+                //         FileUtils.deleteFile(prevImagePath),
+                //         FileUtils.deleteFile(prevThumbnailPath),
+                //     ]);
+                // }
+
+                //TODO 빈 폴더인지 검사한 후, 삭제하기 (앞 4자리가 같은 다른 파일이 있을 수 있음)
+                resolve({
+                    type: 'user',
+                    name: pictureId,
+                    filename: pictureId,
+                    fileurl: `${imagePath.replace(/\\/gi, '/')}?t=${performance.now()}`,
+                    dimension: imageSizeOf(imagePath),
+                });
+            } catch (e) {
+                reject(e);
+            }
+        });
     }
 
     static importSoundsToTemp(filePaths) {

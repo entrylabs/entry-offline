@@ -8,6 +8,7 @@ import { FETCH_POPUP_ITEMS, UPDATE_PROJECT, WS_MODE } from '../actions/types';
 import _includes from 'lodash/includes';
 import _debounce from 'lodash/debounce';
 import entryPatch from '../helper/entry/entryPatcher';
+import root from 'window-or-global';
 import { ModalProgress } from 'entry-tool/component';
 import ModalHelper from '../helper/entry/entryModalHelper';
 import RendererUtils from '../helper/rendererUtils';
@@ -90,8 +91,8 @@ class Workspace extends Component {
         addEventListener('saveAsWorkspace', () => {
             this.handleSaveAction('saveAs');
         });
-        addEventListener('saveCanvasImage', () => {
-            console.log('saveCanvasImage');
+        addEventListener('saveCanvasImage', (data) => {
+            this.handleCanvasImageSave(data);
         });
         // exportObject
         addEventListener('exportObject', EntryUtils.exportObject);
@@ -127,6 +128,23 @@ class Workspace extends Component {
                 this,
                 this.handleChangeWorkspaceMode,
             );
+        }
+    }
+
+    async handleCanvasImageSave(data) {
+        if (this.isSavingCanvasData) {
+            root.entrylms.alert(RendererUtils.getLang('Msgs.save_canvas_alert'));
+        } else {
+            this.showModalProgress('progress', RendererUtils.getLang('Msgs.save_canvas_alert'));
+            this.isSavingCanvasData = true;
+            try {
+                await EntryUtils.saveCanvasImage(data);
+            } catch (e) {
+                console.error(e);
+            } finally {
+                this.hideModalProgress();
+                this.isSavingCanvasData = false;
+            }
         }
     }
 

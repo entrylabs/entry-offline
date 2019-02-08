@@ -145,4 +145,87 @@ export default class {
 
         IpcRendererHelper.writeFile(buffer, filePath);
     }
+
+    /**
+     * 캔버스에서 사용되지 않은 부분을 잘라낸다.
+     * @param imageData
+     * @return {*|jQuery|{}} jQuery deferred.
+     */
+    static cropImageFromCanvas(imageData) {
+        return new Promise(((resolve) => {
+            const image = new Image();
+
+            image.src = imageData;
+            image.onload = function() {
+                const canvas = document.createElement('canvas');
+                canvas.width = image.width;
+                canvas.height = image.height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(this, 0, 0, canvas.width, canvas.height);
+
+                let width = canvas.width;
+                let height = canvas.height;
+                const pix = { x: [], y: [] };
+                const imageData = ctx.getImageData(0,0, width, height);
+
+                let x;
+                let y;
+                let index;
+
+                for (y = 0; y < height; y++) {
+                    for (x = 0; x < width; x++) {
+                        index = (y * width + x) * 4;
+                        if (imageData.data[index + 3] > 0) {
+                            pix.x.push(x);
+                            pix.y.push(y);
+                        }
+                    }
+                }
+                pix.x.sort(function(a, b) {
+                    return a - b;
+                });
+                pix.y.sort(function(a, b) {
+                    return a - b;
+                });
+                const n = pix.x.length - 1;
+
+                let minx = 0;
+                let miny = 0;
+                let maxx = 0;
+                let maxy = 0;
+
+                if (pix.x.length > 0) {
+                    minx = pix.x[0];
+                    maxx = pix.x[n];
+                    width = maxx - minx;
+                    if (width % 2 !== 0) {
+                        width += 1;
+                    }
+                } else {
+                    width = 1;
+                    minx = 0;
+                }
+
+                if (pix.y.length > 0) {
+                    miny = pix.y[0];
+                    maxy = pix.y[n];
+                    height = maxy - miny;
+                    if (height % 2 !== 0) {
+                        height += 1;
+                    }
+                } else {
+                    height = 1;
+                    miny = 0;
+                }
+
+                const cut = ctx.getImageData(minx, miny, width, height);
+
+                canvas.width = width;
+                canvas.height = height;
+                ctx.putImageData(cut, 0, 0);
+
+                resolve(canvas.toDataURL('image/png'));
+            };
+        }));
+    }
 }

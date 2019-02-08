@@ -24,6 +24,7 @@ class IpcMainHelper {
         ipcMain.on('importObjects', this.importObjects.bind(this));
         ipcMain.on('importPictures', this.importPictures.bind(this));
         ipcMain.on('importPicturesFromResource', this.importPicturesFromResource.bind(this));
+        ipcMain.on('importPictureFromCanvas', this.importPictureFromCanvas.bind(this));
         ipcMain.on('importSounds', this.importSounds.bind(this));
         ipcMain.on('importSoundsFromResource', this.importSoundsFromResource.bind(this));
         ipcMain.on('staticDownload', this.staticDownload.bind(this));
@@ -100,6 +101,16 @@ class IpcMainHelper {
         MainUtils.importPicturesFromResource(pictures)
             .then((object) => {
                 event.sender.send('importPicturesFromResource', object);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
+    importPictureFromCanvas(event, data) {
+        MainUtils.importPictureFromCanvas(data)
+            .then((object) => {
+                event.sender.send('importPictureFromCanvas', object);
             })
             .catch((err) => {
                 console.log(err);
