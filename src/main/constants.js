@@ -4,7 +4,7 @@ import path from 'path';
 export default class {
     static get replaceStrategy() {
         return {
-            fromExternal(fileUrl) {
+            fromExternal: (fileUrl) => {
                 let result = fileUrl;
                 if (result.startsWith('.')) {
                     result = result.replace(/\./, 'renderer');
