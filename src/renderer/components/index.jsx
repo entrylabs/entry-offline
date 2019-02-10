@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import Workspace from './workspace';
+import ModeSelectModal from './modeSelectModal';
 import './index.scss';
 
 const Script = ({ children }) => (
@@ -15,9 +16,13 @@ class Index extends PureComponent {
         console.log(this.props);
         return (
             <div>
-                <div className={`ws ${mode === 'workspace' ? '' : 'practical_course_mode'}`}>
-                    <Workspace />
-                </div>
+                {mode ? (
+                    <div className={`ws ${mode === 'workspace' ? '' : 'practical_course_mode'}`}>
+                        <Workspace />
+                    </div>
+                ) : (
+                    <ModeSelectModal />
+                )}
                 <Script>
                     {/* eslint-disable id-length, no-undef, no-param-reassign */
                         () => {

@@ -1,0 +1,88 @@
+
+.workspaceModeSelect {
+  width: 100vw;
+  height: 100vh;
+  background-image: url(../renderer/resources/images/modeSelect/background.png);
+  background-repeat: no-repeat;
+  background-position: 50%;
+  background-color: #d8d8d8;
+  display: flex;
+}
+
+.workspaceModeSelect .contentArea {
+  margin: auto;
+  border-radius: 10px 10px 7px 7px;
+  width: 700px;
+  height: 411px !important;
+  background-color: #fff;
+  box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.25);
+}
+
+.workspaceModeSelect .workspaceModeSelectTitle {
+  padding-left: 26px;
+  font-size: 18px;
+  line-height: 57px;
+  color: #fff;
+  height: 57px;
+  border-radius: 7px 7px 0 0;
+  background-color: #2a7def;
+}
+
+.workspaceModeSelect .workspaceModeSelectArea {
+  display: flex;
+  justify-content: space-between;
+  padding: 36px 59px 15px;
+}
+
+.workspaceModeSelect .workspaceModeSelectBox {
+  width: 277px;
+  height: 212px;
+  border: solid 1px #d6d6d6;
+  color: #3b3b3b;
+  text-align: center;
+  cursor: pointer;
+}
+
+.workspaceModeSelect .workspaceModeSelectBox.active {
+  background-color: #7b57ff;
+  color: #fff;
+}
+
+.workspaceModeSelect .workspaceModeSelectBox .modeTitle {
+  font-size: 20px;
+  margin: 26px 0 16px;
+}
+
+.workspaceModeSelect .workspaceModeSelectBox .modeButton {
+  width: 54px;
+  height: 54px;
+  margin: 24px auto;
+  background-image: url(../renderer/resources/images/modeSelect/btn_check_off.png);
+  background-repeat: no-repeat;
+}
+
+.workspaceModeSelect .workspaceModeSelectBox.active .modeButton {
+  width: 52px;
+  height: 52px;
+  background-image: url(../renderer/resources/images/modeSelect/btn_check_on.png);
+}
+
+.workspaceModeSelect .workspaceModeSelectDivideLine {
+  width: 624px;
+  height: 1px;
+  border-top: solid 1px #d6d6d6;
+  margin: auto auto 15px;
+}
+
+.workspaceModeSelect .workspaceModeSelectCloseBtn {
+  cursor: pointer;
+  width: 118px;
+  height: 45px;
+  margin: auto;
+  text-align: center;
+  line-height: 45px;
+  color: #fff;
+  background-color: #2a7def;
+  border-radius: 5px;
+  font-size: 16px;
+}

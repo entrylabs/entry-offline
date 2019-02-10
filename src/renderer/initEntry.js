@@ -8,7 +8,7 @@ import ImportToggleHelper from './helper/importToggleHelper';
 
 // Lang, EntryStatic
 const lastLang = StorageManager.getPersistLangType() || 'ko';
-const lastWSMode = StorageManager.getPersistWorkspaceMode() || 'workspace';
+const lastWSMode = StorageManager.getPersistWorkspaceMode();
 
 (async() => {
     await ImportToggleHelper.changeLang(lastLang);

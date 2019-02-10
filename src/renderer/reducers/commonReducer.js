@@ -2,7 +2,7 @@ import { CHANGE_LANGUAGE, PROJECT_DATA, WS_MODE } from '../actions/types';
 
 const defaultState = {
     lang: 'ko',
-    mode: 'workspace',
+    mode: undefined,
 };
 
 export default (state = defaultState, action) => {
