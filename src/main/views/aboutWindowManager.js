@@ -25,10 +25,6 @@ export default class {
 
         this.aboutWindow.loadURL(`file:///${path.resolve(
             __dirname,
-            '..',
-            '..',
-            'renderer',
-            'views',
             'about.html',
         )}`);
     }
