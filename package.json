@@ -1,34 +1,96 @@
 {
-    "name": "new-entry-offline",
-    "productName": "new-entry-offline",
-    "version": "1.0.0",
-    "description": "My Electron application description",
+    "private": true,
+    "productName": "entry",
+    "name": "entry-offline",
+    "version": "2.0.0",
+    "description": "Entry for offline",
     "main": "src/main.js",
     "scripts": {
-        "start": "electron-forge start",
-        "debug": "electron-forge start --inspect-electron",
+        "start": "electron .",
+        "debug": "electron --inspect .",
         "build": "webpack",
         "watch": "webpack -w",
-        "lint": "eslint src --color"
+        "lint": "eslint src --color",
+        "rebuild": "electron-rebuild -v 4.0.0",
+        "pack": "electron-builder --dir",
+        "dist": "electron-builder",
+        "build:win32": "electron-packager --arch ia32",
+        "build:win64": "electron-packager ./ --asar --icon build/icon --platform win32 --arch x64"
     },
-    "keywords": [],
-    "author": "USER",
+    "keywords": [
+        "entry",
+        "entry-offline"
+    ],
+    "build": {
+        "mac": {
+            "target": "dmg",
+            "category": "public.app-category.education",
+            "extendInfo": {
+                "URL Types": [
+                    {
+                        "URL Identifie": "org.playentry.entryoffline",
+                        "URL Schemes": [
+                            "entryoffline",
+                            "entry"
+                        ]
+                    }
+                ],
+                "CFBundleURLTypes": [
+                    {
+                        "CFBundleURLName": "org.playentry.entryoffline",
+                        "CFBundleURLSchemes": [
+                            "entryoffline",
+                            "entry"
+                        ]
+                    }
+                ]
+            }
+        },
+        "dmg": {
+            "icon": "build/icon.icns",
+            "iconSize": 80,
+            "background": "build/background.png",
+            "contents": [
+                {
+                    "x": 240,
+                    "y": 120,
+                    "type": "file",
+                    "path": "out/Entry-darwin-x64/Entry.app"
+                },
+                {
+                    "x": 240,
+                    "y": 250,
+                    "type": "file",
+                    "path": "src/README.md"
+                },
+                {
+                    "x": 240,
+                    "y": 380,
+                    "type": "link",
+                    "path": "/Applications"
+                }
+            ]
+        },
+        "win": {
+            "target": "dir"
+        },
+        "electronCompile": false,
+        "asar": true,
+        "appId": "org.playentry.entry",
+        "productName": "Entry"
+    },
+    "author": "entrylabs",
     "license": "MIT",
-    "config": {
-        "forge": "./forge.config.js"
-    },
     "dependencies": {
         "@babel/runtime": "^7.2.0",
         "@entrylabs/bindings": "^1.0.0",
         "@serialport/stream": "^2.0.4",
         "archiver": "^3.0.0",
+        "babel-core": "7.0.0-bridge.0",
         "bignumber.js": "^8.0.1",
         "debug": "^4.1.1",
         "decompress": "^4.2.0",
-        "electron-compile": "^6.4.4",
-        "electron-squirrel-startup": "^1.0.0",
-        "electron-store": "^2.0.0",
-        "entry-tool": "^1.0.4",
+        "entry-tool": "^1.0.5",
         "excel4node": "^1.7.0",
         "fs-extra": "^7.0.1",
         "fstream": "^1.0.11",
@@ -37,9 +99,15 @@
         "jszip": "^3.1.5",
         "lodash": "^4.17.11",
         "mime-types": "^2.1.21",
+        "mp3-duration": "^1.1.0",
         "object.assign": "^4.1.0",
+        "react": "^16.7.0",
+        "react-dom": "^16.7.0",
         "react-redux": "^6.0.0",
-        "redux-persist-electron-storage": "^2.0.0",
+        "redux": "^4.0.1",
+        "redux-electron-store": "^0.6.4",
+        "redux-persist": "^5.10.0",
+        "redux-saga": "^0.16.2",
         "rimraf": "^2.6.3",
         "socket.io": "1.7.3",
         "socket.io-client": "1.7.3",
@@ -61,8 +129,9 @@
         "babel-preset-env": "^1.7.0",
         "babel-preset-react": "^6.24.1",
         "css-loader": "^2.1.0",
-        "electron-forge": "^5.2.3",
-        "electron-prebuilt-compile": "4.0.0",
+        "electron": "^4.0.4",
+        "electron-builder": "^20.38.5",
+        "electron-rebuild": "^1.8.4",
         "eslint": "^5.12.0",
         "eslint-config-react-app": "^3.0.6",
         "eslint-plugin-flowtype": "^3.2.0",
@@ -71,15 +140,8 @@
         "eslint-plugin-react": "^7.12.3",
         "extract-text-webpack-plugin": "^4.0.0-beta.0",
         "less-loader": "^4.1.0",
-        "mp3-duration": "^1.1.0",
         "node-sass": "^4.11.0",
         "prettier": "^1.15.3",
-        "react": "^16.7.0",
-        "react-dom": "^16.7.0",
-        "redux": "^4.0.1",
-        "redux-electron-store": "^0.6.4",
-        "redux-persist": "^5.10.0",
-        "redux-saga": "^0.16.2",
         "sass-loader": "^7.1.0",
         "style-loader": "^0.23.1",
         "url-loader": "^1.1.2",

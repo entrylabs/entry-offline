@@ -4,17 +4,20 @@
       "application/javascript": {
         "presets": [
           [
-            "env",
+            "@babel/preset-env",
+            "@babel/preset-react",
             {
               "targets": {
                 "electron": 4
               }
             }
-          ],
-          "react"
+          ]
         ],
         "plugins": [
-          "transform-async-to-generator"
+          "@babel/plugin-syntax-dynamic-import",
+          "@babel/plugin-transform-runtime",
+          "@babel/plugin-proposal-class-properties",
+          "async-import"
         ],
         "sourceMaps": "inline"
       }
@@ -23,17 +26,20 @@
       "application/javascript": {
         "presets": [
           [
-            "env",
+            "@babel/preset-env",
+            "@babel/preset-react",
             {
               "targets": {
                 "electron": 4
               }
             }
-          ],
-          "react"
+          ]
         ],
         "plugins": [
-          "transform-async-to-generator"
+          "@babel/plugin-syntax-dynamic-import",
+          "@babel/plugin-transform-runtime",
+          "@babel/plugin-proposal-class-properties",
+          "async-import"
         ],
         "sourceMaps": "none"
       }
