@@ -1,7 +1,7 @@
-import { BrowserWindow } from "electron";
-import path from 'path';
+const { BrowserWindow } = require('electron');
+const path = require('path');
 
-export default class {
+module.exports = class {
     constructor(parentWindow) {
         this.parentWindow = parentWindow;
         this.createAboutWindow();

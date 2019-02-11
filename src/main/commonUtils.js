@@ -51,22 +51,6 @@ class CommonUtils {
         return `${filename}${extension}`;
     }
 
-    /**
-     * 엔트리 오브젝트에서 오브젝트명, 확장자를 호출한다.
-     * @param entryObject 엔트리 사운드, 이미지 오브젝트
-     * @property name 이름이 없는 경우 강제로 nonamed 출력
-     * @property ext|extension 확장자. 없는 경우 defaultExtension 으로 대체
-     * @param defaultExtension 확장자가 없는 경우 대체할 기본확장자
-     */
-    static getObjectNameWithExtension(entryObject, defaultExtension) {
-        const filename = entryObject.name || 'nonamed';
-        const extension = CommonUtils.sanitizeExtension(
-            entryObject.ext || entryObject.extension || defaultExtension
-        );
-
-        return `${filename}${extension}`;
-    }
-
     static lpad(str, len) {
         const strLen = str.length;
         let paddedString = str;
@@ -94,4 +78,4 @@ class CommonUtils {
     }
 }
 
-export default CommonUtils;
+module.exports = CommonUtils;

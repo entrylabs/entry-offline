@@ -228,4 +228,19 @@ export default class {
             };
         }));
     }
+
+    /**
+     * 확장자 앞에 . 을 붙여준다. 확장자가 없는 경우 defaultExtension 을 반환한다.
+     *
+     * @param {string}extension 확장자
+     * @param {string=}defaultExtension extension 이 falsy 인 경우 반환
+     * @return {string} . 이 붙은 확장자
+     */
+    static sanitizeExtension(extension, defaultExtension) {
+        let sanitizedExt = extension || defaultExtension;
+        if (!sanitizedExt.startsWith('.')) {
+            sanitizedExt = `.${sanitizedExt}`;
+        }
+        return sanitizedExt;
+    }
 }

@@ -1,10 +1,8 @@
-import { app, ipcMain } from 'electron';
-import path from 'path';
-import MainUtils from './MainUtils';
-import Constants from './constants';
-import CommonUtils from '../common/commonUtils';
-import AboutWindowManager from "./views/aboutWindowManager";
-import packageJson from "../../package";
+const { app, ipcMain } = require('electron');
+const path = require('path');
+const MainUtils = require('./MainUtils');
+const Constants = require('./constants');
+const CommonUtils = require('./commonUtils');
 
 /**
  * ipc process 의 이벤트를 등록한다.
@@ -229,4 +227,4 @@ class IpcMainHelper {
 }
 
 const helper = new IpcMainHelper();
-export default helper;
+module.exports = helper;

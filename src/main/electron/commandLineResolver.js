@@ -1,4 +1,4 @@
-export default function(args) {
+module.exports = function(args) {
     const option = {
         file: null,
         help: null,

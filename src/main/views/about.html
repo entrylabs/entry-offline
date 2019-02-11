@@ -35,7 +35,7 @@
 
 <script>
     window.$ = window.jQuery = require('jquery');
-    import { shell, remote, ipcRenderer } from 'electron';
+    const { shell, remote, ipcRenderer } = require('electron');
 
 	(function () {
 		const { app } = remote;

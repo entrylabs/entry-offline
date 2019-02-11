@@ -1,25 +1,25 @@
-import { app, BrowserWindow } from 'electron';
-import fstream from 'fstream';
-import archiver from 'archiver';
-import fs from 'fs';
-import zlib from 'zlib';
-import path from 'path';
-import xl from 'excel4node';
-import imageSizeOf from 'image-size';
-import soundDuration from 'mp3-duration';
-import { performance } from 'perf_hooks';
-import root from 'window-or-global';
-import stream from 'stream';
-import tar from 'tar';
-import crypto from 'crypto';
-import FileUtils from './fileUtils';
-import Constants from './constants';
-import CommonUtils from '../common/commonUtils';
+const { app, BrowserWindow } = require('electron');
+const fstream = require('fstream');
+const archiver = require('archiver');
+const fs = require('fs');
+const zlib = require('zlib');
+const path = require('path');
+const xl = require('excel4node');
+const imageSizeOf = require('image-size');
+const soundDuration = require('mp3-duration');
+const { performance } = require('perf_hooks');
+const root = require('window-or-global');
+const stream = require('stream');
+const tar = require('tar');
+const crypto = require('crypto');
+const FileUtils = require('./fileUtils');
+const Constants = require('./constants');
+const CommonUtils = require('./commonUtils');
 /**
  * Main Process 에서 발생하는 로직들을 담당한다.
  * ipcMain 을 import 하여 사용하지 않는다. renderer Process 간 이벤트 관리는 ipcMainHelper 가 한다.
  */
-export default class MainUtils {
+module.exports = class MainUtils {
     /**
      * 16진수의 랜덤값을 설정한다. 이 값은 겹치지 않은 신규 파일명을 생성하는데 쓴다.
      * @return {string}

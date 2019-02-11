@@ -2,7 +2,7 @@ import root from 'window-or-global';
 import Constants from '../constants';
 import RendererUtils from '../rendererUtils';
 import IpcRendererHelper from '../ipcRendererHelper';
-import CommonUtils from '../../../common/commonUtils';
+import EntryUtils from './entryUtils';
 
 /**
  * 엔트리 내 오프라인용으로 몽키패치가 필요한 경우 이 함수에서 처리한다.
@@ -15,7 +15,7 @@ export default function() {
 
     Entry.playground.downloadPicture = function(pictureId) {
         const picture = Entry.playground.object.getPicture(pictureId);
-        const saveFileName = CommonUtils.getObjectNameWithExtension(picture, 'png');
+        const saveFileName = EntryUtils.getObjectNameWithExtension(picture, 'png');
 
         RendererUtils.showSaveDialog({
             title: RendererUtils.getLang('Workspace.file_save'),
@@ -33,7 +33,7 @@ export default function() {
 
     Entry.playground.downloadSound = function(soundId) {
         const sound = Entry.playground.object.getSound(soundId);
-        const saveFileName = CommonUtils.getObjectNameWithExtension(sound, 'mp3');
+        const saveFileName = EntryUtils.getObjectNameWithExtension(sound, 'mp3');
 
         RendererUtils.showSaveDialog({
             title: RendererUtils.getLang('Workspace.file_save'),

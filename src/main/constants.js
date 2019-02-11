@@ -1,7 +1,7 @@
-import { app } from 'electron';
-import path from 'path';
+const { app } = require('electron');
+const path = require('path');
 
-export default class {
+module.exports =  class {
     static get replaceStrategy() {
         return {
             fromExternal: (fileUrl) => {

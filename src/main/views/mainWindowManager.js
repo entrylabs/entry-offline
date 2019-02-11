@@ -1,9 +1,9 @@
-import { app, BrowserWindow, dialog } from 'electron';
-import root from 'window-or-global';
-import MainUtils from '../mainUtils';
-import path from 'path';
+const { app, BrowserWindow, dialog } = require('electron');
+const root = require('window-or-global');
+const MainUtils = require('../mainUtils');
+const path = require('path');
 
-export default class {
+module.exports = class {
     get window() {
         return this.mainWindow;
     }

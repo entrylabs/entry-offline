@@ -1,16 +1,16 @@
-import path from 'path';
-import fs from 'fs';
-import rimraf from 'rimraf';
-import fstream from 'fstream';
-import archiver from 'archiver';
-import zlib from 'zlib';
-import decompress from 'decompress';
-import { nativeImage } from 'electron';
+const path = require('path');
+const fs = require('fs');
+const rimraf = require('rimraf');
+const fstream = require('fstream');
+const archiver = require('archiver');
+const zlib = require('zlib');
+const decompress = require('decompress');
+const { nativeImage } = require('electron');
 
 /**
  * 파일 및 디렉토리의 생성 / 삭제와 압축등 IO 와 관련된 일을 담당한다.
  */
-export default class {
+module.exports = class {
     /**
      * 디렉토리를 생성한다.
      * ensureDirectoryExistence 와 다른점은 target directory 의 현재 경로까지 생성한다는 점이다.
