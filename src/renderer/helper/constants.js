@@ -6,7 +6,7 @@ export default class {
     }
 
     static get resourcePath() {
-        return `renderer${this.sep}resources${this.sep}node_modules${this.sep}uploads${this.sep}`;
+        return `renderer${this.sep}resources${this.sep}uploads${this.sep}`;
     }
 
     static resourceImagePath(filename) {
