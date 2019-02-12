@@ -8,15 +8,12 @@
     "scripts": {
         "start": "electron .",
         "debug": "electron --inspect .",
-        "build": "webpack",
+        "webpack" : "webpack",
         "watch": "webpack -w",
         "lint": "eslint src --color",
-        "rebuild": "electron-rebuild -v 4.0.0",
-        "dist": "electron-builder",
-        "dist:win32": "build --arch ia32 --appOutDir=dist/win-ia32",
-        "dist:win64": "build --arch x64 --appOutDir=dist/win-x64",
-        "build:win32": "electron-packager --arch ia32",
-        "build:win64": "electron-packager ./ --asar --icon build/icon --platform win32 --arch x64"
+        "rebuild": "electron-rebuild -v 4.0.4",
+        "dist:win32": "webpack && build --arch ia32",
+        "dist:win64": "webpack && build --arch x64"
     },
     "keywords": [
         "entry",
