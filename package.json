@@ -12,45 +12,14 @@
         "watch": "webpack -w",
         "lint": "eslint src --color",
         "rebuild": "electron-rebuild -v 4.0.4",
-        "dist:win32": "webpack && build --arch ia32",
-        "dist:win64": "webpack && build --arch x64",
-        "dist:mac": "webpack && build --mac"
+        "dist:win32": "webpack && build -c --ia32",
+        "dist:win64": "webpack && build -c --x64",
+        "dist:mac": "webpack && build -c --mac"
     },
     "keywords": [
         "entry",
         "entry-offline"
     ],
-    "build": {
-        "mac": {
-            "target": "dmg",
-            "category": "public.app-category.education",
-            "extendInfo": "build/build.plist"
-        },
-        "dmg": {
-            "icon": "build/icon.icns",
-            "iconSize": 80,
-            "background": "build/background.png",
-            "contents": [
-                {
-                    "x": 240,
-                    "y": 120
-                },
-                {
-                    "x": 240,
-                    "y": 380,
-                    "type": "link",
-                    "path": "/Applications"
-                }
-            ]
-        },
-        "win": {
-            "target": "dir"
-        },
-        "electronCompile": false,
-        "asar": true,
-        "appId": "org.playentry.entry",
-        "productName": "Entry"
-    },
     "author": "entrylabs",
     "license": "MIT",
     "dependencies": {

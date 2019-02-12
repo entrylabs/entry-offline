@@ -1,0 +1,58 @@
+{
+    "mac": {
+        "target": "dmg",
+        "category": "public.app-category.education",
+        "extendInfo": {
+            "URL Types": [
+                {
+                    "URL Identifie": "org.playentry.entryoffline",
+                    "URL Schemes": [
+                        "entryoffline",
+                        "entry"
+                    ]
+                }
+            ],
+            "CFBundleURLTypes": [
+                {
+                    "CFBundleURLName": "org.playentry.entryoffline",
+                    "CFBundleURLSchemes": [
+                        "entryoffline",
+                        "entry"
+                    ]
+                }
+            ]
+        }
+    },
+    "dmg": {
+        "icon": "build/icon.icns",
+        "iconSize": 80,
+        "background": "build/background.png",
+        "contents": [
+            {
+                "x": 240,
+                "y": 120,
+                "type": "file",
+                "path": "out/Entry-darwin-x64/Entry.app"
+            },
+            {
+                "x": 240,
+                "y": 250,
+                "type": "file",
+                "path": "src/README.md"
+            },
+            {
+                "x": 240,
+                "y": 380,
+                "type": "link",
+                "path": "/Applications"
+            }
+        ]
+    },
+    "win": {
+        "target": "dir"
+    },
+    "electronCompile": false,
+    "asar": true,
+    "appId": "org.playentry.entry",
+    "productName": "Entry"
+}
