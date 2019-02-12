@@ -500,7 +500,7 @@ class EntryModalHelper {
             popup.on(eventName, func);
         });
 
-        popup.show({ type, baseUrl: './renderer/resources/node_modules' });
+        popup.show({ type, baseUrl: './renderer/resources' });
         return popup;
     }
 
@@ -585,7 +585,7 @@ EntryModalHelper.loadPopup = (type, data, props) => {
                 imageBaseUrl: './renderer/bower_components/entry-js/images/hardware/',
             },
             type: 'popup',
-            props: { type, baseUrl: './renderer/resources/node_modules' },
+            props: { type, baseUrl: './renderer/resources' },
         });
 
         return EntryModalHelper[`${type}Popup`];

@@ -1,6 +1,6 @@
 const { app, ipcMain } = require('electron');
 const path = require('path');
-const MainUtils = require('./MainUtils');
+const MainUtils = require('./mainUtils');
 const Constants = require('./constants');
 const CommonUtils = require('./commonUtils');
 

@@ -99,7 +99,7 @@ module.exports =  class {
 
     static get resourcePath() {
         return path.join(
-            __dirname, '..', 'renderer', 'resources', 'node_modules', 'uploads', path.sep,
+            __dirname, '..', 'renderer', 'resources', 'uploads', path.sep,
         );
     }
 

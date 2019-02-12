@@ -114,6 +114,15 @@ export default class {
         });
     }
 
+    static importObjectsFromResource(objects) {
+        return new Promise((resolve, reject) => {
+            ipcRenderer.send('importObjectsFromResource', objects);
+            ipcRenderer.once('importObjectsFromResource', (e, objects) => {
+                resolve(objects);
+            });
+        });
+    }
+
     /**
      * 업로드 파일 경로를 temp 로 가져온다.
      * @param {Array!}filePaths 이미지 파일 경로

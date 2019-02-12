@@ -50,7 +50,7 @@ class Workspace extends Component {
         this.defaultInitOption = {
             type: 'workspace',
             libDir: 'renderer/bower_components',
-            defaultDir: 'renderer/resources/node_modules',
+            defaultDir: 'renderer/resources',
             fonts: EntryStatic.fonts,
             textCodingEnable: true,
         };

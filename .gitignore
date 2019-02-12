@@ -12,7 +12,6 @@ temp/
 .vscode
 
 # related to renderer process
-!src/renderer/resources/node_modules/
 src/renderer/bower_components
 src/renderer_build
 
