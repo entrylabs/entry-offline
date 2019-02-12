@@ -58,17 +58,14 @@ class Workspace extends Component {
 
     componentDidMount() {
         this.hwCategoryList = EntryStatic.hwCategoryList;
-
-        EntryUtils.getSavedProject()
-            .then((project) => {
-                Entry.init(this.container.current, this.initOption);
-                entryPatch();
-                Entry.enableArduino();
-                Entry.loadProject(project);
-            })
-            .finally(() => {
-                this.addEntryEvents();
-            });
+        IpcRendererHelper.onPageLoaded(async() => {
+            Entry.init(this.container.current, this.initOption);
+            entryPatch();
+            Entry.enableArduino();
+            this.addEntryEvents();
+            const project = await EntryUtils.getSavedProject();
+            Entry.loadProject(project);    
+        });     
     }
 
     addEntryEvents() {
