@@ -32,9 +32,9 @@ root.entrylms = {
         alert(text);
     },
     confirm: (text) => {
-        const isConfirm = confirm(text);
-        const defer = new root.$.Deferred();
-        return defer.resolve(isConfirm);
+        return new Promise((resolve) => {
+            resolve(confirm(text));
+        });
     },
 };
 

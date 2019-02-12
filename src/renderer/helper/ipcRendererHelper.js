@@ -6,6 +6,12 @@ import RendererUtils from './rendererUtils';
  * nodejs lib 사용 혹은 main 에 통신이 한번이상 필요한 경우 이쪽에 둔다.
  */
 export default class {
+    static onPageLoaded(callback) {
+        ipcRenderer.on('showWindow', () => {
+            callback();
+        });
+    }
+
     static loadProject(filePath) {
         return new Promise((resolve, reject) => {
             ipcRenderer.send('loadProject', filePath);
@@ -38,25 +44,28 @@ export default class {
 
     static downloadExcel(filename, array) {
         return new Promise((resolve, reject) => {
-            RendererUtils.showSaveDialog({
-                title: RendererUtils.getLang('Workspace.file_save'),
-                defaultPath: `${filename}.xlsx`,
-                filters: {
-                    'application/vnd.ms-excel': [
-                        { name: 'Excel Files (*.xlsx)', extensions: ['xlsx'] },
-                        { name: 'All Files (*.*)', extensions: ['*'] },
-                    ],
+            RendererUtils.showSaveDialog(
+                {
+                    title: RendererUtils.getLang('Workspace.file_save'),
+                    defaultPath: `${filename}.xlsx`,
+                    filters: {
+                        'application/vnd.ms-excel': [
+                            { name: 'Excel Files (*.xlsx)', extensions: ['xlsx'] },
+                            { name: 'All Files (*.*)', extensions: ['*'] },
+                        ],
+                    },
                 },
-            }, (filePath) => {
-                ipcRenderer.send('saveExcel', filePath, array);
-                ipcRenderer.once('saveExcel', (e, err) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        resolve();
-                    }
-                });
-            });
+                (filePath) => {
+                    ipcRenderer.send('saveExcel', filePath, array);
+                    ipcRenderer.once('saveExcel', (e, err) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            resolve();
+                        }
+                    });
+                }
+            );
         });
     }
 
@@ -102,7 +111,7 @@ export default class {
                 //NOTE Entry.Toast 라도 주면 좋겠는데 real 에도 아무반응 없네요.
                 resolve();
             });
-        }) ;
+        });
     }
 
     static importObjects(filePaths) {
@@ -110,6 +119,15 @@ export default class {
             ipcRenderer.send('importObjects', filePaths);
             ipcRenderer.once('importObjects', (e, object) => {
                 resolve(object);
+            });
+        });
+    }
+
+    static importObjectsFromResource(objects) {
+        return new Promise((resolve, reject) => {
+            ipcRenderer.send('importObjectsFromResource', objects);
+            ipcRenderer.once('importObjectsFromResource', (e, objects) => {
+                resolve(objects);
             });
         });
     }

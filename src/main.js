@@ -10,10 +10,10 @@ import AboutWindowManager from './main/views/aboutWindowManager';
 import root from 'window-or-global';
 import commandLineResolve from './main/electron/commandLineResolver';
 
-import './main/ipcMainHelper';
-import './main/electron/globalShortCutRegister';
-import CommonUtils from './common/commonUtils';
-import packageJson from '../package';
+import CommonUtils from './main/commonUtils';
+import packageJson from '../package.json';
+import('./main/ipcMainHelper');
+require('./main/electron/globalShortCutRegister');
 
 root.sharedObject = {
     roomId: '',

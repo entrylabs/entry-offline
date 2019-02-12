@@ -60,6 +60,10 @@ export default class {
             mainWindow.show();
         });
 
+        mainWindow.on('show', () => {
+            mainWindow.webContents.send('showWindow');
+        });
+
         mainWindow.webContents.session.on('will-download', (event, downloadItem, webContents) => {
             const filename = downloadItem.getFilename();
             const option = {
@@ -104,7 +108,7 @@ export default class {
         });
 
         mainWindow.setMenu(null);
-        mainWindow.loadURL(`file:///${path.join(__dirname, '..', '..', 'main.html')}`);
+        mainWindow.loadURL(`file:///${path.join(__dirname, '..', 'main.html')}`);
 
         if (option.debug) {
             mainWindow.webContents.openDevTools();

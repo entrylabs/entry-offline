@@ -1,4 +1,4 @@
-import { BrowserWindow } from "electron";
+import { BrowserWindow } from 'electron';
 import path from 'path';
 
 export default class {
@@ -25,6 +25,9 @@ export default class {
 
         this.aboutWindow.loadURL(`file:///${path.resolve(
             __dirname,
+            '..',
+            'main',
+            'views',
             'about.html',
         )}`);
     }

@@ -1,7 +1,7 @@
 import { app } from 'electron';
 import path from 'path';
 
-export default class {
+export default  class {
     static get replaceStrategy() {
         return {
             fromExternal: (fileUrl) => {
@@ -99,7 +99,7 @@ export default class {
 
     static get resourcePath() {
         return path.join(
-            __dirname, '..', 'renderer', 'resources', 'node_modules', 'uploads', path.sep,
+            __dirname, '..', 'renderer', 'resources', 'uploads', path.sep,
         );
     }
 

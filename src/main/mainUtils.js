@@ -14,7 +14,7 @@ import tar from 'tar';
 import crypto from 'crypto';
 import FileUtils from './fileUtils';
 import Constants from './constants';
-import CommonUtils from '../common/commonUtils';
+import CommonUtils from './commonUtils';
 /**
  * Main Process 에서 발생하는 로직들을 담당한다.
  * ipcMain 을 import 하여 사용하지 않는다. renderer Process 간 이벤트 관리는 ipcMainHelper 가 한다.
@@ -368,70 +368,9 @@ export default class MainUtils {
                 // 파일 복사 로직
                 await Promise.all(objectResult.objects.map(async(object) => {
                     const { sprite = {} } = object;
-                    const { pictures = [], sounds = [] } = sprite;
 
                     // 이미지 파일 옮김
-                    const newPictures = await Promise.all(
-                        pictures.map(async(picture) => {
-                            if (Constants.defaultPicturePath.includes(picture.fileurl)) {
-                                // selectedPicture 체크로직
-                                const selectedPictureId = object.selectedPictureId;
-                                if (picture.id === selectedPictureId) {
-                                    object.selectedPicture = picture;
-                                }
-
-                                return picture;
-                            }
-
-                            const ext = CommonUtils.sanitizeExtension(picture.ext, '.png');
-                            const newImageFilePath = path.join(
-                                unpackedDirectoryPath,
-                                Constants.subDirectoryPath(picture.filename),
-                                'image',
-                                `${picture.filename}${ext}`,
-                            );
-                            const newThumbnailFilePath = path.join(
-                                unpackedDirectoryPath,
-                                Constants.subDirectoryPath(picture.filename),
-                                'thumb',
-                                `${picture.filename}${ext}`,
-                            );
-
-                            const newPicture = await MainUtils.importPictureToTemp(
-                                newImageFilePath, newThumbnailFilePath,
-                            );
-                            newPicture.name = picture.name;
-                            //TODO _id 가 없는 경우 entry-tool 에서 난리가 나는 듯 합니다.
-
-                            // selectedPicture 체크로직
-                            const selectedPictureId = object.selectedPictureId;
-                            if (picture.id === selectedPictureId) {
-                                object.selectedPicture = newPicture;
-                                object.selectedPictureId = newPicture.id;
-                            }
-
-                            return newPicture;
-                        }));
-
-                    // 사운드 파일 옮김
-                    const newSounds = await Promise.all(
-                        sounds.map(async(sound) => {
-                            if (Constants.defaultSoundPath.includes(sound.fileurl)) {
-                                return sound;
-                            }
-
-                            const ext = CommonUtils.sanitizeExtension(sound.ext, '.mp3');
-
-                            const newSound = await MainUtils.importSoundToTemp(path.join(
-                                unpackedDirectoryPath,
-                                Constants.subDirectoryPath(sound.filename),
-                                'sound',
-                                `${sound.filename}${ext}`,
-                            ));
-                            newSound.name = sound.name;
-                            return newSound;
-                        }),
-                    );
+                    const [newPictures, newSounds] = await MainUtils.importSpriteToTemp(sprite, unpackedDirectoryPath);
 
                     // 경로 동기화
                     object.sprite.pictures = newPictures;
@@ -444,6 +383,97 @@ export default class MainUtils {
                 resolve(objectResult);
             } catch (err) {
                 reject(err);
+            }
+        });
+    }
+
+    static async importSpriteToTemp(object, resourcePath) {
+        const { pictures, sounds } = object;
+        // 이미지 파일 옮김
+        const newPictures = await Promise.all(
+            pictures.map(async(picture) => {
+                if (Constants.defaultPicturePath.includes(picture.fileurl)) {
+                    // selectedPicture 체크로직
+                    const selectedPictureId = object.selectedPictureId;
+                    if (picture.id === selectedPictureId) {
+                        object.selectedPicture = picture;
+                    }
+
+                    return picture;
+                }
+
+                const ext = CommonUtils.sanitizeExtension(picture.ext, '.png');
+                const newImageFilePath = path.join(
+                    resourcePath,
+                    Constants.subDirectoryPath(picture.filename),
+                    'image',
+                    `${picture.filename}${ext}`,
+                );
+                const newThumbnailFilePath = path.join(
+                    resourcePath,
+                    Constants.subDirectoryPath(picture.filename),
+                    'thumb',
+                    `${picture.filename}${ext}`,
+                );
+
+                const newPicture = await MainUtils.importPictureToTemp(
+                    newImageFilePath, newThumbnailFilePath,
+                );
+                newPicture.name = picture.name;
+                //TODO _id 가 없는 경우 entry-tool 에서 난리가 나는 듯 합니다.
+
+                // selectedPicture 체크로직
+                const selectedPictureId = object.selectedPictureId;
+                if (picture.id === selectedPictureId) {
+                    object.selectedPicture = newPicture;
+                    object.selectedPictureId = newPicture.id;
+                }
+
+                return newPicture;
+            }));
+
+        // 사운드 파일 옮김
+        const newSounds = await Promise.all(
+            sounds.map(async(sound) => {
+                if (Constants.defaultSoundPath.includes(sound.fileurl)) {
+                    return sound;
+                }
+
+                const ext = CommonUtils.sanitizeExtension(sound.ext, '.mp3');
+
+                const newSound = await MainUtils.importSoundToTemp(path.join(
+                    resourcePath,
+                    Constants.subDirectoryPath(sound.filename),
+                    'sound',
+                    `${sound.filename}${ext}`,
+                ));
+                newSound.name = sound.name;
+                return newSound;
+            }),
+        );
+
+        return [newPictures, newSounds];
+    }
+
+    static importObjectsFromResource(objects) {
+        return Promise.all(objects.map((object) => {
+            return MainUtils.importObjectFromResource(object);
+        }));
+    }
+
+    static importObjectFromResource(object) {
+        return new Promise(async(resolve, reject) => {
+            const { pictures = [], sounds = [] } = object;
+            try {
+                const newPictures = await MainUtils.importPicturesFromResource(pictures);
+                const newSounds = await MainUtils.importSoundsFromResource(sounds);
+
+                object.pictures = newPictures;
+                object.sounds = newSounds;
+
+                resolve(object);
+            } catch (e) {
+                reject(e);
             }
         });
     }

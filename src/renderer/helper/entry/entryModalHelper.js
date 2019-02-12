@@ -41,9 +41,10 @@ class EntryModalHelper {
                         });
                     });
             },
-            submit: (data) => {
+            submit: async(data) => {
                 console.log('popupSubmitSpritePopup', data);
-                data.selected.forEach(function(item) {
+                const newObjects = await IpcRendererHelper.importObjectsFromResource(data.selected);
+                newObjects.forEach(function(item) {
                     const object = {
                         id: Entry.generateHash(),
                         objectType: 'sprite',
@@ -500,7 +501,7 @@ class EntryModalHelper {
             popup.on(eventName, func);
         });
 
-        popup.show({ type, baseUrl: './renderer/resources/node_modules' });
+        popup.show({ type, baseUrl: './renderer/resources' });
         return popup;
     }
 
@@ -585,7 +586,7 @@ EntryModalHelper.loadPopup = (type, data, props) => {
                 imageBaseUrl: './renderer/bower_components/entry-js/images/hardware/',
             },
             type: 'popup',
-            props: { type, baseUrl: './renderer/resources/node_modules' },
+            props: { type, baseUrl: './renderer/resources' },
         });
 
         return EntryModalHelper[`${type}Popup`];

@@ -1,8 +1,5 @@
-import { createStore, applyMiddleware } from 'redux';
+import { createStore } from 'redux';
 import { persistStore, persistReducer } from 'redux-persist';
-import hardSet from 'redux-persist/lib/stateReconciler/hardSet';
-import createElectronStorage from 'redux-persist-electron-storage';
-import createSagaMiddleware from 'redux-saga';
 import storage from 'redux-persist/lib/storage';
 import rootReducer from './reducers';
 
@@ -14,8 +11,6 @@ const persistConfig = {
     whitelist: ['common'], // only this reducer key will be persisted
 };
 const persistCombinedReducer = persistReducer(persistConfig, rootReducer);
-
-const sagaMiddleware = createSagaMiddleware();
 
 function configureStore() {
     const store = createStore(persistCombinedReducer);
