@@ -20,6 +20,7 @@ class IpcMainHelper {
         ipcMain.on('resetDirectory', this.resetSaveDirectory.bind(this));
         ipcMain.on('exportObject', this.exportObject.bind(this));
         ipcMain.on('importObjects', this.importObjects.bind(this));
+        ipcMain.on('importObjectsFromResource', this.importObjectsFromResource.bind(this));
         ipcMain.on('importPictures', this.importPictures.bind(this));
         ipcMain.on('importPicturesFromResource', this.importPicturesFromResource.bind(this));
         ipcMain.on('importPictureFromCanvas', this.importPictureFromCanvas.bind(this));
@@ -74,6 +75,20 @@ class IpcMainHelper {
         MainUtils.importObjects(filePaths)
             .then((objects) => {
                 event.sender.send('importObjects', objects);
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+    }
+
+    importObjectsFromResource(event, objects) {
+        if (!objects || objects.length === 0) {
+            event.sender.send('importObjectsFromResource', []);
+        }
+
+        MainUtils.importObjectsFromResource(objects)
+            .then((objects) => {
+                event.sender.send('importObjectsFromResource', objects)
             })
             .catch((err) => {
                 console.error(err);

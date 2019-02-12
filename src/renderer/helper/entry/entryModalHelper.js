@@ -41,9 +41,10 @@ class EntryModalHelper {
                         });
                     });
             },
-            submit: (data) => {
+            submit: async(data) => {
                 console.log('popupSubmitSpritePopup', data);
-                data.selected.forEach(function(item) {
+                const newObjects = await IpcRendererHelper.importObjectsFromResource(data.selected);
+                newObjects.forEach(function(item) {
                     const object = {
                         id: Entry.generateHash(),
                         objectType: 'sprite',
