@@ -1,9 +1,9 @@
-const { app, BrowserWindow, dialog } = require('electron');
-const root = require('window-or-global');
-const MainUtils = require('../mainUtils');
-const path = require('path');
+import { app, BrowserWindow, dialog } from 'electron';
+import root from 'window-or-global';
+import MainUtils from '../mainUtils';
+import path from 'path';
 
-module.exports = class {
+export default class {
     get window() {
         return this.mainWindow;
     }
@@ -104,7 +104,7 @@ module.exports = class {
         });
 
         mainWindow.setMenu(null);
-        mainWindow.loadURL(`file:///${path.join(__dirname, '..', '..', 'main.html')}`);
+        mainWindow.loadURL(`file:///${path.join(__dirname, '..', 'main.html')}`);
 
         if (option.debug) {
             mainWindow.webContents.openDevTools();

@@ -1,4 +1,4 @@
-const { app, globalShortcut, webContents } = require('electron');
+import { app, globalShortcut, webContents } from 'electron';
 
 app.once('ready', () => {
     const inspectorShortcut = process.platform === 'darwin' ?

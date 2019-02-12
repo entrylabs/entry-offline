@@ -1,18 +1,18 @@
-const {
+import {
     app,
     Menu,
     ipcMain,
     net,
-} = require('electron');
-const HardwareWindowManager = require('./main/views/hardwareWindowManager');
-const MainWindowManager = require('./main/views/mainWindowManager');
-const AboutWindowManager = require('./main/views/aboutWindowManager');
-const root = require('window-or-global');
-const commandLineResolve = require('./main/electron/commandLineResolver');
+} from 'electron';
+import HardwareWindowManager from './main/views/hardwareWindowManager';
+import MainWindowManager from './main/views/mainWindowManager';
+import AboutWindowManager from './main/views/aboutWindowManager';
+import root from 'window-or-global';
+import commandLineResolve from './main/electron/commandLineResolver';
 
-const CommonUtils = require('./main/commonUtils');
-const packageJson = require('../package');
-require('./main/ipcMainHelper');
+import CommonUtils from './main/commonUtils';
+import packageJson from '../package.json';
+import('./main/ipcMainHelper');
 require('./main/electron/globalShortCutRegister');
 
 root.sharedObject = {

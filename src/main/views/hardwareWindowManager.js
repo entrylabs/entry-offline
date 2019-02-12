@@ -1,7 +1,7 @@
-const { BrowserWindow, app } = require('electron');
-const path = require('path');
+import { BrowserWindow, app } from 'electron';
+import path from 'path';
 
-module.exports = class {
+export default class {
     constructor(win) {
         this.mainWindow = win;
         this.hardwareWindow = null;

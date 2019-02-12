@@ -1,25 +1,25 @@
-const { app, BrowserWindow } = require('electron');
-const fstream = require('fstream');
-const archiver = require('archiver');
-const fs = require('fs');
-const zlib = require('zlib');
-const path = require('path');
-const xl = require('excel4node');
-const imageSizeOf = require('image-size');
-const soundDuration = require('mp3-duration');
-const { performance } = require('perf_hooks');
-const root = require('window-or-global');
-const stream = require('stream');
-const tar = require('tar');
-const crypto = require('crypto');
-const FileUtils = require('./fileUtils');
-const Constants = require('./constants');
-const CommonUtils = require('./commonUtils');
+import { app, BrowserWindow } from 'electron';
+import fstream from 'fstream';
+import archiver from 'archiver';
+import fs from 'fs';
+import zlib from 'zlib';
+import path from 'path';
+import xl from 'excel4node';
+import imageSizeOf from 'image-size';
+import soundDuration from 'mp3-duration';
+import { performance } from 'perf_hooks';
+import root from 'window-or-global';
+import stream from 'stream';
+import tar from 'tar';
+import crypto from 'crypto';
+import FileUtils from './fileUtils';
+import Constants from './constants';
+import CommonUtils from './commonUtils';
 /**
  * Main Process 에서 발생하는 로직들을 담당한다.
  * ipcMain 을 import 하여 사용하지 않는다. renderer Process 간 이벤트 관리는 ipcMainHelper 가 한다.
  */
-module.exports = class MainUtils {
+export default class MainUtils {
     /**
      * 16진수의 랜덤값을 설정한다. 이 값은 겹치지 않은 신규 파일명을 생성하는데 쓴다.
      * @return {string}
@@ -444,6 +444,97 @@ module.exports = class MainUtils {
                 resolve(objectResult);
             } catch (err) {
                 reject(err);
+            }
+        });
+    }
+
+    static async importSpriteToTemp(object, resourcePath) {
+        const { pictures, sounds } = object;
+        // 이미지 파일 옮김
+        const newPictures = await Promise.all(
+            pictures.map(async(picture) => {
+                if (Constants.defaultPicturePath.includes(picture.fileurl)) {
+                    // selectedPicture 체크로직
+                    const selectedPictureId = object.selectedPictureId;
+                    if (picture.id === selectedPictureId) {
+                        object.selectedPicture = picture;
+                    }
+
+                    return picture;
+                }
+
+                const ext = CommonUtils.sanitizeExtension(picture.ext, '.png');
+                const newImageFilePath = path.join(
+                    resourcePath,
+                    Constants.subDirectoryPath(picture.filename),
+                    'image',
+                    `${picture.filename}${ext}`,
+                );
+                const newThumbnailFilePath = path.join(
+                    resourcePath,
+                    Constants.subDirectoryPath(picture.filename),
+                    'thumb',
+                    `${picture.filename}${ext}`,
+                );
+
+                const newPicture = await MainUtils.importPictureToTemp(
+                    newImageFilePath, newThumbnailFilePath,
+                );
+                newPicture.name = picture.name;
+                //TODO _id 가 없는 경우 entry-tool 에서 난리가 나는 듯 합니다.
+
+                // selectedPicture 체크로직
+                const selectedPictureId = object.selectedPictureId;
+                if (picture.id === selectedPictureId) {
+                    object.selectedPicture = newPicture;
+                    object.selectedPictureId = newPicture.id;
+                }
+
+                return newPicture;
+            }));
+
+        // 사운드 파일 옮김
+        const newSounds = await Promise.all(
+            sounds.map(async(sound) => {
+                if (Constants.defaultSoundPath.includes(sound.fileurl)) {
+                    return sound;
+                }
+
+                const ext = CommonUtils.sanitizeExtension(sound.ext, '.mp3');
+
+                const newSound = await MainUtils.importSoundToTemp(path.join(
+                    resourcePath,
+                    Constants.subDirectoryPath(sound.filename),
+                    'sound',
+                    `${sound.filename}${ext}`,
+                ));
+                newSound.name = sound.name;
+                return newSound;
+            }),
+        );
+
+        return [newPictures, newSounds];
+    }
+
+    static importObjectsFromResource(objects) {
+        return Promise.all(objects.map((object) => {
+            return MainUtils.importObjectFromResource(object);
+        }));
+    }
+
+    static importObjectFromResource(object) {
+        return new Promise(async(resolve, reject) => {
+            const { pictures = [], sounds = [] } = object;
+            try {
+                const newPictures = await MainUtils.importPicturesFromResource(pictures);
+                const newSounds = await MainUtils.importSoundsFromResource(sounds);
+
+                object.pictures = newPictures;
+                object.sounds = newSounds;
+
+                resolve(object);
+            } catch (e) {
+                reject(e);
             }
         });
     }
