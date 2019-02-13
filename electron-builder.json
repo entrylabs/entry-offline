@@ -24,8 +24,22 @@
     "win": {
         "target": "dir"
     },
+    "files": [
+        "src/main/static",
+        "src/renderer/bower_components",
+        "src/renderer/resources",
+        "src/main_build",
+        "src/main.html",
+        "src/WebAudioPluginTest.fail",
+        "!src/main_build/hot",
+        "src/renderer_build",
+        "!src/renderer_build/hot"
+    ],
     "electronCompile": false,
     "asar": true,
     "appId": "org.playentry.entry",
-    "productName": "Entry"
+    "productName": "Entry",
+    "directories": {
+        "output": "out/${productName}-${platform}-${arch}"
+    }
 }

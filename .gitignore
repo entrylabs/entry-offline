@@ -12,7 +12,7 @@ temp/
 .idea
 .vscode
 
-# related to renderer process
+# related to webpack or bower
 src/renderer/bower_components
 src/renderer_build
 src/main_build
