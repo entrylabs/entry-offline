@@ -10,8 +10,8 @@ const Script = ({ children }) => (
 
 class Index extends PureComponent {
     render() {
-        const { common = [] } = this.props;
-        const { mode } = common;
+        const { persist = [] } = this.props;
+        const { mode } = persist;
 
         console.log(this.props);
         return (

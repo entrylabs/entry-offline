@@ -6,10 +6,9 @@ import RendererUtils from '../helper/rendererUtils';
 import EntryUtils from '../helper/entry/entryUtils';
 import { connect } from 'react-redux';
 import { commonAction, showPopup } from '../actions';
-import { CHANGE_LANGUAGE, WS_MODE } from '../actions/types';
+import { CHANGE_LANGUAGE, CHANGE_PROJECT_NAME, WS_MODE } from '../actions/types';
 import { Dropdown } from 'entry-tool/component';
 import ImportToggleHelper from '../helper/importToggleHelper';
-import IpcRendererHelper from '../helper/ipcRendererHelper';
 
 /* global Entry */
 class Header extends Component {
@@ -40,8 +39,8 @@ class Header extends Component {
         ];
     }
     get helpList() {
-        const { common } = this.props;
-        const { mode } = common;
+        const { persist } = this.props;
+        const { mode } = persist;
 
         return [
             [RendererUtils.getLang('Workspace.block_helper'), 'help_block'],
@@ -76,8 +75,8 @@ class Header extends Component {
     }
 
     getModeText() {
-        const { common } = this.props;
-        const { mode } = common;
+        const { persist } = this.props;
+        const { mode } = persist;
         const [modeText] = this.modeList.find((list) => {
             return list[1] === mode;
         });
@@ -94,7 +93,7 @@ class Header extends Component {
     }
 
     getLangValue() {
-        const lang = _get(this.props, 'common.lang');
+        const lang = _get(this.props, 'persist.lang');
         return _get(root.Lang, lang);
     }
 
@@ -204,10 +203,10 @@ class Header extends Component {
     }
 
     render() {
-        const { common = [], projectName = '', programLanguageMode } = this.props;
-        const { lang, mode } = common;
+        const { persist = [], common, programLanguageMode, changeProjectName } = this.props;
+        const { projectName = RendererUtils.getDefaultProjectName() } = common;
+        const { lang, mode } = persist;
         const { dropdownType } = this.state;
-
 
         return (
             /* eslint-disable jsx-a11y/heading-has-content, jsx-a11y/anchor-is-valid */
@@ -221,10 +220,9 @@ class Header extends Component {
                             id="common_srch"
                             name="common_srch"
                             defaultValue={projectName}
-                            onChange={({ target }) => {
+                            onBlur={({ target }) => {
                                 const { value } = target;
-                                const { onProjectNameChanged } = this.props;
-                                onProjectNameChanged(value);
+                                changeProjectName(value);
                             }}
                         />
                     </div>
@@ -390,6 +388,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
     showPopup,
     language: (data) => commonAction(CHANGE_LANGUAGE, data),
+    changeProjectName: (data) => commonAction(CHANGE_PROJECT_NAME, data),
     mode: (data) => commonAction(WS_MODE, data),
 };
 

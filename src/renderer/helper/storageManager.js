@@ -43,23 +43,23 @@ export default class {
     }
 
     static getPersistLangType() {
-        const persist = root.localStorage.getItem('persist:storage');
-        if (!persist) {
+        const rawPersist = root.localStorage.getItem('persist:storage');
+        if (!rawPersist) {
             return;
         }
 
-        const common = JSON.parse(JSON.parse(persist).common);
-        return common[this.LOCAL_STORAGE_LANG];
+        const persist = JSON.parse(JSON.parse(rawPersist).persist);
+        return persist[this.LOCAL_STORAGE_LANG];
     }
 
     static getPersistWorkspaceMode() {
-        const persist = root.localStorage.getItem('persist:storage');
-        if (!persist) {
+        const rawPersist = root.localStorage.getItem('persist:storage');
+        if (!rawPersist) {
             return;
         }
 
-        const common = JSON.parse(JSON.parse(persist).common);
-        return common[this.LOCAL_STORAGE_WS_MODE];
+        const persist = JSON.parse(JSON.parse(rawPersist).persist);
+        return persist[this.LOCAL_STORAGE_WS_MODE];
     }
 
     /**

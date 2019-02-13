@@ -4,7 +4,7 @@ import './workspace.scss';
 import '../resources/styles/fonts.scss';
 import { connect } from 'react-redux';
 import { commonAction, modalProgressAction } from '../actions';
-import { FETCH_POPUP_ITEMS, UPDATE_PROJECT, WS_MODE } from '../actions/types';
+import { FETCH_POPUP_ITEMS, UPDATE_PROJECT, WS_MODE, CHANGE_PROJECT_NAME } from '../actions/types';
 import _includes from 'lodash/includes';
 import _debounce from 'lodash/debounce';
 import entryPatch from '../helper/entry/entryPatcher';
@@ -31,11 +31,7 @@ class Workspace extends Component {
 
         this.container = React.createRef();
 
-        const { project = {} } = props;
-        const { name } = project;
-
         this.isFirstRender = true;
-        this.projectName = name || RendererUtils.getDefaultProjectName();
         this.state = {
             programLanguageMode: 'block',
         };
@@ -171,7 +167,9 @@ class Workspace extends Component {
         console.log('handleStorageProjectSave called');
         const project = Entry.exportProject();
         if (project) {
-            project.name = this.projectName;
+            const { common } = this.props;
+            const { projectName } = common;
+            project.name = projectName;
             Object.assign(project, option);
             LocalStorageManager.saveProject(project);
         }
@@ -219,6 +217,10 @@ class Workspace extends Component {
     }
 
     handleSaveAction = async(key) => {
+        const { persist, common } = this.props;
+        const { projectName } = common;
+        const { mode } = persist;
+
         const saveFunction = async(filePath) => {
             if (!filePath) {
                 return;
@@ -232,14 +234,11 @@ class Workspace extends Component {
 
             try {
                 // 프로젝트를 가져온다. 프로젝트 명과 워크스페이스 모드를 주입한다.
-                const { common } = this.props;
-                const { mode } = common;
-
                 Entry.stage.handle.setVisible(false);
                 Entry.stage.update();
                 const project = Entry.exportProject();
                 project.isPracticalCourse = mode === 'practical_course';
-                project.name = this.projectName;
+                project.name = projectName;
                 // project.parent = parent;
 
                 await IpcRendererHelper.saveProject(project, filePath);
@@ -250,7 +249,7 @@ class Workspace extends Component {
                 Entry.stateManager.addStamp();
                 Entry.toast.success(
                     RendererUtils.getLang('Workspace.saved'),
-                    `${this.projectName} ${RendererUtils.getLang('Workspace.saved_msg')}`
+                    `${projectName} ${RendererUtils.getLang('Workspace.saved_msg')}`
                 );
             } catch (err) {
                 console.error(err);
@@ -267,17 +266,20 @@ class Workspace extends Component {
         } else {
             const targetPath = this.projectSavedPath || '*';
             RendererUtils.showSaveDialog({
-                defaultPath: `${targetPath}/${this.projectName}`,
+                defaultPath: `${targetPath}/${projectName}`,
                 filters: [{ name: 'Entry File', extensions: ['ent'] }],
             }, saveFunction);
         }
     };
 
     handleFileAction = async(type) => {
+        const { changeProjectName } = this.props;
+
         if (type === 'new') {
             if (EntryUtils.confirmProjectWillDismiss()) {
                 RendererUtils.clearTempProject();
                 delete this.projectSavedPath;
+                changeProjectName(RendererUtils.getDefaultProjectName());
                 await this.loadProject();
             }
         } else if (type === 'open_offline') {
@@ -308,14 +310,14 @@ class Workspace extends Component {
      * @param{Object?} project undefined 인 경우 신규 프로젝트로 생성
      */
     loadProject = async(project) => {
-        const { changeWorkspaceMode, common } = this.props;
-        const { mode: currentWorkspaceMode } = common;
+        const { changeWorkspaceMode, persist, changeProjectName } = this.props;
+        const { mode: currentWorkspaceMode } = persist;
         let isToPracticalCourse = currentWorkspaceMode;
 
         if (project) {
-            this.projectName = project.name || RendererUtils.getDefaultProjectName();
             this.projectSavedPath = project.savedPath || '';
             isToPracticalCourse = project.isPracticalCourse || isToPracticalCourse;
+            changeProjectName(project.name || RendererUtils.getDefaultProjectName());
         }
 
         // 현재 WS mode 와 이후 변경될 모드가 다른 경우
@@ -409,12 +411,9 @@ class Workspace extends Component {
                     onReloadProject={this.reloadProject}
                     onLoadProject={this.loadProject}
                     onProgramLanguageChanged={this.handleProgramLanguageModeChanged}
-                    onProjectNameChanged={(changedName) => (this.projectName = changedName)}
-                    projectName={this.projectName}
                     programLanguageMode={programLanguageMode}
                 />
                 <div ref={this.container} className="workspace"/>
-                ;
                 {isShow && (
                     <ModalProgress
                         title={title}
@@ -435,6 +434,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
     modalProgressAction,
     changeWorkspaceMode: (data) => commonAction(WS_MODE, data),
+    changeProjectName: (data) => commonAction(CHANGE_PROJECT_NAME, data),
     updateProject: (data) => {
         return commonAction(UPDATE_PROJECT, data);
     },
