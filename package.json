@@ -8,7 +8,7 @@
     "scripts": {
         "start": "electron .",
         "debug": "electron --inspect .",
-        "webpack" : "webpack",
+        "webpack": "webpack",
         "watch": "webpack -w",
         "lint": "eslint src --color",
         "rebuild": "electron-rebuild -v 4.0.4",
@@ -30,7 +30,7 @@
         "bignumber.js": "^8.0.1",
         "debug": "^4.1.1",
         "decompress": "^4.2.0",
-        "entry-tool": "^1.0.5",
+        "entry-tool": "^1.0.7",
         "excel4node": "^1.7.0",
         "fs-extra": "^7.0.1",
         "fstream": "^1.0.11",
