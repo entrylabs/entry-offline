@@ -19,14 +19,6 @@ import EntryUtils from '../helper/entry/entryUtils';
 
 /* global Entry, EntryStatic */
 class Workspace extends Component {
-    get LOCAL_STORAGE_KEY() {
-        return 'localStorageProject';
-    }
-
-    get LOCAL_STORAGE_KEY_RELOAD() {
-        return 'localStorageProjectReload';
-    }
-
     get initOption() {
         return Object.assign({},
             this.defaultInitOption,
@@ -42,6 +34,7 @@ class Workspace extends Component {
         const { project = {} } = props;
         const { name } = project;
 
+        this.isFirstRender = true;
         this.projectName = name || RendererUtils.getDefaultProjectName();
         this.state = {
             programLanguageMode: 'block',
@@ -61,12 +54,8 @@ class Workspace extends Component {
 
         setTimeout(async() => {
             const project = await EntryUtils.getSavedProject();
-
-            Entry.init(this.container.current, this.initOption);
-            entryPatch();
-            Entry.enableArduino();
-            this.addEntryEvents();
-            Entry.loadProject(project);
+            await this.loadProject(project);
+            this.isFirstRender = false;
         }, 0);
     }
 
@@ -284,16 +273,14 @@ class Workspace extends Component {
         }
     };
 
-    handleFileAction = (type) => {
+    handleFileAction = async(type) => {
         if (type === 'new') {
             if (EntryUtils.confirmProjectWillDismiss()) {
                 RendererUtils.clearTempProject();
                 delete this.projectSavedPath;
-                this.loadProject();
+                await this.loadProject();
             }
         } else if (type === 'open_offline') {
-            const { changeWorkspaceMode, common } = this.props;
-            const { mode: currentWorkspaceMode } = common;
             this.showModalProgress(
                 'progress',
                 RendererUtils.getLang('Workspace.uploading_msg'),
@@ -308,23 +295,7 @@ class Workspace extends Component {
                 if (Array.isArray(filePaths)) {
                     const filePath = filePaths[0];
                     const project = await IpcRendererHelper.loadProject(filePath);
-
-                    this.projectName = project.name;
-                    this.projectSavedPath = project.savedPath;
-                    const isToPracticalCourse = project.isPracticalCourse;
-
-                    // 현재 WS mode 와 이후 변경될 모드가 다른 경우
-                    if ((currentWorkspaceMode === 'workspace') === isToPracticalCourse) {
-                        if (isToPracticalCourse) {
-                            await ImportToggleHelper.changeEntryStatic('practical_course');
-                            changeWorkspaceMode('practical_course');
-                        } else {
-                            await ImportToggleHelper.changeEntryStatic('workspace');
-                            changeWorkspaceMode('workspace');
-                        }
-                    }
-
-                    this.loadProject(project);
+                    await this.loadProject(project);
                 }
 
                 this.hideModalProgress();
@@ -336,17 +307,41 @@ class Workspace extends Component {
      * 프로젝트를 로드한 후, 이벤트 연결을 시도한다.
      * @param{Object?} project undefined 인 경우 신규 프로젝트로 생성
      */
-    loadProject = (project) => {
-        Entry.disposeContainer();
-        Entry.reloadBlock();
+    loadProject = async(project) => {
+        const { changeWorkspaceMode, common } = this.props;
+        const { mode: currentWorkspaceMode } = common;
+        let isToPracticalCourse = currentWorkspaceMode;
+
+        if (project) {
+            this.projectName = project.name || RendererUtils.getDefaultProjectName();
+            this.projectSavedPath = project.savedPath || '';
+            isToPracticalCourse = project.isPracticalCourse || isToPracticalCourse;
+        }
+
+        // 현재 WS mode 와 이후 변경될 모드가 다른 경우
+        if ((currentWorkspaceMode === 'workspace') === isToPracticalCourse) {
+            if (isToPracticalCourse) {
+                await ImportToggleHelper.changeEntryStatic('practical_course');
+                changeWorkspaceMode('practical_course');
+            } else {
+                await ImportToggleHelper.changeEntryStatic('workspace');
+                changeWorkspaceMode('workspace');
+            }
+        }
+
+        if (!this.isFirstRender) {
+            Entry.disposeContainer();
+            Entry.reloadBlock();
+        }
         Entry.init(this.container.current, this.initOption);
         entryPatch();
-        Entry.loadProject(project);
+        Entry.enableArduino();
         this.addEntryEvents();
+        Entry.loadProject(project);
     };
 
-    reloadProject = () => {
-        this.loadProject(Entry.exportProject());
+    reloadProject = async() => {
+        await this.loadProject(Entry.exportProject());
     };
 
     handleProgramLanguageModeChanged = (mode) => {

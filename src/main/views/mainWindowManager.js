@@ -115,10 +115,6 @@ export default class {
             mainWindow.webContents.openDevTools();
         }
 
-        if (option.file) {
-            mainWindow.webContents.startFile = option.file;
-        }
-
         mainWindow.webContents.name = 'entry';
 
         mainWindow.on('page-title-updated', function(e) {

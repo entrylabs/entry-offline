@@ -13,7 +13,7 @@ const { dialog } = remote;
 export default class {
     /**
      * electron main process 와 연결된 오브젝트를 가져온다.
-     * @return {any}
+     * @return {root.sharedObject}
      */
     static getSharedObject() {
         return remote.getGlobal('sharedObject');

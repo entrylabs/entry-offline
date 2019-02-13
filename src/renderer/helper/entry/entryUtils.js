@@ -41,10 +41,19 @@ export default class {
      */
     static getSavedProject() {
         return new Promise(((resolve) => {
+            const sharedObject = RendererUtils.getSharedObject();
+            const { initProjectPath } = sharedObject;
             const reloadProject = StorageManager.loadTempProject();
             const project = StorageManager.loadProject();
 
-            if (reloadProject) {
+            console.log('initProjectPath', initProjectPath);
+            if (initProjectPath) {
+                IpcRendererHelper.loadProject(initProjectPath)
+                    .then(resolve)
+                    .finally(() => {
+                        sharedObject.initProjectPath = undefined;
+                    });
+            } else if (reloadProject) {
                 resolve(reloadProject);
             } else if (project) {
                 root.entrylms.confirm(

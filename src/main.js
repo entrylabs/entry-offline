@@ -15,17 +15,18 @@ import packageJson from '../package.json';
 import('./main/ipcMainHelper');
 require('./main/electron/globalShortCutRegister');
 
+const option = commandLineResolve(process.argv.slice(1));
+
 root.sharedObject = {
     roomId: '',
     mainWindowId: '',
     workingPath: '',
     isInitEntry: false,
+    initProjectPath: option.file,
     appName: 'entry',
     hostURI: 'playentry.org',
     hostProtocol: 'https:',
 };
-
-const option = commandLineResolve(process.argv.slice(1));
 
 app.on('window-all-closed', function() {
     app.quit();
