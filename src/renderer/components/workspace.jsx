@@ -56,16 +56,15 @@ class Workspace extends Component {
         };
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         this.hwCategoryList = EntryStatic.hwCategoryList;
-        IpcRendererHelper.onPageLoaded(async() => {
-            Entry.init(this.container.current, this.initOption);
-            entryPatch();
-            Entry.enableArduino();
-            this.addEntryEvents();
-            const project = await EntryUtils.getSavedProject();
-            Entry.loadProject(project);
-        });
+        const project = await EntryUtils.getSavedProject();
+
+        Entry.init(this.container.current, this.initOption);
+        entryPatch();
+        Entry.enableArduino();
+        this.addEntryEvents();
+        Entry.loadProject(project);
     }
 
     addEntryEvents() {

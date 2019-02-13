@@ -8,14 +8,17 @@ import configureStore from './store';
 import Index from './components/Index.jsx';
 
 import './nativeMenu.js';
+import IpcRendererHelper from './helper/ipcRendererHelper';
 
 const { store, persistor } = configureStore();
 
-ReactDom.render(
-    <Provider store={store}>
-        <PersistGate persistor={persistor}>
-            <Index />
-        </PersistGate>
-    </Provider>,
-    document.getElementById('__next')
-);
+IpcRendererHelper.onPageLoaded(() => {
+    ReactDom.render(
+        <Provider store={store}>
+            <PersistGate persistor={persistor}>
+                <Index />
+            </PersistGate>
+        </Provider>,
+        document.getElementById('__next')
+    );
+});

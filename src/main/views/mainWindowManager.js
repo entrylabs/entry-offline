@@ -51,6 +51,7 @@ export default class {
             webPreferences: {
                 backgroundThrottling: false,
             },
+            icon: path.join(__dirname, '..', 'main', 'static', 'icon.png'),
         });
         this.mainWindow = mainWindow;
 

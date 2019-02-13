@@ -21,7 +21,7 @@ const mainProcess = {
         path: path.resolve(__dirname, 'src', 'main_build'),
         filename: '[name].bundle.js',
         hotUpdateChunkFilename: 'hot/hot-update.js',
-        hotUpdateMainFilename: 'hot/hot-update.json'
+        hotUpdateMainFilename: 'hot/hot-update.json',
     },
     module: {
         rules: [
@@ -90,6 +90,8 @@ const rendererProcess = {
         devtoolLineToLine: true,
         path: path.resolve(__dirname, 'src', 'renderer_build'),
         filename: '[name].bundle.js',
+        hotUpdateChunkFilename: 'hot/hot-update.js',
+        hotUpdateMainFilename: 'hot/hot-update.json',
     },
     module: {
         rules: [
