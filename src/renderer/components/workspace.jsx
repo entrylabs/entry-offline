@@ -64,8 +64,8 @@ class Workspace extends Component {
             Entry.enableArduino();
             this.addEntryEvents();
             const project = await EntryUtils.getSavedProject();
-            Entry.loadProject(project);    
-        });     
+            Entry.loadProject(project);
+        });
     }
 
     addEntryEvents() {

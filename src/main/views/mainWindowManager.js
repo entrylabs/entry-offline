@@ -60,7 +60,7 @@ export default class {
             mainWindow.show();
         });
 
-        mainWindow.on('show', () => {
+        mainWindow.webContents.on('did-finish-load', () => {
             mainWindow.webContents.send('showWindow');
         });
 
