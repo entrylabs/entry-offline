@@ -5015,7 +5015,7 @@ lodash.uniqueid@4.0.1:
   resolved "https://registry.yarnpkg.com/lodash.uniqueid/-/lodash.uniqueid-4.0.1.tgz#3268f26a7c88e4f4b1758d679271814e31fa5b26"
   integrity sha1-MmjyanyI5PSxdY1nknGBTjH6WyY=
 
-lodash@^4.0.0, lodash@^4.13.1, lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.4, lodash@^4.17.5, lodash@~4.17.10:
+lodash@^4.0.0, lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.4, lodash@^4.17.5, lodash@~4.17.10:
   version "4.17.11"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.11.tgz#b39ea6229ef607ecd89e2c8df12536891cac9b8d"
   integrity sha512-cQKh8igo5QUhZ7lg38DYWAxMvjSAKG0A8wGSVimP07SIUEK2UO+arSRKbRZWtelMtN5V0Hkwh5ryOto/SshYIg==
@@ -6599,13 +6599,6 @@ redent@^1.0.0:
   dependencies:
     indent-string "^2.1.0"
     strip-indent "^1.0.1"
-
-redux-electron-store@^0.6.4:
-  version "0.6.4"
-  resolved "https://registry.yarnpkg.com/redux-electron-store/-/redux-electron-store-0.6.4.tgz#c128114938d23673babd9b1eb541b95fe30b21a5"
-  integrity sha512-TimUtU32jxHYEcbHOvad1pS1LcPD9v7X+36SnaZUfFcj+Yzme/r4V1K5WnAwxBnvlRuM3byWLNuTVqTt165biQ==
-  dependencies:
-    lodash "^4.13.1"
 
 redux-form@^7.4.2:
   version "7.4.2"

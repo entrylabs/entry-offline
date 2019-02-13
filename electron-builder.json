@@ -2,26 +2,7 @@
     "mac": {
         "target": "dmg",
         "category": "public.app-category.education",
-        "extendInfo": {
-            "URL Types": [
-                {
-                    "URL Identifie": "org.playentry.entryoffline",
-                    "URL Schemes": [
-                        "entryoffline",
-                        "entry"
-                    ]
-                }
-            ],
-            "CFBundleURLTypes": [
-                {
-                    "CFBundleURLName": "org.playentry.entryoffline",
-                    "CFBundleURLSchemes": [
-                        "entryoffline",
-                        "entry"
-                    ]
-                }
-            ]
-        }
+        "extendInfo": "build/build.plist"
     },
     "dmg": {
         "icon": "build/icon.icns",
@@ -30,15 +11,7 @@
         "contents": [
             {
                 "x": 240,
-                "y": 120,
-                "type": "file",
-                "path": "out/Entry-darwin-x64/Entry.app"
-            },
-            {
-                "x": 240,
-                "y": 250,
-                "type": "file",
-                "path": "src/README.md"
+                "y": 120
             },
             {
                 "x": 240,
