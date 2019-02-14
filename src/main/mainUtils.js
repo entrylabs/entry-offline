@@ -401,6 +401,7 @@ export default class MainUtils {
                                 newImageFilePath, newThumbnailFilePath,
                             );
                             newPicture.name = picture.name;
+                            newPicture.id = picture.id;
                             //TODO _id 가 없는 경우 entry-tool 에서 난리가 나는 듯 합니다.
 
                             // selectedPicture 체크로직
@@ -429,6 +430,8 @@ export default class MainUtils {
                                 `${sound.filename}${ext}`,
                             ));
                             newSound.name = sound.name;
+                            newSound.id = sound.id;
+
                             return newSound;
                         }),
                     );
