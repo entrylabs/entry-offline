@@ -1,3 +1,5 @@
+import path from 'path';
+
 export default function(args) {
     const option = {
         file: null,
@@ -23,7 +25,9 @@ export default function(args) {
         } else if (argv.match(/^--protocol=/) || argv.match(/^-p=/)) {
             option.hostProtocol = argv.split('=')[1];
         } else {
-            option.file = argv;
+            if (path.isAbsolute(argv)) {
+                option.file = argv;
+            }
             break;
         }
     }

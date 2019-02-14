@@ -151,8 +151,10 @@ export default class {
         }
     }
 
-    loadProjectFromPath(path) {
-        this.mainWindow.webContents.send('loadProject', path);
+    loadProjectFromPath(projectPath) {
+        if (path.isAbsolute(projectPath)) {
+            this.mainWindow.webContents.send('loadProject', projectPath);
+        }
     }
 }
 
