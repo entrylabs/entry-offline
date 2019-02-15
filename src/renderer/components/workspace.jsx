@@ -43,6 +43,8 @@ class Workspace extends Component {
             fonts: EntryStatic.fonts,
             textCodingEnable: true,
         };
+
+        this.addMainProcessEvents();
     }
 
     componentDidMount() {
@@ -55,7 +57,9 @@ class Workspace extends Component {
         }, 0);
     }
 
-
+    addMainProcessEvents() {
+        IpcRendererHelper.loadProjectFromMain(this.loadProject.bind(this));
+    }
 
     addEntryEvents() {
         const addEventListener = Entry.addEventListener.bind(Entry);

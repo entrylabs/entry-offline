@@ -43,8 +43,11 @@ if (!app.requestSingleInstanceLock()) {
 
         app.on('second-instance', (event, commandLine, workingDirectory) => {
             // 어플리케이션을 중복 실행했습니다. 주 어플리케이션 인스턴스를 활성화 합니다.
+            const option = commandLineResolve(commandLine);
+
             if (mainWindow) {
-                mainWindow.secondInstanceLoaded(commandLine);
+                mainWindow.activateWindow();
+                mainWindow.loadProjectFromPath(option.file);
             }
         });
 

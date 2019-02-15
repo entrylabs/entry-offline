@@ -25,6 +25,15 @@ export default class {
         });
     }
 
+    static loadProjectFromMain(callback) {
+        ipcRenderer.on('loadProjectFromMain', (e, filePath) => {
+            this.loadProject(filePath)
+                .then((project) => {
+                    callback(project);
+                });
+        });
+    }
+
     static saveProject(project, targetPath) {
         return new Promise((resolve, reject) => {
             ipcRenderer.send('saveProject', project, targetPath);

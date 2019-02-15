@@ -137,23 +137,19 @@ export default class {
         }
     }
 
-    secondInstanceLoaded(commandLine) {
+    activateWindow() {
         const mainWindow = this.mainWindow;
         if (mainWindow) {
             if (mainWindow.isMinimized()) {
                 mainWindow.restore();
             }
             mainWindow.focus();
-
-            if (Array.isArray(commandLine) && commandLine[1]) {
-                this.loadProjectFromPath(commandLine[1]);
-            }
         }
     }
 
     loadProjectFromPath(projectPath) {
         if (path.isAbsolute(projectPath)) {
-            this.mainWindow.webContents.send('loadProject', projectPath);
+            this.mainWindow.webContents.send('loadProjectFromMain', projectPath);
         }
     }
 }
