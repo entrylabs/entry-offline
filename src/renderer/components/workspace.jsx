@@ -63,7 +63,6 @@ class Workspace extends Component {
         // 교과형에서 하드웨어가 바뀔때 마다 카테고리 변화
         addEventListener('hwChanged', this.handleHardwareChange);
         // 하드웨어 다운로드 탭에서 다운로드 처리
-        addEventListener('hwDownload', this.handleHardwareDownload.bind(this));
         addEventListener('newWorkspace', () => {
             this.handleFileAction('new');
         });
@@ -211,10 +210,6 @@ class Workspace extends Component {
             this.lastHwName = undefined;
         }
     };
-
-    handleHardwareDownload(type) {
-        console.log(type);
-    }
 
     handleSaveAction = async(key) => {
         const { persist, common } = this.props;

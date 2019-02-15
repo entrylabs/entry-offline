@@ -142,10 +142,24 @@ class EntryModalHelper {
                     data: {
                         data: [],
                         uploads: results.concat(
-                            objectResults.map((object) => {
+                            objectResults.map((objectModel) => {
                                 // thumbnail 용으로 쓸 selectedPicture 표기. 본 데이터는 sprite
-                                const selected = object.objects[0].selectedPicture;
-                                selected.sprite = object;
+                                const [firstObject] = objectModel.objects;
+
+                                let selected = firstObject.selectedPicture;
+                                if (firstObject.objectType === 'textBox') {
+                                    // selected = firstObject;
+                                    selected = {
+                                        name: firstObject.name,
+                                        text: firstObject.text,
+                                        objectType: firstObject.objectType,
+                                        options: firstObject.entity || {},
+                                        _id: Entry.generateHash(),
+                                        fileurl: 'renderer/resources/images/popup/text_icon.png',
+                                    };
+                                }
+
+                                selected.sprite = objectModel;
                                 return selected;
                             })
                         ),
@@ -154,8 +168,8 @@ class EntryModalHelper {
             },
             uploads: (data) => {
                 data.uploads.forEach(function(objectModel) {
-                    const { sprite } = objectModel;
-                    if (sprite) {
+                    const { sprite, objectType = '' } = objectModel;
+                    if (sprite || objectType === 'textBox') {
                         EntryUtils.addObjectToEntry(objectModel);
                     } else {
                         EntryUtils.addPictureObjectToEntry(objectModel);
