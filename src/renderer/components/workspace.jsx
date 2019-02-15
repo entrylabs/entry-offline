@@ -273,13 +273,9 @@ class Workspace extends Component {
     };
 
     handleFileAction = async(type) => {
-        const { changeProjectName } = this.props;
-
         if (type === 'new') {
             if (EntryUtils.confirmProjectWillDismiss()) {
                 RendererUtils.clearTempProject();
-                delete this.projectSavedPath;
-                changeProjectName(RendererUtils.getDefaultProjectName());
                 await this.loadProject();
             }
         } else if (type === 'open_offline') {
@@ -312,17 +308,20 @@ class Workspace extends Component {
     loadProject = async(project) => {
         const { changeWorkspaceMode, persist, changeProjectName } = this.props;
         const { mode: currentWorkspaceMode } = persist;
-        let isToPracticalCourse = currentWorkspaceMode;
+        let projectWorkspaceMode = currentWorkspaceMode;
 
         if (project) {
             this.projectSavedPath = project.savedPath || '';
-            isToPracticalCourse = project.isPracticalCourse || isToPracticalCourse;
+            projectWorkspaceMode = project.isPracticalCourse ? 'practical_course' : 'workspace';
             changeProjectName(project.name || RendererUtils.getDefaultProjectName());
+        } else {
+            delete this.projectSavedPath;
+            changeProjectName(RendererUtils.getDefaultProjectName());
         }
 
         // 현재 WS mode 와 이후 변경될 모드가 다른 경우
-        if ((currentWorkspaceMode === 'workspace') === isToPracticalCourse) {
-            if (isToPracticalCourse) {
+        if (currentWorkspaceMode !== projectWorkspaceMode) {
+            if (projectWorkspaceMode === 'practical_course') {
                 await ImportToggleHelper.changeEntryStatic('practical_course');
                 changeWorkspaceMode('practical_course');
             } else {
