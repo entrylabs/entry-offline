@@ -17,7 +17,7 @@ export default function(args) {
             break;
         } else if (argv.startsWith('--app')) {
             const value = argv.split('=')[1];
-            if (path.isAbsolute(value)) {
+            if (_isValidProjectFilePath(value)) {
                 option.file = value;
             }
         } else if (argv === '--debug' || argv === '-d') {
@@ -27,10 +27,16 @@ export default function(args) {
         } else if (argv.startsWith('--protocol') || argv.startsWith('-p')) {
             option.hostProtocol = argv.split('=')[1];
         } else {
-            if (path.isAbsolute(argv)) {
+            if (_isValidProjectFilePath(argv)) {
                 option.file = argv;
+                break;
             }
         }
     }
     return option;
 }
+
+const _isValidProjectFilePath = function(filePath) {
+    console.log('extName', path.extname(filePath));
+    return path.isAbsolute(filePath) && path.extname(filePath) === '.ent';
+};

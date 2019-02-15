@@ -148,7 +148,7 @@ export default class {
     }
 
     loadProjectFromPath(projectPath) {
-        if (path.isAbsolute(projectPath)) {
+        if (projectPath) {
             this.mainWindow.webContents.send('loadProjectFromMain', projectPath);
         }
     }

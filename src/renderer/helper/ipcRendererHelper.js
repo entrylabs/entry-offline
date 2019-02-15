@@ -25,12 +25,17 @@ export default class {
         });
     }
 
+    /**
+     * 커맨드라인의 filePath 에서 프로젝트를 로드하는 경우 발생하는 함수이다.
+     * workspace.jsx 의 constructor 에서 이벤트를 수신한다.
+     *
+     * .ent 파일을 실행시키는 경우 발생하도록 되어있다.
+     *
+     * @param{Promise<function>} callback loadProject 프로미스
+     */
     static loadProjectFromMain(callback) {
         ipcRenderer.on('loadProjectFromMain', (e, filePath) => {
-            this.loadProject(filePath)
-                .then((project) => {
-                    callback(project);
-                });
+            callback(this.loadProject(filePath));
         });
     }
 

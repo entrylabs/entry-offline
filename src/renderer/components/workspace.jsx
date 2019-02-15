@@ -58,7 +58,19 @@ class Workspace extends Component {
     }
 
     addMainProcessEvents() {
-        IpcRendererHelper.loadProjectFromMain(this.loadProject.bind(this));
+        IpcRendererHelper.loadProjectFromMain(async(readProjectFunction) => {
+            try {
+                this.showModalProgress(
+                    'progress',
+                    RendererUtils.getLang('Workspace.uploading_msg'),
+                    RendererUtils.getLang('Workspace.fail_contact_msg'),
+                );
+                const project = await readProjectFunction;
+                await this.loadProject(project);
+            } finally {
+                this.hideModalProgress();
+            }
+        });
     }
 
     addEntryEvents() {
