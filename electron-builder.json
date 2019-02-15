@@ -26,14 +26,15 @@
     },
     "files": [
         "src/main/static",
+        "src/**/*.html",
         "src/renderer/bower_components",
         "src/renderer/resources",
         "src/main_build",
-        "src/main.html",
         "src/WebAudioPluginTest.fail",
-        "!src/main_build/hot",
         "src/renderer_build",
-        "!src/renderer_build/hot"
+        "!src/main_build/hot",
+        "!src/renderer_build/hot",
+        "!src/**/*.map"
     ],
     "electronCompile": false,
     "asar": true,
