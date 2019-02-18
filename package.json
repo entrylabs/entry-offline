@@ -8,13 +8,14 @@
     "scripts": {
         "start": "electron .",
         "debug": "electron --inspect .",
-        "webpack": "webpack",
-        "watch": "webpack -w",
+        "webpack:dev": "cross-env NODE_ENV=development webpack",
+        "webpack:prod": "cross-env NODE_ENV=production webpack",
+        "watch": "cross-env NODE_ENV=development webpack -w",
         "lint": "eslint src --color",
         "rebuild": "electron-rebuild -v 4.0.4",
-        "dist:win32": "webpack && build -c --ia32",
-        "dist:win64": "webpack && build -c --x64",
-        "dist:mac": "webpack && build -c --mac"
+        "dist:win32": "cross-env NODE_ENV=production webpack && build -c --ia32",
+        "dist:win64": "cross-env NODE_ENV=production webpack && build -c --x64",
+        "dist:mac": "cross-env NODE_ENV=production webpack && build -c --mac"
     },
     "keywords": [
         "entry",
