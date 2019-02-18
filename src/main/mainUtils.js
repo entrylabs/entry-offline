@@ -98,23 +98,7 @@ export default class MainUtils {
      * 이는 새 엔트리 프로젝트를 만들거나 ent 파일이 새로 로드되는 경우 실행된다.
      */
     static resetSaveDirectory() {
-        MainUtils.deleteFolderRecursive(path.resolve(app.getPath('userData'), 'temp'));
-    }
-
-    static deleteFolderRecursive(localPath) {
-        if (fs.existsSync(localPath)) {
-            fs.readdirSync(localPath).forEach((file) => {
-                const curPath = path.resolve(localPath, file);
-                if (fs.lstatSync(curPath).isDirectory()) {
-                    // recurse
-                    MainUtils.deleteFolderRecursive(curPath);
-                } else {
-                    // delete file
-                    fs.unlinkSync(curPath);
-                }
-            });
-            fs.rmdirSync(localPath);
-        }
+        return FileUtils.removeDirectoryRecursive(path.resolve(app.getPath('userData'), 'temp'));
     }
 
     /**

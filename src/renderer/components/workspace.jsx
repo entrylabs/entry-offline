@@ -302,6 +302,7 @@ class Workspace extends Component {
                 filters: [{ name: 'Entry File', extensions: ['ent'] }],
             }, async(filePaths) => {
                 if (Array.isArray(filePaths)) {
+                    await RendererUtils.clearTempProject();
                     const filePath = filePaths[0];
                     const project = await IpcRendererHelper.loadProject(filePath);
                     await this.loadProject(project);

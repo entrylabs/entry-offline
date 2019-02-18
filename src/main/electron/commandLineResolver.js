@@ -37,6 +37,5 @@ export default function(args) {
 }
 
 const _isValidProjectFilePath = function(filePath) {
-    console.log('extName', path.extname(filePath));
     return path.isAbsolute(filePath) && path.extname(filePath) === '.ent';
 };

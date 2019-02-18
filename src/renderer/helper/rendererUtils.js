@@ -25,10 +25,13 @@ export default class {
      * @property saveTemp temp 폴더를 그대로 두는 경우. 이전 리소스가 남아있을지 모르는 상태일때 사용
      */
     static clearTempProject(options = {}) {
+        let resultPromise = Promise.resolve();
         if (!options.saveTemp) {
-            IpcRendererHelper.resetDirectory();
+            resultPromise = IpcRendererHelper.resetDirectory();
         }
-        StorageManager.removeProject();
+        return resultPromise.then(() => {
+            StorageManager.removeProject();
+        });
     }
 
     /**

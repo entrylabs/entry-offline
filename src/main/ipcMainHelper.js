@@ -53,8 +53,14 @@ class IpcMainHelper {
             });
     }
 
-    resetSaveDirectory() {
-        MainUtils.resetSaveDirectory();
+    resetSaveDirectory(event) {
+        MainUtils.resetSaveDirectory()
+            .then(() => {
+                event.sender.send('resetDirectory');
+            })
+            .catch((err) => {
+                console.error(err);
+            });
     }
 
     exportObject(event, filePath, object) {

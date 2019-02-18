@@ -53,7 +53,10 @@ export default class {
     }
 
     static resetDirectory() {
-        ipcRenderer.send('resetDirectory');
+        return new Promise((resolve) => {
+            ipcRenderer.send('resetDirectory');
+            ipcRenderer.once('resetDirectory', resolve);
+        });
     }
 
     static downloadExcel(filename, array) {
