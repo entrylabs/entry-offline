@@ -32,13 +32,11 @@
         "decompress": "^4.2.0",
         "entry-tool": "^1.0.7",
         "excel4node": "^1.7.0",
-        "fs-extra": "^7.0.1",
         "fstream": "^1.0.11",
         "image-size": "^0.7.1",
         "jquery": "^3.3.1",
         "jszip": "^3.1.5",
         "lodash": "^4.17.11",
-        "mime-types": "^2.1.21",
         "mp3-duration": "^1.1.0",
         "object.assign": "^4.1.0",
         "react": "^16.7.0",
@@ -46,7 +44,6 @@
         "react-redux": "^6.0.0",
         "redux": "^4.0.1",
         "redux-persist": "^5.10.0",
-        "redux-saga": "^0.16.2",
         "rimraf": "^2.6.3",
         "socket.io": "1.7.3",
         "socket.io-client": "1.7.3",
@@ -65,6 +62,7 @@
         "babel-loader": "^8.0.5",
         "babel-plugin-async-import": "^2.0.2",
         "babel-plugin-transform-async-to-generator": "^6.24.1",
+        "cross-env": "^5.2.0",
         "css-loader": "^2.1.0",
         "electron": "^4.0.4",
         "electron-builder": "^20.38.5",
@@ -83,7 +81,6 @@
         "style-loader": "^0.23.1",
         "url-loader": "^1.1.2",
         "webpack": "^4.28.3",
-        "webpack-cli": "^3.2.0",
-        "webpack-dev-server": "^3.1.14"
+        "webpack-cli": "^3.2.0"
     }
 }
