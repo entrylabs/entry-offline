@@ -14,9 +14,15 @@ Node.js 는 개발 전반을 위해 반드시 설치가 되어야하는 프레�
   
 #### Yarn(optional)
 엔트리 오프라인은 yarn 을 통해 의존성을 관리 중입니다. npm 을 사용해도 문제는 없습니다.
+```bash
+npm install --global yarn
+```
 
 #### Bower
 엔트리 오프라인의 정적 라이브러리들은 `bower` 를 통해 관리 합니다.
+```bash
+npm install --global bower
+```
 
 #### Node-gyp
 엔트리 오프라인에 포함된 엔트리 하드웨어는 [node-serialport](https://github.com/node-serialport/node-serialport) 를 사용합니다.  
