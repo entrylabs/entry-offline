@@ -23,11 +23,16 @@ Node.js 는 개발 전반을 위해 반드시 설치가 되어야하는 프레�
 해당 라이브러리를 사용하기 위해서는 C++, python 빌드 환경과 [node-gyp](https://github.com/nodejs/node-gyp) 라이브러리가 필요합니다.  
 빌드에 대한 자세한 사항은 [node-gyp#installation](https://github.com/nodejs/node-gyp#installation) 을 참고해 주세요.
 
+먼저 빌드 환경을 구성해야 합니다.  
 윈도우의 경우, 관리자 권한 명령 프롬프트에서
 ```bash
 npm install --global --production windows-build-tools
 ```
 로 한번에 설치할 수 있습니다. [Windows-Build-Tools](https://github.com/felixrieseberg/windows-build-tools) 를 참고해 주세요.
+
+```bash
+npm install --global node-gyp
+```
 
 ## Structure
 
