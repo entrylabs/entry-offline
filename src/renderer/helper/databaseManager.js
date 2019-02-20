@@ -28,7 +28,16 @@ export default class {
 
                     const { main = '', sub = '' } = object.category;
                     return main === sidebar && (subMenu === 'all' || subMenu === sub);
-                }) || [];
+                })
+                    .sort((prev, next) => {
+                        if (!next.name || prev.name > next.name) {
+                            return 1;
+                        } else if (!prev.name || prev.name < next.name) {
+                            return -1;
+                        } else {
+                            return 0;
+                        }
+                    }) || [];
 
             resolve(findList);
         });
