@@ -467,20 +467,41 @@ class EntryModalHelper {
                     Entry.dispatchEvent('pictureImport', item);
                 }
             },
+            dummyUploads: async({ formData }) => {
+                const files = formData.values(); // keyName : ...uploadFile${idx}
+
+                try {
+                    const uploadFilePaths = [];
+                    for (const value of files) {
+                        if (value instanceof File) {
+                            uploadFilePaths.push(value.path);
+                        }
+                    }
+
+                    const results = await IpcRendererHelper.importPictures(uploadFilePaths);
+                    popup.setData({
+                        data: {
+                            data: [], // 없으면 에러남. entry-tool 의 수정필요
+                            uploads: results,
+                        },
+                    });
+                } catch (e) {
+                    console.error(e);
+                }
+            },
             uploads: (data) => {
-                console.log(data);
-                //     data.uploads.forEach(function(item) {
-                //     if (item.sprite) {
-                //         const obj = item.sprite.objects[0];
-                //         obj.id = Entry.generateHash();
-                //         Entry.container.addObject(obj, 0);
-                //         return;
-                //     }
-                //     if (!item.id) {
-                //         item.id = Entry.generateHash();
-                //     }
-                //     Entry.dispatchEvent('pictureImport', item);
-                // });
+                data.uploads.forEach(function(item) {
+                    if (item.sprite) {
+                        const obj = item.sprite.objects[0];
+                        obj.id = Entry.generateHash();
+                        Entry.container.addObject(obj, 0);
+                        return;
+                    }
+                    if (!item.id) {
+                        item.id = Entry.generateHash();
+                    }
+                    Entry.dispatchEvent('pictureImport', item);
+                });
             },
             uploadFail: (data) => {
                 root.entrylms.alert(RendererUtils.getLang(`${data.messageParent}.${data.message}`));
