@@ -13,7 +13,7 @@ const { dialog } = remote;
 export default class {
     /**
      * electron main process 와 연결된 오브젝트를 가져온다.
-     * @return {root.sharedObject}
+     * @return {sharedObject}
      */
     static getSharedObject() {
         return remote.getGlobal('sharedObject');
@@ -40,8 +40,19 @@ export default class {
      * @return {string} 해당하는 값 || key
      */
     static getLang(key = '') {
-        const lang = window.Lang || {};
+        const lang = root.Lang || {};
         return get(lang, key) || key;
+    }
+
+    /**
+     * 현재 window 에 존재한 Lang 오브젝트의 타입을 반환한다.
+     * 타입이 없는경우 fallbackType 이 반환되는데, 반환 순서는 아래와 같다.
+     * 1. Lang 오브젝트의 fallbackType
+     * 2. 한글 (기본)
+     * @return {string}
+     */
+    static getLangType() {
+        return root.Lang.type || root.Lang.fallbackType || 'ko';
     }
 
     /**

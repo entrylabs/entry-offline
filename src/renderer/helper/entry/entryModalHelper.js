@@ -416,7 +416,7 @@ class EntryModalHelper {
         expansionBlocks = _.sortBy(expansionBlocks, function(item) {
             let result = '';
             if (item.title) {
-                item.nameByLang = item.title[root.Lang.type];
+                item.nameByLang = item.title[RendererUtils.getLangType()];
                 result = item.title.ko.toLowerCase();
             }
             return result;

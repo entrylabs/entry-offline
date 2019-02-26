@@ -1,4 +1,5 @@
 import root from 'window-or-global';
+import RendererUtils from './rendererUtils';
 
 export default class {
     /**
@@ -10,7 +11,7 @@ export default class {
     static async changeEntryStatic(mode) {
         let defaultEntryStatic;
         if (mode === 'practical_course') {
-            if (root.Lang && root.Lang.type !== 'ko') {
+            if (root.Lang && RendererUtils.getLangType() !== 'ko') {
                 (async() => await this.changeLang('ko'))();
             }
             defaultEntryStatic = await import('../bower_components/entry-js/extern/util/static_mini');
