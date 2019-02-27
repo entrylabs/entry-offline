@@ -7,7 +7,6 @@ import { PersistGate } from 'redux-persist/integration/react';
 import configureStore from './store';
 import Index from './components/Index.jsx';
 
-import './nativeMenu.js';
 import IpcRendererHelper from './helper/ipcRendererHelper';
 
 const { store, persistor } = configureStore();

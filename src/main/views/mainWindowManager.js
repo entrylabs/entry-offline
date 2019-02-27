@@ -41,9 +41,8 @@ export default class {
         }
 
         let mainWindow = new BrowserWindow({
-            width: 1024,
-            height: 768,
-            useContentSize: true,
+            width: 1080,
+            height: 824,
             title,
             show: false,
             backgroundColor: '#e5e5e5',

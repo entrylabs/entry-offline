@@ -182,13 +182,18 @@ class Workspace extends Component {
         console.log('handleStorageProjectSave called');
         const project = Entry.exportProject();
         if (project) {
-            const { common } = this.props;
-            const { projectName } = common;
-            project.name = projectName;
+            project.name = this._getProjectName();
             Object.assign(project, option);
             LocalStorageManager.saveProject(project);
         }
     }, 300);
+
+    _getProjectName = () => {
+        const { common } = this.props;
+        const { projectName } = common;
+
+        return projectName || RendererUtils.getDefaultProjectName();
+    };
 
     handleHardwareChange = () => {
         const hw = Entry.hw;
@@ -228,9 +233,9 @@ class Workspace extends Component {
     };
 
     handleSaveAction = async(key) => {
-        const { persist, common } = this.props;
-        const { projectName } = common;
+        const { persist } = this.props;
         const { mode } = persist;
+        const projectName = this._getProjectName();
 
         const saveFunction = async(filePath) => {
             if (!filePath) {
@@ -356,7 +361,9 @@ class Workspace extends Component {
     };
 
     reloadProject = async() => {
-        await this.loadProject(Entry.exportProject());
+        const project = Entry.exportProject();
+        project.name = this._getProjectName();
+        await this.loadProject(project);
     };
 
     handleProgramLanguageModeChanged = (mode) => {

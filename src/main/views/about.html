@@ -40,9 +40,7 @@
 	(function () {
 		const { app } = remote;
 		const aboutWindow = remote.getCurrentWindow();
-		if (!localStorage.getItem('lang')) {
-			localStorage.setItem('lang', 'ko');
-		}
+
 		$(window)
 				.keyup((event) => {
 					//esc
@@ -73,10 +71,10 @@
 				.text(app.getVersion());
 
 		aboutWindow.on('show', () => {
-			console.log('show');
+			const rawPersist = localStorage.getItem('persist:storage');
+			const currentLangType = rawPersist ? JSON.parse(JSON.parse(rawPersist).persist)['lang'] : 'ko';
 
-			const langType = localStorage.getItem('lang');
-			window.Lang = require(`../../renderer/resources/lang/${langType}.js`).Lang;
+			window.Lang = require(`../../renderer/resources/lang/${currentLangType}.json`);
 			$('.btnVersionUpdate')
 					.text(Lang.General.recent_download2);
 			$('.txtAlreadyVersion')

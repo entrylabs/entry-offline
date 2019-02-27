@@ -1,7 +1,7 @@
 import Sprites from '../resources/db/sprites.json';
 import Pictures from '../resources/db/pictures.json';
 import Sounds from '../resources/db/sounds.json';
-import root from 'window-or-global';
+import RendererUtils from './rendererUtils';
 
 /**
  * sprite, pictures, sounds 등의 데이터베이스 추출본을 가지고 CRUD 를 흉내내는 클래스.
@@ -56,7 +56,7 @@ export default class {
         return new Promise((resolve) => {
             const findList = table.filter((object) => {
                 const { label = {}, name = '' }  = object;
-                const objectName = label[root.Lang.type] || name;
+                const objectName = label[RendererUtils.getLangType()] || name;
 
                 return objectName.toString().toLowerCase()
                     .indexOf(lowerCaseSearchQuery) > -1;
