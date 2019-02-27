@@ -1,5 +1,6 @@
 import root from 'window-or-global';
 import RendererUtils from './rendererUtils';
+import nativeMenu from '../nativeMenu';
 
 export default class {
     /**
@@ -33,5 +34,6 @@ export default class {
     static async changeLang(lang) {
         root.Lang = await import(`../resources/lang/${lang}.json`);
         root.Lang.Blocks.ARDUINO_download_connector = root.Lang.Blocks.ARDUINO_open_connector;
+        nativeMenu.init();
     }
 }
