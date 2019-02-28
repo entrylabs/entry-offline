@@ -2,8 +2,7 @@ import { BrowserWindow, app } from 'electron';
 import path from 'path';
 
 export default class {
-    constructor(win) {
-        this.mainWindow = win;
+    constructor() {
         this.hardwareWindow = null;
     }
 
@@ -16,7 +15,6 @@ export default class {
         }
 
         this.hardwareWindow = new BrowserWindow({
-            parent: this.mainWindow,
             width: 800,
             height: 650,
             title,

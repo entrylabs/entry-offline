@@ -38,7 +38,7 @@ if (!app.requestSingleInstanceLock()) {
 } else {
     app.once('ready', () => {
         const mainWindow = new MainWindowManager(option);
-        const hardwareWindow = new HardwareWindowManager(mainWindow.window);
+        const hardwareWindow = new HardwareWindowManager();
         const aboutWindow = new AboutWindowManager(mainWindow.window);
 
         app.on('second-instance', (event, commandLine, workingDirectory) => {
