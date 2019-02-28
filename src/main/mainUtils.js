@@ -431,7 +431,7 @@ export default class MainUtils {
                     return object;
                 }));
 
-                await FileUtils.removeDirectoryRecursive(path.join(unpackDirectoryPath, '..'));
+                await FileUtils.removeDirectoryRecursive(path.join(unpackDirectoryPath));
                 resolve(objectResult);
             } catch (err) {
                 reject(err);
