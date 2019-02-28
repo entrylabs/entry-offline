@@ -38,14 +38,20 @@ export default  class {
     }
 
     static get defaultSoundPath() {
-        return ['./bower_components/entry-js/images/media/bark.mp3'];
+        return [
+            './bower_components/entry-js/images/media/bark.mp3',
+            './bower_components/entryjs/images/media/bark.mp3',
+        ];
     }
 
     static get defaultPicturePath() {
         return [
             './bower_components/entry-js/images/media/entrybot1.png',
+            './bower_components/entryjs/images/media/entrybot1.png',
             './bower_components/entry-js/images/media/entrybot2.png',
+            './bower_components/entryjs/images/media/entrybot2.png',
             './bower_components/entry-js/images/_1x1.png',
+            './bower_components/entryjs/images/_1x1.png',
         ];
     }
 
