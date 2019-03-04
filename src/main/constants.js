@@ -5,10 +5,13 @@ export default  class {
     static get replaceStrategy() {
         return {
             fromExternal: (fileUrl) => {
-                let result = fileUrl;
+                let result = fileUrl.replace(/%5C/gi, '\\'); // 1.6.x 버전 대응
                 if (result.startsWith('.')) {
-                    result = result.replace(/\./, 'renderer');
-                } else if (result.startsWith('temp')) {
+                    result = result
+                        .replace(/\./, 'renderer')
+                        .replace('entryjs', 'entry-js'); // 과거 WS 대응
+                } else if (result.indexOf('temp') > -1) {
+                    result = result.substring(result.indexOf('temp'));
                     result = path.join(this.appPath, result)
                         .replace(/\\/gi, '/');
                 }
@@ -38,14 +41,20 @@ export default  class {
     }
 
     static get defaultSoundPath() {
-        return ['./bower_components/entry-js/images/media/bark.mp3'];
+        return [
+            './bower_components/entry-js/images/media/bark.mp3',
+            './bower_components/entryjs/images/media/bark.mp3',
+        ];
     }
 
     static get defaultPicturePath() {
         return [
             './bower_components/entry-js/images/media/entrybot1.png',
+            './bower_components/entryjs/images/media/entrybot1.png',
             './bower_components/entry-js/images/media/entrybot2.png',
+            './bower_components/entryjs/images/media/entrybot2.png',
             './bower_components/entry-js/images/_1x1.png',
+            './bower_components/entryjs/images/_1x1.png',
         ];
     }
 

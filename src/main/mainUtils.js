@@ -55,9 +55,14 @@ export default class MainUtils {
                 buffers.push(data);
             });
 
-            gunzip.on('end', () => {
+            gunzip.on('end', async() => {
                 const bufferStream = new stream.PassThrough();
-                MainUtils.resetSaveDirectory();
+                try {
+                    await MainUtils.resetSaveDirectory();
+                } catch (e) {
+                    console.log(e);
+                }
+
                 const fsWriter = fstream.Writer({
                     path: baseAppPath,
                     mode: '0777',
@@ -427,7 +432,7 @@ export default class MainUtils {
                     return object;
                 }));
 
-                await FileUtils.removeDirectoryRecursive(path.join(unpackDirectoryPath, '..'));
+                await FileUtils.removeDirectoryRecursive(path.join(unpackDirectoryPath));
                 resolve(objectResult);
             } catch (err) {
                 reject(err);
