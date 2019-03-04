@@ -279,7 +279,6 @@ export default class MainUtils {
      */
     static async exportSoundTempFileTo(sound, targetDir) {
         if (Constants.defaultSoundPath.includes(sound.fileurl)) {
-            sound.fileurl = sound.fileurl.replace('entryjs', 'entry-js');
             return sound;
         }
         const fileId = sound.filename;
@@ -307,7 +306,6 @@ export default class MainUtils {
      */
     static async exportPictureTempFileTo(picture, targetDir) {
         if (Constants.defaultPicturePath.includes(picture.fileurl)) {
-            picture.fileurl = picture.fileurl.replace('entryjs', 'entry-js');
             return picture;
         }
         const fileId = picture.filename;
@@ -360,7 +358,6 @@ export default class MainUtils {
                     const newPictures = await Promise.all(
                         pictures.map(async(picture) => {
                             if (Constants.defaultPicturePath.includes(picture.fileurl)) {
-                                picture.fileurl = picture.fileurl.replace('entryjs', 'entry-js');
                                 // selectedPicture 체크로직
                                 const selectedPictureId = object.selectedPictureId;
                                 if (picture.id === selectedPictureId) {
@@ -405,7 +402,6 @@ export default class MainUtils {
                     const newSounds = await Promise.all(
                         sounds.map(async(sound) => {
                             if (Constants.defaultSoundPath.includes(sound.fileurl)) {
-                                sound.fileurl = sound.fileurl.replace('entryjs', 'entry-js');
                                 return sound;
                             }
 
