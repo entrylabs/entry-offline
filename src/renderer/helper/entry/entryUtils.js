@@ -23,7 +23,7 @@ export default class {
         }
 
         if (confirmProjectDismiss) {
-            StorageManager.saveCurrentWorkspaceInterface();
+            this.saveCurrentWorkspaceInterface();
         }
 
         return confirmProjectDismiss;
@@ -285,5 +285,20 @@ export default class {
         );
 
         return `${filename}${extension}`;
+    }
+
+
+    /**
+     * 엔트리 현재 오브젝트, 블록메뉴의 width 를 저장한다.
+     * 이는 entryjs 가 알아서 불러서 활용한다.
+     */
+    static saveCurrentWorkspaceInterface() {
+        if (Entry.type === 'workspace') {
+            if (localStorage && Entry.interfaceState) {
+                StorageManager.setWorkspaceInterface(
+                    JSON.stringify(Entry.captureInterfaceState())
+                );
+            }
+        }
     }
 }
