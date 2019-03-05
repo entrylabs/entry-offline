@@ -48,8 +48,6 @@ class Workspace extends Component {
     }
 
     componentDidMount() {
-        this.hwCategoryList = EntryStatic.hwCategoryList;
-
         setTimeout(async() => {
             const project = await EntryUtils.getSavedProject();
             await this.loadProject(project);
@@ -197,7 +195,7 @@ class Workspace extends Component {
 
     handleHardwareChange = () => {
         const hw = Entry.hw;
-        const hwCategoryList = this.hwCategoryList;
+        const hwCategoryList = EntryStatic.hwCategoryList;
 
         if (
             (hw.connected && hw.hwModule && this.lastHwName === hw.hwModule.name) ||
