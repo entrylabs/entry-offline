@@ -4,7 +4,7 @@
     "main": "",
     "moduleType": ["node"],
     "dependencies": {
-        "entry-hw": "https://github.com/entrylabs/entry-hw.git#feature/electron_v4",
+        "entry-hw": "https://github.com/entrylabs/entry-hw.git#v1.6.34",
         "literallycanvas": "entrylabs/literallycanvas#feature/mobile",
         "socket.io-client": "~1.4.5",
         "react": "~15.2.0",
@@ -19,7 +19,7 @@
         "bootstrap": "3.3.7",
         "codemirror": "5.12.0",
         "fuzzy": "^0.1.3",
-        "entry-js": "entryjs#dist/offline_v2.0.1"
+        "entry-js": "entryjs#dist/offline_v2.0.3"
     },
     "license": "MIT",
     "homepage": "http://playentry.org",
