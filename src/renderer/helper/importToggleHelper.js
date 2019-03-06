@@ -7,7 +7,7 @@ export default class {
      * 교과형 / 일반형 변경
      * 교과형으로 변경시에는 lang 이 강제로 ko 로 고정된다.
      * TODO ko 로 진입하는 것이 불법접근인데 필요한 방어코드인지 고려
-     * @param mode
+     * @param mode{string} workspace | practical_course
      */
     static async changeEntryStatic(mode) {
         let defaultEntryStatic;
@@ -15,13 +15,11 @@ export default class {
             if (root.Lang && RendererUtils.getLangType() !== 'ko') {
                 (async() => await this.changeLang('ko'))();
             }
-            defaultEntryStatic = await import('../bower_components/entry-js/extern/util/static_mini');
-            defaultEntryStatic = defaultEntryStatic.EntryStatic;
+            defaultEntryStatic = await import('../resources/static_mini.js');
         } else {
             defaultEntryStatic = await import('../resources/static.js');
-            defaultEntryStatic = defaultEntryStatic.default;
         }
-
+        defaultEntryStatic = defaultEntryStatic.default;
         root.EntryStatic = defaultEntryStatic || root.EntryStatic;
     }
 
