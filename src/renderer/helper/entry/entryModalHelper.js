@@ -4,6 +4,7 @@ import RendererUtils from '../rendererUtils';
 import IpcRendererHelper from '../ipcRendererHelper';
 import EntryTool from 'entry-tool';
 import DatabaseManager from '../../helper/databaseManager';
+import StorageManager from '../storageManager';
 import _ from 'lodash';
 import EntryUtils from './entryUtils';
 
@@ -588,6 +589,38 @@ class EntryModalHelper {
                 }
             })
             .show();
+    }
+
+    static showUpdateCheckModal(latestVersion) {
+        new Modal()
+            .alert(
+                `${RendererUtils.getLang('Msgs.version_update_msg1')
+                    .replace(/%1/gi, latestVersion)
+                }\n\n${RendererUtils.getLang('Msgs.version_update_msg3')}`,
+                RendererUtils.getLang('General.update_title'),
+                {
+                    positiveButtonText: RendererUtils.getLang('General.recent_download'),
+                    positiveButtonStyle: {
+                        marginTop: '16px',
+                        marginBottom: '16px',
+                        width: '180px',
+                    },
+                    parentClassName: 'versionAlert',
+                    withDontShowAgain: true,
+                }
+            )
+            .one('click', (event, { dontShowChecked }) => {
+                if (event === 'ok') {
+                    IpcRendererHelper.openExternalUrl('https://playentry.org/#!/offlineEditor');
+                }
+                if (dontShowChecked) {
+                    /*
+                    ok 던 close 던 안열기 누른상태면 더이상 안염
+                    localStorage 에는 latestVersion 을 저장
+                    */
+                    StorageManager.setLastDontShowVersion(latestVersion);
+                }
+            });
     }
 }
 const popupTargetElement = () => {
