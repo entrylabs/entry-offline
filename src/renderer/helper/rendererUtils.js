@@ -52,7 +52,16 @@ export default class {
      * @return {string}
      */
     static getLangType() {
-        return root.Lang.type || root.Lang.fallbackType || 'ko';
+        return root.Lang.type || root.Lang.fallbackType;
+    }
+
+    /**
+     * 현재 window 에 존재하는 Lang 오브젝트의 fallback 타입을 먼저 반환한다.
+     * fallbackType 이 없는 경우 type 을 반환한다.
+     * @return {string}
+     */
+    static getFallbackLangType() {
+        return root.Lang.fallbackType || root.Lang.type;
     }
 
     /**
