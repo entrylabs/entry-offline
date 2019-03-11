@@ -48,6 +48,7 @@ class Workspace extends Component {
     }
 
     componentDidMount() {
+        IpcRendererHelper.checkUpdate();
         setTimeout(async() => {
             const project = await EntryUtils.getSavedProject();
             await this.loadProject(project);

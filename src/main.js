@@ -106,47 +106,4 @@ if (!app.requestSingleInstanceLock()) {
             event.sender.webContents.send('serverMode', mode);
         }
     });
-
-    ipcMain.on('checkVersion', (event, lastCheckVersion) => {
-        const version = CommonUtils.getPaddedVersion(packageJson.version);
-        const lastVersion = CommonUtils.getPaddedVersion(lastCheckVersion);
-        event.sender.send('checkVersion', lastVersion > version);
-    });
-
-    ipcMain.on('checkUpdate', ({ sender }, msg) => {
-        if (sender.name !== 'entry') {
-            return;
-        }
-        const request = net.request({
-            method: 'POST',
-            host: option.hostURI,
-            protocol: option.hostProtocol,
-            path: '/api/checkVersion',
-        });
-        let body = '';
-        request.on('response', (res) => {
-            res.on('data', (chunk) => {
-                body += chunk.toString();
-            });
-            res.on('end', () => {
-                let data = {};
-                try {
-                    data = JSON.parse(body);
-                } catch (e) {
-                }
-                sender.send('checkUpdateResult', data);
-            });
-        });
-        request.on('error', (err) => {
-            console.log(err);
-        });
-        request.setHeader('content-type', 'application/json; charset=utf-8');
-        request.write(
-            JSON.stringify({
-                category: 'offline',
-                version: app.getVersion(),
-            }),
-        );
-        request.end();
-    });
 }

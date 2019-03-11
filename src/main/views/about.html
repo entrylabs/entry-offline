@@ -35,67 +35,56 @@
 
 <script>
     window.$ = window.jQuery = require('jquery');
-    const { shell, remote, ipcRenderer } = require('electron');
+    const { shell, remote } = require('electron');
 
 	(function () {
 		const { app } = remote;
 		const aboutWindow = remote.getCurrentWindow();
+		const currentVersion = app.getVersion();
+		const getLatestVersion = () => localStorage.getItem('lastCheckVersion') || '0.0.0';
 
-		$(window)
-				.keyup((event) => {
-					//esc
-					if (event.which === 27) {
-						aboutWindow.hide();
-					}
-				});
+		const $versionUpdateButton = $('.btnVersionUpdate');
+		const $recentVersionText = $('.txtAlreadyVersion');
 
-		$('body')
-				.on('click', function () {
-					aboutWindow.hide();
-				});
+		$(window).keyup((event) => {
+			//esc
+			if (event.which === 27) {
+				aboutWindow.hide();
+			}
+		});
 
-		$('#playEntryBtn')
-				.on('click', function (e) {
-					e.preventDefault();
-					shell.openExternal('https://playentry.org');
-				});
+		$('body').on('click', function () {
+			aboutWindow.hide();
+		});
 
-		$('.btnVersionUpdate')
-				.on('click', () => {
-					shell.openExternal(
-							'https://playentry.org/#!/offlineEditor',
-					);
-				});
+		$('#playEntryBtn').on('click', function (e) {
+			e.preventDefault();
+			shell.openExternal('https://playentry.org');
+		});
 
-		$('#version')
-				.text(app.getVersion());
+		$versionUpdateButton.on('click', () => {
+			shell.openExternal(
+					'https://playentry.org/#!/offlineEditor',
+			);
+		});
+
+		$('#version').text(app.getVersion());
 
 		aboutWindow.on('show', () => {
 			const rawPersist = localStorage.getItem('persist:storage');
 			const currentLangType = rawPersist ? JSON.parse(JSON.parse(rawPersist).persist)['lang'] : 'ko';
 
 			window.Lang = require(`../../renderer/resources/lang/${currentLangType}.json`);
-			$('.btnVersionUpdate')
-					.text(Lang.General.recent_download2);
-			$('.txtAlreadyVersion')
-					.text(Lang.General.latest_version);
+			$versionUpdateButton.text(Lang.General.recent_download2);
+			$recentVersionText.text(Lang.General.latest_version);
 
-			ipcRenderer.once('checkVersion', (e, hasNewVersion) => {
-				if (hasNewVersion) {
-					$('.txtAlreadyVersion')
-							.hide();
-					$('.btnVersionUpdate')
-							.show();
-				} else {
-					$('.btnVersionUpdate')
-							.hide();
-					$('.txtAlreadyVersion')
-							.show();
-				}
-			});
-
-			ipcRenderer.send('checkVersion',
-					localStorage.getItem('lastCheckVersion') || '0.0.0');
+			if (currentVersion < getLatestVersion()) {
+				$recentVersionText.hide();
+				$versionUpdateButton.show();
+			} else {
+				$versionUpdateButton.hide();
+				$recentVersionText.show();
+			}
 		});
 	}());
 </script>

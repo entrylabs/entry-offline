@@ -4,8 +4,11 @@ export default class {
     static get PERSIST() {
         return 'persist:storage';
     }
-    static get LATEST_VERSION() {
-        return 'lastRecentVersion';
+    static get DONT_SHOW_VERSION() {
+        return 'dontShowVersion';
+    }
+    static get LAST_CHECKED_VERSION() {
+        return 'lastCheckVersion';
     }
     static get LOCAL_STORAGE_KEY() {
         return 'localStorageProject';
@@ -73,5 +76,21 @@ export default class {
 
     static setWorkspaceInterface(interfaceState) {
         root.localStorage.setItem(this.WORKSPACE_INTERFACE, interfaceState);
+    }
+
+    static getLastDontShowVersion() {
+        return root.localStorage.getItem(this.DONT_SHOW_VERSION);
+    }
+
+    static setLastDontShowVersion(latestVersion) {
+        root.localStorage.setItem(this.DONT_SHOW_VERSION, latestVersion);
+    }
+
+    static getLastCheckedVersion() {
+        return root.localStorage.getItem(this.LAST_CHECKED_VERSION);
+    }
+
+    static setLastCheckedVersion(lastCheckedVersion) {
+        root.localStorage.setItem(this.LAST_CHECKED_VERSION, lastCheckedVersion);
     }
 }
