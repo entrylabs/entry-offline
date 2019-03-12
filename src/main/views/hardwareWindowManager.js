@@ -6,7 +6,7 @@ export default class {
         this.hardwareWindow = null;
     }
 
-    createHardwareWindow() {
+    createHardwareWindow(curLang) {
         let title;
         if (app.getLocale() === 'ko') {
             title = '엔트리 하드웨어';
@@ -33,11 +33,12 @@ export default class {
         });
 
         this.hardwareWindow.webContents.name = 'hardware';
+        this.hardwareWindow.curLang = curLang;
     }
 
-    openHardwareWindow() {
+    openHardwareWindow(curLang) {
         if (!this.hardwareWindow) {
-            this.createHardwareWindow();
+            this.createHardwareWindow(curLang);
         }
 
         this.hardwareWindow.show();

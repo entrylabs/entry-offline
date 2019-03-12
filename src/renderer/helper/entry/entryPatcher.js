@@ -80,7 +80,7 @@ export default function() {
         RendererUtils.getSharedObject().roomId = [
             localStorage.getItem('entryhwRoomId'),
         ];
-        IpcRendererHelper.openHardwarePage();
+        IpcRendererHelper.openHardwarePage(RendererUtils.getLangType());
         Entry.hw.initSocket();
     };
 

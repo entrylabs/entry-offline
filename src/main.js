@@ -81,7 +81,7 @@ if (!app.requestSingleInstanceLock()) {
         });
 
         ipcMain.on('openHardwareWindow', function(event, arg) {
-            hardwareWindow.openHardwareWindow();
+            hardwareWindow.openHardwareWindow(arg);
         });
 
         ipcMain.on('openAboutWindow', function(event, arg) {
