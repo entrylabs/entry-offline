@@ -97,7 +97,7 @@ class IpcMainHelper {
 
         MainUtils.importObjectsFromResource(objects)
             .then((objects) => {
-                event.sender.send('importObjectsFromResource', objects)
+                event.sender.send('importObjectsFromResource', objects);
             })
             .catch((err) => {
                 console.error(err);
