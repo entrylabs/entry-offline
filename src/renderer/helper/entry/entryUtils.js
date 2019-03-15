@@ -48,8 +48,10 @@ export default class {
 
             console.log('initProjectPath', initProjectPath);
             if (initProjectPath) {
+                // 에러 처리는 안하니까, 에러 발생시 workspace#showErrorModalProgress 활용 필요
                 IpcRendererHelper.loadProject(initProjectPath)
                     .then(resolve)
+                    .catch(() => resolve())
                     .finally(() => {
                         sharedObject.initProjectPath = undefined;
                     });
@@ -63,13 +65,13 @@ export default class {
                         if (confirm) {
                             resolve(project);
                         } else {
-                            resolve(undefined);
+                            resolve();
                         }
                         RendererUtils.clearTempProject({ saveTemp: confirm });
                     })
                     .catch((err) => {
                         console.error(err);
-                        resolve(undefined);
+                        resolve();
                     });
             } else {
                 resolve(undefined);

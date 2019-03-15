@@ -305,14 +305,21 @@ class Workspace extends Component {
                 properties: ['openFile'],
                 filters: [{ name: 'Entry File', extensions: ['ent'] }],
             }, async(filePaths) => {
-                if (Array.isArray(filePaths)) {
-                    await RendererUtils.clearTempProject();
-                    const filePath = filePaths[0];
-                    const project = await IpcRendererHelper.loadProject(filePath);
-                    await this.loadProject(project);
+                try {
+                    if (Array.isArray(filePaths)) {
+                        await RendererUtils.clearTempProject();
+                        const filePath = filePaths[0];
+                        const project = await IpcRendererHelper.loadProject(filePath);
+                        await this.loadProject(project);
+                        this.hideModalProgress();
+                    }
+                } catch (e) {
+                    this.showModalProgress(
+                        'error',
+                        RendererUtils.getLang('Workspace.loading_fail_msg'),
+                        RendererUtils.getLang('Workspace.fail_contact_msg'),
+                    );
                 }
-
-                this.hideModalProgress();
             });
         }
     };

@@ -52,7 +52,8 @@ class IpcMainHelper {
                 event.sender.send('loadProject', project);
             })
             .catch((err) => {
-                event.sender.send('loadProject', err);
+                console.error(err);
+                event.sender.send('loadProject');
             });
     }
 
