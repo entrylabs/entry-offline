@@ -355,8 +355,8 @@ class Workspace extends Component {
 
         if (!this.isFirstRender) {
             Entry.disposeContainer();
-            Entry.reloadBlock();
         }
+        Entry.reloadBlock();
         //TODO entryjs 의 painterBaseUrl 을 옵션에서 가져가지 않는 문제가 있어 개선요망
         Entry.painterBaseUrl = 'renderer/bower_components/literallycanvas/lib/img';
         Entry.init(this.container.current, this.initOption);
