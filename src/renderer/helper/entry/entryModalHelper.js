@@ -194,8 +194,8 @@ class EntryModalHelper {
      * 모양 추가 팝업을 노출한다.
      * fetch 시 Object 와 동일하나, Object 내의 Pictures 를 전부 까서 보여주는 차이가 있다.
      */
-    static showShapePopup() {
-        const popup = this._switchPopup('shape', {
+    static showPicturePopup() {
+        const popup = this._switchPopup('picture', {
             fetch: (data) => {
                 DatabaseManager.findAll({
                     ...data,
@@ -441,11 +441,11 @@ class EntryModalHelper {
     }
 
     /**
-     * 그림판의 편집 > 가져오기 시 팝업을 노출한다. showShapePopup 과 동일한 DB table 이다.
+     * 그림판의 편집 > 가져오기 시 팝업을 노출한다. showPicturePopup 과 동일한 DB table 이다.
      * 검색기능이 없다.
      */
     static showPaintPopup() {
-        const popup = this._switchPopup('getShape', {
+        const popup = this._switchPopup('paint', {
             fetch: (data) => {
                 DatabaseManager.findAll({
                     ...data,
@@ -543,6 +543,42 @@ class EntryModalHelper {
         popup.show({ type, baseUrl: './renderer/resources' });
         return popup;
     }
+
+    /**
+     * 팝업을 로드한다. 두번째부터는 기존 팝업을 그대로 사용한다.
+     *
+     * @param {!string} type
+     * @param {?Object} data
+     * @return {Object} popup
+     */
+    static loadPopup = (type, data) => {
+        const popup = EntryModalHelper.popup;
+        if (popup === undefined) {
+            EntryModalHelper.popup = new EntryTool({
+                container: (function() {
+                    const targetDiv = document.createElement('div');
+                    targetDiv.classList = 'modal';
+
+                    return targetDiv;
+                })(),
+                target: document.body,
+                isShow: false,
+                data: {
+                    data: {
+                        data,
+                    },
+                    isOffline: true,
+                    imageBaseUrl: './renderer/bower_components/entry-js/images/hardware/',
+                },
+                type: 'popup',
+                props: { type, baseUrl: './renderer/resources' },
+            });
+
+            return EntryModalHelper.popup;
+        } else {
+            return popup;
+        }
+    };
 
     static openImportListModal() {
         new Modal()
@@ -648,44 +684,5 @@ class EntryModalHelper {
         return result;
     }
 }
-const popupTargetElement = () => {
-    const targetDiv = document.createElement('div');
-    targetDiv.classList = 'modal';
-
-    return targetDiv;
-};
-
-//TODO 렌더가 바로 되지 않는 현상이 해결되면 popup 하나로 돌려쓰기 한다.
-/**
- * 팝업을 로드한다. 두번째부터는 기존 팝업을 그대로 사용한다.
- *
- * @param type!
- * @param data?
- * @param props?
- * @return {Object} popup
- */
-EntryModalHelper.loadPopup = (type, data, props) => {
-    const popup = EntryModalHelper[`${type}Popup`];
-    if (popup === undefined) {
-        EntryModalHelper[`${type}Popup`] = new EntryTool({
-            container: popupTargetElement(),
-            target: document.body,
-            isShow: false,
-            data: {
-                data: {
-                    data,
-                },
-                isOffline: true,
-                imageBaseUrl: './renderer/bower_components/entry-js/images/hardware/',
-            },
-            type: 'popup',
-            props: { type, baseUrl: './renderer/resources' },
-        });
-
-        return EntryModalHelper[`${type}Popup`];
-    } else {
-        return popup;
-    }
-};
 
 export default EntryModalHelper;

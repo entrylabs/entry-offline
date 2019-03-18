@@ -102,7 +102,7 @@ class Workspace extends Component {
         addEventListener('openExportListModal', ModalHelper.openExportListModal);
 
         addEventListener('openPictureManager', () => {
-            ModalHelper.showShapePopup();
+            ModalHelper.showPicturePopup();
         });
         addEventListener('openSpriteManager', () => {
             ModalHelper.showSpritePopup();
