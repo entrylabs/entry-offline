@@ -1,6 +1,15 @@
 import root from 'window-or-global';
 
 export default class {
+    static get PERSIST() {
+        return 'persist:storage';
+    }
+    static get DONT_SHOW_VERSION() {
+        return 'dontShowVersion';
+    }
+    static get LAST_CHECKED_VERSION() {
+        return 'lastCheckVersion';
+    }
     static get LOCAL_STORAGE_KEY() {
         return 'localStorageProject';
     }
@@ -12,6 +21,9 @@ export default class {
     }
     static get LOCAL_STORAGE_WS_MODE() {
         return 'mode';
+    }
+    static get WORKSPACE_INTERFACE() {
+        return 'workspace-interface';
     }
 
     static saveProject(project) {
@@ -43,7 +55,7 @@ export default class {
     }
 
     static getPersistLangType() {
-        const rawPersist = root.localStorage.getItem('persist:storage');
+        const rawPersist = root.localStorage.getItem(this.PERSIST);
         if (!rawPersist) {
             return;
         }
@@ -53,7 +65,7 @@ export default class {
     }
 
     static getPersistWorkspaceMode() {
-        const rawPersist = root.localStorage.getItem('persist:storage');
+        const rawPersist = root.localStorage.getItem(this.PERSIST);
         if (!rawPersist) {
             return;
         }
@@ -62,19 +74,23 @@ export default class {
         return persist[this.LOCAL_STORAGE_WS_MODE];
     }
 
-    /**
-     * Entry 전용
-     * 엔트리 현재 오브젝트, 블록메뉴의 width 를 저장한다.
-     * 이는 entryjs 가 알아서 불러서 활용한다.
-     */
-    static saveCurrentWorkspaceInterface() {
-        if (Entry.type === 'workspace') {
-            if (localStorage && Entry.interfaceState) {
-                localStorage.setItem(
-                    'workspace-interface',
-                    JSON.stringify(Entry.captureInterfaceState())
-                );
-            }
-        }
+    static setWorkspaceInterface(interfaceState) {
+        root.localStorage.setItem(this.WORKSPACE_INTERFACE, interfaceState);
+    }
+
+    static getLastDontShowVersion() {
+        return root.localStorage.getItem(this.DONT_SHOW_VERSION);
+    }
+
+    static setLastDontShowVersion(latestVersion) {
+        root.localStorage.setItem(this.DONT_SHOW_VERSION, latestVersion);
+    }
+
+    static getLastCheckedVersion() {
+        return root.localStorage.getItem(this.LAST_CHECKED_VERSION);
+    }
+
+    static setLastCheckedVersion(lastCheckedVersion) {
+        root.localStorage.setItem(this.LAST_CHECKED_VERSION, lastCheckedVersion);
     }
 }

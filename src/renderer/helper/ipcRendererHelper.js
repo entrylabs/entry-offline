@@ -1,5 +1,7 @@
 import { ipcRenderer } from 'electron';
 import RendererUtils from './rendererUtils';
+import StorageManager from './storageManager';
+import EntryModalHelper from './entry/entryModalHelper';
 
 /**
  * electron main process 로 통신하기 위해 사용하는 클래스.
@@ -16,10 +18,10 @@ export default class {
         return new Promise((resolve, reject) => {
             ipcRenderer.send('loadProject', filePath);
             ipcRenderer.once('loadProject', (e, result) => {
-                if (result instanceof Error) {
-                    reject(result);
-                } else {
+                if (result) {
                     resolve(result);
+                } else {
+                    reject(result);
                 }
             });
         });
@@ -205,5 +207,34 @@ export default class {
 
     static openHardwarePage() {
         ipcRenderer.send('openHardwareWindow');
+    }
+
+    static checkUpdate() {
+        return new Promise((resolve) => {
+            ipcRenderer.send('checkUpdate');
+            ipcRenderer.once('checkUpdate',(e, currentVersion, {
+                hasNewVersion, version : latestVersion,
+            }) => {
+                /**
+                 latestVersion properties
+                 @property hasNewVersion{boolean} 요청을 보냈을때의 버전과 비교하여 업데이트가 필요한지 여부
+                 @property padded_version{string} ex) '0002.0000.0002' 비교를 위한 패딩
+                 @property version{string} ex) 2.0.2 원래 버전
+                 @property _id{string} ex) 저장된 mongoDB 오브젝트 ID
+                 */
+                console.log(currentVersion, hasNewVersion, latestVersion);
+                const lastDontShowCheckedVersion = StorageManager.getLastDontShowVersion();
+                // 다시보지않음을 클릭하지 않았거나, 클릭했지만 당시보다 더 높은 버전이 나온 경우 출력
+                if ((!lastDontShowCheckedVersion || (lastDontShowCheckedVersion < latestVersion)) && hasNewVersion) {
+                    EntryModalHelper.showUpdateCheckModal(latestVersion);
+                    StorageManager.setLastCheckedVersion(latestVersion);
+                }
+                resolve();
+            });
+        });
+    }
+
+    static openExternalUrl(url) {
+        ipcRenderer.send('openUrl', url);
     }
 }

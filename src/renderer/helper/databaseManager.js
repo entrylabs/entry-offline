@@ -56,7 +56,10 @@ export default class {
         return new Promise((resolve) => {
             const findList = table.filter((object) => {
                 const { label = {}, name = '' }  = object;
-                const objectName = label[RendererUtils.getLangType()] || name;
+                const objectName =
+                    label[RendererUtils.getLangType()] ||
+                    label[RendererUtils.getFallbackLangType()] ||
+                    name;
 
                 return objectName.toString().toLowerCase()
                     .indexOf(lowerCaseSearchQuery) > -1;

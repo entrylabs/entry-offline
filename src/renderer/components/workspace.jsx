@@ -48,8 +48,7 @@ class Workspace extends Component {
     }
 
     componentDidMount() {
-        this.hwCategoryList = EntryStatic.hwCategoryList;
-
+        IpcRendererHelper.checkUpdate();
         setTimeout(async() => {
             const project = await EntryUtils.getSavedProject();
             await this.loadProject(project);
@@ -103,7 +102,7 @@ class Workspace extends Component {
         addEventListener('openExportListModal', ModalHelper.openExportListModal);
 
         addEventListener('openPictureManager', () => {
-            ModalHelper.showShapePopup();
+            ModalHelper.showPicturePopup();
         });
         addEventListener('openSpriteManager', () => {
             ModalHelper.showSpritePopup();
@@ -197,7 +196,7 @@ class Workspace extends Component {
 
     handleHardwareChange = () => {
         const hw = Entry.hw;
-        const hwCategoryList = this.hwCategoryList;
+        const hwCategoryList = EntryStatic.hwCategoryList;
 
         if (
             (hw.connected && hw.hwModule && this.lastHwName === hw.hwModule.name) ||
@@ -306,14 +305,21 @@ class Workspace extends Component {
                 properties: ['openFile'],
                 filters: [{ name: 'Entry File', extensions: ['ent'] }],
             }, async(filePaths) => {
-                if (Array.isArray(filePaths)) {
-                    await RendererUtils.clearTempProject();
-                    const filePath = filePaths[0];
-                    const project = await IpcRendererHelper.loadProject(filePath);
-                    await this.loadProject(project);
+                try {
+                    if (Array.isArray(filePaths)) {
+                        await RendererUtils.clearTempProject();
+                        const filePath = filePaths[0];
+                        const project = await IpcRendererHelper.loadProject(filePath);
+                        await this.loadProject(project);
+                        this.hideModalProgress();
+                    }
+                } catch (e) {
+                    this.showModalProgress(
+                        'error',
+                        RendererUtils.getLang('Workspace.loading_fail_msg'),
+                        RendererUtils.getLang('Workspace.fail_contact_msg'),
+                    );
                 }
-
-                this.hideModalProgress();
             });
         }
     };
@@ -349,10 +355,8 @@ class Workspace extends Component {
 
         if (!this.isFirstRender) {
             Entry.disposeContainer();
-            Entry.reloadBlock();
         }
-        //TODO entryjs 의 painterBaseUrl 을 옵션에서 가져가지 않는 문제가 있어 개선요망
-        Entry.painterBaseUrl = 'renderer/bower_components/literallycanvas/lib/img';
+        Entry.reloadBlock();
         Entry.init(this.container.current, this.initOption);
         entryPatch();
         Entry.enableArduino();

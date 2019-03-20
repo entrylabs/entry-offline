@@ -1,5 +1,6 @@
-import { app, ipcMain } from 'electron';
+import { app, ipcMain, shell, net } from 'electron';
 import path from 'path';
+import root from 'window-or-global';
 import MainUtils from './mainUtils';
 import Constants from './constants';
 import CommonUtils from './commonUtils';
@@ -30,6 +31,8 @@ class IpcMainHelper {
         ipcMain.on('tempResourceDownload', this.tempResourceDownload.bind(this));
         ipcMain.on('saveExcel', this.saveExcel.bind(this));
         ipcMain.on('writeFile', this.writeFile.bind(this));
+        ipcMain.on('openUrl', this.openUrl.bind(this));
+        ipcMain.on('checkUpdate', this.checkUpdate.bind(this));
         ipcMain.on('quit', this.quitApplication.bind(this));
     }
 
@@ -49,7 +52,8 @@ class IpcMainHelper {
                 event.sender.send('loadProject', project);
             })
             .catch((err) => {
-                event.sender.send('loadProject', err);
+                console.error(err);
+                event.sender.send('loadProject');
             });
     }
 
@@ -94,7 +98,7 @@ class IpcMainHelper {
 
         MainUtils.importObjectsFromResource(objects)
             .then((objects) => {
-                event.sender.send('importObjectsFromResource', objects)
+                event.sender.send('importObjectsFromResource', objects);
             })
             .catch((err) => {
                 console.error(err);
@@ -244,6 +248,46 @@ class IpcMainHelper {
 
     quitApplication(event) {
         app.quit();
+    }
+
+    checkUpdate(event) {
+        const request = net.request({
+            method: 'POST',
+            host: root.sharedObject.hostURI,
+            protocol: root.sharedObject.hostProtocol,
+            path: '/api/checkVersion',
+        });
+
+        request.on('response', (res) => {
+            let body = '';
+            res.on('data', (chunk) => {
+                body += chunk.toString();
+            });
+            res.on('end', () => {
+                let data = {};
+                try {
+                    data = JSON.parse(body);
+                } catch (e) {
+                    console.log(e);
+                }
+                event.sender.send('checkUpdate', app.getVersion(), data);
+            });
+        });
+        request.on('error', (err) => {
+            console.log(err);
+        });
+        request.setHeader('content-type', 'application/json; charset=utf-8');
+        request.write(
+            JSON.stringify({
+                category: 'offline',
+                version: app.getVersion(),
+            }),
+        );
+        request.end();
+    }
+
+    openUrl(event, url) {
+        shell.openExternal(url);
     }
 }
 

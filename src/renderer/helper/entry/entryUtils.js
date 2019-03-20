@@ -23,7 +23,7 @@ export default class {
         }
 
         if (confirmProjectDismiss) {
-            StorageManager.saveCurrentWorkspaceInterface();
+            this.saveCurrentWorkspaceInterface();
         }
 
         return confirmProjectDismiss;
@@ -48,8 +48,10 @@ export default class {
 
             console.log('initProjectPath', initProjectPath);
             if (initProjectPath) {
+                // 에러 처리는 안하니까, 에러 발생시 workspace#showErrorModalProgress 활용 필요
                 IpcRendererHelper.loadProject(initProjectPath)
                     .then(resolve)
+                    .catch(() => resolve())
                     .finally(() => {
                         sharedObject.initProjectPath = undefined;
                     });
@@ -63,13 +65,13 @@ export default class {
                         if (confirm) {
                             resolve(project);
                         } else {
-                            resolve(undefined);
+                            resolve();
                         }
                         RendererUtils.clearTempProject({ saveTemp: confirm });
                     })
                     .catch((err) => {
                         console.error(err);
-                        resolve(undefined);
+                        resolve();
                     });
             } else {
                 resolve(undefined);
@@ -285,5 +287,20 @@ export default class {
         );
 
         return `${filename}${extension}`;
+    }
+
+
+    /**
+     * 엔트리 현재 오브젝트, 블록메뉴의 width 를 저장한다.
+     * 이는 entryjs 가 알아서 불러서 활용한다.
+     */
+    static saveCurrentWorkspaceInterface() {
+        if (Entry.type === 'workspace') {
+            if (localStorage && Entry.interfaceState) {
+                StorageManager.setWorkspaceInterface(
+                    JSON.stringify(Entry.captureInterfaceState())
+                );
+            }
+        }
     }
 }
