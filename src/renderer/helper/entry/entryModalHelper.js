@@ -118,8 +118,8 @@ class EntryModalHelper {
                 Entry.container.addObject(object, 0);
             },
             dummyUploads: async({ formData, objectData }) => {
-                const pictures = formData.values();
-                const objects = objectData.values();
+                const pictures = formData ? formData.values() : [];
+                const objects = objectData ? objectData.values() : [];
 
                 const uploadPicturesPaths = [];
                 const uploadObjectPaths = [];
@@ -274,7 +274,7 @@ class EntryModalHelper {
                 Entry.container.addObject(object, 0);
             },
             dummyUploads: async({ formData }) => {
-                const files = formData.values(); // keyName : ...uploadFile${idx}
+                const files = formData ? formData.values() : []; // keyName : ...uploadFile${idx}
 
                 try {
                     const uploadFilePaths = [];
@@ -368,7 +368,7 @@ class EntryModalHelper {
                 root.createjs.Sound.play(data.id);
             },
             dummyUploads: async({ formData }) => {
-                const files = formData.values(); // keyName : ...uploadFile${idx}
+                const files = formData ? formData.values() : []; // keyName : ...uploadFile${idx}
 
                 try {
                     const uploadFilePaths = [];
@@ -472,7 +472,7 @@ class EntryModalHelper {
                 }
             },
             dummyUploads: async({ formData }) => {
-                const files = formData.values(); // keyName : ...uploadFile${idx}
+                const files = formData ? formData.values() : []; // keyName : ...uploadFile${idx}
 
                 try {
                     const uploadFilePaths = [];
