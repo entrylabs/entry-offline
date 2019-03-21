@@ -121,6 +121,7 @@ class Workspace extends Component {
             Entry.creationChangedEvent = new Entry.Event(window);
         }
         Entry.creationChangedEvent.attach(this, this.handleStorageProjectSave);
+        Entry.creationChangedEvent.attach(this, this.setExecutionStatus);
 
         const workspace = Entry.getMainWS();
         if (workspace) {
@@ -186,6 +187,15 @@ class Workspace extends Component {
             LocalStorageManager.saveProject(project);
         }
     }, 300);
+
+    setExecutionStatus = () => {
+        this.setState({
+            executionStatus: {
+                canRedo: Entry.stateManager.canRedo(),
+                canUndo: Entry.stateManager.canUndo(),
+            },
+        });
+    };
 
     _getProjectName = () => {
         const { common } = this.props;
@@ -422,7 +432,7 @@ class Workspace extends Component {
     };
 
     render() {
-        const { programLanguageMode } = this.state;
+        const { programLanguageMode, executionStatus } = this.state;
         const { modal } = this.props;
         const { isShow, data } = modal;
         const { title, type, description } = data;
@@ -436,6 +446,7 @@ class Workspace extends Component {
                     onLoadProject={this.loadProject}
                     onProgramLanguageChanged={this.handleProgramLanguageModeChanged}
                     programLanguageMode={programLanguageMode}
+                    executionStatus={executionStatus}
                 />
                 <div ref={this.container} className="workspace"/>
                 {isShow && (

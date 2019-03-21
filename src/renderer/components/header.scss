@@ -257,10 +257,16 @@
             background-size: 32px auto;
         }
         .btn_workspace_undo {
+            &.disabled {
+                background: url(../renderer/resources/images/gnb/btn_workspace_undo_disabled.png) no-repeat;
+            }
             background: url(../renderer/resources/images/gnb/btn_workspace_undo_textbook_mode.png) no-repeat;
             background-size: 32px auto;
         }
         .btn_workspace_redo {
+            &.disabled {
+                background: url(../renderer/resources/images/gnb/btn_workspace_redo_disabled.png) no-repeat;
+            }
             background: url(../renderer/resources/images/gnb/btn_workspace_redo_textbook_mode.png) no-repeat;
             background-size: 32px auto;
         }
@@ -305,12 +311,18 @@
     background: url(../renderer/resources/images/gnb/btn_workspace_print.png) no-repeat;
     background-size: 32px auto;
 }
-.btn_workspace_redo {
-    background: url(../renderer/resources/images/gnb/btn_workspace_redo.png) no-repeat;
+.btn_workspace_undo {
+    &.disabled {
+        background: url(../renderer/resources/images/gnb/btn_workspace_undo_disabled.png) no-repeat;
+    }
+    background: url(../renderer/resources/images/gnb/btn_workspace_undo_textbook_mode.png) no-repeat;
     background-size: 32px auto;
 }
-.btn_workspace_undo {
-    background: url(../renderer/resources/images/gnb/btn_workspace_undo.png) no-repeat;
+.btn_workspace_redo {
+    &.disabled {
+        background: url(../renderer/resources/images/gnb/btn_workspace_redo_disabled.png) no-repeat;
+    }
+    background: url(../renderer/resources/images/gnb/btn_workspace_redo_textbook_mode.png) no-repeat;
     background-size: 32px auto;
 }
 .ico_workspace_practical {
