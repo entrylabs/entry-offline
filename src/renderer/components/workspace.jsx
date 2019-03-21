@@ -321,8 +321,8 @@ class Workspace extends Component {
                         const filePath = filePaths[0];
                         const project = await IpcRendererHelper.loadProject(filePath);
                         await this.loadProject(project);
-                        this.hideModalProgress();
                     }
+                    this.hideModalProgress();
                 } catch (e) {
                     this.showModalProgress(
                         'error',
