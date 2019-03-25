@@ -24,8 +24,8 @@ root.sharedObject = {
     isInitEntry: false,
     initProjectPath: option.file,
     appName: 'entry',
-    hostURI: 'playentry.org',
-    hostProtocol: 'https:',
+    hostURI: option.hostURI,
+    hostProtocol: option.hostProtocol,
 };
 
 app.on('window-all-closed', function() {
