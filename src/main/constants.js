@@ -6,11 +6,11 @@ export default  class {
         return {
             fromExternal: (fileUrl) => {
                 let result = fileUrl.replace(/%5C/gi, '\\'); // 1.6.x 버전 대응
-                if (result.startsWith('.')) {
+                if (result.startsWith('./bower_components')) { // 웹 기본 오브젝트 대응
                     result = result
                         .replace(/\./, 'renderer')
-                        .replace('entryjs', 'entry-js'); // 과거 WS 대응
-                } else if (result.indexOf('temp') > -1) {
+                        .replace('entryjs', 'entry-js'); // 과거 웹 WS 대응
+                } else if (result.indexOf('temp') > -1) { // 일반 오브젝트 대응
                     result = result.substring(result.indexOf('temp'));
                     result = path.join(this.appPath, result)
                         .replace(/\\/gi, '/');
