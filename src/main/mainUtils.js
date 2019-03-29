@@ -15,6 +15,7 @@ import crypto from 'crypto';
 import FileUtils from './fileUtils';
 import Constants from './constants';
 import CommonUtils from './commonUtils';
+import BlockConverter from './blockConverter';
 /**
  * Main Process 에서 발생하는 로직들을 담당한다.
  * ipcMain 을 import 하여 사용하지 않는다. renderer Process 간 이벤트 관리는 ipcMainHelper 가 한다.
@@ -83,9 +84,23 @@ export default class MainUtils {
                                 reject(err);
                             } else {
                                 const project = JSON.parse(data);
-                                MainUtils.changeObjectsPath(project.objects, Constants.replaceStrategy.fromExternal);
-                                project.savedPath = filePath; // real .ent file's path
-                                resolve(project);
+                                if (project.objects[0] && project.objects[0].script.substr(0, 4) === '<xml') {
+                                    BlockConverter.convert(project, (convertedProject) => {
+                                        MainUtils.changeObjectsPath(
+                                            convertedProject.objects,
+                                            Constants.replaceStrategy.fromExternal,
+                                        );
+                                        convertedProject.savedPath = filePath; // real .ent file's path
+                                        resolve(convertedProject);
+                                    });
+                                } else {
+                                    MainUtils.changeObjectsPath(
+                                        project.objects,
+                                        Constants.replaceStrategy.fromExternal,
+                                    );
+                                    project.savedPath = filePath; // real .ent file's path
+                                    resolve(project);
+                                }
                             }
                         }
                     );
@@ -553,18 +568,6 @@ export default class MainUtils {
                         FileUtils.createThumbnailBuffer(image),
                         thumbnailPath),
                 ]);
-
-                // 만약 이전 데이터가 있다면 데이터를 삭제한다.
-                // if (prevFilename) {
-                //     console.log('delete prevImageFile ', prevFilename);
-                //     const prevImagePath = Constants.tempImagePath(prevFilename);
-                //     const prevThumbnailPath = Constants.tempThumbnailPath(prevFilename);
-                //
-                //     await Promise.all([
-                //         FileUtils.deleteFile(prevImagePath),
-                //         FileUtils.deleteFile(prevThumbnailPath),
-                //     ]);
-                // }
 
                 //TODO 빈 폴더인지 검사한 후, 삭제하기 (앞 4자리가 같은 다른 파일이 있을 수 있음)
                 resolve({
