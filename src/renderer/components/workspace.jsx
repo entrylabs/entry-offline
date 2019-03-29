@@ -365,8 +365,8 @@ class Workspace extends Component {
 
         if (!this.isFirstRender) {
             Entry.disposeContainer();
+            Entry.reloadBlock();
         }
-        Entry.reloadBlock();
         Entry.init(this.container.current, this.initOption);
         entryPatch();
         Entry.enableArduino();
