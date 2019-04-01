@@ -20,9 +20,9 @@ class EntryModalHelper {
     /**
      * 오브젝트 추가 팝업을 노출한다
      */
-    static showSpritePopup() {
+    static async showSpritePopup() {
         console.log('object popup show');
-        const popup = this._switchPopup('sprite', {
+        const popup = await this._switchPopup('sprite', {
             fetch: (data) => {
                 DatabaseManager.findAll(data)
                     .then((result) => {
@@ -194,8 +194,8 @@ class EntryModalHelper {
      * 모양 추가 팝업을 노출한다.
      * fetch 시 Object 와 동일하나, Object 내의 Pictures 를 전부 까서 보여주는 차이가 있다.
      */
-    static showPicturePopup() {
-        const popup = this._switchPopup('picture', {
+    static async showPicturePopup() {
+        const popup = await this._switchPopup('picture', {
             fetch: (data) => {
                 DatabaseManager.findAll({
                     ...data,
@@ -319,8 +319,8 @@ class EntryModalHelper {
      * 소리 추가 팝업을 노출한다.
      * 소리는 추가됨과 동시에 loadSound 함수를 통해 실제 mp3 파일을 Entry 에 추가한다.
      */
-    static showSoundPopup() {
-        const popup = this._switchPopup('sound', {
+    static async showSoundPopup() {
+        const popup = await this._switchPopup('sound', {
             fetch: (data) => {
                 DatabaseManager.findAll(data)
                     .then((result) => {
@@ -415,7 +415,7 @@ class EntryModalHelper {
     /**
      * 확장블록 리스트를 가져와, 확장블록 추가 팝업을 노출한다.
      */
-    static showExpansionPopup() {
+    static async showExpansionPopup() {
         let expansionBlocks = _.uniq(_.values(Entry.EXPANSION_BLOCK_LIST));
         expansionBlocks = _.sortBy(expansionBlocks, function(item) {
             let result = '';
@@ -426,7 +426,7 @@ class EntryModalHelper {
             return result;
         });
 
-        this._switchPopup('expansion', {
+        await this._switchPopup('expansion', {
             submit: (data) => {
                 data.selected.forEach(function(item) {
                     item.id = Entry.generateHash();
@@ -444,8 +444,8 @@ class EntryModalHelper {
      * 그림판의 편집 > 가져오기 시 팝업을 노출한다. showPicturePopup 과 동일한 DB table 이다.
      * 검색기능이 없다.
      */
-    static showPaintPopup() {
-        const popup = this._switchPopup('paint', {
+    static async showPaintPopup() {
+        const popup = await this._switchPopup('paint', {
             fetch: (data) => {
                 DatabaseManager.findAll({
                     ...data,
@@ -527,8 +527,20 @@ class EntryModalHelper {
      * @param {*}data entry-tool popup 최초 init 시에 들어갈 data object
      * @return popup 자신을 반환한다. 내부 콜백에서 자신을 사용해야 하는 경우 활용가능하다.
      */
-    static _switchPopup(type, events = {}, data = []) {
+    static async _switchPopup(type, events = {}, data = []) {
         const popup = this.loadPopup(type, data);
+        if (this.lastOpenedType === type && data.length === 0) {
+            const initialData = await DatabaseManager.findAll({
+                sidebar: type === 'sound' ? '사람' : 'entrybot_friends',
+                subMenu: 'all',
+                type,
+            });
+            popup.setData({
+                data: { data: initialData },
+            });
+        }
+        this.lastOpenedType = type;
+
         if (popup.isShow) {
             popup.hide();
         }
