@@ -16,7 +16,11 @@ export default function() {
     Entry.playground.downloadPicture = function(pictureId) {
         const picture = Entry.playground.object.getPicture(pictureId);
         const saveFileName = EntryUtils.getObjectNameWithExtension(picture, 'png');
-        picture.fileurl = picture.fileurl.slice(0, picture.fileurl.indexOf('?'));
+
+        const timeQueryIndex = picture.fileurl.indexOf('?');
+        if (timeQueryIndex > -1) {
+            picture.fileurl = picture.fileurl.slice(0, timeQueryIndex);
+        }
         RendererUtils.showSaveDialog({
             title: RendererUtils.getLang('Workspace.file_save'),
             defaultPath: saveFileName,
