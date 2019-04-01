@@ -2,6 +2,7 @@ import root from 'window-or-global';
 import _lodash from 'lodash';
 import jquery from 'jquery';
 import { BigNumber } from 'bignumber.js';
+import Entrylms from './resources/modal/app';
 import StorageManager from './helper/storageManager';
 import ImportToggleHelper from './helper/importToggleHelper';
 
@@ -26,16 +27,11 @@ root.jQuery = jquery;
 // bigNumber
 root.BigNumber = BigNumber;
 
-// entry-lms dummy
+// entry-lms
+const entrylms = new Entrylms();
 root.entrylms = {
-    alert: (text) => {
-        alert(text);
-    },
-    confirm: (text) => {
-        return new Promise((resolve) => {
-            resolve(confirm(text));
-        });
-    },
+    alert: entrylms.alert,
+    confirm: entrylms.confirm,
 };
 
 root.isOsx = process.platform === 'darwin';
