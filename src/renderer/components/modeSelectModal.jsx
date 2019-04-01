@@ -27,6 +27,7 @@ class ModeSelectModal extends PureComponent {
 
         try {
             await ImportToggleHelper.changeEntryStatic(mode);
+            Entry.reloadBlock();
             changeWorkspaceMode(mode);
         } catch (e) {
             console.error(e);
