@@ -2,7 +2,7 @@
     "private": true,
     "productName": "Entry",
     "name": "entry",
-    "version": "2.0.4",
+    "version": "2.0.5",
     "description": "Entry for offline",
     "main": "src/main_build/main.bundle.js",
     "scripts": {
@@ -13,8 +13,8 @@
         "watch": "cross-env NODE_ENV=development webpack -w",
         "lint": "eslint src --color",
         "rebuild": "electron-rebuild -v 4.0.4",
-        "dist:win32": "cross-env NODE_ENV=production webpack && build -c --ia32",
-        "dist:win64": "cross-env NODE_ENV=production webpack && build -c --x64",
+        "dist:win32": "cross-env NODE_ENV=production webpack && build -c -w --ia32=true",
+        "dist:win64": "cross-env NODE_ENV=production webpack && build -c -w --x64=true",
         "dist:mac": "cross-env NODE_ENV=production webpack && build -c --mac"
     },
     "keywords": [
