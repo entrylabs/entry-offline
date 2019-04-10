@@ -33,6 +33,8 @@ app.on('window-all-closed', function() {
 if (!app.requestSingleInstanceLock()) {
     app.quit();
 } else {
+    app.commandLine.appendSwitch("disable-renderer-backgrounding");
+
     app.once('ready', () => {
         const mainWindow = new MainWindowManager(option);
         const hardwareWindow = new HardwareWindowManager();
