@@ -145,3 +145,8 @@
   src: url("../renderer/resources/fonts/NotoSansKR-subset-Bold.eot");
   src: url("../renderer/resources/fonts/NotoSansKR-subset-Bold.eot?#iefix") format('embedded-opentype'), url("../renderer/resources/fonts/NotoSansKR-subset-Bold.woff") format('woff');
 }
+@font-face {
+  font-family: NanumGothic;
+  font-style: normal;
+  src: local('Nanum Gothic'), url("../renderer/resources/fonts/NanumGothic-Regular.woff2") format('woff2');
+}
