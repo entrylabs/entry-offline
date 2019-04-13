@@ -2,7 +2,6 @@ import {
     app,
     Menu,
     ipcMain,
-    net,
 } from 'electron';
 import HardwareWindowManager from './main/views/hardwareWindowManager';
 import MainWindowManager from './main/views/mainWindowManager';
@@ -10,8 +9,6 @@ import AboutWindowManager from './main/views/aboutWindowManager';
 import root from 'window-or-global';
 import commandLineResolve from './main/electron/commandLineResolver';
 
-import CommonUtils from './main/commonUtils';
-import packageJson from '../package.json';
 import('./main/ipcMainHelper');
 require('./main/electron/globalShortCutRegister');
 
@@ -24,8 +21,8 @@ root.sharedObject = {
     isInitEntry: false,
     initProjectPath: option.file,
     appName: 'entry',
-    hostURI: 'playentry.org',
-    hostProtocol: 'https:',
+    hostURI: option.hostURI,
+    hostProtocol: option.hostProtocol,
 };
 
 app.on('window-all-closed', function() {

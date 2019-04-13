@@ -2,7 +2,8 @@
     "mac": {
         "target": "dmg",
         "category": "public.app-category.education",
-        "extendInfo": "build/build.plist"
+        "extendInfo": "build/build.plist",
+        "identity": "Connect Foundation (DLFUSDA3L5)"
     },
     "dmg": {
         "icon": "build/icon.icns",

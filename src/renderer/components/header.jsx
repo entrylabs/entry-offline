@@ -203,7 +203,8 @@ class Header extends Component {
     }
 
     render() {
-        const { persist = [], common, programLanguageMode, changeProjectName } = this.props;
+        const { persist = [], common, programLanguageMode, changeProjectName, executionStatus = {} } = this.props;
+        const { canRedo = false, canUndo = false } = executionStatus;
         const { projectName = RendererUtils.getDefaultProjectName() } = common;
         const { lang, mode } = persist;
         const { dropdownType } = this.state;
@@ -316,7 +317,7 @@ class Header extends Component {
                         <div className={'work_space'}>
                             <a
                                 title={RendererUtils.getLang('Workspace.undo')}
-                                className={'btn_workspace_undo'}
+                                className={`btn_workspace_undo ${canUndo ? '' : 'disabled'}`}
                                 onClick={() => {
                                     Entry.dispatchEvent('undo');
                                 }}
@@ -325,7 +326,7 @@ class Header extends Component {
                             </a>
                             <a
                                 title={RendererUtils.getLang('Workspace.redo')}
-                                className={'btn_workspace_redo'}
+                                className={`btn_workspace_redo ${canRedo ? '' : 'disabled'}`}
                                 onClick={() => {
                                     Entry.dispatchEvent('redo');
                                 }}

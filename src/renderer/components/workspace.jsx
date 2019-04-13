@@ -102,7 +102,7 @@ class Workspace extends Component {
         addEventListener('openExportListModal', ModalHelper.openExportListModal);
 
         addEventListener('openPictureManager', () => {
-            ModalHelper.showShapePopup();
+            ModalHelper.showPicturePopup();
         });
         addEventListener('openSpriteManager', () => {
             ModalHelper.showSpritePopup();
@@ -121,6 +121,7 @@ class Workspace extends Component {
             Entry.creationChangedEvent = new Entry.Event(window);
         }
         Entry.creationChangedEvent.attach(this, this.handleStorageProjectSave);
+        Entry.creationChangedEvent.attach(this, this.setExecutionStatus);
 
         const workspace = Entry.getMainWS();
         if (workspace) {
@@ -186,6 +187,15 @@ class Workspace extends Component {
             LocalStorageManager.saveProject(project);
         }
     }, 300);
+
+    setExecutionStatus = () => {
+        this.setState({
+            executionStatus: {
+                canRedo: Entry.stateManager.canRedo(),
+                canUndo: Entry.stateManager.canUndo(),
+            },
+        });
+    };
 
     _getProjectName = () => {
         const { common } = this.props;
@@ -305,14 +315,21 @@ class Workspace extends Component {
                 properties: ['openFile'],
                 filters: [{ name: 'Entry File', extensions: ['ent'] }],
             }, async(filePaths) => {
-                if (Array.isArray(filePaths)) {
-                    await RendererUtils.clearTempProject();
-                    const filePath = filePaths[0];
-                    const project = await IpcRendererHelper.loadProject(filePath);
-                    await this.loadProject(project);
+                try {
+                    if (Array.isArray(filePaths)) {
+                        await RendererUtils.clearTempProject();
+                        const filePath = filePaths[0];
+                        const project = await IpcRendererHelper.loadProject(filePath);
+                        await this.loadProject(project);
+                    }
+                    this.hideModalProgress();
+                } catch (e) {
+                    this.showModalProgress(
+                        'error',
+                        RendererUtils.getLang('Workspace.loading_fail_msg'),
+                        RendererUtils.getLang('Workspace.fail_contact_msg'),
+                    );
                 }
-
-                this.hideModalProgress();
             });
         }
     };
@@ -350,8 +367,6 @@ class Workspace extends Component {
             Entry.disposeContainer();
             Entry.reloadBlock();
         }
-        //TODO entryjs 의 painterBaseUrl 을 옵션에서 가져가지 않는 문제가 있어 개선요망
-        Entry.painterBaseUrl = 'renderer/bower_components/literallycanvas/lib/img';
         Entry.init(this.container.current, this.initOption);
         entryPatch();
         Entry.enableArduino();
@@ -417,7 +432,7 @@ class Workspace extends Component {
     };
 
     render() {
-        const { programLanguageMode } = this.state;
+        const { programLanguageMode, executionStatus } = this.state;
         const { modal } = this.props;
         const { isShow, data } = modal;
         const { title, type, description } = data;
@@ -431,6 +446,7 @@ class Workspace extends Component {
                     onLoadProject={this.loadProject}
                     onProgramLanguageChanged={this.handleProgramLanguageModeChanged}
                     programLanguageMode={programLanguageMode}
+                    executionStatus={executionStatus}
                 />
                 <div ref={this.container} className="workspace"/>
                 {isShow && (

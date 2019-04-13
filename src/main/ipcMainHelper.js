@@ -52,7 +52,8 @@ class IpcMainHelper {
                 event.sender.send('loadProject', project);
             })
             .catch((err) => {
-                event.sender.send('loadProject', err);
+                console.error(err);
+                event.sender.send('loadProject');
             });
     }
 
@@ -97,7 +98,7 @@ class IpcMainHelper {
 
         MainUtils.importObjectsFromResource(objects)
             .then((objects) => {
-                event.sender.send('importObjectsFromResource', objects)
+                event.sender.send('importObjectsFromResource', objects);
             })
             .catch((err) => {
                 console.error(err);

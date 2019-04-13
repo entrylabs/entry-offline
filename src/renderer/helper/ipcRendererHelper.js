@@ -18,10 +18,10 @@ export default class {
         return new Promise((resolve, reject) => {
             ipcRenderer.send('loadProject', filePath);
             ipcRenderer.once('loadProject', (e, result) => {
-                if (result instanceof Error) {
-                    reject(result);
-                } else {
+                if (result) {
                     resolve(result);
+                } else {
+                    reject(result);
                 }
             });
         });

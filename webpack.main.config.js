@@ -48,7 +48,7 @@ if (NODE_ENV === 'production') {
     setting.mode = 'production';
 } else if (NODE_ENV === 'development') {
     setting.mode = 'development';
-    setting.output.devtoolModuleFilenameTemplate = 'webpack://[namespace]/[resource-path]?[loaders]';
+    // setting.output.devtoolModuleFilenameTemplate = 'webpack://[namespace]/[resource-path]?[loaders]';
     setting.devtool = 'source-map';
 }
 

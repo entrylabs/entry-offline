@@ -1,4 +1,4 @@
-import { BrowserWindow, app } from 'electron';
+import { BrowserWindow, app, ipcMain } from 'electron';
 import path from 'path';
 
 export default class {
@@ -34,6 +34,18 @@ export default class {
 
         this.hardwareWindow.webContents.name = 'hardware';
         this.hardwareWindow.curLang = curLang;
+
+        this.requestLocalDataInterval = -1;
+        ipcMain.on('startRequestLocalData', (event, duration) => {
+            this.requestLocalDataInterval = setInterval(() => {
+                if (!event.sender.isDestroyed()) {
+                    event.sender.send('sendingRequestLocalData');
+                }
+            }, duration);
+        });
+        ipcMain.on('stopRequestLocalData', () => {
+            clearInterval(this.requestLocalDataInterval);
+        });
     }
 
     openHardwareWindow(curLang) {
@@ -50,6 +62,9 @@ export default class {
 
     closeHardwareWindow() {
         if (this.hardwareWindow) {
+            clearInterval(this.requestLocalDataInterval);
+            ipcMain.removeListener('stopRequestLocalData');
+            ipcMain.removeListener('startRequestLocalData');
             this.hardwareWindow.destroy();
         }
     }
