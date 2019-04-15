@@ -9,6 +9,10 @@ const setting = {
         init: './src/renderer/initEntry.js',
         render: './src/renderer/renderEntry.js',
     },
+    externals: {
+        '@entrylabs/tool': 'EntryTool',
+        '@entrylabs/tool/component': 'EntryTool.Component',
+    },
     resolve: {
         extensions: ['.js', '.jsx'],
     },

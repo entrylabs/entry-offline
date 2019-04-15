@@ -2,7 +2,7 @@ import Modal from '../../resources/modal/app.js';
 import root from 'window-or-global';
 import RendererUtils from '../rendererUtils';
 import IpcRendererHelper from '../ipcRendererHelper';
-import EntryTool from 'entry-tool';
+import { Popup } from '@entrylabs/tool';
 import DatabaseManager from '../../helper/databaseManager';
 import StorageManager from '../storageManager';
 import _ from 'lodash';
@@ -566,7 +566,7 @@ class EntryModalHelper {
     static loadPopup = (type, data) => {
         const popup = EntryModalHelper.popup;
         if (popup === undefined) {
-            EntryModalHelper.popup = new EntryTool({
+            EntryModalHelper.popup = new Popup({
                 container: (function() {
                     const targetDiv = document.createElement('div');
                     targetDiv.classList = 'modal';

@@ -7,7 +7,7 @@ import EntryUtils from '../helper/entry/entryUtils';
 import { connect } from 'react-redux';
 import { commonAction, showPopup } from '../actions';
 import { CHANGE_LANGUAGE, CHANGE_PROJECT_NAME, WS_MODE } from '../actions/types';
-import { Dropdown } from 'entry-tool/component';
+import { Dropdown } from '@entrylabs/tool/component';
 import ImportToggleHelper from '../helper/importToggleHelper';
 
 /* global Entry */

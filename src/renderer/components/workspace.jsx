@@ -9,7 +9,7 @@ import _includes from 'lodash/includes';
 import _debounce from 'lodash/debounce';
 import entryPatch from '../helper/entry/entryPatcher';
 import root from 'window-or-global';
-import { ModalProgress } from 'entry-tool/component';
+import { ModalProgress } from '@entrylabs/tool/component';
 import ModalHelper from '../helper/entry/entryModalHelper';
 import RendererUtils from '../helper/rendererUtils';
 import IpcRendererHelper from '../helper/ipcRendererHelper';
