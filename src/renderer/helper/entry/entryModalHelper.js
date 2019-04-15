@@ -17,19 +17,17 @@ import EntryUtils from './entryUtils';
  */
 //TODO object fetch result sort 필요?
 class EntryModalHelper {
+    static fetchPopup = (data) => EntryModalHelper.popup.setData({ data: { data } });
     /**
      * 오브젝트 추가 팝업을 노출한다
      */
     static async showSpritePopup() {
         console.log('object popup show');
-        const popup = await this._switchPopup('sprite', {
+        await this._switchPopup('sprite', {
             fetch: (data) => {
-                DatabaseManager.findAll(data)
-                    .then((result) => {
-                        popup.setData({
-                            data: { data: result },
-                        });
-                    });
+                DatabaseManager
+                    .findAll(data)
+                    .then(EntryModalHelper.fetchPopup);
             },
             search: (data) => {
                 if (data.searchQuery === '') {
@@ -37,13 +35,10 @@ class EntryModalHelper {
                 }
                 DatabaseManager.search(data)
                     .then((result) => {
-                        popup.setData({
-                            data: { data: result },
-                        });
+                        EntryModalHelper.fetchPopup(result);
                     });
             },
             submit: async(data) => {
-                console.log('popupSubmitSpritePopup', data);
                 const newObjects = await IpcRendererHelper.importObjectsFromResource(data.selected);
                 newObjects.forEach((item) => {
                     const labeledItem = EntryModalHelper._getLabeledObject(item);
@@ -140,7 +135,7 @@ class EntryModalHelper {
                 const results = await IpcRendererHelper.importPictures(uploadPicturesPaths);
                 const objectResults = await IpcRendererHelper.importObjects(uploadObjectPaths);
 
-                popup.setData({
+                EntryModalHelper.popup.setData({
                     data: {
                         data: [],
                         uploads: results.concat(
@@ -197,29 +192,23 @@ class EntryModalHelper {
     static async showPicturePopup() {
         const popup = await this._switchPopup('picture', {
             fetch: (data) => {
-                DatabaseManager.findAll({
-                    ...data,
-                    type: 'picture',
-                })
-                    .then((result) => {
-                        popup.setData({
-                            data: { data: result },
-                        });
-                    });
+                DatabaseManager
+                    .findAll({
+                        ...data,
+                        type: 'picture',
+                    })
+                    .then(EntryModalHelper.fetchPopup);
             },
             search: (data) => {
                 if (data.searchQuery === '') {
                     return;
                 }
-                DatabaseManager.search({
-                    ...data,
-                    type: 'picture',
-                })
-                    .then((result) => {
-                        popup.setData({
-                            data: { data: result },
-                        });
-                    });
+                DatabaseManager
+                    .search({
+                        ...data,
+                        type: 'picture',
+                    })
+                    .then(EntryModalHelper.fetchPopup);
             },
             submit: async(data) => {
                 const pictures = await IpcRendererHelper.importPicturesFromResource(data.selected);
@@ -285,7 +274,7 @@ class EntryModalHelper {
                     }
 
                     const results = await IpcRendererHelper.importPictures(uploadFilePaths);
-                    popup.setData({
+                    EntryModalHelper.popup.setData({
                         data: {
                             data: [], // 없으면 에러남. entry-tool 의 수정필요
                             uploads: results,
@@ -320,11 +309,12 @@ class EntryModalHelper {
      * 소리는 추가됨과 동시에 loadSound 함수를 통해 실제 mp3 파일을 Entry 에 추가한다.
      */
     static async showSoundPopup() {
-        const popup = await this._switchPopup('sound', {
+        await this._switchPopup('sound', {
             fetch: (data) => {
-                DatabaseManager.findAll(data)
+                DatabaseManager
+                    .findAll(data)
                     .then((result) => {
-                        popup.setData({
+                        EntryModalHelper.popup.setData({
                             data: { data: result },
                         });
                         EntryUtils.loadSound(result);
@@ -336,7 +326,7 @@ class EntryModalHelper {
                 }
                 DatabaseManager.search(data)
                     .then((result) => {
-                        popup.setData({
+                        EntryModalHelper.popup.setData({
                             data: { data: result },
                         });
                         EntryUtils.loadSound(result);
@@ -382,7 +372,7 @@ class EntryModalHelper {
                     createjs.Sound.stop();
 
                     EntryUtils.loadSound(results);
-                    popup.setData({
+                    EntryModalHelper.popup.setData({
                         data: {
                             data: [], // 없으면 에러남. entry-tool 의 수정필요
                             uploads: results,
@@ -447,15 +437,12 @@ class EntryModalHelper {
     static async showPaintPopup() {
         const popup = await this._switchPopup('paint', {
             fetch: (data) => {
-                DatabaseManager.findAll({
-                    ...data,
-                    type: 'picture',
-                })
-                    .then((result) => {
-                        popup.setData({
-                            data: { data: result },
-                        });
-                    });
+                DatabaseManager
+                    .findAll({
+                        ...data,
+                        type: 'picture',
+                    })
+                    .then(EntryModalHelper.fetchPopup);
             },
             submit: (data) => {
                 const item = data.selected[0];
@@ -483,7 +470,7 @@ class EntryModalHelper {
                     }
 
                     const results = await IpcRendererHelper.importPictures(uploadFilePaths);
-                    popup.setData({
+                    EntryModalHelper.popup.setData({
                         data: {
                             data: [], // 없으면 에러남. entry-tool 의 수정필요
                             uploads: results,
@@ -528,7 +515,8 @@ class EntryModalHelper {
      * @return popup 자신을 반환한다. 내부 콜백에서 자신을 사용해야 하는 경우 활용가능하다.
      */
     static async _switchPopup(type, events = {}, data = []) {
-        const popup = this.loadPopup(type, data);
+        this.loadPopup(type, data);
+        const popup = EntryModalHelper.popup;
         if (this.lastOpenedType === type && data.length === 0) {
             const initialData = await DatabaseManager.findAll({
                 sidebar: type === 'sound' ? '사람' : 'entrybot_friends',
@@ -564,16 +552,11 @@ class EntryModalHelper {
      * @return {Object} popup
      */
     static loadPopup = (type, data) => {
-        const popup = EntryModalHelper.popup;
-        if (popup === undefined) {
+        if (!EntryModalHelper.popup) {
+            const targetDiv = document.createElement('div');
+            document.body.appendChild(targetDiv);
             EntryModalHelper.popup = new Popup({
-                container: (function() {
-                    const targetDiv = document.createElement('div');
-                    targetDiv.classList = 'modal';
-
-                    return targetDiv;
-                })(),
-                target: document.body,
+                container: targetDiv,
                 isShow: false,
                 data: {
                     data: {
@@ -583,12 +566,8 @@ class EntryModalHelper {
                     imageBaseUrl: './renderer/bower_components/entry-js/images/hardware/',
                 },
                 type: 'popup',
-                props: { type, baseUrl: './renderer/resources' },
+                props: { baseUrl: './renderer/resources' },
             });
-
-            return EntryModalHelper.popup;
-        } else {
-            return popup;
         }
     };
 
