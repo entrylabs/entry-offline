@@ -7,6 +7,10 @@ import EntryModalHelper from './entry/entryModalHelper';
  * electron main process 로 통신하기 위해 사용하는 클래스.
  * nodejs lib 사용 혹은 main 에 통신이 한번이상 필요한 경우 이쪽에 둔다.
  */
+ipcRenderer.on('console', (event, ...args) => {
+    console.log(...args);
+});
+
 export default class {
     static onPageLoaded(callback) {
         ipcRenderer.on('showWindow', () => {
