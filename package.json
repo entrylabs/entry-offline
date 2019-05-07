@@ -61,6 +61,7 @@
         "babel-loader": "^8.0.5",
         "babel-plugin-async-import": "^2.0.2",
         "babel-plugin-transform-async-to-generator": "^6.24.1",
+        "core-js": "2",
         "cross-env": "^5.2.0",
         "css-loader": "^2.1.0",
         "electron": "4.0.0",
