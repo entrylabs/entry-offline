@@ -24,6 +24,7 @@ const setting = {
                 test: /\.(js|jsx|mjs)$/,
                 exclude: [
                     /node_modules/,
+                    /bower_components/,
                 ],
                 use: [{ loader: 'babel-loader' }],
             },

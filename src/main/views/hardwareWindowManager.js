@@ -1,6 +1,11 @@
 import { BrowserWindow, app, ipcMain } from 'electron';
 import path from 'path';
 
+global.defaultHWModuleRoot = {
+    bindings: 'bindings.node',
+    module_root: path.resolve(__dirname, '..', '..', 'node_modules', '@entrylabs', 'bindings'),
+};
+
 export default class {
     constructor() {
         this.hardwareWindow = null;
@@ -24,17 +29,19 @@ export default class {
             },
         });
 
-        this.hardwareWindow.setMenu(null);
-        this.hardwareWindow.setMenuBarVisibility(false);
-        this.hardwareWindow.loadURL(`file:///${path.join(
-            __dirname, '..', 'renderer', 'bower_components', 'entry-hw', 'app', 'index.html')}`);
-        this.hardwareWindow.on('closed', () => {
-            this.hardwareWindow = null;
-        });
+        import('../../renderer/bower_components/entry-hw/app/src/main/mainRouter').then((MainRouter) => {
+            this.hardwareRouter = new MainRouter(this.hardwareWindow);
+            this.hardwareWindow.setMenu(null);
+            this.hardwareWindow.setMenuBarVisibility(false);
+            this.hardwareWindow.loadURL(`file://${path.join(
+                __dirname, '..', 'renderer', 'bower_components', 'entry-hw', 'app', 'src', 'renderer', 'views', 'index.html')}`);
+            this.hardwareWindow.on('closed', () => {
+                this.hardwareWindow = null;
+            });
 
-        this.hardwareWindow.webContents.name = 'hardware';
-        this.requestLocalDataInterval = -1;
-        // this.hardwareRouter = new MainRouter(this.hardwareWindow);
+            this.hardwareWindow.webContents.name = 'hardware';
+            this.requestLocalDataInterval = -1;
+        });
     }
 
     openHardwareWindow() {
