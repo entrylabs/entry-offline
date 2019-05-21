@@ -34,7 +34,16 @@ export default class {
 
         this.hardwareWindow.webContents.name = 'hardware';
         this.requestLocalDataInterval = -1;
-        // this.hardwareRouter = new MainRouter(this.hardwareWindow);
+        ipcMain.on('startRequestLocalData', (event, duration) => {
+            this.requestLocalDataInterval = setInterval(() => {
+                if (!event.sender.isDestroyed()) {
+                    event.sender.send('sendingRequestLocalData');
+                }
+            }, duration);
+        });
+        ipcMain.on('stopRequestLocalData', () => {
+            clearInterval(this.requestLocalDataInterval);
+        });
     }
 
     openHardwareWindow() {
@@ -52,6 +61,8 @@ export default class {
     closeHardwareWindow() {
         if (this.hardwareWindow) {
             clearInterval(this.requestLocalDataInterval);
+            ipcMain.removeListener('stopRequestLocalData');
+            ipcMain.removeListener('startRequestLocalData');
             this.hardwareWindow.destroy();
         }
     }
