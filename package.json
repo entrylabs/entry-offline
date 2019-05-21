@@ -7,7 +7,7 @@
     "main": "src/main_build/main.bundle.js",
     "scripts": {
         "start": "electron .",
-        "debug": "electron --inspect-brk .",
+        "debug": "electron --inspect .",
         "webpack:dev": "cross-env NODE_ENV=development webpack",
         "webpack:prod": "cross-env NODE_ENV=production webpack",
         "watch": "cross-env NODE_ENV=development webpack -w",
