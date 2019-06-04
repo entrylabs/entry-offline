@@ -11,7 +11,8 @@ import { performance } from 'perf_hooks';
 import root from 'window-or-global';
 import stream from 'stream';
 import tar from 'tar';
-import crypto from 'crypto';
+import puid from 'puid';
+import uid from 'uid';
 import FileUtils from './fileUtils';
 import Constants from './constants';
 import CommonUtils from './commonUtils';
@@ -26,11 +27,7 @@ export default class MainUtils {
      * @return {string}
      */
     static createFileId() {
-        const randomStr = `${Math.random().toString(16)}000000000`.substr(2, 8);
-        return crypto
-            .createHash('md5')
-            .update(randomStr)
-            .digest('hex');
+        return uid(8) + puid.generate();
     }
 
     /**

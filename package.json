@@ -38,6 +38,7 @@
         "lodash": "^4.17.11",
         "mp3-duration": "^1.1.0",
         "object.assign": "^4.1.0",
+        "puid": "^1.0.7",
         "react": "^16.7.0",
         "react-dom": "^16.7.0",
         "react-redux": "^6.0.0",
@@ -47,6 +48,7 @@
         "socket.io": "1.7.3",
         "socket.io-client": "1.7.3",
         "tar": "2.2.1",
+        "uid": "^0.0.2",
         "window-or-global": "^1.0.1",
         "xml2js": "^0.4.19"
     },
