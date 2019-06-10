@@ -9,8 +9,8 @@ const setting = {
         extensions: ['.js', '.json'],
     },
     node: {
-        __dirname: false,
-        __filename: false,
+        __dirname: true,
+        __filename: true,
     },
     output: {
         path: path.resolve(__dirname, 'src', 'main_build'),

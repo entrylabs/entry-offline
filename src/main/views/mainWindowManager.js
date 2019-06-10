@@ -50,7 +50,7 @@ export default class {
             webPreferences: {
                 backgroundThrottling: false,
             },
-            icon: path.join(__dirname, '..', 'main', 'static', 'icon.png'),
+            icon: path.resolve(__dirname, '..', 'main', 'static', 'icon.png'),
         });
         this.mainWindow = mainWindow;
 
@@ -108,7 +108,7 @@ export default class {
         });
 
         mainWindow.setMenu(null);
-        mainWindow.loadURL(`file:///${path.join(__dirname, '..', 'main.html')}`);
+        mainWindow.loadURL(`file:///${path.resolve(__dirname, '..', '..', 'main.html')}`);
 
         if (option.debug) {
             mainWindow.webContents.openDevTools();

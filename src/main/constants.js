@@ -107,7 +107,7 @@ export default  class {
     }
 
     static get resourcePath() {
-        return path.join(
+        return path.resolve(
             __dirname, '..', 'renderer', 'resources', 'uploads', path.sep,
         );
     }
