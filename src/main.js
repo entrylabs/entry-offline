@@ -10,7 +10,7 @@ import root from 'window-or-global';
 import commandLineResolve from './main/electron/commandLineResolver';
 
 import('./main/ipcMainHelper');
-require('./main/electron/globalShortCutRegister');
+import('./main/electron/globalShortCutRegister');
 
 const option = commandLineResolve(process.argv.slice(1));
 
