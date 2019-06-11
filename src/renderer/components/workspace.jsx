@@ -38,6 +38,7 @@ class Workspace extends Component {
 
         this.defaultInitOption = {
             type: 'workspace',
+            backpackDisable: true,
             libDir: 'renderer/bower_components',
             defaultDir: 'renderer/resources',
             fonts: EntryStatic.fonts,
