@@ -6,7 +6,7 @@ const setting = {
     target: 'electron-main',
     entry: './src/main.js',
     resolve: {
-        extensions: ['.js', '.json'],
+        extensions: ['.ts', '.js', '.json'],
     },
     node: {
         __dirname: true,
@@ -20,6 +20,10 @@ const setting = {
     },
     module: {
         rules: [
+            {
+                test: /\.tsx?$/,
+                loader: 'ts-loader',
+            },
             {
                 test: /\.(js|jsx|mjs)$/,
                 exclude: [
