@@ -1,12 +1,10 @@
 import path from 'path';
 
-export default function(args) {
+export default function(args: string[]) {
     const option = {
-        file: null,
-        help: null,
-        version: null,
-        webdriver: null,
-        modules: [],
+        file: '',
+        version: false,
+        debug: false,
         hostURI: 'playentry.org',
         hostProtocol: 'https:',
     };
@@ -36,6 +34,6 @@ export default function(args) {
     return option;
 }
 
-const _isValidProjectFilePath = function(filePath) {
+const _isValidProjectFilePath = function(filePath: string) {
     return path.isAbsolute(filePath) && path.extname(filePath) === '.ent';
 };
