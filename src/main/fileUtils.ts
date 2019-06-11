@@ -1,6 +1,7 @@
 import path from 'path';
 import fs from 'fs';
 import rimraf from 'rimraf';
+// @ts-ignore
 import fstream from 'fstream';
 import archiver from 'archiver';
 import zlib from 'zlib';
@@ -17,7 +18,7 @@ export default class {
      * @param {string}target 생성할 경로
      * @return {Promise<any>}
      */
-    static mkdirRecursive(target) {
+    static mkdirRecursive(target: string) {
         return new Promise((resolve, reject) => {
             fs.stat(target, async(err) => {
                 if (err) {
@@ -48,7 +49,7 @@ export default class {
      * 현재 경로 상위 디렉토리까지 폴더가 존재하는지 확인하고, 아닌 경우 생성한다.
      * @param {string}dirPath 파일 혹은 디렉토리 경로
      */
-    static ensureDirectoryExistence(dirPath) {
+    static ensureDirectoryExistence(dirPath: string) {
         const dirname = path.dirname(dirPath);
         if (fs.existsSync(dirname)) {
             return;
@@ -62,7 +63,7 @@ export default class {
      * @param dirPath 삭제할 디렉토리 명
      * @return {Promise<any>}
      */
-    static removeDirectoryRecursive(dirPath) {
+    static removeDirectoryRecursive(dirPath: string) {
         return new Promise((resolve, reject) => {
             rimraf(dirPath, (err) => {
                 if (!err) {
@@ -80,7 +81,7 @@ export default class {
      * @param targetPath 디렉
      * @return {Promise<>}
      */
-    static unpack(sourcePath, targetPath) {
+    static unpack(sourcePath: string, targetPath: string) {
         return decompress(sourcePath, targetPath);
     }
     /**
@@ -89,7 +90,7 @@ export default class {
      * @param targetPath 저장될 파일 경로
      * @return {Promise<any>}
      */
-    static pack(sourcePath, targetPath) {
+    static pack(sourcePath: string, targetPath: string) {
         return new Promise((resolve, reject) => {
             const parser = path.parse(sourcePath);
             const fsWriter = fstream.Writer({ path: targetPath, type: 'File' });
@@ -117,13 +118,15 @@ export default class {
      * 섬네일은 width 96px 기준으로, png 파일 확장자를 가진다.
      * @param {Buffer||string}imageData 원본 이미지 버퍼 혹은 원본 이미지 주소
      */
-    static createThumbnailBuffer(imageData) {
-        let imageResizeStrategy = nativeImage.createFromPath;
+    static createThumbnailBuffer(imageData: string | Buffer) {
+        let imageResizeNativeImage: nativeImage;
         if (imageData instanceof Buffer) {
-            imageResizeStrategy = nativeImage.createFromBuffer;
+            imageResizeNativeImage = nativeImage.createFromBuffer(imageData);
+        } else {
+            imageResizeNativeImage = nativeImage.createFromPath(imageData);
         }
 
-        return imageResizeStrategy(imageData)
+        return imageResizeNativeImage
             .resize({
                 width: 96,
                 quality: 'better',
@@ -137,7 +140,7 @@ export default class {
      * @param {string}filePath 파일 경로
      * @return {Promise<>}
      */
-    static writeFile(contents, filePath) {
+    static writeFile(contents: any, filePath: string) {
         return new Promise((resolve, reject) => {
             this.ensureDirectoryExistence(filePath);
             fs.writeFile(filePath, contents, (err) => {
@@ -155,7 +158,7 @@ export default class {
      * 삭제가 되지 않은 케이스는 크리티컬하지 않아서이다.
      * @param filePath
      */
-    static deleteFile(filePath) {
+    static deleteFile(filePath: string) {
         return new Promise((resolve) => {
             fs.unlink(filePath, (err) => {
                 if (err) {
@@ -173,7 +176,7 @@ export default class {
      * @param {string}filePath 파일 경로
      * @return {Promise<any>}
      */
-    static readFile(filePath) {
+    static readFile(filePath: string) {
         return new Promise((resolve, reject) => {
             fs.readFile(filePath, 'utf8', (err, data) => {
                 if (err) {
@@ -191,7 +194,7 @@ export default class {
      * @param {string}dest 저장할 파일경로
      * @return {Promise<any>}
      */
-    static copyFile(src, dest) {
+    static copyFile(src: string, dest: string) {
         return new Promise((resolve, reject) => {
             this.ensureDirectoryExistence(dest);
             const readStream = fs.createReadStream(src);

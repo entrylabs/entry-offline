@@ -2,7 +2,7 @@
 
 const parseString = require('xml2js').parseString;
 const _ = require('lodash');
-const entry = require('./entryBlocks.js');
+const entry = require('./entryBlocks');
 
 function processCode(xml) {
     let code = [];
