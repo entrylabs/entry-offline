@@ -1,5 +1,6 @@
 import { BrowserWindow, app, ipcMain } from 'electron';
 import path from 'path';
+import HardwareMainRouter from '../../renderer/bower_components/entry-hw/app/src/main/mainRouter';
 
 export default class {
     constructor() {
@@ -21,16 +22,19 @@ export default class {
             show: false,
             webPreferences: {
                 backgroundThrottling: false,
+                nodeIntegration: false,
+                preload: path.resolve(
+                    __dirname, '..', '..', 'renderer', 'bower_components', 'entry-hw', 'app', 'src', 'renderer', 'preload.js',
+                ),
             },
         });
+        this.hardwareWindow.hardwareRouter = new HardwareMainRouter(this.hardwareWindow);
 
         this.hardwareWindow.setMenu(null);
         this.hardwareWindow.setMenuBarVisibility(false);
-        this.hardwareWindow.loadURL(`file:///${path.join(
-            __dirname, '..', 'renderer', 'bower_components', 'entry-hw', 'app', 'index.html')}`);
-        this.hardwareWindow.on('closed', () => {
-            this.hardwareWindow = null;
-        });
+        this.hardwareWindow.loadURL(`file:///${path.resolve(
+            __dirname, '..', '..', 'renderer', 'bower_components', 'entry-hw', 'app', 'src', 'renderer', 'views', 'index.html')}`);
+        this.hardwareWindow.on('closed', this.closeHardwareWindow.bind(this));
 
         this.hardwareWindow.webContents.name = 'hardware';
         this.requestLocalDataInterval = -1;
@@ -60,10 +64,17 @@ export default class {
 
     closeHardwareWindow() {
         if (this.hardwareWindow) {
+            if (this.hardwareWindow.hardwareRouter) {
+                const foo = this.hardwareWindow.hardwareRouter;
+                foo.close();
+                foo.server.close();
+                delete this.hardwareWindow.hardwareRouter;
+            }
+
+
             clearInterval(this.requestLocalDataInterval);
-            ipcMain.removeListener('stopRequestLocalData');
-            ipcMain.removeListener('startRequestLocalData');
             this.hardwareWindow.destroy();
+            this.hardwareWindow = null;
         }
     }
 
