@@ -25,8 +25,12 @@ class CommonUtils {
      * @param {string=}defaultExtension extension 이 falsy 인 경우 반환
      * @return {string} . 이 붙은 확장자
      */
-    static sanitizeExtension(extension, defaultExtension) {
+    static sanitizeExtension(extension: string, defaultExtension?: string) {
         let sanitizedExt = extension || defaultExtension;
+        if (!sanitizedExt) {
+            return extension;
+        }
+
         if (!sanitizedExt.startsWith('.')) {
             sanitizedExt = `.${sanitizedExt}`;
         }
@@ -41,17 +45,17 @@ class CommonUtils {
      * @property ext|extension 확장자. 없는 경우 defaultExtension 으로 대체
      * @param defaultExtension 확장자가 없는 경우 대체할 기본확장자
      */
-    static getFileNameWithExtension(entryObject, defaultExtension) {
+    static getFileNameWithExtension(entryObject: any, defaultExtension?: string) {
         const filename = entryObject.filename;
         const extension = CommonUtils.sanitizeExtension(
             entryObject.ext || entryObject.extension,
-            defaultExtension
+            defaultExtension,
         );
 
         return `${filename}${extension}`;
     }
 
-    static lpad(str, len) {
+    static lpad(str: string, len: number) {
         const strLen = str.length;
         let paddedString = str;
         if (strLen < len) {
@@ -62,13 +66,13 @@ class CommonUtils {
         return String(paddedString);
     }
 
-    static getPaddedVersion(version) {
+    static getPaddedVersion(version: string | number) {
         if (!version) {
             return '';
         }
         const versionString = String(version);
 
-        const padded = [];
+        const padded: string[] = [];
         const splitVersion = versionString.split('.');
         splitVersion.forEach((item) => {
             padded.push(this.lpad(item, 4));
