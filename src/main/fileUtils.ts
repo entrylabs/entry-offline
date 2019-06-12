@@ -1,5 +1,5 @@
 import path from 'path';
-import fs from 'fs';
+import fs, { PathLike } from 'fs';
 import rimraf from 'rimraf';
 // @ts-ignore
 import fstream from 'fstream';
@@ -176,7 +176,7 @@ export default class {
      * @param {string}filePath 파일 경로
      * @return {Promise<any>}
      */
-    static readFile(filePath: string) {
+    static readFile(filePath: PathLike): Promise<any> {
         return new Promise((resolve, reject) => {
             fs.readFile(filePath, 'utf8', (err, data) => {
                 if (err) {

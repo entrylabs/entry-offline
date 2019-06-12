@@ -1,7 +1,7 @@
 import { app } from 'electron';
 import path from 'path';
 
-export default  class {
+export default class {
     static get replaceStrategy() {
         return {
             fromExternal: (fileUrl) => {
