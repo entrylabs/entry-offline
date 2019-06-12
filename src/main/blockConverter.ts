@@ -1,10 +1,15 @@
+/* eslint-disable */
+/*
+ * 이 파일은 entryjs 에서 가져온 파일로직으로, legacy(xml 블록) 을 json 화 하기위해 만들어졌다.
+ * 그렇기 때문에 새로 유지보수될 일이 없으며, 모든 타입은 any 처리되었다.
+ */
 'use strict';
 
 const parseString = require('xml2js').parseString;
 const _ = require('lodash');
 const entry = require('./entryBlocks');
 
-function processCode(xml) {
+function processCode(xml: any) {
     let code = [];
     const topBlocks = xml.xml.block;
     if (topBlocks) {
@@ -12,9 +17,9 @@ function processCode(xml) {
     }
 
 
-    const locationsX = [];
-    const locationsY = [];
-    code.forEach(function(thread) {
+    const locationsX: any[] = [];
+    const locationsY: any[] = [];
+    code.forEach(function(thread: any) {
         const block = thread[0];
         locationsX.push(block.x);
         locationsY.push(block.y);
@@ -23,7 +28,7 @@ function processCode(xml) {
     const dX = 40 - Math.min.apply(null, locationsX);
     const dY = 50 - Math.min.apply(null, locationsY);
 
-    code.forEach(function(thread) {
+    code.forEach(function(thread: any) {
         const block = thread[0];
         block.x += dX;
         block.y += dY;
@@ -32,13 +37,13 @@ function processCode(xml) {
     return code;
 }
 
-function processThread(block) {
-    const thread = [];
+function processThread(block: any) {
+    const thread: any[] = [];
     processBlock(block, thread);
     return thread;
 }
 
-function processFunctionGeneral(block, thread) {
+function processFunctionGeneral(block: any, thread: any) {
     const parsedBlock = block.$;
 
     parsedBlock.x ? parsedBlock.x = Number(parsedBlock.x) : 0;
@@ -53,7 +58,7 @@ function processFunctionGeneral(block, thread) {
     if (values) {
         for (const i in values) {
             const fieldBlock = values[i].block[0];
-            const fieldThread = [];
+            const fieldThread: any[] = [];
             processBlock(fieldBlock, fieldThread);
             parsedBlock.params.push(fieldThread[0]);
         }
@@ -65,7 +70,7 @@ function processFunctionGeneral(block, thread) {
     }
 }
 
-function processFunctionCreate(block, thread) {
+function processFunctionCreate(block: any, thread: any) {
     const parsedBlock = block.$;
 
     parsedBlock.x ? parsedBlock.x = Number(parsedBlock.x) : 0;
@@ -77,7 +82,7 @@ function processFunctionCreate(block, thread) {
     }
 }
 
-function processMutationField(block, thread) {
+function processMutationField(block: any, thread: any) {
     const parsedBlock = block.$;
 
     parsedBlock.x ? parsedBlock.x = Number(parsedBlock.x) : 0;
@@ -105,7 +110,7 @@ function processMutationField(block, thread) {
     thread.push(parsedBlock);
 }
 
-function processMutationParam(block, thread) {
+function processMutationParam(block: any, thread: any) {
     const parsedBlock = block.$;
 
     parsedBlock.x ? parsedBlock.x = Number(parsedBlock.x) : 0;
@@ -123,7 +128,7 @@ function processMutationParam(block, thread) {
     thread.push(parsedBlock);
 }
 
-function processBlock(block, thread) {
+function processBlock(block: any, thread: any) {
     if (!block) {
         return;
     }
@@ -145,10 +150,10 @@ function processBlock(block, thread) {
     }
     const keyMap = entry.block[parsedBlock.type].paramsKeyMap;
 
-    const blockValues = [];
+    const blockValues: any[] | any = [];
     let fields = block.field;
     if (fields) {
-        fields = fields.map(function(f) {
+        fields = fields.map(function(f: any) {
             let val = f._;
             const pType = parsedBlock.type;
             if ((pType === "number" || pType === 'text') && val === undefined) {
@@ -160,9 +165,9 @@ function processBlock(block, thread) {
 
     let values = block.value;
     if (values) {
-        values = values.map(function(v) {
+        values = values.map(function(v: any) {
             const fieldBlock = v.block[0];
-            const fieldThread = [];
+            const fieldThread: any[] = [];
             processBlock(fieldBlock, fieldThread);
             let index = keyMap[v.$.name];
             if (blockValues.type === "rotate_by_angle_time") {
@@ -178,7 +183,7 @@ function processBlock(block, thread) {
 
     let statements = block.statement;
     if (statements) {
-        statements = statements.map(function(s) {
+        statements = statements.map(function(s: any) {
             if (s.block) {
                 const topBlock = s.block[0];
                 return processThread(topBlock);
@@ -198,7 +203,7 @@ function processBlock(block, thread) {
 }
 
 module.exports = {
-    convert(project, cb) {
+    convert(project: any, cb: any) {
         const objects = project.objects;
         const functions = project.functions;
 
@@ -213,7 +218,7 @@ module.exports = {
 
             for (let i = 0; i < objects.length; i++) {
                 var object = objects[i];
-                parseString(object.script, function(err, xml) {
+                parseString(object.script, function(err: any, xml: any) {
                     object.script = JSON.stringify(processCode(xml));
                     done();
                 });
@@ -226,7 +231,7 @@ module.exports = {
 
         for (let i = 0; i < functions.length; i++) {
             var func = functions[i];
-            parseString(func.content, function(err, xml) {
+            parseString(func.content, function(err: any, xml: any) {
                 func.content = JSON.stringify(processCode(xml));
                 done();
             });
