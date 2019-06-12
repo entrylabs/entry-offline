@@ -36,7 +36,7 @@ class IpcMainHelper {
         ipcMain.on('quit', this.quitApplication.bind(this));
     }
 
-    saveProject(event, project, targetPath) {
+    saveProject(event: Electron.Event, project: ObjectLike, targetPath: string) {
         MainUtils.saveProject(project, targetPath)
             .then(() => {
                 event.sender.send('saveProject');
@@ -46,7 +46,7 @@ class IpcMainHelper {
             });
     }
 
-    loadProject(event, filePath) {
+    loadProject(event: Electron.Event, filePath: string) {
         MainUtils.loadProject(filePath)
             .then((project) => {
                 event.sender.send('loadProject', project);
@@ -57,7 +57,7 @@ class IpcMainHelper {
             });
     }
 
-    resetSaveDirectory(event) {
+    resetSaveDirectory(event: Electron.Event) {
         MainUtils.resetSaveDirectory()
             .then(() => {
                 event.sender.send('resetDirectory');
@@ -67,7 +67,7 @@ class IpcMainHelper {
             });
     }
 
-    exportObject(event, filePath, object) {
+    exportObject(event: Electron.Event, filePath: string, object: any) {
         MainUtils.exportObject(filePath, object)
             .then(() => {
                 event.sender.send('exportObject');
@@ -77,7 +77,7 @@ class IpcMainHelper {
             });
     }
 
-    importObjects(event, filePaths) {
+    importObjects(event: Electron.Event, filePaths: string[]) {
         if (!filePaths || filePaths.length === 0) {
             event.sender.send('importObjects', []);
         }
@@ -91,7 +91,7 @@ class IpcMainHelper {
             });
     }
 
-    importObjectsFromResource(event, objects) {
+    importObjectsFromResource(event: Electron.Event, objects: ObjectLike[]) {
         if (!objects || objects.length === 0) {
             event.sender.send('importObjectsFromResource', []);
         }
@@ -106,7 +106,7 @@ class IpcMainHelper {
     }
 
     // 외부 이미지 업로드시.
-    importPictures(event, filePaths) {
+    importPictures(event: Electron.Event, filePaths: string[]) {
         if (!filePaths || filePaths.length === 0) {
             event.sender.send('importPictures', []);
         }
@@ -120,7 +120,7 @@ class IpcMainHelper {
             });
     }
 
-    importPicturesFromResource(event, pictures) {
+    importPicturesFromResource(event: Electron.Event, pictures: ObjectLike[]) {
         MainUtils.importPicturesFromResource(pictures)
             .then((object) => {
                 event.sender.send('importPicturesFromResource', object);
@@ -130,7 +130,7 @@ class IpcMainHelper {
             });
     }
 
-    importPictureFromCanvas(event, data) {
+    importPictureFromCanvas(event: Electron.Event, data: ObjectLike[]) {
         MainUtils.importPictureFromCanvas(data)
             .then((object) => {
                 event.sender.send('importPictureFromCanvas', object);
@@ -140,7 +140,7 @@ class IpcMainHelper {
             });
     }
 
-    importSounds(event, filePaths) {
+    importSounds(event: Electron.Event, filePaths: string[]) {
         if (!filePaths || filePaths.length === 0) {
             event.sender.send('importSounds', []);
         }
@@ -154,7 +154,7 @@ class IpcMainHelper {
             });
     }
 
-    importSoundsFromResource(event, sounds) {
+    importSoundsFromResource(event: Electron.Event, sounds: ObjectLike[]) {
         MainUtils.importSoundsFromResource(sounds)
             .then((object) => {
                 event.sender.send('importSoundsFromResource', object);
@@ -170,7 +170,7 @@ class IpcMainHelper {
      * @param {Array<string>}unresolvedFilePathArray separator 가 없는 경로 목록
      * @param targetFilePath
      */
-    staticDownload(event, unresolvedFilePathArray, targetFilePath) {
+    staticDownload(event: Electron.Event, unresolvedFilePathArray: string[], targetFilePath: string) {
         const resolvedFilePath = path.join(...unresolvedFilePathArray);
         const staticFilePath = path.resolve(__dirname, '..', 'main', 'static', resolvedFilePath);
         MainUtils.downloadFile(staticFilePath, targetFilePath)
@@ -188,7 +188,7 @@ class IpcMainHelper {
      * @param {string=}type 경로를 결정할 타입. image, sound 중 하나
      * @param {string}targetFilePath
      */
-    tempResourceDownload(event, entryObject, type, targetFilePath) {
+    tempResourceDownload(event: Electron.Event, entryObject: ObjectLike, type: string, targetFilePath: string) {
         let typedPath = '';
         if (entryObject.fileurl) {
             typedPath = entryObject.fileurl;
@@ -226,7 +226,7 @@ class IpcMainHelper {
         }
     }
 
-    saveExcel(event, filePath, array) {
+    saveExcel(event: Electron.Event, filePath: string, array: any[]) {
         MainUtils.saveExcel(filePath, array)
             .then(() => {
                 event.sender.send('saveExcel');
@@ -236,7 +236,7 @@ class IpcMainHelper {
             });
     }
 
-    writeFile(event, data, filePath) {
+    writeFile(event: Electron.Event, data: any, filePath: string) {
         MainUtils.writeFile(data, filePath)
             .then(() => {
                 event.sender.send('writeFile');
@@ -246,11 +246,11 @@ class IpcMainHelper {
             });
     }
 
-    quitApplication(event) {
+    quitApplication() {
         app.quit();
     }
 
-    checkUpdate(event) {
+    checkUpdate(event: Electron.Event) {
         const request = net.request({
             method: 'POST',
             host: root.sharedObject.hostURI,
@@ -286,7 +286,7 @@ class IpcMainHelper {
         request.end();
     }
 
-    openUrl(event, url) {
+    openUrl(event: Electron.Event, url: string) {
         shell.openExternal(url);
     }
 }

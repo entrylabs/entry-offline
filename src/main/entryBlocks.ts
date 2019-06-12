@@ -1,4 +1,4 @@
-module.exports = {
+const entryBlocks: {[key:string] : {[key:string]: any}} = {
     block: {
         expansionBlockAddButton: {},
         arduino_noti: {},
@@ -2501,3 +2501,7 @@ module.exports = {
         robotis_melody_note_for: { paramsKeyMap: { NOTE: 0, OCTAVE: 1, DURATION: 2 } },
     },
 };
+
+export default entryBlocks;
+
+

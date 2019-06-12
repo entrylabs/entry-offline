@@ -1,9 +1,12 @@
-import { BrowserWindow, app, ipcMain } from 'electron';
+import { BrowserWindow, app, ipcMain, NamedBrowserWindow } from 'electron';
 import path from 'path';
 
 export default class {
+    hardwareWindow?: NamedBrowserWindow;
+    requestLocalDataInterval?: NodeJS.Timeout;
+
     constructor() {
-        this.hardwareWindow = null;
+        this.hardwareWindow = undefined;
     }
 
     createHardwareWindow() {
@@ -26,15 +29,15 @@ export default class {
 
         this.hardwareWindow.setMenu(null);
         this.hardwareWindow.setMenuBarVisibility(false);
-        this.hardwareWindow.loadURL(`file:///${path.join(
-            __dirname, '..', 'renderer', 'bower_components', 'entry-hw', 'app', 'index.html')}`);
+        this.hardwareWindow.loadURL(`file:///${path.resolve(
+            __dirname, '..', '..', 'renderer', 'bower_components', 'entry-hw', 'app', 'index.html')}`);
         this.hardwareWindow.on('closed', () => {
-            this.hardwareWindow = null;
+            this.hardwareWindow = undefined;
         });
 
         this.hardwareWindow.webContents.name = 'hardware';
-        this.requestLocalDataInterval = -1;
-        ipcMain.on('startRequestLocalData', (event, duration) => {
+        this.requestLocalDataInterval = undefined;
+        ipcMain.on('startRequestLocalData', (event: Electron.Event, duration: number) => {
             this.requestLocalDataInterval = setInterval(() => {
                 if (!event.sender.isDestroyed()) {
                     event.sender.send('sendingRequestLocalData');
@@ -42,7 +45,9 @@ export default class {
             }, duration);
         });
         ipcMain.on('stopRequestLocalData', () => {
-            clearInterval(this.requestLocalDataInterval);
+            if (this.requestLocalDataInterval) {
+                clearInterval(this.requestLocalDataInterval);
+            }
         });
     }
 
@@ -50,24 +55,26 @@ export default class {
         if (!this.hardwareWindow) {
             this.createHardwareWindow();
         }
-
-        this.hardwareWindow.show();
-        if (this.hardwareWindow.isMinimized()) {
-            this.hardwareWindow.restore();
+        const hardwareWindow = this.hardwareWindow as BrowserWindow;
+        hardwareWindow.show();
+        if (hardwareWindow.isMinimized()) {
+            hardwareWindow.restore();
         }
-        this.hardwareWindow.focus();
+        hardwareWindow.focus();
     }
 
     closeHardwareWindow() {
         if (this.hardwareWindow) {
-            clearInterval(this.requestLocalDataInterval);
-            ipcMain.removeListener('stopRequestLocalData');
-            ipcMain.removeListener('startRequestLocalData');
+            if (this.requestLocalDataInterval) {
+                clearInterval(this.requestLocalDataInterval);
+            }
             this.hardwareWindow.destroy();
         }
     }
 
     reloadHardwareWindow() {
-        this.hardwareWindow.reload();
+        if (this.hardwareWindow) {
+            this.hardwareWindow.reload();
+        }
     }
 }
