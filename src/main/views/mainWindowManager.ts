@@ -1,4 +1,4 @@
-import { app, BrowserWindow, dialog, FileFilter, SaveDialogOptions, webContents } from 'electron';
+import { app, BrowserWindow, dialog, FileFilter, SaveDialogOptions, NamedBrowserWindow } from 'electron';
 import root from 'window-or-global';
 import MainUtils from '../mainUtils';
 import path from 'path';
@@ -11,13 +11,6 @@ type MainWindowOption = {
 type CrashMessage = {
     title: string;
     content: string;
-}
-
-interface MainBrowserWebContents extends webContents {
-    name?: string;
-}
-export interface MainBrowserWindow extends BrowserWindow {
-    webContents: MainBrowserWebContents
 }
 
 export default class {
@@ -62,7 +55,7 @@ export default class {
                 'This program has been shut down unexpectedly. Save the file you were working on.';
         }
 
-        const mainWindow: MainBrowserWindow = new BrowserWindow({
+        const mainWindow: NamedBrowserWindow = new BrowserWindow({
             width: 1080,
             height: 824,
             title,
