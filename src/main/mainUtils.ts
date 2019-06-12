@@ -14,7 +14,7 @@ import tar from 'tar';
 import Puid from 'puid';
 import uid from 'uid';
 import FileUtils from './fileUtils';
-import Constants from './constants';
+import Constants, { ReplaceStrategy } from './constants';
 import CommonUtils from './commonUtils';
 import BlockConverter from './blockConverter';
 /**
@@ -202,7 +202,7 @@ export default class MainUtils {
      * @see Constants.replaceStrategy
      * @return {object} 인자로 받은 project 를 그대로 반환한다.
      */
-    static changeObjectsPath(objects:any[] = [], replaceStrategy:(fileUrl: string) => string) {
+    static changeObjectsPath(objects:any[] = [], replaceStrategy: ReplaceStrategy) {
         objects.forEach((object) => {
             if (!object.sprite) {
                 return;
