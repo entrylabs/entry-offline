@@ -38,3 +38,9 @@ declare module 'excel4node' {
     const value: any;
     export = value;
 }
+
+/* eslint-disable */
+declare module 'xml2js' {
+    const value: any;
+    export = value;
+}

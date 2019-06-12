@@ -5,9 +5,10 @@
  */
 'use strict';
 
-const parseString = require('xml2js').parseString;
-const _ = require('lodash');
-const entry = require('./entryBlocks');
+import xml2js from 'xml2js';
+import _ from 'lodash';
+import entry from './entryBlocks';
+const parseString = xml2js.parseString;
 
 function processCode(xml: any) {
     let code = [];
@@ -202,7 +203,7 @@ function processBlock(block: any, thread: any) {
     }
 }
 
-module.exports = {
+export default {
     convert(project: any, cb: any) {
         const objects = project.objects;
         const functions = project.functions;
