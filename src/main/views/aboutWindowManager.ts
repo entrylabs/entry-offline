@@ -2,10 +2,10 @@ import { BrowserWindow } from 'electron';
 import path from 'path';
 
 export default class {
-    parentWindow: BrowserWindow;
+    parentWindow?: BrowserWindow;
     aboutWindow?: BrowserWindow;
 
-    constructor(parentWindow: BrowserWindow) {
+    constructor(parentWindow?: BrowserWindow) {
         this.parentWindow = parentWindow;
         this.aboutWindow = undefined;
         this.createAboutWindow();
@@ -36,9 +36,9 @@ export default class {
     openAboutWindow() {
         if (!this.aboutWindow) {
             this.createAboutWindow();
-        } else {
-            this.aboutWindow.show();
         }
+
+        (this.aboutWindow as BrowserWindow).show();
     }
 
     closeAboutWindow() {

@@ -29,8 +29,8 @@ export default class {
 
         this.hardwareWindow.setMenu(null);
         this.hardwareWindow.setMenuBarVisibility(false);
-        this.hardwareWindow.loadURL(`file:///${path.join(
-            __dirname, '..', 'renderer', 'bower_components', 'entry-hw', 'app', 'index.html')}`);
+        this.hardwareWindow.loadURL(`file:///${path.resolve(
+            __dirname, '..', '..', 'renderer', 'bower_components', 'entry-hw', 'app', 'index.html')}`);
         this.hardwareWindow.on('closed', () => {
             this.hardwareWindow = undefined;
         });
@@ -54,13 +54,13 @@ export default class {
     openHardwareWindow() {
         if (!this.hardwareWindow) {
             this.createHardwareWindow();
-        } else {
-            this.hardwareWindow.show();
-            if (this.hardwareWindow.isMinimized()) {
-                this.hardwareWindow.restore();
-            }
-            this.hardwareWindow.focus();
         }
+        const hardwareWindow = this.hardwareWindow as BrowserWindow;
+        hardwareWindow.show();
+        if (hardwareWindow.isMinimized()) {
+            hardwareWindow.restore();
+        }
+        hardwareWindow.focus();
     }
 
     closeHardwareWindow() {

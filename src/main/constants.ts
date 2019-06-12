@@ -3,7 +3,7 @@ import path from 'path';
 
 export type ReplaceStrategy = (fileUrl: string) => string | undefined;
 export default class {
-    static get replaceStrategy(): {[key:string]: ReplaceStrategy} {
+    static get replaceStrategy(): { [key: string]: ReplaceStrategy } {
         return {
             fromExternal: (fileUrl) => {
                 let result = fileUrl.replace(/%5C/gi, '\\'); // 1.6.x 버전 대응
@@ -59,6 +59,7 @@ export default class {
         ];
     }
 
+    // 사용위치는 join 을 사용 (프로젝트 외 경로)
     static get appPath() {
         return app.getPath('userData');
     }
@@ -72,6 +73,7 @@ export default class {
         );
     }
 
+    // 사용위치는 join 을 사용 (프로젝트 외 경로)
     static get tempPath() {
         return path.join(
             this.appPath,
@@ -109,7 +111,7 @@ export default class {
 
     static get resourcePath() {
         return path.resolve(
-            __dirname, '..', 'renderer', 'resources', 'uploads', path.sep,
+            __dirname, '..', 'renderer', 'resources', 'uploads',
         );
     }
 

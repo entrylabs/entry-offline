@@ -17,6 +17,8 @@ import FileUtils from './fileUtils';
 import Constants, { ReplaceStrategy } from './constants';
 import CommonUtils from './commonUtils';
 import BlockConverter from './blockConverter';
+
+const puid = new Puid();
 /**
  * Main Process 에서 발생하는 로직들을 담당한다.
  * ipcMain 을 import 하여 사용하지 않는다. renderer Process 간 이벤트 관리는 ipcMainHelper 가 한다.
@@ -27,7 +29,7 @@ export default class MainUtils {
      * @return {string}
      */
     static createFileId() {
-        return uid(8) + Puid.generate();
+        return uid(8) + puid.generate();
     }
 
     /**
@@ -137,7 +139,7 @@ export default class MainUtils {
             MainUtils.changeObjectsPath(project.objects, Constants.replaceStrategy.toExternal);
 
             const projectString = JSON.stringify(project);
-            const targetFilePath = path.join(sourcePath, 'temp', 'project.json');
+            const targetFilePath = path.resolve(sourcePath, 'temp', 'project.json');
             FileUtils.ensureDirectoryExistence(targetFilePath);
 
             fs.writeFile(
@@ -234,7 +236,7 @@ export default class MainUtils {
             const objectName = objects[0].name;
             // renderer/bower_components 를 ./bower_components 로 치환
             MainUtils.changeObjectsPath(objects, Constants.replaceStrategy.toExternalDeleteUrl);
-            const exportDirectoryPath = path.join(Constants.tempPathForExport(objectId), 'object');
+            const exportDirectoryPath = path.resolve(Constants.tempPathForExport(objectId), 'object');
             const objectJsonPath = path.join(exportDirectoryPath, 'object.json');
 
             const exportFileName = `${objectName}.eo`;
@@ -304,9 +306,9 @@ export default class MainUtils {
         const newFileId = MainUtils.createFileId();
         const newFileName = `${newFileId}${ext}`;
 
-        const tempSoundPath = path.join(Constants.tempSoundPath(fileId), fileName);
+        const tempSoundPath = path.resolve(Constants.tempSoundPath(fileId), fileName);
 
-        const targetSoundPath = path.join(targetDir,
+        const targetSoundPath = path.resolve(targetDir,
             Constants.subDirectoryPath(newFileId), 'sound', newFileName);
 
         await FileUtils.copyFile(tempSoundPath, targetSoundPath);
@@ -334,9 +336,9 @@ export default class MainUtils {
         const tempImagePath = path.join(Constants.tempImagePath(fileId), fileName);
         const tempThumbnailPath = path.join(Constants.tempThumbnailPath(fileId), fileName);
 
-        const targetImagePath = path.join(targetDir,
+        const targetImagePath = path.resolve(targetDir,
             Constants.subDirectoryPath(newFileId), 'image', newFileName);
-        const targetThumbnailPath = path.join(targetDir,
+        const targetThumbnailPath = path.resolve(targetDir,
             Constants.subDirectoryPath(newFileId), 'thumb', newFileName);
 
         await FileUtils.copyFile(tempImagePath, targetImagePath);
@@ -533,7 +535,7 @@ export default class MainUtils {
     static importPicturesFromResource(pictures: ObjectLike[]) {
         return Promise.all(pictures.map(async(picture) => {
             const fileName = picture.filename + (picture.ext || '.png');
-            const imageResourcePath = path.join(Constants.resourceImagePath(picture.filename), fileName);
+            const imageResourcePath = path.resolve(Constants.resourceImagePath(picture.filename), fileName);
             const thumbnailResourcePath = path.join(Constants.resourceThumbnailPath(picture.filename), fileName);
             const newObject = await MainUtils.importPictureToTemp(imageResourcePath, thumbnailResourcePath);
 

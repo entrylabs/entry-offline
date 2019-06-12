@@ -102,8 +102,6 @@ if (!app.requestSingleInstanceLock()) {
     });
 
     ipcMain.on('serverMode', function(event: Electron.Event, mode: string) {
-        if (event.sender && event.sender) {
-            event.sender.send('serverMode', mode);
-        }
+        event.sender.send('serverMode', mode);
     });
 }
