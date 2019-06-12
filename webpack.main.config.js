@@ -4,7 +4,7 @@ const webpack = require('webpack');
 const setting = {
     mode: 'none',
     target: 'electron-main',
-    entry: './src/main.js',
+    entry: './src/main.ts',
     resolve: {
         extensions: ['.ts', '.js', '.json'],
     },

@@ -2,6 +2,7 @@ import {
     app,
     Menu,
     ipcMain,
+    NamedEvent,
 } from 'electron';
 import HardwareWindowManager from './main/views/hardwareWindowManager';
 import MainWindowManager from './main/views/mainWindowManager';
@@ -63,46 +64,46 @@ if (!app.requestSingleInstanceLock()) {
             mainWindow.close({ isForceClose : true });
         });
 
-        ipcMain.on('reload', function(event, arg) {
-            if (event.sender.webContents.name !== 'entry') {
+        ipcMain.on('reload', function(event: NamedEvent, arg: any) {
+            if (event.sender.name !== 'entry') {
                 return hardwareWindow.reloadHardwareWindow();
             }
 
-            if (event.sender.webContents) {
+            if (event.sender) {
                 if (process.platform === 'darwin') {
                     const menu = Menu.buildFromTemplate([]);
                     Menu.setApplicationMenu(menu);
                 } else {
-                    mainWindow.setMenu(null);
+                    mainWindow.window && mainWindow.window.setMenu(null);
                 }
-                event.sender.webContents.reload();
+                event.sender.reload();
             }
         });
 
-        ipcMain.on('openHardwareWindow', function(event, arg) {
+        ipcMain.on('openHardwareWindow', function(event: Electron.Event, arg: any) {
             hardwareWindow.openHardwareWindow();
         });
 
-        ipcMain.on('openAboutWindow', function(event, arg) {
+        ipcMain.on('openAboutWindow', function(event: Electron.Event, arg: any) {
             aboutWindow.openAboutWindow();
         });
 
-        ipcMain.on('closeAboutWindow', function(event, arg) {
+        ipcMain.on('closeAboutWindow', function(event: Electron.Event, arg: any) {
             aboutWindow.closeAboutWindow();
         });
     });
 
-    ipcMain.on('roomId', function(event, arg) {
+    ipcMain.on('roomId', function(event: Electron.Event, arg: any) {
         event.returnValue = root.sharedObject.roomId;
     });
 
-    ipcMain.on('version', function(event, arg) {
+    ipcMain.on('version', function(event: Electron.Event, arg: any) {
         event.returnValue = '99';
     });
 
-    ipcMain.on('serverMode', function(event, mode) {
-        if (event.sender && event.sender.webContents) {
-            event.sender.webContents.send('serverMode', mode);
+    ipcMain.on('serverMode', function(event: Electron.Event, mode: string) {
+        if (event.sender && event.sender) {
+            event.sender.send('serverMode', mode);
         }
     });
 }
