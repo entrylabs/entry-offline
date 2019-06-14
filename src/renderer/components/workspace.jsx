@@ -373,7 +373,6 @@ class Workspace extends Component {
         }
         Entry.init(this.container.current, this.initOption);
         entryPatch();
-        Entry.enableArduino();
         this.addEntryEvents();
         Entry.loadProject(project);
     };
