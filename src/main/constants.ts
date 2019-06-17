@@ -1,8 +1,9 @@
 import { app } from 'electron';
 import path from 'path';
 
-export default  class {
-    static get replaceStrategy() {
+export type ReplaceStrategy = (fileUrl: string) => string | undefined;
+export default class {
+    static get replaceStrategy(): { [key: string]: ReplaceStrategy } {
         return {
             fromExternal: (fileUrl) => {
                 let result = fileUrl.replace(/%5C/gi, '\\'); // 1.6.x 버전 대응
@@ -29,7 +30,7 @@ export default  class {
                 return result;
             },
             toExternalDeleteUrl(fileUrl) {
-                let result = fileUrl;
+                let result: string | undefined = fileUrl;
                 if (result.startsWith('renderer')) {
                     result = result.replace('renderer', '.');
                 } else {
@@ -58,11 +59,12 @@ export default  class {
         ];
     }
 
+    // 사용위치는 join 을 사용 (프로젝트 외 경로)
     static get appPath() {
         return app.getPath('userData');
     }
 
-    static tempPathForExport(objectId) {
+    static tempPathForExport(objectId: string) {
         return path.join(
             this.appPath,
             'import',
@@ -71,6 +73,7 @@ export default  class {
         );
     }
 
+    // 사용위치는 join 을 사용 (프로젝트 외 경로)
     static get tempPath() {
         return path.join(
             this.appPath,
@@ -79,7 +82,7 @@ export default  class {
         );
     }
 
-    static tempImagePath(filename) {
+    static tempImagePath(filename: string) {
         return path.join(
             this.tempPath,
             this.subDirectoryPath(filename),
@@ -88,7 +91,7 @@ export default  class {
         );
     }
 
-    static tempThumbnailPath(filename) {
+    static tempThumbnailPath(filename: string) {
         return path.join(
             this.tempPath,
             this.subDirectoryPath(filename),
@@ -97,7 +100,7 @@ export default  class {
         );
     }
 
-    static tempSoundPath(filename) {
+    static tempSoundPath(filename: string) {
         return path.join(
             this.tempPath,
             this.subDirectoryPath(filename),
@@ -108,11 +111,11 @@ export default  class {
 
     static get resourcePath() {
         return path.resolve(
-            __dirname, '..', 'renderer', 'resources', 'uploads', path.sep,
+            __dirname, '..', 'renderer', 'resources', 'uploads',
         );
     }
 
-    static resourceImagePath(filename) {
+    static resourceImagePath(filename: string) {
         return path.join(
             this.resourcePath,
             this.subDirectoryPath(filename),
@@ -121,7 +124,7 @@ export default  class {
         );
     }
 
-    static resourceThumbnailPath(filename) {
+    static resourceThumbnailPath(filename: string) {
         return path.join(
             this.resourcePath,
             this.subDirectoryPath(filename),
@@ -130,7 +133,7 @@ export default  class {
         );
     }
 
-    static resourceSoundPath(filename) {
+    static resourceSoundPath(filename: string) {
         return path.join(
             this.resourcePath,
             this.subDirectoryPath(filename),
@@ -138,7 +141,7 @@ export default  class {
         );
     }
 
-    static subDirectoryPath(filename) {
+    static subDirectoryPath(filename: string) {
         return path.join(
             filename.substr(0, 2),
             filename.substr(2, 2),

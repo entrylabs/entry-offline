@@ -1,14 +1,26 @@
-import { app, BrowserWindow, dialog } from 'electron';
+import { app, BrowserWindow, dialog, FileFilter, SaveDialogOptions, NamedBrowserWindow } from 'electron';
 import root from 'window-or-global';
 import MainUtils from '../mainUtils';
 import path from 'path';
 
+type MainWindowOption = {
+    [key: string]: any;
+    debug: boolean;
+}
+
+type CrashMessage = {
+    title: string;
+    content: string;
+}
+
 export default class {
+    mainWindow ?: BrowserWindow;
+
     get window() {
         return this.mainWindow;
     }
 
-    get downloadFilterList() {
+    get downloadFilterList(): {[key: string]: FileFilter[]} {
         return {
             'image/png': [
                 {
@@ -23,10 +35,13 @@ export default class {
         };
     }
 
-    constructor(option) {
+    constructor(option: MainWindowOption) {
         const language = app.getLocale();
         let title = app.getVersion();
-        const crashedMsg = {};
+        const crashedMsg: CrashMessage = {
+            title: '',
+            content: '',
+        };
 
         if (language === 'ko') {
             title = `엔트리 v${title}`;
@@ -40,13 +55,12 @@ export default class {
                 'This program has been shut down unexpectedly. Save the file you were working on.';
         }
 
-        let mainWindow = new BrowserWindow({
+        const mainWindow: NamedBrowserWindow = new BrowserWindow({
             width: 1080,
             height: 824,
             title,
             show: false,
             backgroundColor: '#e5e5e5',
-            nodeIntegration: false,
             webPreferences: {
                 backgroundThrottling: false,
             },
@@ -66,7 +80,7 @@ export default class {
 
         mainWindow.webContents.session.on('will-download', (event, downloadItem, webContents) => {
             const filename = downloadItem.getFilename();
-            const option = {
+            const option: SaveDialogOptions = {
                 defaultPath: filename,
             };
             const filters = this.downloadFilterList[downloadItem.getMimeType()];
@@ -120,16 +134,19 @@ export default class {
             e.preventDefault();
         });
 
-        mainWindow.on('closed', function() {
-            mainWindow = null;
+        mainWindow.on('closed', () => {
+            this.mainWindow = undefined;
             app.quit();
             process.exit(0);
         });
     }
 
     close({ isForceClose = false }) {
+        if (!this.mainWindow) {
+            return;
+        }
+
         if (!isForceClose && root.sharedObject.isInitEntry) {
-            // cwm.closeHardwareWindow();
             this.mainWindow.webContents.send('mainClose');
         } else {
             this.mainWindow.close();
@@ -146,8 +163,8 @@ export default class {
         }
     }
 
-    loadProjectFromPath(projectPath) {
-        if (projectPath) {
+    loadProjectFromPath(projectPath: string) {
+        if (this.mainWindow && !this.mainWindow.isDestroyed() &&  projectPath) {
             this.mainWindow.webContents.send('loadProjectFromMain', projectPath);
         }
     }

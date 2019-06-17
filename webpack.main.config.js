@@ -4,9 +4,9 @@ const webpack = require('webpack');
 const setting = {
     mode: 'none',
     target: 'electron-main',
-    entry: './src/main.js',
+    entry: './src/main.ts',
     resolve: {
-        extensions: ['.js', '.json'],
+        extensions: ['.ts', '.js', '.json'],
     },
     node: {
         __dirname: true,
@@ -20,6 +20,10 @@ const setting = {
     },
     module: {
         rules: [
+            {
+                test: /\.tsx?$/,
+                loader: 'ts-loader',
+            },
             {
                 test: /\.(js|jsx|mjs)$/,
                 exclude: [

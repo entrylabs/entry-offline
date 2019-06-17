@@ -38,6 +38,7 @@ class Workspace extends Component {
 
         this.defaultInitOption = {
             type: 'workspace',
+            backpackDisable: true,
             libDir: 'renderer/bower_components',
             defaultDir: 'renderer/resources',
             fonts: EntryStatic.fonts,
@@ -75,6 +76,9 @@ class Workspace extends Component {
     addEntryEvents() {
         const addEventListener = Entry.addEventListener.bind(Entry);
 
+        addEventListener('openBackPack', () => {
+            root.entrylms.alert(RendererUtils.getLang('[다국어미적용]\n온라인에서 사용가능'));
+        });
         // 교과형에서 하드웨어가 바뀔때 마다 카테고리 변화
         addEventListener('hwChanged', this.handleHardwareChange);
         // 하드웨어 다운로드 탭에서 다운로드 처리
@@ -369,7 +373,6 @@ class Workspace extends Component {
         }
         Entry.init(this.container.current, this.initOption);
         entryPatch();
-        Entry.enableArduino();
         this.addEntryEvents();
         Entry.loadProject(project);
     };

@@ -4,6 +4,23 @@
     "react-app",
     "eslint:recommended"
   ],
+  "overrides": [
+    {
+      "files": ["*.ts"],
+      "parser": "@typescript-eslint/parser",
+      "rules": {
+        "no-unused-vars": "off"
+      }
+    },
+    {
+      "files": ["*.d.ts"],
+      "parser": "@typescript-eslint/parser",
+      "rules": {
+        "no-unused-vars": "off",
+        "no-useless-constructor": "off"
+      }
+    }
+  ],
   "parserOptions": {
     "ecmaVersion": 8,
     "sourceType": "module",
