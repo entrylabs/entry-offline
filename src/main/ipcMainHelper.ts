@@ -172,7 +172,7 @@ class IpcMainHelper {
      */
     staticDownload(event: Electron.Event, unresolvedFilePathArray: string[], targetFilePath: string) {
         const resolvedFilePath = path.join(...unresolvedFilePathArray);
-        const staticFilePath = path.resolve(__dirname, '..', 'main', 'static', resolvedFilePath);
+        const staticFilePath = path.resolve(app.getAppPath(), 'src', 'main', 'static', resolvedFilePath);
         MainUtils.downloadFile(staticFilePath, targetFilePath)
             .catch((err) => {
                 console.error(err);

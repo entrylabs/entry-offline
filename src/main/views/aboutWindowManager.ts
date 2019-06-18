@@ -1,4 +1,4 @@
-import { BrowserWindow } from 'electron';
+import { app, BrowserWindow } from 'electron';
 import path from 'path';
 
 export default class {
@@ -10,6 +10,7 @@ export default class {
         this.aboutWindow = undefined;
         this.createAboutWindow();
     }
+
     createAboutWindow() {
         this.aboutWindow = new BrowserWindow({
             parent: this.parentWindow,
@@ -28,8 +29,7 @@ export default class {
         });
 
         this.aboutWindow.loadURL(`file:///${path.resolve(
-            __dirname,
-            'about.html',
+            app.getAppPath(), 'src', 'main', 'views', 'about.html',
         )}`);
     }
 
