@@ -1,7 +1,7 @@
 import { MODAL_PROGRESS } from '../actions/types';
 import { CommonAction } from './index';
 
-interface IModalState {
+export interface IModalState {
     isShow: boolean,
     data: {
         type: string,

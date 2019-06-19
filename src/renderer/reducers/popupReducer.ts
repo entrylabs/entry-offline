@@ -7,7 +7,7 @@ export type PopupAction = Action & {
     page: number;
 }
 
-interface IPopupState {
+export interface IPopupState {
     type: string;
     visible: boolean;
     page: number;

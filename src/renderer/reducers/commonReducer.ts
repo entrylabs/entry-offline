@@ -1,7 +1,7 @@
 import { CHANGE_PROJECT_NAME } from '../actions/types';
 import { CommonAction } from './index';
 
-interface ICommonState {
+export interface ICommonState {
     projectName?: string;
 }
 

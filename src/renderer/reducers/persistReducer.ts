@@ -1,7 +1,7 @@
 import { CHANGE_LANGUAGE, PROJECT_DATA, WS_MODE } from '../actions/types';
 import { CommonAction } from './index';
 
-interface IPersistState {
+export interface IPersistState {
     lang: string,
     mode?: WorkspaceMode,
 }
