@@ -3,7 +3,7 @@ import { CommonAction } from './index';
 
 interface IPersistState {
     lang: string,
-    mode?: string,
+    mode?: WorkspaceMode,
 }
 
 const defaultState = {

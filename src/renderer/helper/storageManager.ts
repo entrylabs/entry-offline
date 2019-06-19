@@ -48,13 +48,13 @@ export default class {
         root.localStorage.setItem(this.LOCAL_STORAGE_KEY_RELOAD, projectJson);
     }
 
-    static loadTempProject() {
+    static loadTempProject(): Entry.Project {
         const tempProject = JSON.parse(root.localStorage.getItem(this.LOCAL_STORAGE_KEY_RELOAD));
         root.localStorage.removeItem(this.LOCAL_STORAGE_KEY_RELOAD);
         return tempProject;
     }
 
-    static getPersistLangType() {
+    static getPersistLangType(): string | undefined {
         const rawPersist = root.localStorage.getItem(this.PERSIST);
         if (!rawPersist) {
             return;
@@ -64,7 +64,7 @@ export default class {
         return persist[this.LOCAL_STORAGE_LANG];
     }
 
-    static getPersistWorkspaceMode() {
+    static getPersistWorkspaceMode(): WorkspaceMode | undefined {
         const rawPersist = root.localStorage.getItem(this.PERSIST);
         if (!rawPersist) {
             return;

@@ -3,6 +3,8 @@ declare interface ObjectLike extends Object {
     [key: string]: any
 }
 
+declare type WorkspaceMode = 'practical_course' | 'workspace';
+
 declare const Entry: any;
 
 /* eslint-disable */

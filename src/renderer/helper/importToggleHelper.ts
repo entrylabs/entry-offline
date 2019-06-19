@@ -9,7 +9,7 @@ export default class {
      * TODO ko 로 진입하는 것이 불법접근인데 필요한 방어코드인지 고려
      * @param mode{string} workspace | practical_course
      */
-    static async changeEntryStatic(mode) {
+    static async changeEntryStatic(mode?: WorkspaceMode) {
         let defaultEntryStatic;
         if (mode === 'practical_course') {
             if (root.Lang && RendererUtils.getLangType() !== 'ko') {
@@ -29,7 +29,7 @@ export default class {
      * @param lang
      * @return {Promise<void>}
      */
-    static async changeLang(lang) {
+    static async changeLang(lang: string) {
         root.Lang = await import(`../resources/lang/${lang}.json`);
         root.Lang.Blocks.ARDUINO_download_connector = root.Lang.Blocks.ARDUINO_open_connector;
         nativeMenu.init();
