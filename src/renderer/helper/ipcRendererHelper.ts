@@ -39,7 +39,7 @@ export default class {
      *
      * @param{Promise<function>} callback loadProject 프로미스
      */
-    static loadProjectFromMain(callback: (project: Entry.Project) => void) {
+    static loadProjectFromMain(callback: (project: Promise<Entry.Project>) => void) {
         ipcRenderer.on('loadProjectFromMain', (e: Electron.Event, filePath: string) => {
             callback(this.loadProject(filePath));
         });
@@ -107,7 +107,7 @@ export default class {
         });
     }
 
-    static importPictureFromCanvas(data: ObjectLike[]): Promise<Entry.Picture> {
+    static importPictureFromCanvas(data: any): Promise<Entry.Picture> {
         return new Promise((resolve) => {
             ipcRenderer.send('importPictureFromCanvas', data);
             ipcRenderer.once('importPictureFromCanvas', (e: Electron.Event, object: Entry.Picture) => {

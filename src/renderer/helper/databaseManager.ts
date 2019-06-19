@@ -9,22 +9,24 @@ interface BaseObject {
     name: string;
     specials: [];
     created: string;
+    _id: string;
 }
 
-interface SoundObject extends BaseObject {
+export interface DBSoundObject extends BaseObject {
+    path?: string
     ext: string;
     duration: number;
     filename: string;
 }
 
-interface PictureObject extends BaseObject {
+export interface DBPictureObject extends BaseObject {
     dimension: { height: number, width: number };
     filename: string;
 }
 
-interface SpriteObject extends BaseObject {
-    pictures: Pick<PictureObject, 'label' | 'dimension' | 'filename' | 'name'>[];
-    sounds: Pick<SoundObject, 'label' | 'duration' | 'ext' | 'filename' | 'name'>[];
+export interface DBSpriteObject extends BaseObject {
+    pictures: Pick<DBPictureObject, 'label' | 'dimension' | 'filename' | 'name'>[];
+    sounds: Pick<DBSoundObject, 'label' | 'duration' | 'ext' | 'filename' | 'name'>[];
 }
 
 /**
@@ -94,42 +96,16 @@ export default class {
         });
     }
 
-    static _selectTable(type ?: string): PictureObject[] | SpriteObject[] | SoundObject[] | any[] {
+    static _selectTable(type ?: string): DBPictureObject[] | DBSpriteObject[] | DBSoundObject[] | any[] {
         switch (type) {
             case 'picture':
-                return Pictures as PictureObject[];
+                return Pictures as DBPictureObject[];
             case 'sprite':
-                return Sprites as SpriteObject[];
+                return Sprites as DBSpriteObject[];
             case 'sound':
-                return Sounds as SoundObject[];
+                return Sounds as DBSoundObject[];
             default:
                 return [];
         }
     }
 }
-
-/*
-참고사항
-
-sprite 구조 :
-{
-    '_id': '56cb52e5fc051ddf4ba6110d',
-    '__v': 0,
-    'name': '아무거나 버튼',
-    'user': '56b2f0052d7146c949202baa',
-    'specials': [],
-    'created': '2016-02-22T18:26:45.271Z',
-    'sounds': [],
-    'pictures': [{
-        '_id': '56ca2a4cfc051ddf4ba60f5f',
-        'filename': '817ef76cf059abf7c9c39a478e57612f',
-        'name': '아무거나 버튼_1',
-        'dimension': { 'height': 99, 'width': 236 },
-        'label': { 'en': 'Random Button_1', 'ko': '아무거나 버튼_1', 'vn': '아무거나버' },
-    }],
-    'type': '_system_',
-    'category': { 'main': 'interface' },
-    'label': { 'ko': '아무거나 버튼', 'en': 'Random Button' },
-};
-
-*/
