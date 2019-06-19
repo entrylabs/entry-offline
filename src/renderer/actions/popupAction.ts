@@ -1,6 +1,6 @@
 import { POPUP_SHOW, POPUP_HIDE, PAGE_MOVE } from './types';
 
-export const showPopup = (type, data) => {
+export const showPopup = (type: string, data: any) => {
     return {
         type: POPUP_SHOW,
         popupType: type,
@@ -16,7 +16,7 @@ export const hidePopup = () => {
     };
 };
 
-export const goTo = (page) => {
+export const goTo = (page: number) => {
     return {
         type: PAGE_MOVE,
         page: page,
