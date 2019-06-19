@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, ReactElement } from 'react';
 import './header.scss';
 import root from 'window-or-global';
 import _get from 'lodash/get';
@@ -10,9 +10,16 @@ import { CHANGE_LANGUAGE, CHANGE_PROJECT_NAME, WS_MODE } from '../actions/types'
 import { Dropdown } from '@entrylabs/tool/component';
 import ImportToggleHelper from '../helper/importToggleHelper';
 
+interface IState {
+    dropdownType?: string;
+}
+type IProps = any;
+type DropDownItemPair = [string | ReactElement, string];
 /* global Entry */
-class Header extends Component {
-    constructor(props) {
+class Header extends Component<IProps, IState> {
+    dropdownList: any;
+
+    constructor(props: Readonly<IProps>) {
         super(props);
         this.dropdownList = {};
         this.state = {
@@ -20,25 +27,25 @@ class Header extends Component {
         };
     }
 
-    get programLanguageList() {
+    get programLanguageList(): DropDownItemPair[] {
         return [
             [RendererUtils.getLang('Menus.block_coding'), 'block'],
             [RendererUtils.getLang('Menus.python_coding'), 'python'],
         ];
     }
-    get fileList() {
+    get fileList(): DropDownItemPair[] {
         return [
             [RendererUtils.getLang('Workspace.file_new'), 'new'],
             [RendererUtils.getLang('Workspace.file_upload'), 'open_offline'],
         ];
     }
-    get saveList() {
+    get saveList(): DropDownItemPair[] {
         return [
             [RendererUtils.getLang('Workspace.file_save'), 'save'],
             [RendererUtils.getLang('Workspace.file_save_as'), 'save_as'],
         ];
     }
-    get helpList() {
+    get helpList(): DropDownItemPair[] {
         const { persist } = this.props;
         const { mode } = persist;
 
@@ -51,7 +58,7 @@ class Header extends Component {
             [RendererUtils.getLang('Workspace.python_guide'), 'help_python'],
         ];
     }
-    get modeList() {
+    get modeList(): DropDownItemPair[] {
         return [
             [RendererUtils.getLang('Workspace.default_mode'), 'workspace'],
             [
@@ -65,7 +72,7 @@ class Header extends Component {
             ],
         ];
     }
-    get languageList() {
+    get languageList(): DropDownItemPair[] {
         return [
             [RendererUtils.getLang('ko'), 'ko'],
             [RendererUtils.getLang('en'), 'en'],
@@ -77,13 +84,13 @@ class Header extends Component {
     getModeText() {
         const { persist } = this.props;
         const { mode } = persist;
-        const [modeText] = this.modeList.find((list) => {
+        const [modeText]: any = this.modeList.find((list) => {
             return list[1] === mode;
         });
         return modeText;
     }
 
-    handleDropdownClick(type) {
+    handleDropdownClick(type?: string) {
         this.setState((state) => {
             const { dropdownType } = state;
             return {
@@ -97,7 +104,7 @@ class Header extends Component {
         return _get(root.Lang, lang);
     }
 
-    makeDropdown(type, items) {
+    makeDropdown(type: string, items: DropDownItemPair[]) {
         const { dropdownType } = this.state;
         if (type !== dropdownType) {
             return null;
@@ -109,7 +116,7 @@ class Header extends Component {
                 animation={false}
                 items={items}
                 positionDom={positionDom}
-                onSelectDropdown={(item) => {
+                onSelectDropdown={(item: DropDownItemPair) => {
                     this.handleDropdownSelect(type, item);
                     this.setState(() => {
                         return {
@@ -129,7 +136,7 @@ class Header extends Component {
         );
     }
 
-    handleDropdownSelect(type, item) {
+    handleDropdownSelect(type: string, item: DropDownItemPair) {
         const key = item[1];
         switch (type) {
             case 'programLanguage':
@@ -157,7 +164,7 @@ class Header extends Component {
         }
     }
 
-    handleProgramLanguageClick(item) {
+    handleProgramLanguageClick(item: DropDownItemPair) {
         const { onProgramLanguageChanged, programLanguageMode } = this.props;
         const key = item[1];
         if (key !== programLanguageMode) {
@@ -165,7 +172,7 @@ class Header extends Component {
         }
     }
 
-    handleHelpClick(item) {
+    handleHelpClick(item: DropDownItemPair) {
         const key = item[1];
         if (key === 'help_block') {
             Entry.dispatchEvent('showBlockHelper');
@@ -184,7 +191,7 @@ class Header extends Component {
         }
     }
 
-    async handleChangeWsMode(item) {
+    async handleChangeWsMode(item: DropDownItemPair) {
         if (EntryUtils.confirmProjectWillDismiss()) {
             const { mode, onLoadProject } = this.props;
             const key = item[1];
@@ -194,7 +201,7 @@ class Header extends Component {
         }
     }
 
-    async handleChangeLanguage(item) {
+    async handleChangeLanguage(item: DropDownItemPair) {
         const { language, onReloadProject } = this.props;
         const langType = item[1];
         await ImportToggleHelper.changeLang(langType);
@@ -382,15 +389,15 @@ class Header extends Component {
     }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: any) => ({
     ...state,
 });
 
 const mapDispatchToProps = {
     showPopup,
-    language: (data) => commonAction(CHANGE_LANGUAGE, data),
-    changeProjectName: (data) => commonAction(CHANGE_PROJECT_NAME, data),
-    mode: (data) => commonAction(WS_MODE, data),
+    language: (data: string) => commonAction(CHANGE_LANGUAGE, data),
+    changeProjectName: (data: string) => commonAction(CHANGE_PROJECT_NAME, data),
+    mode: (data: string) => commonAction(WS_MODE, data),
 };
 
 export default connect(

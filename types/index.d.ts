@@ -8,6 +8,9 @@ declare type WorkspaceMode = 'practical_course' | 'workspace';
 declare module '@entrylabs/tool' {
     export const Popup: any;
 }
+declare module '@entrylabs/tool/component' {
+    export const Dropdown: any;
+}
 
 /* eslint-disable */
 declare module 'puid' {

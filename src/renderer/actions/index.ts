@@ -1,5 +1,5 @@
 import { MODAL_PROGRESS } from './types';
-export const commonAction = (type: string, data: any, options: any) => {
+export const commonAction = (type: string, data: any, options?: any) => {
     return {
         type,
         options,
