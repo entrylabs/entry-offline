@@ -71,12 +71,10 @@ export default class {
                 {
                     title: RendererUtils.getLang('Workspace.file_save'),
                     defaultPath: `${filename}.xlsx`,
-                    filters: {
-                        'application/vnd.ms-excel': [
-                            { name: 'Excel Files (*.xlsx)', extensions: ['xlsx'] },
-                            { name: 'All Files (*.*)', extensions: ['*'] },
-                        ],
-                    },
+                    filters: [
+                        { name: 'Excel Files (*.xlsx)', extensions: ['xlsx'] },
+                        { name: 'All Files (*.*)', extensions: ['*'] },
+                    ],
                 },
                 (filePath: string) => {
                     ipcRenderer.send('saveExcel', filePath, array);

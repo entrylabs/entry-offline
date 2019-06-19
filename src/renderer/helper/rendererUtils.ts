@@ -24,7 +24,7 @@ export default class {
      * @param {Object=} options
      * @property saveTemp temp 폴더를 그대로 두는 경우. 이전 리소스가 남아있을지 모르는 상태일때 사용
      */
-    static clearTempProject(options = {}) {
+    static clearTempProject(options: { saveTemp?: boolean } = {}) {
         let resultPromise = Promise.resolve();
         if (!options.saveTemp) {
             resultPromise = IpcRendererHelper.resetDirectory();
@@ -39,7 +39,7 @@ export default class {
      * @param key{string} property chain
      * @return {string} 해당하는 값 || key
      */
-    static getLang(key = '') {
+    static getLang(key = ''): string {
         const lang = root.Lang || {};
         return get(lang, key) || key;
     }
@@ -51,7 +51,7 @@ export default class {
      * 2. 한글 (기본)
      * @return {string}
      */
-    static getLangType() {
+    static getLangType(): string {
         return root.Lang.type || root.Lang.fallbackType;
     }
 
@@ -60,7 +60,7 @@ export default class {
      * fallbackType 이 없는 경우 type 을 반환한다.
      * @return {string}
      */
-    static getFallbackLangType() {
+    static getFallbackLangType(): string {
         return root.Lang.fallbackType || root.Lang.type;
     }
 
@@ -68,7 +68,7 @@ export default class {
      * 현재 일자를 YYMMDD 형식으로 반환한다
      * @return {string}
      */
-    static getFormattedDate() {
+    static getFormattedDate(): string {
         const currentDate = new Date();
         const year = currentDate
             .getFullYear()
@@ -96,7 +96,7 @@ export default class {
         return `${this.getFormattedDate()}_${this.getLang('Workspace.project')}`;
     }
 
-    static showOpenDialog(option, callback) {
+    static showOpenDialog(option: Electron.OpenDialogOptions, callback: (path: string[]) => void) {
         if (root.isOsx) {
             dialog.showOpenDialog(option, callback);
         } else {
@@ -105,7 +105,7 @@ export default class {
         }
     }
 
-    static showSaveDialog(option, callback) {
+    static showSaveDialog(option: Electron.SaveDialogOptions, callback: (filePath: string) => void) {
         dialog.showSaveDialog(option, callback);
     }
 
@@ -161,9 +161,9 @@ export default class {
      * @param data buffer 화 되지 않은 엘리먼트의 src
      * @param filePath 저장할 위치
      */
-    static saveBlockImage(data, filePath) {
+    static saveBlockImage(data: string, filePath: string) {
         const buffer = Buffer.from(
-            data.replace(/^data:image\/(png|gif|jpeg);base64,/, ''), 'base64'
+            data.replace(/^data:image\/(png|gif|jpeg);base64,/, ''), 'base64',
         );
 
         IpcRendererHelper.writeFile(buffer, filePath);
@@ -174,7 +174,7 @@ export default class {
      * @param imageData
      * @return {*|jQuery|{}} jQuery deferred.
      */
-    static cropImageFromCanvas(imageData) {
+    static cropImageFromCanvas(imageData: string): Promise<string> {
         return new Promise(((resolve) => {
             const image = new Image();
 
@@ -184,12 +184,16 @@ export default class {
                 canvas.width = image.width;
                 canvas.height = image.height;
                 const ctx = canvas.getContext('2d');
-                ctx.drawImage(this, 0, 0, canvas.width, canvas.height);
+                if (!ctx) {
+                    resolve('');
+                    return;
+                }
+                ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
 
                 let width = canvas.width;
                 let height = canvas.height;
-                const pix = { x: [], y: [] };
-                const imageData = ctx.getImageData(0,0, width, height);
+                const pix: { x: number[], y: number[] } = { x: [], y: [] };
+                const imageData = ctx.getImageData(0, 0, width, height);
 
                 let x;
                 let y;
@@ -259,7 +263,7 @@ export default class {
      * @param {string=}defaultExtension extension 이 falsy 인 경우 반환
      * @return {string} . 이 붙은 확장자
      */
-    static sanitizeExtension(extension, defaultExtension) {
+    static sanitizeExtension(extension: string, defaultExtension: string) {
         let sanitizedExt = extension || defaultExtension;
         if (!sanitizedExt.startsWith('.')) {
             sanitizedExt = `.${sanitizedExt}`;
