@@ -3,6 +3,30 @@ import Pictures from '../resources/db/pictures.json';
 import Sounds from '../resources/db/sounds.json';
 import RendererUtils from './rendererUtils';
 
+interface BaseObject {
+    label: { ko: string, en: string, jp?: string, vn?: string };
+    category: { main: string, sub: string };
+    name: string;
+    specials: [];
+    created: string;
+}
+
+interface SoundObject extends BaseObject {
+    ext: string;
+    duration: number;
+    filename: string;
+}
+
+interface PictureObject extends BaseObject {
+    dimension: { height: number, width: number };
+    filename: string;
+}
+
+interface SpriteObject extends BaseObject {
+    pictures: Pick<PictureObject, 'label' | 'dimension' | 'filename' | 'name'>[];
+    sounds: Pick<SoundObject, 'label' | 'duration' | 'ext' | 'filename' | 'name'>[];
+}
+
 /**
  * sprite, pictures, sounds 등의 데이터베이스 추출본을 가지고 CRUD 를 흉내내는 클래스.
  *
@@ -17,13 +41,14 @@ export default class {
      * @param type 테이블명
      * @return {Array<string>} 결과 리스트
      */
-    static findAll({ sidebar, subMenu, type }) {
+    static findAll({ sidebar, subMenu, type }: { sidebar: string, subMenu: string, type: string }) {
         const table = this._selectTable(type);
         return new Promise((resolve) => {
             const findList =
                 table.filter((object) => {
                     if (!object.category) {
-                        return false;
+                        resolve();
+                        return;
                     }
 
                     const { main = '', sub = '' } = object.category;
@@ -49,13 +74,13 @@ export default class {
      * entry-tool 에서 전달받을 때는 아래의 인자를 받게 된다.
      * {category, period, searchQuery, sort, type}
      */
-    static search({ type, searchQuery }) {
+    static search({ type, searchQuery }: { type: string, searchQuery: string }) {
         const table = this._selectTable(type);
         const lowerCaseSearchQuery = searchQuery.toString().toLowerCase();
 
         return new Promise((resolve) => {
             const findList = table.filter((object) => {
-                const { label = {}, name = '' }  = object;
+                const { label = {}, name = '' } = object;
                 const objectName =
                     label[RendererUtils.getLangType()] ||
                     label[RendererUtils.getFallbackLangType()] ||
@@ -69,14 +94,14 @@ export default class {
         });
     }
 
-    static _selectTable(type) {
+    static _selectTable(type ?: string): PictureObject[] | SpriteObject[] | SoundObject[] | any[] {
         switch (type) {
             case 'picture':
-                return Pictures;
+                return Pictures as PictureObject[];
             case 'sprite':
-                return Sprites;
+                return Sprites as SpriteObject[];
             case 'sound':
-                return Sounds;
+                return Sounds as SoundObject[];
             default:
                 return [];
         }
