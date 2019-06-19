@@ -17,19 +17,22 @@ import EntryUtils from './entryUtils';
  */
 //TODO object fetch result sort 필요?
 class EntryModalHelper {
-    static fetchPopup = (data) => EntryModalHelper.popup.setData({ data: { data } });
+    static popup: any;
+    static lastOpenedType?: string;
+    static fetchPopup = (data: any) => EntryModalHelper.popup.setData({ data: { data } });
+
     /**
      * 오브젝트 추가 팝업을 노출한다
      */
     static async showSpritePopup() {
         console.log('object popup show');
         await this._switchPopup('sprite', {
-            fetch: (data) => {
+            fetch: (data: any) => {
                 DatabaseManager
                     .findAll(data)
                     .then(EntryModalHelper.fetchPopup);
             },
-            search: (data) => {
+            search: (data: any) => {
                 if (data.searchQuery === '') {
                     return;
                 }
@@ -38,7 +41,7 @@ class EntryModalHelper {
                         EntryModalHelper.fetchPopup(result);
                     });
             },
-            submit: async(data) => {
+            submit: async(data: any) => {
                 const newObjects = await IpcRendererHelper.importObjectsFromResource(data.selected);
                 newObjects.forEach((item) => {
                     const labeledItem = EntryModalHelper._getLabeledObject(item);
@@ -50,7 +53,7 @@ class EntryModalHelper {
                     Entry.container.addObject(object, 0);
                 });
             },
-            select: (data) => {
+            select: (data: any) => {
                 const object = {
                     id: Entry.generateHash(),
                     objectType: 'sprite',
@@ -85,7 +88,7 @@ class EntryModalHelper {
                 Entry.container.addObject(object, 0);
                 Entry.playground.changeViewMode('picture');
             },
-            write: (data) => {
+            write: (data: any) => {
                 console.log('popupWrite', data);
                 let linebreak = true;
                 if (data.writeType === 'one') {
@@ -112,7 +115,7 @@ class EntryModalHelper {
                 };
                 Entry.container.addObject(object, 0);
             },
-            dummyUploads: async({ formData, objectData }) => {
+            dummyUploads: async({ formData, objectData }: { formData: any, objectData: any }) => {
                 const pictures = formData ? formData.values() : [];
                 const objects = objectData ? objectData.values() : [];
 
@@ -139,7 +142,7 @@ class EntryModalHelper {
                     data: {
                         data: [],
                         uploads: results.concat(
-                            objectResults.map((objectModel) => {
+                            objectResults.map((objectModel: any) => {
                                 // thumbnail 용으로 쓸 selectedPicture 표기. 본 데이터는 sprite
                                 const [firstObject] = objectModel.objects;
 
@@ -158,13 +161,13 @@ class EntryModalHelper {
 
                                 selected.sprite = objectModel;
                                 return selected;
-                            })
+                            }),
                         ),
                     },
                 });
             },
-            uploads: (data) => {
-                data.uploads.forEach(function(objectModel) {
+            uploads: (data: any) => {
+                data.uploads.forEach(function(objectModel: any) {
                     const { sprite, objectType = '' } = objectModel;
                     if (sprite || objectType === 'textBox') {
                         EntryUtils.addObjectToEntry(objectModel);
@@ -173,13 +176,13 @@ class EntryModalHelper {
                     }
                 });
             },
-            uploadFail: (data) => {
+            uploadFail: (data: any) => {
                 root.entrylms.alert(RendererUtils.getLang(`${data.messageParent}.${data.message}`));
             },
-            fail: (data) => {
+            fail: () => {
                 root.entrylms.alert(RendererUtils.getLang('Msgs.error_occured'));
             },
-            error: (data) => {
+            error: () => {
                 root.entrylms.alert(RendererUtils.getLang('Msgs.error_occured'));
             },
         });
@@ -190,8 +193,8 @@ class EntryModalHelper {
      * fetch 시 Object 와 동일하나, Object 내의 Pictures 를 전부 까서 보여주는 차이가 있다.
      */
     static async showPicturePopup() {
-        const popup = await this._switchPopup('picture', {
-            fetch: (data) => {
+        await this._switchPopup('picture', {
+            fetch: (data: any) => {
                 DatabaseManager
                     .findAll({
                         ...data,
@@ -199,7 +202,7 @@ class EntryModalHelper {
                     })
                     .then(EntryModalHelper.fetchPopup);
             },
-            search: (data) => {
+            search: (data: any) => {
                 if (data.searchQuery === '') {
                     return;
                 }
@@ -210,7 +213,7 @@ class EntryModalHelper {
                     })
                     .then(EntryModalHelper.fetchPopup);
             },
-            submit: async(data) => {
+            submit: async(data: any) => {
                 const pictures = await IpcRendererHelper.importPicturesFromResource(data.selected);
                 pictures.forEach((object) => {
                     const labeledObject = EntryModalHelper._getLabeledObject(object);
@@ -218,7 +221,7 @@ class EntryModalHelper {
                     Entry.playground.addPicture(labeledObject, true);
                 });
             },
-            select: (data) => {
+            select: (data: any) => {
                 const picture = data.item;
                 picture.id = Entry.generateHash();
                 Entry.playground.addPicture(picture, true);
@@ -235,7 +238,7 @@ class EntryModalHelper {
                 };
                 Entry.playground.addPicture(item, true);
             },
-            write: (data) => {
+            write: (data: any) => {
                 console.log('popupWrite', data);
                 let linebreak = true;
                 if (data.writeType === 'one') {
@@ -262,7 +265,7 @@ class EntryModalHelper {
                 };
                 Entry.container.addObject(object, 0);
             },
-            dummyUploads: async({ formData }) => {
+            dummyUploads: async({ formData }: { formData: any }) => {
                 const files = formData ? formData.values() : []; // keyName : ...uploadFile${idx}
 
                 try {
@@ -284,21 +287,21 @@ class EntryModalHelper {
                     console.error(e);
                 }
             },
-            uploads: (data) => {
+            uploads: (data: any) => {
                 // upload 된 데이터의 submit 과 동일
-                data.uploads.forEach((picture) => {
+                data.uploads.forEach((picture: any) => {
                     // css 에 들어갈 background-url fileUrl 의 경우, windows 에서도 / 여야 한다.
                     picture.fileurl = picture.fileurl.replace(/\\/gi, '/');
                     Entry.playground.addPicture(picture, true);
                 });
             },
-            uploadFail: (data) => {
+            uploadFail: (data: any) => {
                 root.entrylms.alert(RendererUtils.getLang(`${data.messageParent}.${data.message}`));
             },
-            fail: (data) => {
+            fail: () => {
                 root.entrylms.alert(RendererUtils.getLang('Msgs.error_occured'));
             },
-            error: (data) => {
+            error: () => {
                 root.entrylms.alert(RendererUtils.getLang('Msgs.error_occured'));
             },
         });
@@ -310,17 +313,17 @@ class EntryModalHelper {
      */
     static async showSoundPopup() {
         await this._switchPopup('sound', {
-            fetch: (data) => {
+            fetch: (data: any) => {
                 DatabaseManager
                     .findAll(data)
                     .then((result) => {
                         EntryModalHelper.popup.setData({
                             data: { data: result },
                         });
-                        EntryUtils.loadSound(result);
+                        EntryUtils.loadSound(result as any[]);
                     });
             },
-            search: (data) => {
+            search: (data: any) => {
                 if (data.searchQuery === '') {
                     return;
                 }
@@ -329,10 +332,10 @@ class EntryModalHelper {
                         EntryModalHelper.popup.setData({
                             data: { data: result },
                         });
-                        EntryUtils.loadSound(result);
+                        EntryUtils.loadSound(result as any[]);
                     });
             },
-            submit: async(data) => {
+            submit: async(data: any) => {
                 const sounds = await IpcRendererHelper.importSoundsFromResource(data.selected);
                 sounds.forEach((item) => {
                     const labeledItem = EntryModalHelper._getLabeledObject(item);
@@ -341,7 +344,7 @@ class EntryModalHelper {
                 });
                 root.createjs.Sound.stop();
             },
-            select: (data) => {
+            select: (data: any) => {
                 console.log(data);
                 const item = {
                     id: Entry.generateHash(),
@@ -354,10 +357,10 @@ class EntryModalHelper {
             itemoff: () => {
                 return root.createjs.Sound.stop();
             },
-            itemon: (data) => {
+            itemon: (data: any) => {
                 root.createjs.Sound.play(data.id);
             },
-            dummyUploads: async({ formData }) => {
+            dummyUploads: async({ formData }: { formData: any }) => {
                 const files = formData ? formData.values() : []; // keyName : ...uploadFile${idx}
 
                 try {
@@ -382,21 +385,21 @@ class EntryModalHelper {
                     console.error(e);
                 }
             },
-            uploads:(data) => {
+            uploads: (data: any) => {
                 console.log(data);
-                data.uploads.forEach(function(item) {
+                data.uploads.forEach(function(item: any) {
                     item.id = Entry.generateHash();
                     Entry.playground.addSound(item, true);
                 });
                 createjs.Sound.stop();
             },
-            uploadFail: (data) => {
+            uploadFail: (data: any) => {
                 root.entrylms.alert(RendererUtils.getLang(`${data.messageParent}.${data.message}`));
             },
-            fail: (data) => {
+            fail: (data: any) => {
                 root.entrylms.alert(RendererUtils.getLang('Msgs.error_occured'));
             },
-            error: (data) => {
+            error: (data: any) => {
                 root.entrylms.alert(RendererUtils.getLang('Msgs.error_occured'));
             },
         });
@@ -417,17 +420,17 @@ class EntryModalHelper {
         });
 
         await this._switchPopup('expansion', {
-            submit: (data) => {
-                data.selected.forEach(function(item) {
+            submit: (data: any) => {
+                data.selected.forEach(function(item: any) {
                     item.id = Entry.generateHash();
                     Entry.playground.addExpansionBlock(item, true, true);
                 });
             },
-            select: (data) => {
+            select: (data: any) => {
                 data.item.id = Entry.generateHash();
                 Entry.playground.addExpansionBlock(data.item, true, true);
             },
-        }, expansionBlocks);
+        }, expansionBlocks as any);
     }
 
     /**
@@ -435,8 +438,8 @@ class EntryModalHelper {
      * 검색기능이 없다.
      */
     static async showPaintPopup() {
-        const popup = await this._switchPopup('paint', {
-            fetch: (data) => {
+        await this._switchPopup('paint', {
+            fetch: (data: any) => {
                 DatabaseManager
                     .findAll({
                         ...data,
@@ -444,21 +447,21 @@ class EntryModalHelper {
                     })
                     .then(EntryModalHelper.fetchPopup);
             },
-            submit: (data) => {
+            submit: (data: any) => {
                 const item = data.selected[0];
                 if (item) {
                     item.id = Entry.generateHash();
                     Entry.dispatchEvent('pictureImport', item);
                 }
             },
-            select: (data) => {
+            select: (data: any) => {
                 const item = data.item;
                 if (item) {
                     item.id = Entry.generateHash();
                     Entry.dispatchEvent('pictureImport', item);
                 }
             },
-            dummyUploads: async({ formData }) => {
+            dummyUploads: async({ formData }: { formData: any }) => {
                 const files = formData ? formData.values() : []; // keyName : ...uploadFile${idx}
 
                 try {
@@ -480,8 +483,8 @@ class EntryModalHelper {
                     console.error(e);
                 }
             },
-            uploads: (data) => {
-                data.uploads.forEach(function(item) {
+            uploads: (data: any) => {
+                data.uploads.forEach(function(item: any) {
                     if (item.sprite) {
                         const obj = item.sprite.objects[0];
                         obj.id = Entry.generateHash();
@@ -494,13 +497,13 @@ class EntryModalHelper {
                     Entry.dispatchEvent('pictureImport', item);
                 });
             },
-            uploadFail: (data) => {
+            uploadFail: (data: any) => {
                 root.entrylms.alert(RendererUtils.getLang(`${data.messageParent}.${data.message}`));
             },
-            fail: (data) => {
+            fail: () => {
                 root.entrylms.alert(RendererUtils.getLang('Msgs.error_occured'));
             },
-            error: (data) => {
+            error: () => {
                 root.entrylms.alert(RendererUtils.getLang('Msgs.error_occured'));
             },
         });
@@ -514,7 +517,7 @@ class EntryModalHelper {
      * @param {*}data entry-tool popup 최초 init 시에 들어갈 data object
      * @return popup 자신을 반환한다. 내부 콜백에서 자신을 사용해야 하는 경우 활용가능하다.
      */
-    static async _switchPopup(type, events = {}, data = []) {
+    static async _switchPopup(type: any, events: any = {}, data: any = []) {
         this.loadPopup(type, data);
         const popup = EntryModalHelper.popup;
         if (this.lastOpenedType === type && data.length === 0) {
@@ -551,7 +554,7 @@ class EntryModalHelper {
      * @param {?Object} data
      * @return {Object} popup
      */
-    static loadPopup = (type, data) => {
+    static loadPopup = (type: string, data: any) => {
         if (!EntryModalHelper.popup) {
             const targetDiv = document.createElement('div');
             document.body.appendChild(targetDiv);
@@ -574,7 +577,7 @@ class EntryModalHelper {
     static openImportListModal() {
         new Modal()
             .createModal([{ type: 'LIST_IMPORT', theme: 'BLUE' }])
-            .on('click', (e, data) => {
+            .on('click', (e: string, data: any[]) => {
                 switch (e) {
                     case 'save':
                         //아무것도 입력하지 않은 경우, 빈칸 하나만 있는 것으로 처리된다.
@@ -595,10 +598,10 @@ class EntryModalHelper {
             .show();
     }
 
-    static openExportListModal(array, name) {
+    static openExportListModal(array: any[], name: string) {
         new Modal()
             .createModal([{ type: 'LIST_EXPORT', theme: 'BLUE', content: array }])
-            .on('click', function(e, data) {
+            .on('click', function(e: string, data: any[]) {
                 switch (e) {
                     case 'copied':
                         root.entrylms.alert(RendererUtils.getLang('Menus.content_copied'));
@@ -621,7 +624,7 @@ class EntryModalHelper {
             .show();
     }
 
-    static showUpdateCheckModal(latestVersion) {
+    static showUpdateCheckModal(latestVersion: string) {
         new Modal()
             .alert(
                 `${RendererUtils.getLang('Msgs.version_update_msg1')
@@ -637,9 +640,9 @@ class EntryModalHelper {
                     },
                     parentClassName: 'versionAlert',
                     withDontShowAgain: true,
-                }
+                },
             )
-            .one('click', (event, { dontShowChecked }) => {
+            .one('click', (event: string, { dontShowChecked }: { dontShowChecked: boolean }) => {
                 if (event === 'ok') {
                     IpcRendererHelper.openExternalUrl('https://playentry.org/#!/offlineEditor');
                 }
@@ -661,7 +664,7 @@ class EntryModalHelper {
      * @return{Object} label 에 맞춰 이름이 치환된 오브젝트
      * @private
      */
-    static _getLabeledObject(object) {
+    static _getLabeledObject(object: any) {
         object.pictures && object.pictures.map(this._getLabeledObject);
         object.sounds && object.sounds.map(this._getLabeledObject);
 

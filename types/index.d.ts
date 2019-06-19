@@ -5,7 +5,9 @@ declare interface ObjectLike extends Object {
 
 declare type WorkspaceMode = 'practical_course' | 'workspace';
 
-declare const Entry: any;
+declare module '@entrylabs/tool' {
+    export const Popup: any;
+}
 
 /* eslint-disable */
 declare module 'puid' {

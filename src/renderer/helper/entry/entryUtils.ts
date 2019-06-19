@@ -85,7 +85,7 @@ export default class {
      * 사운드 오브젝트 (from resources/db) 를 Entry.soundQueue 에 로드한다.
      * @param {Array<Object>} sounds
      */
-    static loadSound(sounds: DBSoundObject[] = []) {
+    static loadSound(sounds: any[] = []) {
         sounds.forEach((sound) => {
             const path = sound.path || `${Constants.resourceSoundPath(sound.filename)}${sound.filename}${sound.ext}`;
             Entry.soundQueue.loadFile({
