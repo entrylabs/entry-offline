@@ -1,10 +1,15 @@
 import { CHANGE_PROJECT_NAME } from '../actions/types';
+import { CommonAction } from './index';
 
-const defaultState = {
+interface ICommonState {
+    projectName?: string;
+}
+
+const defaultState: ICommonState = {
     projectName: undefined,
 };
 
-export default (state = defaultState, action) => {
+export default (state: ICommonState = defaultState, action: CommonAction): ICommonState => {
     switch (action.type) {
         case CHANGE_PROJECT_NAME:
             return { ...state, projectName: action.payload };

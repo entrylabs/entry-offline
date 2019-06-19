@@ -1,6 +1,16 @@
 import { MODAL_PROGRESS } from '../actions/types';
+import { CommonAction } from './index';
 
-const initState = {
+interface IModalState {
+    isShow: boolean,
+    data: {
+        type: string,
+        title: string,
+        description: string,
+    },
+}
+
+const initState: IModalState = {
     isShow: false,
     data: {
         type: '',
@@ -9,7 +19,7 @@ const initState = {
     },
 };
 
-export default (state = initState, action) => {
+export default (state: IModalState = initState, action: CommonAction): IModalState => {
     switch (action.type) {
         case MODAL_PROGRESS:
             return Object.assign({}, state, { ...action.payload });
