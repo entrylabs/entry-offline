@@ -27,6 +27,9 @@ const setting = {
             {
                 test: /\.tsx?$/,
                 loader: 'ts-loader',
+                options: {
+                    transpileOnly: true
+                }
             },
             {
                 test: /\.(js|jsx|mjs)$/,
