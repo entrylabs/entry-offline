@@ -6,15 +6,15 @@ const setting = {
     mode: 'none',
     target: 'electron-renderer',
     entry: {
-        init: './src/renderer/initEntry.js',
-        render: './src/renderer/renderEntry.js',
+        init: './src/renderer/initEntry.ts',
+        render: './src/renderer/renderEntry.tsx',
     },
     externals: {
         '@entrylabs/tool': 'EntryTool',
         '@entrylabs/tool/component': 'EntryTool.Component',
     },
     resolve: {
-        extensions: ['.js', '.jsx'],
+        extensions: ['.ts', '.tsx', '.js', '.jsx'],
     },
     output: {
         path: path.resolve(__dirname, 'src', 'renderer_build'),
@@ -24,6 +24,10 @@ const setting = {
     },
     module: {
         rules: [
+            {
+                test: /\.tsx?$/,
+                loader: 'ts-loader',
+            },
             {
                 test: /\.(js|jsx|mjs)$/,
                 exclude: [
