@@ -188,7 +188,7 @@ class IpcMainHelper {
      * @param {string=}type 경로를 결정할 타입. image, sound 중 하나
      * @param {string}targetFilePath
      */
-    tempResourceDownload(event: Electron.Event, entryObject: ObjectLike, type: string, targetFilePath: string) {
+    tempResourceDownload(event: Electron.Event, entryObject: Entry.Project, type: string, targetFilePath: string) {
         let typedPath = '';
         if (entryObject.fileurl) {
             typedPath = entryObject.fileurl;

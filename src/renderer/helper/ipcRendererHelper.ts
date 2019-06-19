@@ -7,21 +7,21 @@ import EntryModalHelper from './entry/entryModalHelper';
  * electron main process 로 통신하기 위해 사용하는 클래스.
  * nodejs lib 사용 혹은 main 에 통신이 한번이상 필요한 경우 이쪽에 둔다.
  */
-ipcRenderer.on('console', (event, ...args) => {
+ipcRenderer.on('console', (event: Electron.Event, ...args: any[]) => {
     console.log(...args);
 });
 
 export default class {
-    static onPageLoaded(callback) {
+    static onPageLoaded(callback: () => void) {
         ipcRenderer.on('showWindow', () => {
             callback();
         });
     }
 
-    static loadProject(filePath) {
+    static loadProject(filePath: string): Promise<Entry.Project> {
         return new Promise((resolve, reject) => {
             ipcRenderer.send('loadProject', filePath);
-            ipcRenderer.once('loadProject', (e, result) => {
+            ipcRenderer.once('loadProject', (e: Electron.Event, result: Entry.Project) => {
                 if (result) {
                     resolve(result);
                 } else {
@@ -39,16 +39,16 @@ export default class {
      *
      * @param{Promise<function>} callback loadProject 프로미스
      */
-    static loadProjectFromMain(callback) {
-        ipcRenderer.on('loadProjectFromMain', (e, filePath) => {
+    static loadProjectFromMain(callback: (project: Entry.Project) => void) {
+        ipcRenderer.on('loadProjectFromMain', (e: Electron.Event, filePath: string) => {
             callback(this.loadProject(filePath));
         });
     }
 
-    static saveProject(project, targetPath) {
+    static saveProject(project: Entry.Project, targetPath: string): Promise<void> {
         return new Promise((resolve, reject) => {
             ipcRenderer.send('saveProject', project, targetPath);
-            ipcRenderer.once('saveProject', (e, err) => {
+            ipcRenderer.once('saveProject', (e: Electron.Event, err: Error) => {
                 if (err) {
                     reject(err);
                 } else {
@@ -58,14 +58,14 @@ export default class {
         });
     }
 
-    static resetDirectory() {
+    static resetDirectory(): Promise<void> {
         return new Promise((resolve) => {
             ipcRenderer.send('resetDirectory');
             ipcRenderer.once('resetDirectory', resolve);
         });
     }
 
-    static downloadExcel(filename, array) {
+    static downloadExcel(filename: string, array: any[]) {
         return new Promise((resolve, reject) => {
             RendererUtils.showSaveDialog(
                 {
@@ -78,41 +78,41 @@ export default class {
                         ],
                     },
                 },
-                (filePath) => {
+                (filePath: string) => {
                     ipcRenderer.send('saveExcel', filePath, array);
-                    ipcRenderer.once('saveExcel', (e, err) => {
+                    ipcRenderer.once('saveExcel', (e: Electron.Event, err: Error) => {
                         if (err) {
                             reject(err);
                         } else {
                             resolve();
                         }
                     });
-                }
+                },
             );
         });
     }
 
-    static staticDownload(unresolvedPath, targetFilePath) {
+    static staticDownload(unresolvedPath: string[], targetFilePath: string) {
         ipcRenderer.send('staticDownload', unresolvedPath, targetFilePath);
     }
 
-    static tempResourceDownload(entryObject, type, targetFilePath) {
+    static tempResourceDownload(entryObject: Entry.Object, type: string, targetFilePath: string) {
         ipcRenderer.send('tempResourceDownload', entryObject, type, targetFilePath);
     }
 
-    static writeFile(data, filePath) {
+    static writeFile(data: any, filePath: string) {
         ipcRenderer.send('writeFile', data, filePath);
-        ipcRenderer.once('writeFile', (e, err) => {
+        ipcRenderer.once('writeFile', (e: Electron.Event, err: Error) => {
             if (err) {
                 console.error(err);
             }
         });
     }
 
-    static importPictureFromCanvas(data) {
+    static importPictureFromCanvas(data: ObjectLike[]): Promise<Entry.Picture> {
         return new Promise((resolve) => {
             ipcRenderer.send('importPictureFromCanvas', data);
-            ipcRenderer.once('importPictureFromCanvas', (e, object) => {
+            ipcRenderer.once('importPictureFromCanvas', (e: Electron.Event, object: Entry.Picture) => {
                 resolve(object);
             });
         });
@@ -127,29 +127,29 @@ export default class {
      * @param filePath 저장할 파일 전체경로
      * @param objectVariable
      */
-    static exportObject(filePath, objectVariable) {
+    static exportObject(filePath: string, objectVariable: any): Promise<void> {
         return new Promise((resolve, reject) => {
             ipcRenderer.send('exportObject', filePath, objectVariable);
-            ipcRenderer.once('exportObject', (e, result) => {
+            ipcRenderer.once('exportObject', (e: Electron.Event, result: any) => {
                 //NOTE Entry.Toast 라도 주면 좋겠는데 real 에도 아무반응 없네요.
                 resolve();
             });
         });
     }
 
-    static importObjects(filePaths) {
+    static importObjects(filePaths: string[]): Promise<Entry.Object[]> {
         return new Promise((resolve, reject) => {
             ipcRenderer.send('importObjects', filePaths);
-            ipcRenderer.once('importObjects', (e, object) => {
+            ipcRenderer.once('importObjects', (e: Electron.Event, object: Entry.Object[]) => {
                 resolve(object);
             });
         });
     }
 
-    static importObjectsFromResource(objects) {
+    static importObjectsFromResource(objects: any): Promise<Entry.Object[]> {
         return new Promise((resolve, reject) => {
             ipcRenderer.send('importObjectsFromResource', objects);
-            ipcRenderer.once('importObjectsFromResource', (e, objects) => {
+            ipcRenderer.once('importObjectsFromResource', (e: Electron.Event, objects: Entry.Object[]) => {
                 resolve(objects);
             });
         });
@@ -160,10 +160,10 @@ export default class {
      * @param {Array!}filePaths 이미지 파일 경로
      * @return {Promise<Object>} 신규생성된 오브젝트 메타데이터
      */
-    static importPictures(filePaths) {
+    static importPictures(filePaths: string[]): Promise<Entry.Picture[]> {
         return new Promise((resolve, reject) => {
             ipcRenderer.send('importPictures', filePaths);
-            ipcRenderer.once('importPictures', (e, object) => {
+            ipcRenderer.once('importPictures', (e: Electron.Event, object: Entry.Picture[]) => {
                 resolve(object);
             });
         });
@@ -174,28 +174,28 @@ export default class {
      * @param {Array}pictures DB 에서 가져온 이미지 정보 오브젝트
      * @return {Promise<Object>} 파일명이 변경된 이미지 정보 오브젝트
      */
-    static importPicturesFromResource(pictures) {
+    static importPicturesFromResource(pictures: string[]): Promise<Entry.Picture[]> {
         return new Promise((resolve, reject) => {
             ipcRenderer.send('importPicturesFromResource', pictures);
-            ipcRenderer.once('importPicturesFromResource', (e, object) => {
+            ipcRenderer.once('importPicturesFromResource', (e: Electron.Event, object: Entry.Picture[]) => {
                 resolve(object);
             });
         });
     }
 
-    static importSounds(filePath) {
+    static importSounds(filePath: string[]): Promise<Entry.Sound[]> {
         return new Promise((resolve, reject) => {
             ipcRenderer.send('importSounds', filePath);
-            ipcRenderer.once('importSounds', (e, object) => {
+            ipcRenderer.once('importSounds', (e: Electron.Event, object: Entry.Sound[]) => {
                 resolve(object);
             });
         });
     }
 
-    static importSoundsFromResource(sounds) {
+    static importSoundsFromResource(sounds: any[]): Promise<Entry.Sound[]> {
         return new Promise((resolve, reject) => {
             ipcRenderer.send('importSoundsFromResource', sounds);
-            ipcRenderer.once('importSoundsFromResource', (e, object) => {
+            ipcRenderer.once('importSoundsFromResource', (e: Electron.Event, object: Entry.Sound[]) => {
                 resolve(object);
             });
         });
@@ -216,9 +216,9 @@ export default class {
     static checkUpdate() {
         return new Promise((resolve) => {
             ipcRenderer.send('checkUpdate');
-            ipcRenderer.once('checkUpdate',(e, currentVersion, {
-                hasNewVersion, version : latestVersion,
-            }) => {
+            ipcRenderer.once('checkUpdate', (e: Electron.Event, currentVersion: string, {
+                hasNewVersion, version: latestVersion,
+            }: { hasNewVersion: string, version: string }) => {
                 /**
                  latestVersion properties
                  @property hasNewVersion{boolean} 요청을 보냈을때의 버전과 비교하여 업데이트가 필요한지 여부
@@ -238,7 +238,7 @@ export default class {
         });
     }
 
-    static openExternalUrl(url) {
+    static openExternalUrl(url: string) {
         ipcRenderer.send('openUrl', url);
     }
 }

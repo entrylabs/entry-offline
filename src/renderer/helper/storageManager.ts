@@ -26,7 +26,7 @@ export default class {
         return 'workspace-interface';
     }
 
-    static saveProject(project: EntryProject) {
+    static saveProject(project: Entry.Project) {
         if (!project) {
             this.removeProject();
             return;
@@ -43,7 +43,7 @@ export default class {
         return root.localStorage.removeItem(this.LOCAL_STORAGE_KEY);
     }
 
-    static saveTempProject(project: EntryProject) {
+    static saveTempProject(project: Entry.Project) {
         const projectJson = typeof project === 'string' ? project : JSON.stringify(project);
         root.localStorage.setItem(this.LOCAL_STORAGE_KEY_RELOAD, projectJson);
     }
@@ -74,7 +74,7 @@ export default class {
         return persist[this.LOCAL_STORAGE_WS_MODE];
     }
 
-    static setWorkspaceInterface(interfaceState: EntryWorkspaceInterface) {
+    static setWorkspaceInterface(interfaceState: Entry.WorkspaceInterface) {
         (root.localStorage as Storage).setItem(this.WORKSPACE_INTERFACE, JSON.stringify(interfaceState));
     }
 
