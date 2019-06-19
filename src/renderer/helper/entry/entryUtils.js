@@ -298,7 +298,7 @@ export default class {
         if (Entry.type === 'workspace') {
             if (localStorage && Entry.interfaceState) {
                 StorageManager.setWorkspaceInterface(
-                    JSON.stringify(Entry.captureInterfaceState())
+                    Entry.captureInterfaceState()
                 );
             }
         }
