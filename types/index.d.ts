@@ -3,6 +3,8 @@ declare interface ObjectLike extends Object {
     [key: string]: any
 }
 
+declare const Entry: any;
+
 /* eslint-disable */
 declare module 'puid' {
     const value: any;
