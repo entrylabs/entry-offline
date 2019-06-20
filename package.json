@@ -10,6 +10,8 @@
         "debug": "electron --inspect .",
         "webpack:dev": "cross-env NODE_ENV=development webpack",
         "webpack:prod": "cross-env NODE_ENV=production webpack",
+        "webpack:main": "cross-env NODE_ENV=development webpack --config webpack.main.config.js",
+        "webpack:renderer": "cross-env NODE_ENV=development webpack --config webpack.renderer.config.js",
         "watch": "cross-env NODE_ENV=development webpack -w",
         "lint": "eslint src --color",
         "rebuild": "electron-rebuild -v 4.0.4",
