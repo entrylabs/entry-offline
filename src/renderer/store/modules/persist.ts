@@ -5,7 +5,7 @@ const CHANGE_LANGUAGE = 'persist/CHANGE_LANGUAGE';
 const WS_MODE = 'persist/WORKSPACE_MODE';
 
 // actions
-export const actionCreators = {
+export const PersistActionCreators = {
     changeLanguage: createAction(CHANGE_LANGUAGE, (lang: string) => {
         return { lang };
     }),
@@ -20,12 +20,12 @@ export interface IPersistState {
     mode?: string;
 }
 
-const defaultState = {
+const defaultState: IPersistState = {
     lang: 'ko',
     mode: undefined,
 };
 
-// reducers
+// reducer
 export default handleActions<IPersistState>({
     [WS_MODE]: (state, action) => ({ ...state, mode: action.payload.mode }),
     [CHANGE_LANGUAGE]: (state, action) => ({ ...state, lang: action.payload.lang }),

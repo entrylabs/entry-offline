@@ -6,10 +6,11 @@ import commonReducer from './commonReducer';
 
 // TODO ducks reducers
 import ducksPersistReducer from '../store/modules/persist';
+import ducksCommonReducer from '../store/modules/common';
 
 export default combineReducers({
     persist: ducksPersistReducer,
-    common: commonReducer,
+    common: ducksCommonReducer,
     modal: modalReducer,
     popup: popupReducer,
 });

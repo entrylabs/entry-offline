@@ -6,9 +6,8 @@ import RendererUtils from '../helper/rendererUtils';
 import EntryUtils from '../helper/entry/entryUtils';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { actionCreators } from '../store/modules/persist';
-import { commonAction, showPopup } from '../actions';
-import { CHANGE_PROJECT_NAME } from '../actions/types';
+import { CommonActionCreators } from '../store/modules/common';
+import { PersistActionCreators } from '../store/modules/persist';
 import { Dropdown } from '@entrylabs/tool/component';
 import ImportToggleHelper from '../helper/importToggleHelper';
 
@@ -205,7 +204,7 @@ class Header extends Component {
     }
 
     render() {
-        const { persist = [], common, programLanguageMode, executionStatus = {} } = this.props;
+        const { CommonActions, persist = [], common, programLanguageMode, executionStatus = {} } = this.props;
         const { canRedo = false, canUndo = false } = executionStatus;
         const { projectName = RendererUtils.getDefaultProjectName() } = common;
         const { lang, mode } = persist;
@@ -225,7 +224,7 @@ class Header extends Component {
                             defaultValue={projectName}
                             onBlur={({ target }) => {
                                 const { value } = target;
-                                changeProjectName(value);
+                                CommonActions.changeProjectName(value);
                             }}
                         />
                     </div>
@@ -389,9 +388,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    showPopup,
-    changeProjectName: (data) => commonAction(CHANGE_PROJECT_NAME, data),
-    PersistActions: bindActionCreators(actionCreators, dispatch),
+    PersistActions: bindActionCreators(PersistActionCreators, dispatch),
+    CommonActions: bindActionCreators(CommonActionCreators, dispatch),
 });
 
 export default connect(

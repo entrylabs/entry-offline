@@ -4,8 +4,9 @@ import './workspace.scss';
 import '../resources/styles/fonts.scss';
 import { connect } from 'react-redux';
 import { commonAction, modalProgressAction } from '../actions';
-import { actionCreators } from '../store/modules/persist';
-import { FETCH_POPUP_ITEMS, UPDATE_PROJECT, CHANGE_PROJECT_NAME } from '../actions/types';
+import { PersistActionCreators } from '../store/modules/persist';
+import { CommonActionCreators } from '../store/modules/common';
+import { FETCH_POPUP_ITEMS } from '../actions/types';
 import _includes from 'lodash/includes';
 import _debounce from 'lodash/debounce';
 import entryPatch from '../helper/entry/entryPatcher';
@@ -345,17 +346,17 @@ class Workspace extends Component {
      * @param{Object?} project undefined 인 경우 신규 프로젝트로 생성
      */
     loadProject = async(project) => {
-        const { PersistActions, persist, changeProjectName } = this.props;
+        const { CommonActions, PersistActions, persist } = this.props;
         const { mode: currentWorkspaceMode } = persist;
         let projectWorkspaceMode = currentWorkspaceMode;
 
         if (project) {
             this.projectSavedPath = project.savedPath || '';
             projectWorkspaceMode = project.isPracticalCourse ? 'practical_course' : 'workspace';
-            changeProjectName(project.name || RendererUtils.getDefaultProjectName());
+            CommonActions.changeProjectName(project.name || RendererUtils.getDefaultProjectName());
         } else {
             delete this.projectSavedPath;
-            changeProjectName(RendererUtils.getDefaultProjectName());
+            CommonActions.changeProjectName(RendererUtils.getDefaultProjectName());
         }
 
         // 현재 WS mode 와 이후 변경될 모드가 다른 경우
@@ -473,10 +474,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
     modalProgressAction: (data) => dispatch(modalProgressAction(data)),
-    changeProjectName: (data) => dispatch(commonAction(CHANGE_PROJECT_NAME, data)),
-    updateProject: (data) => dispatch(commonAction(UPDATE_PROJECT, data)),
     fetchPopup: (data) => dispatch(commonAction(FETCH_POPUP_ITEMS, data)),
-    PersistActions: bindActionCreators(actionCreators, dispatch),
+    PersistActions: bindActionCreators(PersistActionCreators, dispatch),
+    CommonActions: bindActionCreators(CommonActionCreators, dispatch),
 });
 
 export default connect(

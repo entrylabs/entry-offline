@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { actionCreators } from '../store/modules/persist';
+import { PersistActionCreators } from '../store/modules/persist';
 import RendererUtils from '../helper/rendererUtils';
 import ImportToggleHelper from '../helper/importToggleHelper';
 import './modeSelectModal.scss';
@@ -90,7 +90,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-    PersistActions: bindActionCreators(actionCreators, dispatch),
+    PersistActions: bindActionCreators(PersistActionCreators, dispatch),
 });
 
 export default connect(
