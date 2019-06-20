@@ -14,7 +14,7 @@ const setting = {
         '@entrylabs/tool/component': 'EntryTool.Component',
     },
     resolve: {
-        extensions: ['.js', '.jsx'],
+        extensions: ['.ts', '.tsx', '.js', '.jsx'],
     },
     output: {
         path: path.resolve(__dirname, 'src', 'renderer_build'),
@@ -24,6 +24,13 @@ const setting = {
     },
     module: {
         rules: [
+            {
+                test: /\.tsx?$/,
+                loader: 'ts-loader',
+                options: {
+                    transpileOnly: true
+                }
+            },
             {
                 test: /\.(js|jsx|mjs)$/,
                 exclude: [

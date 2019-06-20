@@ -1,16 +1,16 @@
 import { createStore } from 'redux';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import rootReducer from './reducers';
+import reducers from './modules';
 
 // persist store configure
 const persistConfig = {
     key: 'storage', // identifier for persist
     storage,
     // stateReconciler: hardSet, // https://github.com/rt2zz/redux-persist#state-reconciler
-    whitelist: ['persist'], // only this reducer key will be persisted
+    whitelist: ['persist'], // only 'persist' named reducer will be persisted
 };
-const persistCombinedReducer = persistReducer(persistConfig, rootReducer);
+const persistCombinedReducer = persistReducer(persistConfig, reducers);
 
 function configureStore() {
     const store = createStore(persistCombinedReducer);
