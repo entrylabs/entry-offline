@@ -3,10 +3,8 @@ import Header from './header';
 import './workspace.scss';
 import '../resources/styles/fonts.scss';
 import { connect } from 'react-redux';
-import { commonAction, modalProgressAction } from '../actions';
 import { PersistActionCreators } from '../store/modules/persist';
 import { CommonActionCreators } from '../store/modules/common';
-import { FETCH_POPUP_ITEMS } from '../actions/types';
 import _includes from 'lodash/includes';
 import _debounce from 'lodash/debounce';
 import entryPatch from '../helper/entry/entryPatcher';
@@ -19,6 +17,7 @@ import LocalStorageManager from '../helper/storageManager';
 import ImportToggleHelper from '../helper/importToggleHelper';
 import EntryUtils from '../helper/entry/entryUtils';
 import { bindActionCreators } from 'redux';
+import { ModalActionCreators } from '../store/modules/modal';
 
 /* global Entry, EntryStatic */
 class Workspace extends Component {
@@ -419,8 +418,8 @@ class Workspace extends Component {
     };
 
     showModalProgress(type, title, description) {
-        const { modalProgressAction } = this.props;
-        modalProgressAction({
+        const { ModalActions } = this.props;
+        ModalActions.showModalProgress({
             isShow: true,
             data: {
                 type,
@@ -431,8 +430,8 @@ class Workspace extends Component {
     }
 
     hideModalProgress = () => {
-        const { modalProgressAction } = this.props;
-        modalProgressAction({
+        const { ModalActions } = this.props;
+        ModalActions.showModalProgress({
             isShow: false,
         });
     };
@@ -473,10 +472,9 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-    modalProgressAction: (data) => dispatch(modalProgressAction(data)),
-    fetchPopup: (data) => dispatch(commonAction(FETCH_POPUP_ITEMS, data)),
     PersistActions: bindActionCreators(PersistActionCreators, dispatch),
     CommonActions: bindActionCreators(CommonActionCreators, dispatch),
+    ModalActions: bindActionCreators(ModalActionCreators, dispatch),
 });
 
 export default connect(
