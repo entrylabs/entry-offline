@@ -5,8 +5,10 @@ import _get from 'lodash/get';
 import RendererUtils from '../helper/rendererUtils';
 import EntryUtils from '../helper/entry/entryUtils';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { actionCreators } from '../store/modules/persist';
 import { commonAction, showPopup } from '../actions';
-import { CHANGE_LANGUAGE, CHANGE_PROJECT_NAME, WS_MODE } from '../actions/types';
+import { CHANGE_PROJECT_NAME } from '../actions/types';
 import { Dropdown } from '@entrylabs/tool/component';
 import ImportToggleHelper from '../helper/importToggleHelper';
 
@@ -186,24 +188,24 @@ class Header extends Component {
 
     async handleChangeWsMode(item) {
         if (EntryUtils.confirmProjectWillDismiss()) {
-            const { mode, onLoadProject } = this.props;
+            const { PersistActions, onLoadProject } = this.props;
             const key = item[1];
             await ImportToggleHelper.changeEntryStatic(key);
-            mode(key);
+            PersistActions.changeWorkspaceMode(key);
             onLoadProject();
         }
     }
 
     async handleChangeLanguage(item) {
-        const { language, onReloadProject } = this.props;
+        const { PersistActions, onReloadProject } = this.props;
         const langType = item[1];
         await ImportToggleHelper.changeLang(langType);
-        language({ lang: langType });
+        PersistActions.changeLanguage(langType);
         onReloadProject();
     }
 
     render() {
-        const { persist = [], common, programLanguageMode, changeProjectName, executionStatus = {} } = this.props;
+        const { persist = [], common, programLanguageMode, executionStatus = {} } = this.props;
         const { canRedo = false, canUndo = false } = executionStatus;
         const { projectName = RendererUtils.getDefaultProjectName() } = common;
         const { lang, mode } = persist;
@@ -386,12 +388,11 @@ const mapStateToProps = (state) => ({
     ...state,
 });
 
-const mapDispatchToProps = {
+const mapDispatchToProps = (dispatch) => ({
     showPopup,
-    language: (data) => commonAction(CHANGE_LANGUAGE, data),
     changeProjectName: (data) => commonAction(CHANGE_PROJECT_NAME, data),
-    mode: (data) => commonAction(WS_MODE, data),
-};
+    PersistActions: bindActionCreators(actionCreators, dispatch),
+});
 
 export default connect(
     mapStateToProps,

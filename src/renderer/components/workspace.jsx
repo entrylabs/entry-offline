@@ -4,7 +4,8 @@ import './workspace.scss';
 import '../resources/styles/fonts.scss';
 import { connect } from 'react-redux';
 import { commonAction, modalProgressAction } from '../actions';
-import { FETCH_POPUP_ITEMS, UPDATE_PROJECT, WS_MODE, CHANGE_PROJECT_NAME } from '../actions/types';
+import { actionCreators } from '../store/modules/persist';
+import { FETCH_POPUP_ITEMS, UPDATE_PROJECT, CHANGE_PROJECT_NAME } from '../actions/types';
 import _includes from 'lodash/includes';
 import _debounce from 'lodash/debounce';
 import entryPatch from '../helper/entry/entryPatcher';
@@ -16,6 +17,7 @@ import IpcRendererHelper from '../helper/ipcRendererHelper';
 import LocalStorageManager from '../helper/storageManager';
 import ImportToggleHelper from '../helper/importToggleHelper';
 import EntryUtils from '../helper/entry/entryUtils';
+import { bindActionCreators } from 'redux';
 
 /* global Entry, EntryStatic */
 class Workspace extends Component {
@@ -343,7 +345,7 @@ class Workspace extends Component {
      * @param{Object?} project undefined 인 경우 신규 프로젝트로 생성
      */
     loadProject = async(project) => {
-        const { changeWorkspaceMode, persist, changeProjectName } = this.props;
+        const { PersistActions, persist, changeProjectName } = this.props;
         const { mode: currentWorkspaceMode } = persist;
         let projectWorkspaceMode = currentWorkspaceMode;
 
@@ -360,10 +362,10 @@ class Workspace extends Component {
         if (currentWorkspaceMode !== projectWorkspaceMode) {
             if (projectWorkspaceMode === 'practical_course') {
                 await ImportToggleHelper.changeEntryStatic('practical_course');
-                changeWorkspaceMode('practical_course');
+                PersistActions.changeWorkspaceMode('practical_course');
             } else {
                 await ImportToggleHelper.changeEntryStatic('workspace');
-                changeWorkspaceMode('workspace');
+                PersistActions.changeWorkspaceMode('workspace');
             }
         }
 
@@ -469,17 +471,13 @@ const mapStateToProps = (state) => {
     return { ...state };
 };
 
-const mapDispatchToProps = {
-    modalProgressAction,
-    changeWorkspaceMode: (data) => commonAction(WS_MODE, data),
-    changeProjectName: (data) => commonAction(CHANGE_PROJECT_NAME, data),
-    updateProject: (data) => {
-        return commonAction(UPDATE_PROJECT, data);
-    },
-    fetchPopup: (data) => {
-        return commonAction(FETCH_POPUP_ITEMS, data);
-    },
-};
+const mapDispatchToProps = (dispatch) => ({
+    modalProgressAction: (data) => dispatch(modalProgressAction(data)),
+    changeProjectName: (data) => dispatch(commonAction(CHANGE_PROJECT_NAME, data)),
+    updateProject: (data) => dispatch(commonAction(UPDATE_PROJECT, data)),
+    fetchPopup: (data) => dispatch(commonAction(FETCH_POPUP_ITEMS, data)),
+    PersistActions: bindActionCreators(actionCreators, dispatch),
+});
 
 export default connect(
     mapStateToProps,

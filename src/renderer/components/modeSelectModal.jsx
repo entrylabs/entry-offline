@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { commonAction } from "../actions";
-import { WS_MODE } from "../actions/types";
+import { bindActionCreators } from 'redux';
+import { actionCreators } from '../store/modules/persist';
 import RendererUtils from '../helper/rendererUtils';
 import ImportToggleHelper from '../helper/importToggleHelper';
 import './modeSelectModal.scss';
@@ -23,12 +23,12 @@ class ModeSelectModal extends PureComponent {
 
     async handleCloseButtonClick() {
         const { mode } = this.state;
-        const { changeWorkspaceMode } = this.props;
+        const { PersistActions } = this.props;
 
         try {
             await ImportToggleHelper.changeEntryStatic(mode);
             Entry.reloadBlock();
-            changeWorkspaceMode(mode);
+            PersistActions.changeWorkspaceMode(mode);
         } catch (e) {
             console.error(e);
         }
@@ -89,9 +89,9 @@ const mapStateToProps = (state) => {
     return { ...state };
 };
 
-const mapDispatchToProps = {
-    changeWorkspaceMode: (data) => commonAction(WS_MODE, data),
-};
+const mapDispatchToProps = (dispatch) => ({
+    PersistActions: bindActionCreators(actionCreators, dispatch),
+});
 
 export default connect(
     mapStateToProps,
