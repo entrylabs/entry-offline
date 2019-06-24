@@ -194,7 +194,7 @@ class IpcMainHelper {
             typedPath = entryObject.fileurl;
             // 기본 이미지 및 사운드인 경우 상대경로이므로 기준 위치 수정
             if (typedPath.startsWith('renderer')) {
-                typedPath = path.join('src', typedPath);
+                typedPath = path.resolve(app.getAppPath(), 'src', typedPath);
             }
         } else {
             switch (type) {

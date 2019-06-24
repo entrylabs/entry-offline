@@ -535,7 +535,7 @@ export default class MainUtils {
     static importPicturesFromResource(pictures: ObjectLike[]) {
         return Promise.all(pictures.map(async(picture) => {
             const fileName = picture.filename + (picture.ext || '.png');
-            const imageResourcePath = path.resolve(Constants.resourceImagePath(picture.filename), fileName);
+            const imageResourcePath = path.join(Constants.resourceImagePath(picture.filename), fileName);
             const thumbnailResourcePath = path.join(Constants.resourceThumbnailPath(picture.filename), fileName);
             const newObject = await MainUtils.importPictureToTemp(imageResourcePath, thumbnailResourcePath);
 
