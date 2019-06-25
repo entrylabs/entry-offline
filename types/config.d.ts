@@ -4,10 +4,7 @@ declare interface ExternalConfigurations {
     baseUrl: string,
 }
 
-declare interface InternalConfigurations {
-}
-
-declare type Configurations =  ExternalConfigurations & InternalConfigurations;
+declare type Configurations =  ExternalConfigurations;
 
 // CommandLine Options
 

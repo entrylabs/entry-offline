@@ -1,6 +1,6 @@
 import { app } from 'electron';
 
-const { forEach, merge } = require('lodash');
+const { forEach } = require('lodash');
 const path = require('path');
 const fs = require('fs');
 
@@ -10,11 +10,6 @@ const fs = require('fs');
 const defaultConfigSchema: ExternalConfigurations = {
     'baseUrl': 'https://playentry.org',
 };
-
-/**
- * 외부 설정이 아닌 내부에서 정의되며, 변경될 여지가 없는 하드코드의 경우 이쪽에 선언한다.
- */
-const internalConfig: InternalConfigurations = {};
 
 // target 에 있는 키만 병합한다.
 function mergeExistProperties(target: ExternalConfigurations, src: ExternalConfigurations): ExternalConfigurations {
@@ -40,9 +35,7 @@ export default (configName: string = 'ko'): Configurations => {
     console.log(`load ${configFilePath}...`);
 
     const fileData = fs.readFileSync(configFilePath);
-    const externalConfig: ExternalConfigurations = getMergedConfig(JSON.parse(fileData));
-
-    const mergedConfig: Configurations = merge({}, internalConfig, externalConfig);
+    const mergedConfig: ExternalConfigurations = getMergedConfig(JSON.parse(fileData));
 
     console.log('applied configuration');
     forEach(mergedConfig, (value: any, key: string) => {
