@@ -32,7 +32,7 @@ export default class {
 
     constructor(option: CommandLineOptions) {
         const language = app.getLocale();
-        let title = app.getVersion();
+        let title = root.sharedObject.version;
         const crashedMsg: CrashMessage = {
             title: '',
             content: '',

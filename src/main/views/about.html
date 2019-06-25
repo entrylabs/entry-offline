@@ -40,7 +40,7 @@
 	(function () {
 		const { app } = remote;
 		const aboutWindow = remote.getCurrentWindow();
-		const currentVersion = app.getVersion();
+		const currentVersion = remote.getGlobal('sharedObject').version;
 		const getLatestVersion = () => localStorage.getItem('lastCheckVersion') || '0.0.0';
 
 		const $versionUpdateButton = $('.btnVersionUpdate');
@@ -68,7 +68,7 @@
 			);
 		});
 
-		$('#version').text(app.getVersion());
+		$('#version').text(currentVersion);
 
 		aboutWindow.on('show', () => {
 			const rawPersist = localStorage.getItem('persist:storage');

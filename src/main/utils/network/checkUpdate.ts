@@ -2,9 +2,11 @@ import { app, net } from 'electron';
 import root from 'window-or-global';
 
 export default () => new Promise((resolve, reject) => {
+    const { baseUrl, version } = root.sharedObject;
+
     const request = net.request({
         method: 'POST',
-        url: `${root.sharedObject.baseUrl}/api/checkVersion`,
+        url: `${baseUrl}/api/checkVersion`,
     });
 
     request.on('response', (res) => {
@@ -30,7 +32,7 @@ export default () => new Promise((resolve, reject) => {
     request.write(
         JSON.stringify({
             category: 'offline',
-            version: app.getVersion(),
+            version: version,
         }),
     );
     request.end();

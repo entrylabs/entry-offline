@@ -1,23 +1,28 @@
 import { merge } from 'lodash';
+import packageJson from '../../../../package.json';
 import path from 'path';
 
+// 입력받을 수 있는 값들
 const properties: {
     flag: [keyof CommandLineFlags, string][],
     pair: [keyof CommandLinePairs, any][],
 } = {
     flag: [
         ['debug', 'd'],
-        ['version', 'v'],
     ],
     pair: [
+        ['version', 'v'],
         ['file', 'app'],
         ['baseUrl', 'h'],
         ['config', 'c'],
     ],
 };
 
+// 디폴트 값
 const flags: CommandLineFlags = {};
-const pairs: CommandLinePairs = {};
+const pairs: CommandLinePairs = {
+    version: packageJson.version,
+};
 
 function parseFlags(key: string): boolean | void {
     for (let i = 0; i < properties.flag.length; i++) {

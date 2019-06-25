@@ -1,4 +1,5 @@
 import { app, ipcMain, shell } from 'electron';
+import root from 'window-or-global';
 import path from 'path';
 import MainUtils from './mainUtils';
 import Constants from './constants';
@@ -253,7 +254,7 @@ class IpcMainHelper {
     checkUpdate(event: Electron.Event) {
         checkUpdateRequest()
             .then((data) => {
-                event.sender.send('checkUpdate', app.getVersion(), data);
+                event.sender.send('checkUpdate', root.sharedObject.version, data);
             })
             .catch((e) => {
                 console.error(e);

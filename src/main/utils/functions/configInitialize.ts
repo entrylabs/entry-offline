@@ -1,4 +1,3 @@
-const packageJson = require('../../../../package.json');
 const { forEach, merge } = require('lodash');
 const path = require('path');
 const fs = require('fs');
@@ -8,9 +7,6 @@ const fs = require('fs');
  */
 const defaultConfigSchema: ExternalConfigurations = {
     'baseUrl': 'https://playentry.org',
-    'baseResource': '/public/hardware',
-    'versionCheckApi': '/api/checkVersion',
-    'moduleCheckApi': '/api/hardware',
 };
 
 /**

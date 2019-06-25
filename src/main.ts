@@ -17,9 +17,6 @@ import('./main/utils/functions/globalShortCutRegister');
 const commandLineOptions = parseCommandLine(process.argv.slice(1));
 const configurations = configInitialize(commandLineOptions.config);
 
-console.log('commandLineOptions : ', commandLineOptions);
-console.log('configurations', configurations);
-
 root.sharedObject = {
     roomId: '',
     mainWindowId: '',
@@ -27,7 +24,8 @@ root.sharedObject = {
     isInitEntry: false,
     initProjectPath: commandLineOptions.file,
     appName: 'entry',
-    baseUrl: commandLineOptions.baseUrl,
+    baseUrl: commandLineOptions.baseUrl || 'https://playentry.org/',
+    version: commandLineOptions.version,
 };
 
 if (!app.requestSingleInstanceLock()) {

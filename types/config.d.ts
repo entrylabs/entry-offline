@@ -2,9 +2,6 @@
 
 declare interface ExternalConfigurations {
     baseUrl: string,
-    baseResource: string,
-    versionCheckApi: string,
-    moduleCheckApi: string,
 }
 
 declare interface InternalConfigurations {
@@ -16,10 +13,10 @@ declare type Configurations =  ExternalConfigurations & InternalConfigurations;
 
 declare type CommandLineFlags = {
     debug?: boolean;
-    version?: boolean;
 }
 
 declare type CommandLinePairs = {
+    version?: string;
     file?: any;
     baseUrl?: string;
     config?: string;
