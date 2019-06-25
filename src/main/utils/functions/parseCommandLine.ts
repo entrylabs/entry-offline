@@ -59,7 +59,7 @@ const _isValidProjectFilePath = function(filePath: string) {
     return path.isAbsolute(filePath) && path.extname(filePath) === '.ent';
 };
 
-export default (argv: string[]): CommandLineOptions => {
+export default (argv: string[]): Readonly<CommandLineOptions> => {
     for (const arg of argv) {
         const [key, value] = arg.split('=');
         const isFlagParsed = parseFlags(key);

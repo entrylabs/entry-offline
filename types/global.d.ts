@@ -1,6 +1,6 @@
 declare module NodeJS  {
     interface Global {
-        sharedObject: any;
+        sharedObject: GlobalConfigurations;
         $: any;
     }
 }

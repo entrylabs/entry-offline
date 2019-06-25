@@ -11,7 +11,7 @@ declare module 'puid' {
 
 /* eslint-disable */
 declare module 'window-or-global' {
-    const value: any;
+    const value: NodeJS.Global;
     export = value;
 }
 

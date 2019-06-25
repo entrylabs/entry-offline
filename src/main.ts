@@ -16,17 +16,15 @@ import('./main/utils/functions/globalShortCutRegister');
 
 const commandLineOptions = parseCommandLine(process.argv.slice(1));
 const configurations = configInitialize(commandLineOptions.config);
-
-root.sharedObject = {
-    roomId: '',
-    mainWindowId: '',
+const runtimeProperties = {
+    roomIds: [],
+    mainWindowId: -1,
     workingPath: '',
     isInitEntry: false,
-    initProjectPath: commandLineOptions.file,
     appName: 'entry',
-    baseUrl: commandLineOptions.baseUrl || 'https://playentry.org/',
-    version: commandLineOptions.version,
 };
+
+global.sharedObject = Object.assign({}, runtimeProperties, configurations, commandLineOptions);
 
 if (!app.requestSingleInstanceLock()) {
     app.quit();
@@ -46,7 +44,6 @@ if (!app.requestSingleInstanceLock()) {
         app.on('second-instance', (event, commandLine, workingDirectory) => {
             // 어플리케이션을 중복 실행했습니다. 주 어플리케이션 인스턴스를 활성화 합니다.
             const option = parseCommandLine(commandLine);
-
             if (mainWindow) {
                 mainWindow.activateWindow();
                 mainWindow.loadProjectFromPath(option.file);
@@ -55,7 +52,6 @@ if (!app.requestSingleInstanceLock()) {
 
         app.on('open-file', function(event, pathToOpen) {
             if (process.platform === 'darwin') {
-                commandLineOptions.file = pathToOpen;
                 if (mainWindow) {
                     mainWindow.loadProjectFromPath(pathToOpen);
                 }
@@ -96,7 +92,7 @@ if (!app.requestSingleInstanceLock()) {
     });
 
     ipcMain.on('roomId', function(event: Electron.Event, arg: any) {
-        event.returnValue = root.sharedObject.roomId;
+        event.returnValue = root.sharedObject.roomIds;
     });
 
     ipcMain.on('version', function(event: Electron.Event, arg: any) {

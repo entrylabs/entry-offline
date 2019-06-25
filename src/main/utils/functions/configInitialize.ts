@@ -7,14 +7,14 @@ const fs = require('fs');
 /**
  * 외부 config 파일이 존재하지 않는 경우의 기본값.
  */
-const defaultConfigSchema: ExternalConfigurations = {
+const defaultConfigSchema: FileConfigurations = {
     'baseUrl': 'https://playentry.org',
 };
 
 // target 에 있는 키만 병합한다.
-function mergeExistProperties(target: ExternalConfigurations, src: ExternalConfigurations): ExternalConfigurations {
-    const result: ExternalConfigurations = target;
-    forEach(src, (value: any, key: keyof ExternalConfigurations) => {
+function mergeExistProperties(target: FileConfigurations, src: FileConfigurations): FileConfigurations {
+    const result: FileConfigurations = target;
+    forEach(src, (value: any, key: keyof FileConfigurations) => {
         result[key] = value;
     });
     return result;
@@ -28,14 +28,14 @@ function getExtraResourcePath() {
     return appPath;
 }
 
-export default (configName: string = 'ko'): Configurations => {
-    const getMergedConfig = (target: ExternalConfigurations) => mergeExistProperties(defaultConfigSchema, target);
+export default (configName: string = 'ko'): Readonly<FileConfigurations> => {
+    const getMergedConfig = (target: FileConfigurations) => mergeExistProperties(defaultConfigSchema, target);
     const configFilePath = path.join(getExtraResourcePath(), 'config', `config.${configName}.json`);
 
     console.log(`load ${configFilePath}...`);
 
     const fileData = fs.readFileSync(configFilePath);
-    const mergedConfig: ExternalConfigurations = getMergedConfig(JSON.parse(fileData));
+    const mergedConfig: FileConfigurations = getMergedConfig(JSON.parse(fileData));
 
     console.log('applied configuration');
     forEach(mergedConfig, (value: any, key: string) => {
