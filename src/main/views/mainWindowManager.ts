@@ -142,7 +142,7 @@ export default class {
             return;
         }
 
-        if (!isForceClose && root.sharedObject.isInitEntry) {
+        if (!isForceClose) {
             this.mainWindow.webContents.send('mainClose');
         } else {
             this.mainWindow.close();

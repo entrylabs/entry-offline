@@ -25,7 +25,6 @@ declare type RuntimeGlobalProperties = {
     roomIds: string[];
     mainWindowId: number;
     workingPath: string;
-    isInitEntry: boolean;
     appName: string
 }
 

@@ -14,13 +14,12 @@ import configInitialize from './main/utils/functions/configInitialize';
 import('./main/ipcMainHelper');
 import('./main/utils/functions/globalShortCutRegister');
 
-const commandLineOptions = parseCommandLine(process.argv.slice(1));
-const configurations = configInitialize(commandLineOptions.config);
-const runtimeProperties = {
+const commandLineOptions: Readonly<CommandLineOptions> = parseCommandLine(process.argv.slice(1));
+const configurations: Readonly<FileConfigurations> = configInitialize(commandLineOptions.config);
+const runtimeProperties: RuntimeGlobalProperties = {
     roomIds: [],
     mainWindowId: -1,
     workingPath: '',
-    isInitEntry: false,
     appName: 'entry',
 };
 
