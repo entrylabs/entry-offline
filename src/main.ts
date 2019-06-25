@@ -8,10 +8,10 @@ import HardwareWindowManager from './main/views/hardwareWindowManager';
 import MainWindowManager from './main/views/mainWindowManager';
 import AboutWindowManager from './main/views/aboutWindowManager';
 import root from 'window-or-global';
-import commandLineResolve from './main/electron/commandLineResolver';
+import commandLineResolve from './main/utils/functions/commandLineResolver';
 
 import('./main/ipcMainHelper');
-import('./main/electron/globalShortCutRegister');
+import('./main/utils/functions/globalShortCutRegister');
 
 const option = commandLineResolve(process.argv.slice(1));
 
