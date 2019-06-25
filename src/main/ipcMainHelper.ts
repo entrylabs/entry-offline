@@ -1,9 +1,9 @@
-import { app, ipcMain, shell, net } from 'electron';
+import { app, ipcMain, shell } from 'electron';
 import path from 'path';
-import root from 'window-or-global';
 import MainUtils from './mainUtils';
 import Constants from './constants';
 import CommonUtils from './commonUtils';
+import checkUpdateRequest from './utils/network/checkUpdate';
 
 /**
  * ipc process 의 이벤트를 등록한다.
@@ -251,39 +251,13 @@ class IpcMainHelper {
     }
 
     checkUpdate(event: Electron.Event) {
-        const request = net.request({
-            method: 'POST',
-            host: root.sharedObject.hostURI,
-            protocol: root.sharedObject.hostProtocol,
-            path: '/api/checkVersion',
-        });
-
-        request.on('response', (res) => {
-            let body = '';
-            res.on('data', (chunk) => {
-                body += chunk.toString();
-            });
-            res.on('end', () => {
-                let data = {};
-                try {
-                    data = JSON.parse(body);
-                } catch (e) {
-                    console.log(e);
-                }
+        checkUpdateRequest()
+            .then((data) => {
                 event.sender.send('checkUpdate', app.getVersion(), data);
+            })
+            .catch((e) => {
+                console.error(e);
             });
-        });
-        request.on('error', (err) => {
-            console.log(err);
-        });
-        request.setHeader('content-type', 'application/json; charset=utf-8');
-        request.write(
-            JSON.stringify({
-                category: 'offline',
-                version: app.getVersion(),
-            }),
-        );
-        request.end();
     }
 
     openUrl(event: Electron.Event, url: string) {
