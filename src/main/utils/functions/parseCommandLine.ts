@@ -12,7 +12,7 @@ const properties: {
     ],
     pair: [
         ['version', 'v'],
-        ['file', 'app'],
+        ['file', 'f'],
         ['baseUrl', 'h'],
         ['config', 'c'],
     ],
