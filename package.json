@@ -6,7 +6,7 @@
     "description": "Entry for offline",
     "main": "src/main_build/main.bundle.js",
     "scripts": {
-        "start": "electron .",
+        "start": "electron . --debug",
         "debug": "electron --inspect .",
         "webpack:dev": "cross-env NODE_ENV=development webpack",
         "webpack:prod": "cross-env NODE_ENV=production webpack",

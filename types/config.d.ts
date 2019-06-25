@@ -8,11 +8,6 @@ declare interface ExternalConfigurations {
 }
 
 declare interface InternalConfigurations {
-    appName: string,
-    hardwareVersion: string,
-    roomIds: string[],
-    hostURI: string,
-    hostProtocol: string,
 }
 
 declare type Configurations =  ExternalConfigurations & InternalConfigurations;

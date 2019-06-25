@@ -119,14 +119,16 @@ export default class {
         mainWindow.setMenu(null);
         mainWindow.loadURL(`file://${path.resolve(app.getAppPath(), 'src', 'main.html')}`);
 
-        if (option.debug) {
-            mainWindow.webContents.openDevTools();
-        }
-
         mainWindow.webContents.name = 'entry';
 
         mainWindow.on('page-title-updated', function(e) {
             e.preventDefault();
+        });
+
+        mainWindow.on('show', () => {
+            if (option.debug) {
+                mainWindow.webContents.openDevTools();
+            }
         });
 
         mainWindow.on('closed', () => {

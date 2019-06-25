@@ -9,21 +9,26 @@ import MainWindowManager from './main/views/mainWindowManager';
 import AboutWindowManager from './main/views/aboutWindowManager';
 import root from 'window-or-global';
 import parseCommandLine from './main/utils/functions/parseCommandLine';
+import configInitialize from './main/utils/functions/configInitialize';
 
 import('./main/ipcMainHelper');
 import('./main/utils/functions/globalShortCutRegister');
 
-const option = parseCommandLine(process.argv.slice(1));
+const commandLineOptions = parseCommandLine(process.argv.slice(1));
+const configurations = configInitialize(commandLineOptions.config);
+
+console.log('commandLineOptions : ', commandLineOptions);
+console.log('configurations', configurations);
 
 root.sharedObject = {
     roomId: '',
     mainWindowId: '',
     workingPath: '',
     isInitEntry: false,
-    initProjectPath: option.file,
+    initProjectPath: commandLineOptions.file,
     appName: 'entry',
-    hostURI: option.host,
-    hostProtocol: option.protocol,
+    hostURI: commandLineOptions.host,
+    hostProtocol: commandLineOptions.protocol,
 };
 
 if (!app.requestSingleInstanceLock()) {
@@ -37,7 +42,7 @@ if (!app.requestSingleInstanceLock()) {
     });
 
     app.once('ready', () => {
-        const mainWindow = new MainWindowManager(option);
+        const mainWindow = new MainWindowManager(commandLineOptions);
         const hardwareWindow = new HardwareWindowManager();
         const aboutWindow = new AboutWindowManager(mainWindow.window);
 
@@ -53,7 +58,7 @@ if (!app.requestSingleInstanceLock()) {
 
         app.on('open-file', function(event, pathToOpen) {
             if (process.platform === 'darwin') {
-                option.file = pathToOpen;
+                commandLineOptions.file = pathToOpen;
                 if (mainWindow) {
                     mainWindow.loadProjectFromPath(pathToOpen);
                 }
