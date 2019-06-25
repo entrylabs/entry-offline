@@ -26,15 +26,15 @@ root.sharedObject = {
     hostProtocol: option.protocol,
 };
 
-app.on('window-all-closed', function() {
-    app.quit();
-    process.exit(0);
-});
-
 if (!app.requestSingleInstanceLock()) {
     app.quit();
 } else {
     app.commandLine.appendSwitch('disable-renderer-backgrounding');
+
+    app.on('window-all-closed', function() {
+        app.quit();
+        process.exit(0);
+    });
 
     app.once('ready', () => {
         const mainWindow = new MainWindowManager(option);

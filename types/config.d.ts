@@ -1,7 +1,6 @@
 // configuration for entire program setting
 
 declare interface ExternalConfigurations {
-    language?: string,
     baseUrl: string,
     baseResource: string,
     versionCheckApi: string,
