@@ -11,8 +11,7 @@ const properties: {
     ],
     pair: [
         ['file', 'app'],
-        ['host', 'h'],
-        ['protocol', 'p'],
+        ['baseUrl', 'h'],
         ['config', 'c'],
     ],
 };

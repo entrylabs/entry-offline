@@ -4,9 +4,7 @@ import root from 'window-or-global';
 export default () => new Promise((resolve, reject) => {
     const request = net.request({
         method: 'POST',
-        host: root.sharedObject.hostURI,
-        protocol: root.sharedObject.hostProtocol,
-        path: '/api/checkVersion',
+        url: `${root.sharedObject.baseUrl}/api/checkVersion`,
     });
 
     request.on('response', (res) => {

@@ -27,8 +27,7 @@ root.sharedObject = {
     isInitEntry: false,
     initProjectPath: commandLineOptions.file,
     appName: 'entry',
-    hostURI: commandLineOptions.host,
-    hostProtocol: commandLineOptions.protocol,
+    baseUrl: commandLineOptions.baseUrl,
 };
 
 if (!app.requestSingleInstanceLock()) {

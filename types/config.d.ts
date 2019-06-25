@@ -21,8 +21,7 @@ declare type CommandLineFlags = {
 
 declare type CommandLinePairs = {
     file?: any;
-    host?: string;
-    protocol?: string;
+    baseUrl?: string;
     config?: string;
 }
 

@@ -17,8 +17,6 @@ const defaultConfigSchema: ExternalConfigurations = {
  * 외부 설정이 아닌 내부에서 정의되며, 변경될 여지가 없는 하드코드의 경우 이쪽에 선언한다.
  */
 const internalConfig: InternalConfigurations = {
-    hostURI: 'playentry.org',
-    hostProtocol: 'https:',
 };
 
 // target 에 있는 키만 병합한다.
