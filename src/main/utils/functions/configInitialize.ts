@@ -34,6 +34,10 @@ export default (configName: string = 'ko'): Readonly<FileConfigurations> => {
 
     console.log(`load ${configFilePath}...`);
 
+    if (!fs.existsSync(configFilePath)) {
+        return defaultConfigSchema;
+    }
+
     const fileData = fs.readFileSync(configFilePath);
     const mergedConfig: FileConfigurations = getMergedConfig(JSON.parse(fileData));
 
