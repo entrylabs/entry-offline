@@ -3,11 +3,6 @@ import root from 'window-or-global';
 import MainUtils from '../mainUtils';
 import path from 'path';
 
-type MainWindowOption = {
-    [key: string]: any;
-    debug: boolean;
-}
-
 type CrashMessage = {
     title: string;
     content: string;
@@ -35,7 +30,7 @@ export default class {
         };
     }
 
-    constructor(option: MainWindowOption) {
+    constructor(option: CommandLineOptions) {
         const language = app.getLocale();
         let title = app.getVersion();
         const crashedMsg: CrashMessage = {

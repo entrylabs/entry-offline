@@ -1,39 +1,71 @@
+import { merge } from 'lodash';
 import path from 'path';
 
-export default function(args: string[]) {
-    const option = {
-        file: '',
-        version: false,
-        debug: false,
-        hostURI: 'playentry.org',
-        hostProtocol: 'https:',
-    };
+const properties: {
+    flag: [keyof CommandLineFlags, string][],
+    pair: [keyof CommandLinePairs, any][],
+} = {
+    flag: [
+        ['debug', 'd'],
+        ['version', 'v'],
+    ],
+    pair: [
+        ['file', 'app'],
+        ['host', 'h'],
+        ['protocol', 'p'],
+        ['config', 'c'],
+    ],
+};
 
-    for (const argv of args) {
-        if (argv === '--version' || argv === '-v') {
-            option.version = true;
-            break;
-        } else if (argv.startsWith('--app')) {
-            const value = argv.split('=')[1];
-            if (_isValidProjectFilePath(value)) {
-                option.file = value;
-            }
-        } else if (argv === '--debug' || argv === '-d') {
-            option.debug = true;
-        } else if (argv.startsWith('--host') || argv.startsWith('-h')) {
-            option.hostURI = argv.split('=')[1];
-        } else if (argv.startsWith('--protocol') || argv.startsWith('-p')) {
-            option.hostProtocol = argv.split('=')[1];
-        } else {
-            if (_isValidProjectFilePath(argv)) {
-                option.file = argv;
-                break;
-            }
+const flags: CommandLineFlags = {};
+const pairs: CommandLinePairs = {};
+
+function parseFlags(key: string): boolean | void {
+    for (let i = 0; i < properties.flag.length; i++) {
+        const [fullName, alias] = properties.flag[i];
+        if (`--${fullName}` === key || `-${alias}` === key) {
+            flags[fullName as keyof CommandLineFlags] = true;
+            return true;
         }
     }
-    return option;
+}
+
+function parsePair(key: string, value: string): boolean | void {
+    if (!value) {
+        return;
+    }
+
+    for (let i = 0; i < properties.pair.length; i++) {
+        const [fullName, alias] = properties.pair[i];
+        if (`--${fullName}` === key || `-${alias}` === key) {
+
+            if (
+                (fullName === 'file' || alias === 'app') &&
+                !_isValidProjectFilePath(value as string)
+            ) {
+                continue;
+            }
+            pairs[fullName as keyof CommandLinePairs] = value;
+            return true;
+        }
+    }
 }
 
 const _isValidProjectFilePath = function(filePath: string) {
     return path.isAbsolute(filePath) && path.extname(filePath) === '.ent';
+};
+
+export default (argv: string[]): CommandLineOptions => {
+    for (const arg of argv) {
+        const [key, value] = arg.split('=');
+        const isFlagParsed = parseFlags(key);
+        const isPairParsed = parsePair(key, value);
+        if (!isFlagParsed && !isPairParsed) {
+            if (_isValidProjectFilePath(arg)) {
+                pairs.file = arg;
+            }
+        }
+    }
+
+    return merge(flags, pairs);
 };

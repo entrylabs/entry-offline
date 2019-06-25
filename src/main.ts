@@ -22,8 +22,8 @@ root.sharedObject = {
     isInitEntry: false,
     initProjectPath: option.file,
     appName: 'entry',
-    hostURI: option.hostURI,
-    hostProtocol: option.hostProtocol,
+    hostURI: option.host,
+    hostProtocol: option.protocol,
 };
 
 app.on('window-all-closed', function() {
@@ -34,7 +34,7 @@ app.on('window-all-closed', function() {
 if (!app.requestSingleInstanceLock()) {
     app.quit();
 } else {
-    app.commandLine.appendSwitch("disable-renderer-backgrounding");
+    app.commandLine.appendSwitch('disable-renderer-backgrounding');
 
     app.once('ready', () => {
         const mainWindow = new MainWindowManager(option);
@@ -61,7 +61,7 @@ if (!app.requestSingleInstanceLock()) {
         });
 
         ipcMain.on('forceClose', () => {
-            mainWindow.close({ isForceClose : true });
+            mainWindow.close({ isForceClose: true });
         });
 
         ipcMain.on('reload', function(event: NamedEvent, arg: any) {
