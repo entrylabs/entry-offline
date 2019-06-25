@@ -1,3 +1,5 @@
+import { app } from 'electron';
+
 const { forEach, merge } = require('lodash');
 const path = require('path');
 const fs = require('fs');
@@ -12,8 +14,7 @@ const defaultConfigSchema: ExternalConfigurations = {
 /**
  * 외부 설정이 아닌 내부에서 정의되며, 변경될 여지가 없는 하드코드의 경우 이쪽에 선언한다.
  */
-const internalConfig: InternalConfigurations = {
-};
+const internalConfig: InternalConfigurations = {};
 
 // target 에 있는 키만 병합한다.
 function mergeExistProperties(target: ExternalConfigurations, src: ExternalConfigurations): ExternalConfigurations {
@@ -24,9 +25,17 @@ function mergeExistProperties(target: ExternalConfigurations, src: ExternalConfi
     return result;
 }
 
+function getExtraResourcePath() {
+    const appPath = app.getAppPath();
+    if (appPath.indexOf('app.asar') > -1) {
+        return path.join(appPath, '..');
+    }
+    return appPath;
+}
+
 export default (configName: string = 'ko'): Configurations => {
     const getMergedConfig = (target: ExternalConfigurations) => mergeExistProperties(defaultConfigSchema, target);
-    const configFilePath = path.resolve('config', `config.${configName}.json`);
+    const configFilePath = path.join(getExtraResourcePath(), 'config', `config.${configName}.json`);
 
     console.log(`load ${configFilePath}...`);
 
