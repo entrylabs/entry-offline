@@ -1,14 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import theme from '../../themes/default';
 
-const assetPath = '../src/renderer/resources/images/gnb/';
-
-const HeaderLogo = styled.h1`
-    float: left;
-    width: 88px;
-    height: 18px;
-    background: url(${assetPath}logo_gnb.png) no-repeat;
-    background-size: 88px auto;
-`;
-
+const HeaderLogo = theme.header.logo;
 export default () => (<HeaderLogo className={'logo logo_gnb'} />);
