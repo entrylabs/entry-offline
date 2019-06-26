@@ -11,19 +11,6 @@
     &.orange {
         background-color: orange;
     }
-    .logo {
-        float: left;
-        width: 88px;
-        height: 18px;
-        a {
-            display: block;
-            overflow: hidden;
-            height: 18px;
-            font-size: 1px;
-            color: transparent;
-            text-indent: -10px;
-        }
-    }
     .srch_box {
         float: left;
         margin-left: 16px;
@@ -273,11 +260,6 @@
     }
 }
 
-//팝업 뒤로 가기
-.logo_gnb {
-    background: url(../renderer/resources/images/gnb/logo_gnb.png) no-repeat;
-    background-size: 88px auto;
-}
 .btn_work_space:after {
     background: url(../renderer/resources/images/gnb/btn_workspace_arr.png) no-repeat;
     background-size: 6px auto;

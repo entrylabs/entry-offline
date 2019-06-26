@@ -10,6 +10,8 @@ import { CommonActionCreators } from '../store/modules/common';
 import { PersistActionCreators } from '../store/modules/persist';
 import { Dropdown } from '@entrylabs/tool/component';
 import ImportToggleHelper from '../helper/importToggleHelper';
+import LineHeaderLogoBox from './header_components/LineHeaderLogoBox';
+import HeaderLogoBox from './header_components/HeaderLogoBox';
 
 /* global Entry */
 class Header extends Component {
@@ -213,7 +215,7 @@ class Header extends Component {
         return (
             /* eslint-disable jsx-a11y/heading-has-content, jsx-a11y/anchor-is-valid */
             <header className={'common_gnb'}>
-                <h1 className={`${'logo'} ${'logo_gnb'}`} />
+                <HeaderLogoBox />
                 <div className={'srch_box'}>
                     {/* 작품명 */}
                     <div key={projectName}>
