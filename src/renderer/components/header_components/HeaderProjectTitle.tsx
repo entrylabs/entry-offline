@@ -24,6 +24,7 @@ interface IProps {
 
 const WorkspaceTitle = ({ value, onBlur }: IProps): ReactElement => (
     <Title
+        className={'srch_box'}
         defaultValue={value}
         onBlur={(e) => onBlur(e.target.value)}
     />

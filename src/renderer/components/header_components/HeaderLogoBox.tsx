@@ -11,4 +11,4 @@ const HeaderLogo = styled.h1`
     background-size: 88px auto;
 `;
 
-export default HeaderLogo;
+export default () => (<HeaderLogo className={'logo logo_gnb'} />);

@@ -280,14 +280,14 @@ class Workspace extends Component {
                 Entry.stateManager.addStamp();
                 Entry.toast.success(
                     RendererUtils.getLang('Workspace.saved'),
-                    `${projectName} ${RendererUtils.getLang('Workspace.saved_msg')}`
+                    `${projectName} ${RendererUtils.getLang('Workspace.saved_msg')}`,
                 );
             } catch (err) {
                 console.error(err);
                 this.showModalProgress(
                     'error',
                     RendererUtils.getLang('Workspace.saving_fail_msg'),
-                    RendererUtils.getLang('Workspace.fail_contact_msg')
+                    RendererUtils.getLang('Workspace.fail_contact_msg'),
                 );
             }
         };
