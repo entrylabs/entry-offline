@@ -1,17 +1,22 @@
-import styled, { StyledComponentBase } from 'styled-components';
+import styled from 'styled-components';
+import { Theme } from '../../../types/theme';
 
-interface Theme {
-    header: {
-        logo: StyledComponentBase<'h1', any>,
-        projectTitle: StyledComponentBase<'input', any, {}, never>,
-        buttonGroup: StyledComponentBase<'div', any, {}, never>,
-    }
-    workspace?: StyledComponentBase<'div', any, {}, never>,
-}
 
 const assetPath = '../src/renderer/resources/images/gnb/';
 const Theme: Theme = {
     header: {
+        wrapper: styled.div`
+            position: relative;
+            min-width: 1024px;
+            padding: 8px 8px 3px;
+            background-color: #4f80ff;
+            z-index: 300;
+            &:after {
+                display: block;
+                clear: both;
+                content: '';
+            }
+        `,
         logo: styled.h1`
             float: left;
             width: 88px;

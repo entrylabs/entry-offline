@@ -13,6 +13,7 @@ import ImportToggleHelper from '../helper/importToggleHelper';
 import HeaderLogoBox from './header_components/HeaderLogoBox';
 import HeaderProjectTitle from './header_components/HeaderProjectTitle';
 import HeaderButtonGroupBox from './header_components/HeaderButtonGroupBox';
+import HeaderWrapper from './header_components/HeaderWrapper';
 
 /* global Entry */
 class Header extends Component {
@@ -215,7 +216,7 @@ class Header extends Component {
 
         return (
             /* eslint-disable jsx-a11y/heading-has-content, jsx-a11y/anchor-is-valid */
-            <header className={'common_gnb'}>
+            <HeaderWrapper>
                 <HeaderLogoBox />
                 <HeaderProjectTitle
                     onBlur={(projectTitle) => {
@@ -372,7 +373,7 @@ class Header extends Component {
                         </div>)
                     }
                 </HeaderButtonGroupBox>
-            </header>
+            </HeaderWrapper>
         );
     }
 }

@@ -1,13 +1,5 @@
-import styled, { keyframes, css, StyledComponentBase } from 'styled-components';
-
-interface Theme {
-    header: {
-        logo: StyledComponentBase<'h1', any>,
-        projectTitle: StyledComponentBase<'input', any, {}, never>,
-        buttonGroup: StyledComponentBase<'div', any, {}, never>,
-    }
-    workspace: StyledComponentBase<'div', any, {}, never>,
-}
+import styled, { keyframes, css } from 'styled-components';
+import { Theme } from '../../../types/theme';
 
 const main = {
     default_green: '#40b235',
@@ -879,6 +871,16 @@ const Wrapper = styled.div`
 
 const Theme: Theme = {
     header: {
+        wrapper: styled.div`
+            position: relative;
+            width: 100%;
+            padding: 10px;
+            background-color: ${main.workspace_main};
+            color: #fff;
+            font-size: 14px;
+            min-width: 1024px;
+            z-index: 2;
+        `,
         logo: styled.h1`
             float: left;
             position: relative;
