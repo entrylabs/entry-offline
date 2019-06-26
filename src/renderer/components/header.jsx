@@ -14,6 +14,7 @@ import LineHeaderLogoBox from './header_components/LineHeaderLogoBox';
 import LineHeaderProjectTitle from './header_components/LineHeaderProjectTitle';
 import HeaderLogoBox from './header_components/HeaderLogoBox';
 import HeaderProjectTitle from './header_components/HeaderProjectTitle';
+import HeaderButtonGroupBox from './header_components/HeaderButtonGroupBox';
 
 /* global Entry */
 class Header extends Component {
@@ -224,7 +225,7 @@ class Header extends Component {
                     }}
                     value={projectName}
                 />
-                <div className={'group_box'}>
+                <HeaderButtonGroupBox>
                     <div className={'group_inner'}>
                         { mode === 'workspace' &&
                             // 블록코딩, 엔트리파이선 모드 변경
@@ -372,7 +373,7 @@ class Header extends Component {
                             </div>
                         </div>)
                     }
-                </div>
+                </HeaderButtonGroupBox>
             </header>
         );
     }
