@@ -7,7 +7,7 @@ const setting = {
     target: 'electron-renderer',
     entry: {
         init: './src/renderer/initEntry.js',
-        render: './src/renderer/renderEntry.js',
+        render: './src/renderer/renderEntry.jsx',
     },
     externals: {
         '@entrylabs/tool': 'EntryTool',
