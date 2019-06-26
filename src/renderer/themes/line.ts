@@ -9,8 +9,52 @@ interface Theme {
     workspace: StyledComponentBase<'div', any, {}, never>,
 }
 
+const main = {
+    default_green: '#40b235',
+    dark_green: '#006446',
+    light_green: '#88c082',
+    green2: '#2f8f37',
+    green3: '#92d930',
+    green4: '#00b50a',
+    green5: '#007e2c',
+    gray1: '#333',
+    gray2: '#666',
+    gray3: '#888',
+    gray4: '#d4d4d4',
+    gray5: '#eee',
+    gray6: '#707070',
+    gray7: '#e4e4d2',
+    gray8: '#eeeee0',
+    gray9: '#f4f4f4',
+    gray10: '#ebebeb',
+    gray11: '#cdcdcd',
+    gray12: '#acacac',
+    gray13: '#fcfcfc',
+    gray14: '#eee',
+    gray15: '#d8d8d8',
+    gray16: '#555',
+    placeholder: '#d4d4d4',
+    ListBG1: '#f8f8e6',
+    font_UserThmb: '#50b4fa',
+    font_Error: '#fa5536',
+    red1: '#fd5538',
+    yellow1: '#f8f821',
+    yellow2: '#f8f8e6',
+    yellow3: '#e4af0a',
+    yellow4: '#e0e0c3',
+    yellow5: '#f1f1d4',
+    yellow6: '#c7c79f',
+    blue1: '#2578d6',
+    blue2: '#009ce1',
+    blue3: '#5a96ff',
+    white: '#fff',
+    workspace_main: '#1c8850',
+    workspace_point: '#006446',
+    black: '#333',
+};
+
 const assetPath = '../src/renderer/resources/theme/line/';
-const workspacePath = `../src/renderer/resources/images/workspace/`;
+const workspacePath = `${assetPath}workspace/`;
 const ColorSet = {
     green: '#1c8850',
     grey: '#d4d4d4',
@@ -38,7 +82,7 @@ const Wrapper = styled.div`
             `;
     } else {
         return css`
-                height: calc(100% - 39px);
+                height: 100%;
                 min-height: 590px;
                 /* workspace loading */
                 .workspace:empty {
@@ -121,7 +165,7 @@ const Wrapper = styled.div`
     /* workspace header */
     /* scene */
     .entrySceneWorkspace {
-        background-color: ${(props) => props.theme.workspace_main};
+        background-color: ${main.workspace_main};
         z-index: 1;
     }
     .workspace_button_group .workspace_divider {

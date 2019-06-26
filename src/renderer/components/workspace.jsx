@@ -18,6 +18,7 @@ import ImportToggleHelper from '../helper/importToggleHelper';
 import EntryUtils from '../helper/entry/entryUtils';
 import { bindActionCreators } from 'redux';
 import { ModalActionCreators } from '../store/modules/modal';
+import WorkspaceWrapper from './WorkspaceWrapper';
 
 /* global Entry, EntryStatic */
 class Workspace extends Component {
@@ -453,7 +454,9 @@ class Workspace extends Component {
                     programLanguageMode={programLanguageMode}
                     executionStatus={executionStatus}
                 />
-                <div ref={this.container} className="workspace"/>
+                <WorkspaceWrapper>
+                    <div ref={this.container} className="workspace"/>
+                </WorkspaceWrapper>
                 {isShow && (
                     <ModalProgress
                         title={title}

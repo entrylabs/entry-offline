@@ -10,8 +10,6 @@ import { CommonActionCreators } from '../store/modules/common';
 import { PersistActionCreators } from '../store/modules/persist';
 import { Dropdown } from '@entrylabs/tool/component';
 import ImportToggleHelper from '../helper/importToggleHelper';
-import LineHeaderLogoBox from './header_components/LineHeaderLogoBox';
-import LineHeaderProjectTitle from './header_components/LineHeaderProjectTitle';
 import HeaderLogoBox from './header_components/HeaderLogoBox';
 import HeaderProjectTitle from './header_components/HeaderProjectTitle';
 import HeaderButtonGroupBox from './header_components/HeaderButtonGroupBox';
