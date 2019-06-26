@@ -6,6 +6,7 @@ interface Theme {
         projectTitle: StyledComponentBase<'input', any, {}, never>,
         buttonGroup: StyledComponentBase<'div', any, {}, never>,
     }
+    workspace: StyledComponentBase<'div', any, {}, never>,
 }
 
 const assetPath = '../src/renderer/resources/images/gnb/';
@@ -37,6 +38,7 @@ const Theme: Theme = {
             float: right;
         `,
     },
+    workspace: styled.div``
 };
 
 export default Theme;
