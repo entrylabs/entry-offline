@@ -11,7 +11,9 @@ import { PersistActionCreators } from '../store/modules/persist';
 import { Dropdown } from '@entrylabs/tool/component';
 import ImportToggleHelper from '../helper/importToggleHelper';
 import LineHeaderLogoBox from './header_components/LineHeaderLogoBox';
+import LineHeaderProjectTitle from './header_components/LineHeaderProjectTitle';
 import HeaderLogoBox from './header_components/HeaderLogoBox';
+import HeaderProjectTitle from './header_components/HeaderProjectTitle';
 
 /* global Entry */
 class Header extends Component {
@@ -216,21 +218,12 @@ class Header extends Component {
             /* eslint-disable jsx-a11y/heading-has-content, jsx-a11y/anchor-is-valid */
             <header className={'common_gnb'}>
                 <HeaderLogoBox />
-                <div className={'srch_box'}>
-                    {/* 작품명 */}
-                    <div key={projectName}>
-                        <input
-                            type="text"
-                            id="common_srch"
-                            name="common_srch"
-                            defaultValue={projectName}
-                            onBlur={({ target }) => {
-                                const { value } = target;
-                                CommonActions.changeProjectName(value);
-                            }}
-                        />
-                    </div>
-                </div>
+                <HeaderProjectTitle
+                    onBlur={(projectTitle) => {
+                        CommonActions.changeProjectName(projectTitle);
+                    }}
+                    value={projectName}
+                />
                 <div className={'group_box'}>
                     <div className={'group_inner'}>
                         { mode === 'workspace' &&
