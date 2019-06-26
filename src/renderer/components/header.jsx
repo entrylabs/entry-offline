@@ -14,6 +14,7 @@ import HeaderLogoBox from './header_components/HeaderLogoBox';
 import HeaderProjectTitle from './header_components/HeaderProjectTitle';
 import HeaderButtonGroupBox from './header_components/HeaderButtonGroupBox';
 import HeaderWrapper from './header_components/HeaderWrapper';
+import HeaderDropdownButton from './header_components/HeaderDropdownButton';
 
 /* global Entry */
 class Header extends Component {
@@ -225,6 +226,17 @@ class Header extends Component {
                     value={projectName}
                 />
                 <HeaderButtonGroupBox>
+                    <div className={'group_inner'}>
+                        <HeaderDropdownButton
+                            icon={'file'}
+                            onSelect={this.handleDropdownClick}
+                            items={this.fileList}
+                        >
+                            file
+                        </HeaderDropdownButton>
+
+                    </div>
+
                     <div className={'group_inner'}>
                         { mode === 'workspace' &&
                             // 블록코딩, 엔트리파이선 모드 변경

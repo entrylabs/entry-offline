@@ -44,3 +44,7 @@ declare module 'xml2js' {
     const value: any;
     export = value;
 }
+
+declare module '@entrylabs/tool/component' {
+    export const Dropdown: any;
+}

@@ -933,6 +933,54 @@ const Theme: Theme = {
                 height: 16px;
             }
         `,
+        dropdownButton: {
+            wrapper: styled.div`
+                display: inline-block;
+                position: relative;
+                font-size: 0;
+            `,
+            anchor: styled.a<{on: boolean, icon: string}>`
+                margin-top: 0;
+                display: block;
+                position: relative;
+                overflow: hidden;
+                width: 48px;
+                height: 32px;
+                border-radius: 16px;
+                border-style: solid;
+                border-width: 1px;
+                border-color: #9ab6ff;
+                background-color: #6e97ff;
+                cursor: pointer;
+                &:before {
+                    position: absolute;
+                    left: 8px;
+                    top: 50%;
+                    width: 18px;
+                    height: 18px;
+                    margin-top: -9px;
+                    content: '';
+                    background: ${(props) => `url(${assetPath}btn_workspace_${props.icon}.png) no-repeat;`};
+                    background-size: 18px auto;
+                }
+                &:after {
+                    position: absolute;
+                    right: 8px;
+                    top: 50%;
+                    width: 6px;
+                    height: 4px;
+                    margin-top: -2px;
+                    content: '';
+                    background: ${(props) => {
+                const url = props.on
+                    ? `${assetPath}btn_workspace_arr_on.png`
+                    : `${assetPath}btn_workspace_arr.png`;
+                return `url(${url}) no-repeat;`;
+            }};
+                    background-size: 6px auto;
+                }
+            `
+        }
     },
     workspace: Wrapper,
 };
