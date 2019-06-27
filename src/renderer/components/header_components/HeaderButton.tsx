@@ -12,7 +12,6 @@ interface IProps {
 }
 
 export default ({ onClick, enabledIcon, disabledIcon, disabled, children }: IProps) => {
-    console.log(enabledIcon, disabledIcon, disabled);
     return <HeaderButton
         icon={disabled ? disabledIcon : enabledIcon}
         onClick={onClick}

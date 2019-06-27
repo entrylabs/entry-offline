@@ -8,7 +8,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { CommonActionCreators } from '../store/modules/common';
 import { PersistActionCreators } from '../store/modules/persist';
-import { Dropdown } from '@entrylabs/tool/component';
 import ImportToggleHelper from '../helper/importToggleHelper';
 import HeaderLogoBox from './header_components/HeaderLogoBox';
 import HeaderProjectTitle from './header_components/HeaderProjectTitle';
@@ -23,7 +22,6 @@ import HeaderDropdownBox from './header_components/HeaderDropdownBox';
 class Header extends Component {
     constructor(props) {
         super(props);
-        this.dropdownList = {};
         this.state = {
             dropdownType: undefined,
         };
@@ -97,50 +95,9 @@ class Header extends Component {
         return modeText;
     }
 
-    handleDropdownClick(type) {
-        this.setState((state) => {
-            const { dropdownType } = state;
-            return {
-                dropdownType: dropdownType === type ? undefined : type,
-            };
-        });
-    }
-
     getLangValue() {
         const lang = _get(this.props, 'persist.lang');
         return _get(root.Lang, lang);
-    }
-
-    makeDropdown(type, items) {
-        const { dropdownType } = this.state;
-        if (type !== dropdownType) {
-            return null;
-        }
-        const positionDom = this.dropdownList[type];
-        return (
-            <Dropdown
-                autoWidth
-                animation={false}
-                items={items}
-                positionDom={positionDom}
-                onSelectDropdown={(item) => {
-                    this.handleDropdownSelect(type, item);
-                    this.setState(() => {
-                        return {
-                            dropdownType: undefined,
-                        };
-                    });
-                }}
-                outsideExcludeDom={[positionDom]}
-                onOutsideClick={() => {
-                    this.setState(() => {
-                        return {
-                            dropdownType: undefined,
-                        };
-                    });
-                }}
-            />
-        );
     }
 
     handleDropdownSelect(type, item) {
@@ -221,7 +178,6 @@ class Header extends Component {
         const { canRedo = false, canUndo = false } = executionStatus;
         const { projectName = RendererUtils.getDefaultProjectName() } = common;
         const { lang, mode } = persist;
-        const { dropdownType } = this.state;
 
         return (
             /* eslint-disable jsx-a11y/heading-has-content, jsx-a11y/anchor-is-valid */
@@ -235,10 +191,11 @@ class Header extends Component {
                 />
                 <HeaderButtonGroupBox>
                     {
+                        // 파이선모드 변경
                         mode === 'workspace' &&
                         <HeaderDropdownButton
                             title={RendererUtils.getLang('Workspace.language')}
-                            icon={'block.svg'}
+                            icon={`${programLanguageMode}.svg`}
                             onSelect={(item) => this.handleDropdownSelect('programLanguage', item)}
                             items={this.programLanguageList}
                         />
@@ -261,7 +218,9 @@ class Header extends Component {
                         onSelect={(item) => this.handleDropdownSelect('help', item)}
                         items={this.helpList}
                     />
+
                     <hr/>
+
                     <HeaderButton
                         disabled={!canUndo}
                         enabledIcon={'undo.png'}
@@ -274,61 +233,29 @@ class Header extends Component {
                         disabledIcon={'redo_disabled.png'}
                         onClick={() => {Entry.dispatchEvent('redo')}}
                     />
+
                     <hr/>
-                    <HeaderDropdownText
-                        onSelect={(item) => this.handleDropdownSelect('mode', item)}
-                        items={this.modeList}
-                    >
-                        {this.getModeText()}
-                    </HeaderDropdownText>
 
-                    {/* 일반형, 교과형 모드변경 */}
-                    {/*{lang === 'ko' && (*/}
-                    {/*    <div className={'group_inner'}>*/}
-                    {/*        <div className={'work_space'}>*/}
-                    {/*            <a*/}
-                    {/*                className={`link_workspace_text text_work_space  ${*/}
-                    {/*                    dropdownType === 'mode' ? 'on' : ''*/}
-                    {/*                    }`}*/}
-                    {/*                ref={(dom) => (this.dropdownList.mode = dom)}*/}
-                    {/*                onClick={() => {*/}
-                    {/*                    this.handleDropdownClick('mode');*/}
-                    {/*                }}*/}
-                    {/*            >*/}
-                    {/*                {this.getModeText()}*/}
-                    {/*            </a>*/}
-                    {/*            {this.makeDropdown('mode', this.modeList)}*/}
-                    {/*        </div>*/}
-                    {/*    </div>*/}
-                    {/*)}*/}
-
-                    {/* 언어 변경*/}
-
-                    <HeaderDropdownBox
-                        items={this.languageList}
-                        onSelect={(item) => this.handleDropdownSelect('language', item)}
-                    >
-                        {this.getLangValue()}
-                    </HeaderDropdownBox>
-
-                    {/*{mode === 'workspace' &&*/}
-                    {/*    (<div className={'lang_select_box'}>*/}
-                    {/*        <a*/}
-                    {/*            className={`${'select_link'} ${'ico_white_select_arr'} ${*/}
-                    {/*                dropdownType === 'language' ? 'on' : ''*/}
-                    {/*                }`}*/}
-                    {/*            ref={(dom) => (this.dropdownList.language = dom)}*/}
-                    {/*            onClick={() => {*/}
-                    {/*                this.handleDropdownClick('language');*/}
-                    {/*            }}*/}
-                    {/*        >*/}
-                    {/*            {this.getLangValue()}*/}
-                    {/*        </a>*/}
-                    {/*        <div className={'tooltip_box'}>*/}
-                    {/*            {this.makeDropdown('language', this.languageList)}*/}
-                    {/*        </div>*/}
-                    {/*    </div>)*/}
-                    {/*}*/}
+                    {
+                        // 일반형, 교과형 모드 변경
+                        lang === 'ko' &&
+                        <HeaderDropdownText
+                            onSelect={(item) => this.handleDropdownSelect('mode', item)}
+                            items={this.modeList}
+                        >
+                            {this.getModeText()}
+                        </HeaderDropdownText>
+                    }
+                    {
+                        // 언어 변경
+                        mode === 'workspace' &&
+                        <HeaderDropdownBox
+                            items={this.languageList}
+                            onSelect={(item) => this.handleDropdownSelect('language', item)}
+                        >
+                            {this.getLangValue()}
+                        </HeaderDropdownBox>
+                    }
                 </HeaderButtonGroupBox>
             </HeaderWrapper>
         );
