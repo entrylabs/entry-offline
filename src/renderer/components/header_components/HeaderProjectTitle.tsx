@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
-import Theme from '../../themes/default';
+import ThemeSelector from '../../helper/themeSelector';
 
-const Title = Theme.header.projectTitle;
+const Title = ThemeSelector.getThemeComponent<'input', {}>('header.projectTitle');
 
 interface IProps {
     value: string;

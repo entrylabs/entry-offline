@@ -1,7 +1,7 @@
 import React, { ReactElement, ReactNode } from 'react';
-import Theme from '../../themes/default';
+import ThemeSelector from '../../helper/themeSelector';
 
-const ButtonGroup = Theme.header.buttonGroup;
+const ButtonGroup = ThemeSelector.getThemeComponent<'div'>('header.buttonGroup');
 
 export default (props: { children: ReactNode }): ReactElement => (
     <ButtonGroup className={'group_box'}>{props.children}</ButtonGroup>)

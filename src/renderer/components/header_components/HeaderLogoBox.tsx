@@ -1,5 +1,5 @@
 import React from 'react';
-import theme from '../../themes/default';
+import ThemeSelector from '../../helper/themeSelector';
 
-const HeaderLogo = theme.header.logo;
+const HeaderLogo = ThemeSelector.getThemeComponent<'div'>('header.logo');
 export default () => (<HeaderLogo className={'logo logo_gnb'} />);

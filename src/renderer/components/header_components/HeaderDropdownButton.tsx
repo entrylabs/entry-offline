@@ -1,9 +1,9 @@
 import React from 'react';
 import { Dropdown } from '@entrylabs/tool/component';
-import Theme from '../../themes/default';
+import ThemeSelector from '../../helper/themeSelector';
 
-const DropdownButton = Theme.header.dropdownButton;
-const { wrapper: Wrapper, anchor: AnchorButton } = DropdownButton;
+const Wrapper = ThemeSelector.getThemeComponent<'div'>('header.dropdownButton.wrapper');
+const AnchorButton = ThemeSelector.getThemeComponent<'a', any>('header.dropdownButton.anchor');
 
 type DropdownItemTuple = [string, string];
 

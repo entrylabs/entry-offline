@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
-import Theme from '../../themes/default';
+import ThemeSelector from '../../helper/themeSelector';
 
-const HeaderButton = Theme.header.button;
+const HeaderButton = ThemeSelector.getThemeComponent<'div', {icon: string, disabled: boolean}>('header.button');
 
 interface IProps {
     enabledIcon: string;
