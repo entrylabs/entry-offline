@@ -8,140 +8,140 @@
     padding: 8px 8px 3px;
     background-color: #4f80ff;
     z-index: 300;
-    &.orange {
-        background-color: orange;
-    }
-    .group_box {
-        float: right;
-        &:after {
-            display: block;
-            clear: both;
-            content: '';
-        }
-        .group_inner {
-            float: left;
-            position: relative;
-            padding: 0 14px;
-            height: 32px;
-        }
-        .group_inner:first-child {
-            padding-left: 0;
-        }
-        .group_inner:first-child:before {
-            display: none;
-        }
-        .group_inner:before {
-            @include PositionLT(absolute, 0, 50%);
-            width: 1px;
-            height: 16px;
-            margin-top: -8px;
-            background-color: #fff;
-            content: '';
-        }
-        .group_inner:after {
-            display: block;
-            clear: both;
-            content: '';
-        }
-        .group_inner .work_space {
-            position: relative;
-            float: left;
-            margin-left: 10px;
-            font-size: 0;
-        }
-        .group_inner .work_space:first-child {
-            margin-left: 0;
-        }
-        .group_inner .work_space.print {
-            margin-left: 14px;
-        }
-        .group_inner .btn_work_space {
-            display: block;
-            position: relative;
-            overflow: hidden;
-            width: 48px;
-            height: 32px;
-            border-radius: 16px;
-            border: 1px solid #9ab6ff;
-            background-color: #6e97ff;
-            cursor: pointer;
-        }
-        .group_inner .work_space .tooltip_box {
-            display: none;
-            font-size: 14px;
-            top: 45px;
-        }
-        .group_inner .work_space .btn_workspace_lang.on + .tooltip_box {
-            display: block;
-            width: 107px;
-            left: -32px;
-        }
-        .group_inner .work_space .btn_workspace_file.on + .tooltip_box {
-            display: block;
-            width: 166px;
-            left: -61px;
-        }
-        .group_inner .work_space .btn_workspace_save.on + .tooltip_box {
-            display: block;
-            width: 153px;
-            left: -55px;
-        }
-        .group_inner .work_space .btn_workspace_help.on + .tooltip_box {
-            display: block;
-            width: 164px;
-            left: -61px;
-        }
-        .group_inner .work_space .link_workspace_text.on + .tooltip_box {
-            display: block;
-            width: 95px;
-            left: -13px;
-        }
-        .group_inner .btn_work_space:before {
-            @include PositionLT(absolute, 8px, 50%);
-            width: 18px;
-            height: 18px;
-            margin-top: -9px;
-            content: '';
-        }
-        .group_inner .btn_work_space:after {
-            @include PositionRT(absolute, 8px, 50%);
-            width: 6px;
-            height: 4px;
-            margin-top: -2px;
-            content: '';
-        }
-        .group_inner .btn_workspace_print,
-        .group_inner .btn_workspace_undo,
-        .group_inner .btn_workspace_redo {
-            display: inline-block;
-            width: 32px;
-            height: 32px;
-            cursor: pointer;
-        }
-        .group_inner .btn_workspace_redo {
-            margin-left: 10px;
-        }
-        .link_workspace_text {
-            display: inline-block;
-            margin-top: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            color: #fff;
-            letter-spacing: -0.6px;
-            line-height: 15px;
-            cursor: pointer;
-
-            &:after {
-                @include PositionRT(absolute, 0px, 50%);
-                width: 6px;
-                height: 4px;
-                margin-top: 2px;
-                content: '';
-            }
-        }
-        .text_work_space {
-            margin-right: 14px;
-        }
+    //&.orange {
+    //    background-color: orange;
+    //}
+    //.group_box {
+    //    float: right;
+    //    &:after {
+    //        display: block;
+    //        clear: both;
+    //        content: '';
+    //    }
+    //    .group_inner {
+    //        float: left;
+    //        position: relative;
+    //        padding: 0 14px;
+    //        height: 32px;
+    //    }
+    //    .group_inner:first-child {
+    //        padding-left: 0;
+    //    }
+    //    .group_inner:first-child:before {
+    //        display: none;
+    //    }
+    //    .group_inner:before {
+    //        @include PositionLT(absolute, 0, 50%);
+    //        width: 1px;
+    //        height: 16px;
+    //        margin-top: -8px;
+    //        background-color: #fff;
+    //        content: '';
+    //    }
+    //    .group_inner:after {
+    //        display: block;
+    //        clear: both;
+    //        content: '';
+    //    }
+    //    .group_inner .work_space {
+    //        position: relative;
+    //        float: left;
+    //        margin-left: 10px;
+    //        font-size: 0;
+    //    }
+    //    .group_inner .work_space:first-child {
+    //        margin-left: 0;
+    //    }
+    //    .group_inner .work_space.print {
+    //        margin-left: 14px;
+    //    }
+    //    .group_inner .btn_work_space {
+    //        display: block;
+    //        position: relative;
+    //        overflow: hidden;
+    //        width: 48px;
+    //        height: 32px;
+    //        border-radius: 16px;
+    //        border: 1px solid #9ab6ff;
+    //        background-color: #6e97ff;
+    //        cursor: pointer;
+    //    }
+    //    .group_inner .work_space .tooltip_box {
+    //        display: none;
+    //        font-size: 14px;
+    //        top: 45px;
+    //    }
+    //    .group_inner .work_space .btn_workspace_lang.on + .tooltip_box {
+    //        display: block;
+    //        width: 107px;
+    //        left: -32px;
+    //    }
+    //    .group_inner .work_space .btn_workspace_file.on + .tooltip_box {
+    //        display: block;
+    //        width: 166px;
+    //        left: -61px;
+    //    }
+    //    .group_inner .work_space .btn_workspace_save.on + .tooltip_box {
+    //        display: block;
+    //        width: 153px;
+    //        left: -55px;
+    //    }
+    //    .group_inner .work_space .btn_workspace_help.on + .tooltip_box {
+    //        display: block;
+    //        width: 164px;
+    //        left: -61px;
+    //    }
+    //    .group_inner .work_space .link_workspace_text.on + .tooltip_box {
+    //        display: block;
+    //        width: 95px;
+    //        left: -13px;
+    //    }
+    //    .group_inner .btn_work_space:before {
+    //        @include PositionLT(absolute, 8px, 50%);
+    //        width: 18px;
+    //        height: 18px;
+    //        margin-top: -9px;
+    //        content: '';
+    //    }
+    //    .group_inner .btn_work_space:after {
+    //        @include PositionRT(absolute, 8px, 50%);
+    //        width: 6px;
+    //        height: 4px;
+    //        margin-top: -2px;
+    //        content: '';
+    //    }
+    //    .group_inner .btn_workspace_print,
+    //    .group_inner .btn_workspace_undo,
+    //    .group_inner .btn_workspace_redo {
+    //        display: inline-block;
+    //        width: 32px;
+    //        height: 32px;
+    //        cursor: pointer;
+    //    }
+    //    .group_inner .btn_workspace_redo {
+    //        margin-left: 10px;
+    //    }
+    //    .link_workspace_text {
+    //        display: inline-block;
+    //        margin-top: 8px;
+    //        font-size: 14px;
+    //        font-weight: 600;
+    //        color: #fff;
+    //        letter-spacing: -0.6px;
+    //        line-height: 15px;
+    //        cursor: pointer;
+    //
+    //        &:after {
+    //            @include PositionRT(absolute, 0px, 50%);
+    //            width: 6px;
+    //            height: 4px;
+    //            margin-top: 2px;
+    //            content: '';
+    //        }
+    //    }
+    //    .text_work_space {
+    //        margin-right: 14px;
+    //    }
         .ico_workspace_practical {
             display: inline-block;
             overflow: hidden;
@@ -153,90 +153,90 @@
             text-indent: -10px;
             vertical-align: top;
         }
-        .link_workspace_text + .link_workspace_text {
-            margin-left: 8px;
-        }
-        .lang_select_box {
-            position: relative;
-            float: left;
-            cursor: pointer;
-        }
-        .lang_select_box .select_link {
-            position: relative;
-            display: block;
-            overflow: hidden;
-            box-sizing: content-box;
-            min-width: 46px;
-            height: 14px;
-            padding: 6px 24px 6px 8px;
-            background-color: #6e97ff;
-            border: 1px solid #9ab6ff;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: 600;
-            color: #fff;
-            letter-spacing: -0.5px;
-            line-height: 14px;
-        }
-        .lang_select_box .select_link:after {
-            @include PositionRT(absolute, 8px, 50%);
-            width: 8px;
-            height: 6px;
-            margin-top: -3px;
-            content: '';
-        }
-        .lang_select_box .tooltip_box {
-            display: none;
-            width: auto;
-            left: auto;
-            right: 0;
-            top: 40px;
-        }
-        .lang_select_box .select_link.on + .tooltip_box {
-            display: block;
-        }
-    }
-    &:after {
-        display: block;
-        clear: both;
-        content: '';
-    }
+    //    .link_workspace_text + .link_workspace_text {
+    //        margin-left: 8px;
+    //    }
+    //    .lang_select_box {
+    //        position: relative;
+    //        float: left;
+    //        cursor: pointer;
+    //    }
+    //    .lang_select_box .select_link {
+    //        position: relative;
+    //        display: block;
+    //        overflow: hidden;
+    //        box-sizing: content-box;
+    //        min-width: 46px;
+    //        height: 14px;
+    //        padding: 6px 24px 6px 8px;
+    //        background-color: #6e97ff;
+    //        border: 1px solid #9ab6ff;
+    //        border-radius: 4px;
+    //        font-size: 12px;
+    //        font-weight: 600;
+    //        color: #fff;
+    //        letter-spacing: -0.5px;
+    //        line-height: 14px;
+    //    }
+    //    .lang_select_box .select_link:after {
+    //        @include PositionRT(absolute, 8px, 50%);
+    //        width: 8px;
+    //        height: 6px;
+    //        margin-top: -3px;
+    //        content: '';
+    //    }
+    //    .lang_select_box .tooltip_box {
+    //        display: none;
+    //        width: auto;
+    //        left: auto;
+    //        right: 0;
+    //        top: 40px;
+    //    }
+    //    .lang_select_box .select_link.on + .tooltip_box {
+    //        display: block;
+    //    }
+    //}
+    //&:after {
+    //    display: block;
+    //    clear: both;
+    //    content: '';
+    //}
 }
 
 //교과용
 .practical_course_mode {
     .common_gnb {
         background-color: #8274ff;
-        .srch_box input[type='text']::placeholder {
-            color: #8274ff;
-        }
-        .group_inner .btn_work_space {
-            border: 1px solid #b2a9ff;
-            background-color: #9f95ff;
-        }
-        .lang_select_box .select_link {
-            border: 1px solid #b2a9ff;
-            background-color: #9f95ff;
-            color: #fff;
-        }
-        .btn_workspace_print {
-            background: url(../renderer/resources/images/gnb/btn_workspace_print_textbook_mode.png) no-repeat;
-            background-size: 32px auto;
-        }
-        .btn_workspace_undo {
-            &.disabled {
-                background: url(../renderer/resources/images/gnb/btn_workspace_undo_disabled.png) no-repeat;
-            }
-            background: url(../renderer/resources/images/gnb/btn_workspace_undo_textbook_mode.png) no-repeat;
-            background-size: 32px auto;
-        }
-        .btn_workspace_redo {
-            &.disabled {
-                background: url(../renderer/resources/images/gnb/btn_workspace_redo_disabled.png) no-repeat;
-            }
-            background: url(../renderer/resources/images/gnb/btn_workspace_redo_textbook_mode.png) no-repeat;
-            background-size: 32px auto;
-        }
+        //.srch_box input[type='text']::placeholder {
+        //    color: #8274ff;
+        //}
+        //.group_inner .btn_work_space {
+        //    border: 1px solid #b2a9ff;
+        //    background-color: #9f95ff;
+        //}
+        //.lang_select_box .select_link {
+        //    border: 1px solid #b2a9ff;
+        //    background-color: #9f95ff;
+        //    color: #fff;
+        //}
+        //.btn_workspace_print {
+        //    background: url(../renderer/resources/images/gnb/btn_workspace_print_textbook_mode.png) no-repeat;
+        //    background-size: 32px auto;
+        //}
+        //.btn_workspace_undo {
+        //    &.disabled {
+        //        background: url(../renderer/resources/images/gnb/btn_workspace_undo_disabled.png) no-repeat;
+        //    }
+        //    background: url(../renderer/resources/images/gnb/btn_workspace_undo_textbook_mode.png) no-repeat;
+        //    background-size: 32px auto;
+        //}
+        //.btn_workspace_redo {
+        //    &.disabled {
+        //        background: url(../renderer/resources/images/gnb/btn_workspace_redo_disabled.png) no-repeat;
+        //    }
+        //    background: url(../renderer/resources/images/gnb/btn_workspace_redo_textbook_mode.png) no-repeat;
+        //    background-size: 32px auto;
+        //}
     }
 }
 
