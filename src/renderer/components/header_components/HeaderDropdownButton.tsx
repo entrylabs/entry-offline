@@ -13,6 +13,7 @@ interface IProps {
     items: DropdownItemTuple[];
     onSelect: ([key, value]: DropdownItemTuple) => void;
     animate?: boolean;
+    style?: React.CSSProperties
 }
 
 interface IState {
@@ -81,6 +82,7 @@ class DropdownIconButton extends React.Component<IProps, IState> {
                     onClick={this.clickHandler}
                     on={this.state.on}
                     icon={this.props.icon}
+                    style={this.props.style}
                 />
                 {this.makeDropdown()}
             </Wrapper>

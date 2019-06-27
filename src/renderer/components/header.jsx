@@ -205,31 +205,43 @@ class Header extends Component {
                         icon={'file.png'}
                         onSelect={(item) => this.handleDropdownSelect('file', item)}
                         items={this.fileList}
+                        style={mode === 'practical_course' ? {
+                            border: '1px solid #b2a9ff',
+                            backgroundColor: '#9f95ff',
+                        } : {}}
                     />
                     <HeaderDropdownButton
                         title={RendererUtils.getLang('Workspace.save')}
                         icon={'save.png'}
                         onSelect={(item) => this.handleDropdownSelect('save', item)}
                         items={this.saveList}
+                        style={mode === 'practical_course' ? {
+                            border: '1px solid #b2a9ff',
+                            backgroundColor: '#9f95ff',
+                        } : {}}
                     />
                     <HeaderDropdownButton
                         title={RendererUtils.getLang('Workspace.help')}
                         icon={'help.png'}
                         onSelect={(item) => this.handleDropdownSelect('help', item)}
                         items={this.helpList}
+                        style={mode === 'practical_course' ? {
+                            border: '1px solid #b2a9ff',
+                            backgroundColor: '#9f95ff',
+                        } : {}}
                     />
 
                     <hr/>
 
                     <HeaderButton
                         disabled={!canUndo}
-                        enabledIcon={'undo.png'}
+                        enabledIcon={mode === 'workspace' ? 'undo.png' : 'undo_textbook_mode.png'}
                         disabledIcon={'undo_disabled.png'}
                         onClick={() => {Entry.dispatchEvent('undo')}}
                     />
                     <HeaderButton
                         disabled={!canRedo}
-                        enabledIcon={'redo.png'}
+                        enabledIcon={mode === 'workspace' ? 'redo.png' : 'redo_textbook_mode.png'}
                         disabledIcon={'redo_disabled.png'}
                         onClick={() => {Entry.dispatchEvent('redo')}}
                     />
