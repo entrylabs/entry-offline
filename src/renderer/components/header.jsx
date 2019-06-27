@@ -306,7 +306,7 @@ class Header extends Component {
 
                     <HeaderDropdownBox
                         items={this.languageList}
-                        onSelect={(item) => console.log(item)}
+                        onSelect={(item) => this.handleDropdownSelect('language', item)}
                     >
                         {this.getLangValue()}
                     </HeaderDropdownBox>
