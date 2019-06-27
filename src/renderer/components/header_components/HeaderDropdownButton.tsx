@@ -2,9 +2,6 @@ import React from 'react';
 import { Dropdown } from '@entrylabs/tool/component';
 import ThemeSelector from '../../helper/themeSelector';
 
-const Wrapper = ThemeSelector.getThemeComponent<'div'>('header.dropdownButton.wrapper');
-const AnchorButton = ThemeSelector.getThemeComponent<'a', any>('header.dropdownButton.anchor');
-
 type DropdownItemTuple = [string, string];
 
 interface IProps {
@@ -74,6 +71,9 @@ class DropdownIconButton extends React.Component<IProps, IState> {
     };
 
     render() {
+        const Wrapper = ThemeSelector.getThemeComponent<'div'>('header.dropdownButton.wrapper');
+        const AnchorButton = ThemeSelector.getThemeComponent<'a', any>('header.dropdownButton.anchor');
+
         return (
             <Wrapper>
                 <AnchorButton

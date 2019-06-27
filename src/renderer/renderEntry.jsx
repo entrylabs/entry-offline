@@ -8,10 +8,12 @@ import configureStore from './store';
 import Index from './components/Index.jsx';
 
 import IpcRendererHelper from './helper/ipcRendererHelper';
+import ThemeSelector from './helper/themeSelector';
 
 const { store, persistor } = configureStore();
 
-IpcRendererHelper.onPageLoaded(() => {
+IpcRendererHelper.onPageLoaded(async () => {
+    await ThemeSelector.overrideTheme();
     ReactDom.render(
         <Provider store={store}>
             <PersistGate persistor={persistor}>

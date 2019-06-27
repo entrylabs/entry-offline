@@ -14,15 +14,15 @@ class ThemeSelector {
     ) {
     };
 
-    async overrideTheme(themeName: string): Promise<void> {
+    async overrideTheme(themeName: string = 'default'): Promise<void> {
         try {
             if (themeName === this.currentThemeName) {
                 return;
             }
 
-            const partialTheme: DeepPartial<Theme> = await import(`../themes/${themeName}`);
+            const partialTheme = await import(`../themes/${themeName}`);
             this.currentThemeName = themeName;
-            this.theme = merge(this.theme, partialTheme);
+            this.theme = merge(this.theme, partialTheme!.default);
         } catch (e) {
             console.log(e);
         }

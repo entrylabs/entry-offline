@@ -45,6 +45,7 @@ const main = {
     black: '#333',
 };
 
+const gnbPath = '../src/renderer/resources/images/gnb/';
 const assetPath = '../src/renderer/resources/theme/line/';
 const workspacePath = `${assetPath}workspace/`;
 const ColorSet = {
@@ -949,8 +950,8 @@ const Theme: DeepPartial<Theme> = {
                 border-radius: 16px;
                 border-style: solid;
                 border-width: 1px;
-                border-color: #9ab6ff;
-                background-color: #6e97ff;
+                border-color: ${main.light_green};
+                background-color: ${main.dark_green};
                 cursor: pointer;
                 &:before {
                     position: absolute;
@@ -960,7 +961,7 @@ const Theme: DeepPartial<Theme> = {
                     height: 18px;
                     margin-top: -9px;
                     content: '';
-                    background: ${(props) => `url(${assetPath}btn_workspace_${props.icon}) no-repeat;`};
+                    background: ${(props) => `url(${gnbPath}btn_workspace_${props.icon}) no-repeat;`};
                     background-size: 18px auto;
                 }
                 &:after {
@@ -973,8 +974,8 @@ const Theme: DeepPartial<Theme> = {
                     content: '';
                     background: ${(props) => {
                 const url = props.on
-                    ? `${assetPath}btn_workspace_arr_on.png`
-                    : `${assetPath}btn_workspace_arr.png`;
+                    ? `${gnbPath}btn_workspace_arr_on.png`
+                    : `${gnbPath}btn_workspace_arr.png`;
                 return `url(${url}) no-repeat;`;
             }};
                     background-size: 6px auto;

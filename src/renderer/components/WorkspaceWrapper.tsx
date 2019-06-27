@@ -1,6 +1,11 @@
 import React, { ReactNode } from 'react';
-import Theme from '../themes/default';
+import ThemeSelector from '../helper/themeSelector';
 
-const WorkspaceWrapper = Theme.workspace;
-export default (props: { children: ReactNode }) => (WorkspaceWrapper ?
-    <WorkspaceWrapper>{props.children}</WorkspaceWrapper> : props.children)
+export default (props: { children: ReactNode }) => {
+    const WorkspaceWrapper = ThemeSelector.getThemeComponent<'div', any>('workspace');
+    if (WorkspaceWrapper) {
+        return <WorkspaceWrapper>{props.children}</WorkspaceWrapper>;
+    } else {
+        return props.children;
+    }
+}
