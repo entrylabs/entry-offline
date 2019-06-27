@@ -100,11 +100,11 @@ const Theme: Theme = {
                     margin-top: -2px;
                     content: '';
                     background: ${(props) => {
-                const url = props.on
-                    ? `${assetPath}btn_workspace_arr_on.png`
-                    : `${assetPath}btn_workspace_arr.png`;
-                return `url(${url}) no-repeat;`;
-            }};
+                        const url = props.on
+                            ? `${assetPath}btn_workspace_arr_on.png`
+                            : `${assetPath}btn_workspace_arr.png`;
+                        return `url(${url}) no-repeat;`;
+                    }};
                     background-size: 6px auto;
                 }
             `,

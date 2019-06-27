@@ -16,6 +16,7 @@ import HeaderButtonGroupBox from './header_components/HeaderButtonGroupBox';
 import HeaderWrapper from './header_components/HeaderWrapper';
 import HeaderDropdownButton from './header_components/HeaderDropdownButton';
 import HeaderButton from './header_components/HeaderButton'
+import HeaderDropdownText from './header_components/HeaderDropdownText';
 
 /* global Entry */
 class Header extends Component {
@@ -270,26 +271,33 @@ class Header extends Component {
                         enabledIcon={'redo.png'}
                         disabledIcon={'redo_disabled.png'}
                     />
+                    <hr />
+                    <HeaderDropdownText
+                        onSelect={(item) => console.log('handleDropdownClick mode', item)}
+                        items={this.modeList}
+                    >
+                        {this.getModeText()}
+                    </HeaderDropdownText>
 
                     {/* 일반형, 교과형 모드변경 */}
-                    {lang === 'ko' && (
-                        <div className={'group_inner'}>
-                            <div className={'work_space'}>
-                                <a
-                                    className={`link_workspace_text text_work_space  ${
-                                        dropdownType === 'mode' ? 'on' : ''
-                                        }`}
-                                    ref={(dom) => (this.dropdownList.mode = dom)}
-                                    onClick={() => {
-                                        this.handleDropdownClick('mode');
-                                    }}
-                                >
-                                    {this.getModeText()}
-                                </a>
-                                {this.makeDropdown('mode', this.modeList)}
-                            </div>
-                        </div>
-                    )}
+                    {/*{lang === 'ko' && (*/}
+                    {/*    <div className={'group_inner'}>*/}
+                    {/*        <div className={'work_space'}>*/}
+                    {/*            <a*/}
+                    {/*                className={`link_workspace_text text_work_space  ${*/}
+                    {/*                    dropdownType === 'mode' ? 'on' : ''*/}
+                    {/*                    }`}*/}
+                    {/*                ref={(dom) => (this.dropdownList.mode = dom)}*/}
+                    {/*                onClick={() => {*/}
+                    {/*                    this.handleDropdownClick('mode');*/}
+                    {/*                }}*/}
+                    {/*            >*/}
+                    {/*                {this.getModeText()}*/}
+                    {/*            </a>*/}
+                    {/*            {this.makeDropdown('mode', this.modeList)}*/}
+                    {/*        </div>*/}
+                    {/*    </div>*/}
+                    {/*)}*/}
 
                     {/* 언어 변경*/}
 
