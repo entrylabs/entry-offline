@@ -15,6 +15,7 @@ import HeaderProjectTitle from './header_components/HeaderProjectTitle';
 import HeaderButtonGroupBox from './header_components/HeaderButtonGroupBox';
 import HeaderWrapper from './header_components/HeaderWrapper';
 import HeaderDropdownButton from './header_components/HeaderDropdownButton';
+import HeaderButton from './header_components/HeaderButton'
 
 /* global Entry */
 class Header extends Component {
@@ -32,18 +33,21 @@ class Header extends Component {
             [RendererUtils.getLang('Menus.python_coding'), 'python'],
         ];
     }
+
     get fileList() {
         return [
             [RendererUtils.getLang('Workspace.file_new'), 'new'],
             [RendererUtils.getLang('Workspace.file_upload'), 'open_offline'],
         ];
     }
+
     get saveList() {
         return [
             [RendererUtils.getLang('Workspace.file_save'), 'save'],
             [RendererUtils.getLang('Workspace.file_save_as'), 'save_as'],
         ];
     }
+
     get helpList() {
         const { persist } = this.props;
         const { mode } = persist;
@@ -51,12 +55,13 @@ class Header extends Component {
         return [
             [RendererUtils.getLang('Workspace.block_helper'), 'help_block'],
             (mode === 'workspace' ?
-                [RendererUtils.getLang('Workspace.hardware_guide'), 'help_hardware'] :
-                [RendererUtils.getLang('Workspace.robot_guide'), 'help_robot']
+                    [RendererUtils.getLang('Workspace.hardware_guide'), 'help_hardware'] :
+                    [RendererUtils.getLang('Workspace.robot_guide'), 'help_robot']
             ),
             [RendererUtils.getLang('Workspace.python_guide'), 'help_python'],
         ];
     }
+
     get modeList() {
         return [
             [RendererUtils.getLang('Workspace.default_mode'), 'workspace'],
@@ -71,6 +76,7 @@ class Header extends Component {
             ],
         ];
     }
+
     get languageList() {
         return [
             [RendererUtils.getLang('ko'), 'ko'],
@@ -218,7 +224,7 @@ class Header extends Component {
         return (
             /* eslint-disable jsx-a11y/heading-has-content, jsx-a11y/anchor-is-valid */
             <HeaderWrapper>
-                <HeaderLogoBox />
+                <HeaderLogoBox/>
                 <HeaderProjectTitle
                     onBlur={(projectTitle) => {
                         CommonActions.changeProjectName(projectTitle);
@@ -226,123 +232,44 @@ class Header extends Component {
                     value={projectName}
                 />
                 <HeaderButtonGroupBox>
-                    <div className={'group_inner'}>
+                    {
+                        mode === 'workspace' &&
                         <HeaderDropdownButton
-                            icon={'file'}
+                            title={RendererUtils.getLang('Workspace.language')}
+                            icon={'block.svg'}
                             onSelect={this.handleDropdownClick}
-                            items={this.fileList}
-                        >
-                            file
-                        </HeaderDropdownButton>
-
-                    </div>
-
-                    <div className={'group_inner'}>
-                        { mode === 'workspace' &&
-                            // 블록코딩, 엔트리파이선 모드 변경
-                            <div className={'work_space'}>
-                                <a
-                                    title={RendererUtils.getLang('Workspace.language')}
-                                    className={`btn_work_space btn_workspace_lang ${
-                                        dropdownType === 'programLanguage' ? 'on' : ''
-                                    } ${programLanguageMode}`}
-                                    ref={(dom) => (this.dropdownList.programLanguage = dom)}
-                                    onClick={() => {
-                                        this.handleDropdownClick('programLanguage');
-                                    }}
-                                >
-                                    <span className={'blind'}>
-                                        {RendererUtils.getLang('Workspace.language')}
-                                    </span>
-                                </a>
-                                {this.makeDropdown('programLanguage', this.programLanguageList)}
-                            </div>
-                        }
-                        {
-                            // 새로만들기, 불러오기
-                            <div className={'work_space'}>
-                                <a
-                                    title={RendererUtils.getLang('Workspace.file')}
-                                    className={`${'btn_work_space'} ${'btn_workspace_file'} ${
-                                        dropdownType === 'file' ? 'on' : ''
-                                    }`}
-                                    ref={(dom) => (this.dropdownList.file = dom)}
-                                    onClick={() => {
-                                        this.handleDropdownClick('file');
-                                    }}
-                                >
-                                    <span className={'blind'}>
-                                        {RendererUtils.getLang('Workspace.file')}
-                                    </span>
-                                </a>
-                                {this.makeDropdown('file', this.fileList)}
-                            </div>
-                        }
-                        {
-                            // 저장하기, 복사본으로 저장하기
-                            <div className={'work_space'}>
-                                <a
-                                    title={RendererUtils.getLang('Workspace.save')}
-                                    className={`${'btn_work_space'} ${'btn_workspace_save'}  ${
-                                        dropdownType === 'save' ? 'on' : ''
-                                    }`}
-                                    ref={(dom) => (this.dropdownList.save = dom)}
-                                    onClick={() => {
-                                        this.handleDropdownClick('save');
-                                    }}
-                                >
-                                    <span className={'blind'}>
-                                        {RendererUtils.getLang('Workspace.save')}
-                                    </span>
-                                </a>
-                                {this.makeDropdown('save', this.saveList)}
-                            </div>
-                        }
-                        {
-                            // 도움말들
-                            <div className={'work_space'}>
-                                <a
-                                    title={RendererUtils.getLang('Workspace.help')}
-                                    className={`${'btn_work_space'} ${'btn_workspace_help'} ${
-                                        dropdownType === 'help' ? 'on' : ''
-                                    }`}
-                                    ref={(dom) => (this.dropdownList.help = dom)}
-                                    onClick={() => {
-                                        this.handleDropdownClick('help');
-                                    }}
-                                >
-                                    <span className={'blind'}>
-                                        {RendererUtils.getLang('Workspace.help')}
-                                    </span>
-                                </a>
-                                {this.makeDropdown('help', this.helpList)}
-                            </div>
-                        }
-                    </div>
-
-                    {/* undo, redo */}
-                    <div className={'group_inner'}>
-                        <div className={'work_space'}>
-                            <a
-                                title={RendererUtils.getLang('Workspace.undo')}
-                                className={`btn_workspace_undo ${canUndo ? '' : 'disabled'}`}
-                                onClick={() => {
-                                    Entry.dispatchEvent('undo');
-                                }}
-                            >
-                                <span className={'blind'}>{RendererUtils.getLang('Workspace.undo')}</span>
-                            </a>
-                            <a
-                                title={RendererUtils.getLang('Workspace.redo')}
-                                className={`btn_workspace_redo ${canRedo ? '' : 'disabled'}`}
-                                onClick={() => {
-                                    Entry.dispatchEvent('redo');
-                                }}
-                            >
-                                <span className={'blind'}>{RendererUtils.getLang('Workspace.redo')}</span>
-                            </a>
-                        </div>
-                    </div>
+                            items={this.programLanguageList}
+                        />
+                    }
+                    <HeaderDropdownButton
+                        title={RendererUtils.getLang('Workspace.file')}
+                        icon={'file.png'}
+                        onSelect={this.handleDropdownClick}
+                        items={this.fileList}
+                    />
+                    <HeaderDropdownButton
+                        title={RendererUtils.getLang('Workspace.save')}
+                        icon={'save.png'}
+                        onSelect={this.handleDropdownClick}
+                        items={this.saveList}
+                    />
+                    <HeaderDropdownButton
+                        title={RendererUtils.getLang('Workspace.help')}
+                        icon={'help.png'}
+                        onSelect={this.handleDropdownClick}
+                        items={this.helpList}
+                    />
+                    <hr />
+                    <HeaderButton
+                        disabled={!canUndo}
+                        enabledIcon={'undo.png'}
+                        disabledIcon={'undo_disabled.png'}
+                    />
+                    <HeaderButton
+                        disabled={!canRedo}
+                        enabledIcon={'redo.png'}
+                        disabledIcon={'redo_disabled.png'}
+                    />
 
                     {/* 일반형, 교과형 모드변경 */}
                     {lang === 'ko' && (
@@ -351,7 +278,7 @@ class Header extends Component {
                                 <a
                                     className={`link_workspace_text text_work_space  ${
                                         dropdownType === 'mode' ? 'on' : ''
-                                    }`}
+                                        }`}
                                     ref={(dom) => (this.dropdownList.mode = dom)}
                                     onClick={() => {
                                         this.handleDropdownClick('mode');
@@ -364,14 +291,14 @@ class Header extends Component {
                         </div>
                     )}
 
-                    {
-                        /* 언어 변경 */
-                        mode === 'workspace' &&
+                    {/* 언어 변경*/}
+
+                    {mode === 'workspace' &&
                         (<div className={'lang_select_box'}>
                             <a
                                 className={`${'select_link'} ${'ico_white_select_arr'} ${
                                     dropdownType === 'language' ? 'on' : ''
-                                }`}
+                                    }`}
                                 ref={(dom) => (this.dropdownList.language = dom)}
                                 onClick={() => {
                                     this.handleDropdownClick('language');
@@ -401,5 +328,5 @@ const mapDispatchToProps = (dispatch) => ({
 
 export default connect(
     mapStateToProps,
-    mapDispatchToProps
+    mapDispatchToProps,
 )(Header);

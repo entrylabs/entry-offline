@@ -869,7 +869,7 @@ const Wrapper = styled.div`
     }
 `;
 
-const Theme: Theme = {
+const Theme: DeepPartial<Theme> = {
     header: {
         wrapper: styled.div`
             position: relative;
@@ -960,7 +960,7 @@ const Theme: Theme = {
                     height: 18px;
                     margin-top: -9px;
                     content: '';
-                    background: ${(props) => `url(${assetPath}btn_workspace_${props.icon}.png) no-repeat;`};
+                    background: ${(props) => `url(${assetPath}btn_workspace_${props.icon}) no-repeat;`};
                     background-size: 18px auto;
                 }
                 &:after {

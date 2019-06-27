@@ -41,6 +41,25 @@ const Theme: Theme = {
         `,
         buttonGroup: styled.div`
             float: right;
+            & > div {
+                vertical-align: top;
+                margin-left: 10px;
+            }
+            span {
+                margin-top: 5px;
+            }
+            & > hr:first-child {
+                display: none;
+            }
+            hr {
+                margin-left: 13px;
+                margin-right: 3px;
+                display: inline-block;
+                width: 1px;
+                border: none;
+                border-left: 1px solid #fff;
+                height: 16px;
+            }
         `,
         dropdownButton: {
             wrapper: styled.div`
@@ -48,7 +67,7 @@ const Theme: Theme = {
                 position: relative;
                 font-size: 0;
             `,
-            anchor: styled.a<{on: boolean, icon: string}>`
+            anchor: styled.a<{ on: boolean, icon: string }>`
                 margin-top: 0;
                 display: block;
                 position: relative;
@@ -69,7 +88,7 @@ const Theme: Theme = {
                     height: 18px;
                     margin-top: -9px;
                     content: '';
-                    background: ${(props) => `url(${assetPath}btn_workspace_${props.icon}.png) no-repeat;`};
+                    background: ${(props) => `url(${assetPath}btn_workspace_${props.icon}) no-repeat;`};
                     background-size: 18px auto;
                 }
                 &:after {
@@ -81,15 +100,31 @@ const Theme: Theme = {
                     margin-top: -2px;
                     content: '';
                     background: ${(props) => {
-                        const url = props.on
-                            ? `${assetPath}btn_workspace_arr_on.png`
-                            : `${assetPath}btn_workspace_arr.png`;
-                        return `url(${url}) no-repeat;`;
-                    }};
+                const url = props.on
+                    ? `${assetPath}btn_workspace_arr_on.png`
+                    : `${assetPath}btn_workspace_arr.png`;
+                return `url(${url}) no-repeat;`;
+            }};
                     background-size: 6px auto;
                 }
-            `
-        }
+            `,
+        },
+        button: styled.div<{ disabled: boolean, icon: string }>`
+            display: inline-block;
+            height: 32px;
+            color: #fff;
+            font-size: 12px;
+            padding: 5px 13px;
+            ${({ icon }) => {
+                const url = `${assetPath}btn_workspace_${icon}`;
+                return `
+                    background: url(${url}) no-repeat;
+                    background-size: 32px auto;
+                    width: 32px;
+                `;
+            }}
+            ${({ disabled }) => disabled ? 'cursor: pointer;' : 'cursor: default;'} 
+        `,
     },
 };
 

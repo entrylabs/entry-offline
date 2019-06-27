@@ -9,7 +9,8 @@ export interface Theme {
         dropdownButton: {
             wrapper: StyledComponentBase<'div', any, {}, never>,
             anchor: StyledComponentBase<'a', any, {on: boolean, icon: string}, never>,
-        }
+        },
+        button: StyledComponentBase<'div', any, { disabled: boolean, icon: string }, never>,
     }
     workspace?: StyledComponentBase<'div', any, {}, never>,
 }

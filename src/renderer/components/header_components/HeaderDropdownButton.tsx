@@ -8,10 +8,11 @@ const { wrapper: Wrapper, anchor: AnchorButton } = DropdownButton;
 type DropdownItemTuple = [string, string];
 
 interface IProps {
-    icon: string,
-    items: DropdownItemTuple[],
-    onSelect: ([key, value]: [string, string]) => void,
-    animate?: boolean,
+    icon: string;
+    title?: string;
+    items: DropdownItemTuple[];
+    onSelect: ([key, value]: DropdownItemTuple) => void;
+    animate?: boolean;
 }
 
 interface IState {
@@ -75,13 +76,12 @@ class DropdownIconButton extends React.Component<IProps, IState> {
         return (
             <Wrapper>
                 <AnchorButton
+                    title={this.props.title}
                     ref={this.dom}
                     onClick={this.clickHandler}
                     on={this.state.on}
                     icon={this.props.icon}
-                >
-                    <span style={{ display: 'none' }}>{this.props.children}</span>
-                </AnchorButton>
+                />
                 {this.makeDropdown()}
             </Wrapper>
         );
