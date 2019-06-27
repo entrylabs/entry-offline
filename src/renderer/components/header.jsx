@@ -15,8 +15,9 @@ import HeaderProjectTitle from './header_components/HeaderProjectTitle';
 import HeaderButtonGroupBox from './header_components/HeaderButtonGroupBox';
 import HeaderWrapper from './header_components/HeaderWrapper';
 import HeaderDropdownButton from './header_components/HeaderDropdownButton';
-import HeaderButton from './header_components/HeaderButton'
+import HeaderButton from './header_components/HeaderButton';
 import HeaderDropdownText from './header_components/HeaderDropdownText';
+import HeaderDropdownBox from './header_components/HeaderDropdownBox';
 
 /* global Entry */
 class Header extends Component {
@@ -238,42 +239,44 @@ class Header extends Component {
                         <HeaderDropdownButton
                             title={RendererUtils.getLang('Workspace.language')}
                             icon={'block.svg'}
-                            onSelect={this.handleDropdownClick}
+                            onSelect={(item) => this.handleDropdownSelect('programLanguage', item)}
                             items={this.programLanguageList}
                         />
                     }
                     <HeaderDropdownButton
                         title={RendererUtils.getLang('Workspace.file')}
                         icon={'file.png'}
-                        onSelect={this.handleDropdownClick}
+                        onSelect={(item) => this.handleDropdownSelect('file', item)}
                         items={this.fileList}
                     />
                     <HeaderDropdownButton
                         title={RendererUtils.getLang('Workspace.save')}
                         icon={'save.png'}
-                        onSelect={this.handleDropdownClick}
+                        onSelect={(item) => this.handleDropdownSelect('save', item)}
                         items={this.saveList}
                     />
                     <HeaderDropdownButton
                         title={RendererUtils.getLang('Workspace.help')}
                         icon={'help.png'}
-                        onSelect={this.handleDropdownClick}
+                        onSelect={(item) => this.handleDropdownSelect('help', item)}
                         items={this.helpList}
                     />
-                    <hr />
+                    <hr/>
                     <HeaderButton
                         disabled={!canUndo}
                         enabledIcon={'undo.png'}
                         disabledIcon={'undo_disabled.png'}
+                        onClick={() => {Entry.dispatchEvent('undo')}}
                     />
                     <HeaderButton
                         disabled={!canRedo}
                         enabledIcon={'redo.png'}
                         disabledIcon={'redo_disabled.png'}
+                        onClick={() => {Entry.dispatchEvent('redo')}}
                     />
-                    <hr />
+                    <hr/>
                     <HeaderDropdownText
-                        onSelect={(item) => console.log('handleDropdownClick mode', item)}
+                        onSelect={(item) => this.handleDropdownSelect('mode', item)}
                         items={this.modeList}
                     >
                         {this.getModeText()}
@@ -301,24 +304,31 @@ class Header extends Component {
 
                     {/* 언어 변경*/}
 
-                    {mode === 'workspace' &&
-                        (<div className={'lang_select_box'}>
-                            <a
-                                className={`${'select_link'} ${'ico_white_select_arr'} ${
-                                    dropdownType === 'language' ? 'on' : ''
-                                    }`}
-                                ref={(dom) => (this.dropdownList.language = dom)}
-                                onClick={() => {
-                                    this.handleDropdownClick('language');
-                                }}
-                            >
-                                {this.getLangValue()}
-                            </a>
-                            <div className={'tooltip_box'}>
-                                {this.makeDropdown('language', this.languageList)}
-                            </div>
-                        </div>)
-                    }
+                    <HeaderDropdownBox
+                        items={this.languageList}
+                        onSelect={(item) => console.log(item)}
+                    >
+                        {this.getLangValue()}
+                    </HeaderDropdownBox>
+
+                    {/*{mode === 'workspace' &&*/}
+                    {/*    (<div className={'lang_select_box'}>*/}
+                    {/*        <a*/}
+                    {/*            className={`${'select_link'} ${'ico_white_select_arr'} ${*/}
+                    {/*                dropdownType === 'language' ? 'on' : ''*/}
+                    {/*                }`}*/}
+                    {/*            ref={(dom) => (this.dropdownList.language = dom)}*/}
+                    {/*            onClick={() => {*/}
+                    {/*                this.handleDropdownClick('language');*/}
+                    {/*            }}*/}
+                    {/*        >*/}
+                    {/*            {this.getLangValue()}*/}
+                    {/*        </a>*/}
+                    {/*        <div className={'tooltip_box'}>*/}
+                    {/*            {this.makeDropdown('language', this.languageList)}*/}
+                    {/*        </div>*/}
+                    {/*    </div>)*/}
+                    {/*}*/}
                 </HeaderButtonGroupBox>
             </HeaderWrapper>
         );

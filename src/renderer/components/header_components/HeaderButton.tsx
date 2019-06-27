@@ -7,13 +7,15 @@ interface IProps {
     enabledIcon: string;
     disabledIcon: string;
     disabled: boolean;
+    onClick: () => void;
     children: ReactNode;
 }
 
-export default ({ enabledIcon, disabledIcon, disabled, children }: IProps) => {
+export default ({ onClick, enabledIcon, disabledIcon, disabled, children }: IProps) => {
     console.log(enabledIcon, disabledIcon, disabled);
     return <HeaderButton
         icon={disabled ? disabledIcon : enabledIcon}
+        onClick={onClick}
         disabled={disabled}
     >
         <span style={{display: enabledIcon ? 'block' : 'none'}}>{children}</span>
