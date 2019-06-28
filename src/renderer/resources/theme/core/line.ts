@@ -1,6 +1,5 @@
 import styled, { keyframes, css } from 'styled-components';
 import { Theme } from '../../../../../types/theme';
-import { DeepPartial } from 'redux';
 
 const main = {
     default_green: '#40b235',
