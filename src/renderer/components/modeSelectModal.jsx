@@ -85,15 +85,11 @@ class ModeSelectModal extends PureComponent {
     }
 }
 
-const mapStateToProps = (state) => {
-    return { ...state };
-};
-
 const mapDispatchToProps = (dispatch) => ({
     PersistActions: bindActionCreators(PersistActionCreators, dispatch),
 });
 
 export default connect(
-    mapStateToProps,
+    undefined,
     mapDispatchToProps,
 )(ModeSelectModal);

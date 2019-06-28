@@ -205,8 +205,7 @@ class Workspace extends Component {
     };
 
     _getProjectName = () => {
-        const { common } = this.props;
-        const { projectName } = common;
+        const { projectName } = this.props;
 
         return projectName || RendererUtils.getDefaultProjectName();
     };
@@ -249,8 +248,7 @@ class Workspace extends Component {
     };
 
     handleSaveAction = async(key) => {
-        const { persist } = this.props;
-        const { mode } = persist;
+        const { workspaceMode } = this.props;
         const projectName = this._getProjectName();
 
         const saveFunction = async(filePath) => {
@@ -269,7 +267,7 @@ class Workspace extends Component {
                 Entry.stage.handle.setVisible(false);
                 Entry.stage.update();
                 const project = Entry.exportProject();
-                project.isPracticalCourse = mode === 'practical_course';
+                project.isPracticalCourse = workspaceMode === 'practical_course';
                 project.name = projectName;
                 // project.parent = parent;
 
@@ -346,9 +344,8 @@ class Workspace extends Component {
      * @param{Object?} project undefined 인 경우 신규 프로젝트로 생성
      */
     loadProject = async(project) => {
-        const { CommonActions, PersistActions, persist } = this.props;
-        const { mode: currentWorkspaceMode } = persist;
-        let projectWorkspaceMode = currentWorkspaceMode;
+        const { CommonActions, PersistActions, workspaceMode } = this.props;
+        let projectWorkspaceMode = workspaceMode;
 
         if (project) {
             this.projectSavedPath = project.savedPath || '';
@@ -360,7 +357,7 @@ class Workspace extends Component {
         }
 
         // 현재 WS mode 와 이후 변경될 모드가 다른 경우
-        if (currentWorkspaceMode !== projectWorkspaceMode) {
+        if (workspaceMode !== projectWorkspaceMode) {
             if (projectWorkspaceMode === 'practical_course') {
                 await ImportToggleHelper.changeEntryStatic('practical_course');
                 PersistActions.changeWorkspaceMode('practical_course');
@@ -471,7 +468,11 @@ class Workspace extends Component {
 }
 
 const mapStateToProps = (state) => {
-    return { ...state };
+    return {
+        modal: state.modal,
+        workspaceMode: state.persist.mode,
+        projectName: state.common.projectName,
+    };
 };
 
 const mapDispatchToProps = (dispatch) => ({

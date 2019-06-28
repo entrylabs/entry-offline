@@ -46,7 +46,7 @@ export default class {
             const reloadProject = StorageManager.loadTempProject();
             const project = StorageManager.loadProject();
 
-            console.log('file', file);
+            console.log('initialProjectPath : ', file);
             if (file) {
                 // 에러 처리는 안하니까, 에러 발생시 workspace#showErrorModalProgress 활용 필요
                 IpcRendererHelper.loadProject(file)

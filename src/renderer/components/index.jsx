@@ -10,10 +10,7 @@ const Script = ({ children }) => (
 
 class Index extends PureComponent {
     render() {
-        const { persist = [] } = this.props;
-        const { mode } = persist;
-
-        console.log(this.props);
+        const { mode } = this.props;
         return (
             <div>
                 {mode ? (
@@ -45,7 +42,7 @@ class Index extends PureComponent {
 
 const mapStateToProps = (state) => {
     return {
-        ...state,
+        mode: state.persist.mode,
     };
 };
 

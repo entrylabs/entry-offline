@@ -49,12 +49,11 @@ class Header extends Component {
     }
 
     get helpList() {
-        const { persist } = this.props;
-        const { mode } = persist;
+        const { workspaceMode } = this.props;
 
         return [
             [RendererUtils.getLang('Workspace.block_helper'), 'help_block'],
-            (mode === 'workspace' ?
+            (workspaceMode === 'workspace' ?
                     [RendererUtils.getLang('Workspace.hardware_guide'), 'help_hardware'] :
                     [RendererUtils.getLang('Workspace.robot_guide'), 'help_robot']
             ),
@@ -87,16 +86,15 @@ class Header extends Component {
     }
 
     getModeText() {
-        const { persist } = this.props;
-        const { mode } = persist;
+        const { workspaceMode } = this.props;
         const [modeText] = this.modeList.find((list) => {
-            return list[1] === mode;
+            return list[1] === workspaceMode;
         });
         return modeText;
     }
 
     getLangValue() {
-        const lang = _get(this.props, 'persist.lang');
+        const lang = this.props.currentLangType;
         return _get(root.Lang, lang);
     }
 
@@ -174,10 +172,8 @@ class Header extends Component {
     }
 
     render() {
-        const { CommonActions, persist = [], common, programLanguageMode, executionStatus = {} } = this.props;
+        const { projectName = RendererUtils.getDefaultProjectName(), currentLangType, workspaceMode, CommonActions, programLanguageMode, executionStatus = {} } = this.props;
         const { canRedo = false, canUndo = false } = executionStatus;
-        const { projectName = RendererUtils.getDefaultProjectName() } = common;
-        const { lang, mode } = persist;
 
         return (
             /* eslint-disable jsx-a11y/heading-has-content, jsx-a11y/anchor-is-valid */
@@ -192,7 +188,7 @@ class Header extends Component {
                 <HeaderButtonGroupBox>
                     {
                         // 파이선모드 변경
-                        mode === 'workspace' &&
+                        workspaceMode === 'workspace' &&
                         <HeaderDropdownButton
                             title={RendererUtils.getLang('Workspace.language')}
                             icon={`${programLanguageMode}.svg`}
@@ -205,7 +201,7 @@ class Header extends Component {
                         icon={'file.png'}
                         onSelect={(item) => this.handleDropdownSelect('file', item)}
                         items={this.fileList}
-                        style={mode === 'practical_course' ? {
+                        style={workspaceMode === 'practical_course' ? {
                             border: '1px solid #b2a9ff',
                             backgroundColor: '#9f95ff',
                         } : {}}
@@ -215,7 +211,7 @@ class Header extends Component {
                         icon={'save.png'}
                         onSelect={(item) => this.handleDropdownSelect('save', item)}
                         items={this.saveList}
-                        style={mode === 'practical_course' ? {
+                        style={workspaceMode === 'practical_course' ? {
                             border: '1px solid #b2a9ff',
                             backgroundColor: '#9f95ff',
                         } : {}}
@@ -225,7 +221,7 @@ class Header extends Component {
                         icon={'help.png'}
                         onSelect={(item) => this.handleDropdownSelect('help', item)}
                         items={this.helpList}
-                        style={mode === 'practical_course' ? {
+                        style={workspaceMode === 'practical_course' ? {
                             border: '1px solid #b2a9ff',
                             backgroundColor: '#9f95ff',
                         } : {}}
@@ -235,13 +231,13 @@ class Header extends Component {
 
                     <HeaderButton
                         disabled={!canUndo}
-                        enabledIcon={mode === 'workspace' ? 'undo.png' : 'undo_textbook_mode.png'}
+                        enabledIcon={workspaceMode === 'workspace' ? 'undo.png' : 'undo_textbook_mode.png'}
                         disabledIcon={'undo_disabled.png'}
                         onClick={() => {Entry.dispatchEvent('undo')}}
                     />
                     <HeaderButton
                         disabled={!canRedo}
-                        enabledIcon={mode === 'workspace' ? 'redo.png' : 'redo_textbook_mode.png'}
+                        enabledIcon={workspaceMode === 'workspace' ? 'redo.png' : 'redo_textbook_mode.png'}
                         disabledIcon={'redo_disabled.png'}
                         onClick={() => {Entry.dispatchEvent('redo')}}
                     />
@@ -250,7 +246,7 @@ class Header extends Component {
 
                     {
                         // 일반형, 교과형 모드 변경
-                        lang === 'ko' &&
+                        currentLangType === 'ko' &&
                         <HeaderDropdownText
                             onSelect={(item) => this.handleDropdownSelect('mode', item)}
                             items={this.modeList}
@@ -260,7 +256,7 @@ class Header extends Component {
                     }
                     {
                         // 언어 변경
-                        mode === 'workspace' &&
+                        workspaceMode === 'workspace' &&
                         <HeaderDropdownBox
                             items={this.languageList}
                             onSelect={(item) => this.handleDropdownSelect('language', item)}
@@ -275,7 +271,9 @@ class Header extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    ...state,
+    projectName: state.common.projectName,
+    workspaceMode: state.persist.mode,
+    currentLangType: state.persist.lang,
 });
 
 const mapDispatchToProps = (dispatch) => ({

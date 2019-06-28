@@ -12,8 +12,11 @@ import ThemeSelector from './helper/themeSelector';
 
 const { store, persistor } = configureStore();
 
+store.subscribe(() => {
+    console.log('reduxStore Changed => ', store.getState());
+});
 IpcRendererHelper.onPageLoaded(async () => {
-    await ThemeSelector.overrideTheme('line');
+    await ThemeSelector.overrideTheme();
     ReactDom.render(
         <Provider store={store}>
             <PersistGate persistor={persistor}>
