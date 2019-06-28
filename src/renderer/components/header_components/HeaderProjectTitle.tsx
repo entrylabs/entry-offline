@@ -11,6 +11,7 @@ const WorkspaceTitle = ({ value, onBlur }: IProps): ReactElement => {
     return <Title
         className={'srch_box'}
         defaultValue={value}
+        key={value}
         onBlur={(e) => onBlur(e.target.value)}
     />;
 };
