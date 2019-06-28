@@ -1,5 +1,6 @@
 import styled, { keyframes, css } from 'styled-components';
-import { Theme } from '../../../types/theme';
+import { Theme } from '../../../../../types/theme';
+import { DeepPartial } from 'redux';
 
 const main = {
     default_green: '#40b235',
@@ -46,7 +47,7 @@ const main = {
 };
 
 const gnbPath = '../src/renderer/resources/images/gnb/';
-const assetPath = '../src/renderer/resources/theme/line/';
+const assetPath = '../src/renderer/resources/theme/assets/line/';
 const workspacePath = `${assetPath}workspace/`;
 const ColorSet = {
     green: '#1c8850',

@@ -1,11 +1,3 @@
-declare type DeepPartial<T> = {
-    [P in keyof T]?: T[P] extends Array<infer U>
-        ? Array<DeepPartial<U>>
-        : T[P] extends ReadonlyArray<infer U>
-            ? ReadonlyArray<DeepPartial<U>>
-            : DeepPartial<T[P]>
-};
-
 // TODO ObjectLike 로 표기된 구문은 나중에 인터페이스로 따로 만들어주어야 한다.
 declare interface ObjectLike extends Object {
     [key: string]: any

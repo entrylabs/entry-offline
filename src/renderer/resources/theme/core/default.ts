@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Theme } from '../../../types/theme';
+import { Theme } from '../../../../../types/theme';
 
 
 const assetPath = '../src/renderer/resources/images/gnb/';

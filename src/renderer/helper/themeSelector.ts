@@ -1,6 +1,6 @@
 import { Theme } from '../../../types/theme';
 import { merge, get } from 'lodash';
-import defaultTheme from '../themes/default';
+import defaultTheme from '../resources/theme/core/default';
 import { StyledComponent } from 'styled-components';
 
 /**
@@ -20,7 +20,7 @@ class ThemeSelector {
                 return;
             }
 
-            const partialTheme = await import(`../themes/${themeName}`);
+            const partialTheme = await import(`../resources/theme/core/${themeName}`);
             this.currentThemeName = themeName;
             this.theme = merge(this.theme, partialTheme!.default);
         } catch (e) {

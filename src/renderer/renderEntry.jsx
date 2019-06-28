@@ -13,7 +13,7 @@ import ThemeSelector from './helper/themeSelector';
 const { store, persistor } = configureStore();
 
 IpcRendererHelper.onPageLoaded(async () => {
-    await ThemeSelector.overrideTheme();
+    await ThemeSelector.overrideTheme('line');
     ReactDom.render(
         <Provider store={store}>
             <PersistGate persistor={persistor}>
