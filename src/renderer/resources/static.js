@@ -18,6 +18,6 @@ EntryStatic.getAllBlocks = (() =>
     }))();
 
 const sharedObject = Utils.getSharedObject();
-EntryStatic.baseUrl = sharedObject && `${sharedObject.hostProtocol}//${sharedObject.hostURI}`;
+EntryStatic.baseUrl = sharedObject && sharedObject.baseUrl;
 
 export default EntryStatic;

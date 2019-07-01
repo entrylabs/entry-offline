@@ -87,7 +87,7 @@ export default class {
                             resolve();
                         }
                     });
-                }
+                },
             );
         });
     }
@@ -216,8 +216,8 @@ export default class {
     static checkUpdate() {
         return new Promise((resolve) => {
             ipcRenderer.send('checkUpdate');
-            ipcRenderer.once('checkUpdate',(e, currentVersion, {
-                hasNewVersion, version : latestVersion,
+            ipcRenderer.once('checkUpdate', (e, currentVersion, {
+                hasNewVersion, version: latestVersion,
             }) => {
                 /**
                  latestVersion properties
@@ -226,7 +226,7 @@ export default class {
                  @property version{string} ex) 2.0.2 원래 버전
                  @property _id{string} ex) 저장된 mongoDB 오브젝트 ID
                  */
-                console.log(currentVersion, hasNewVersion, latestVersion);
+                console.log(`currentVersion : ${currentVersion}\nrecentVersion: ${latestVersion}\nneedUpdate: ${hasNewVersion}`);
                 const lastDontShowCheckedVersion = StorageManager.getLastDontShowVersion();
                 // 다시보지않음을 클릭하지 않았거나, 클릭했지만 당시보다 더 높은 버전이 나온 경우 출력
                 if ((!lastDontShowCheckedVersion || (lastDontShowCheckedVersion < latestVersion)) && hasNewVersion) {

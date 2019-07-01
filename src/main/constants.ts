@@ -111,7 +111,7 @@ export default class {
 
     static get resourcePath() {
         return path.resolve(
-            __dirname, '..', 'renderer', 'resources', 'uploads',
+            app.getAppPath(), 'src', 'renderer', 'resources', 'uploads',
         );
     }
 

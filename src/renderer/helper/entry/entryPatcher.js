@@ -115,4 +115,6 @@ export default function() {
             }
         });
     };
+
+    Entry.EXPANSION_BLOCK.tts.api = EntryStatic.baseUrl + Entry.EXPANSION_BLOCK.tts.api;
 }
