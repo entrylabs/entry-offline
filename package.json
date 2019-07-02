@@ -13,8 +13,7 @@
         "webpack:main": "cross-env NODE_ENV=development webpack --config webpack.main.config.js",
         "webpack:renderer": "cross-env NODE_ENV=development webpack --config webpack.renderer.config.js",
         "watch": "cross-env NODE_ENV=development webpack -w",
-        "lint": "eslint src --color",
-        "rebuild": "electron-rebuild -v 4.0.4",
+        "rebuild": "electron-rebuild",
         "dist:win32": "cross-env NODE_ENV=production webpack && build -c -w --ia32=true",
         "dist:win64": "cross-env NODE_ENV=production webpack && build -c -w --x64=true",
         "dist:mac": "cross-env NODE_ENV=production webpack && build -c --mac"
