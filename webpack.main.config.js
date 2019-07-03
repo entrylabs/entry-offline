@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const nodeExternals = require('webpack-node-externals');
 
 const setting = {
     mode: 'none',
@@ -18,6 +19,7 @@ const setting = {
         hotUpdateChunkFilename: 'hot/hot-update.js',
         hotUpdateMainFilename: 'hot/hot-update.json',
     },
+    externals: [nodeExternals({ modulesFromFile: true})],
     module: {
         rules: [
             {

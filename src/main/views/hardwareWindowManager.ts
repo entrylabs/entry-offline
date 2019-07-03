@@ -27,7 +27,7 @@ export default class {
                 backgroundThrottling: false,
                 nodeIntegration: false,
                 preload: path.resolve(
-                    __dirname, '..', '..', 'renderer', 'bower_components', 'entry-hw', 'app', 'src', 'renderer', 'preload.js',
+                    app.getAppPath(), 'src', 'renderer', 'bower_components', 'entry-hw', 'app', 'src', 'renderer', 'preload.js',
                 ),
             },
         });
