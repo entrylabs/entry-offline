@@ -19,9 +19,11 @@ const properties: {
 };
 
 // 디폴트 값
+// config 은 기본값이 ko, 그 다음은 ENTRY_CONFIG 외부값을 따른다. 이 값은 webpack 에 의해 고정된다.
 const flags: CommandLineFlags = {};
 const pairs: CommandLinePairs = {
     version: packageJson.version,
+    config: process.env.ENTRY_CONFIG || 'ko',
 };
 
 function parseFlags(key: string): boolean | void {

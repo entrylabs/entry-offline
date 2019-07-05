@@ -17,7 +17,10 @@
         "rebuild": "electron-rebuild -v 4.0.4",
         "dist:win32": "cross-env NODE_ENV=production webpack && build -c -w --ia32=true",
         "dist:win64": "cross-env NODE_ENV=production webpack && build -c -w --x64=true",
-        "dist:mac": "cross-env NODE_ENV=production webpack && build -c --mac"
+        "dist:mac": "cross-env NODE_ENV=production webpack && build -c --mac",
+        "dist:line_win32": "cross-env NODE_ENV=production ENTRY_CONFIG=jp webpack && build -c -w --ia32=true",
+        "dist:line_win64": "cross-env NODE_ENV=production ENTRY_CONFIG=jp webpack && build -c -w --x64=true",
+        "dist:line_mac": "cross-env NODE_ENV=production ENTRY_CONFIG=jp webpack && build -c --mac"
     },
     "keywords": [
         "entry",

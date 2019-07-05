@@ -5,6 +5,7 @@ declare type CommonConfigurations = {
 
 declare type FileConfigurations = CommonConfigurations & {
     baseUrl: string,
+    theme?: string,
 }
 
 // CommandLine Options

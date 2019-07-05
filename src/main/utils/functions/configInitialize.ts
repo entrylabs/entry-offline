@@ -9,6 +9,7 @@ const fs = require('fs');
  */
 const defaultConfigSchema: FileConfigurations = {
     'baseUrl': 'https://playentry.org',
+    'theme': 'default',
 };
 
 function getExtraResourcePath() {
@@ -19,7 +20,8 @@ function getExtraResourcePath() {
     return appPath;
 }
 
-export default (configName: string = 'ko'): Readonly<FileConfigurations> => {
+// 기본값은 commandLineOptions 를 따른다. = ko or process.env.ENTRY_CONFIG
+export default (configName: string): Readonly<FileConfigurations> => {
     const configFilePath = path.join(getExtraResourcePath(), 'config', `config.${configName}.json`);
 
     console.log(`load ${configFilePath}...`);

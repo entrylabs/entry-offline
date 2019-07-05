@@ -46,6 +46,9 @@ const setting = {
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
+        new webpack.DefinePlugin({
+            'process.env.ENTRY_CONFIG': JSON.stringify(process.env.ENTRY_CONFIG)
+        })
     ],
 };
 
