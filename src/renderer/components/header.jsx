@@ -189,6 +189,7 @@ class Header extends Component {
                     {
                         // 파이선모드 변경
                         workspaceMode === 'workspace' &&
+                        programLanguageMode !== 'none' &&
                         <HeaderDropdownButton
                             title={RendererUtils.getLang('Workspace.language')}
                             icon={`${programLanguageMode}.svg`}

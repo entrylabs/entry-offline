@@ -35,8 +35,13 @@ class Workspace extends Component {
         this.container = React.createRef();
 
         this.isFirstRender = true;
+
+        let programLanguage = 'block';
+        if (EntryStatic.initOptions && !EntryStatic.initOptions.textCodingEnable) {
+            programLanguage = 'none';
+        }
         this.state = {
-            programLanguageMode: 'block',
+            programLanguageMode: programLanguage,
         };
 
         this.defaultInitOption = {
@@ -45,7 +50,6 @@ class Workspace extends Component {
             libDir: 'renderer/bower_components',
             defaultDir: 'renderer/resources',
             fonts: EntryStatic.fonts,
-            textCodingEnable: true,
         };
 
         this.addMainProcessEvents();
