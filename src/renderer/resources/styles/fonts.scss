@@ -150,3 +150,31 @@
   font-style: normal;
   src: local('Nanum Gothic'), url("../renderer/resources/fonts/NanumGothic-Regular.woff2") format('woff2');
 }
+@font-face {
+  font-family: 'yg-jalnan';
+  font-style: normal;
+  font-weight: 400;
+  src: local('잘난체 Regular');
+  src: url("../renderer/resources/fonts/JalnanOTF00.woff") format('woff');
+}
+@font-face {
+  font-family: 'UhBeemysen';
+  font-style: normal;
+  font-weight: 400;
+  src: local('어비 마이센체 Regular');
+  src: url("../renderer/resources/fonts/UhBeemysen.woff") format('woff');
+}
+@font-face {
+  font-family: 'designhouseOTFLight00';
+  font-style: normal;
+  font-weight: 400;
+  src: local('디자인 하우스체 Regular');
+  src: url("../renderer/resources/fonts/designhouseOTFLight00.woff") format('woff');
+}
+@font-face {
+  font-family: 'DungGeunMo';
+  font-style: normal;
+  font-weight: 400;
+  src: local('둥근모꼴 Regular');
+  src: url("../renderer/resources/fonts/DungGeunMo.woff") format('woff');
+}

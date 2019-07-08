@@ -152,3 +152,11 @@
   src: url("../fonts/NotoSansKR-subset-Bold.eot");
   src: url("../fonts/NotoSansKR-subset-Bold.eot?#iefix") format('embedded-opentype'), url("../fonts/NotoSansKR-subset-Bold.woff") format('woff');
 }
+
+@font-face {
+  font-family: 'yg-jalnan';
+  font-style: normal;
+  font-weight: 400;
+  src: local('잘난체 Regular');
+  src: url("../fonts/fonts/JalnanOTF00.woff") format('woff');
+}
