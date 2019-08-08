@@ -2,10 +2,7 @@ import path from 'path';
 import fs, { PathLike } from 'fs';
 import rimraf from 'rimraf';
 // @ts-ignore
-import fstream from 'fstream';
-import archiver from 'archiver';
-import zlib from 'zlib';
-import decompress from 'decompress';
+import tar from 'tar';
 import { nativeImage } from 'electron';
 
 /**
@@ -20,7 +17,7 @@ export default class {
      */
     static mkdirRecursive(target: string) {
         return new Promise((resolve, reject) => {
-            fs.stat(target, async(err) => {
+            fs.stat(target, async (err) => {
                 if (err) {
                     if (err.code === 'ENOENT') {
                         try {
@@ -81,36 +78,43 @@ export default class {
      * @param targetPath 디렉
      * @return {Promise<>}
      */
-    static unpack(sourcePath: string, targetPath: string) {
-        return decompress(sourcePath, targetPath);
+    static async unpack(sourcePath: string, targetPath: string) {
+        await tar.x({
+            file: sourcePath,
+            cwd: targetPath,
+            filter: (path, entry) => {
+                const { type } = entry;
+                // @ts-ignore
+                return type !== 'SymbolicLink';
+            },
+        });
     }
+
     /**
      * 폴더를 압축하여 파일 하나로 압축해 저장한다.
      * @param sourcePath 압축할 폴더 위치
      * @param targetPath 저장될 파일 경로
      * @return {Promise<any>}
      */
-    static pack(sourcePath: string, targetPath: string) {
-        return new Promise((resolve, reject) => {
-            const parser = path.parse(sourcePath);
-            const fsWriter = fstream.Writer({ path: targetPath, type: 'File' });
-            const archive = archiver('tar');
-            const gzip = zlib.createGzip();
-
-            fsWriter.on('error', reject);
-            archive.on('error', reject);
-            gzip.on('error', reject);
-
-            fsWriter.on('end', () => {
-                resolve();
-            });
-
-            archive.pipe(gzip)
-                .pipe(fsWriter);
-
-            archive.directory(parser.dir, false);
-            archive.finalize();
-        });
+    static async pack(sourcePath: string, targetPath: string) {
+        const srcDirectoryPath = path.parse(sourcePath).dir;
+        await tar.c(
+            {
+                file: targetPath,
+                gzip: { memLevel: 9 },
+                cwd: srcDirectoryPath,
+                filter: (path, stat) => {
+                    try {
+                        // @ts-ignore
+                        return !stat.isSymbolicLink();
+                    } catch (e) {
+                        return false;
+                    }
+                },
+                portable: true,
+            },
+            ['.'],
+        );
     }
 
     /**
