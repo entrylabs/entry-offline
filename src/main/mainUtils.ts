@@ -1,16 +1,11 @@
 import { app, BrowserWindow } from 'electron';
-import fstream from 'fstream';
-import archiver from 'archiver';
 import fs from 'fs';
-import zlib from 'zlib';
 import path from 'path';
 import xl from 'excel4node';
 import imageSizeOf from 'image-size';
 import soundDuration from 'mp3-duration';
 import { performance } from 'perf_hooks';
 import root from 'window-or-global';
-import stream from 'stream';
-import tar from 'tar';
 import Puid from 'puid';
 import uid from 'uid';
 import FileUtils from './fileUtils';
@@ -47,11 +42,7 @@ export default class MainUtils {
 
             await MainUtils.resetSaveDirectory();
             await FileUtils.mkdirRecursive(tempDirectoryPath);
-            await tar.x({
-                file: filePath,
-                strip: 1,
-                cwd: tempDirectoryPath,
-            });
+            await FileUtils.unpack(filePath, baseAppPath);
 
             fs.readFile(
                 path.resolve(tempDirectoryPath, 'project.json'),
