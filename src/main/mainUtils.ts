@@ -98,76 +98,21 @@ export default class MainUtils {
      * @param {string}destinationPath 저장위치 (파일명까지 포함)
      * @return {Promise} 성공시 resolve(), 실패시 reject(err)
      */
-    static saveProject(project: ObjectLike, destinationPath: string) {
+    static async saveProject(project: ObjectLike, destinationPath: string) {
+        // progressBar Status 필요하다면 사용
         const mainWindow = BrowserWindow.fromId(root.sharedObject.mainWindowId);
         const sourcePath = app.getPath('userData');
+        if (destinationPath.indexOf('.ent') === -1) {
+            throw new Error('.ent only accepted');
+        }
 
-        return new Promise((resolve, reject) => {
-            if (destinationPath.indexOf('.ent') === -1) {
-                reject(Error('.ent only accepted'));
-                return;
-            }
+        MainUtils.changeObjectsPath(project.objects, Constants.replaceStrategy.toExternal);
 
-            MainUtils.changeObjectsPath(project.objects, Constants.replaceStrategy.toExternal);
-
-            const projectString = JSON.stringify(project);
-            const targetFilePath = path.resolve(sourcePath, 'temp', 'project.json');
-            FileUtils.ensureDirectoryExistence(targetFilePath);
-
-            fs.writeFile(
-                targetFilePath,
-                projectString,
-                { encoding: 'utf8', mode: '0777' },
-                (err) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        const archive = archiver('tar');
-                        const gzip = zlib.createGzip();
-                        const fsWriter = fstream.Writer({
-                            path: destinationPath,
-                            mode: '0777',
-                            type: 'File',
-                        });
-
-                        fsWriter.on('error', (e: Error) => {
-                            reject(e);
-                        });
-
-                        fsWriter.on('end', () => {
-                            mainWindow.setProgressBar(-1);
-                            resolve();
-                        });
-                        archive.on('error', (e) => {
-                            reject(e);
-                        });
-                        archive.on('entry', () => {
-                        });
-                        archive.on('progress', ({ fs }) => {
-                            const { totalBytes, processedBytes } = fs;
-                            mainWindow.setProgressBar(processedBytes / totalBytes);
-                        });
-
-                        archive.pipe(gzip).pipe(fsWriter);
-
-                        archive.file(targetFilePath, {
-                            name: 'temp/project.json',
-                        });
-                        archive.glob(
-                            '**',
-                            {
-                                cwd: path.resolve(sourcePath, 'temp'),
-                                ignore: ['project.json'],
-                            },
-                            {
-                                prefix: 'temp',
-                            },
-                        );
-                        archive.finalize();
-                    }
-                },
-            );
-        });
+        const projectString = JSON.stringify(project);
+        const targetFilePath = path.resolve(sourcePath, 'temp', 'project.json');
+        FileUtils.ensureDirectoryExistence(targetFilePath);
+        await FileUtils.writeFile(projectString, targetFilePath);
+        await FileUtils.pack(path.resolve(sourcePath, 'temp'), destinationPath, undefined, ['temp']);
     }
 
     /**
@@ -216,7 +161,7 @@ export default class MainUtils {
             const exportFile = path.resolve(exportDirectoryPath, '..', exportFileName);
 
             try {
-                await FileUtils.ensureDirectoryExistence(objectJsonPath);
+                FileUtils.ensureDirectoryExistence(objectJsonPath);
                 await MainUtils.exportObjectTempFileTo(object, exportDirectoryPath);
 
                 const objectData = typeof object === 'string' ? object : JSON.stringify(object);

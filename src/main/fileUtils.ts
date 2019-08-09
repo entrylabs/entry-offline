@@ -2,9 +2,10 @@ import path from 'path';
 import fs, { PathLike } from 'fs';
 import rimraf from 'rimraf';
 // @ts-ignore
-import tar from 'tar';
+import tar, { CreateOptions, FileOptions } from 'tar';
 import { nativeImage } from 'electron';
 
+type tarCreateOption = FileOptions & CreateOptions;
 /**
  * 파일 및 디렉토리의 생성 / 삭제와 압축등 IO 와 관련된 일을 담당한다.
  */
@@ -94,26 +95,34 @@ export default class {
      * 폴더를 압축하여 파일 하나로 압축해 저장한다.
      * @param sourcePath 압축할 폴더 위치
      * @param targetPath 저장될 파일 경로
+     * @param {tarCreateOption?}options
+     * @param {string[]?}fileList default: sourcePath 경로기준 동일 depth 내 모든 파일
      * @return {Promise<any>}
      */
-    static async pack(sourcePath: string, targetPath: string) {
+    static async pack(
+        sourcePath: string,
+        targetPath: string,
+        options: tarCreateOption = {},
+        fileList = ['.'],
+    ) {
         const srcDirectoryPath = path.parse(sourcePath).dir;
-        await tar.c(
-            {
-                file: targetPath,
-                gzip: { memLevel: 9 },
-                cwd: srcDirectoryPath,
-                filter: (path, stat) => {
-                    try {
-                        // @ts-ignore
-                        return !stat.isSymbolicLink();
-                    } catch (e) {
-                        return false;
-                    }
-                },
-                portable: true,
+        const defaultOption: tarCreateOption = {
+            file: targetPath,
+            gzip: { memLevel: 4 },
+            cwd: srcDirectoryPath,
+            filter: (path, stat) => {
+                try {
+                    // @ts-ignore
+                    return !stat.isSymbolicLink();
+                } catch (e) {
+                    return false;
+                }
             },
-            ['.'],
+            portable: true,
+        };
+        await tar.c(
+            Object.assign(defaultOption, options),
+            fileList,
         );
     }
 
@@ -142,12 +151,16 @@ export default class {
      * 파일을 생성한다.
      * @param contents 작성할 내용
      * @param {string}filePath 파일 경로
+     * @param {fs.WriteFileOptions}option 파일 옵션
      * @return {Promise<>}
      */
-    static writeFile(contents: any, filePath: string) {
+    static writeFile(contents: any, filePath: string, option: fs.WriteFileOptions = {
+        encoding: 'utf8',
+        mode: '0777',
+    }) {
         return new Promise((resolve, reject) => {
             this.ensureDirectoryExistence(filePath);
-            fs.writeFile(filePath, contents, (err) => {
+            fs.writeFile(filePath, contents, option, (err) => {
                 if (err) {
                     return reject(err);
                 }
