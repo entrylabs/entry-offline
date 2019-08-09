@@ -549,7 +549,7 @@ export default class MainUtils {
 
     static importSoundsFromResource(sounds: ObjectLike[]) {
         return Promise.all(sounds.map(async (sound) => {
-            const fileName = sound.filename + (sound.ext || '.mpg');
+            const fileName = sound.filename + (sound.ext || '.mp3');
             const soundResourcePath = path.join(Constants.resourceSoundPath(sound.filename), fileName);
             const newObject = await MainUtils.importSoundToTemp(soundResourcePath);
 
