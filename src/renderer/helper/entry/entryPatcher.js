@@ -87,7 +87,7 @@ export default function() {
     const openHardwarePage = function() {
         RendererUtils.getSharedObject().roomIds = [localStorage.getItem('entryhwRoomId')];
         IpcRendererHelper.openHardwarePage();
-        Entry.hw.initSocket();
+        Entry.hw._initSocket();
     };
 
     Entry.HW.prototype.downloadConnector = openHardwarePage;

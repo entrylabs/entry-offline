@@ -108,7 +108,7 @@ export default class {
         const srcDirectoryPath = path.parse(sourcePath).dir;
         const defaultOption: tarCreateOption = {
             file: targetPath,
-            gzip: { memLevel: 4 },
+            gzip: { memLevel: 9 },
             cwd: srcDirectoryPath,
             filter: (path, stat) => {
                 try {
