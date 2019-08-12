@@ -10,9 +10,11 @@ const originGetAllBlocks = EntryStatic.getAllBlocks;
 EntryStatic.getAllBlocks = () => {
     const allBlocks = originGetAllBlocks();
     const arduino = _.find(allBlocks, ['category', 'arduino']);
-    const { blocks } = arduino;
-    const index = blocks.indexOf('arduino_open');
-    blocks.splice(index, 1);
+    arduino.blocks.forEach((block, index) => {
+        if (['arduino_download_connector'].indexOf(block) !== -1) {
+            arduino.blocks.splice(index, 1);
+        }
+    });
     return allBlocks;
 };
 
