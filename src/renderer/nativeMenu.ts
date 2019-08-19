@@ -1,17 +1,17 @@
-import { remote } from 'electron';
+import { remote, MenuItemConstructorOptions } from 'electron';
 import RendererUtils from './helper/rendererUtils';
 import IpcRendererHelper from './helper/ipcRendererHelper';
 const { Menu } = remote;
 
 const getTemplate = function() {
-    const template = [
+    const template: MenuItemConstructorOptions[] = [
         {
             label: RendererUtils.getLang('Menus.offline_file'),
             submenu: [
                 {
                     label: RendererUtils.getLang('Workspace.file_new'),
                     accelerator: 'CmdOrCtrl+n',
-                    click(item, focusedWindow) {
+                    click() {
                         Entry && Entry.dispatchEvent('newWorkspace');
                     },
                 },
@@ -47,7 +47,7 @@ const getTemplate = function() {
                 {
                     label: RendererUtils.getLang('Menus.offline_undo'),
                     accelerator: 'CmdOrCtrl+z',
-                    click(item, focusedWindow) {
+                    click() {
                         Entry && Entry.dispatchEvent('undo');
                     },
                 },
@@ -60,7 +60,7 @@ const getTemplate = function() {
                             return 'Ctrl+y';
                         }
                     })(),
-                    click(item, focusedWindow) {
+                    click() {
                         Entry && Entry.dispatchEvent('redo');
                     },
                 },
@@ -107,7 +107,7 @@ const getTemplate = function() {
                 },
             ],
         });
-        template[2].submenu.push(
+        (template[2].submenu as MenuItemConstructorOptions[]).push(
             {
                 type: 'separator',
             },
@@ -117,7 +117,7 @@ const getTemplate = function() {
             }
         );
     } else {
-        template[0].submenu.push(
+        (template[0].submenu as MenuItemConstructorOptions[]).push(
             {
                 type: 'separator',
             },

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, ReactElement } from 'react';
 import './header.scss';
 import root from 'window-or-global';
 import _get from 'lodash/get';
@@ -10,10 +10,35 @@ import { CommonActionCreators } from '../store/modules/common';
 import { PersistActionCreators } from '../store/modules/persist';
 import { Dropdown } from '@entrylabs/tool/component';
 import ImportToggleHelper from '../helper/importToggleHelper';
+import { IPersistState } from '../store/modules/persist';
+import { ICommonState } from '../store/modules/common';
+import { IStoreState } from '../store/modules';
+import { IMapDispatchToProps, IMapStateToProps } from '../store';
+
+interface IState {
+    dropdownType?: string;
+}
+
+interface IProps extends IReduxDispatch, IReduxState {
+    onFileAction: (key: string) => void;
+    onSaveAction: (key: string) => void;
+    onProgramLanguageChanged: (key: string) => void;
+    onLoadProject: () => void;
+    onReloadProject: () => void;
+    programLanguageMode: string;
+    executionStatus: {
+        canRedo: boolean;
+        canUndo: boolean;
+    }
+}
+
+type DropDownItemPair = [string | ReactElement, string];
 
 /* global Entry */
-class Header extends Component {
-    constructor(props) {
+class Header extends Component<IProps, IState> {
+    dropdownList: any;
+
+    constructor(props: Readonly<IProps>) {
         super(props);
         this.dropdownList = {};
         this.state = {
@@ -21,38 +46,42 @@ class Header extends Component {
         };
     }
 
-    get programLanguageList() {
+    get programLanguageList(): DropDownItemPair[] {
         return [
             [RendererUtils.getLang('Menus.block_coding'), 'block'],
             [RendererUtils.getLang('Menus.python_coding'), 'python'],
         ];
     }
-    get fileList() {
+
+    get fileList(): DropDownItemPair[] {
         return [
             [RendererUtils.getLang('Workspace.file_new'), 'new'],
             [RendererUtils.getLang('Workspace.file_upload'), 'open_offline'],
         ];
     }
-    get saveList() {
+
+    get saveList(): DropDownItemPair[] {
         return [
             [RendererUtils.getLang('Workspace.file_save'), 'save'],
             [RendererUtils.getLang('Workspace.file_save_as'), 'save_as'],
         ];
     }
-    get helpList() {
+
+    get helpList(): DropDownItemPair[] {
         const { persist } = this.props;
         const { mode } = persist;
 
         return [
             [RendererUtils.getLang('Workspace.block_helper'), 'help_block'],
             (mode === 'workspace' ?
-                [RendererUtils.getLang('Workspace.hardware_guide'), 'help_hardware'] :
-                [RendererUtils.getLang('Workspace.robot_guide'), 'help_robot']
+                    [RendererUtils.getLang('Workspace.hardware_guide'), 'help_hardware'] :
+                    [RendererUtils.getLang('Workspace.robot_guide'), 'help_robot']
             ),
             [RendererUtils.getLang('Workspace.python_guide'), 'help_python'],
         ];
     }
-    get modeList() {
+
+    get modeList(): DropDownItemPair[] {
         return [
             [RendererUtils.getLang('Workspace.default_mode'), 'workspace'],
             [
@@ -66,7 +95,8 @@ class Header extends Component {
             ],
         ];
     }
-    get languageList() {
+
+    get languageList(): DropDownItemPair[] {
         return [
             [RendererUtils.getLang('ko'), 'ko'],
             [RendererUtils.getLang('en'), 'en'],
@@ -78,13 +108,13 @@ class Header extends Component {
     getModeText() {
         const { persist } = this.props;
         const { mode } = persist;
-        const [modeText] = this.modeList.find((list) => {
+        const [modeText]: any = this.modeList.find((list) => {
             return list[1] === mode;
         });
         return modeText;
     }
 
-    handleDropdownClick(type) {
+    handleDropdownClick(type?: string) {
         this.setState((state) => {
             const { dropdownType } = state;
             return {
@@ -94,11 +124,11 @@ class Header extends Component {
     }
 
     getLangValue() {
-        const lang = _get(this.props, 'persist.lang');
+        const lang = this.props.persist.lang;
         return _get(root.Lang, lang);
     }
 
-    makeDropdown(type, items) {
+    makeDropdown(type: string, items: DropDownItemPair[]) {
         const { dropdownType } = this.state;
         if (type !== dropdownType) {
             return null;
@@ -110,7 +140,7 @@ class Header extends Component {
                 animation={false}
                 items={items}
                 positionDom={positionDom}
-                onSelectDropdown={(item) => {
+                onSelectDropdown={(item: DropDownItemPair) => {
                     this.handleDropdownSelect(type, item);
                     this.setState(() => {
                         return {
@@ -130,7 +160,7 @@ class Header extends Component {
         );
     }
 
-    handleDropdownSelect(type, item) {
+    handleDropdownSelect(type: string, item: DropDownItemPair) {
         const key = item[1];
         switch (type) {
             case 'programLanguage':
@@ -158,7 +188,7 @@ class Header extends Component {
         }
     }
 
-    handleProgramLanguageClick(item) {
+    handleProgramLanguageClick(item: DropDownItemPair) {
         const { onProgramLanguageChanged, programLanguageMode } = this.props;
         const key = item[1];
         if (key !== programLanguageMode) {
@@ -166,7 +196,7 @@ class Header extends Component {
         }
     }
 
-    handleHelpClick(item) {
+    handleHelpClick(item: DropDownItemPair) {
         const key = item[1];
         if (key === 'help_block') {
             Entry.dispatchEvent('showBlockHelper');
@@ -185,7 +215,7 @@ class Header extends Component {
         }
     }
 
-    async handleChangeWsMode(item) {
+    async handleChangeWsMode(item: DropDownItemPair) {
         if (EntryUtils.confirmProjectWillDismiss()) {
             const { PersistActions, onLoadProject } = this.props;
             const key = item[1];
@@ -195,7 +225,7 @@ class Header extends Component {
         }
     }
 
-    async handleChangeLanguage(item) {
+    async handleChangeLanguage(item: DropDownItemPair) {
         const { PersistActions, onReloadProject } = this.props;
         const langType = item[1];
         await ImportToggleHelper.changeLang(langType);
@@ -204,7 +234,12 @@ class Header extends Component {
     }
 
     render() {
-        const { CommonActions, persist = [], common, programLanguageMode, executionStatus = {} } = this.props;
+        const {
+            CommonActions, persist = {
+                lang: '',
+                mode: '',
+            }, common, programLanguageMode, executionStatus = { canRedo: false, canUndo: false },
+        } = this.props;
         const { canRedo = false, canUndo = false } = executionStatus;
         const { projectName = RendererUtils.getDefaultProjectName() } = common;
         const { lang, mode } = persist;
@@ -213,7 +248,7 @@ class Header extends Component {
         return (
             /* eslint-disable jsx-a11y/heading-has-content, jsx-a11y/anchor-is-valid */
             <header className={'common_gnb'}>
-                <h1 className={`${'logo'} ${'logo_gnb'}`} />
+                <h1 className={`${'logo'} ${'logo_gnb'}`}/>
                 <div className={'srch_box'}>
                     {/* 작품명 */}
                     <div key={projectName}>
@@ -231,25 +266,25 @@ class Header extends Component {
                 </div>
                 <div className={'group_box'}>
                     <div className={'group_inner'}>
-                        { mode === 'workspace' &&
-                            // 블록코딩, 엔트리파이선 모드 변경
-                            <div className={'work_space'}>
-                                <a
-                                    title={RendererUtils.getLang('Workspace.language')}
-                                    className={`btn_work_space btn_workspace_lang ${
-                                        dropdownType === 'programLanguage' ? 'on' : ''
+                        {mode === 'workspace' &&
+                        // 블록코딩, 엔트리파이선 모드 변경
+                        <div className={'work_space'}>
+                            <a
+                                title={RendererUtils.getLang('Workspace.language')}
+                                className={`btn_work_space btn_workspace_lang ${
+                                    dropdownType === 'programLanguage' ? 'on' : ''
                                     } ${programLanguageMode}`}
-                                    ref={(dom) => (this.dropdownList.programLanguage = dom)}
-                                    onClick={() => {
-                                        this.handleDropdownClick('programLanguage');
-                                    }}
-                                >
+                                ref={(dom) => (this.dropdownList.programLanguage = dom)}
+                                onClick={() => {
+                                    this.handleDropdownClick('programLanguage');
+                                }}
+                            >
                                     <span className={'blind'}>
                                         {RendererUtils.getLang('Workspace.language')}
                                     </span>
-                                </a>
-                                {this.makeDropdown('programLanguage', this.programLanguageList)}
-                            </div>
+                            </a>
+                            {this.makeDropdown('programLanguage', this.programLanguageList)}
+                        </div>
                         }
                         {
                             // 새로만들기, 불러오기
@@ -258,7 +293,7 @@ class Header extends Component {
                                     title={RendererUtils.getLang('Workspace.file')}
                                     className={`${'btn_work_space'} ${'btn_workspace_file'} ${
                                         dropdownType === 'file' ? 'on' : ''
-                                    }`}
+                                        }`}
                                     ref={(dom) => (this.dropdownList.file = dom)}
                                     onClick={() => {
                                         this.handleDropdownClick('file');
@@ -278,7 +313,7 @@ class Header extends Component {
                                     title={RendererUtils.getLang('Workspace.save')}
                                     className={`${'btn_work_space'} ${'btn_workspace_save'}  ${
                                         dropdownType === 'save' ? 'on' : ''
-                                    }`}
+                                        }`}
                                     ref={(dom) => (this.dropdownList.save = dom)}
                                     onClick={() => {
                                         this.handleDropdownClick('save');
@@ -298,7 +333,7 @@ class Header extends Component {
                                     title={RendererUtils.getLang('Workspace.help')}
                                     className={`${'btn_work_space'} ${'btn_workspace_help'} ${
                                         dropdownType === 'help' ? 'on' : ''
-                                    }`}
+                                        }`}
                                     ref={(dom) => (this.dropdownList.help = dom)}
                                     onClick={() => {
                                         this.handleDropdownClick('help');
@@ -344,7 +379,7 @@ class Header extends Component {
                                 <a
                                     className={`link_workspace_text text_work_space  ${
                                         dropdownType === 'mode' ? 'on' : ''
-                                    }`}
+                                        }`}
                                     ref={(dom) => (this.dropdownList.mode = dom)}
                                     onClick={() => {
                                         this.handleDropdownClick('mode');
@@ -364,7 +399,7 @@ class Header extends Component {
                             <a
                                 className={`${'select_link'} ${'ico_white_select_arr'} ${
                                     dropdownType === 'language' ? 'on' : ''
-                                }`}
+                                    }`}
                                 ref={(dom) => (this.dropdownList.language = dom)}
                                 onClick={() => {
                                     this.handleDropdownClick('language');
@@ -383,16 +418,27 @@ class Header extends Component {
     }
 }
 
-const mapStateToProps = (state) => ({
-    ...state,
+interface IReduxState {
+    persist: IPersistState,
+    common: ICommonState,
+}
+
+const mapStateToProps: IMapStateToProps<IReduxState> = (state: IStoreState) => ({
+    persist: state.persist,
+    common: state.common,
 });
 
-const mapDispatchToProps = (dispatch) => ({
+interface IReduxDispatch {
+    PersistActions: any,
+    CommonActions: any;
+}
+
+const mapDispatchToProps: IMapDispatchToProps<IReduxDispatch> = (dispatch) => ({
     PersistActions: bindActionCreators(PersistActionCreators, dispatch),
     CommonActions: bindActionCreators(CommonActionCreators, dispatch),
 });
 
 export default connect(
     mapStateToProps,
-    mapDispatchToProps
+    mapDispatchToProps,
 )(Header);

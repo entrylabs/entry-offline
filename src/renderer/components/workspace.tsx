@@ -3,8 +3,8 @@ import Header from './header';
 import './workspace.scss';
 import '../resources/styles/fonts.scss';
 import { connect } from 'react-redux';
-import { PersistActionCreators } from '../store/modules/persist';
-import { CommonActionCreators } from '../store/modules/common';
+import { IPersistState, PersistActionCreators } from '../store/modules/persist';
+import { CommonActionCreators, ICommonState } from '../store/modules/common';
 import _includes from 'lodash/includes';
 import _debounce from 'lodash/debounce';
 import entryPatch from '../helper/entry/entryPatcher';
@@ -17,42 +17,51 @@ import LocalStorageManager from '../helper/storageManager';
 import ImportToggleHelper from '../helper/importToggleHelper';
 import EntryUtils from '../helper/entry/entryUtils';
 import { bindActionCreators } from 'redux';
-import { ModalActionCreators } from '../store/modules/modal';
+import { IModalState, ModalActionCreators } from '../store/modules/modal';
+import { IMapDispatchToProps, IMapStateToProps } from '../store';
+
+interface IProps extends IReduxDispatch, IReduxState {
+
+}
 
 /* global Entry, EntryStatic */
-class Workspace extends Component {
+class Workspace extends Component<IProps> {
+    private lastHwName?: string;
+    private projectSavedPath?: string;
+    private container = React.createRef<HTMLDivElement>();
+    private isFirstRender = true;
+    private isSavingCanvasData = false;
+    private defaultInitOption = {
+        type: 'workspace',
+        backpackDisable: true,
+        libDir: 'renderer/bower_components',
+        defaultDir: 'renderer/resources',
+        fonts: root.EntryStatic.fonts,
+        textCodingEnable: true,
+    };
+    state = {
+        programLanguageMode: 'block',
+        executionStatus: {
+            canRedo: false,
+            canUndo: false,
+        },
+    };
+
     get initOption() {
         return Object.assign({},
             this.defaultInitOption,
-            EntryStatic.initOptions,
+            root.EntryStatic.initOptions,
         );
     }
 
-    constructor(props) {
+    constructor(props: Readonly<IProps>) {
         super(props);
-
-        this.container = React.createRef();
-
-        this.isFirstRender = true;
-        this.state = {
-            programLanguageMode: 'block',
-        };
-
-        this.defaultInitOption = {
-            type: 'workspace',
-            backpackDisable: true,
-            libDir: 'renderer/bower_components',
-            defaultDir: 'renderer/resources',
-            fonts: EntryStatic.fonts,
-            textCodingEnable: true,
-        };
-
         this.addMainProcessEvents();
     }
 
     componentDidMount() {
         IpcRendererHelper.checkUpdate();
-        setTimeout(async() => {
+        setTimeout(async () => {
             const project = await EntryUtils.getSavedProject();
             await this.loadProject(project);
             this.isFirstRender = false;
@@ -60,7 +69,7 @@ class Workspace extends Component {
     }
 
     addMainProcessEvents() {
-        IpcRendererHelper.loadProjectFromMain(async(readProjectFunction) => {
+        IpcRendererHelper.loadProjectFromMain(async (readProjectFunction) => {
             try {
                 this.showModalProgress(
                     'progress',
@@ -97,7 +106,7 @@ class Workspace extends Component {
         addEventListener('saveAsWorkspace', () => {
             this.handleSaveAction('saveAs');
         });
-        addEventListener('saveCanvasImage', (data) => {
+        addEventListener('saveCanvasImage', (data: any) => {
             this.handleCanvasImageSave(data);
         });
         // exportObject
@@ -138,7 +147,7 @@ class Workspace extends Component {
         }
     }
 
-    async handleCanvasImageSave(data) {
+    async handleCanvasImageSave(data: any) {
         if (this.isSavingCanvasData) {
             root.entrylms.alert(RendererUtils.getLang('Msgs.save_canvas_alert'));
         } else {
@@ -212,25 +221,25 @@ class Workspace extends Component {
 
     handleHardwareChange = () => {
         const hw = Entry.hw;
-        const hwCategoryList = EntryStatic.hwCategoryList;
+        const hwCategoryList = root.EntryStatic.hwCategoryList;
 
         if (
             (hw.connected && hw.hwModule && this.lastHwName === hw.hwModule.name) ||
-            !EntryStatic.isPracticalCourse
+            !root.EntryStatic.isPracticalCourse
         ) {
             return;
         }
         const blockMenu = Entry.playground.blockMenu;
         if (hw.connected && hw.hwModule) {
             const hwName = hw.hwModule.name;
-            if (_includes(EntryStatic.hwMiniSupportList, hwName)) {
-                hwCategoryList.forEach(function(categoryName) {
+            if (_includes(root.EntryStatic.hwMiniSupportList, hwName)) {
+                hwCategoryList.forEach(function(categoryName: string) {
                     blockMenu.unbanCategory(categoryName);
                 });
                 blockMenu.banCategory('arduino');
                 blockMenu.banCategory('hw_robot');
             } else {
-                hwCategoryList.forEach(function(categoryName) {
+                hwCategoryList.forEach(function(categoryName: string) {
                     blockMenu.banCategory(categoryName);
                 });
                 blockMenu.banCategory('hw_robot');
@@ -238,7 +247,7 @@ class Workspace extends Component {
             }
             this.lastHwName = hwName;
         } else {
-            hwCategoryList.forEach(function(categoryName) {
+            hwCategoryList.forEach(function(categoryName: string) {
                 blockMenu.banCategory(categoryName);
             });
             blockMenu.banCategory('arduino');
@@ -247,12 +256,12 @@ class Workspace extends Component {
         }
     };
 
-    handleSaveAction = async(key) => {
+    handleSaveAction = async (key: string) => {
         const { persist } = this.props;
         const { mode } = persist;
         const projectName = this._getProjectName();
 
-        const saveFunction = async(filePath) => {
+        const saveFunction = async (filePath: string) => {
             if (!filePath) {
                 return;
             }
@@ -280,14 +289,14 @@ class Workspace extends Component {
                 Entry.stateManager.addStamp();
                 Entry.toast.success(
                     RendererUtils.getLang('Workspace.saved'),
-                    `${projectName} ${RendererUtils.getLang('Workspace.saved_msg')}`
+                    `${projectName} ${RendererUtils.getLang('Workspace.saved_msg')}`,
                 );
             } catch (err) {
                 console.error(err);
                 this.showModalProgress(
                     'error',
                     RendererUtils.getLang('Workspace.saving_fail_msg'),
-                    RendererUtils.getLang('Workspace.fail_contact_msg')
+                    RendererUtils.getLang('Workspace.fail_contact_msg'),
                 );
             }
         };
@@ -303,10 +312,10 @@ class Workspace extends Component {
         }
     };
 
-    handleFileAction = async(type) => {
+    handleFileAction = async (type: string) => {
         if (type === 'new') {
             if (EntryUtils.confirmProjectWillDismiss()) {
-                RendererUtils.clearTempProject();
+                await RendererUtils.clearTempProject();
                 await this.loadProject();
             }
         } else if (type === 'open_offline') {
@@ -320,7 +329,7 @@ class Workspace extends Component {
                 /*defaultPath: storage.getItem('defaultPath') || '',*/
                 properties: ['openFile'],
                 filters: [{ name: 'Entry File', extensions: ['ent'] }],
-            }, async(filePaths) => {
+            }, async (filePaths) => {
                 try {
                     if (Array.isArray(filePaths)) {
                         await RendererUtils.clearTempProject();
@@ -344,7 +353,7 @@ class Workspace extends Component {
      * 프로젝트를 로드한 후, 이벤트 연결을 시도한다.
      * @param{Object?} project undefined 인 경우 신규 프로젝트로 생성
      */
-    loadProject = async(project) => {
+    loadProject = async (project?: any) => {
         const { CommonActions, PersistActions, persist } = this.props;
         const { mode: currentWorkspaceMode } = persist;
         let projectWorkspaceMode = currentWorkspaceMode;
@@ -379,14 +388,14 @@ class Workspace extends Component {
         Entry.loadProject(project);
     };
 
-    reloadProject = async() => {
+    reloadProject = async () => {
         const project = Entry.exportProject();
         project.name = this._getProjectName();
         await this.loadProject(project);
     };
 
-    handleProgramLanguageModeChanged = (mode) => {
-        const option = {};
+    handleProgramLanguageModeChanged = (mode: string) => {
+        const option: any = {};
 
         if (mode === 'block') {
             option.boardType = Entry.Workspace.MODE_BOARD;
@@ -417,7 +426,7 @@ class Workspace extends Component {
         }
     };
 
-    showModalProgress(type, title, description) {
+    showModalProgress(type: string, title: string, description = '') {
         const { ModalActions } = this.props;
         ModalActions.showModalProgress({
             isShow: true,
@@ -467,11 +476,25 @@ class Workspace extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    return { ...state };
-};
+interface IReduxState {
+    modal: IModalState,
+    persist: IPersistState,
+    common: ICommonState,
+}
 
-const mapDispatchToProps = (dispatch) => ({
+const mapStateToProps: IMapStateToProps<IReduxState> = (state) => ({
+    modal: state.modal,
+    persist: state.persist,
+    common: state.common,
+});
+
+interface IReduxDispatch {
+    PersistActions: any;
+    CommonActions: any;
+    ModalActions: any;
+}
+
+const mapDispatchToProps: IMapDispatchToProps<IReduxDispatch> = (dispatch) => ({
     PersistActions: bindActionCreators(PersistActionCreators, dispatch),
     CommonActions: bindActionCreators(CommonActionCreators, dispatch),
     ModalActions: bindActionCreators(ModalActionCreators, dispatch),

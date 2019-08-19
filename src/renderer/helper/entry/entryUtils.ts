@@ -3,6 +3,7 @@ import StorageManager from '../storageManager';
 import RendererUtils from '../rendererUtils';
 import Constants from '../constants';
 import root from 'window-or-global';
+import { DBSoundObject } from '../databaseManager';
 
 /**
  * 엔트리 코드로직과 관련된 유틸.
@@ -59,9 +60,9 @@ export default class {
                 resolve(reloadProject);
             } else if (project) {
                 root.entrylms.confirm(
-                    RendererUtils.getLang('Workspace.confirm_load_temporary')
+                    RendererUtils.getLang('Workspace.confirm_load_temporary'),
                 )
-                    .then((confirm) => {
+                    .then((confirm: boolean) => {
                         if (confirm) {
                             resolve(project);
                         } else {
@@ -69,7 +70,7 @@ export default class {
                         }
                         RendererUtils.clearTempProject({ saveTemp: confirm });
                     })
-                    .catch((err) => {
+                    .catch((err: any) => {
                         console.error(err);
                         resolve();
                     });
@@ -84,7 +85,7 @@ export default class {
      * 사운드 오브젝트 (from resources/db) 를 Entry.soundQueue 에 로드한다.
      * @param {Array<Object>} sounds
      */
-    static loadSound(sounds = []) {
+    static loadSound(sounds: any[] = []) {
         sounds.forEach((sound) => {
             const path = sound.path || `${Constants.resourceSoundPath(sound.filename)}${sound.filename}${sound.ext}`;
             Entry.soundQueue.loadFile({
@@ -99,7 +100,7 @@ export default class {
      * 오브젝트를 eo 파일로 만들어서 외부로 저장한다.
      * @param object 저장할 엔트리 오브젝트
      */
-    static exportObject(object) {
+    static exportObject(object: Entry.Object) {
         const { name, script } = object;
 
         const blockList = script.getBlockList();
@@ -128,7 +129,7 @@ export default class {
      * @property {Object}messages 오브젝트에서 사용된 메세지목록
      * @property {Object}variables 오브젝트에서 사용된 변수목록
      */
-    static addObjectToEntry(model) {
+    static addObjectToEntry(model: EntryAddOptions) {
         if (!model.sprite) {
             console.error('object structure is not valid');
             return;
@@ -137,15 +138,15 @@ export default class {
         const { objects, functions, messages, variables } = model.sprite;
 
         if (Entry.getMainWS().mode === Entry.Workspace.MODE_VIMBOARD &&
-        (
-            !Entry.TextCodingUtil.canUsePythonVariables(variables) ||
-            !Entry.TextCodingUtil.canUsePythonFunctions(functions)
-        )) {
+            (
+                !Entry.TextCodingUtil.canUsePythonVariables(variables) ||
+                !Entry.TextCodingUtil.canUsePythonFunctions(functions)
+            )) {
             return root.entrylms.alert(RendererUtils.getLang('Menus.object_import_syntax_error'));
         }
 
-        const objectIdMap = {};
-        variables.forEach((variable) => {
+        const objectIdMap: { [key: string]: Entry.Variable } = {};
+        variables.forEach((variable: Entry.Variable) => {
             const { object } = variable;
             if (object) {
                 const id = variable.id;
@@ -170,11 +171,11 @@ export default class {
         Entry.variableContainer.appendVariables(variables);
         Entry.variableContainer.appendFunctions(functions);
 
-        objects.forEach(function(object) {
+        objects.forEach(function(object: Entry.Object) {
             const idMap = objectIdMap[object.id];
             if (idMap) {
                 let script = object.script;
-                idMap.variableOriginId.forEach((id, idx) => {
+                idMap.variableOriginId.forEach((id: string, idx: number) => {
                     const regex = new RegExp(id, 'gi');
                     script = script.replace(regex, idMap.variableId[idx]);
                 });
@@ -200,7 +201,7 @@ export default class {
         });
     }
 
-    static addPictureObjectToEntry(picture) {
+    static addPictureObjectToEntry(picture: Entry.Picture) {
         if (!picture.id) {
             picture.id = Entry.generateHash();
         }
@@ -227,14 +228,14 @@ export default class {
      * @property file 오브젝트 및 현재 행동 메타데이터.
      * @property image image src. base64 이미지이다.
      */
-    static async saveCanvasImage(data) {
+    static async saveCanvasImage(data: any) {
         const { file, image } = data;
         const { id, name, objectId, mode } = file;
 
         try {
             const croppedImageData = await RendererUtils.cropImageFromCanvas(image);
             const imageBuffer = Buffer.from(
-                croppedImageData.replace(/^data:image\/(png|gif|jpeg);base64,/, ''), 'base64'
+                croppedImageData.replace(/^data:image\/(png|gif|jpeg);base64,/, ''), 'base64',
             );
 
             // 만약 이전 파일명이 존재하는 경우 삭제처리를 위함
@@ -280,10 +281,11 @@ export default class {
      * @property ext|extension 확장자. 없는 경우 defaultExtension 으로 대체
      * @param defaultExtension 확장자가 없는 경우 대체할 기본확장자
      */
-    static getObjectNameWithExtension(entryObject, defaultExtension) {
+    static getObjectNameWithExtension(entryObject: any, defaultExtension: string) {
         const filename = entryObject.name || 'nonamed';
         const extension = RendererUtils.sanitizeExtension(
-            entryObject.ext || entryObject.extension || defaultExtension
+            entryObject.ext || entryObject.extension,
+            defaultExtension,
         );
 
         return `${filename}${extension}`;
@@ -298,7 +300,7 @@ export default class {
         if (Entry.type === 'workspace') {
             if (localStorage && Entry.interfaceState) {
                 StorageManager.setWorkspaceInterface(
-                    JSON.stringify(Entry.captureInterfaceState())
+                    Entry.captureInterfaceState(),
                 );
             }
         }

@@ -3,6 +3,32 @@ import Pictures from '../resources/db/pictures.json';
 import Sounds from '../resources/db/sounds.json';
 import RendererUtils from './rendererUtils';
 
+interface BaseObject {
+    label: { ko: string, en: string, jp?: string, vn?: string };
+    category: { main: string, sub: string };
+    name: string;
+    specials: [];
+    created: string;
+    _id: string;
+}
+
+export interface DBSoundObject extends BaseObject {
+    path?: string
+    ext: string;
+    duration: number;
+    filename: string;
+}
+
+export interface DBPictureObject extends BaseObject {
+    dimension: { height: number, width: number };
+    filename: string;
+}
+
+export interface DBSpriteObject extends BaseObject {
+    pictures: Pick<DBPictureObject, 'label' | 'dimension' | 'filename' | 'name'>[];
+    sounds: Pick<DBSoundObject, 'label' | 'duration' | 'ext' | 'filename' | 'name'>[];
+}
+
 /**
  * sprite, pictures, sounds 등의 데이터베이스 추출본을 가지고 CRUD 를 흉내내는 클래스.
  *
@@ -17,13 +43,14 @@ export default class {
      * @param type 테이블명
      * @return {Array<string>} 결과 리스트
      */
-    static findAll({ sidebar, subMenu, type }) {
+    static findAll({ sidebar, subMenu, type }: { sidebar: string, subMenu: string, type: string }) {
         const table = this._selectTable(type);
         return new Promise((resolve) => {
             const findList =
                 table.filter((object) => {
                     if (!object.category) {
-                        return false;
+                        resolve();
+                        return;
                     }
 
                     const { main = '', sub = '' } = object.category;
@@ -49,13 +76,13 @@ export default class {
      * entry-tool 에서 전달받을 때는 아래의 인자를 받게 된다.
      * {category, period, searchQuery, sort, type}
      */
-    static search({ type, searchQuery }) {
+    static search({ type, searchQuery }: { type: string, searchQuery: string }) {
         const table = this._selectTable(type);
         const lowerCaseSearchQuery = searchQuery.toString().toLowerCase();
 
         return new Promise((resolve) => {
             const findList = table.filter((object) => {
-                const { label = {}, name = '' }  = object;
+                const { label = {}, name = '' } = object;
                 const objectName =
                     label[RendererUtils.getLangType()] ||
                     label[RendererUtils.getFallbackLangType()] ||
@@ -69,42 +96,16 @@ export default class {
         });
     }
 
-    static _selectTable(type) {
+    static _selectTable(type ?: string): DBPictureObject[] | DBSpriteObject[] | DBSoundObject[] | any[] {
         switch (type) {
             case 'picture':
-                return Pictures;
+                return Pictures as DBPictureObject[];
             case 'sprite':
-                return Sprites;
+                return Sprites as DBSpriteObject[];
             case 'sound':
-                return Sounds;
+                return Sounds as DBSoundObject[];
             default:
                 return [];
         }
     }
 }
-
-/*
-참고사항
-
-sprite 구조 :
-{
-    '_id': '56cb52e5fc051ddf4ba6110d',
-    '__v': 0,
-    'name': '아무거나 버튼',
-    'user': '56b2f0052d7146c949202baa',
-    'specials': [],
-    'created': '2016-02-22T18:26:45.271Z',
-    'sounds': [],
-    'pictures': [{
-        '_id': '56ca2a4cfc051ddf4ba60f5f',
-        'filename': '817ef76cf059abf7c9c39a478e57612f',
-        'name': '아무거나 버튼_1',
-        'dimension': { 'height': 99, 'width': 236 },
-        'label': { 'en': 'Random Button_1', 'ko': '아무거나 버튼_1', 'vn': '아무거나버' },
-    }],
-    'type': '_system_',
-    'category': { 'main': 'interface' },
-    'label': { 'ko': '아무거나 버튼', 'en': 'Random Button' },
-};
-
-*/

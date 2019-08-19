@@ -3,6 +3,16 @@ declare interface ObjectLike extends Object {
     [key: string]: any
 }
 
+declare type WorkspaceMode = 'practical_course' | 'workspace';
+
+declare module '@entrylabs/tool' {
+    export const Popup: any;
+}
+declare module '@entrylabs/tool/component' {
+    export const Dropdown: any;
+    export const ModalProgress: any;
+}
+
 /* eslint-disable */
 declare module 'puid' {
     const value: any;
@@ -11,7 +21,7 @@ declare module 'puid' {
 
 /* eslint-disable */
 declare module 'window-or-global' {
-    const value: NodeJS.Global;
+    const value: any;
     export = value;
 }
 

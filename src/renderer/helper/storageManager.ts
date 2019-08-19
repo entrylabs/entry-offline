@@ -26,7 +26,7 @@ export default class {
         return 'workspace-interface';
     }
 
-    static saveProject(project) {
+    static saveProject(project: Entry.Project) {
         if (!project) {
             this.removeProject();
             return;
@@ -43,18 +43,18 @@ export default class {
         return root.localStorage.removeItem(this.LOCAL_STORAGE_KEY);
     }
 
-    static saveTempProject(project) {
+    static saveTempProject(project: Entry.Project) {
         const projectJson = typeof project === 'string' ? project : JSON.stringify(project);
         root.localStorage.setItem(this.LOCAL_STORAGE_KEY_RELOAD, projectJson);
     }
 
-    static loadTempProject() {
+    static loadTempProject(): Entry.Project {
         const tempProject = JSON.parse(root.localStorage.getItem(this.LOCAL_STORAGE_KEY_RELOAD));
         root.localStorage.removeItem(this.LOCAL_STORAGE_KEY_RELOAD);
         return tempProject;
     }
 
-    static getPersistLangType() {
+    static getPersistLangType(): string | undefined {
         const rawPersist = root.localStorage.getItem(this.PERSIST);
         if (!rawPersist) {
             return;
@@ -64,7 +64,7 @@ export default class {
         return persist[this.LOCAL_STORAGE_LANG];
     }
 
-    static getPersistWorkspaceMode() {
+    static getPersistWorkspaceMode(): WorkspaceMode | undefined {
         const rawPersist = root.localStorage.getItem(this.PERSIST);
         if (!rawPersist) {
             return;
@@ -74,15 +74,15 @@ export default class {
         return persist[this.LOCAL_STORAGE_WS_MODE];
     }
 
-    static setWorkspaceInterface(interfaceState) {
-        root.localStorage.setItem(this.WORKSPACE_INTERFACE, interfaceState);
+    static setWorkspaceInterface(interfaceState: Entry.WorkspaceInterface) {
+        (root.localStorage as Storage).setItem(this.WORKSPACE_INTERFACE, JSON.stringify(interfaceState));
     }
 
     static getLastDontShowVersion() {
         return root.localStorage.getItem(this.DONT_SHOW_VERSION);
     }
 
-    static setLastDontShowVersion(latestVersion) {
+    static setLastDontShowVersion(latestVersion: string) {
         root.localStorage.setItem(this.DONT_SHOW_VERSION, latestVersion);
     }
 
@@ -90,7 +90,7 @@ export default class {
         return root.localStorage.getItem(this.LAST_CHECKED_VERSION);
     }
 
-    static setLastCheckedVersion(lastCheckedVersion) {
+    static setLastCheckedVersion(lastCheckedVersion: string) {
         root.localStorage.setItem(this.LAST_CHECKED_VERSION, lastCheckedVersion);
     }
 }

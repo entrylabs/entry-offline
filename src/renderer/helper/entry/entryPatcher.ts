@@ -13,7 +13,7 @@ export default function() {
         return;
     }
 
-    Entry.playground.downloadPicture = function(pictureId) {
+    Entry.playground.downloadPicture = function(pictureId: string) {
         const picture = Entry.playground.object.getPicture(pictureId);
         const saveFileName = EntryUtils.getObjectNameWithExtension(picture, 'png');
 
@@ -24,12 +24,10 @@ export default function() {
         RendererUtils.showSaveDialog({
             title: RendererUtils.getLang('Workspace.file_save'),
             defaultPath: saveFileName,
-            filters: {
-                'image/png': [
-                    { name: 'PNG Image (*.png)', extensions: ['png'] },
-                    { name: 'All Files (*.*)', extensions: ['*'] },
-                ],
-            },
+            filters: [
+                { name: 'PNG Image (*.png)', extensions: ['png'] },
+                { name: 'All Files (*.*)', extensions: ['*'] },
+            ],
         }, (filePath) => {
             if (filePath) {
                 IpcRendererHelper.tempResourceDownload(picture, 'image', filePath);
@@ -37,19 +35,17 @@ export default function() {
         });
     };
 
-    Entry.playground.downloadSound = function(soundId) {
+    Entry.playground.downloadSound = function(soundId: string) {
         const sound = Entry.playground.object.getSound(soundId);
         const saveFileName = EntryUtils.getObjectNameWithExtension(sound, 'mp3');
 
         RendererUtils.showSaveDialog({
             title: RendererUtils.getLang('Workspace.file_save'),
             defaultPath: saveFileName,
-            filters: {
-                'audio/mpeg3': [
-                    { name: 'MP3 Audio (*.mp3)', extensions: ['mp3'] },
-                    { name: 'All Files (*.*)', extensions: ['*'] },
-                ],
-            },
+            filters: [
+                { name: 'MP3 Audio (*.mp3)', extensions: ['mp3'] },
+                { name: 'All Files (*.*)', extensions: ['*'] },
+            ],
         }, (filePath) => {
             if (filePath) {
                 IpcRendererHelper.tempResourceDownload(sound, 'sound', filePath);
@@ -60,11 +56,11 @@ export default function() {
     Entry.playground.board._contextOptions[3].option.callback = function() {
         RendererUtils.showOpenDialog({
             properties: ['openDirectory'],
-            filters: { name: 'Image', extensions: ['png'] },
+            filters: [{ name: 'Image', extensions: ['png'] }],
         }, (dirPath) => {
             if (dirPath) {
                 Entry.playground.board.code.getThreads()
-                    .forEach(function(thread, index) {
+                    .forEach(function(thread: any, index: number) {
                         const topBlock = thread.getFirstBlock();
                         if (!topBlock) {
                             return;
@@ -73,7 +69,7 @@ export default function() {
                         /* eslint-disable */
                         (function(i) {
                             topBlock.view.getDataUrl()
-                                .then(function(data) {
+                                .then(function(data: any) {
                                     const savePath = `${dirPath[0]}${Constants.sep}${i}${'.png'}`;
                                     RendererUtils.saveBlockImage(data.src, savePath);
                                 });
