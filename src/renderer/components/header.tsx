@@ -5,7 +5,7 @@ import _get from 'lodash/get';
 import RendererUtils from '../helper/rendererUtils';
 import EntryUtils from '../helper/entry/entryUtils';
 import { connect } from 'react-redux';
-import { bindActionCreators, Dispatch } from 'redux';
+import { bindActionCreators } from 'redux';
 import { CommonActionCreators } from '../store/modules/common';
 import { PersistActionCreators } from '../store/modules/persist';
 import { Dropdown } from '@entrylabs/tool/component';
@@ -433,7 +433,7 @@ interface IReduxDispatch {
     CommonActions: any;
 }
 
-const mapDispatchToProps: IMapDispatchToProps<IReduxDispatch> = (dispatch: Dispatch) => ({
+const mapDispatchToProps: IMapDispatchToProps<IReduxDispatch> = (dispatch) => ({
     PersistActions: bindActionCreators(PersistActionCreators, dispatch),
     CommonActions: bindActionCreators(CommonActionCreators, dispatch),
 });

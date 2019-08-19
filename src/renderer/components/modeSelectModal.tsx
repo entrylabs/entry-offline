@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators, Dispatch } from 'redux';
+import { bindActionCreators } from 'redux';
 import { PersistActionCreators } from '../store/modules/persist';
 import RendererUtils from '../helper/rendererUtils';
 import ImportToggleHelper from '../helper/importToggleHelper';
@@ -89,7 +89,7 @@ interface IReduxDispatch {
     PersistActions: any;
 }
 
-const mapDispatchToProps: IMapDispatchToProps<IReduxDispatch> = (dispatch: Dispatch) => ({
+const mapDispatchToProps: IMapDispatchToProps<IReduxDispatch> = (dispatch) => ({
     PersistActions: bindActionCreators(PersistActionCreators, dispatch),
 });
 

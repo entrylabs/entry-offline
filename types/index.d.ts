@@ -10,6 +10,7 @@ declare module '@entrylabs/tool' {
 }
 declare module '@entrylabs/tool/component' {
     export const Dropdown: any;
+    export const ModalProgress: any;
 }
 
 /* eslint-disable */
