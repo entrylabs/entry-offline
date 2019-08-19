@@ -3,31 +3,34 @@ import { connect } from 'react-redux';
 import Workspace from './workspace';
 import ModeSelectModal from './modeSelectModal';
 import './index.scss';
+import { IStoreState } from '../store/modules';
+import { IMapStateToProps } from '../store';
 
-const Script = ({ children }) => (
-    <script dangerouslySetInnerHTML={{ __html: `(${children.toString()})();` }} />
+const Script = ({ children }: { children: any }) => (
+    <script dangerouslySetInnerHTML={{ __html: `(${children.toString()})();` }}/>
 );
 
-class Index extends PureComponent {
-    render() {
-        const { persist = [] } = this.props;
-        const { mode } = persist;
+interface IProps extends IReduxState {
 
-        console.log(this.props);
+}
+
+class Index extends PureComponent<IProps> {
+    render() {
+        const { mode } = this.props;
         return (
             <div>
                 {mode ? (
                     <div className={`ws ${mode === 'workspace' ? '' : 'practical_course_mode'}`}>
-                        <Workspace />
+                        <Workspace/>
                     </div>
                 ) : (
-                    <ModeSelectModal />
+                    <ModeSelectModal/>
                 )}
                 <Script>
                     {/* eslint-disable id-length, no-undef, no-param-reassign */
                         () => {
                             const playFunc = createjs.Sound.play;
-                            createjs.Sound.play = function(a, b) {
+                            createjs.Sound.play = function(a: any, b: any) {
                                 if (b) {
                                     b.pan = 0.01;
                                 } else {
@@ -43,10 +46,12 @@ class Index extends PureComponent {
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        ...state,
-    };
-};
+interface IReduxState {
+    mode?: string;
+}
+
+const mapStateToProps: IMapStateToProps<IReduxState> = (state: IStoreState) => ({
+    mode: state.persist.mode,
+});
 
 export default connect(mapStateToProps)(Index);

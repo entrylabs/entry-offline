@@ -1,7 +1,7 @@
 import { createStore } from 'redux';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import reducers from './modules';
+import reducers, { IStoreState } from './modules';
 
 // persist store configure
 const persistConfig = {
@@ -18,4 +18,6 @@ function configureStore() {
     return { store, persistor };
 }
 
+export type IMapStateToProps<T> = (state : IStoreState) => T;
+export type IMapDispatchToProps<T> = (dispatch: (action: any) => void) => T;
 export default configureStore;

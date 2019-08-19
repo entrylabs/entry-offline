@@ -10,25 +10,22 @@ import { CommonActionCreators } from '../store/modules/common';
 import { PersistActionCreators } from '../store/modules/persist';
 import { Dropdown } from '@entrylabs/tool/component';
 import ImportToggleHelper from '../helper/importToggleHelper';
-import { IPersistState } from '../reducers/persistReducer';
-import { ICommonState } from '../reducers/commonReducer';
+import { IPersistState } from '../store/modules/persist';
+import { ICommonState } from '../store/modules/common';
+import { IStoreState } from '../store/modules';
+import { IMapDispatchToProps, IMapStateToProps } from '../store';
 
 interface IState {
     dropdownType?: string;
 }
 
-interface IProps extends IDispatchToProps {
-    persist: IPersistState;
-    common: ICommonState;
+interface IProps extends IReduxDispatch, IReduxState {
     onFileAction: (key: string) => void;
     onSaveAction: (key: string) => void;
     onProgramLanguageChanged: (key: string) => void;
-    programLanguageMode: string;
-    mode: (mode: string) => void
     onLoadProject: () => void;
-    language: ({ lang }: { lang: string }) => void,
-    changeProjectName: (data: string) => void,
     onReloadProject: () => void;
+    programLanguageMode: string;
     executionStatus: {
         canRedo: boolean;
         canUndo: boolean;
@@ -127,7 +124,7 @@ class Header extends Component<IProps, IState> {
     }
 
     getLangValue() {
-        const lang = _get(this.props, 'persist.lang');
+        const lang = this.props.persist.lang;
         return _get(root.Lang, lang);
     }
 
@@ -421,16 +418,22 @@ class Header extends Component<IProps, IState> {
     }
 }
 
-const mapStateToProps = (state: any) => ({
-    ...state,
+interface IReduxState {
+    persist: IPersistState,
+    common: ICommonState,
+}
+
+const mapStateToProps: IMapStateToProps<IReduxState> = (state: IStoreState) => ({
+    persist: state.persist,
+    common: state.common,
 });
 
-interface IDispatchToProps {
+interface IReduxDispatch {
     PersistActions: any,
     CommonActions: any;
 }
 
-const mapDispatchToProps: (dispatch: any) => IDispatchToProps = (dispatch: any) => ({
+const mapDispatchToProps: IMapDispatchToProps<IReduxDispatch> = (dispatch: any) => ({
     PersistActions: bindActionCreators(PersistActionCreators, dispatch),
     CommonActions: bindActionCreators(CommonActionCreators, dispatch),
 });
