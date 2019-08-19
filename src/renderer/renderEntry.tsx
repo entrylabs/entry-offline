@@ -5,7 +5,7 @@ import ReactDom from 'react-dom';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import configureStore from './store';
-import Index from './components/Index.jsx';
+import Index from './components/Index';
 
 import IpcRendererHelper from './helper/ipcRendererHelper';
 

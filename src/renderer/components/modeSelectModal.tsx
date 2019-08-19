@@ -1,21 +1,21 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { bindActionCreators, Dispatch } from 'redux';
 import { PersistActionCreators } from '../store/modules/persist';
 import RendererUtils from '../helper/rendererUtils';
 import ImportToggleHelper from '../helper/importToggleHelper';
 import './modeSelectModal.scss';
+import { IMapDispatchToProps } from '../store';
 
-class ModeSelectModal extends PureComponent {
-    constructor(props) {
-        super(props);
-        this.mode = 'workspace';
-        this.state = {
-            mode: 'workspace',
-        };
-    }
+interface IProps extends IReduxDispatch {
+}
 
-    handleSelectAreaClick(type) {
+class ModeSelectModal extends PureComponent<IProps> {
+    state = {
+        mode: 'workspace',
+    };
+
+    handleSelectAreaClick(type: string) {
         this.setState({
             mode: type,
         });
@@ -53,9 +53,9 @@ class ModeSelectModal extends PureComponent {
                             </div>
                             <div
                                 className={'modeDesc'}
-                                dangerouslySetInnerHTML={{ __html: RendererUtils.getLang('Workspace.select_mode_popup_desc1')}}
+                                dangerouslySetInnerHTML={{ __html: RendererUtils.getLang('Workspace.select_mode_popup_desc1') }}
                             />
-                            <div className={'modeButton'} />
+                            <div className={'modeButton'}/>
                         </div>
                         <div
                             className={`workspaceModeSelectPracticalArts ${mode === 'practical_course' ? 'active' : ''} workspaceModeSelectBox`}
@@ -66,14 +66,14 @@ class ModeSelectModal extends PureComponent {
                             </div>
                             <div
                                 className={'modeDesc'}
-                                dangerouslySetInnerHTML={{ __html: RendererUtils.getLang('Workspace.select_mode_popup_desc2')}}
+                                dangerouslySetInnerHTML={{ __html: RendererUtils.getLang('Workspace.select_mode_popup_desc2') }}
                             />
-                            <div className={'modeButton'} />
+                            <div className={'modeButton'}/>
                         </div>
                     </div>
                     <div
                         className={'workspaceModeSelectCloseBtn'}
-                        onClick={async() => {
+                        onClick={async () => {
                             await this.handleCloseButtonClick();
                         }}
                     >
@@ -85,15 +85,15 @@ class ModeSelectModal extends PureComponent {
     }
 }
 
-const mapStateToProps = (state) => {
-    return { ...state };
-};
+interface IReduxDispatch {
+    PersistActions: any;
+}
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps: IMapDispatchToProps<IReduxDispatch> = (dispatch: Dispatch) => ({
     PersistActions: bindActionCreators(PersistActionCreators, dispatch),
 });
 
 export default connect(
-    mapStateToProps,
+    undefined,
     mapDispatchToProps,
 )(ModeSelectModal);
