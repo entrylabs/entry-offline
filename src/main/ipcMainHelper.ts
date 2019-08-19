@@ -1,9 +1,10 @@
-import { app, ipcMain, shell, net } from 'electron';
-import path from 'path';
+import { app, ipcMain, shell } from 'electron';
 import root from 'window-or-global';
+import path from 'path';
 import MainUtils from './mainUtils';
 import Constants from './constants';
 import CommonUtils from './commonUtils';
+import checkUpdateRequest from './utils/network/checkUpdate';
 
 /**
  * ipc process 의 이벤트를 등록한다.
@@ -194,7 +195,7 @@ class IpcMainHelper {
             typedPath = entryObject.fileurl;
             // 기본 이미지 및 사운드인 경우 상대경로이므로 기준 위치 수정
             if (typedPath.startsWith('renderer')) {
-                typedPath = path.join('src', typedPath);
+                typedPath = path.resolve(app.getAppPath(), 'src', typedPath);
             }
         } else {
             switch (type) {
@@ -251,39 +252,13 @@ class IpcMainHelper {
     }
 
     checkUpdate(event: Electron.Event) {
-        const request = net.request({
-            method: 'POST',
-            host: root.sharedObject.hostURI,
-            protocol: root.sharedObject.hostProtocol,
-            path: '/api/checkVersion',
-        });
-
-        request.on('response', (res) => {
-            let body = '';
-            res.on('data', (chunk) => {
-                body += chunk.toString();
+        checkUpdateRequest()
+            .then((data) => {
+                event.sender.send('checkUpdate', root.sharedObject.version, data);
+            })
+            .catch((e) => {
+                console.error(e);
             });
-            res.on('end', () => {
-                let data = {};
-                try {
-                    data = JSON.parse(body);
-                } catch (e) {
-                    console.log(e);
-                }
-                event.sender.send('checkUpdate', app.getVersion(), data);
-            });
-        });
-        request.on('error', (err) => {
-            console.log(err);
-        });
-        request.setHeader('content-type', 'application/json; charset=utf-8');
-        request.write(
-            JSON.stringify({
-                category: 'offline',
-                version: app.getVersion(),
-            }),
-        );
-        request.end();
     }
 
     openUrl(event: Electron.Event, url: string) {

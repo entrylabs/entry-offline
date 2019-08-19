@@ -2,12 +2,10 @@ import path from 'path';
 import fs, { PathLike } from 'fs';
 import rimraf from 'rimraf';
 // @ts-ignore
-import fstream from 'fstream';
-import archiver from 'archiver';
-import zlib from 'zlib';
-import decompress from 'decompress';
+import tar, { CreateOptions, FileOptions } from 'tar';
 import { nativeImage } from 'electron';
 
+type tarCreateOption = FileOptions & CreateOptions;
 /**
  * 파일 및 디렉토리의 생성 / 삭제와 압축등 IO 와 관련된 일을 담당한다.
  */
@@ -20,7 +18,7 @@ export default class {
      */
     static mkdirRecursive(target: string) {
         return new Promise((resolve, reject) => {
-            fs.stat(target, async(err) => {
+            fs.stat(target, async (err) => {
                 if (err) {
                     if (err.code === 'ENOENT') {
                         try {
@@ -81,36 +79,54 @@ export default class {
      * @param targetPath 디렉
      * @return {Promise<>}
      */
-    static unpack(sourcePath: string, targetPath: string) {
-        return decompress(sourcePath, targetPath);
+    static async unpack(sourcePath: string, targetPath: string) {
+        await tar.x({
+            file: sourcePath,
+            cwd: targetPath,
+            filter: (path, entry) => {
+                const { type } = entry;
+                // @ts-ignore
+                return type !== 'SymbolicLink';
+            },
+        });
     }
+
     /**
      * 폴더를 압축하여 파일 하나로 압축해 저장한다.
      * @param sourcePath 압축할 폴더 위치
      * @param targetPath 저장될 파일 경로
+     * @param {tarCreateOption?}options
+     * @param {string[]?}fileList default: sourcePath 경로기준 동일 depth 내 모든 파일
      * @return {Promise<any>}
      */
-    static pack(sourcePath: string, targetPath: string) {
-        return new Promise((resolve, reject) => {
-            const parser = path.parse(sourcePath);
-            const fsWriter = fstream.Writer({ path: targetPath, type: 'File' });
-            const archive = archiver('tar');
-            const gzip = zlib.createGzip();
-
-            fsWriter.on('error', reject);
-            archive.on('error', reject);
-            gzip.on('error', reject);
-
-            fsWriter.on('end', () => {
-                resolve();
-            });
-
-            archive.pipe(gzip)
-                .pipe(fsWriter);
-
-            archive.directory(parser.dir, false);
-            archive.finalize();
-        });
+    static async pack(
+        sourcePath: string,
+        targetPath: string,
+        options: tarCreateOption = {},
+        fileList = ['.'],
+    ) {
+        const srcDirectoryPath = path.parse(sourcePath).dir;
+        const defaultOption: tarCreateOption = {
+            file: targetPath,
+            gzip: {
+                level: 6,
+                memLevel: 9,
+            },
+            cwd: srcDirectoryPath,
+            filter: (path, stat) => {
+                try {
+                    // @ts-ignore
+                    return !stat.isSymbolicLink();
+                } catch (e) {
+                    return false;
+                }
+            },
+            portable: true,
+        };
+        await tar.c(
+            Object.assign(defaultOption, options),
+            fileList,
+        );
     }
 
     /**
@@ -138,12 +154,16 @@ export default class {
      * 파일을 생성한다.
      * @param contents 작성할 내용
      * @param {string}filePath 파일 경로
+     * @param {fs.WriteFileOptions}option 파일 옵션
      * @return {Promise<>}
      */
-    static writeFile(contents: any, filePath: string) {
+    static writeFile(contents: any, filePath: string, option: fs.WriteFileOptions = {
+        encoding: 'utf8',
+        mode: '0777',
+    }) {
         return new Promise((resolve, reject) => {
             this.ensureDirectoryExistence(filePath);
-            fs.writeFile(filePath, contents, (err) => {
+            fs.writeFile(filePath, contents, option, (err) => {
                 if (err) {
                     return reject(err);
                 }

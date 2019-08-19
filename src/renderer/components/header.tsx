@@ -5,8 +5,9 @@ import _get from 'lodash/get';
 import RendererUtils from '../helper/rendererUtils';
 import EntryUtils from '../helper/entry/entryUtils';
 import { connect } from 'react-redux';
-import { commonAction, showPopup } from '../actions';
-import { CHANGE_LANGUAGE, CHANGE_PROJECT_NAME, WS_MODE } from '../actions/types';
+import { bindActionCreators } from 'redux';
+import { CommonActionCreators } from '../store/modules/common';
+import { PersistActionCreators } from '../store/modules/persist';
 import { Dropdown } from '@entrylabs/tool/component';
 import ImportToggleHelper from '../helper/importToggleHelper';
 import { IPersistState } from '../reducers/persistReducer';
@@ -219,24 +220,24 @@ class Header extends Component<IProps, IState> {
 
     async handleChangeWsMode(item: DropDownItemPair) {
         if (EntryUtils.confirmProjectWillDismiss()) {
-            const { mode, onLoadProject } = this.props;
+            const { PersistActions, onLoadProject } = this.props;
             const key = item[1];
             await ImportToggleHelper.changeEntryStatic(key);
-            mode(key);
+            PersistActions.changeWorkspaceMode(key);
             onLoadProject();
         }
     }
 
     async handleChangeLanguage(item: DropDownItemPair) {
-        const { language, onReloadProject } = this.props;
+        const { PersistActions, onReloadProject } = this.props;
         const langType = item[1];
         await ImportToggleHelper.changeLang(langType);
-        language({ lang: langType });
+        PersistActions.changeLanguage(langType);
         onReloadProject();
     }
 
     render() {
-        const { persist = {lang: '', mode: ''}, common, programLanguageMode, changeProjectName, executionStatus = { canRedo: false, canUndo: false}} = this.props;
+        const { CommonActions, persist = {lang: '', mode: ''}, common, programLanguageMode, executionStatus = { canRedo: false, canUndo: false}} = this.props;
         const { canRedo = false, canUndo = false } = executionStatus;
         const { projectName = RendererUtils.getDefaultProjectName() } = common;
         const { lang, mode } = persist;
@@ -256,7 +257,7 @@ class Header extends Component<IProps, IState> {
                             defaultValue={projectName}
                             onBlur={({ target }) => {
                                 const { value } = target;
-                                changeProjectName(value);
+                                CommonActions.changeProjectName(value);
                             }}
                         />
                     </div>
@@ -419,12 +420,10 @@ const mapStateToProps = (state: any) => ({
     ...state,
 });
 
-const mapDispatchToProps = {
-    showPopup,
-    language: (data: string) => commonAction(CHANGE_LANGUAGE, data),
-    changeProjectName: (data: string) => commonAction(CHANGE_PROJECT_NAME, data),
-    mode: (data: string) => commonAction(WS_MODE, data),
-};
+const mapDispatchToProps = (dispatch: any) => ({
+    PersistActions: bindActionCreators(PersistActionCreators, dispatch),
+    CommonActions: bindActionCreators(CommonActionCreators, dispatch),
+});
 
 export default connect(
     mapStateToProps,

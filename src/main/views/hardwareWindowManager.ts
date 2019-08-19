@@ -1,5 +1,6 @@
 import { BrowserWindow, app, ipcMain, NamedBrowserWindow } from 'electron';
 import path from 'path';
+import HardwareMainRouter from '../../renderer/bower_components/entry-hw/app/src/main/mainRouter';
 
 export default class {
     hardwareWindow?: NamedBrowserWindow;
@@ -24,16 +25,19 @@ export default class {
             show: false,
             webPreferences: {
                 backgroundThrottling: false,
+                nodeIntegration: false,
+                preload: path.resolve(
+                    app.getAppPath(), 'src', 'renderer', 'bower_components', 'entry-hw', 'app', 'src', 'renderer', 'preload.js',
+                ),
             },
         });
+        this.hardwareWindow.hardwareRouter = new HardwareMainRouter(this.hardwareWindow);
 
         this.hardwareWindow.setMenu(null);
         this.hardwareWindow.setMenuBarVisibility(false);
         this.hardwareWindow.loadURL(`file:///${path.resolve(
-            app.getAppPath(), 'src', 'renderer', 'bower_components', 'entry-hw', 'app', 'index.html')}`);
-        this.hardwareWindow.on('closed', () => {
-            this.hardwareWindow = undefined;
-        });
+            app.getAppPath(), 'src', 'renderer', 'bower_components', 'entry-hw', 'app', 'src', 'renderer', 'views', 'index.html')}`);
+        this.hardwareWindow.on('closed', this.closeHardwareWindow.bind(this));
 
         this.hardwareWindow.webContents.name = 'hardware';
         this.requestLocalDataInterval = undefined;
@@ -65,10 +69,18 @@ export default class {
 
     closeHardwareWindow() {
         if (this.hardwareWindow) {
+            if (this.hardwareWindow.hardwareRouter) {
+                const foo = this.hardwareWindow.hardwareRouter;
+                foo.close();
+                foo.server.close();
+                delete this.hardwareWindow.hardwareRouter;
+            }
+
             if (this.requestLocalDataInterval) {
                 clearInterval(this.requestLocalDataInterval);
             }
             this.hardwareWindow.destroy();
+            this.hardwareWindow = undefined;
         }
     }
 

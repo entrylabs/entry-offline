@@ -5,12 +5,12 @@
     <key>CFBundleDocumentTypes</key>
     <array>
       <dict>
-        <key>CFBundleTypeExtensions</key>
+        <key>LSItemContentTypes</key>
         <array>
-          <string>ent</string>
+          <string>org.playentry.ent</string>
         </array>
         <key>CFBundleTypeIconFile</key>
-        <string>electron.icns</string>
+        <string>icon.icns</string>
         <key>CFBundleTypeName</key>
         <string>Entry File</string>
         <key>CFBundleTypeRole</key>
@@ -18,20 +18,26 @@
         <key>LSHandlerRank</key>
         <string>Alternate</string>
       </dict>
-      <dict>
-        <key>CFBundleTypeExtensions</key>
-        <array>
-          <string>entx</string>
-        </array>
-        <key>CFBundleTypeIconFile</key>
-        <string>electron.icns</string>
-        <key>CFBundleTypeName</key>
-        <string>Entry File</string>
-        <key>CFBundleTypeRole</key>
-        <string>Editor</string>
-        <key>LSHandlerRank</key>
-        <string>Alternate</string>
-      </dict>
+    </array>
+    <key>UTExportedTypeDeclarations</key>
+    <array>
+        <dict>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.data</string>
+            </array>
+            <key>UTTypeDescription</key>
+            <string>Entry File</string>
+            <key>UTTypeIdentifier</key>
+            <string>org.playentry.ent</string>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <string>ent</string>
+                <key>public.mime-type</key>
+                <string>application/octet-stream</string>
+            </dict>
+        </dict>
     </array>
   </dict>
 </plist>

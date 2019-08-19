@@ -8,43 +8,41 @@ import HardwareWindowManager from './main/views/hardwareWindowManager';
 import MainWindowManager from './main/views/mainWindowManager';
 import AboutWindowManager from './main/views/aboutWindowManager';
 import root from 'window-or-global';
-import commandLineResolve from './main/electron/commandLineResolver';
+import parseCommandLine from './main/utils/functions/parseCommandLine';
+import configInitialize from './main/utils/functions/configInitialize';
 
 import('./main/ipcMainHelper');
-import('./main/electron/globalShortCutRegister');
+import('./main/utils/functions/globalShortCutRegister');
 
-const option = commandLineResolve(process.argv.slice(1));
-
-root.sharedObject = {
-    roomId: '',
-    mainWindowId: '',
+const commandLineOptions: Readonly<CommandLineOptions> = parseCommandLine(process.argv.slice(1));
+const configurations: Readonly<FileConfigurations> = configInitialize(commandLineOptions.config);
+const runtimeProperties: RuntimeGlobalProperties = {
+    roomIds: [],
+    mainWindowId: -1,
     workingPath: '',
-    isInitEntry: false,
-    initProjectPath: option.file,
     appName: 'entry',
-    hostURI: option.hostURI,
-    hostProtocol: option.hostProtocol,
 };
 
-app.on('window-all-closed', function() {
-    app.quit();
-    process.exit(0);
-});
+global.sharedObject = Object.assign({}, runtimeProperties, configurations, commandLineOptions);
 
 if (!app.requestSingleInstanceLock()) {
     app.quit();
 } else {
-    app.commandLine.appendSwitch("disable-renderer-backgrounding");
+    app.commandLine.appendSwitch('disable-renderer-backgrounding');
+
+    app.on('window-all-closed', function() {
+        app.quit();
+        process.exit(0);
+    });
 
     app.once('ready', () => {
-        const mainWindow = new MainWindowManager(option);
+        const mainWindow = new MainWindowManager(commandLineOptions);
         const hardwareWindow = new HardwareWindowManager();
         const aboutWindow = new AboutWindowManager(mainWindow.window);
 
         app.on('second-instance', (event, commandLine, workingDirectory) => {
             // 어플리케이션을 중복 실행했습니다. 주 어플리케이션 인스턴스를 활성화 합니다.
-            const option = commandLineResolve(commandLine);
-
+            const option = parseCommandLine(commandLine);
             if (mainWindow) {
                 mainWindow.activateWindow();
                 mainWindow.loadProjectFromPath(option.file);
@@ -53,7 +51,6 @@ if (!app.requestSingleInstanceLock()) {
 
         app.on('open-file', function(event, pathToOpen) {
             if (process.platform === 'darwin') {
-                option.file = pathToOpen;
                 if (mainWindow) {
                     mainWindow.loadProjectFromPath(pathToOpen);
                 }
@@ -61,7 +58,7 @@ if (!app.requestSingleInstanceLock()) {
         });
 
         ipcMain.on('forceClose', () => {
-            mainWindow.close({ isForceClose : true });
+            mainWindow.close({ isForceClose: true });
         });
 
         ipcMain.on('reload', function(event: NamedEvent, arg: any) {
@@ -94,7 +91,7 @@ if (!app.requestSingleInstanceLock()) {
     });
 
     ipcMain.on('roomId', function(event: Electron.Event, arg: any) {
-        event.returnValue = root.sharedObject.roomId;
+        event.returnValue = root.sharedObject.roomIds;
     });
 
     ipcMain.on('version', function(event: Electron.Event, arg: any) {

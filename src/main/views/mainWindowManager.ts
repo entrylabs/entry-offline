@@ -1,12 +1,6 @@
 import { app, BrowserWindow, dialog, FileFilter, SaveDialogOptions, NamedBrowserWindow } from 'electron';
 import root from 'window-or-global';
-import MainUtils from '../mainUtils';
 import path from 'path';
-
-type MainWindowOption = {
-    [key: string]: any;
-    debug: boolean;
-}
 
 type CrashMessage = {
     title: string;
@@ -35,9 +29,9 @@ export default class {
         };
     }
 
-    constructor(option: MainWindowOption) {
+    constructor(option: CommandLineOptions) {
         const language = app.getLocale();
-        let title = app.getVersion();
+        let title = root.sharedObject.version;
         const crashedMsg: CrashMessage = {
             title: '',
             content: '',
@@ -96,42 +90,44 @@ export default class {
         });
 
 
-        mainWindow.webContents.on('crashed', () => {
-            dialog.showErrorBox(crashedMsg.title, crashedMsg.content);
-            dialog.showSaveDialog(
-                mainWindow,
-                {
-                    filters: [
-                        {
-                            name: 'Entry File',
-                            extensions: ['ent'],
-                        },
-                    ],
-                },
-                async(destinationPath) => {
-                    let err;
-                    try {
-                        await MainUtils.saveProject(root.sharedObject.workingPath, destinationPath);
-                    } catch (error) {
-                        console.log(error);
-                        err = error;
-                    }
-                    mainWindow.reload();
-                },
-            );
-        });
+        // mainWindow.webContents.on('crashed', () => {
+        //     dialog.showErrorBox(crashedMsg.title, crashedMsg.content);
+        //     dialog.showSaveDialog(
+        //         mainWindow,
+        //         {
+        //             filters: [
+        //                 {
+        //                     name: 'Entry File',
+        //                     extensions: ['ent'],
+        //                 },
+        //             ],
+        //         },
+        //         async(destinationPath) => {
+        //             let err;
+        //             try {
+        //                 await MainUtils.saveProject(root.sharedObject.workingPath, destinationPath);
+        //             } catch (error) {
+        //                 console.log(error);
+        //                 err = error;
+        //             }
+        //             mainWindow.reload();
+        //         },
+        //     );
+        // });
 
         mainWindow.setMenu(null);
         mainWindow.loadURL(`file://${path.resolve(app.getAppPath(), 'src', 'main.html')}`);
-
-        if (option.debug) {
-            mainWindow.webContents.openDevTools();
-        }
 
         mainWindow.webContents.name = 'entry';
 
         mainWindow.on('page-title-updated', function(e) {
             e.preventDefault();
+        });
+
+        mainWindow.on('show', () => {
+            if (option.debug) {
+                mainWindow.webContents.openDevTools();
+            }
         });
 
         mainWindow.on('closed', () => {
@@ -146,7 +142,7 @@ export default class {
             return;
         }
 
-        if (!isForceClose && root.sharedObject.isInitEntry) {
+        if (!isForceClose) {
             this.mainWindow.webContents.send('mainClose');
         } else {
             this.mainWindow.close();
@@ -163,8 +159,8 @@ export default class {
         }
     }
 
-    loadProjectFromPath(projectPath: string) {
-        if (this.mainWindow && !this.mainWindow.isDestroyed() &&  projectPath) {
+    loadProjectFromPath(projectPath?: string) {
+        if (this.mainWindow && !this.mainWindow.isDestroyed() && projectPath) {
             this.mainWindow.webContents.send('loadProjectFromMain', projectPath);
         }
     }

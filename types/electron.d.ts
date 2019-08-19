@@ -12,6 +12,7 @@ declare module 'electron' {
 
     export interface NamedBrowserWindow extends BrowserWindow {
         webContents: NamedWebContents
+        hardwareRouter?: any;
     }
 
     export interface NamedEvent extends Event {

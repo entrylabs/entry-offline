@@ -3,8 +3,8 @@ import Header from './header';
 import './workspace.scss';
 import '../resources/styles/fonts.scss';
 import { connect } from 'react-redux';
-import { commonAction, modalProgressAction } from '../actions';
-import { FETCH_POPUP_ITEMS, UPDATE_PROJECT, WS_MODE, CHANGE_PROJECT_NAME } from '../actions/types';
+import { PersistActionCreators } from '../store/modules/persist';
+import { CommonActionCreators } from '../store/modules/common';
 import _includes from 'lodash/includes';
 import _debounce from 'lodash/debounce';
 import entryPatch from '../helper/entry/entryPatcher';
@@ -16,6 +16,8 @@ import IpcRendererHelper from '../helper/ipcRendererHelper';
 import LocalStorageManager from '../helper/storageManager';
 import ImportToggleHelper from '../helper/importToggleHelper';
 import EntryUtils from '../helper/entry/entryUtils';
+import { bindActionCreators } from 'redux';
+import { ModalActionCreators } from '../store/modules/modal';
 
 /* global Entry, EntryStatic */
 class Workspace extends Component {
@@ -343,27 +345,27 @@ class Workspace extends Component {
      * @param{Object?} project undefined 인 경우 신규 프로젝트로 생성
      */
     loadProject = async(project) => {
-        const { changeWorkspaceMode, persist, changeProjectName } = this.props;
+        const { CommonActions, PersistActions, persist } = this.props;
         const { mode: currentWorkspaceMode } = persist;
         let projectWorkspaceMode = currentWorkspaceMode;
 
         if (project) {
             this.projectSavedPath = project.savedPath || '';
             projectWorkspaceMode = project.isPracticalCourse ? 'practical_course' : 'workspace';
-            changeProjectName(project.name || RendererUtils.getDefaultProjectName());
+            CommonActions.changeProjectName(project.name || RendererUtils.getDefaultProjectName());
         } else {
             delete this.projectSavedPath;
-            changeProjectName(RendererUtils.getDefaultProjectName());
+            CommonActions.changeProjectName(RendererUtils.getDefaultProjectName());
         }
 
         // 현재 WS mode 와 이후 변경될 모드가 다른 경우
         if (currentWorkspaceMode !== projectWorkspaceMode) {
             if (projectWorkspaceMode === 'practical_course') {
                 await ImportToggleHelper.changeEntryStatic('practical_course');
-                changeWorkspaceMode('practical_course');
+                PersistActions.changeWorkspaceMode('practical_course');
             } else {
                 await ImportToggleHelper.changeEntryStatic('workspace');
-                changeWorkspaceMode('workspace');
+                PersistActions.changeWorkspaceMode('workspace');
             }
         }
 
@@ -416,8 +418,8 @@ class Workspace extends Component {
     };
 
     showModalProgress(type, title, description) {
-        const { modalProgressAction } = this.props;
-        modalProgressAction({
+        const { ModalActions } = this.props;
+        ModalActions.showModalProgress({
             isShow: true,
             data: {
                 type,
@@ -428,8 +430,8 @@ class Workspace extends Component {
     }
 
     hideModalProgress = () => {
-        const { modalProgressAction } = this.props;
-        modalProgressAction({
+        const { ModalActions } = this.props;
+        ModalActions.showModalProgress({
             isShow: false,
         });
     };
@@ -469,17 +471,11 @@ const mapStateToProps = (state) => {
     return { ...state };
 };
 
-const mapDispatchToProps = {
-    modalProgressAction,
-    changeWorkspaceMode: (data) => commonAction(WS_MODE, data),
-    changeProjectName: (data) => commonAction(CHANGE_PROJECT_NAME, data),
-    updateProject: (data) => {
-        return commonAction(UPDATE_PROJECT, data);
-    },
-    fetchPopup: (data) => {
-        return commonAction(FETCH_POPUP_ITEMS, data);
-    },
-};
+const mapDispatchToProps = (dispatch) => ({
+    PersistActions: bindActionCreators(PersistActionCreators, dispatch),
+    CommonActions: bindActionCreators(CommonActionCreators, dispatch),
+    ModalActions: bindActionCreators(ModalActionCreators, dispatch),
+});
 
 export default connect(
     mapStateToProps,

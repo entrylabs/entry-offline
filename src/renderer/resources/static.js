@@ -7,17 +7,18 @@ import { EntryStatic } from '../bower_components/entry-js/extern/util/static.js'
  */
 
 const originGetAllBlocks = EntryStatic.getAllBlocks;
-EntryStatic.getAllBlocks = (() =>
-    _.memoize(() => {
-        const allBlocks = originGetAllBlocks();
-        const arduino = _.find(allBlocks, ['category', 'arduino']);
-        const { blocks } = arduino;
-        const index = blocks.indexOf('arduino_open');
-        blocks.splice(index, 1);
-        return allBlocks;
-    }))();
+EntryStatic.getAllBlocks = () => {
+    const allBlocks = originGetAllBlocks();
+    const arduino = _.find(allBlocks, ['category', 'arduino']);
+    arduino.blocks.forEach((block, index) => {
+        if (['arduino_download_connector'].indexOf(block) !== -1) {
+            arduino.blocks.splice(index, 1);
+        }
+    });
+    return allBlocks;
+};
 
 const sharedObject = Utils.getSharedObject();
-EntryStatic.baseUrl = sharedObject && `${sharedObject.hostProtocol}//${sharedObject.hostURI}`;
+EntryStatic.baseUrl = sharedObject && sharedObject.baseUrl;
 
 export default EntryStatic;

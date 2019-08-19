@@ -37,6 +37,9 @@
         "!src/renderer_build/hot",
         "!src/**/*.map"
     ],
+    "extraResources": [
+        "config/**/*"
+    ],
     "electronCompile": false,
     "asar": true,
     "appId": "org.playentry.entry",

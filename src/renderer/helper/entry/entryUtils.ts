@@ -43,18 +43,18 @@ export default class {
     static getSavedProject() {
         return new Promise(((resolve) => {
             const sharedObject = RendererUtils.getSharedObject();
-            const { initProjectPath } = sharedObject;
+            const { file } = sharedObject;
             const reloadProject = StorageManager.loadTempProject();
             const project = StorageManager.loadProject();
 
-            console.log('initProjectPath', initProjectPath);
-            if (initProjectPath) {
+            console.log('file', file);
+            if (file) {
                 // 에러 처리는 안하니까, 에러 발생시 workspace#showErrorModalProgress 활용 필요
-                IpcRendererHelper.loadProject(initProjectPath)
+                IpcRendererHelper.loadProject(file)
                     .then(resolve)
                     .catch(() => resolve())
                     .finally(() => {
-                        sharedObject.initProjectPath = undefined;
+                        sharedObject.file = undefined;
                     });
             } else if (reloadProject) {
                 resolve(reloadProject);
