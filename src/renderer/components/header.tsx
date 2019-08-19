@@ -17,7 +17,7 @@ interface IState {
     dropdownType?: string;
 }
 
-interface IProps {
+interface IProps extends IDispatchToProps {
     persist: IPersistState;
     common: ICommonState;
     onFileAction: (key: string) => void;
@@ -237,7 +237,12 @@ class Header extends Component<IProps, IState> {
     }
 
     render() {
-        const { CommonActions, persist = {lang: '', mode: ''}, common, programLanguageMode, executionStatus = { canRedo: false, canUndo: false}} = this.props;
+        const {
+            CommonActions, persist = {
+                lang: '',
+                mode: '',
+            }, common, programLanguageMode, executionStatus = { canRedo: false, canUndo: false },
+        } = this.props;
         const { canRedo = false, canUndo = false } = executionStatus;
         const { projectName = RendererUtils.getDefaultProjectName() } = common;
         const { lang, mode } = persist;
@@ -420,7 +425,12 @@ const mapStateToProps = (state: any) => ({
     ...state,
 });
 
-const mapDispatchToProps = (dispatch: any) => ({
+interface IDispatchToProps {
+    PersistActions: any,
+    CommonActions: any;
+}
+
+const mapDispatchToProps: (dispatch: any) => IDispatchToProps = (dispatch: any) => ({
     PersistActions: bindActionCreators(PersistActionCreators, dispatch),
     CommonActions: bindActionCreators(CommonActionCreators, dispatch),
 });
