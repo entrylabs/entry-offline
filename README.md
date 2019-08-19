@@ -51,13 +51,14 @@ npm install --global node-gyp
 엔트리 오프라인은 `main process` 와 `renderer process` 가 전부 webpack build 되어있습니다.  
 그러므로 실제 실행시에는 빌드 후 실행해야 합니다.
 
-> 첫번째 쉘
 ```bash
+# 웹팩 빌드
 yarn watch
+yarn webpack:dev #한번만 실행하려는 경우
 ```
 
-> 두번째 쉘 (웹팩 빌드 완료 후)
 ```bash
+# 일렉트론 실행
 yarn start
 ```
 
