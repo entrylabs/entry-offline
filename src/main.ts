@@ -2,7 +2,7 @@ import {
     app,
     Menu,
     ipcMain,
-    NamedEvent,
+    NamedEvent, BrowserWindow,
 } from 'electron';
 import HardwareWindowManager from './main/views/hardwareWindowManager';
 import MainWindowManager from './main/views/mainWindowManager';
@@ -28,6 +28,7 @@ global.sharedObject = Object.assign({}, runtimeProperties, configurations, comma
 if (!app.requestSingleInstanceLock()) {
     app.quit();
 } else {
+    let mainWindow: MainWindowManager;
     app.commandLine.appendSwitch('disable-renderer-backgrounding');
 
     app.on('window-all-closed', function() {
@@ -35,8 +36,17 @@ if (!app.requestSingleInstanceLock()) {
         process.exit(0);
     });
 
+    app.on('open-file', function(event, pathToOpen) {
+        if (process.platform === 'darwin') {
+            global.sharedObject.workingPath = pathToOpen;
+            if (mainWindow) {
+                mainWindow.loadProjectFromPath(pathToOpen);
+            }
+        }
+    });
+
     app.once('ready', () => {
-        const mainWindow = new MainWindowManager(commandLineOptions);
+        mainWindow = new MainWindowManager(commandLineOptions);
         const hardwareWindow = new HardwareWindowManager();
         const aboutWindow = new AboutWindowManager(mainWindow.window);
 
@@ -46,14 +56,6 @@ if (!app.requestSingleInstanceLock()) {
             if (mainWindow) {
                 mainWindow.activateWindow();
                 mainWindow.loadProjectFromPath(option.file);
-            }
-        });
-
-        app.on('open-file', function(event, pathToOpen) {
-            if (process.platform === 'darwin') {
-                if (mainWindow) {
-                    mainWindow.loadProjectFromPath(pathToOpen);
-                }
             }
         });
 

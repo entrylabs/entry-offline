@@ -61,10 +61,19 @@ class Workspace extends Component<IProps> {
 
     componentDidMount() {
         IpcRendererHelper.checkUpdate();
-        setTimeout(async () => {
-            const project = await EntryUtils.getSavedProject();
-            await this.loadProject(project);
-            this.isFirstRender = false;
+        setTimeout(async() => {
+            try {
+                const project = await EntryUtils.getSavedProject();
+                await this.loadProject(project);
+                this.isFirstRender = false;
+            } catch (e) {
+                this.showModalProgress(
+                    'error',
+                    RendererUtils.getLang('Workspace.loading_fail_msg'),
+                    RendererUtils.getLang('Workspace.fail_contact_msg'),
+                );
+                await this.loadProject();
+            }
         }, 0);
     }
 
@@ -78,6 +87,9 @@ class Workspace extends Component<IProps> {
                 );
                 const project = await readProjectFunction;
                 await this.loadProject(project);
+            } catch (e) {
+                console.log('error occurred, ', e);
+                alert('asdfasdf');
             } finally {
                 this.hideModalProgress();
             }
