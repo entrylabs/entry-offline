@@ -49,8 +49,7 @@ export default class {
             const findList =
                 table.filter((object) => {
                     if (!object.category) {
-                        resolve();
-                        return;
+                        return false;
                     }
 
                     const { main = '', sub = '' } = object.category;
