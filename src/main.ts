@@ -19,7 +19,7 @@ const configurations: Readonly<FileConfigurations> = configInitialize(commandLin
 const runtimeProperties: RuntimeGlobalProperties = {
     roomIds: [],
     mainWindowId: -1,
-    workingPath: '',
+    workingPath: commandLineOptions.file || '',
     appName: 'entry',
 };
 
