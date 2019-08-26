@@ -40,38 +40,41 @@ export default class MainUtils {
             const baseAppPath = Constants.appPath;
             const tempDirectoryPath = path.join(baseAppPath, 'temp');
 
-            await MainUtils.resetSaveDirectory();
-            await FileUtils.mkdirRecursive(tempDirectoryPath);
-            await FileUtils.unpack(filePath, baseAppPath);
-
-            fs.readFile(
-                path.resolve(tempDirectoryPath, 'project.json'),
-                'utf8',
-                (err, data) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        const project = JSON.parse(data);
-                        if (project.objects[0] && project.objects[0].script.substr(0, 4) === '<xml') {
-                            BlockConverter.convert(project, (convertedProject: any) => {
+            try {
+                await MainUtils.resetSaveDirectory();
+                await FileUtils.mkdirRecursive(tempDirectoryPath);
+                await FileUtils.unpack(filePath, baseAppPath);
+                fs.readFile(
+                    path.resolve(tempDirectoryPath, 'project.json'),
+                    'utf8',
+                    (err, data) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            const project = JSON.parse(data);
+                            if (project.objects[0] && project.objects[0].script.substr(0, 4) === '<xml') {
+                                BlockConverter.convert(project, (convertedProject: any) => {
+                                    MainUtils.changeObjectsPath(
+                                        convertedProject.objects,
+                                        Constants.replaceStrategy.fromExternal,
+                                    );
+                                    convertedProject.savedPath = filePath; // real .ent file's path
+                                    resolve(convertedProject);
+                                });
+                            } else {
                                 MainUtils.changeObjectsPath(
-                                    convertedProject.objects,
+                                    project.objects,
                                     Constants.replaceStrategy.fromExternal,
                                 );
-                                convertedProject.savedPath = filePath; // real .ent file's path
-                                resolve(convertedProject);
-                            });
-                        } else {
-                            MainUtils.changeObjectsPath(
-                                project.objects,
-                                Constants.replaceStrategy.fromExternal,
-                            );
-                            project.savedPath = filePath; // real .ent file's path
-                            resolve(project);
+                                project.savedPath = filePath; // real .ent file's path
+                                resolve(project);
+                            }
                         }
-                    }
-                },
-            );
+                    },
+                );
+            } catch (e) {
+                reject(e);
+            }
         });
     }
 

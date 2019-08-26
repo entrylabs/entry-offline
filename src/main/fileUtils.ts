@@ -79,15 +79,23 @@ export default class {
      * @param targetPath 디렉
      * @return {Promise<>}
      */
-    static async unpack(sourcePath: string, targetPath: string) {
-        await tar.x({
-            file: sourcePath,
-            cwd: targetPath,
-            filter: (path, entry) => {
-                const { type } = entry;
-                // @ts-ignore
-                return type !== 'SymbolicLink';
-            },
+    static unpack(sourcePath: string, targetPath: string) {
+        return new Promise((resolve, reject) => {
+            process.once('uncaughtException', function(e) {
+                reject();
+            });
+
+            tar.x({
+                file: sourcePath,
+                cwd: targetPath,
+                filter: (path, entry) => {
+                    const { type } = entry;
+                    // @ts-ignore
+                    return type !== 'SymbolicLink';
+                },
+            })
+                .then(resolve)
+                .catch(reject);
         });
     }
 
