@@ -41,7 +41,7 @@ class EntryModalHelper {
                         EntryModalHelper.fetchPopup(result);
                     });
             },
-            submit: async(data: any) => {
+            submit: async (data: any) => {
                 const newObjects = await IpcRendererHelper.importObjectsFromResource(data.selected);
                 newObjects.forEach((item) => {
                     const labeledItem = EntryModalHelper._getLabeledObject(item);
@@ -67,7 +67,7 @@ class EntryModalHelper {
                     objectType: 'sprite',
                     sprite: {
                         name: `${RendererUtils.getLang('Workspace.new_object')
-                        }${Entry.container.getAllObjects().length + 1}`,
+                            }${Entry.container.getAllObjects().length + 1}`,
                         pictures: [
                             {
                                 dimension: {
@@ -115,7 +115,7 @@ class EntryModalHelper {
                 };
                 Entry.container.addObject(object, 0);
             },
-            dummyUploads: async({ formData, objectData }: { formData: any, objectData: any }) => {
+            dummyUploads: async ({ formData, objectData }: { formData: any, objectData: any }) => {
                 const pictures = formData ? formData.values() : [];
                 const objects = objectData ? objectData.values() : [];
 
@@ -213,7 +213,7 @@ class EntryModalHelper {
                     })
                     .then(EntryModalHelper.fetchPopup);
             },
-            submit: async(data: any) => {
+            submit: async (data: any) => {
                 const pictures = await IpcRendererHelper.importPicturesFromResource(data.selected);
                 pictures.forEach((object) => {
                     const labeledObject = EntryModalHelper._getLabeledObject(object);
@@ -265,7 +265,7 @@ class EntryModalHelper {
                 };
                 Entry.container.addObject(object, 0);
             },
-            dummyUploads: async({ formData }: { formData: any }) => {
+            dummyUploads: async ({ formData }: { formData: any }) => {
                 const files = formData ? formData.values() : []; // keyName : ...uploadFile${idx}
 
                 try {
@@ -335,7 +335,7 @@ class EntryModalHelper {
                         EntryUtils.loadSound(result as any[]);
                     });
             },
-            submit: async(data: any) => {
+            submit: async (data: any) => {
                 const sounds = await IpcRendererHelper.importSoundsFromResource(data.selected);
                 sounds.forEach((item) => {
                     const labeledItem = EntryModalHelper._getLabeledObject(item);
@@ -360,7 +360,7 @@ class EntryModalHelper {
             itemon: (data: any) => {
                 root.createjs.Sound.play(data.id);
             },
-            dummyUploads: async({ formData }: { formData: any }) => {
+            dummyUploads: async ({ formData }: { formData: any }) => {
                 const files = formData ? formData.values() : []; // keyName : ...uploadFile${idx}
 
                 try {
@@ -461,7 +461,7 @@ class EntryModalHelper {
                     Entry.dispatchEvent('pictureImport', item);
                 }
             },
-            dummyUploads: async({ formData }: { formData: any }) => {
+            dummyUploads: async ({ formData }: { formData: any }) => {
                 const files = formData ? formData.values() : []; // keyName : ...uploadFile${idx}
 
                 try {
@@ -571,6 +571,8 @@ class EntryModalHelper {
                 type: 'popup',
                 props: { baseUrl: './renderer/resources' },
             });
+        } else {
+            EntryModalHelper.popup.setData({ data: { data } });
         }
     };
 
@@ -629,7 +631,7 @@ class EntryModalHelper {
             .alert(
                 `${RendererUtils.getLang('Msgs.version_update_msg1')
                     .replace(/%1/gi, latestVersion)
-                }\n\n${RendererUtils.getLang('Msgs.version_update_msg3')}`,
+                    }\n\n${RendererUtils.getLang('Msgs.version_update_msg3')}`,
                 RendererUtils.getLang('General.update_title'),
                 {
                     positiveButtonText: RendererUtils.getLang('General.recent_download'),
