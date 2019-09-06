@@ -518,7 +518,7 @@ class EntryModalHelper {
      * @return popup 자신을 반환한다. 내부 콜백에서 자신을 사용해야 하는 경우 활용가능하다.
      */
     static async _switchPopup(type: any, events: any = {}, data: any = []) {
-        this.loadPopup(type, data);
+        this.loadPopup(data);
         const popup = EntryModalHelper.popup;
         if (this.lastOpenedType === type && data.length === 0) {
             const initialData = await DatabaseManager.findAll({
@@ -550,11 +550,10 @@ class EntryModalHelper {
     /**
      * 팝업을 로드한다. 두번째부터는 기존 팝업을 그대로 사용한다.
      *
-     * @param {!string} type
      * @param {?Object} data
      * @return {Object} popup
      */
-    static loadPopup = (type: string, data: any) => {
+    static loadPopup = (data: any) => {
         if (!EntryModalHelper.popup) {
             const targetDiv = document.createElement('div');
             document.body.appendChild(targetDiv);
