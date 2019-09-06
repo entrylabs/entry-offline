@@ -104,8 +104,8 @@ class Workspace extends Component<IProps> {
         // 교과형에서 하드웨어가 바뀔때 마다 카테고리 변화
         addEventListener('hwChanged', this.handleHardwareChange);
         // 하드웨어 다운로드 탭에서 다운로드 처리
-        addEventListener('newWorkspace', () => {
-            this.handleFileAction('new');
+        addEventListener('newWorkspace', async () => {
+            await this.handleFileAction('new');
         });
         addEventListener('loadWorkspace', () => {
             this.handleFileAction('open_offline');
@@ -385,7 +385,10 @@ class Workspace extends Component<IProps> {
         }
 
         if (!this.isFirstRender) {
+            Entry.clearProject();
             Entry.disposeContainer();
+            // zoom 스케일이 변경된 상태에서 new project 한 경우 블록메뉴에 스케일정보가 남아서 초기화
+            Entry.getMainWS().setScale(1);
         }
         Entry.reloadBlock();
         this.isFirstRender = false;
@@ -393,6 +396,23 @@ class Workspace extends Component<IProps> {
         entryPatch();
         this.addEntryEvents();
         Entry.loadProject(project);
+
+        /*
+        Single Page 동작을 하기 때문에 발생하는 이슈
+        함수 창을 열어두면 해당 함수 편집 스테이지로 바인딩 되고,
+        new 프로젝트를 한다 하더라도 Entry 는 이 데이터를 계속 들고있는다.
+        그래서 강제로 신규 로드시 이전 프로젝트가 함수편집 모드였는지 체크하고,
+        함수용 블록을 추가, 메뉴 업데이트를 하는 동작이다.
+
+        @TODO Entry 의 loadProject 혹은 destroy 개선을 위해 로직을 코어로 이전한다.
+        @since 20190905
+        @author extracold1209
+         */
+        if (Entry.Func.isEdit) {
+            Entry.Func.endEdit();
+            Entry.Func.setupMenuCode();
+            Entry.Func.updateMenu();
+        }
     };
 
     reloadProject = async () => {
