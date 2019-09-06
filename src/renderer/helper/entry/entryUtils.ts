@@ -40,45 +40,46 @@ export default class {
      *
      * @return {Promise<Object>} undefined || Entry Project
      */
-    static getSavedProject() {
-        return new Promise(((resolve, reject) => {
-            const sharedObject = RendererUtils.getSharedObject();
-            const { workingPath } = sharedObject;
-            const reloadProject = StorageManager.loadTempProject();
-            const project = StorageManager.loadProject();
+    static async getSavedProject() {
+        const sharedObject = RendererUtils.getSharedObject();
+        const { file } = sharedObject;
+        const reloadProject = StorageManager.loadTempProject();
+        const project = StorageManager.loadProject();
 
-            console.log('file', workingPath);
-            if (workingPath) {
-                // 에러 처리는 안하니까, 에러 발생시 workspace#showErrorModalProgress 활용 필요
-                IpcRendererHelper.loadProject(workingPath)
-                    .then(resolve)
-                    .catch(() => reject())
-                    .finally(() => {
-                        sharedObject.workingPath = undefined;
-                    });
-            } else if (reloadProject) {
-                resolve(reloadProject);
-            } else if (project) {
-                root.entrylms.confirm(
-                    RendererUtils.getLang('Workspace.confirm_load_temporary'),
-                )
-                    .then((confirm: boolean) => {
-                        if (confirm) {
-                            resolve(project);
-                        } else {
-                            resolve();
-                        }
-                        RendererUtils.clearTempProject({ saveTemp: confirm });
-                    })
-                    .catch((err: any) => {
-                        console.error(err);
-                        resolve();
-                    });
-            } else {
-                resolve(undefined);
-                RendererUtils.clearTempProject();
+        console.log('Workspace load from file : ', file);
+        if (file) {
+            try {
+                return await IpcRendererHelper.loadProject(file);
+            } catch (e) {
+                return undefined;
+            } finally {
+                sharedObject.file = undefined;
             }
-        }));
+        } else if (reloadProject) {
+            return reloadProject;
+        } else if (project) {
+            let confirm = false;
+            try {
+                confirm =
+                    await root.entrylms.confirm(
+                        RendererUtils.getLang('Workspace.confirm_load_temporary'),
+                    );
+
+                if (confirm) {
+                    return project;
+                } else {
+                    return undefined;
+                }
+            } catch (e) {
+                console.error(e);
+                return undefined;
+            } finally {
+                await RendererUtils.clearTempProject({ saveTemp: confirm });
+            }
+        } else {
+            await RendererUtils.clearTempProject();
+            return undefined;
+        }
     }
 
     /**
