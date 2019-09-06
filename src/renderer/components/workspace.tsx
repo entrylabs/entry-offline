@@ -76,6 +76,12 @@ class Workspace extends Component<IProps> {
         }, 0);
     }
 
+    componentDidUpdate(prevProps: Readonly<IProps>): void {
+        if (prevProps.common.projectName !== this.props.common.projectName) {
+            this.handleStorageProjectSave();
+        }
+    }
+
     addMainProcessEvents() {
         IpcRendererHelper.loadProjectFromMain(async (readProjectFunction) => {
             try {
@@ -199,7 +205,7 @@ class Workspace extends Component<IProps> {
         }
     }
 
-    handleStorageProjectSave = _debounce((isImmediate, option = {}) => {
+    handleStorageProjectSave = _debounce((option = {}) => {
         const { engine } = Entry;
         if (engine && engine.isState('run')) {
             return;
