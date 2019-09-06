@@ -65,7 +65,6 @@ class Workspace extends Component<IProps> {
             try {
                 const project = await EntryUtils.getSavedProject();
                 await this.loadProject(project);
-                this.isFirstRender = false;
             } catch (e) {
                 this.showModalProgress(
                     'error',
@@ -381,19 +380,15 @@ class Workspace extends Component<IProps> {
 
         // 현재 WS mode 와 이후 변경될 모드가 다른 경우
         if (currentWorkspaceMode !== projectWorkspaceMode) {
-            if (projectWorkspaceMode === 'practical_course') {
-                await ImportToggleHelper.changeEntryStatic('practical_course');
-                PersistActions.changeWorkspaceMode('practical_course');
-            } else {
-                await ImportToggleHelper.changeEntryStatic('workspace');
-                PersistActions.changeWorkspaceMode('workspace');
-            }
+            await ImportToggleHelper.changeEntryStatic(projectWorkspaceMode);
+            PersistActions.changeWorkspaceMode(projectWorkspaceMode);
         }
 
         if (!this.isFirstRender) {
             Entry.disposeContainer();
-            Entry.reloadBlock();
         }
+        Entry.reloadBlock();
+        this.isFirstRender = false;
         Entry.init(this.container.current, this.initOption);
         entryPatch();
         this.addEntryEvents();
