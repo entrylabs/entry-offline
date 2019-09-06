@@ -77,7 +77,7 @@ class Workspace extends Component<IProps> {
     }
 
     componentDidUpdate(prevProps: Readonly<IProps>): void {
-        if (prevProps.common.projectName !== this.props.common.projectName) {
+        if (prevProps.common.projectName && prevProps.common.projectName !== this.props.common.projectName) {
             this.handleStorageProjectSave();
         }
     }
