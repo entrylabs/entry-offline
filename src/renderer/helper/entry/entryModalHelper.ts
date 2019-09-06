@@ -67,7 +67,7 @@ class EntryModalHelper {
                     objectType: 'sprite',
                     sprite: {
                         name: `${RendererUtils.getLang('Workspace.new_object')
-                            }${Entry.container.getAllObjects().length + 1}`,
+                        }${Entry.container.getAllObjects().length + 1}`,
                         pictures: [
                             {
                                 dimension: {
@@ -612,11 +612,10 @@ class EntryModalHelper {
                         //TODO 추출중입니다 이런 ModalProgress 문구가 있으면 더 좋을것 같음.
                         IpcRendererHelper.downloadExcel(name, data)
                             .then(() => {
-                                root.entrylms.alert('엑셀 추출에 성공했습니다.');
+                                console.log('excel download completed');
                             })
                             .catch((err) => {
                                 console.error(err);
-                                root.entrylms.alert('엑셀 추출에 실패했습니다.');
                             });
                         break;
                     default:
@@ -631,7 +630,7 @@ class EntryModalHelper {
             .alert(
                 `${RendererUtils.getLang('Msgs.version_update_msg1')
                     .replace(/%1/gi, latestVersion)
-                    }\n\n${RendererUtils.getLang('Msgs.version_update_msg3')}`,
+                }\n\n${RendererUtils.getLang('Msgs.version_update_msg3')}`,
                 RendererUtils.getLang('General.update_title'),
                 {
                     positiveButtonText: RendererUtils.getLang('General.recent_download'),
