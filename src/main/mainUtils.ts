@@ -35,46 +35,42 @@ export default class MainUtils {
      * @param filePath ent file path
      * @return {Promise<Object>} 성공시 project, 실패시 {Error}err
      */
-    static loadProject(filePath: string) {
-        return new Promise(async (resolve, reject) => {
-            const baseAppPath = Constants.appPath;
-            const tempDirectoryPath = path.join(baseAppPath, 'temp');
+    static async loadProject(filePath: string) {
+        const baseAppPath = Constants.appPath;
+        const tempDirectoryPath = path.join(baseAppPath, 'temp');
+        await MainUtils.resetSaveDirectory();
+        await FileUtils.mkdirRecursive(tempDirectoryPath);
+        await FileUtils.unpack(filePath, baseAppPath);
 
-            try {
-                await MainUtils.resetSaveDirectory();
-                await FileUtils.mkdirRecursive(tempDirectoryPath);
-                await FileUtils.unpack(filePath, baseAppPath);
-                fs.readFile(
-                    path.resolve(tempDirectoryPath, 'project.json'),
-                    'utf8',
-                    (err, data) => {
-                        if (err) {
-                            reject(err);
-                        } else {
-                            const project = JSON.parse(data);
-                            if (project.objects[0] && project.objects[0].script.substr(0, 4) === '<xml') {
-                                BlockConverter.convert(project, (convertedProject: any) => {
-                                    MainUtils.changeObjectsPath(
-                                        convertedProject.objects,
-                                        Constants.replaceStrategy.fromExternal,
-                                    );
-                                    convertedProject.savedPath = filePath; // real .ent file's path
-                                    resolve(convertedProject);
-                                });
-                            } else {
+        return await new Promise((resolve, reject) => {
+            fs.readFile(
+                path.resolve(tempDirectoryPath, 'project.json'),
+                'utf8',
+                (err, data) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        const project = JSON.parse(data);
+                        if (project.objects[0] && project.objects[0].script.substr(0, 4) === '<xml') {
+                            BlockConverter.convert(project, (convertedProject: any) => {
                                 MainUtils.changeObjectsPath(
-                                    project.objects,
+                                    convertedProject.objects,
                                     Constants.replaceStrategy.fromExternal,
                                 );
-                                project.savedPath = filePath; // real .ent file's path
-                                resolve(project);
-                            }
+                                convertedProject.savedPath = filePath; // real .ent file's path
+                                resolve(convertedProject);
+                            });
+                        } else {
+                            MainUtils.changeObjectsPath(
+                                project.objects,
+                                Constants.replaceStrategy.fromExternal,
+                            );
+                            project.savedPath = filePath; // real .ent file's path
+                            resolve(project);
                         }
-                    },
-                );
-            } catch (e) {
-                reject(e);
-            }
+                    }
+                },
+            );
         });
     }
 

@@ -88,6 +88,7 @@ export default class {
             tar.x({
                 file: sourcePath,
                 cwd: targetPath,
+                strict: true,
                 filter: (path, entry) => {
                     const { type } = entry;
                     // @ts-ignore
