@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import xl from 'excel4node';
 import imageSizeOf from 'image-size';
-import soundDuration from 'mp3-duration';
+import * as musicMetadata from 'music-metadata';
 import { performance } from 'perf_hooks';
 import root from 'window-or-global';
 import Puid from 'puid';
@@ -502,39 +502,28 @@ export default class MainUtils {
      * @param filePath 사운드 파일 경로
      * @return {Promise<Object>} 엔트리 사운드 오브젝트
      */
-    static importSoundToTemp(filePath: string): Promise<any> {
-        return new Promise(async (resolve, reject) => {
-            const originalFileExt = path.extname(filePath);
-            const originalFileName = path.basename(filePath, originalFileExt);
-            const newFileId = MainUtils.createFileId();
-            const newFileName = newFileId + originalFileExt;
-            const newSoundPath = path.join(Constants.tempSoundPath(newFileId), newFileName);
+    static async importSoundToTemp(filePath: string): Promise<any> {
+        const originalFileExt = path.extname(filePath);
+        const originalFileName = path.basename(filePath, originalFileExt);
+        const newFileId = MainUtils.createFileId();
+        const newFileName = newFileId + originalFileExt;
+        const newSoundPath = path.join(Constants.tempSoundPath(newFileId), newFileName);
 
-            try {
-                await FileUtils.copyFile(filePath, newSoundPath);
+        await FileUtils.copyFile(filePath, newSoundPath);
 
-                soundDuration(newSoundPath, (err: Error, duration: number) => {
-                    if (err) {
-                        reject(err);
-                        return;
-                    }
+        const metadata = await musicMetadata.parseFile(newSoundPath, {duration: true});
 
-                    resolve({
-                        _id: CommonUtils.generateHash(),
-                        type: 'user',
-                        name: originalFileName,
-                        filename: newFileId,
-                        ext: originalFileExt,
-                        fileurl: newSoundPath,
-                        path: newSoundPath, //See EntryUtils#loadSound
-                        duration: Math.floor(duration * 10) / 10,
-                    });
-                });
-            } catch (err) {
-                console.error(err);
-                reject(err);
-            }
-        });
+        return {
+            _id: CommonUtils.generateHash(),
+            type: 'user',
+            name: originalFileName,
+            filename: newFileId,
+            ext: originalFileExt,
+            fileurl: newSoundPath,
+            path: newSoundPath, //See EntryUtils#loadSound
+            duration: Math.round((metadata.format.duration || 0) * 10) / 10,
+        };
+
     }
 
     static importSoundsFromResource(sounds: ObjectLike[]) {
