@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import xl from 'excel4node';
 import imageSizeOf from 'image-size';
-import musicMetadata from 'music-metadata';
+import * as musicMetadata from 'music-metadata';
 import { performance } from 'perf_hooks';
 import root from 'window-or-global';
 import Puid from 'puid';
@@ -525,7 +525,7 @@ export default class MainUtils {
             ext: originalFileExt,
             fileurl: newSoundPath,
             path: newSoundPath, //See EntryUtils#loadSound
-            duration: Math.floor(metadata.format.duration * 10) / 10,
+            duration: Math.round((metadata.format.duration || 0) * 10) / 10,
         };
 
     }
