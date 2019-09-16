@@ -227,7 +227,10 @@ export default class {
                 console.log(`currentVersion : ${currentVersion}\nrecentVersion: ${latestVersion}\nneedUpdate: ${hasNewVersion}`);
                 const lastDontShowCheckedVersion = StorageManager.getLastDontShowVersion();
                 // 다시보지않음을 클릭하지 않았거나, 클릭했지만 당시보다 더 높은 버전이 나온 경우 출력
-                if ((!lastDontShowCheckedVersion || (lastDontShowCheckedVersion < latestVersion)) && hasNewVersion) {
+                if (
+                    latestVersion > currentVersion &&
+                    (!lastDontShowCheckedVersion || (latestVersion > lastDontShowCheckedVersion))
+                ) {
                     EntryModalHelper.showUpdateCheckModal(latestVersion);
                     StorageManager.setLastCheckedVersion(latestVersion);
                 }
