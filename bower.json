@@ -4,7 +4,7 @@
     "main": "",
     "moduleType": ["node"],
     "dependencies": {
-        "entry-hw": "https://github.com/entrylabs/entry-hw.git#v1.7.6",
+        "entry-hw": "https://github.com/entrylabs/entry-hw.git#v1.7.7",
         "literallycanvas-mobile": "entrylabs/literallycanvas#feature/mobile",
         "socket.io-client": "~1.4.5",
         "react": "~15.2.0",
@@ -19,7 +19,7 @@
         "bootstrap": "3.3.7",
         "codemirror": "5.12.0",
         "fuzzy": "^0.1.3",
-        "entry-js": "entryjs#dist/offline_v2.0.11",
+        "entry-js": "entryjs#dist/offline_v2.0.12",
         "entry-tool": "^1.1.4"
     },
     "license": "MIT",
