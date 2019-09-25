@@ -4,3 +4,8 @@ html, body{
     min-width: 1024px;
     min-height: 768px;
 }
+
+/* TODO 20190925 무조건 다음에 지우세요 벡터 모아보기 버튼에서 발생하는 문제를 트릭으로 숨겨놓은 CSS 땜빵코드입니다. */
+div.popup .false {
+    display: none;
+}
