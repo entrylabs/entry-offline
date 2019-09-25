@@ -103,9 +103,16 @@ export default class {
      */
     static exportObject(object: Entry.Object) {
         const { name, script } = object;
+        const getObjectData = (script: any, index?: number) => {
+            const blockList = script.getBlockList(undefined, undefined, index);
+            const objectVariable = Entry.variableContainer.getObjectVariables(blockList);
+            return {
+                ...objectVariable,
+                expansionBlocks: Entry.expansion.getExpansions(blockList),
+            };
+        };
 
-        const blockList = script.getBlockList();
-        const objectVariable = Entry.variableContainer.getObjectVariables(blockList);
+        const objectVariable = getObjectData(script);
         objectVariable.objects = [object.toJSON()];
 
         RendererUtils.showSaveDialog({
@@ -135,71 +142,7 @@ export default class {
             console.error('object structure is not valid');
             return;
         }
-
-        const { objects, functions, messages, variables } = model.sprite;
-
-        if (Entry.getMainWS().mode === Entry.Workspace.MODE_VIMBOARD &&
-            (
-                !Entry.TextCodingUtil.canUsePythonVariables(variables) ||
-                !Entry.TextCodingUtil.canUsePythonFunctions(functions)
-            )) {
-            return root.entrylms.alert(RendererUtils.getLang('Menus.object_import_syntax_error'));
-        }
-
-        const objectIdMap: { [key: string]: Entry.Variable } = {};
-        variables.forEach((variable: Entry.Variable) => {
-            const { object } = variable;
-            if (object) {
-                const id = variable.id;
-                const idMap = objectIdMap[object];
-                variable.id = Entry.generateHash();
-                if (!idMap) {
-                    variable.object = Entry.generateHash();
-                    objectIdMap[object] = {
-                        objectId: variable.object,
-                        variableOriginId: [id],
-                        variableId: [variable.id],
-                    };
-                } else {
-                    variable.object = idMap.objectId;
-                    idMap.variableOriginId.push(id);
-                    idMap.variableId.push(variable.id);
-                }
-            }
-        });
-
-        Entry.variableContainer.appendMessages(messages);
-        Entry.variableContainer.appendVariables(variables);
-        Entry.variableContainer.appendFunctions(functions);
-
-        objects.forEach(function(object: Entry.Object) {
-            const idMap = objectIdMap[object.id];
-            if (idMap) {
-                let script = object.script;
-                idMap.variableOriginId.forEach((id: string, idx: number) => {
-                    const regex = new RegExp(id, 'gi');
-                    script = script.replace(regex, idMap.variableId[idx]);
-                });
-                object.script = script;
-                object.id = idMap.objectId;
-            } else if (Entry.container.getObject(object.id)) {
-                object.id = Entry.generateHash();
-            }
-            if (model.objectType === 'textBox') {
-                const text = model.text ? model.text : RendererUtils.getLang('Blocks.TEXT');
-                const options = model.options;
-                object.objectType = 'textBox';
-                Object.assign(object, {
-                    text,
-                    options,
-                    name: RendererUtils.getLang('Workspace.textbox'),
-                });
-            } else {
-                object.objectType = 'sprite';
-            }
-
-            Entry.container.addObject(object, 0);
-        });
+        Entry.Utils.addNewObject(model.sprite);
     }
 
     static addPictureObjectToEntry(picture: Entry.Picture) {
