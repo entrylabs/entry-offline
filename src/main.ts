@@ -2,7 +2,8 @@ import {
     app,
     Menu,
     ipcMain,
-    NamedEvent, BrowserWindow,
+    NamedEvent,
+    dialog,
 } from 'electron';
 import HardwareWindowManager from './main/views/hardwareWindowManager';
 import MainWindowManager from './main/views/mainWindowManager';
@@ -104,3 +105,18 @@ if (!app.requestSingleInstanceLock()) {
         event.sender.send('serverMode', mode);
     });
 }
+
+process.on('uncaughtException', (error) => {
+    const whichButtonClicked = dialog.showMessageBox({
+        type: 'error',
+        title: 'Unexpected Error',
+        message: 'Unexpected Error',
+        detail: error.toString(),
+        buttons: ['ignore', 'exit'],
+    });
+    console.error(error.message, error.stack);
+    if (whichButtonClicked === 1) {
+        process.exit(-1);
+    }
+});
+
