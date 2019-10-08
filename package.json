@@ -16,7 +16,8 @@
         "rebuild": "electron-rebuild",
         "dist:win32": "cross-env NODE_ENV=production webpack && build -c -w --ia32=true",
         "dist:win64": "cross-env NODE_ENV=production webpack && build -c -w --x64=true",
-        "dist:mac": "cross-env NODE_ENV=production webpack && build -c --mac"
+        "dist:mac": "cross-env NODE_ENV=production webpack && build -c --mac",
+        "postinstall": "electron-rebuild && bower i"
     },
     "keywords": [
         "entry",
