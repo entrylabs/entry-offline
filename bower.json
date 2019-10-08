@@ -4,7 +4,8 @@
     "main": "",
     "moduleType": ["node"],
     "dependencies": {
-        "entry-hw": "https://github.com/entrylabs/entry-hw.git#v1.7.7_hamster_s",
+        "entry-hw": "https://github.com/entrylabs/entry-hw.git#feature/pkg",
+        "entry-hw-server": "https://github.com/entrylabs/entry-hw-server.git",
         "literallycanvas-mobile": "entrylabs/literallycanvas#feature/mobile",
         "socket.io-client": "~1.4.5",
         "react": "~15.2.0",
