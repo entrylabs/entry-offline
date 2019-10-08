@@ -18,7 +18,7 @@ class ServerProcessManager {
     }
 
     close() {
-        this.childProcess && this.childProcess.kill();
+        this.childProcess && this.childProcess.close();
     }
 
     addRoomIdsOnSecondInstance(roomId: string) {
