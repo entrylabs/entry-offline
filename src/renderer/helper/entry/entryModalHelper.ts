@@ -25,7 +25,6 @@ class EntryModalHelper {
      * 오브젝트 추가 팝업을 노출한다
      */
     static async showSpritePopup() {
-        console.log('object popup show');
         await this._switchPopup('sprite', {
             fetch: (data: any) => {
                 DatabaseManager
@@ -89,7 +88,6 @@ class EntryModalHelper {
                 Entry.playground.changeViewMode('picture');
             },
             write: (data: any) => {
-                console.log('popupWrite', data);
                 let linebreak = true;
                 if (data.writeType === 'one') {
                     linebreak = false;
@@ -239,7 +237,6 @@ class EntryModalHelper {
                 Entry.playground.addPicture(item, true);
             },
             write: (data: any) => {
-                console.log('popupWrite', data);
                 let linebreak = true;
                 if (data.writeType === 'one') {
                     linebreak = false;

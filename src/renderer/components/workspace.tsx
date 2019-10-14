@@ -94,7 +94,6 @@ class Workspace extends Component<IProps> {
                 await this.loadProject(project);
             } catch (e) {
                 console.log('error occurred, ', e);
-                alert('asdfasdf');
             } finally {
                 this.hideModalProgress();
             }
