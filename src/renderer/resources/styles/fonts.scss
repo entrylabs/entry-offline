@@ -178,3 +178,66 @@
   src: local('둥근모꼴 Regular');
   src: url("../renderer/resources/fonts/DungGeunMo.woff") format('woff');
 }
+/*
+ * 용비어천가 (Korean) https://www.sandollcloud.com/font/Sandoll/107.html
+ */
+@font-face {
+  font-family: 'SDYongbi';
+  font-style: normal;
+  font-weight: 400;
+  src: url("../renderer/resources/fonts/SDYongbi.woff") format('woff');
+}
+/*
+ * 목각 (Korean) https://www.sandollcloud.com/font/Sandoll/485.html
+ */
+@font-face {
+  font-family: 'SDWoodcarving';
+  font-style: normal;
+  font-weight: 400;
+  src: url("../renderer/resources/fonts/SDWoodcarving.woff") format('woff');
+}
+/*
+ * 별이 샤방샤방 (Korean) https://www.sandollcloud.com/font/Sandoll/67.html
+ */
+@font-face {
+  font-family: 'SDShabang';
+  font-style: normal;
+  font-weight: 400;
+  src: url("../renderer/resources/fonts/SDShabang-bMd.woff") format('woff');
+}
+/*
+ * 맵씨 (Korean) https://www.sandollcloud.com/font/Sandoll/513.html
+ */
+@font-face {
+  font-family: 'SDMapssi';
+  font-style: normal;
+  font-weight: 400;
+  src: url("../renderer/resources/fonts/SDMapssi.woff") format('woff');
+}
+/*
+ * 코믹 스텐실 (Korean) https://www.sandollcloud.com/font/Sandoll/1509.html
+ */
+@font-face {
+  font-family: 'SDComicStencil';
+  font-style: normal;
+  font-weight: 400;
+  src: url("../renderer/resources/fonts/SDComicStencil-aBasic.woff") format('woff');
+}
+/*
+ * 시네마극장 (Korean) https://www.sandollcloud.com/font/Sandoll/224.html
+ */
+@font-face {
+  font-family: 'SDCinemaTheater';
+  font-style: normal;
+  font-weight: 400;
+  src: url("../renderer/resources/fonts/SDCinemaTheater.woff") format('woff');
+}
+/*
+ * 초록우산어린이 (Korean) https://www.sandollcloud.com/font/Sandoll/863.html
+ */
+@font-face {
+  font-family: 'SDChildfundkorea';
+  font-style: normal;
+  font-weight: 400;
+  src: url("../renderer/resources/fonts/SDChildfundkorea.woff") format('woff');
+}
