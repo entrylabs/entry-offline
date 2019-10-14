@@ -92,7 +92,7 @@ export default class {
                 filter: (path, entry) => {
                     const { type } = entry;
                     // @ts-ignore
-                    return type !== 'SymbolicLink';
+                    return type !== 'SymbolicLink' && path.startsWith('temp/');
                 },
             })
                 .then(resolve)
