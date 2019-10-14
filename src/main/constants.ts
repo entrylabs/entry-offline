@@ -16,6 +16,7 @@ export default class {
                     result = path.join(this.appPath, result)
                         .replace(/\\/gi, '/');
                 }
+                result = result.replace(/.*\/\//, ''); // 외부 접속 프로토콜 스키마 보안 대응
                 return result;
             },
             toExternal(fileUrl) {
@@ -26,11 +27,13 @@ export default class {
                 }
                 result = result.substring(result.indexOf('temp'));
                 result = result.replace(/\\/gi, '/');
+                result = result.replace(/.*\/\//, ''); // 외부 접속 프로토콜 스키마 보안 대응
 
                 return result;
             },
             toExternalDeleteUrl(fileUrl) {
                 let result: string | undefined = fileUrl;
+                result = result.replace(/.*\/\//, ''); // 외부 접속 프로토콜 스키마 보안 대응
                 if (result.startsWith('renderer')) {
                     result = result.replace('renderer', '.');
                 } else {
