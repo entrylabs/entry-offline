@@ -77,9 +77,10 @@ export default class {
      * 파일을 압축해제하여 디렉토리 위치에 저장한다.
      * @param sourcePath 압축해제할 파일. 일반적으로는 eo 확장자 파일.
      * @param targetPath 디렉
+     * @param filterFunction 해당 함수가 존재하면, 해당 함수 내 true 를 반환하는 파일만 필터된다.
      * @return {Promise<>}
      */
-    static unpack(sourcePath: string, targetPath: string) {
+    static unpack(sourcePath: string, targetPath: string, filterFunction?: (path: string) => boolean) {
         return new Promise((resolve, reject) => {
             process.once('uncaughtException', function(e) {
                 reject();
@@ -91,8 +92,9 @@ export default class {
                 strict: true,
                 filter: (path, entry) => {
                     const { type } = entry;
+                    console.log(path);
                     // @ts-ignore
-                    return type !== 'SymbolicLink' && path.startsWith('temp/');
+                    return (type !== 'SymbolicLink' && (!filterFunction || filterFunction(path)));
                 },
             })
                 .then(resolve)

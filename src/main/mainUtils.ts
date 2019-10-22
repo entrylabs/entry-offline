@@ -40,7 +40,7 @@ export default class MainUtils {
         const tempDirectoryPath = path.join(baseAppPath, 'temp');
         await MainUtils.resetSaveDirectory();
         await FileUtils.mkdirRecursive(tempDirectoryPath);
-        await FileUtils.unpack(filePath, baseAppPath);
+        await FileUtils.unpack(filePath, baseAppPath, (path) => path.startsWith('temp/'));
 
         return await new Promise((resolve, reject) => {
             fs.readFile(
