@@ -14,9 +14,9 @@
         "webpack:renderer": "cross-env NODE_ENV=development webpack --config webpack.renderer.config.js",
         "watch": "cross-env NODE_ENV=development webpack -w",
         "rebuild": "electron-rebuild",
-        "dist:win32": "cross-env NODE_ENV=production webpack && build -c -w --ia32=true",
-        "dist:win64": "cross-env NODE_ENV=production webpack && build -c -w --x64=true",
-        "dist:mac": "cross-env NODE_ENV=production webpack && build -c --mac",
+        "dist:win32": "cross-env NODE_ENV=production webpack && electron-builder -c --win --ia32",
+        "dist:win64": "cross-env NODE_ENV=production webpack && electron-builder -c --win --x64",
+        "dist:mac": "cross-env NODE_ENV=production webpack && electron-builder -c --mac",
         "postinstall": "electron-rebuild && bower i"
     },
     "keywords": [
@@ -85,8 +85,8 @@
         "core-js": "2",
         "cross-env": "^5.2.0",
         "css-loader": "^2.1.0",
-        "electron": "4.0.0",
-        "electron-builder": "^20.38.5",
+        "electron": "4.0.4",
+        "electron-builder": "^21.2.0",
         "electron-rebuild": "^1.8.4",
         "eslint": "^6.2.2",
         "eslint-config-react-app": "^5.0.1",
