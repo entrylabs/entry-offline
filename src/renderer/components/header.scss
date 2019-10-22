@@ -348,3 +348,8 @@
 .text_work_space.on:after {
     background-image: url(../renderer/resources/images/gnb/btn_workspace_arr_on.png);
 }
+
+.entryObjectThumbnailWorkspace.entryObjectTextBox {
+    background-image: url(../renderer/resources/images/workspace/text_icon_ko.svg) !important;
+    background-size: cover;
+}

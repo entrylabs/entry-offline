@@ -153,7 +153,7 @@ class EntryModalHelper {
                                         objectType: firstObject.objectType,
                                         options: firstObject.entity || {},
                                         _id: Entry.generateHash(),
-                                        fileurl: 'renderer/resources/images/popup/text_icon.png',
+                                        fileurl: 'renderer/resources/images/workspace/text_icon_ko.svg',
                                     };
                                 }
 
