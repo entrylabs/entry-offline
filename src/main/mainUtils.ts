@@ -462,10 +462,6 @@ export default class MainUtils {
             let pictureId = MainUtils.createFileId();
 
             try {
-                if (prevFilename && mode === 'edit') {
-                    pictureId = prevFilename;
-                }
-
                 const imagePath = path.join(Constants.tempImagePath(pictureId), `${pictureId}.png`);
                 const thumbnailPath = path.join(Constants.tempThumbnailPath(pictureId), `${pictureId}.png`);
 
@@ -477,12 +473,23 @@ export default class MainUtils {
                         thumbnailPath),
                 ]);
 
+                // 편집모드이며 리소스 기본이미지가이 아닌, temp 내 원본 이미지가 있는 경우 이전 이미지를 삭제한다.
+                if (prevFilename && mode === 'edit') {
+                    const prevImagePath = path.join(Constants.tempImagePath(prevFilename), `${prevFilename}.png`);
+                    const prevThumbnailPath = path.join(Constants.tempThumbnailPath(prevFilename), `${prevFilename}.png`);
+
+                    await Promise.all([
+                        FileUtils.deleteFile(prevImagePath),
+                        FileUtils.deleteFile(prevThumbnailPath),
+                    ]);
+                }
+
                 //TODO 빈 폴더인지 검사한 후, 삭제하기 (앞 4자리가 같은 다른 파일이 있을 수 있음)
                 resolve({
                     type: 'user',
                     name: pictureId,
                     filename: pictureId,
-                    fileurl: `${imagePath.replace(/\\/gi, '/')}?t=${performance.now()}`,
+                    fileurl: imagePath.replace(/\\/gi, '/'),
                     dimension: imageSizeOf(imagePath),
                 });
             } catch (e) {
