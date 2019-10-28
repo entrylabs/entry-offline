@@ -38,6 +38,7 @@ class Workspace extends Component<IProps> {
         defaultDir: 'renderer/resources',
         fonts: root.EntryStatic.fonts,
         textCodingEnable: true,
+        paintMode: 'entry-paint',
     };
     state = {
         programLanguageMode: 'block',
