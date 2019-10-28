@@ -6,6 +6,12 @@ import tar, { CreateOptions, FileOptions } from 'tar';
 import { nativeImage } from 'electron';
 
 type tarCreateOption = FileOptions & CreateOptions;
+
+type Dimension = { width: number, height: number };
+export const ImageResizeSize: { [key: string]: Dimension } = {
+    thumbnail: { width: 96, height: 96 },
+    picture: { width: 960, height: 540 },
+};
 /**
  * 파일 및 디렉토리의 생성 / 삭제와 압축등 IO 와 관련된 일을 담당한다.
  */
@@ -144,8 +150,9 @@ export default class {
      * 이미지 버퍼를 섬네일용으로 리사이징한다.
      * 섬네일은 width 96px 기준으로, png 파일 확장자를 가진다.
      * @param {Buffer||string}imageData 원본 이미지 버퍼 혹은 원본 이미지 주소
+     * @param {Dimension}width 리사이즈 할 크기 width, height
      */
-    static createThumbnailBuffer(imageData: string | Buffer) {
+    static createResizedImageBuffer(imageData: string | Buffer, width: Dimension) {
         let imageResizeNativeImage: nativeImage;
         if (imageData instanceof Buffer) {
             imageResizeNativeImage = nativeImage.createFromBuffer(imageData);
@@ -155,8 +162,8 @@ export default class {
 
         return imageResizeNativeImage
             .resize({
-                width: 96,
                 quality: 'better',
+                ...width
             })
             .toPNG();
     }
