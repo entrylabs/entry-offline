@@ -331,9 +331,9 @@ class Header extends Component<IProps, IState> {
                             <div className={'work_space'}>
                                 <a
                                     title={RendererUtils.getLang('Workspace.help')}
-                                    className={`${'btn_work_space'} ${'btn_workspace_help'} ${
+                                    className={`btn_work_space btn_workspace_help ${
                                         dropdownType === 'help' ? 'on' : ''
-                                        }`}
+                                    }`}
                                     ref={(dom) => (this.dropdownList.help = dom)}
                                     onClick={() => {
                                         this.handleDropdownClick('help');

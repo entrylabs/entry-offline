@@ -327,6 +327,7 @@ class Workspace extends Component<IProps> {
                 filters: [{ name: 'Entry File', extensions: ['ent'] }],
             }, saveFunction);
         }
+        LocalStorageManager.clearSavedProject();
     };
 
     handleFileAction = async (type: string) => {

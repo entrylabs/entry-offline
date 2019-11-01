@@ -30,7 +30,7 @@ export default class {
             resultPromise = IpcRendererHelper.resetDirectory();
         }
         return resultPromise.then(() => {
-            StorageManager.removeProject();
+            StorageManager.clearSavedProject();
         });
     }
 

@@ -28,7 +28,7 @@ export default class {
 
     static saveProject(project: Entry.Project) {
         if (!project) {
-            this.removeProject();
+            this.clearSavedProject();
             return;
         }
         const projectJson = typeof project === 'string' ? project : JSON.stringify(project);
@@ -39,7 +39,7 @@ export default class {
         return JSON.parse(root.localStorage.getItem(this.LOCAL_STORAGE_KEY));
     }
 
-    static removeProject() {
+    static clearSavedProject() {
         return root.localStorage.removeItem(this.LOCAL_STORAGE_KEY);
     }
 
