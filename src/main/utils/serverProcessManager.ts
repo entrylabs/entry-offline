@@ -5,7 +5,7 @@ class ServerProcessManager {
     private router: any;
 
     constructor() {
-        this.childProcess = new EntryServer();
+        this.childProcess = new EntryServer({http: true});
     }
 
     setRouter(router: any) {

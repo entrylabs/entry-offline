@@ -2,6 +2,7 @@ import { BrowserWindow, app, ipcMain, NamedBrowserWindow } from 'electron';
 import path from 'path';
 import HardwareMainRouter from '../../renderer/bower_components/entry-hw/app/src/main/mainRouter';
 import HardwareEntryServer from '../utils/serverProcessManager';
+import root from 'window-or-global';
 
 export default class {
     hardwareWindow?: NamedBrowserWindow;
@@ -59,6 +60,12 @@ export default class {
         if (!this.hardwareWindow) {
             this.createHardwareWindow();
         }
+
+        const offlineRoomIds = root.sharedObject.roomIds;
+        if (offlineRoomIds && offlineRoomIds[0]) {
+            this.hardwareWindow!.hardwareRouter.addRoomId(offlineRoomIds[0]);
+        }
+
         const hardwareWindow = this.hardwareWindow as BrowserWindow;
         hardwareWindow.show();
         if (hardwareWindow.isMinimized()) {
