@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 23.0.3, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 580 120" style="enable-background:new 0 0 580 120;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#FFFFFF;}
+	.st1{fill:#4F80FF;}
+</style>
+<title>text input field / search</title>
+<desc>Created with Sketch.</desc>
+<g>
+	<g>
+		<path class="st0" d="M60,0h460c33.1,0,60,26.9,60,60s-26.9,60-60,60H60C26.9,120,0,93.1,0,60S26.9,0,60,0z"/>
+		<path class="st1" d="M60,0h460c33.1,0,60,26.9,60,60s-26.9,60-60,60H60C26.9,120,0,93.1,0,60S26.9,0,60,0z M60,2C28,2,2,28,2,60
+			s26,58,58,58h460c32,0,58-26,58-58S552,2,520,2H60z"/>
+		<g transform="translate(478.000000, 31.000000)">
+			<path id="Combined-Shape" class="st1" d="M23.8,41.7c9.9,0,17.9-8,17.9-17.9S33.7,6,23.8,6S6,13.9,6,23.8S13.9,41.7,23.8,41.7z
+				 M23.8,47.6C10.7,47.6,0,37,0,23.8S10.7,0,23.8,0s23.8,10.7,23.8,23.8S37,47.6,23.8,47.6z M41.5,42.2l0.7-0.7
+				c1.6-1.6,4.1-1.6,5.7,0L59,52.7c1.6,1.6,1.6,4.1,0,5.7L58.4,59c-1.6,1.6-4.1,1.6-5.7,0L41.5,47.8C40,46.3,40,43.7,41.5,42.2z"/>
+		</g>
+	</g>
+</g>
+</svg>

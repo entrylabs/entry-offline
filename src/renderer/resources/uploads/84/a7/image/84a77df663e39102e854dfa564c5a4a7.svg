@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 23.0.3, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 557 126" style="enable-background:new 0 0 557 126;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill-rule:evenodd;clip-rule:evenodd;fill:#7D2321;}
+	.st1{fill-rule:evenodd;clip-rule:evenodd;fill:#BF5E5B;}
+	.st2{fill-rule:evenodd;clip-rule:evenodd;fill:#3C0B0A;}
+	.st3{fill-rule:evenodd;clip-rule:evenodd;fill:#8E2927;}
+	.st4{filter:url(#Adobe_OpacityMaskFilter);}
+	.st5{fill-rule:evenodd;clip-rule:evenodd;fill:#FFFFFF;}
+	.st6{mask:url(#mask-2_1_);fill-rule:evenodd;clip-rule:evenodd;fill:#862826;}
+	.st7{filter:url(#Adobe_OpacityMaskFilter_1_);}
+	.st8{mask:url(#mask-2_2_);fill-rule:evenodd;clip-rule:evenodd;fill:#862826;}
+</style>
+<title>img / ribbon / mission / fail</title>
+<desc>Created with Sketch.</desc>
+<g>
+	<g id="img_ribbon_mission_fail">
+		<g id="left-ribbon" transform="translate(0.000000, 13.000000)">
+			<g id="Combined-Shape">
+				<path id="Path" class="st0" d="M0,76.8v-1l18.8-18.9L0,38v-1l18.8-18.9L0.7,0h107.7c5.5,0,10,4.5,10,10v102.4H2.1l16.8-16.8
+					L0,76.8z"/>
+				<path id="Shape" class="st1" d="M14.4,13.7L10.7,10h107.7v0v3.7H14.4z M118.4,98.7v3.7H12l3.7-3.7H118.4z"/>
+			</g>
+			<polygon id="Path-7" class="st2" points="118.4,95 118.4,112.4 98.5,97.4 			"/>
+		</g>
+		<g id="right-ribbon" transform="translate(438.000000, 13.000000)">
+			<g id="Combined-Shape-Copy-14" transform="translate(0.000000, 0.000000)">
+				<path class="st0" d="M118.4,76.8L99.6,95.6l16.8,16.8H0V10C0,4.5,4.5,0,10,0h107.7L99.6,18.2l18.8,18.9v1L99.6,56.9l18.8,18.9
+					V76.8z"/>
+				<path class="st1" d="M102.6,98.7l3.7,3.7H0v-3.7H102.6L102.6,98.7z M0,13.7V10v0h107.7l-3.7,3.7H0L0,13.7z"/>
+			</g>
+			<polygon id="Path-7-Copy" class="st2" points="0,95 0,112.4 19.9,97.4 			"/>
+		</g>
+		<g id="미션실패" transform="translate(94.000000, 0.000000)">
+			<g id="bg">
+				<g id="Mask">
+					<path class="st3" d="M10,0h348.5c5.5,0,10,4.5,10,10v92.4c0,5.5-4.5,10-10,10H10c-5.5,0-10-4.5-10-10V10C0,4.5,4.5,0,10,0z"/>
+				</g>
+				<defs>
+					<filter id="Adobe_OpacityMaskFilter" filterUnits="userSpaceOnUse" x="0" y="0" width="13.7" height="112.4">
+						<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+					</filter>
+				</defs>
+				<mask maskUnits="userSpaceOnUse" x="0" y="0" width="13.7" height="112.4" id="mask-2_1_">
+					<g class="st4">
+						<path id="path-1_1_" class="st5" d="M10,0h348.5c5.5,0,10,4.5,10,10v92.4c0,5.5-4.5,10-10,10H10c-5.5,0-10-4.5-10-10V10
+							C0,4.5,4.5,0,10,0z"/>
+					</g>
+				</mask>
+				<polygon id="Rectangle" class="st6" points="0,0 13.7,0 13.7,112.4 0,112.4 				"/>
+				<defs>
+					<filter id="Adobe_OpacityMaskFilter_1_" filterUnits="userSpaceOnUse" x="354.8" y="0" width="13.7" height="112.4">
+						<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+					</filter>
+				</defs>
+				<mask maskUnits="userSpaceOnUse" x="354.8" y="0" width="13.7" height="112.4" id="mask-2_2_">
+					<g class="st7">
+						<path id="path-1_2_" class="st5" d="M10,0h348.5c5.5,0,10,4.5,10,10v92.4c0,5.5-4.5,10-10,10H10c-5.5,0-10-4.5-10-10V10
+							C0,4.5,4.5,0,10,0z"/>
+					</g>
+				</mask>
+				<polygon id="Rectangle-Copy-5" class="st8" points="368.5,112.4 354.8,112.4 354.8,0 368.5,0 				"/>
+			</g>
+			<path class="st1" d="M368.2,18.1c-0.8-2.5-3.2-4.4-6-4.4H6.2c-2.8,0-5.2,1.8-6,4.4C0.1,17.5,0,16.9,0,16.2C0,12.8,2.8,10,6.2,10
+				h356c3.4,0,6.2,2.8,6.2,6.2C368.5,16.9,368.4,17.5,368.2,18.1L368.2,18.1z M368.2,100.6c-0.8-2.5-3.2-4.4-6-4.4H6.2
+				c-2.8,0-5.2,1.8-6,4.4C0.1,100,0,99.3,0,98.7c0-3.4,2.8-6.2,6.2-6.2h356c3.4,0,6.2,2.8,6.2,6.2C368.5,99.3,368.4,100,368.2,100.6
+				L368.2,100.6z"/>
+		</g>
+	</g>
+</g>
+</svg>

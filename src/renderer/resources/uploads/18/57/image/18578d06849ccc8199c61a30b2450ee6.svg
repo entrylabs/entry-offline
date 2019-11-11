@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 23.0.3, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 120 120" style="enable-background:new 0 0 120 120;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#FFFFFF;}
+	.st1{fill:#4F80FF;}
+</style>
+<title>btn / check box / normal</title>
+<desc>Created with Sketch.</desc>
+<g>
+	<path id="Rectangle" class="st0" d="M14.5,0h91c8,0,14.5,6.5,14.5,14.5v91c0,8-6.5,14.5-14.5,14.5h-91c-8,0-14.5-6.5-14.5-14.5v-91
+		C0,6.5,6.5,0,14.5,0z"/>
+	<path class="st1" d="M14.5,0h91c8,0,14.5,6.5,14.5,14.5v91c0,8-6.5,14.5-14.5,14.5h-91c-8,0-14.5-6.5-14.5-14.5v-91
+		C0,6.5,6.5,0,14.5,0z M14.5,7C10.4,7,7,10.4,7,14.5v91c0,4.2,3.4,7.5,7.5,7.5h91c4.2,0,7.5-3.4,7.5-7.5v-91c0-4.2-3.4-7.5-7.5-7.5
+		H14.5z"/>
+</g>
+</svg>
