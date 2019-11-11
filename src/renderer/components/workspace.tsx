@@ -38,6 +38,7 @@ class Workspace extends Component<IProps> {
         defaultDir: 'renderer/resources',
         fonts: root.EntryStatic.fonts,
         textCodingEnable: true,
+        paintMode: 'entry-paint',
     };
     state = {
         programLanguageMode: 'block',
@@ -326,6 +327,7 @@ class Workspace extends Component<IProps> {
                 filters: [{ name: 'Entry File', extensions: ['ent'] }],
             }, saveFunction);
         }
+        LocalStorageManager.clearSavedProject();
     };
 
     handleFileAction = async (type: string) => {

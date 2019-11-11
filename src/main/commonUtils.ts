@@ -34,7 +34,7 @@ class CommonUtils {
         if (!sanitizedExt.startsWith('.')) {
             sanitizedExt = `.${sanitizedExt}`;
         }
-        return sanitizedExt;
+        return sanitizedExt.toLowerCase();
     }
 
     /**

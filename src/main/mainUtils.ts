@@ -8,7 +8,7 @@ import { performance } from 'perf_hooks';
 import root from 'window-or-global';
 import Puid from 'puid';
 import uid from 'uid';
-import FileUtils from './fileUtils';
+import FileUtils, { ImageResizeSize } from './fileUtils';
 import Constants, { ReplaceStrategy } from './constants';
 import CommonUtils from './commonUtils';
 import BlockConverter from './blockConverter';
@@ -412,14 +412,17 @@ export default class MainUtils {
         const newPicturePath = path.join(Constants.tempImagePath(newFileId), newFileName);
         const newThumbnailPath = path.join(Constants.tempThumbnailPath(newFileId), newFileName);
 
-        await FileUtils.copyFile(filePath, newPicturePath);
+        await FileUtils.writeFile(
+            FileUtils.createResizedImageBuffer(filePath, ImageResizeSize.picture),
+            newPicturePath,
+        );
 
         // 섬네일 이미지가 이미 있는 경우는 해당 이미지를 가져다 쓰고, 없는 경우 원본을 리사이징
         if (thumbnailPath) {
             await FileUtils.copyFile(thumbnailPath, newThumbnailPath);
         } else {
             await FileUtils.writeFile(
-                FileUtils.createThumbnailBuffer(filePath),
+                FileUtils.createResizedImageBuffer(filePath, ImageResizeSize.thumbnail),
                 newThumbnailPath,
             );
         }
@@ -462,10 +465,6 @@ export default class MainUtils {
             let pictureId = MainUtils.createFileId();
 
             try {
-                if (prevFilename && mode === 'edit') {
-                    pictureId = prevFilename;
-                }
-
                 const imagePath = path.join(Constants.tempImagePath(pictureId), `${pictureId}.png`);
                 const thumbnailPath = path.join(Constants.tempThumbnailPath(pictureId), `${pictureId}.png`);
 
@@ -473,16 +472,31 @@ export default class MainUtils {
                 await Promise.all([
                     FileUtils.writeFile(image, imagePath),
                     FileUtils.writeFile(
-                        FileUtils.createThumbnailBuffer(image),
+                        FileUtils.createResizedImageBuffer(image, ImageResizeSize.thumbnail),
                         thumbnailPath),
                 ]);
+
+                // 편집모드이며 리소스 기본이미지가이 아닌, temp 내 원본 이미지가 있는 경우 이전 이미지를 삭제한다.
+                if (prevFilename && mode === 'edit') {
+                    const prevImageFileName = fs.readdirSync(Constants.tempImagePath(prevFilename))[0];
+
+                    if (prevImageFileName) {
+                        const prevImagePath = path.join(Constants.tempImagePath(prevImageFileName), prevImageFileName);
+                        const prevThumbnailPath = path.join(Constants.tempThumbnailPath(prevImageFileName), prevImageFileName);
+
+                        await Promise.all([
+                            prevImagePath && FileUtils.deleteFile(prevImagePath),
+                            prevThumbnailPath && FileUtils.deleteFile(prevThumbnailPath),
+                        ]);
+                    }
+                }
 
                 //TODO 빈 폴더인지 검사한 후, 삭제하기 (앞 4자리가 같은 다른 파일이 있을 수 있음)
                 resolve({
                     type: 'user',
                     name: pictureId,
                     filename: pictureId,
-                    fileurl: `${imagePath.replace(/\\/gi, '/')}?t=${performance.now()}`,
+                    fileurl: imagePath.replace(/\\/gi, '/'),
                     dimension: imageSizeOf(imagePath),
                 });
             } catch (e) {
@@ -511,7 +525,7 @@ export default class MainUtils {
 
         await FileUtils.copyFile(filePath, newSoundPath);
 
-        const metadata = await musicMetadata.parseFile(newSoundPath, {duration: true});
+        const metadata = await musicMetadata.parseFile(newSoundPath, { duration: true });
 
         return {
             _id: CommonUtils.generateHash(),

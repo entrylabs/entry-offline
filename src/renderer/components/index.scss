@@ -1,3 +1,7 @@
+@import './styles/_reset.scss';
+@import './styles/_mixin.scss';
+@import './styles/_tooltip.scss';
+
 html, body{
     margin: 0;
     overflow: hidden;

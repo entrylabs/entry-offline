@@ -12,6 +12,7 @@ const setting = {
     externals: {
         '@entrylabs/tool': 'EntryTool',
         '@entrylabs/tool/component': 'EntryTool.Component',
+        'entry-paint': 'EntryPaint',
     },
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.jsx'],
