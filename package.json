@@ -74,6 +74,7 @@
         "@types/socket.io": "^2.1.2",
         "@types/socket.io-client": "^1.4.32",
         "@types/tar": "^4.0.0",
+        "@types/window-or-global": "^1.0.0",
         "@typescript-eslint/parser": "^1.10.2",
         "babel-eslint": "^10.0.1",
         "babel-loader": "^8.0.5",

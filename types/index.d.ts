@@ -19,13 +19,6 @@ declare module 'puid' {
     export = value;
 }
 
-/* eslint-disable */
-declare module 'window-or-global' {
-    const value: any;
-    export = value;
-}
-
-/* eslint-disable */
 declare module 'uid' {
     const value: any;
     export = value;
