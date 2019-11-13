@@ -16,7 +16,8 @@
         "rebuild": "electron-rebuild",
         "dist:win32": "cross-env NODE_ENV=production webpack && electron-builder -c --win --ia32",
         "dist:win64": "cross-env NODE_ENV=production webpack && electron-builder -c --win --x64",
-        "dist:mac": "cross-env NODE_ENV=production webpack && electron-builder -c --mac",
+        "dist:mac:notarize": "cross-env NODE_ENV=production webpack && cross-env NOTARIZE=true electron-builder -c --mac",
+        "dist:mac": "cross-env NODE_ENV=development webpack && cross-env NOTARIZE=false electron-builder -c --mac",
         "postinstall": "electron-rebuild && bower i"
     },
     "keywords": [
@@ -85,6 +86,7 @@
         "css-loader": "^2.1.0",
         "electron": "7.1.1",
         "electron-builder": "^22.1.0",
+        "electron-notarize": "^0.2.0",
         "electron-rebuild": "^1.8.6",
         "eslint": "^6.2.2",
         "eslint-config-react-app": "^5.0.1",

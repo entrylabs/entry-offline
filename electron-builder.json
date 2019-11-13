@@ -3,11 +3,16 @@
         "target": "dmg",
         "category": "public.app-category.education",
         "extendInfo": "build/build.plist",
-        "identity": "Connect Foundation (DLFUSDA3L5)"
+        "identity": "Connect Foundation (DLFUSDA3L5)",
+        "hardenedRuntime": true,
+        "gatekeeperAssess": false,
+        "entitlements": "build/entitlements.mac.plist",
+        "entitlementsInherit": "build/entitlements.mac.plist"
     },
     "dmg": {
         "icon": "build/icon.icns",
         "iconSize": 80,
+        "sign": false,
         "background": "build/background.png",
         "contents": [
             {
@@ -44,6 +49,7 @@
     "asar": true,
     "appId": "org.playentry.entry",
     "productName": "Entry",
+    "afterSign": "scripts/notarize.js",
     "directories": {
         "output": "out/${productName}-${platform}-${arch}"
     }
