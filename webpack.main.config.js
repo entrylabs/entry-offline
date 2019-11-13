@@ -1,9 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
-const nodeExternals = require('webpack-node-externals');
 
 const setting = {
-    mode: 'none',
     target: 'electron-main',
     entry: './src/main.ts',
     resolve: {
@@ -19,15 +17,22 @@ const setting = {
         hotUpdateChunkFilename: 'hot/hot-update.js',
         hotUpdateMainFilename: 'hot/hot-update.json',
     },
-    externals: [nodeExternals({ modulesFromFile: true})],
+    externals: [
+        function(context, request, callback) {
+            if (!/^\..*/.test(request)){
+                return callback(null, 'commonjs ' + request);
+            }
+            callback();
+        }
+    ],
     module: {
         rules: [
             {
                 test: /\.tsx?$/,
                 loader: 'ts-loader',
                 options: {
-                    transpileOnly: true
-                }
+                    transpileOnly: true,
+                },
             },
             {
                 test: /\.(js|jsx|mjs)$/,

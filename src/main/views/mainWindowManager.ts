@@ -57,6 +57,7 @@ export default class {
             backgroundColor: '#e5e5e5',
             webPreferences: {
                 backgroundThrottling: false,
+                nodeIntegration: true,
             },
             icon: path.resolve(app.getAppPath(), 'src', 'main', 'static', 'icon.png'),
         });
