@@ -20,12 +20,6 @@ declare module 'puid' {
 }
 
 /* eslint-disable */
-declare module 'window-or-global' {
-    const value: any;
-    export = value;
-}
-
-/* eslint-disable */
 declare module 'uid' {
     const value: any;
     export = value;
@@ -54,3 +48,5 @@ declare module 'xml2js' {
     const value: any;
     export = value;
 }
+
+declare const createjs: any;

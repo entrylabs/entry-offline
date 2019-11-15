@@ -1,10 +1,9 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import fs from 'fs';
 import path from 'path';
 import xl from 'excel4node';
 import imageSizeOf from 'image-size';
 import * as musicMetadata from 'music-metadata';
-import { performance } from 'perf_hooks';
 import root from 'window-or-global';
 import Puid from 'puid';
 import uid from 'uid';
@@ -309,7 +308,7 @@ export default class MainUtils {
                             );
 
                             const newPicture = await MainUtils.importPictureToTemp(
-                                newImageFilePath, newThumbnailFilePath,
+                                newImageFilePath, { thumbnailPath: newThumbnailFilePath },
                             );
                             newPicture.name = picture.name;
                             newPicture.id = picture.id;
@@ -389,42 +388,55 @@ export default class MainUtils {
      * 여러 picture 들을 가져온다. 이 경우 thumbnail 을 개별설정 하지 못한다.
      * 로직 수정을 통해 구현할 수 있다.
      * @param {Array<string>}filePaths
+     * @param sender
      * @return {Promise<any[]>}
      */
-    static importPicturesToTemp(filePaths: string[]) {
+    static importPicturesToTemp(filePaths: string[], sender: Electron.WebContents) {
         return Promise.all(filePaths.map(async (filePath) => {
-            return await MainUtils.importPictureToTemp(filePath);
+            const pngPath = await MainUtils.createPngFromSvg(filePath, sender);
+            if (pngPath) {
+                return await MainUtils.importPictureToTemp(pngPath, { svgPath: filePath });
+            } else {
+                return await MainUtils.importPictureToTemp(filePath);
+            }
         }));
     }
 
     /**
      * filePath 에 있는 파일을 가져와 temp 에 담는다. 이후 Entry object 프로퍼티 스펙대로 맞춰
      * 오브젝트를 생성한뒤 전달한다.
-     * @param {string}filePath 이미지 파일 경로
-     * @param {string=}thumbnailPath 섬네일 파일 경로. 없으면 이미지에서 만들어낸다.
-     * @return {Promise<Object>}
      */
-    static async importPictureToTemp(filePath: string, thumbnailPath?: string) {
+    static async importPictureToTemp(filePath: string, extraPath?: { thumbnailPath?: string; svgPath?: string; }) {
         const originalFileExt = path.extname(filePath);
         const originalFileName = path.basename(filePath, originalFileExt);
         const newFileId = MainUtils.createFileId();
-        const newFileName = newFileId + originalFileExt;
-        const newPicturePath = path.join(Constants.tempImagePath(newFileId), newFileName);
-        const newThumbnailPath = path.join(Constants.tempThumbnailPath(newFileId), newFileName);
+        let imageType = 'png';
 
+        const newPicturePath = path.join(Constants.tempImagePath(newFileId), `${newFileId}${originalFileExt}`);
         await FileUtils.writeFile(
             FileUtils.createResizedImageBuffer(filePath, ImageResizeSize.picture),
             newPicturePath,
         );
 
-        // 섬네일 이미지가 이미 있는 경우는 해당 이미지를 가져다 쓰고, 없는 경우 원본을 리사이징
-        if (thumbnailPath) {
-            await FileUtils.copyFile(thumbnailPath, newThumbnailPath);
-        } else {
-            await FileUtils.writeFile(
-                FileUtils.createResizedImageBuffer(filePath, ImageResizeSize.thumbnail),
-                newThumbnailPath,
-            );
+        if (extraPath) {
+            const { thumbnailPath, svgPath } = extraPath;
+
+            // 섬네일 이미지가 이미 있는 경우는 해당 이미지를 가져다 쓰고, 없는 경우 원본을 리사이징
+            const newThumbnailPath = path.join(Constants.tempThumbnailPath(newFileId), `${newFileId}${originalFileExt}`);
+            if (thumbnailPath) {
+                await FileUtils.copyFile(thumbnailPath, newThumbnailPath);
+            } else {
+                await FileUtils.writeFile(
+                    FileUtils.createResizedImageBuffer(filePath, ImageResizeSize.thumbnail),
+                    newThumbnailPath,
+                );
+            }
+
+            if (svgPath) {
+                imageType = 'svg';
+                const newSvgPath = path.join(Constants.tempImagePath(newFileId), `${newFileId}.svg`);
+                await FileUtils.copyFile(svgPath, newSvgPath);
+            }
         }
 
         return {
@@ -436,6 +448,7 @@ export default class MainUtils {
             fileurl: newPicturePath.replace(/\\/gi, '/'),
             extension: originalFileExt,
             dimension: imageSizeOf(newPicturePath),
+            imageType,
         };
     }
 
@@ -449,7 +462,10 @@ export default class MainUtils {
             const fileName = picture.filename + (picture.ext || '.png');
             const imageResourcePath = path.join(Constants.resourceImagePath(picture.filename), fileName);
             const thumbnailResourcePath = path.join(Constants.resourceThumbnailPath(picture.filename), fileName);
-            const newObject = await MainUtils.importPictureToTemp(imageResourcePath, thumbnailResourcePath);
+            const newObject = await MainUtils.importPictureToTemp(
+                imageResourcePath,
+                { thumbnailPath: thumbnailResourcePath },
+            );
 
             picture.filename = newObject.filename;
             picture.fileurl = newObject.fileurl;
@@ -586,5 +602,39 @@ export default class MainUtils {
                 }
             });
         });
+    }
+
+    static createPngFromSvg(filePath: string, sender: Electron.webContents): Promise<string | undefined> {
+        return new Promise(async (resolve) => {
+            if (path.extname(filePath) === '.svg') {
+                const svgFileString = await FileUtils.readFile(filePath);
+                const svgViewBoxDimension = MainUtils.getDimensionFromSvg(svgFileString);
+                sender.send('convertSvgToPng', svgFileString, svgViewBoxDimension);
+                ipcMain.once('convertSvgToPng', (_: Electron.Event, pngBuffer: any) => {
+                    const imageBase64 = pngBuffer.split(';base64,').pop();
+                    const newPngFilePath = path.join(Constants.tempPathForExport('fromSvg'), `${MainUtils.createFileId()}.png`);
+                    FileUtils
+                        .writeFile(imageBase64, newPngFilePath, { encoding: 'base64' })
+                        .then(() => {
+                            resolve(newPngFilePath);
+                        });
+                });
+            } else {
+                resolve();
+            }
+        });
+    }
+
+    static getDimensionFromSvg(svgElementString: string): { x: number; y: number; width: number; height: number; } | undefined {
+        // ex. viewBox="0 0 100 100" 처럼 4개가 온전한 숫자여야 한다.
+        const result = /viewBox=['"](\d+(?:\s)?)?(\d+(?:\s)?)?(\d+(?:\s)?)?(\d+(?:\s)?)?['"]/.exec(svgElementString);
+        if (result && result.length === 5) {
+            return {
+                x: Number(result[1]),
+                y: Number(result[2]),
+                width: Number(result[3]),
+                height: Number(result[4]),
+            };
+        }
     }
 }

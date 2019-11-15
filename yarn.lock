@@ -987,6 +987,11 @@
     "@types/minipass" "*"
     "@types/node" "*"
 
+"@types/window-or-global@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@types/window-or-global/-/window-or-global-1.0.0.tgz#b4bc8480c37fe4bac2355f7a92c9ffcd84822c94"
+  integrity sha1-tLyEgMN/5LrCNV96ksn/zYSCLJQ=
+
 "@typescript-eslint/experimental-utils@1.13.0":
   version "1.13.0"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/experimental-utils/-/experimental-utils-1.13.0.tgz#b08c60d780c0067de2fb44b04b432f540138301e"

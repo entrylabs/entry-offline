@@ -80,6 +80,13 @@ export default function() {
         });
     };
 
+    Entry.playground.painter.getImageSrc = function({ fileurl, filename, imageType = 'png' }: { fileurl: string; filename: string; imageType: string; }) {
+        if (!fileurl) {
+            return Constants.resourceImagePath(filename) + `${filename}.${imageType}`;
+        }
+        return fileurl.replace(/\..{3,4}$/, `.${imageType}`);
+    };
+
     const openHardwarePage = function() {
         RendererUtils.getSharedObject().roomIds = [localStorage.getItem('entryhwRoomId')];
         IpcRendererHelper.openHardwarePage();

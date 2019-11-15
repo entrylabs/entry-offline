@@ -107,18 +107,16 @@ class IpcMainHelper {
     }
 
     // 외부 이미지 업로드시.
-    importPictures(event: Electron.Event, filePaths: string[]) {
+    async importPictures(event: Electron.Event, filePaths: string[]) {
         if (!filePaths || filePaths.length === 0) {
             event.sender.send('importPictures', []);
         }
-
-        MainUtils.importPicturesToTemp(filePaths)
-            .then((object) => {
-                event.sender.send('importPictures', object);
-            })
-            .catch((err) => {
-                console.error(err);
-            });
+        try {
+            const object = await MainUtils.importPicturesToTemp(filePaths, event.sender);
+            event.sender.send('importPictures', object);
+        } catch (e) {
+            console.error(e);
+        }
     }
 
     importPicturesFromResource(event: Electron.Event, pictures: ObjectLike[]) {

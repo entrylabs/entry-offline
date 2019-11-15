@@ -11,6 +11,24 @@ ipcRenderer.on('console', (event: Electron.Event, ...args: any[]) => {
     console.log(...args);
 });
 
+type SvgViewBoxDimension = { x: number, y: number, width: number; height: number; };
+ipcRenderer.on('convertSvgToPng', (event: Electron.Event, svgData: string, svgDimension?: SvgViewBoxDimension) => {
+
+    const canvas = document.createElement('canvas');
+    const { x, y, width, height } = svgDimension || { x: 0, y: 0, width: 960, height: 540 };
+
+    const imageElement = new Image(width, height);
+    canvas.width = x + width;
+    canvas.height = y + height;
+
+    imageElement.onload = function() {
+        canvas.getContext('2d')!.drawImage(imageElement, x, y);
+        const pngImage = canvas.toDataURL('image/png');
+        event.sender.send('convertSvgToPng', pngImage);
+    };
+    imageElement.src = 'data:image/svg+xml;base64,' + btoa(svgData);
+});
+
 export default class {
     static onPageLoaded(callback: () => void) {
         ipcRenderer.on('showWindow', () => {
