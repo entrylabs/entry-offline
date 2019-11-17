@@ -80,11 +80,21 @@ export default function() {
         });
     };
 
+    /*
+    오프라인은 fileurl 을 사용한다.
+    entryjs 는 filename, fileurl 이 다 있으면 fileurl 을 우선으로, 없으면 filename 으로 일정규칙의 주소를 만든다.
+    이 규칙은 EntryInitOptions 의 defaultDir 을 따르나 이미지가 워크스페이스 내장이 아닐 수 있으므로 이 규직을 따를 수 없다.
+    그러므로 직접 오프라인에 맞는 파일시스템 기준 경로생성 로직을 따로 구현하였다.
+     */
     Entry.playground.painter.getImageSrc = function({ fileurl, filename, imageType = 'png' }: { fileurl: string; filename: string; imageType: string; }) {
-        if (!fileurl) {
-            return Constants.resourceImagePath(filename) + `${filename}.${imageType}`;
+        if (fileurl) {
+            // 외부에서 들어온 파일인 경우 fileurl 이 필수적으로 포함되어있다. 타입과 상관없이 png 이다
+            if (imageType === 'svg') {
+                return fileurl.replace(/\..{3,4}$/, `.${imageType}`);
+            }
+            return fileurl;
         }
-        return fileurl.replace(/\..{3,4}$/, `.${imageType}`);
+        return Constants.resourceImagePath(filename) + `${filename}.${imageType}`;
     };
 
     const openHardwarePage = function() {
