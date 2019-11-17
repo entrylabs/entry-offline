@@ -236,12 +236,12 @@ export default class MainUtils {
         }
         const fileId = picture.filename;
         const ext = CommonUtils.sanitizeExtension(picture.ext, '.png');
-        const fileName = `${fileId}${ext}`;
+        const pngFileName = `${fileId}${ext}`;
         const newFileId = MainUtils.createFileId();
         const newFileName = `${newFileId}${ext}`;
 
-        const tempImagePath = path.join(Constants.tempImagePath(fileId), fileName);
-        const tempThumbnailPath = path.join(Constants.tempThumbnailPath(fileId), fileName);
+        const tempImagePath = path.join(Constants.tempImagePath(fileId), pngFileName);
+        const tempThumbnailPath = path.join(Constants.tempThumbnailPath(fileId), pngFileName);
 
         const targetImagePath = path.resolve(targetDir,
             Constants.subDirectoryPath(newFileId), 'image', newFileName);
@@ -250,6 +250,13 @@ export default class MainUtils {
 
         await FileUtils.copyFile(tempImagePath, targetImagePath);
         await FileUtils.copyFile(tempThumbnailPath, targetThumbnailPath);
+
+        if (picture.imageType === 'svg') {
+            const tempSvgImagePath = path.join(Constants.tempImagePath(fileId), `${fileId}.svg`);
+            const targetSvgImagePath = path.resolve(targetDir,
+                Constants.subDirectoryPath(newFileId), 'image', `${newFileId}.svg`);
+            await FileUtils.copyFile(tempSvgImagePath, targetSvgImagePath);
+        }
 
         picture.filename = newFileId;
         return picture;
@@ -294,6 +301,16 @@ export default class MainUtils {
                             }
 
                             const ext = CommonUtils.sanitizeExtension(picture.ext, '.png');
+                            let newSvgImageFilePath;
+                            if (picture.imageType === 'svg') {
+                                newSvgImageFilePath = path.join(
+                                    unpackedDirectoryPath,
+                                    Constants.subDirectoryPath(picture.filename),
+                                    'image',
+                                    `${picture.filename}.svg`,
+                                );
+                            }
+
                             const newImageFilePath = path.join(
                                 unpackedDirectoryPath,
                                 Constants.subDirectoryPath(picture.filename),
@@ -308,7 +325,7 @@ export default class MainUtils {
                             );
 
                             const newPicture = await MainUtils.importPictureToTemp(
-                                newImageFilePath, { thumbnailPath: newThumbnailFilePath },
+                                newImageFilePath, { thumbnailPath: newThumbnailFilePath, svgPath: newSvgImageFilePath },
                             );
                             newPicture.name = picture.name;
                             newPicture.id = picture.id;
@@ -406,7 +423,7 @@ export default class MainUtils {
      * filePath 에 있는 파일을 가져와 temp 에 담는다. 이후 Entry object 프로퍼티 스펙대로 맞춰
      * 오브젝트를 생성한뒤 전달한다.
      */
-    static async importPictureToTemp(filePath: string, extraPath?: { thumbnailPath?: string; svgPath?: string; }) {
+    static async importPictureToTemp(filePath: string, extraPath?: { thumbnailPath?: string | undefined; svgPath?: string | undefined; }) {
         const originalFileExt = path.extname(filePath);
         const originalFileName = path.basename(filePath, originalFileExt);
         const newFileId = MainUtils.createFileId();
