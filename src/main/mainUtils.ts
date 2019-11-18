@@ -431,7 +431,7 @@ export default class MainUtils {
 
         const newPicturePath = path.join(Constants.tempImagePath(newFileId), `${newFileId}${originalFileExt}`);
         await FileUtils.writeFile(
-            FileUtils.createResizedImageBuffer(filePath, ImageResizeSize.picture),
+            FileUtils.createResizedImageBuffer(filePath, imageSizeOf(filePath) || ImageResizeSize.picture),
             newPicturePath,
         );
 
@@ -476,12 +476,18 @@ export default class MainUtils {
      */
     static importPicturesFromResource(pictures: ObjectLike[]) {
         return Promise.all(pictures.map(async (picture) => {
-            const fileName = picture.filename + (picture.ext || '.png');
-            const imageResourcePath = path.join(Constants.resourceImagePath(picture.filename), fileName);
-            const thumbnailResourcePath = path.join(Constants.resourceThumbnailPath(picture.filename), fileName);
+            const pngFileName = picture.filename + (picture.ext || '.png');
+            const imageResourcePath = path.join(Constants.resourceImagePath(picture.filename), pngFileName);
+            const thumbnailResourcePath = path.join(Constants.resourceThumbnailPath(picture.filename), pngFileName);
+
+            let svgPath;
+            if (picture.imageType === 'svg') {
+                svgPath = path.join(Constants.resourceImagePath(picture.filename), `${picture.filename}.svg`);
+            }
+
             const newObject = await MainUtils.importPictureToTemp(
                 imageResourcePath,
-                { thumbnailPath: thumbnailResourcePath },
+                { thumbnailPath: thumbnailResourcePath, svgPath },
             );
 
             picture.filename = newObject.filename;
@@ -494,12 +500,18 @@ export default class MainUtils {
     static importPictureFromCanvas(data: ObjectLike) {
         return new Promise(async (resolve, reject) => {
             const { file, image } = data;
-            const { prevFilename, mode } = file;
+            const { prevFilename, mode, svg } = file;
             let pictureId = MainUtils.createFileId();
 
             try {
                 const imagePath = path.join(Constants.tempImagePath(pictureId), `${pictureId}.png`);
                 const thumbnailPath = path.join(Constants.tempThumbnailPath(pictureId), `${pictureId}.png`);
+                let svgWritePromise;
+
+                if (svg) {
+                    const svgImagePath = path.join(Constants.tempImagePath(pictureId), `${pictureId}.svg`);
+                    svgWritePromise = FileUtils.writeFile(svg, svgImagePath);
+                }
 
                 // 편집된 이미지를 저장한다
                 await Promise.all([
@@ -507,6 +519,7 @@ export default class MainUtils {
                     FileUtils.writeFile(
                         FileUtils.createResizedImageBuffer(image, ImageResizeSize.thumbnail),
                         thumbnailPath),
+                    svgWritePromise,
                 ]);
 
                 // 편집모드이며 리소스 기본이미지가이 아닌, temp 내 원본 이미지가 있는 경우 이전 이미지를 삭제한다.
