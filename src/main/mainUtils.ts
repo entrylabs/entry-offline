@@ -499,8 +499,8 @@ export default class MainUtils {
 
     static importPictureFromCanvas(data: ObjectLike) {
         return new Promise(async (resolve, reject) => {
-            const { file, image, ext = 'png' } = data;
-            const { prevFilename, mode, svg } = file;
+            const { file, image } = data;
+            const { prevFilename, mode, svg, ext = 'png' } = file;
             let pictureId = MainUtils.createFileId();
 
             try {
@@ -548,6 +548,7 @@ export default class MainUtils {
                     filename: pictureId,
                     fileurl: imagePath.replace(/\\/gi, '/'),
                     dimension: imageSizeOf(imagePath),
+                    imageType: ext,
                 });
             } catch (e) {
                 reject(e);
