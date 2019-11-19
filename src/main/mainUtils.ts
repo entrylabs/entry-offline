@@ -499,7 +499,7 @@ export default class MainUtils {
 
     static importPictureFromCanvas(data: ObjectLike) {
         return new Promise(async (resolve, reject) => {
-            const { file, image } = data;
+            const { file, image, ext = 'png' } = data;
             const { prevFilename, mode, svg } = file;
             let pictureId = MainUtils.createFileId();
 
@@ -524,17 +524,21 @@ export default class MainUtils {
 
                 // 편집모드이며 리소스 기본이미지가이 아닌, temp 내 원본 이미지가 있는 경우 이전 이미지를 삭제한다.
                 if (prevFilename && mode === 'edit') {
-                    const prevImageFileName = fs.readdirSync(Constants.tempImagePath(prevFilename))[0];
+                    const prevImageFilePath = path.join(Constants.tempImagePath(prevFilename), `${prevFilename}.${ext}`);
+                    const prevThumbnailPath = path.join(Constants.tempThumbnailPath(prevFilename), `${prevFilename}.png`);
+                    let secondImageFilePath;
 
-                    if (prevImageFileName) {
-                        const prevImagePath = path.join(Constants.tempImagePath(prevImageFileName), prevImageFileName);
-                        const prevThumbnailPath = path.join(Constants.tempThumbnailPath(prevImageFileName), prevImageFileName);
-
-                        await Promise.all([
-                            prevImagePath && FileUtils.deleteFile(prevImagePath),
-                            prevThumbnailPath && FileUtils.deleteFile(prevThumbnailPath),
-                        ]);
+                    if (svg) {
+                        // svg 타입이면 prevImageFileName 은 svg 확장자일 것이므로, secondary 는 png 이다.
+                        // svg 타입이 아니라면 prevImageFileName 의 확장자는 객체 프로퍼티에 맡긴다.
+                        secondImageFilePath = path.join(Constants.tempImagePath(prevFilename), `${prevFilename}.png`);
                     }
+
+                    await Promise.all([
+                        prevImageFilePath && FileUtils.deleteFile(prevImageFilePath),
+                        prevThumbnailPath && FileUtils.deleteFile(prevThumbnailPath),
+                        secondImageFilePath && FileUtils.deleteFile(secondImageFilePath),
+                    ]);
                 }
 
                 //TODO 빈 폴더인지 검사한 후, 삭제하기 (앞 4자리가 같은 다른 파일이 있을 수 있음)
