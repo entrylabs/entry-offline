@@ -11,22 +11,19 @@ ipcRenderer.on('console', (event: Electron.Event, ...args: any[]) => {
     console.log(...args);
 });
 
-type SvgViewBoxDimension = { x: number, y: number, width: number; height: number; };
-ipcRenderer.on('convertSvgToPng', (event: Electron.Event, svgData: string, svgDimension?: SvgViewBoxDimension) => {
-
+ipcRenderer.on('convertSvgToPng', (event: Electron.Event, svgData: string, mimeType: string) => {
     const canvas = document.createElement('canvas');
-    const { x, y, width, height } = svgDimension || { x: 0, y: 0, width: 960, height: 540 };
 
-    const imageElement = new Image(width, height);
-    canvas.width = x + width;
-    canvas.height = y + height;
-
+    const imageElement = new Image();
     imageElement.onload = function() {
-        canvas.getContext('2d')!.drawImage(imageElement, x, y);
+        canvas.width = imageElement.width;
+        canvas.height = imageElement.height;
+
+        canvas.getContext('2d')!.drawImage(imageElement, 0, 0, canvas.width, canvas.height);
         const pngImage = canvas.toDataURL('image/png');
         event.sender.send('convertSvgToPng', pngImage);
     };
-    imageElement.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+    imageElement.src = `data:${mimeType};base64,${svgData}`;
 });
 
 export default class {

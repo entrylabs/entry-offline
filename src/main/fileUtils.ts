@@ -6,7 +6,7 @@ import tar, { CreateOptions, FileOptions } from 'tar';
 import { nativeImage } from 'electron';
 
 type tarCreateOption = FileOptions & CreateOptions;
-
+type readFileOption = { encoding?: string | null; flag?: string; } | string | undefined | null;
 type Dimension = { width: number, height: number };
 export const ImageResizeSize: { [key: string]: Dimension } = {
     thumbnail: { width: 96, height: 96 },
@@ -215,12 +215,10 @@ export default class {
 
     /**
      * 파일을 읽어서 데이터를 반환한다.
-     * @param {string}filePath 파일 경로
-     * @return {Promise<any>}
      */
-    static readFile(filePath: PathLike): Promise<any> {
+    static readFile(filePath: PathLike, option?: readFileOption ): Promise<any> {
         return new Promise((resolve, reject) => {
-            fs.readFile(filePath, 'utf8', (err, data) => {
+            fs.readFile(filePath, option, (err, data) => {
                 if (err) {
                     reject(err);
                 } else {

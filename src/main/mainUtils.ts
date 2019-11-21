@@ -7,12 +7,14 @@ import * as musicMetadata from 'music-metadata';
 import root from 'window-or-global';
 import Puid from 'puid';
 import uid from 'uid';
+import mime from 'mime-types';
 import FileUtils, { ImageResizeSize } from './fileUtils';
 import Constants, { ReplaceStrategy } from './constants';
 import CommonUtils from './commonUtils';
 import BlockConverter from './blockConverter';
 
 const puid = new Puid();
+type ConvertResult = { filePath: string; svgPath?: string | undefined }
 /**
  * Main Process 에서 발생하는 로직들을 담당한다.
  * ipcMain 을 import 하여 사용하지 않는다. renderer Process 간 이벤트 관리는 ipcMainHelper 가 한다.
@@ -304,7 +306,7 @@ export default class MainUtils {
                 await FileUtils.unpack(objectPath, unpackDirectoryPath); // 압축 해제
                 // object.json 읽어오기
                 const objectResult = JSON.parse(
-                    await FileUtils.readFile(path.join(unpackedDirectoryPath, 'object.json')),
+                    await FileUtils.readFile(path.join(unpackedDirectoryPath, 'object.json'), 'utf8'),
                 );
 
                 // 파일 복사 로직
@@ -435,11 +437,11 @@ export default class MainUtils {
      */
     static importPicturesToTemp(filePaths: string[], sender: Electron.WebContents) {
         return Promise.all(filePaths.map(async (filePath) => {
-            const pngPath = await MainUtils.createPngFromSvg(filePath, sender);
-            if (pngPath) {
-                return await MainUtils.importPictureToTemp(pngPath, { svgPath: filePath });
+            const { filePath: newFilePath, svgPath } = await MainUtils.convertPng(filePath, sender);
+            if (svgPath) {
+                return await MainUtils.importPictureToTemp(newFilePath, { svgPath });
             } else {
-                return await MainUtils.importPictureToTemp(filePath);
+                return await MainUtils.importPictureToTemp(newFilePath);
             }
         }));
     }
@@ -664,23 +666,35 @@ export default class MainUtils {
         });
     }
 
-    static createPngFromSvg(filePath: string, sender: Electron.webContents): Promise<string | undefined> {
+    /**
+     * 모든 이미지 파일을 png 로 전환한다.
+     * svg 의 경우는 원본 파일도 같이 필요하므로 이쪽도 전달한
+     * @param filePath
+     * @param sender
+     */
+    static convertPng(filePath: string, sender: Electron.webContents): Promise<ConvertResult> {
         return new Promise(async (resolve) => {
-            if (path.extname(filePath) === '.svg') {
-                const svgFileString = await FileUtils.readFile(filePath);
-                const svgViewBoxDimension = MainUtils.getDimensionFromSvg(svgFileString);
-                sender.send('convertSvgToPng', svgFileString, svgViewBoxDimension);
-                ipcMain.once('convertSvgToPng', (_: Electron.Event, pngBuffer: any) => {
-                    const imageBase64 = pngBuffer.split(';base64,').pop();
-                    const newPngFilePath = path.join(Constants.tempPathForExport('fromSvg'), `${MainUtils.createFileId()}.png`);
-                    FileUtils
-                        .writeFile(imageBase64, newPngFilePath, { encoding: 'base64' })
-                        .then(() => {
-                            resolve(newPngFilePath);
-                        });
+            try {
+                const fileData = await FileUtils.readFile(filePath, 'base64');
+                const newFilePath = path.join(Constants.tempPathForExport('convert'), `${MainUtils.createFileId()}.png`);
+                const mimeType = mime.lookup(filePath);
+                sender.send('convertSvgToPng', fileData, mimeType);
+                ipcMain.once('convertSvgToPng', (_: Electron.Event, buffer: any) => {
+                    FileUtils.writeFile(
+                        buffer.split(';base64,').pop(),
+                        newFilePath,
+                        'base64',
+                    ).then(() => {
+                        const result: ConvertResult = { filePath: newFilePath };
+                        if (mimeType && mimeType.includes('svg')) {
+                            result.svgPath = filePath;
+                        }
+                        resolve(result);
+                    });
                 });
-            } else {
-                resolve();
+            } catch (e) {
+                console.error('image convert error:', e);
+                resolve({ filePath });
             }
         });
     }
