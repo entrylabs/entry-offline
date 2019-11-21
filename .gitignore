@@ -19,3 +19,4 @@ src/main_build
 
 # specifics
 build/*.exe
+yarn-error.log
