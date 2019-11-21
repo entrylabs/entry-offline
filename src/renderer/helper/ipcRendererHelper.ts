@@ -11,19 +11,27 @@ ipcRenderer.on('console', (event: Electron.Event, ...args: any[]) => {
     console.log(...args);
 });
 
-ipcRenderer.on('convertSvgToPng', (event: Electron.Event, svgData: string, mimeType: string) => {
+type OptionalDimension = { x?: number; y?: number; width?: number; height?: number };
+ipcRenderer.on('convertPng', (event: Electron.Event, base64String: string, mimeType: string, dimension?: OptionalDimension) => {
     const canvas = document.createElement('canvas');
+    const { x, y, width, height } = dimension || {};
+    const imageElement = (width && height) ? new Image(width, height) : new Image();
 
-    const imageElement = new Image();
     imageElement.onload = function() {
         canvas.width = imageElement.width;
         canvas.height = imageElement.height;
 
-        canvas.getContext('2d')!.drawImage(imageElement, 0, 0, canvas.width, canvas.height);
+        x && (canvas.width += x);
+        y && (canvas.height += y);
+
+        canvas.getContext('2d')!.drawImage(imageElement, x || 0, y || 0, canvas.width, canvas.height);
+
+        console.log(canvas.width, canvas.height, imageElement.width, imageElement.height);
+
         const pngImage = canvas.toDataURL('image/png');
-        event.sender.send('convertSvgToPng', pngImage);
+        event.sender.send('convertPng', pngImage);
     };
-    imageElement.src = `data:${mimeType};base64,${svgData}`;
+    imageElement.src = `data:${mimeType};base64,${base64String}`;
 });
 
 export default class {

@@ -678,8 +678,11 @@ export default class MainUtils {
                 const fileData = await FileUtils.readFile(filePath, 'base64');
                 const newFilePath = path.join(Constants.tempPathForExport('convert'), `${MainUtils.createFileId()}.png`);
                 const mimeType = mime.lookup(filePath);
-                sender.send('convertSvgToPng', fileData, mimeType);
-                ipcMain.once('convertSvgToPng', (_: Electron.Event, buffer: any) => {
+                let dimension = (mimeType && mimeType.includes('svg')) &&
+                    MainUtils.getDimensionFromSvg(Buffer.from(fileData, 'base64').toString('utf8'));
+
+                sender.send('convertPng', fileData, mimeType, dimension);
+                ipcMain.once('convertPng', (_: Electron.Event, buffer: any) => {
                     FileUtils.writeFile(
                         buffer.split(';base64,').pop(),
                         newFilePath,
