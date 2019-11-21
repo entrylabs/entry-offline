@@ -8,7 +8,7 @@ exports.default = async function notarizing(context) {
         return;
     }
 
-    if (!NOTARIZE) {
+    if (NOTARIZE === 'false') {
         console.log('  • NOTARIZE flag is false. will be skipped this process');
         return;
     }
