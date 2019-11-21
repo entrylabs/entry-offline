@@ -48,12 +48,16 @@ class IpcMainHelper {
     }
 
     loadProject(event: Electron.Event, filePath: string) {
+        // 원본 백업
+        MainUtils.backupTempProject();
         MainUtils.loadProject(filePath)
             .then((project) => {
                 event.sender.send('loadProject', project);
+                MainUtils.clearRollbackTempProject();
             })
             .catch((err) => {
                 console.error(err);
+                MainUtils.rollbackTempProject();
                 event.sender.send('loadProject');
             });
     }

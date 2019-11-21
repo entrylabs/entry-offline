@@ -26,6 +26,31 @@ export default class MainUtils {
         return uid(8) + puid.generate();
     }
 
+    static backupTempProject() {
+        const baseAppPath = Constants.appPath;
+        const tempDirectoryPath = path.join(baseAppPath, 'temp');
+        const rollbackDirectoryPath = path.join(baseAppPath, 'rollback');
+        FileUtils.move(tempDirectoryPath, rollbackDirectoryPath);
+    }
+
+    static async rollbackTempProject() {
+        const baseAppPath = Constants.appPath;
+        const tempDirectoryPath = path.join(baseAppPath, 'temp');
+        const rollbackDirectoryPath = path.join(baseAppPath, 'rollback');
+        if (FileUtils.isDirectoryExistSync(rollbackDirectoryPath)) {
+            await MainUtils.resetSaveDirectory();
+            FileUtils.move(rollbackDirectoryPath, tempDirectoryPath);
+        } else {
+            console.warn('Rollback executed but backup dir is not exist');
+        }
+    }
+
+    static async clearRollbackTempProject() {
+        const baseAppPath = Constants.appPath;
+        const rollbackDirectoryPath = path.join(baseAppPath, 'rollback');
+        await FileUtils.deleteFile(rollbackDirectoryPath);
+    }
+
     /**
      * ent 파일에서 프로젝트를 로드한다.
      * electron directory 에 압축해제 한 후,

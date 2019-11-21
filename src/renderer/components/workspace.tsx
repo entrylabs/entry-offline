@@ -350,9 +350,9 @@ class Workspace extends Component<IProps> {
             }, async (filePaths) => {
                 try {
                     if (Array.isArray(filePaths)) {
-                        await RendererUtils.clearTempProject();
                         const filePath = filePaths[0];
                         const project = await IpcRendererHelper.loadProject(filePath);
+                        await RendererUtils.clearTempProject();
                         await this.loadProject(project);
                     }
                     this.hideModalProgress();

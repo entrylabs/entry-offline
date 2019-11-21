@@ -55,11 +55,15 @@ export default class {
      */
     static ensureDirectoryExistence(dirPath: string) {
         const dirname = path.dirname(dirPath);
-        if (fs.existsSync(dirname)) {
+        if (this.isDirectoryExistSync(dirname)) {
             return;
         }
         this.ensureDirectoryExistence(dirname);
         fs.mkdirSync(dirname);
+    }
+
+    static isDirectoryExistSync(dirname: string): boolean {
+        return fs.existsSync(dirname);
     }
 
     /**
@@ -250,5 +254,9 @@ export default class {
                     reject(err);
                 });
         });
+    }
+
+    static move(src: string, dest: string) {
+        fs.renameSync(src, dest);
     }
 }
