@@ -668,7 +668,7 @@ export default class MainUtils {
 
     /**
      * 모든 이미지 파일을 png 로 전환한다.
-     * svg 의 경우는 원본 파일도 같이 필요하므로 이쪽도 전달한
+     * svg 의 경우는 원본 파일도 같이 필요하므로 이쪽도 전달한다.
      * @param filePath
      * @param sender
      */
@@ -678,6 +678,8 @@ export default class MainUtils {
                 const fileData = await FileUtils.readFile(filePath, 'base64');
                 const newFilePath = path.join(Constants.tempPathForExport('convert'), `${MainUtils.createFileId()}.png`);
                 const mimeType = mime.lookup(filePath);
+
+                // svg 의 경우 viewBox 에서 뽑아서 전달하지 않으면 코딱지만한 크기로 잡혀버린다.
                 let dimension = (mimeType && mimeType.includes('svg')) &&
                     MainUtils.getDimensionFromSvg(Buffer.from(fileData, 'base64').toString('utf8'));
 
@@ -687,8 +689,10 @@ export default class MainUtils {
                         buffer.split(';base64,').pop(),
                         newFilePath,
                         'base64',
-                    ).then(() => {
+                    ).then(() => {문
                         const result: ConvertResult = { filePath: newFilePath };
+
+                        // svg 의 경우 svg 파일과 png 파일 둘다 제공되어야 한다. 그림판이 쓰기 때
                         if (mimeType && mimeType.includes('svg')) {
                             result.svgPath = filePath;
                         }
