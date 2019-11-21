@@ -26,7 +26,7 @@ ipcRenderer.on('convertSvgToPng', (event: Electron.Event, svgData: string, svgDi
         const pngImage = canvas.toDataURL('image/png');
         event.sender.send('convertSvgToPng', pngImage);
     };
-    imageElement.src = 'data:image/svg+xml;base64,' + btoa(svgData);
+    imageElement.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
 });
 
 export default class {
