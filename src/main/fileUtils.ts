@@ -1,5 +1,6 @@
 import path from 'path';
 import fs, { PathLike } from 'fs';
+import fse from 'fs-extra';
 import rimraf from 'rimraf';
 // @ts-ignore
 import tar, { CreateOptions, FileOptions } from 'tar';
@@ -167,7 +168,7 @@ export default class {
         return imageResizeNativeImage
             .resize({
                 quality: 'better',
-                ...width
+                ...width,
             })
             .toPNG();
     }
@@ -204,7 +205,6 @@ export default class {
         return new Promise((resolve) => {
             fs.unlink(filePath, (err) => {
                 if (err) {
-                    console.error(err);
                     resolve();
                 } else {
                     resolve();
@@ -216,7 +216,7 @@ export default class {
     /**
      * 파일을 읽어서 데이터를 반환한다.
      */
-    static readFile(filePath: PathLike, option?: readFileOption ): Promise<any> {
+    static readFile(filePath: PathLike, option?: readFileOption): Promise<any> {
         return new Promise((resolve, reject) => {
             fs.readFile(filePath, option, (err, data) => {
                 if (err) {
@@ -255,6 +255,6 @@ export default class {
     }
 
     static move(src: string, dest: string) {
-        fs.renameSync(src, dest);
+        fse.moveSync(src, dest, { overwrite: true });
     }
 }

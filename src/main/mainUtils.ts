@@ -32,7 +32,10 @@ export default class MainUtils {
         const baseAppPath = Constants.appPath;
         const tempDirectoryPath = path.join(baseAppPath, 'temp');
         const rollbackDirectoryPath = path.join(baseAppPath, 'rollback');
-        FileUtils.move(tempDirectoryPath, rollbackDirectoryPath);
+
+        if (FileUtils.isDirectoryExistSync(tempDirectoryPath)) {
+            FileUtils.move(tempDirectoryPath, rollbackDirectoryPath);
+        }
     }
 
     static async rollbackTempProject() {

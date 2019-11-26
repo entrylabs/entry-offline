@@ -52,8 +52,8 @@ class IpcMainHelper {
         MainUtils.backupTempProject();
         MainUtils.loadProject(filePath)
             .then((project) => {
-                event.sender.send('loadProject', project);
                 MainUtils.clearRollbackTempProject();
+                event.sender.send('loadProject', project);
             })
             .catch((err) => {
                 console.error(err);
