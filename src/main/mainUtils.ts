@@ -689,7 +689,7 @@ export default class MainUtils {
                         buffer.split(';base64,').pop(),
                         newFilePath,
                         'base64',
-                    ).then(() => {문
+                    ).then(() => {
                         const result: ConvertResult = { filePath: newFilePath };
 
                         // svg 의 경우 svg 파일과 png 파일 둘다 제공되어야 한다. 그림판이 쓰기 때
