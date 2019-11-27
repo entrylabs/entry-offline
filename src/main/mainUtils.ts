@@ -438,15 +438,18 @@ export default class MainUtils {
      * @param sender
      * @return {Promise<any[]>}
      */
-    static importPicturesToTemp(filePaths: string[], sender: Electron.WebContents) {
-        return Promise.all(filePaths.map(async (filePath) => {
+    static async importPicturesToTemp(filePaths: string[], sender: Electron.WebContents) {
+        const results = [];
+        for (let i = 0; i < filePaths.length; i++) {
+            const filePath = filePaths[i];
             const { filePath: newFilePath, svgPath } = await MainUtils.convertPng(filePath, sender);
             if (svgPath) {
-                return await MainUtils.importPictureToTemp(newFilePath, { svgPath });
+                results.push(await MainUtils.importPictureToTemp(newFilePath, { svgPath }));
             } else {
-                return await MainUtils.importPictureToTemp(newFilePath);
+                results.push(await MainUtils.importPictureToTemp(newFilePath));
             }
-        }));
+        }
+        return results;
     }
 
     /**
@@ -678,8 +681,9 @@ export default class MainUtils {
     static convertPng(filePath: string, sender: Electron.webContents): Promise<ConvertResult> {
         return new Promise(async (resolve) => {
             try {
+                const newFileName = path.basename(filePath).replace(/\..*$/, '');
                 const fileData = await FileUtils.readFile(filePath, 'base64');
-                const newFilePath = path.join(Constants.tempPathForExport('convert'), `${MainUtils.createFileId()}.png`);
+                const newFilePath = path.join(Constants.tempPathForExport('convert'), `${newFileName}.png`);
                 const mimeType = mime.lookup(filePath);
 
                 // svg 의 경우 viewBox 에서 뽑아서 전달하지 않으면 코딱지만한 크기로 잡혀버린다.
