@@ -48,5 +48,3 @@ declare module 'xml2js' {
     const value: any;
     export = value;
 }
-
-declare const createjs: any;

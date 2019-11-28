@@ -4,3 +4,8 @@ declare module NodeJS  {
         $: any;
     }
 }
+
+declare interface Window {
+    createjs: any;
+    Entry: any;
+}
