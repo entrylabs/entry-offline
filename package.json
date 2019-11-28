@@ -28,10 +28,6 @@
     "license": "MIT",
     "dependencies": {
         "@babel/runtime": "^7.2.0",
-        "@entrylabs/bindings": "1.0.0",
-        "@serialport/stream": "^2.0.4",
-        "@types/react-redux": "^7.1.0",
-        "@types/redux-actions": "^2.6.1",
         "bignumber.js": "^8.0.1",
         "debug": "^4.1.1",
         "excel4node": "^1.7.0",
@@ -51,6 +47,7 @@
         "redux-actions": "^2.6.5",
         "redux-persist": "^5.10.0",
         "rimraf": "^2.6.3",
+        "serialport": "^8.0.5",
         "socket.io": "^2.2.0",
         "socket.io-client": "^2.2.0",
         "tar": "^4.4.10",
@@ -77,8 +74,9 @@
         "@types/react": "^16.8.20",
         "@types/react-dom": "^16.8.4",
         "@types/react-redux": "^7.1.0",
+        "@types/redux-actions": "^2.6.1",
         "@types/rimraf": "^2.0.2",
-        "@types/serialport": "^7.0.3",
+        "@types/serialport": "^7.0.4",
         "@types/socket.io": "^2.1.2",
         "@types/socket.io-client": "^1.4.32",
         "@types/tar": "^4.0.0",
@@ -91,10 +89,10 @@
         "core-js": "2",
         "cross-env": "^5.2.0",
         "css-loader": "^2.1.0",
-        "electron": "4.0.4",
-        "electron-builder": "^21.2.0",
+        "electron": "7.1.1",
+        "electron-builder": "^22.1.0",
         "electron-notarize": "^0.2.0",
-        "electron-rebuild": "^1.8.4",
+        "electron-rebuild": "^1.8.6",
         "eslint": "^6.2.2",
         "eslint-config-react-app": "^5.0.1",
         "eslint-plugin-flowtype": "^4.2.0",
@@ -112,7 +110,6 @@
         "typescript": "^3.7.2",
         "url-loader": "^1.1.2",
         "webpack": "^4.28.3",
-        "webpack-cli": "^3.2.0",
-        "webpack-node-externals": "^1.7.2"
+        "webpack-cli": "^3.2.0"
     }
 }
