@@ -57,7 +57,8 @@ export default function() {
         RendererUtils.showOpenDialog({
             properties: ['openDirectory'],
             filters: [{ name: 'Image', extensions: ['png'] }],
-        }, (dirPath) => {
+        }).then(({ filePaths }) => {
+            const dirPath = filePaths[0];
             if (dirPath) {
                 Entry.playground.board.code.getThreads()
                     .forEach(function(thread: any, index: number) {

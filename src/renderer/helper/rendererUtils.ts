@@ -96,17 +96,13 @@ export default class {
         return `${this.getFormattedDate()}_${this.getLang('Workspace.project')}`;
     }
 
-    static showOpenDialog(option: Electron.OpenDialogOptions, callback: (path: string[]) => void) {
-        if (root.isOsx) {
-            dialog.showOpenDialog(option, callback);
-        } else {
-            //TODO 윈도우용은 다른가요?
-            dialog.showOpenDialog(option, callback);
-        }
+    static showOpenDialog(option: Electron.OpenDialogOptions) {
+        return dialog.showOpenDialog(option);
     }
 
-    static showSaveDialog(option: Electron.SaveDialogOptions, callback: (filePath: string) => void) {
-        dialog.showSaveDialog(option, callback);
+    static showSaveDialog(option: Electron.SaveDialogOptions, callback: (filePath: string | undefined) => void) {
+        const path = dialog.showSaveDialogSync(option);
+        callback(path);
     }
 
     static downloadHardwareGuide() {

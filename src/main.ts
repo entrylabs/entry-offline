@@ -107,7 +107,7 @@ if (!app.requestSingleInstanceLock()) {
 }
 
 process.on('uncaughtException', (error) => {
-    const whichButtonClicked = dialog.showMessageBox({
+    const whichButtonClicked = dialog.showMessageBoxSync({
         type: 'error',
         title: 'Unexpected Error',
         message: 'Unexpected Error',

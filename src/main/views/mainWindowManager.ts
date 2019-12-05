@@ -73,7 +73,7 @@ export default class {
             mainWindow.webContents.send('showWindow');
         });
 
-        mainWindow.webContents.session.on('will-download', (event, downloadItem, webContents) => {
+        mainWindow.webContents.session.on('will-download', (event: Electron.Event , downloadItem: Electron.DownloadItem, webContents: Electron.WebContents) => {
             const filename = downloadItem.getFilename();
             const option: SaveDialogOptions = {
                 defaultPath: filename,
@@ -82,39 +82,13 @@ export default class {
             if (filters) {
                 option.filters = filters;
             }
-            const fileName = dialog.showSaveDialog(option);
+            const fileName = dialog.showSaveDialogSync(option);
             if (typeof fileName == 'undefined') {
                 downloadItem.cancel();
             } else {
                 downloadItem.setSavePath(fileName);
             }
         });
-
-
-        // mainWindow.webContents.on('crashed', () => {
-        //     dialog.showErrorBox(crashedMsg.title, crashedMsg.content);
-        //     dialog.showSaveDialog(
-        //         mainWindow,
-        //         {
-        //             filters: [
-        //                 {
-        //                     name: 'Entry File',
-        //                     extensions: ['ent'],
-        //                 },
-        //             ],
-        //         },
-        //         async(destinationPath) => {
-        //             let err;
-        //             try {
-        //                 await MainUtils.saveProject(root.sharedObject.workingPath, destinationPath);
-        //             } catch (error) {
-        //                 console.log(error);
-        //                 err = error;
-        //             }
-        //             mainWindow.reload();
-        //         },
-        //     );
-        // });
 
         mainWindow.setMenu(null);
         mainWindow.loadURL(`file://${path.resolve(app.getAppPath(), 'src', 'main.html')}`);

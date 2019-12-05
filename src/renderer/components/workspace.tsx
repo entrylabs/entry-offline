@@ -62,7 +62,7 @@ class Workspace extends Component<IProps> {
 
     componentDidMount() {
         IpcRendererHelper.checkUpdate();
-        setTimeout(async() => {
+        setTimeout(async () => {
             try {
                 const project = await EntryUtils.getSavedProject();
                 await this.loadProject(project);
@@ -347,7 +347,8 @@ class Workspace extends Component<IProps> {
                 /*defaultPath: storage.getItem('defaultPath') || '',*/
                 properties: ['openFile'],
                 filters: [{ name: 'Entry File', extensions: ['ent'] }],
-            }, async (filePaths) => {
+            }).then(async ({ filePaths }) => {
+                console.log('filePaths', filePaths);
                 try {
                     if (Array.isArray(filePaths)) {
                         const filePath = filePaths[0];
