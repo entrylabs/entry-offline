@@ -352,10 +352,10 @@ class EntryModalHelper {
             loaded: EntryUtils.loadSound,
             load: EntryUtils.loadSound,
             itemoff: () => {
-                return root.createjs.Sound.stop();
+                return createjs.Sound.stop();
             },
             itemon: (data: any) => {
-                root.createjs.Sound.play(data.id);
+                createjs.Sound.play(data.id);
             },
             dummyUploads: async ({ formData }: { formData: any }) => {
                 const files = formData ? formData.values() : []; // keyName : ...uploadFile${idx}
@@ -420,12 +420,12 @@ class EntryModalHelper {
             submit: (data: any) => {
                 data.selected.forEach(function(item: any) {
                     item.id = Entry.generateHash();
-                    Entry.playground.addExpansionBlock(item, true, true);
+                    Entry.playground.addExpansionBlock(item);
                 });
             },
             select: (data: any) => {
                 data.item.id = Entry.generateHash();
-                Entry.playground.addExpansionBlock(data.item, true, true);
+                Entry.playground.addExpansionBlock(data.item);
             },
         }, expansionBlocks as any);
     }

@@ -1,11 +1,10 @@
-declare module NodeJS  {
+declare namespace NodeJS  {
+    // noinspection JSUnusedGlobalSymbols
     interface Global {
         sharedObject: GlobalConfigurations;
         $: any;
     }
 }
 
-declare interface Window {
-    createjs: any;
-    Entry: any;
-}
+declare var createjs: any;
+declare var EntryStatic: any;

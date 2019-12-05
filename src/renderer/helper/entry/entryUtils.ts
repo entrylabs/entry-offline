@@ -3,7 +3,6 @@ import StorageManager from '../storageManager';
 import RendererUtils from '../rendererUtils';
 import Constants from '../constants';
 import root from 'window-or-global';
-import { DBSoundObject } from '../databaseManager';
 
 /**
  * 엔트리 코드로직과 관련된 유틸.
@@ -101,7 +100,7 @@ export default class {
      * 오브젝트를 eo 파일로 만들어서 외부로 저장한다.
      * @param object 저장할 엔트리 오브젝트
      */
-    static exportObject(object: Entry.Object) {
+    static exportObject(object: IEntry.Object) {
         const { name, script } = object;
         const getObjectData = (script: any, index?: number) => {
             const blockList = script.getBlockList(undefined, undefined, index);
@@ -145,7 +144,7 @@ export default class {
         Entry.Utils.addNewObject(model.sprite);
     }
 
-    static addPictureObjectToEntry(picture: Entry.Picture) {
+    static addPictureObjectToEntry(picture: IEntry.Picture) {
         if (!picture.id) {
             picture.id = Entry.generateHash();
         }
@@ -204,7 +203,7 @@ export default class {
             const imageElement = new Image();
             imageElement.src = newPicture.fileurl;
             imageElement.onload = () => {
-                const entityId = Entry.playground.object.entity.id;
+                const entityId = Entry.playground.object!.entity.id;
                 const painterFileId = Entry.playground.painter.file.id;
                 const cacheId = `${newPicture.id}${entityId}`;
 

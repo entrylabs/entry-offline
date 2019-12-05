@@ -14,7 +14,7 @@ export default function() {
     }
 
     Entry.playground.downloadPicture = function(pictureId: string) {
-        const picture = Entry.playground.object.getPicture(pictureId);
+        const picture = Entry.playground.object!.getPicture(pictureId);
         const saveFileName = EntryUtils.getObjectNameWithExtension(picture, 'png');
 
         const timeQueryIndex = picture.fileurl.indexOf('?');
@@ -36,7 +36,7 @@ export default function() {
     };
 
     Entry.playground.downloadSound = function(soundId: string) {
-        const sound = Entry.playground.object.getSound(soundId);
+        const sound = Entry.playground.object!.getSound(soundId);
         const saveFileName = EntryUtils.getObjectNameWithExtension(sound, 'mp3');
 
         RendererUtils.showSaveDialog({
@@ -128,5 +128,5 @@ export default function() {
         });
     };
 
-    Entry.EXPANSION_BLOCK.tts.api = EntryStatic.baseUrl + Entry.EXPANSION_BLOCK.tts.api;
+    Entry.EXPANSION_BLOCK.tts.api = window.EntryStatic.baseUrl + Entry.EXPANSION_BLOCK.tts.api;
 }

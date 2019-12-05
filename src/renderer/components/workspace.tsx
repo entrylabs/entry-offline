@@ -241,13 +241,13 @@ class Workspace extends Component<IProps> {
         const hwCategoryList = root.EntryStatic.hwCategoryList;
 
         if (
-            (hw.connected && hw.hwModule && this.lastHwName === hw.hwModule.name) ||
+            (hw.programConnected && hw.hwModule && this.lastHwName === hw.hwModule.name) ||
             !root.EntryStatic.isPracticalCourse
         ) {
             return;
         }
         const blockMenu = Entry.playground.blockMenu;
-        if (hw.connected && hw.hwModule) {
+        if (hw.programConnected && hw.hwModule) {
             const hwName = hw.hwModule.name;
             if (_includes(root.EntryStatic.hwMiniSupportList, hwName)) {
                 hwCategoryList.forEach(function(categoryName: string) {
@@ -399,7 +399,7 @@ class Workspace extends Component<IProps> {
         }
         Entry.reloadBlock();
         this.isFirstRender = false;
-        Entry.init(this.container.current, this.initOption);
+        Entry.init(this.container.current as HTMLDivElement, this.initOption);
         entryPatch();
         this.addEntryEvents();
         Entry.loadProject(project);
