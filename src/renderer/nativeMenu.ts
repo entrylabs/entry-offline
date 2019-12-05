@@ -89,7 +89,7 @@ const getTemplate = function() {
                 {
                     label: RendererUtils.getLang('Menus.hide_others'),
                     accelerator: 'Command+Alt+H',
-                    role: 'hideothers',
+                    role: 'hideOthers',
                 },
                 {
                     label: RendererUtils.getLang('Menus.show_all'),

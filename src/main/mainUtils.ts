@@ -691,7 +691,7 @@ export default class MainUtils {
                     MainUtils.getDimensionFromSvg(Buffer.from(fileData, 'base64').toString('utf8'));
 
                 sender.send('convertPng', fileData, mimeType, dimension);
-                ipcMain.once('convertPng', (_: Electron.Event, buffer: any) => {
+                ipcMain.once('convertPng', (_: Electron.IpcMainEvent, buffer: any) => {
                     FileUtils.writeFile(
                         buffer.split(';base64,').pop(),
                         newFilePath,

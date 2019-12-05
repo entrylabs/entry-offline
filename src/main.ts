@@ -80,28 +80,28 @@ if (!app.requestSingleInstanceLock()) {
             }
         });
 
-        ipcMain.on('openHardwareWindow', function(event: Electron.Event, arg: any) {
+        ipcMain.on('openHardwareWindow', function(event: Electron.IpcMainEvent, arg: any) {
             hardwareWindow.openHardwareWindow();
         });
 
-        ipcMain.on('openAboutWindow', function(event: Electron.Event, arg: any) {
+        ipcMain.on('openAboutWindow', function(event: Electron.IpcMainEvent, arg: any) {
             aboutWindow.openAboutWindow();
         });
 
-        ipcMain.on('closeAboutWindow', function(event: Electron.Event, arg: any) {
+        ipcMain.on('closeAboutWindow', function(event: Electron.IpcMainEvent, arg: any) {
             aboutWindow.closeAboutWindow();
         });
     });
 
-    ipcMain.on('roomId', function(event: Electron.Event, arg: any) {
+    ipcMain.on('roomId', function(event: Electron.IpcMainEvent, arg: any) {
         event.returnValue = root.sharedObject.roomIds;
     });
 
-    ipcMain.on('version', function(event: Electron.Event, arg: any) {
+    ipcMain.on('version', function(event: Electron.IpcMainEvent, arg: any) {
         event.returnValue = '99';
     });
 
-    ipcMain.on('serverMode', function(event: Electron.Event, mode: string) {
+    ipcMain.on('serverMode', function(event: Electron.IpcMainEvent, mode: string) {
         event.sender.send('serverMode', mode);
     });
 }

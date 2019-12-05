@@ -278,7 +278,7 @@ class Workspace extends Component<IProps> {
         const { mode } = persist;
         const projectName = this._getProjectName();
 
-        const saveFunction = async (filePath: string) => {
+        const saveFunction = async (filePath: string | undefined) => {
             if (!filePath) {
                 return;
             }

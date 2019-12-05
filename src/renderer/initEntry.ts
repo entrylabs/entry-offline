@@ -2,7 +2,7 @@ import root from 'window-or-global';
 import _lodash from 'lodash';
 import jquery from 'jquery';
 import { BigNumber } from 'bignumber.js';
-import Entrylms from './resources/modal/app';
+import Entrylms from './resources/modal/app.js';
 import StorageManager from './helper/storageManager';
 import ImportToggleHelper from './helper/importToggleHelper';
 

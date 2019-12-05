@@ -42,7 +42,7 @@ export default class {
 
         this.hardwareWindow.webContents.name = 'hardware';
         this.requestLocalDataInterval = undefined;
-        ipcMain.on('startRequestLocalData', (event: Electron.Event, duration: number) => {
+        ipcMain.on('startRequestLocalData', (event: Electron.IpcMainEvent, duration: number) => {
             this.requestLocalDataInterval = setInterval(() => {
                 if (!event.sender.isDestroyed()) {
                     event.sender.send('sendingRequestLocalData');

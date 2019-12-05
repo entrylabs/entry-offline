@@ -73,7 +73,7 @@ export default class {
             mainWindow.webContents.send('showWindow');
         });
 
-        mainWindow.webContents.session.on('will-download', (event: Electron.Event , downloadItem: Electron.DownloadItem, webContents: Electron.WebContents) => {
+        mainWindow.webContents.session.on('will-download', (event: Electron.Event , downloadItem: Electron.DownloadItem) => {
             const filename = downloadItem.getFilename();
             const option: SaveDialogOptions = {
                 defaultPath: filename,
