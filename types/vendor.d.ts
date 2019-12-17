@@ -13,6 +13,11 @@ declare module 'puid' {
     export = value;
 }
 
+declare module 'fontfaceonload' {
+    const value: any;
+    export = value;
+}
+
 /* eslint-disable */
 declare module 'uid' {
     const value: any;

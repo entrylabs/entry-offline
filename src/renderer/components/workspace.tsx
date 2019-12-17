@@ -3,6 +3,7 @@ import Header from './header';
 import './workspace.scss';
 import '../resources/styles/fonts.scss';
 import { connect } from 'react-redux';
+import fontFaceOnload from 'fontfaceonload';
 import { IPersistState, PersistActionCreators } from '../store/modules/persist';
 import { CommonActionCreators, ICommonState } from '../store/modules/common';
 import _includes from 'lodash/includes';
@@ -60,9 +61,26 @@ class Workspace extends Component<IProps> {
         this.addMainProcessEvents();
     }
 
+    _waitFontLoad() {
+        return new Promise((resolve) => {
+            fontFaceOnload('NanumGothic', {
+                success() {
+                    console.log('NanumGothic load successed');
+                    resolve();
+                },
+                error() {
+                    console.log('font load failed');
+                    resolve();
+                },
+                timeout: 5000,
+            })
+        })
+    }
+
     componentDidMount() {
         IpcRendererHelper.checkUpdate();
         setTimeout(async () => {
+            await this._waitFontLoad();
             try {
                 const project = await EntryUtils.getSavedProject();
                 await this.loadProject(project);
