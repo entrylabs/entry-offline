@@ -40,7 +40,10 @@
         "src/renderer_build",
         "!src/main_build/hot",
         "!src/renderer_build/hot",
-        "!src/**/*.map"
+        "!src/renderer/bower_components/entry-hw/app/server",
+        "!src/renderer/bower_components/entry-hw/app/src/main",
+        "!src/**/*.map",
+        "!src/**/*.scss"
     ],
     "extraResources": [
         "config/**/*"
