@@ -80,6 +80,15 @@ $scene-text-width: 57px;
 $scene-text-height: 15px;
 $scene-text-skeleton: linear-gradient(#e2e2e2 $scene-btn-height, transparent 0);
 
+.block {
+    cursor: grab;
+    -ms-touch-action: none;
+}
+
+.block.dragging {
+    cursor: grabbing;
+}
+
 .ws {
     background: white;
 
