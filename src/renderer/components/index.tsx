@@ -29,7 +29,10 @@ const IndexComponent: React.FC<IProps> = (props) => {
             <Script>
                 {/* eslint-disable id-length, no-undef, no-param-reassign */
                     () => {
+                        // @ts-ignore
                         const playFunc = createjs.Sound.play;
+
+                        // @ts-ignore
                         createjs.Sound.play = function(a: any, b: any) {
                             if (b) {
                                 b.pan = 0.01;

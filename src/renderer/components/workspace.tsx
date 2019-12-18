@@ -20,12 +20,12 @@ import EntryUtils from '../helper/entry/entryUtils';
 import { bindActionCreators } from 'redux';
 import { IModalState, ModalActionCreators } from '../store/modules/modal';
 import { IMapDispatchToProps, IMapStateToProps } from '../store';
+import DragAndDropContainer from './DragAndDropContainer';
 
 interface IProps extends IReduxDispatch, IReduxState {
 
 }
 
-/* global Entry, EntryStatic */
 class Workspace extends Component<IProps> {
     private lastHwName?: string;
     private projectSavedPath?: string;
@@ -73,8 +73,8 @@ class Workspace extends Component<IProps> {
                     resolve();
                 },
                 timeout: 5000,
-            })
-        })
+            });
+        });
     }
 
     componentDidMount() {
@@ -90,6 +90,7 @@ class Workspace extends Component<IProps> {
                     RendererUtils.getLang('Workspace.loading_fail_msg'),
                     RendererUtils.getLang('Workspace.fail_contact_msg'),
                 );
+                await RendererUtils.clearTempProject();
                 await this.loadProject();
             }
         }, 0);
@@ -355,35 +356,38 @@ class Workspace extends Component<IProps> {
                 await this.loadProject();
             }
         } else if (type === 'open_offline') {
-            this.showModalProgress(
-                'progress',
-                RendererUtils.getLang('Workspace.uploading_msg'),
-                RendererUtils.getLang('Workspace.fail_contact_msg'),
-            );
-
-            RendererUtils.showOpenDialog({
-                /*defaultPath: storage.getItem('defaultPath') || '',*/
-                properties: ['openFile'],
-                filters: [{ name: 'Entry File', extensions: ['ent'] }],
-            }).then(async ({ filePaths }) => {
-                console.log('filePaths', filePaths);
-                try {
-                    if (Array.isArray(filePaths)) {
-                        const filePath = filePaths[0];
-                        const project = await IpcRendererHelper.loadProject(filePath);
-                        await this.loadProject(project);
-                    }
-                    this.hideModalProgress();
-                } catch (e) {
-                    this.showModalProgress(
-                        'error',
-                        RendererUtils.getLang('Workspace.loading_fail_msg'),
-                        RendererUtils.getLang('Workspace.fail_contact_msg'),
-                    );
-                }
-            });
+            this._loadProjectFromFile(() => new Promise<string>((resolve, reject) => {
+                RendererUtils.showOpenDialog({
+                    /*defaultPath: storage.getItem('defaultPath') || '',*/
+                    properties: ['openFile'],
+                    filters: [{ name: 'Entry File', extensions: ['ent'] }],
+                }).then(({ filePaths }) => {
+                    resolve(filePaths[0]);
+                });
+            }));
         }
     };
+
+    async _loadProjectFromFile(filePathGetter: string | (() => Promise<string>)) {
+        this.showModalProgress(
+            'progress',
+            RendererUtils.getLang('Workspace.uploading_msg'),
+            RendererUtils.getLang('Workspace.fail_contact_msg'),
+        );
+
+        try {
+            const filePath = typeof filePathGetter === 'function' ? (await filePathGetter()) : filePathGetter;
+            const project = await IpcRendererHelper.loadProject(filePath);
+            await this.loadProject(project);
+            this.hideModalProgress();
+        } catch (e) {
+            this.showModalProgress(
+                'error',
+                RendererUtils.getLang('Workspace.loading_fail_msg'),
+                RendererUtils.getLang('Workspace.fail_contact_msg'),
+            );
+        }
+    }
 
     /**
      * 프로젝트를 로드한 후, 이벤트 연결을 시도한다.
@@ -504,26 +508,38 @@ class Workspace extends Component<IProps> {
         const { title, type, description } = data;
 
         return (
-            <div>
-                <Header
-                    onSaveAction={this.handleSaveAction}
-                    onFileAction={this.handleFileAction}
-                    onReloadProject={this.reloadProject}
-                    onLoadProject={this.loadProject}
-                    onProgramLanguageChanged={this.handleProgramLanguageModeChanged}
-                    programLanguageMode={programLanguageMode}
-                    executionStatus={executionStatus}
+            <>
+                <DragAndDropContainer
+                    text={RendererUtils.getLang('Workspace.ent_drag_and_drop')}
+                    onDropFile={async (filePath) => {
+                        if (filePath.endsWith('.ent')) {
+                            await this._loadProjectFromFile(filePath);
+                        } else {
+                            root.entrylms.alert(RendererUtils.getLang('Workspace.upload_not_supported_file_msg'));
+                        }
+                    }}
                 />
-                <div ref={this.container} className="workspace"/>
-                {isShow && (
-                    <ModalProgress
-                        title={title}
-                        type={type}
-                        description={description}
-                        onClose={this.hideModalProgress}
+                <div>
+                    <Header
+                        onSaveAction={this.handleSaveAction}
+                        onFileAction={this.handleFileAction}
+                        onReloadProject={this.reloadProject}
+                        onLoadProject={this.loadProject}
+                        onProgramLanguageChanged={this.handleProgramLanguageModeChanged}
+                        programLanguageMode={programLanguageMode}
+                        executionStatus={executionStatus}
                     />
-                )}
-            </div>
+                    <div ref={this.container} className="workspace"/>
+                    {isShow && (
+                        <ModalProgress
+                            title={title}
+                            type={type}
+                            description={description}
+                            onClose={this.hideModalProgress}
+                        />
+                    )}
+                </div>
+            </>
         );
     }
 }

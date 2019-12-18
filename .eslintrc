@@ -33,10 +33,6 @@
     ],
     "no-loop-func": "warn",
     "no-new-func": "warn",
-    "space-before-function-paren": [
-      "warn",
-      "never"
-    ],
     "no-param-reassign": [
       "warn",
       {
@@ -160,7 +156,8 @@
       "parser": "@typescript-eslint/parser",
       "rules": {
         "no-unused-vars": "off",
-        "no-useless-constructor": "off"
+        "no-useless-constructor": "off",
+        "no-var": "off"
       }
     }
   ]

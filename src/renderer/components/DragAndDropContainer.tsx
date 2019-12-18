@@ -53,10 +53,11 @@ const UploaderWindowNotifyText = Styled.h1`
 
 interface IProps {
     text: string;
+    onDropFile?: (filePath: string) => void;
 }
 
 const DragAndDropContainer: React.FC<IProps> = (props) => {
-    const { text } = props;
+    const { text, onDropFile } = props;
     const [isShowContainer, toggleShowContainer] = useState(false);
 
     const handleDragEnter = useCallback((e: DragEvent) => {
@@ -83,11 +84,10 @@ const DragAndDropContainer: React.FC<IProps> = (props) => {
 
     const handleFileDrop = useCallback((e: DragEvent) => {
         toggleShowContainer(false);
-        console.log(e.dataTransfer?.files[0]);
-    }, []);
+        (onDropFile && e.dataTransfer) && onDropFile(e.dataTransfer.files[0].path);
+    }, [onDropFile]);
 
     useEffect(() => {
-        console.log('register');
         document.body.addEventListener('dragenter', handleDragEnter, false);
         document.body.addEventListener('dragleave', handleDragEnd, false);
         document.body.addEventListener('dragover', handleDragOver, false);

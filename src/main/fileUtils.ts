@@ -103,7 +103,6 @@ export default class {
                 strict: true,
                 filter: (path, entry) => {
                     const { type } = entry;
-                    console.log(path);
                     // @ts-ignore
                     return (type !== 'SymbolicLink' && (!filterFunction || filterFunction(path)));
                 },

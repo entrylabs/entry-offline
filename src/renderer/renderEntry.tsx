@@ -8,8 +8,6 @@ import configureStore from './store';
 import Index from './components/Index';
 
 import IpcRendererHelper from './helper/ipcRendererHelper';
-import RendererUtils from './helper/rendererUtils';
-import DragAndDropContainer from './components/DragAndDropContainer';
 
 const { store, persistor } = configureStore();
 
@@ -17,7 +15,6 @@ IpcRendererHelper.onPageLoaded(() => {
     ReactDom.render(
         <Provider store={store}>
             <PersistGate persistor={persistor}>
-                <DragAndDropContainer text={RendererUtils.getLang('Workspace.ent_drag_and_drop')}/>
                 <Index/>
             </PersistGate>
         </Provider>,
