@@ -1,6 +1,8 @@
 const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const createStyledComponentsTransformer = require('typescript-plugin-styled-components').default;
+const styledComponentsTransformer = createStyledComponentsTransformer();
 
 const setting = {
     mode: 'none',
@@ -29,8 +31,9 @@ const setting = {
                 test: /\.tsx?$/,
                 loader: 'ts-loader',
                 options: {
-                    transpileOnly: true
-                }
+                    transpileOnly: true,
+                    getCustomTransformers: () => ({ before: [styledComponentsTransformer] }),
+                },
             },
             {
                 test: /\.(js|jsx|mjs)$/,

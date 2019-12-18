@@ -4,23 +4,6 @@
     "react-app",
     "eslint:recommended"
   ],
-  "overrides": [
-    {
-      "files": ["*.ts"],
-      "parser": "@typescript-eslint/parser",
-      "rules": {
-        "no-unused-vars": "off"
-      }
-    },
-    {
-      "files": ["*.d.ts"],
-      "parser": "@typescript-eslint/parser",
-      "rules": {
-        "no-unused-vars": "off",
-        "no-useless-constructor": "off"
-      }
-    }
-  ],
   "parserOptions": {
     "ecmaVersion": 8,
     "sourceType": "module",
@@ -156,14 +139,29 @@
     "no-var": "error",
     "no-unused-vars": ["warn", {"caughtErrors": "none"}],
     "prefer-const": "warn",
-    "indent": [
-      "warn",
-      4,
-      {
-        "SwitchCase": 1
-      }
-    ],
     "linebreak-style": 0,
     "react/react-in-jsx-scope": "off"
-  }
+  },
+  "overrides": [
+    {
+      "files": [
+        "*.ts",
+        "*.tsx"
+      ],
+      "parser": "@typescript-eslint/parser",
+      "rules": {
+        "no-unused-vars": "off"
+      }
+    },
+    {
+      "files": [
+        "*.d.ts"
+      ],
+      "parser": "@typescript-eslint/parser",
+      "rules": {
+        "no-unused-vars": "off",
+        "no-useless-constructor": "off"
+      }
+    }
+  ]
 }

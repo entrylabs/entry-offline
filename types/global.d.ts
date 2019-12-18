@@ -8,5 +8,10 @@ declare namespace NodeJS  {
     }
 }
 
+declare interface Window {
+    createjs: any;
+    EntryStatic: any;
+}
+
 declare var createjs: any;
 declare var EntryStatic: any;
