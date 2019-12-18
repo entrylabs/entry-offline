@@ -16,16 +16,6 @@ module.exports = {
                 },
             },
             {
-                test: /\.(js|jsx|mjs)$/,
-                exclude: [
-                    /node_modules/,
-                    /bower_components/,
-                    /modal[\\/]app\.js/,
-                    /entry-tool/,
-                ],
-                use: [{ loader: 'babel-loader' }],
-            },
-            {
                 test: /\.(ico|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot|cur)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
                 loader: 'url-loader',
                 options: {
