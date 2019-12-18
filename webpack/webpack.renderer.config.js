@@ -1,11 +1,10 @@
 const path = require('path');
 const webpack = require('webpack');
+const merge = require('webpack-merge');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const createStyledComponentsTransformer = require('typescript-plugin-styled-components').default;
-const styledComponentsTransformer = createStyledComponentsTransformer();
+const common = require('./webpack.common.config');
 
 const setting = {
-    mode: 'none',
     target: 'electron-renderer',
     entry: {
         init: './src/renderer/initEntry.ts',
@@ -16,45 +15,14 @@ const setting = {
         '@entrylabs/tool/component': 'EntryTool.Component',
         'entry-paint': 'EntryPaint',
     },
-    resolve: {
-        extensions: ['.ts', '.tsx', '.js', '.jsx'],
-    },
     output: {
-        path: path.resolve(__dirname, 'src', 'renderer_build'),
+        path: path.resolve(__dirname, '..', 'src', 'renderer_build'),
         filename: '[name].bundle.js',
         hotUpdateChunkFilename: 'hot/hot-update.js',
         hotUpdateMainFilename: 'hot/hot-update.json',
     },
     module: {
         rules: [
-            {
-                test: /\.tsx?$/,
-                loader: 'ts-loader',
-                options: {
-                    transpileOnly: true,
-                    getCustomTransformers: () => ({ before: [styledComponentsTransformer] }),
-                },
-            },
-            {
-                test: /\.(js|jsx|mjs)$/,
-                exclude: [
-                    /node_modules/,
-                    /bower_components/,
-                    /modal[\\/]app\.js/,
-                    /entry-tool/,
-                ],
-                use: [{ loader: 'babel-loader' }],
-            },
-            {
-                test: /\.less$/,
-                use: ExtractTextPlugin.extract({
-                    fallback: 'style-loader',
-                    use: [
-                        { loader: 'css-loader', options: { importLoaders: 1 } },
-                        { loader: 'less-loader', options: { sourceMap: true } },
-                    ],
-                }),
-            },
             {
                 test: /\.scss$/,
                 use: ExtractTextPlugin.extract({
@@ -97,5 +65,4 @@ if (NODE_ENV === 'production') {
     setting.devtool = 'eval-inline-source-map';
 }
 
-
-module.exports = setting;
+module.exports = merge(common, setting);

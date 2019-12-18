@@ -84,6 +84,7 @@ const DragAndDropContainer: React.FC<IProps> = (props) => {
 
     const handleFileDrop = useCallback((e: DragEvent) => {
         toggleShowContainer(false);
+        // @ts-ignore path 있는데 없다고나옴
         (onDropFile && e.dataTransfer) && onDropFile(e.dataTransfer.files[0].path);
     }, [onDropFile]);
 

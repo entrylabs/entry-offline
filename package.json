@@ -10,15 +10,15 @@
         "debug": "electron --inspect .",
         "webpack:dev": "cross-env NODE_ENV=development webpack",
         "webpack:prod": "cross-env NODE_ENV=production webpack",
-        "webpack:main": "cross-env NODE_ENV=development webpack --config webpack.main.config.js",
-        "webpack:renderer": "cross-env NODE_ENV=development webpack --config webpack.renderer.config.js",
+        "webpack:main": "cross-env NODE_ENV=development webpack --config webpack/webpack.main.config.js",
+        "webpack:renderer": "cross-env NODE_ENV=development webpack --config webpack/webpack.renderer.config.js",
         "webpack:watch": "cross-env NODE_ENV=development webpack -w",
         "rebuild": "electron-rebuild",
         "dist:win32": "cross-env NODE_ENV=production webpack && electron-builder -c --win --ia32",
         "dist:win64": "cross-env NODE_ENV=production webpack && electron-builder -c --win --x64",
         "dist:mac:notarize": "cross-env NODE_ENV=production webpack && cross-env NOTARIZE=true electron-builder -c --mac",
         "dist:mac": "cross-env NODE_ENV=development webpack && cross-env NOTARIZE=false electron-builder -c --mac",
-        "postinstall": "electron-rebuild && bower i"
+        "postinstall": "electron-rebuild -f && bower i"
     },
     "keywords": [
         "entry",
@@ -100,7 +100,6 @@
         "extract-text-webpack-plugin": "^4.0.0-beta.0",
         "file-loader": "^4.0.0",
         "fontfaceonload": "^1.0.2",
-        "less-loader": "^4.1.0",
         "node-sass": "^4.11.0",
         "prettier": "^1.15.3",
         "react": "^16.7.0",
@@ -117,6 +116,7 @@
         "typescript-plugin-styled-components": "^1.4.3",
         "url-loader": "^1.1.2",
         "webpack": "^4.41.3",
-        "webpack-cli": "^3.3.10"
+        "webpack-cli": "^3.3.10",
+        "webpack-merge": "^4.2.2"
     }
 }

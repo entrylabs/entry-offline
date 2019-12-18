@@ -1,6 +1,4 @@
-'use strict';
-
-const mainProcess = require('./webpack.main.config');
-const rendererProcess = require('./webpack.renderer.config');
+const mainProcess = require('./webpack/webpack.main.config');
+const rendererProcess = require('./webpack/webpack.renderer.config');
 
 module.exports = [mainProcess, rendererProcess];
