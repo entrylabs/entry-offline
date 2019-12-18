@@ -1,3 +1,5 @@
+/// <reference path="./config.d.ts"/>
+
 declare namespace NodeJS  {
     // noinspection JSUnusedGlobalSymbols
     interface Global {

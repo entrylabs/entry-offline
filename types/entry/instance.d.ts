@@ -1,3 +1,7 @@
+/// <reference path="./entry.d.ts" />
+/// <reference path="./hardware.d.ts" />
+/// <reference path="../index.d.ts" />
+
 declare interface Window {
     Entry: Entry;
 }
@@ -8,12 +12,12 @@ declare class Entry {
     static Picture: IEntry.Picture;
     static Workspace: IEntry.Workspace;
     static HW: IEntry.Hardware;
-    static Vim: UnknownAny;
-    static Utils: UnknownAny;
-    static Event: UnknownAny;
+    static Vim: any;
+    static Utils: any;
+    static Event: any;
 
-    static EXPANSION_BLOCK: UnknownAny;
-    static EXPANSION_BLOCK_LIST: UnknownAny;
+    static EXPANSION_BLOCK: any;
+    static EXPANSION_BLOCK_LIST: any;
     static mediaFilePath: string;
 
 
@@ -21,10 +25,10 @@ declare class Entry {
     static container: IEntry.Container;
     static playground: IEntry.Playground;
     static hw: IEntry.Hardware;
-    static engine: UnknownAny;
+    static engine: any;
     static stage: IEntry.Stage;
     static toast: IEntry.ToastLegacy;
-    static Func: UnknownAny;
+    static Func: any;
 
     // 엔트리 네임스페이스에 할당되어있는 특정 함수들
     static generateHash: () => string;
@@ -34,7 +38,7 @@ declare class Entry {
     static addEventListener: (event: string, listener: (...args: any[]) => void) => void;
     static dispatchEvent: (event: string, ...args: any[]) => void;
     static getMainWS: () => IEntry.Workspace;
-    static exportProject: () => UnknownAny;
+    static exportProject: () => any;
     static clearProject: () => void;
     static loadProject: (project: IEntry.Project) => void;
     static disposeContainer: () => void;

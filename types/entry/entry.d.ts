@@ -48,10 +48,10 @@ declare module IEntry {
     }
 
     export interface Container {
-        getAllObjects(): UnknownAny[];
-        addObject: (objectModel: any, ...rest: number[]) => UnknownAny;
+        getAllObjects(): any[];
+        addObject: (objectModel: any, ...rest: number[]) => any;
         getObject: (objectId: string) => IEntry.Object;
-        cachePicture: (pictureId: string, image: UnknownAny) => void;
+        cachePicture: (pictureId: string, image: any) => void;
     }
 
     export interface Workspace {
@@ -78,8 +78,8 @@ declare module IEntry {
         changeViewMode: (viewType: PlaygroundViewMode) => void;
         addExpansionBlock: (blockName: string) => void;
         painter: Painter;
-        setMenu?: UnknownFunction;
-        board: UnknownAny;
+        setMenu?: (...args: any[]) => any;
+        board: any;
         blockMenu: BlockMenu;
     }
 
@@ -98,14 +98,14 @@ declare module IEntry {
      */
     export interface PropertyPanel {
         removeMode: (mode: string) => void;
-        addMode: (modeKey: string, element: UnknownAny) => void;
+        addMode: (modeKey: string, element: any) => void;
         selected: string;
     }
 
     export interface Stage {
         canvas: /*PIXI.Container | */any;
         _app: /*PIXI.Application | */any;
-        handle: UnknownAny;
+        handle: any;
         update: () => void;
     }
 
@@ -138,11 +138,11 @@ declare module IEntry {
 declare type EntryAddOptions = {
     objectType: string;
     text: string;
-    options: UnknownAny;
+    options: any;
 
-    sprite: UnknownAny;
+    sprite: any;
     objects: IEntry.Object[];
-    functions: UnknownAny[];
-    messages: UnknownAny[];
+    functions: any[];
+    messages: any[];
     variables: IEntry.Variable[];
 }

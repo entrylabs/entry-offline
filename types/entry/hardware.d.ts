@@ -29,10 +29,10 @@ declare module IEntry {
         prototype: any;
 
         programConnected: boolean;
-        hwModule: UnknownAny;
+        hwModule: any;
 
-        portData: UnknownAny;
-        sendQueue: UnknownAny;
+        portData: any;
+        sendQueue: any;
         update: () => void;
         closeConnection: () => void;
         downloadConnector: () => void;
@@ -52,7 +52,7 @@ declare module IEntry {
     export interface HardwareModule {
         id: HardwareModuleId;
         name: string;
-        monitorTemplate?: UnknownAny;
+        monitorTemplate?: any;
         sendMessage?: (hw: Hardware) => void;
         setZero: () => void;
 
@@ -74,6 +74,6 @@ declare module IEntry {
         generateListView: () => void;
         toggleMode: (mode: string) => void; // 'list' || 'both'?
         setHwModule: (hwModule: HardwareModule) => void;
-        update: (portData: UnknownAny, sendQueue: UnknownAny) => void;
+        update: (portData: any, sendQueue: any) => void;
     }
 }
