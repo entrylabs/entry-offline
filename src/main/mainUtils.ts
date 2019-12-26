@@ -468,25 +468,23 @@ export default class MainUtils {
             newPicturePath,
         );
 
-        if (extraPath) {
-            const { thumbnailPath, svgPath } = extraPath;
+        const { thumbnailPath, svgPath } = extraPath || {};
 
-            // 섬네일 이미지가 이미 있는 경우는 해당 이미지를 가져다 쓰고, 없는 경우 원본을 리사이징
-            const newThumbnailPath = path.join(Constants.tempThumbnailPath(newFileId), `${newFileId}${originalFileExt}`);
-            if (thumbnailPath) {
-                await FileUtils.copyFile(thumbnailPath, newThumbnailPath);
-            } else {
-                await FileUtils.writeFile(
-                    FileUtils.createResizedImageBuffer(filePath, ImageResizeSize.thumbnail),
-                    newThumbnailPath,
-                );
-            }
+        // 섬네일 이미지가 이미 있는 경우는 해당 이미지를 가져다 쓰고, 없는 경우 원본을 리사이징
+        const newThumbnailPath = path.join(Constants.tempThumbnailPath(newFileId), `${newFileId}${originalFileExt}`);
+        if (thumbnailPath) {
+            await FileUtils.copyFile(thumbnailPath, newThumbnailPath);
+        } else {
+            await FileUtils.writeFile(
+                FileUtils.createResizedImageBuffer(filePath, ImageResizeSize.thumbnail),
+                newThumbnailPath,
+            );
+        }
 
-            if (svgPath) {
-                imageType = 'svg';
-                const newSvgPath = path.join(Constants.tempImagePath(newFileId), `${newFileId}.svg`);
-                await FileUtils.copyFile(svgPath, newSvgPath);
-            }
+        if (svgPath) {
+            imageType = 'svg';
+            const newSvgPath = path.join(Constants.tempImagePath(newFileId), `${newFileId}.svg`);
+            await FileUtils.copyFile(svgPath, newSvgPath);
         }
 
         return {
@@ -534,7 +532,7 @@ export default class MainUtils {
         return new Promise(async (resolve, reject) => {
             const { file, image } = data;
             const { prevFilename, mode, svg, ext = 'png' } = file;
-            let pictureId = MainUtils.createFileId();
+            const pictureId = MainUtils.createFileId();
 
             try {
                 const imagePath = path.join(Constants.tempImagePath(pictureId), `${pictureId}.png`);
@@ -621,7 +619,6 @@ export default class MainUtils {
             path: newSoundPath, //See EntryUtils#loadSound
             duration: Math.round((metadata.format.duration || 0) * 10) / 10,
         };
-
     }
 
     static importSoundsFromResource(sounds: ObjectLike[]) {
@@ -687,7 +684,7 @@ export default class MainUtils {
                 const mimeType = mime.lookup(filePath);
 
                 // svg 의 경우 viewBox 에서 뽑아서 전달하지 않으면 코딱지만한 크기로 잡혀버린다.
-                let dimension = (mimeType && mimeType.includes('svg')) &&
+                const dimension = (mimeType && mimeType.includes('svg')) &&
                     MainUtils.getDimensionFromSvg(Buffer.from(fileData, 'base64').toString('utf8'));
 
                 sender.send('convertPng', fileData, mimeType, dimension);
