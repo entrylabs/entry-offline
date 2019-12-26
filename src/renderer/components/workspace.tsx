@@ -369,6 +369,10 @@ class Workspace extends Component<IProps> {
     };
 
     async _loadProjectFromFile(filePathGetter: string | (() => Promise<string>)) {
+        if (!filePathGetter) {
+            return;
+        }
+
         this.showModalProgress(
             'progress',
             RendererUtils.getLang('Workspace.uploading_msg'),
@@ -377,6 +381,10 @@ class Workspace extends Component<IProps> {
 
         try {
             const filePath = typeof filePathGetter === 'function' ? (await filePathGetter()) : filePathGetter;
+            if (!filePath) {
+                this.hideModalProgress();
+                return;
+            }
             const project = await IpcRendererHelper.loadProject(filePath);
             await this.loadProject(project);
             this.hideModalProgress();
