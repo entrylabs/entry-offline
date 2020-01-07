@@ -35,7 +35,7 @@ class EntryModalHelper {
                 if (data.searchQuery === '') {
                     return;
                 }
-                DatabaseManager.search(data)
+                DatabaseManager.search(data, 'sprite')
                     .then((result) => {
                         EntryModalHelper.fetchPopup(result);
                     });
@@ -205,10 +205,7 @@ class EntryModalHelper {
                     return;
                 }
                 DatabaseManager
-                    .search({
-                        ...data,
-                        type: 'picture',
-                    })
+                    .search(data, 'picture')
                     .then(EntryModalHelper.fetchPopup);
             },
             submit: async (data: any) => {
@@ -324,7 +321,7 @@ class EntryModalHelper {
                 if (data.searchQuery === '') {
                     return;
                 }
-                DatabaseManager.search(data)
+                DatabaseManager.search(data, 'sound')
                     .then((result) => {
                         EntryModalHelper.popup.setData({
                             data: { data: result },

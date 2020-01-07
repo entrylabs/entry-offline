@@ -75,7 +75,7 @@ export default class {
      * entry-tool 에서 전달받을 때는 아래의 인자를 받게 된다.
      * {category, period, searchQuery, sort, type}
      */
-    static search({ type, searchQuery }: { type: string, searchQuery: string }) {
+    static search({ searchQuery }: { searchQuery: string }, type: string) {
         const table = this._selectTable(type);
         const lowerCaseSearchQuery = searchQuery.toString().toLowerCase();
 
