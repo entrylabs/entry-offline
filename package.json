@@ -40,7 +40,9 @@
         "tar": "^4.4.10",
         "uid": "^0.0.2",
         "window-or-global": "^1.0.1",
-        "xml2js": "^0.4.19"
+        "xml2js": "^0.4.19",
+        "entry-hw": "git+https://github.com/entrylabs/entry-hw.git#test/offline_test",
+        "entry-hw-server": "git+https://github.com/entrylabs/entry-hw-server.git#master"
     },
     "devDependencies": {
         "@types/archiver": "^3.0.0",
@@ -55,6 +57,7 @@
         "@types/react": "^16.9.13",
         "@types/react-dom": "^16.8.4",
         "@types/react-redux": "^7.1.5",
+        "@types/react-transition-group": "^4.2.3",
         "@types/redux": "^3.6.0",
         "@types/redux-actions": "^2.6.1",
         "@types/rimraf": "^2.0.2",
@@ -82,11 +85,13 @@
         "extract-text-webpack-plugin": "^4.0.0-beta.0",
         "file-loader": "^4.0.0",
         "fontfaceonload": "^1.0.2",
+        "immer": "^5.2.0",
         "node-sass": "^4.11.0",
         "prettier": "^1.15.3",
         "react": "^16.7.0",
         "react-dom": "^16.7.0",
         "react-redux": "^7.1.0",
+        "react-transition-group": "^4.3.0",
         "redux": "^4.0.1",
         "redux-actions": "^2.6.5",
         "redux-persist": "^5.10.0",

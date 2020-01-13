@@ -1,3 +1,13 @@
+declare module 'entry-hw-server' {
+    const value: any;
+    export = value;
+}
+
+declare module 'entry-hw/*' {
+    const value: any;
+    export = value;
+}
+
 declare module '@entrylabs/tool' {
     export const Popup: any;
 }
