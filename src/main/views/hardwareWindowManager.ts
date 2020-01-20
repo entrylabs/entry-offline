@@ -1,4 +1,4 @@
-import { BrowserWindow, app, ipcMain, NamedBrowserWindow } from 'electron';
+import { BrowserWindow, app, NamedBrowserWindow } from 'electron';
 import path from 'path';
 import HardwareMainRouter from '../../renderer/bower_components/entry-hw/app/src/main/mainRouter';
 import HardwareEntryServer from '../utils/serverProcessManager';
@@ -42,18 +42,6 @@ export default class {
 
         this.hardwareWindow.webContents.name = 'hardware';
         this.requestLocalDataInterval = undefined;
-        ipcMain.on('startRequestLocalData', (event: Electron.IpcMainEvent, duration: number) => {
-            this.requestLocalDataInterval = setInterval(() => {
-                if (!event.sender.isDestroyed()) {
-                    event.sender.send('sendingRequestLocalData');
-                }
-            }, duration);
-        });
-        ipcMain.on('stopRequestLocalData', () => {
-            if (this.requestLocalDataInterval) {
-                clearInterval(this.requestLocalDataInterval);
-            }
-        });
     }
 
     openHardwareWindow() {
