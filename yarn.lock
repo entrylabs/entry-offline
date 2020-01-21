@@ -2413,6 +2413,10 @@ enhanced-resolve@^4.0.0, enhanced-resolve@^4.1.0:
     socket.io-client "^2.2.0"
     tar "^5.0.5"
 
+"entry-tool@git+https://github.com/entrylabs/entry-tool.git#v1.20200115.186":
+  version "0.0.0"
+  resolved "git+https://github.com/entrylabs/entry-tool.git#b7f275be7778f47b373bca1753692483609351a8"
+
 env-paths@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/env-paths/-/env-paths-2.2.0.tgz#cdca557dc009152917d6166e2febe1f039685e43"
