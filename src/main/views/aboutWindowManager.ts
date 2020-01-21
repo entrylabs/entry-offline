@@ -22,6 +22,9 @@ export default class {
             frame: false,
             modal: true,
             show: false,
+            webPreferences: {
+                nodeIntegration: true,
+            },
         });
 
         this.aboutWindow.on('closed', () => {
