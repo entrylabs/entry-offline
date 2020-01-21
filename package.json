@@ -28,7 +28,7 @@
         "bignumber.js": "^8.0.1",
         "entry-hw": "git+https://github.com/entrylabs/entry-hw.git#test/offline_test",
         "entry-hw-server": "git+https://github.com/entrylabs/entry-hw-server.git#master",
-        "entry-tool": "git+https://github.com/entrylabs/entry-tool.git#v1.20200115.186",
+        "entry-tool": "v1.1.9",
         "literally-canvas": "git+https://github.com/entrylabs/literallycanvas#feature/mobile",
         "excel4node": "^1.7.0",
         "fs-extra": "^8.1.0",
