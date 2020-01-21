@@ -4,7 +4,6 @@
     "main": "",
     "moduleType": ["node"],
     "dependencies": {
-        "literallycanvas-mobile": "entrylabs/literallycanvas#feature/mobile",
         "entry-js": "entryjs#dist/offline_v2.0.17"
     },
     "license": "MIT",
