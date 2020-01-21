@@ -15,7 +15,7 @@
         "dist:win64": "cross-env NODE_ENV=production webpack && electron-builder -c --win --x64",
         "dist:mac:notarize": "cross-env NODE_ENV=production webpack && cross-env NOTARIZE=true electron-builder -c --mac",
         "dist:mac": "cross-env NODE_ENV=development webpack && cross-env NOTARIZE=false electron-builder -c --mac",
-        "postinstall": "electron-rebuild -f && bower i"
+        "rebuild": "electron-rebuild -f"
     },
     "keywords": [
         "entry",
@@ -25,13 +25,15 @@
     "license": "MIT",
     "dependencies": {
         "bignumber.js": "^8.0.1",
+        "entry-hw": "git+https://github.com/entrylabs/entry-hw.git#test/offline_test",
+        "entry-hw-server": "git+https://github.com/entrylabs/entry-hw-server.git#master",
         "excel4node": "^1.7.0",
         "fs-extra": "^8.1.0",
-        "image-size": "^0.7.1",
-        "jquery": "^3.3.1",
+        "image-size": "^0.8.3",
+        "jquery": "^3.4.1",
         "lodash": "^4.17.15",
-        "mime-types": "^2.1.25",
-        "music-metadata": "^4.5.2",
+        "mime-types": "^2.1.26",
+        "music-metadata": "^6.3.0",
         "puid": "^1.0.7",
         "rimraf": "^2.6.3",
         "serialport": "^8.0.5",
@@ -40,9 +42,7 @@
         "tar": "^4.4.10",
         "uid": "^0.0.2",
         "window-or-global": "^1.0.1",
-        "xml2js": "^0.4.19",
-        "entry-hw": "git+https://github.com/entrylabs/entry-hw.git#test/offline_test",
-        "entry-hw-server": "git+https://github.com/entrylabs/entry-hw-server.git#master"
+        "xml2js": "^0.4.19"
     },
     "devDependencies": {
         "@types/archiver": "^3.0.0",
@@ -85,7 +85,7 @@
         "extract-text-webpack-plugin": "^4.0.0-beta.0",
         "file-loader": "^4.0.0",
         "fontfaceonload": "^1.0.2",
-        "immer": "^5.2.0",
+        "immer": "^5.3.2",
         "node-sass": "^4.11.0",
         "prettier": "^1.15.3",
         "react": "^16.7.0",
