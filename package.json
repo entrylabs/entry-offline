@@ -15,7 +15,8 @@
         "dist:win64": "cross-env NODE_ENV=production webpack && electron-builder -c --win --x64",
         "dist:mac:notarize": "cross-env NODE_ENV=production webpack && cross-env NOTARIZE=true electron-builder -c --mac",
         "dist:mac": "cross-env NODE_ENV=development webpack && cross-env NOTARIZE=false electron-builder -c --mac",
-        "rebuild": "electron-rebuild -f"
+        "rebuild": "electron-rebuild -f",
+        "postinstall": "npm run rebuild && npm run webpack:dev"
     },
     "keywords": [
         "entry",
