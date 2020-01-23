@@ -1,6 +1,6 @@
 import { BrowserWindow, app, NamedBrowserWindow } from 'electron';
 import path from 'path';
-import HardwareMainRouter from 'entry-hw/app/src/main/mainRouter';
+import HardwareMainRouter from 'entry-hw/app/src/main/mainRouter.build';
 import HardwareEntryServer from '../utils/serverProcessManager';
 import root from 'window-or-global';
 
@@ -28,7 +28,7 @@ export default class HardwareWindowManager {
                 backgroundThrottling: false,
                 nodeIntegration: false,
                 preload: path.resolve(
-                    app.getAppPath(), 'node_modules', 'entry-hw', 'app', 'src', 'renderer', 'preload.js',
+                    app.getAppPath(), 'node_modules', 'entry-hw', 'app', 'src', 'preload', 'preload.bundle.js',
                 ),
             },
         });
@@ -36,7 +36,7 @@ export default class HardwareWindowManager {
         this.hardwareWindow.setMenu(null);
         this.hardwareWindow.setMenuBarVisibility(false);
         this.hardwareWindow.loadURL(`file:///${path.resolve(
-            app.getAppPath(), 'node_modules', 'entry-hw', 'app', 'src', 'renderer', 'views', 'index.html')}`);
+            app.getAppPath(), 'node_modules', 'entry-hw', 'app', 'src', 'views', 'index.html')}`);
         this.hardwareWindow.on('closed', this.closeHardwareWindow.bind(this));
 
         this.hardwareWindow.webContents.name = 'hardware';

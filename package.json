@@ -26,7 +26,7 @@
     "license": "MIT",
     "dependencies": {
         "bignumber.js": "^8.0.1",
-        "entry-hw": "git+https://github.com/entrylabs/entry-hw.git#test/offline_test",
+        "entry-hw": "git+https://github.com/entrylabs/entry-hw.git#build-base",
         "entry-hw-server": "git+https://github.com/entrylabs/entry-hw-server.git#master",
         "entry-tool": "v1.1.9",
         "literally-canvas": "git+https://github.com/entrylabs/literallycanvas#feature/mobile",
