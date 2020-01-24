@@ -211,7 +211,7 @@ declare module IEntry {
         downloadPicture: (pictureId: string) => void;
         downloadSound: (soundId: string) => void;
         changeViewMode: (viewType: PlaygroundViewMode) => void;
-        addExpansionBlock: (blockName: string) => void;
+        addExpansionBlocks: (expansionInfoList: any[]) => void;
         painter: Painter;
         setMenu?: (...args: any[]) => any;
         board: any;

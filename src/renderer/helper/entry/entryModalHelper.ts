@@ -415,14 +415,10 @@ class EntryModalHelper {
 
         await this._switchPopup('expansion', {
             submit: (data: any) => {
-                data.selected.forEach(function(item: any) {
-                    item.id = Entry.generateHash();
-                    Entry.playground.addExpansionBlock(item);
-                });
+                Entry.playground.addExpansionBlocks(data.selected);
             },
             select: (data: any) => {
-                data.item.id = Entry.generateHash();
-                Entry.playground.addExpansionBlock(data.item);
+                Entry.playground.addExpansionBlocks(data.item);
             },
         }, expansionBlocks as any);
     }
