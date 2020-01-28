@@ -403,24 +403,49 @@ class EntryModalHelper {
      * 확장블록 리스트를 가져와, 확장블록 추가 팝업을 노출한다.
      */
     static async showExpansionPopup() {
-        let expansionBlocks = _.uniq(_.values(Entry.EXPANSION_BLOCK_LIST));
-        expansionBlocks = _.sortBy(expansionBlocks, function(item) {
+        const expansionBlocks = this._getActiveExpansionBlocks();
+
+        await this._switchPopup('expansion', {
+            submit: (data: any) => {
+                this._addExpansionBlocks(data.selected);
+            },
+            itemoff: ({ data, callback }: { data: any; callback?: () => void }) => {
+                const isActive = Entry.expansion.isActive(data.name);
+                if (!isActive) {
+                    callback && callback();
+                } else {
+                    entrylms.alert(Lang.Workspace.deselect_expansion_block_warning);
+                }
+            },
+            itemon: ({ callback }: { callback?: () => void }) => {
+                callback && callback();
+            },
+        }, expansionBlocks as any);
+    }
+
+    static _getActiveExpansionBlocks() {
+        const activated = Entry.expansionBlocks;
+        const expansionBlocks = _.uniq(_.values(Entry.EXPANSION_BLOCK_LIST)).map((item) => {
+            item.active = activated.includes(item.name);
+            return item;
+        });
+        return _.sortBy(expansionBlocks, (item) => {
             let result = '';
             if (item.title) {
-                item.nameByLang = item.title[RendererUtils.getLangType() || 'ko'];
+                item.nameByLang = item.title[Lang.type];
                 result = item.title.ko.toLowerCase();
             }
             return result;
         });
+    }
 
-        await this._switchPopup('expansion', {
-            submit: (data: any) => {
-                Entry.playground.addExpansionBlocks(data.selected);
-            },
-            select: (data: any) => {
-                Entry.playground.addExpansionBlocks(data.item);
-            },
-        }, expansionBlocks as any);
+    static _addExpansionBlocks(blocks: any) {
+        const addBlocks = blocks.filter(({ name }: { name: string }) => !Entry.expansionBlocks.includes(name));
+        const removeBlocks = this._getActiveExpansionBlocks()
+            .filter((item) => item.active)
+            .filter((item) => !blocks.includes(item));
+        Entry.playground.addExpansionBlocks(addBlocks);
+        Entry.playground.removeExpansionBlocks(removeBlocks);
     }
 
     /**

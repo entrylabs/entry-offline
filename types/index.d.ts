@@ -10,7 +10,7 @@ declare type Point = {
     y: number;
 };
 
-declare namespace NodeJS  {
+declare namespace NodeJS {
     // noinspection JSUnusedGlobalSymbols
     interface Global {
         sharedObject: GlobalConfigurations;
@@ -21,8 +21,11 @@ declare namespace NodeJS  {
 declare interface Window {
     createjs: any;
     EntryStatic: any;
+    Lang: any;
 }
 
+declare var entrylms: any;
+declare var Lang: any;
 declare var createjs: any;
 declare var EntryStatic: any;
 
@@ -126,7 +129,8 @@ declare module IEntry {
      * 하드웨어가 연결되면 필요여부에 따라 프로퍼티패널에 하드웨어 모니터가 노출됨
      */
     export interface HardwareMonitor {
-        new (hwModule: HardwareModule): HardwareMonitor;
+        new(hwModule: HardwareModule): HardwareMonitor;
+
         initView: () => void;
         generateView: () => void;
         generateListView: () => void;
@@ -138,6 +142,7 @@ declare module IEntry {
     enum WorkspaceMode {
         MODE_BOARD, MODE_VIMBOARD, MODE_OVERLAYBOARD
     }
+
     export type Project = {
         name: string;
         script: any & {
@@ -184,6 +189,7 @@ declare module IEntry {
 
     export interface Container {
         getAllObjects(): any[];
+
         addObject: (objectModel: any, ...rest: number[]) => any;
         getObject: (objectId: string) => IEntry.Object;
         cachePicture: (pictureId: string, image: any) => void;
@@ -212,6 +218,7 @@ declare module IEntry {
         downloadSound: (soundId: string) => void;
         changeViewMode: (viewType: PlaygroundViewMode) => void;
         addExpansionBlocks: (expansionInfoList: any[]) => void;
+        removeExpansionBlocks: (expansionInfoList: any[]) => void;
         painter: Painter;
         setMenu?: (...args: any[]) => any;
         board: any;
@@ -313,6 +320,7 @@ declare class Entry {
     static stage: IEntry.Stage;
     static toast: IEntry.ToastLegacy;
     static Func: any;
+    static expansionBlocks: any[];
 
     // 엔트리 네임스페이스에 할당되어있는 특정 함수들
     static generateHash: () => string;

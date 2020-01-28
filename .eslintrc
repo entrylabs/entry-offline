@@ -15,7 +15,9 @@
     "browser": true
   },
   "globals": {
-    "Entry": true
+    "Entry": true,
+    "Lang": true,
+    "entrylms": true,
   },
   "rules": {
     "no-console": "off",
