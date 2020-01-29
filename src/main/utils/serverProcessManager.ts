@@ -1,4 +1,4 @@
-import EntryServer from '../../renderer/bower_components/entry-hw-server/src/pkg/server';
+import EntryServer from 'entry-hw-server';
 
 class ServerProcessManager {
     private readonly childProcess: any;
