@@ -580,7 +580,7 @@ class EntryModalHelper {
                         data,
                     },
                     isOffline: true,
-                    imageBaseUrl: './renderer/bower_components/entry-js/images/hardware/',
+                    imageBaseUrl: '../node_modules/entry-js/images/hardware/',
                 },
                 type: 'popup',
                 props: { baseUrl: './renderer/resources' },

@@ -26,6 +26,7 @@
     "license": "MIT",
     "dependencies": {
         "bignumber.js": "^8.0.1",
+        "entry-js": "git+https://github.com/entrylabs/entryjs.git#dist/offline_v2.0.17",
         "entry-hw": "git+https://github.com/entrylabs/entry-hw.git#build-base",
         "entry-hw-server": "git+https://github.com/entrylabs/entry-hw-server.git#master",
         "entry-tool": "v1.1.9",
@@ -33,7 +34,7 @@
         "fs-extra": "^8.1.0",
         "image-size": "^0.8.3",
         "jquery": "^3.4.1",
-        "literally-canvas": "git+https://github.com/entrylabs/literallycanvas#feature/mobile",
+        "literallycanvas-mobile": "git+https://github.com/entrylabs/literallycanvas#feature/mobile",
         "lodash": "^4.17.15",
         "mime-types": "^2.1.26",
         "music-metadata": "^6.3.0",

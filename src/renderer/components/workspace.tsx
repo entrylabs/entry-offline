@@ -35,7 +35,7 @@ class Workspace extends Component<IProps> {
     private defaultInitOption = {
         type: 'workspace',
         backpackDisable: true,
-        libDir: 'renderer/bower_components',
+        libDir: '../node_modules',
         defaultDir: 'renderer/resources',
         fonts: root.EntryStatic.fonts,
         textCodingEnable: true,

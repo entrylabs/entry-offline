@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import Utils from '../helper/rendererUtils';
-import { EntryStatic } from '../bower_components/entry-js/extern/util/static.js';
+import { EntryStatic } from 'entry-js/extern/util/static';
 
 /**
  * entryjs 내 포함되어있는 EntryStatic 에 추가적인 코드를 덮어쓰기 하는 로직

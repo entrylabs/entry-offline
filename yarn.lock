@@ -2566,6 +2566,10 @@ enquire.js@^2.1.6:
     socket.io-client "^2.2.0"
     tar "^5.0.5"
 
+"entry-js@git+https://github.com/entrylabs/entryjs.git#dist/offline_v2.0.17":
+  version "0.0.0"
+  resolved "git+https://github.com/entrylabs/entryjs.git#a67e8b608bca98ce610531b38533b476ab51b143"
+
 entry-tool@v1.1.9:
   version "1.1.9"
   resolved "https://registry.yarnpkg.com/entry-tool/-/entry-tool-1.1.9.tgz#0f24e6c37c1918c561a0d36a96dddd6a29627807"
@@ -4420,7 +4424,7 @@ lie@~3.3.0:
   dependencies:
     immediate "~3.0.5"
 
-"literally-canvas@git+https://github.com/entrylabs/literallycanvas#feature/mobile":
+"literallycanvas-mobile@git+https://github.com/entrylabs/literallycanvas#feature/mobile":
   version "0.4.14"
   resolved "git+https://github.com/entrylabs/literallycanvas#fe8cc109251c90f8d3a0dccc2811cb2c8a5f9217"
   dependencies:

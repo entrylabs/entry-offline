@@ -1,4 +1,4 @@
-import { EntryStatic } from '../bower_components/entry-js/extern/util/static_mini.js';
+import { EntryStatic } from 'entry-js/extern/util/static_mini';
 import _ from 'lodash';
 
 /**
