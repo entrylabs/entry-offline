@@ -26,9 +26,9 @@
     "license": "MIT",
     "dependencies": {
         "bignumber.js": "^8.0.1",
-        "entry-js": "git+https://github.com/entrylabs/entryjs.git#dist/offline_v2.0.17",
         "entry-hw": "git+https://github.com/entrylabs/entry-hw.git#build-base",
         "entry-hw-server": "git+https://github.com/entrylabs/entry-hw-server.git#master",
+        "entry-js": "git+https://github.com/entrylabs/entryjs.git#dist/offline_v2.0.17",
         "entry-tool": "v1.1.9",
         "excel4node": "^1.7.0",
         "fs-extra": "^8.1.0",
@@ -40,7 +40,6 @@
         "music-metadata": "^6.3.0",
         "puid": "^1.0.7",
         "rimraf": "^2.6.3",
-        "serialport": "^8.0.5",
         "socket.io": "^2.2.0",
         "socket.io-client": "^2.2.0",
         "tar": "^4.4.10",
