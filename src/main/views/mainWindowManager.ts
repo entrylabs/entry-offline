@@ -1,4 +1,4 @@
-import { app, BrowserWindow, dialog, FileFilter, SaveDialogOptions, NamedBrowserWindow } from 'electron';
+import { app, BrowserWindow, dialog, FileFilter, SaveDialogOptions } from 'electron';
 import root from 'window-or-global';
 import path from 'path';
 
@@ -8,13 +8,14 @@ type CrashMessage = {
 }
 
 export default class {
-    mainWindow ?: BrowserWindow;
+    private mainWindow?: BrowserWindow;
+    private readonly webContentsId: number = -1;
 
     get window() {
         return this.mainWindow;
     }
 
-    get downloadFilterList(): {[key: string]: FileFilter[]} {
+    get downloadFilterList(): { [key: string]: FileFilter[] } {
         return {
             'image/png': [
                 {
@@ -49,7 +50,7 @@ export default class {
                 'This program has been shut down unexpectedly. Save the file you were working on.';
         }
 
-        const mainWindow: NamedBrowserWindow = new BrowserWindow({
+        const mainWindow = new BrowserWindow({
             width: 1080,
             height: 824,
             title,
@@ -62,8 +63,7 @@ export default class {
             icon: path.resolve(app.getAppPath(), 'src', 'main', 'static', 'icon.png'),
         });
         this.mainWindow = mainWindow;
-
-        root.sharedObject.mainWindowId = mainWindow.id;
+        this.webContentsId = mainWindow.webContents.id;
 
         mainWindow.once('ready-to-show', () => {
             mainWindow.show();
@@ -73,7 +73,10 @@ export default class {
             mainWindow.webContents.send('showWindow');
         });
 
-        mainWindow.webContents.session.on('will-download', (event: Electron.Event , downloadItem: Electron.DownloadItem) => {
+        mainWindow.webContents.session.on('will-download', (
+            event: Electron.Event,
+            downloadItem: Electron.DownloadItem,
+        ) => {
             const filename = downloadItem.getFilename();
             const option: SaveDialogOptions = {
                 defaultPath: filename,
@@ -92,8 +95,6 @@ export default class {
 
         mainWindow.setMenu(null);
         mainWindow.loadURL(`file://${path.resolve(app.getAppPath(), 'src', 'main.html')}`);
-
-        mainWindow.webContents.name = 'entry';
 
         mainWindow.on('page-title-updated', function(e) {
             e.preventDefault();
@@ -138,6 +139,10 @@ export default class {
         if (this.mainWindow && !this.mainWindow.isDestroyed() && projectPath) {
             this.mainWindow.webContents.send('loadProjectFromMain', projectPath);
         }
+    }
+
+    isCurrentWebContentsId(webContentsId: number) {
+        return this.webContentsId === webContentsId;
     }
 }
 

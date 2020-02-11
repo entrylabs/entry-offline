@@ -1,11 +1,13 @@
-import { BrowserWindow, app, NamedBrowserWindow } from 'electron';
+import { BrowserWindow, app } from 'electron';
 import path from 'path';
 import HardwareMainRouter from 'entry-hw/app/src/main/mainRouter.build';
 import HardwareEntryServer from '../utils/serverProcessManager';
 import root from 'window-or-global';
 
 export default class HardwareWindowManager {
-    hardwareWindow?: NamedBrowserWindow;
+    private hardwareWindow?: BrowserWindow;
+    private hardwareRouter?: any;
+    private windowId: number = -1;
 
     constructor() {
         this.hardwareWindow = undefined;
@@ -32,14 +34,14 @@ export default class HardwareWindowManager {
                 ),
             },
         });
-        this.hardwareWindow.hardwareRouter = new HardwareMainRouter(this.hardwareWindow, new HardwareEntryServer());
+        this.hardwareRouter = new HardwareMainRouter(this.hardwareWindow, new HardwareEntryServer());
         this.hardwareWindow.setMenu(null);
         this.hardwareWindow.setMenuBarVisibility(false);
         this.hardwareWindow.loadURL(`file:///${path.resolve(
             app.getAppPath(), 'node_modules', 'entry-hw', 'app', 'src', 'views', 'index.html')}`);
         this.hardwareWindow.on('closed', this.closeHardwareWindow.bind(this));
 
-        this.hardwareWindow.webContents.name = 'hardware';
+        this.windowId = this.hardwareWindow.webContents.id;
     }
 
     openHardwareWindow() {
@@ -49,7 +51,7 @@ export default class HardwareWindowManager {
 
         const offlineRoomIds = root.sharedObject.roomIds;
         if (offlineRoomIds && offlineRoomIds[0]) {
-            this.hardwareWindow!.hardwareRouter.addRoomId(offlineRoomIds[0]);
+            this.hardwareRouter.addRoomId(offlineRoomIds[0]);
         }
 
         const hardwareWindow = this.hardwareWindow as BrowserWindow;
@@ -62,11 +64,10 @@ export default class HardwareWindowManager {
 
     closeHardwareWindow() {
         if (this.hardwareWindow) {
-            if (this.hardwareWindow.hardwareRouter) {
-                const foo = this.hardwareWindow.hardwareRouter;
-                foo.close();
-                foo.server.close();
-                delete this.hardwareWindow.hardwareRouter;
+            if (this.hardwareRouter) {
+                this.hardwareRouter.close();
+                this.hardwareRouter.server.close();
+                delete this.hardwareRouter;
             }
 
             this.hardwareWindow.destroy();
@@ -74,9 +75,7 @@ export default class HardwareWindowManager {
         }
     }
 
-    reloadHardwareWindow() {
-        if (this.hardwareWindow) {
-            this.hardwareWindow.reload();
-        }
+    isCurrentWebContentsId(webContentsId: number) {
+        return this.windowId === webContentsId;
     }
 }

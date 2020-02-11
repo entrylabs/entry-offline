@@ -1,10 +1,4 @@
-import {
-    app,
-    Menu,
-    ipcMain,
-    NamedEvent,
-    dialog,
-} from 'electron';
+import { app, dialog, ipcMain, Menu, NamedEvent } from 'electron';
 import HardwareWindowManager from './main/views/hardwareWindowManager';
 import MainWindowManager from './main/views/mainWindowManager';
 import AboutWindowManager from './main/views/aboutWindowManager';
@@ -19,7 +13,6 @@ const commandLineOptions: Readonly<CommandLineOptions> = parseCommandLine(proces
 const configurations: Readonly<FileConfigurations> = configInitialize(commandLineOptions.config);
 const runtimeProperties: RuntimeGlobalProperties = {
     roomIds: [],
-    mainWindowId: -1,
     workingPath: commandLineOptions.file || '',
     appName: 'entry',
 };
@@ -65,19 +58,15 @@ if (!app.requestSingleInstanceLock()) {
         });
 
         ipcMain.on('reload', function(event: NamedEvent, arg: any) {
-            if (event.sender.name !== 'entry') {
-                return hardwareWindow.reloadHardwareWindow();
-            }
-
-            if (event.sender) {
+            if (!hardwareWindow.isCurrentWebContentsId(event.sender.id)) {
                 if (process.platform === 'darwin') {
                     const menu = Menu.buildFromTemplate([]);
                     Menu.setApplicationMenu(menu);
                 } else {
                     mainWindow.window && mainWindow.window.setMenu(null);
                 }
-                event.sender.reload();
             }
+            event.sender.reload();
         });
 
         ipcMain.on('openHardwareWindow', function(event: Electron.IpcMainEvent, arg: any) {

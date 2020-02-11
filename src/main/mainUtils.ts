@@ -118,8 +118,6 @@ export default class MainUtils {
      * @return {Promise} 성공시 resolve(), 실패시 reject(err)
      */
     static async saveProject(project: ObjectLike, destinationPath: string) {
-        // progressBar Status 필요하다면 사용
-        const mainWindow = BrowserWindow.fromId(root.sharedObject.mainWindowId);
         const sourcePath = app.getPath('userData');
         if (destinationPath.indexOf('.ent') === -1) {
             throw new Error('.ent only accepted');
