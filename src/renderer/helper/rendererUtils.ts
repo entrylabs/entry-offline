@@ -100,6 +100,11 @@ export default class {
         return dialog.showOpenDialog(option);
     }
 
+    static async showSaveDialogAsync(option: Electron.SaveDialogOptions) {
+        const path = await dialog.showSaveDialog(option);
+        return path.filePath;
+    }
+
     static showSaveDialog(option: Electron.SaveDialogOptions, callback: (filePath: string | undefined) => void) {
         const path = dialog.showSaveDialogSync(option);
         callback(path);

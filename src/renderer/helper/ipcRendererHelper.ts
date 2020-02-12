@@ -42,16 +42,7 @@ export default class {
     }
 
     static loadProject(filePath: string): Promise<IEntry.Project> {
-        return new Promise((resolve, reject) => {
-            ipcRenderer.send('loadProject', filePath);
-            ipcRenderer.once('loadProject', (e: Electron.IpcRendererEvent, result: IEntry.Project) => {
-                if (result) {
-                    resolve(result);
-                } else {
-                    reject(result);
-                }
-            });
-        });
+        return ipcRenderer.invoke('loadProject', filePath);
     }
 
     /**
@@ -69,74 +60,39 @@ export default class {
     }
 
     static saveProject(project: IEntry.Project, targetPath: string): Promise<void> {
-        return new Promise((resolve, reject) => {
-            ipcRenderer.send('saveProject', project, targetPath);
-            ipcRenderer.once('saveProject', (e: Electron.IpcRendererEvent, err: Error) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve();
-                }
-            });
-        });
+        return ipcRenderer.invoke('saveProject', project, targetPath);
     }
 
     static resetDirectory(): Promise<void> {
-        return new Promise((resolve) => {
-            ipcRenderer.send('resetDirectory');
-            ipcRenderer.once('resetDirectory', () => resolve());
-        });
+        return ipcRenderer.invoke('resetDirectory');
     }
 
-    static downloadExcel(filename: string, array: any[]) {
-        return new Promise((resolve, reject) => {
-            RendererUtils.showSaveDialog(
-                {
-                    title: RendererUtils.getLang('Workspace.file_save'),
-                    defaultPath: `${filename}.xlsx`,
-                    filters: [
-                        { name: 'Excel Files (*.xlsx)', extensions: ['xlsx'] },
-                        { name: 'All Files (*.*)', extensions: ['*'] },
-                    ],
-                },
-                (filePath) => {
-                    ipcRenderer.send('saveExcel', filePath, array);
-                    ipcRenderer.once('saveExcel', (e: Electron.IpcRendererEvent, err: Error) => {
-                        if (err) {
-                            reject(err);
-                        } else {
-                            resolve();
-                        }
-                    });
-                },
-            );
+    static async downloadExcel(filename: string, array: any[]) {
+        const filePath = await RendererUtils.showSaveDialogAsync({
+            title: RendererUtils.getLang('Workspace.file_save'),
+            defaultPath: `${filename}.xlsx`,
+            filters: [
+                { name: 'Excel Files (*.xlsx)', extensions: ['xlsx'] },
+                { name: 'All Files (*.*)', extensions: ['*'] },
+            ],
         });
+        await ipcRenderer.invoke('saveExcel', filePath, array);
     }
 
     static staticDownload(unresolvedPath: string[], targetFilePath: string) {
-        ipcRenderer.send('staticDownload', unresolvedPath, targetFilePath);
+        ipcRenderer.invoke('staticDownload', unresolvedPath, targetFilePath);
     }
 
     static tempResourceDownload(entryObject: IEntry.Object, type: string, targetFilePath: string) {
-        ipcRenderer.send('tempResourceDownload', entryObject, type, targetFilePath);
+        ipcRenderer.invoke('tempResourceDownload', entryObject, type, targetFilePath);
     }
 
     static writeFile(data: any, filePath: string) {
-        ipcRenderer.send('writeFile', data, filePath);
-        ipcRenderer.once('writeFile', (e: Electron.IpcRendererEvent, err: Error) => {
-            if (err) {
-                console.error(err);
-            }
-        });
+        ipcRenderer.invoke('writeFile', data, filePath);
     }
 
     static importPictureFromCanvas(data: any): Promise<IEntry.Picture> {
-        return new Promise((resolve) => {
-            ipcRenderer.send('importPictureFromCanvas', data);
-            ipcRenderer.once('importPictureFromCanvas', (e: Electron.IpcRendererEvent, object: IEntry.Picture) => {
-                resolve(object);
-            });
-        });
+        return ipcRenderer.invoke('importPictureFromCanvas', data);
     }
 
     /**
@@ -149,31 +105,15 @@ export default class {
      * @param objectVariable
      */
     static exportObject(filePath: string, objectVariable: any): Promise<void> {
-        return new Promise((resolve, reject) => {
-            ipcRenderer.send('exportObject', filePath, objectVariable);
-            ipcRenderer.once('exportObject', (e: Electron.IpcRendererEvent, result: any) => {
-                //NOTE Entry.Toast 라도 주면 좋겠는데 real 에도 아무반응 없네요.
-                resolve();
-            });
-        });
+        return ipcRenderer.invoke('exportObject', filePath, objectVariable);
     }
 
     static importObjects(filePaths: string[]): Promise<IEntry.Object[]> {
-        return new Promise((resolve, reject) => {
-            ipcRenderer.send('importObjects', filePaths);
-            ipcRenderer.once('importObjects', (e: Electron.IpcRendererEvent, object: IEntry.Object[]) => {
-                resolve(object);
-            });
-        });
+        return ipcRenderer.invoke('importObjects', filePaths);
     }
 
     static importObjectsFromResource(objects: any): Promise<IEntry.Object[]> {
-        return new Promise((resolve, reject) => {
-            ipcRenderer.send('importObjectsFromResource', objects);
-            ipcRenderer.once('importObjectsFromResource', (e: Electron.IpcRendererEvent, objects: IEntry.Object[]) => {
-                resolve(objects);
-            });
-        });
+        return ipcRenderer.invoke('importObjectsFromResource', objects);
     }
 
     /**
@@ -182,12 +122,7 @@ export default class {
      * @return {Promise<Object>} 신규생성된 오브젝트 메타데이터
      */
     static importPictures(filePaths: string[]): Promise<IEntry.Picture[]> {
-        return new Promise((resolve, reject) => {
-            ipcRenderer.send('importPictures', filePaths);
-            ipcRenderer.once('importPictures', (e: Electron.IpcRendererEvent, object: IEntry.Picture[]) => {
-                resolve(object);
-            });
-        });
+        return ipcRenderer.invoke('importPictures', filePaths);
     }
 
     /**
@@ -196,34 +131,19 @@ export default class {
      * @return {Promise<Object>} 파일명이 변경된 이미지 정보 오브젝트
      */
     static importPicturesFromResource(pictures: string[]): Promise<IEntry.Picture[]> {
-        return new Promise((resolve, reject) => {
-            ipcRenderer.send('importPicturesFromResource', pictures);
-            ipcRenderer.once('importPicturesFromResource', (e: Electron.IpcRendererEvent, object: IEntry.Picture[]) => {
-                resolve(object);
-            });
-        });
+        return ipcRenderer.invoke('importPicturesFromResource', pictures);
     }
 
     static importSounds(filePath: string[]): Promise<IEntry.Sound[]> {
-        return new Promise((resolve, reject) => {
-            ipcRenderer.send('importSounds', filePath);
-            ipcRenderer.once('importSounds', (e: Electron.IpcRendererEvent, object: IEntry.Sound[]) => {
-                resolve(object);
-            });
-        });
+        return ipcRenderer.invoke('importSounds', filePath);
     }
 
     static importSoundsFromResource(sounds: any[]): Promise<IEntry.Sound[]> {
-        return new Promise((resolve, reject) => {
-            ipcRenderer.send('importSoundsFromResource', sounds);
-            ipcRenderer.once('importSoundsFromResource', (e: Electron.IpcRendererEvent, object: IEntry.Sound[]) => {
-                resolve(object);
-            });
-        });
+        return ipcRenderer.invoke('importSoundsFromResource', sounds);
     }
 
     static quitApplication() {
-        ipcRenderer.send('quit');
+        ipcRenderer.invoke('quit');
     }
 
     static openAboutPage() {
@@ -234,35 +154,36 @@ export default class {
         ipcRenderer.send('openHardwareWindow');
     }
 
-    static checkUpdate() {
-        return new Promise((resolve) => {
-            ipcRenderer.send('checkUpdate');
-            ipcRenderer.once('checkUpdate', (e: Electron.IpcRendererEvent, currentVersion: string, {
-                hasNewVersion, version: latestVersion,
-            }: { hasNewVersion: string, version: string }) => {
-                /**
-                 latestVersion properties
-                 @property hasNewVersion{boolean} 요청을 보냈을때의 버전과 비교하여 업데이트가 필요한지 여부
-                 @property padded_version{string} ex) '0002.0000.0002' 비교를 위한 패딩
-                 @property version{string} ex) 2.0.2 원래 버전
-                 @property _id{string} ex) 저장된 mongoDB 오브젝트 ID
-                 */
-                console.log(`currentVersion : ${currentVersion}\nrecentVersion: ${latestVersion}\nneedUpdate: ${hasNewVersion}`);
-                const lastDontShowCheckedVersion = StorageManager.getLastDontShowVersion();
-                // 다시보지않음을 클릭하지 않았거나, 클릭했지만 당시보다 더 높은 버전이 나온 경우 출력
-                if (
-                    latestVersion > currentVersion &&
-                    (!lastDontShowCheckedVersion || (latestVersion > lastDontShowCheckedVersion))
-                ) {
-                    EntryModalHelper.showUpdateCheckModal(latestVersion);
-                    StorageManager.setLastCheckedVersion(latestVersion);
-                }
-                resolve();
-            });
-        });
+    static async checkUpdate() {
+        const [
+            currentVersion,
+            { hasNewVersion, version: latestVersion },
+        ]: [string, { hasNewVersion: string, version: string }] = await ipcRenderer.invoke('checkUpdate');
+
+        /**
+         latestVersion properties
+         @property hasNewVersion{boolean} 요청을 보냈을때의 버전과 비교하여 업데이트가 필요한지 여부
+         @property padded_version{string} ex) '0002.0000.0002' 비교를 위한 패딩
+         @property version{string} ex) 2.0.2 원래 버전
+         @property _id{string} ex) 저장된 mongoDB 오브젝트 ID
+         */
+        console.log(
+            `currentVersion : ${currentVersion
+            }\nrecentVersion: ${latestVersion
+            }\nneedUpdate: ${hasNewVersion
+            }`);
+        const lastDontShowCheckedVersion = StorageManager.getLastDontShowVersion();
+        // 다시보지않음을 클릭하지 않았거나, 클릭했지만 당시보다 더 높은 버전이 나온 경우 출력
+        if (
+            latestVersion > currentVersion &&
+            (!lastDontShowCheckedVersion || (latestVersion > lastDontShowCheckedVersion))
+        ) {
+            EntryModalHelper.showUpdateCheckModal(latestVersion);
+            StorageManager.setLastCheckedVersion(latestVersion);
+        }
     }
 
     static openExternalUrl(url: string) {
-        ipcRenderer.send('openUrl', url);
+        ipcRenderer.invoke('openUrl', url);
     }
 }

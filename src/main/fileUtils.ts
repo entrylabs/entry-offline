@@ -153,10 +153,8 @@ export default class {
     /**
      * 이미지 버퍼를 섬네일용으로 리사이징한다.
      * 섬네일은 width 96px 기준으로, png 파일 확장자를 가진다.
-     * @param {Buffer||string}imageData 원본 이미지 버퍼 혹은 원본 이미지 주소
-     * @param {Dimension}width 리사이즈 할 크기 width, height
      */
-    static createResizedImageBuffer(imageData: string | Buffer, width: Dimension) {
+    static createResizedImageBuffer(imageData: string | Buffer, dimension: Dimension) {
         let imageResizeNativeImage: nativeImage;
         if (imageData instanceof Buffer) {
             imageResizeNativeImage = nativeImage.createFromBuffer(imageData);
@@ -167,7 +165,7 @@ export default class {
         return imageResizeNativeImage
             .resize({
                 quality: 'better',
-                ...width,
+                ...dimension,
             })
             .toPNG();
     }

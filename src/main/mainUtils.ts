@@ -1,10 +1,9 @@
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, ipcMain } from 'electron';
 import fs from 'fs';
 import path from 'path';
 import xl from 'excel4node';
-import imageSizeOf from 'image-size';
+import { imageSize } from 'image-size';
 import * as musicMetadata from 'music-metadata';
-import root from 'window-or-global';
 import Puid from 'puid';
 import uid from 'uid';
 import mime from 'mime-types';
@@ -461,8 +460,14 @@ export default class MainUtils {
         let imageType = 'png';
 
         const newPicturePath = path.join(Constants.tempImagePath(newFileId), `${newFileId}${originalFileExt}`);
+
+        const { width, height } = imageSize(filePath);
+        const { width: defaultWidth, height: defaultHeight } = ImageResizeSize.picture;
         await FileUtils.writeFile(
-            FileUtils.createResizedImageBuffer(filePath, imageSizeOf(filePath) || ImageResizeSize.picture),
+            FileUtils.createResizedImageBuffer(filePath, {
+                width: width || defaultWidth,
+                height: height || defaultHeight,
+            }),
             newPicturePath,
         );
 
@@ -493,7 +498,7 @@ export default class MainUtils {
             filename: newFileId,
             fileurl: newPicturePath.replace(/\\/gi, '/'),
             extension: originalFileExt,
-            dimension: imageSizeOf(newPicturePath),
+            dimension: imageSize(newPicturePath),
             imageType,
         };
     }
@@ -576,7 +581,7 @@ export default class MainUtils {
                     name: pictureId,
                     filename: pictureId,
                     fileurl: imagePath.replace(/\\/gi, '/'),
-                    dimension: imageSizeOf(imagePath),
+                    dimension: imageSize(imagePath),
                     imageType: ext,
                 });
             } catch (e) {

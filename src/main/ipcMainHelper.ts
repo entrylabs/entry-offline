@@ -1,4 +1,4 @@
-import { app, ipcMain, shell } from 'electron';
+import { app, ipcMain, shell, IpcMainInvokeEvent } from 'electron';
 import root from 'window-or-global';
 import path from 'path';
 import MainUtils from './mainUtils';
@@ -17,154 +17,92 @@ import checkUpdateRequest from './utils/network/checkUpdate';
  */
 class IpcMainHelper {
     constructor() {
-        ipcMain.on('saveProject', this.saveProject.bind(this));
-        ipcMain.on('loadProject', this.loadProject.bind(this));
-        ipcMain.on('resetDirectory', this.resetSaveDirectory.bind(this));
-        ipcMain.on('exportObject', this.exportObject.bind(this));
-        ipcMain.on('importObjects', this.importObjects.bind(this));
-        ipcMain.on('importObjectsFromResource', this.importObjectsFromResource.bind(this));
-        ipcMain.on('importPictures', this.importPictures.bind(this));
-        ipcMain.on('importPicturesFromResource', this.importPicturesFromResource.bind(this));
-        ipcMain.on('importPictureFromCanvas', this.importPictureFromCanvas.bind(this));
-        ipcMain.on('importSounds', this.importSounds.bind(this));
-        ipcMain.on('importSoundsFromResource', this.importSoundsFromResource.bind(this));
-        ipcMain.on('staticDownload', this.staticDownload.bind(this));
-        ipcMain.on('tempResourceDownload', this.tempResourceDownload.bind(this));
-        ipcMain.on('saveExcel', this.saveExcel.bind(this));
-        ipcMain.on('writeFile', this.writeFile.bind(this));
-        ipcMain.on('openUrl', this.openUrl.bind(this));
-        ipcMain.on('checkUpdate', this.checkUpdate.bind(this));
-        ipcMain.on('quit', this.quitApplication.bind(this));
+        ipcMain.handle('saveProject', this.saveProject.bind(this));
+        ipcMain.handle('loadProject', this.loadProject.bind(this));
+        ipcMain.handle('resetDirectory', this.resetSaveDirectory.bind(this));
+        ipcMain.handle('exportObject', this.exportObject.bind(this));
+        ipcMain.handle('importObjects', this.importObjects.bind(this));
+        ipcMain.handle('importObjectsFromResource', this.importObjectsFromResource.bind(this));
+        ipcMain.handle('importPictures', this.importPictures.bind(this));
+        ipcMain.handle('importPicturesFromResource', this.importPicturesFromResource.bind(this));
+        ipcMain.handle('importPictureFromCanvas', this.importPictureFromCanvas.bind(this));
+        ipcMain.handle('importSounds', this.importSounds.bind(this));
+        ipcMain.handle('importSoundsFromResource', this.importSoundsFromResource.bind(this));
+        ipcMain.handle('staticDownload', this.staticDownload.bind(this));
+        ipcMain.handle('tempResourceDownload', this.tempResourceDownload.bind(this));
+        ipcMain.handle('saveExcel', this.saveExcel.bind(this));
+        ipcMain.handle('writeFile', this.writeFile.bind(this));
+        ipcMain.handle('openUrl', this.openUrl.bind(this));
+        ipcMain.handle('checkUpdate', this.checkUpdate.bind(this));
+        ipcMain.handle('quit', this.quitApplication.bind(this));
     }
 
-    saveProject(event: Electron.IpcMainEvent, project: ObjectLike, targetPath: string) {
-        MainUtils.saveProject(project, targetPath)
-            .then(() => {
-                event.sender.send('saveProject');
-            })
-            .catch((err) => {
-                event.sender.send('saveProject', err);
-            });
+    async saveProject(event: IpcMainInvokeEvent, project: ObjectLike, targetPath: string) {
+        return await MainUtils.saveProject(project, targetPath);
     }
 
-    loadProject(event: Electron.IpcMainEvent, filePath: string) {
-        // 원본 백업
-        MainUtils.backupTempProject();
-        MainUtils.loadProject(filePath)
-            .then((project) => {
-                MainUtils.clearRollbackTempProject();
-                event.sender.send('loadProject', project);
-            })
-            .catch((err) => {
-                console.error(err);
-                MainUtils.rollbackTempProject();
-                event.sender.send('loadProject');
-            });
+    async loadProject(event: IpcMainInvokeEvent, filePath: string) {
+        try {
+            MainUtils.backupTempProject();
+            return await MainUtils.loadProject(filePath);
+        } catch (e) {
+            console.error(e);
+            MainUtils.rollbackTempProject(); // no await
+            throw e;
+        }
     }
 
-    resetSaveDirectory(event: Electron.IpcMainEvent) {
-        MainUtils.resetSaveDirectory()
-            .then(() => {
-                event.sender.send('resetDirectory');
-            })
-            .catch((err) => {
-                console.error(err);
-            });
+    async resetSaveDirectory() {
+        await MainUtils.resetSaveDirectory();
     }
 
-    exportObject(event: Electron.IpcMainEvent, filePath: string, object: any) {
-        MainUtils.exportObject(filePath, object)
-            .then(() => {
-                event.sender.send('exportObject');
-            })
-            .catch((err) => {
-                console.error(err);
-            });
+    async exportObject(event: IpcMainInvokeEvent, filePath: string, object: any) {
+        await MainUtils.exportObject(filePath, object);
     }
 
-    importObjects(event: Electron.IpcMainEvent, filePaths: string[]) {
+    async importObjects(event: IpcMainInvokeEvent, filePaths: string[]) {
         if (!filePaths || filePaths.length === 0) {
-            event.sender.send('importObjects', []);
+            return [];
         }
 
-        MainUtils.importObjects(filePaths)
-            .then((objects) => {
-                event.sender.send('importObjects', objects);
-            })
-            .catch((err) => {
-                console.error(err);
-            });
+        return await MainUtils.importObjects(filePaths);
     }
 
-    importObjectsFromResource(event: Electron.IpcMainEvent, objects: ObjectLike[]) {
+    async importObjectsFromResource(event: IpcMainInvokeEvent, objects: ObjectLike[]) {
         if (!objects || objects.length === 0) {
-            event.sender.send('importObjectsFromResource', []);
+            return [];
         }
 
-        MainUtils.importObjectsFromResource(objects)
-            .then((objects) => {
-                event.sender.send('importObjectsFromResource', objects);
-            })
-            .catch((err) => {
-                console.error(err);
-            });
+        return await MainUtils.importObjectsFromResource(objects);
     }
 
     // 외부 이미지 업로드시.
-    async importPictures(event: Electron.IpcMainEvent, filePaths: string[]) {
+    async importPictures(event: IpcMainInvokeEvent, filePaths: string[]) {
         if (!filePaths || filePaths.length === 0) {
-            event.sender.send('importPictures', []);
+            return [];
         }
-        try {
-            const object = await MainUtils.importPicturesToTemp(filePaths, event.sender);
-            event.sender.send('importPictures', object);
-        } catch (e) {
-            console.error(e);
-        }
+
+        return await MainUtils.importPicturesToTemp(filePaths, event.sender);
     }
 
-    importPicturesFromResource(event: Electron.IpcMainEvent, pictures: ObjectLike[]) {
-        MainUtils.importPicturesFromResource(pictures)
-            .then((object) => {
-                event.sender.send('importPicturesFromResource', object);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+    async importPicturesFromResource(event: IpcMainInvokeEvent, pictures: ObjectLike[]) {
+        return await MainUtils.importPicturesFromResource(pictures);
     }
 
-    importPictureFromCanvas(event: Electron.IpcMainEvent, data: ObjectLike[]) {
-        MainUtils.importPictureFromCanvas(data)
-            .then((object) => {
-                event.sender.send('importPictureFromCanvas', object);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+    async importPictureFromCanvas(event: IpcMainInvokeEvent, data: ObjectLike[]) {
+        return await MainUtils.importPictureFromCanvas(data);
     }
 
-    importSounds(event: Electron.IpcMainEvent, filePaths: string[]) {
+    async importSounds(event: IpcMainInvokeEvent, filePaths: string[]) {
         if (!filePaths || filePaths.length === 0) {
-            event.sender.send('importSounds', []);
+            return [];
         }
 
-        MainUtils.importSoundsToTemp(filePaths)
-            .then((object) => {
-                event.sender.send('importSounds', object);
-            })
-            .catch((err) => {
-                console.error(err);
-            });
+        return await MainUtils.importSoundsToTemp(filePaths);
     }
 
-    importSoundsFromResource(event: Electron.IpcMainEvent, sounds: ObjectLike[]) {
-        MainUtils.importSoundsFromResource(sounds)
-            .then((object) => {
-                event.sender.send('importSoundsFromResource', object);
-            })
-            .catch((err) => {
-                console.error(err);
-            });
+    async importSoundsFromResource(event: IpcMainInvokeEvent, sounds: ObjectLike[]) {
+        await MainUtils.importSoundsFromResource(sounds);
     }
 
     /**
@@ -173,10 +111,10 @@ class IpcMainHelper {
      * @param {Array<string>}unresolvedFilePathArray separator 가 없는 경로 목록
      * @param targetFilePath
      */
-    staticDownload(event: Electron.IpcMainEvent, unresolvedFilePathArray: string[], targetFilePath: string) {
+    async staticDownload(event: IpcMainInvokeEvent, unresolvedFilePathArray: string[], targetFilePath: string) {
         const resolvedFilePath = path.join(...unresolvedFilePathArray);
         const staticFilePath = path.resolve(app.getAppPath(), 'src', 'main', 'static', resolvedFilePath);
-        MainUtils.downloadFile(staticFilePath, targetFilePath)
+        await MainUtils.downloadFile(staticFilePath, targetFilePath)
             .catch((err) => {
                 console.error(err);
             });
@@ -191,7 +129,7 @@ class IpcMainHelper {
      * @param {string=}type 경로를 결정할 타입. image, sound 중 하나
      * @param {string}targetFilePath
      */
-    tempResourceDownload(event: Electron.IpcMainEvent, entryObject: any, type: string, targetFilePath: string) {
+    async tempResourceDownload(event: IpcMainInvokeEvent, entryObject: any, type: string, targetFilePath: string) {
         let typedPath = '';
         if (entryObject.fileurl) {
             typedPath = entryObject.fileurl;
@@ -217,53 +155,30 @@ class IpcMainHelper {
         }
 
         if (typedPath === '') {
-            event.sender.send('tempResourceDownload', new Error('invalid Type'));
+            throw new Error('invalid Type');
         } else {
-            MainUtils.downloadFile(typedPath, targetFilePath)
-                .then(() => {
-                    event.sender.send('tempResourceDownload');
-                })
-                .catch((err) => {
-                    console.error(err);
-                });
+            return await MainUtils.downloadFile(typedPath, targetFilePath);
         }
     }
 
-    saveExcel(event: Electron.IpcMainEvent, filePath: string, array: any[]) {
-        MainUtils.saveExcel(filePath, array)
-            .then(() => {
-                event.sender.send('saveExcel');
-            })
-            .catch((err) => {
-                event.sender.send('saveExcel', err);
-            });
+    async saveExcel(event: IpcMainInvokeEvent, filePath: string, array: any[]) {
+        return await MainUtils.saveExcel(filePath, array);
     }
 
-    writeFile(event: Electron.IpcMainEvent, data: any, filePath: string) {
-        MainUtils.writeFile(data, filePath)
-            .then(() => {
-                event.sender.send('writeFile');
-            })
-            .catch((err) => {
-                event.sender.send('writeFile', err);
-            });
+    async writeFile(event: IpcMainInvokeEvent, data: any, filePath: string) {
+        return await MainUtils.writeFile(data, filePath);
     }
 
     quitApplication() {
         app.quit();
     }
 
-    checkUpdate(event: Electron.IpcMainEvent) {
-        checkUpdateRequest()
-            .then((data) => {
-                event.sender.send('checkUpdate', root.sharedObject.version, data);
-            })
-            .catch((e) => {
-                console.error(e);
-            });
+    async checkUpdate(event: IpcMainInvokeEvent) {
+        const data = await checkUpdateRequest();
+        return [root.sharedObject.version, data];
     }
 
-    openUrl(event: Electron.IpcMainEvent, url: string) {
+    openUrl(event: IpcMainInvokeEvent, url: string) {
         shell.openExternal(url);
     }
 }

@@ -1,4 +1,4 @@
-import { app, dialog, ipcMain, Menu, NamedEvent } from 'electron';
+import { app, dialog, ipcMain, Menu } from 'electron';
 import HardwareWindowManager from './main/views/hardwareWindowManager';
 import MainWindowManager from './main/views/mainWindowManager';
 import AboutWindowManager from './main/views/aboutWindowManager';
@@ -57,7 +57,7 @@ if (!app.requestSingleInstanceLock()) {
             mainWindow.close({ isForceClose: true });
         });
 
-        ipcMain.on('reload', function(event: NamedEvent, arg: any) {
+        ipcMain.on('reload', function(event: Electron.IpcMainEvent, arg: any) {
             if (!hardwareWindow.isCurrentWebContentsId(event.sender.id)) {
                 if (process.platform === 'darwin') {
                     const menu = Menu.buildFromTemplate([]);
@@ -78,20 +78,9 @@ if (!app.requestSingleInstanceLock()) {
         });
 
         ipcMain.on('closeAboutWindow', function(event: Electron.IpcMainEvent, arg: any) {
+            console.log('close About Window');
             aboutWindow.closeAboutWindow();
         });
-    });
-
-    ipcMain.on('roomId', function(event: Electron.IpcMainEvent, arg: any) {
-        event.returnValue = root.sharedObject.roomIds;
-    });
-
-    ipcMain.on('version', function(event: Electron.IpcMainEvent, arg: any) {
-        event.returnValue = '99';
-    });
-
-    ipcMain.on('serverMode', function(event: Electron.IpcMainEvent, mode: string) {
-        event.sender.send('serverMode', mode);
     });
 }
 
