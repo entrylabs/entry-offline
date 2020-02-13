@@ -128,5 +128,5 @@ export default function() {
         });
     };
 
-    Entry.EXPANSION_BLOCK.tts.api = window.EntryStatic.baseUrl + Entry.EXPANSION_BLOCK.tts.api;
+    // Entry.EXPANSION_BLOCK.tts.api = window.EntryStatic.baseUrl + Entry.EXPANSION_BLOCK.tts.api;
 }
