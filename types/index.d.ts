@@ -217,7 +217,9 @@ declare module IEntry {
         downloadSound: (soundId: string) => void;
         changeViewMode: (viewType: PlaygroundViewMode) => void;
         addExpansionBlocks: (expansionInfoList: any[]) => void;
+        addAIUtilizeBlocks: (aiBlockInfoList: any[]) => void;
         removeExpansionBlocks: (expansionInfoList: any[]) => void;
+        removeAIUtilizeBlocks: (aiBlockInfoList: any[]) => void;
         painter: Painter;
         setMenu?: (...args: any[]) => any;
         board: any;
@@ -308,6 +310,7 @@ declare class Entry {
 
     static EXPANSION_BLOCK: any;
     static EXPANSION_BLOCK_LIST: any;
+    static AI_UTILIZE_BLOCK_LIST: any;
     static mediaFilePath: string;
 
 
@@ -320,6 +323,7 @@ declare class Entry {
     static toast: IEntry.ToastLegacy;
     static Func: any;
     static expansionBlocks: any[];
+    static aiUtilizeBlocks: any[];
 
     // 엔트리 네임스페이스에 할당되어있는 특정 함수들
     static generateHash: () => string;

@@ -8,6 +8,10 @@ import StorageManager from '../storageManager';
 import _ from 'lodash';
 import EntryUtils from './entryUtils';
 
+type PopupEventListeners = {
+    [eventName: string]: (...args: any) => any;
+}
+
 /**
  * 이 클래스는 Entry 프로젝트에서 entry-lms, entry-tool 을 사용하여 팝업 및 모달을 출력해야 하는 경우 사용한다.
  * entry-tool 의 팝업은 기본적으로 타겟이될 div HTMLElement 가 필요하므로 인스턴스를 만들어서 사용해야 한다.
@@ -423,6 +427,27 @@ class EntryModalHelper {
         }, expansionBlocks as any);
     }
 
+    static async showAIUtilizePopup() {
+        const aiBlocks = this._getActiveAIUtilizeBlocks();
+
+        await this._switchPopup('aiUtilize', {
+            submit: (data: any) => {
+                this._addExpansionBlocks(data.selected);
+            },
+            itemoff: ({ data, callback }: { data: any; callback?: () => void }) => {
+                const isActive = Entry.expansion.isActive(data.name);
+                if (!isActive) {
+                    callback && callback();
+                } else {
+                    entrylms.alert(Lang.Workspace.deselect_expansion_block_warning);
+                }
+            },
+            itemon: ({ callback }: { callback?: () => void }) => {
+                callback && callback();
+            },
+        }, aiBlocks as any, '../node_modules/entry-js/images/aiUtilize/');
+    }
+
     static _getActiveExpansionBlocks() {
         const activated = Entry.expansionBlocks;
         const expansionBlocks = _.uniq(_.values(Entry.EXPANSION_BLOCK_LIST)).map((item) => {
@@ -437,6 +462,31 @@ class EntryModalHelper {
             }
             return result;
         });
+    }
+
+    static _getActiveAIUtilizeBlocks() {
+        const activated = Entry.aiUtilizeBlocks;
+        const aiUtilizeBlocks = _.uniq(_.values(Entry.AI_UTILIZE_BLOCK_LIST)).map((item) => {
+            item.active = activated.includes(item.name);
+            return item;
+        });
+        return _.sortBy(aiUtilizeBlocks, (item) => {
+            let result = '';
+            if (item.title) {
+                item.nameByLang = item.title[Lang.type];
+                result = item.title.ko.toLowerCase();
+            }
+            return result;
+        });
+    }
+
+    static _addAIUtilizeBlocks(blocks: any) {
+        const addBlocks = blocks.filter(({ name }: { name: string }) => !Entry.aiUtilizeBlocks.includes(name));
+        const removeBlocks = this._getActiveAIUtilizeBlocks()
+            .filter((item) => item.active)
+            .filter((item) => !blocks.includes(item));
+        Entry.playground.addAIUtilizeBlocks(addBlocks);
+        Entry.playground.removeAIUtilizeBlocks(removeBlocks);
     }
 
     static _addExpansionBlocks(blocks: any) {
@@ -526,13 +576,12 @@ class EntryModalHelper {
 
     /**
      * 기존 팝업을 hide, event off 후, 신규 타입의 팝업을 노출한다.
-     *
-     * @param {string}type 팝업 타입
-     * @param {Object}events 바인딩할 이벤트 목록들. key = eventName, value = function
-     * @param {*}data entry-tool popup 최초 init 시에 들어갈 data object
-     * @return popup 자신을 반환한다. 내부 콜백에서 자신을 사용해야 하는 경우 활용가능하다.
      */
-    static async _switchPopup(type: any, events: any = {}, data: any = []) {
+    static async _switchPopup(
+        type: string,
+        events: PopupEventListeners = {},
+        data: any = [],
+        imageBaseUrl: string = '../node_modules/entry-js/images/hardware/') {
         this.loadPopup(data);
         const popup = EntryModalHelper.popup;
         if (this.lastOpenedType === type && data.length === 0) {
@@ -558,7 +607,7 @@ class EntryModalHelper {
             popup.on(eventName, func);
         });
 
-        popup.show({ type, baseUrl: './renderer/resources' });
+        popup.show({ type, imageBaseUrl });
         return popup;
     }
 
@@ -579,11 +628,8 @@ class EntryModalHelper {
                     data: {
                         data,
                     },
-                    isOffline: true,
-                    imageBaseUrl: '../node_modules/entry-js/images/hardware/',
                 },
                 type: 'popup',
-                props: { baseUrl: './renderer/resources' },
             });
         } else {
             EntryModalHelper.popup.setData({ data: { data } });

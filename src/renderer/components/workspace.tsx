@@ -164,6 +164,10 @@ class Workspace extends Component<IProps> {
         addEventListener('openExpansionBlockManager', () => {
             ModalHelper.showExpansionPopup();
         });
+        addEventListener('openAIUtilizeBlockManager', () => {
+            ModalHelper.showAIUtilizePopup();
+        });
+
         addEventListener('openPictureImport', () => {
             ModalHelper.showPaintPopup();
         });
