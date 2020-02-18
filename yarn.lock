@@ -2526,9 +2526,9 @@ enhanced-resolve@^4.0.0, enhanced-resolve@^4.1.0:
   version "0.0.0"
   resolved "git+https://github.com/entrylabs/entryjs.git#ca9aee7d48749072aa69e385ce5fd2acf2b58ea2"
 
-"entry-tool@git+https://github.com/entrylabs/entry-tool.git#v1.20200121.188":
+"entry-tool@git+https://github.com/entrylabs/entry-tool.git#v1.20200218.191":
   version "0.0.0"
-  resolved "git+https://github.com/entrylabs/entry-tool.git#5f5d45709c6c5f8708a0630d9293b0943f13dc36"
+  resolved "git+https://github.com/entrylabs/entry-tool.git#6eb167ca368eabaec3f407cf14f0edb4445ae65e"
 
 env-paths@^2.2.0:
   version "2.2.0"
