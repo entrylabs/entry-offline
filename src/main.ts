@@ -2,7 +2,6 @@ import { app, dialog, ipcMain, Menu } from 'electron';
 import HardwareWindowManager from './main/views/hardwareWindowManager';
 import MainWindowManager from './main/views/mainWindowManager';
 import AboutWindowManager from './main/views/aboutWindowManager';
-import root from 'window-or-global';
 import parseCommandLine from './main/utils/functions/parseCommandLine';
 import configInitialize from './main/utils/functions/configInitialize';
 

@@ -37,8 +37,10 @@ class Workspace extends Component<IProps> {
         backpackDisable: true,
         libDir: '../node_modules',
         defaultDir: 'renderer/resources',
+        baseUrl: 'https://playentry.org',
         fonts: root.EntryStatic.fonts,
         textCodingEnable: true,
+        dataTableEnable: false,
         paintMode: 'entry-paint',
     };
     state = {
@@ -85,12 +87,15 @@ class Workspace extends Component<IProps> {
                 const project = await EntryUtils.getSavedProject();
                 await this.loadProject(project);
             } catch (e) {
+                console.error(e);
                 this.showModalProgress(
                     'error',
                     RendererUtils.getLang('Workspace.loading_fail_msg'),
                     RendererUtils.getLang('Workspace.fail_contact_msg'),
                 );
                 await RendererUtils.clearTempProject();
+
+                this.isFirstRender = true; // didMount 에서 에러가 발생한 경우, 렌더하지 않은 것으로 판단하기 위함
                 await this.loadProject();
             }
         }, 0);
