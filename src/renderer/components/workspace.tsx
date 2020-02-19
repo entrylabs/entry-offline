@@ -32,6 +32,7 @@ class Workspace extends Component<IProps> {
     private container = React.createRef<HTMLDivElement>();
     private isFirstRender = true;
     private isSavingCanvasData = false;
+    private isSaveProject = false;
     private defaultInitOption = {
         type: 'workspace',
         backpackDisable: true,
@@ -257,6 +258,13 @@ class Workspace extends Component<IProps> {
         });
     };
 
+    handleBeforeSaveProject = (e: BeforeUnloadEvent) => {
+        if (this.isSaveProject) {
+            e.returnValue = false;
+            e.preventDefault();
+        }
+    };
+
     _getProjectName = () => {
         const { common } = this.props;
         const { projectName } = common;
@@ -318,6 +326,9 @@ class Workspace extends Component<IProps> {
             );
 
             try {
+                window.addEventListener('beforeunload', this.handleBeforeSaveProject);
+                this.isSaveProject = true;
+
                 // 프로젝트를 가져온다. 프로젝트 명과 워크스페이스 모드를 주입한다.
                 Entry.stage.handle.setVisible(false);
                 Entry.stage.update();
@@ -343,6 +354,9 @@ class Workspace extends Component<IProps> {
                     RendererUtils.getLang('Workspace.saving_fail_msg'),
                     RendererUtils.getLang('Workspace.fail_contact_msg'),
                 );
+            } finally {
+                this.isSaveProject = false;
+                window.removeEventListener('beforeunload', this.handleBeforeSaveProject);
             }
         };
 
