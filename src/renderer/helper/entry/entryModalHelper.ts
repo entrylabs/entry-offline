@@ -607,7 +607,7 @@ class EntryModalHelper {
             popup.on(eventName, func);
         });
 
-        popup.show({ type, imageBaseUrl });
+        popup.show({ type, imageBaseUrl, baseUrl: './renderer/resources' });
         return popup;
     }
 
