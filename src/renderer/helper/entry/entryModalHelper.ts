@@ -431,15 +431,15 @@ class EntryModalHelper {
         const aiBlocks = this._getActiveAIUtilizeBlocks();
 
         await this._switchPopup('aiUtilize', {
-            submit: (data: any) => {
-                this._addExpansionBlocks(data.selected);
+            submit: async (data: any) => {
+                await this._addAIUtilizeBlocks(data.selected);
             },
             itemoff: ({ data, callback }: { data: any; callback?: () => void }) => {
-                const isActive = Entry.expansion.isActive(data.name);
+                const isActive = Entry.aiUtilize.isActive(data.name);
                 if (!isActive) {
                     callback && callback();
                 } else {
-                    entrylms.alert(Lang.Workspace.deselect_expansion_block_warning);
+                    entrylms.alert(Lang.Workspace.deselect_ai_utilize_block_warning);
                 }
             },
             itemon: ({ callback }: { callback?: () => void }) => {
@@ -480,11 +480,16 @@ class EntryModalHelper {
         });
     }
 
-    static _addAIUtilizeBlocks(blocks: any) {
+    static async _addAIUtilizeBlocks(blocks: any) {
         const addBlocks = blocks.filter(({ name }: { name: string }) => !Entry.aiUtilizeBlocks.includes(name));
         const removeBlocks = this._getActiveAIUtilizeBlocks()
             .filter((item) => item.active)
             .filter((item) => !blocks.includes(item));
+
+        if (addBlocks.some((block: any) => block.name === 'audio')) {
+            await IpcRendererHelper.checkAudioPermission();
+        }
+
         Entry.playground.addAIUtilizeBlocks(addBlocks);
         Entry.playground.removeAIUtilizeBlocks(removeBlocks);
     }

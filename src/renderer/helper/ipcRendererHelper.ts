@@ -186,4 +186,8 @@ export default class {
     static openExternalUrl(url: string) {
         ipcRenderer.invoke('openUrl', url);
     }
+
+    static checkAudioPermission() {
+        return ipcRenderer.invoke('checkPermission', 'microphone');
+    }
 }

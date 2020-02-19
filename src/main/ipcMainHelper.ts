@@ -1,4 +1,4 @@
-import { app, ipcMain, shell, IpcMainInvokeEvent } from 'electron';
+import { app, ipcMain, shell, systemPreferences,  IpcMainInvokeEvent } from 'electron';
 import root from 'window-or-global';
 import path from 'path';
 import MainUtils from './mainUtils';
@@ -35,6 +35,7 @@ class IpcMainHelper {
         ipcMain.handle('openUrl', this.openUrl.bind(this));
         ipcMain.handle('checkUpdate', this.checkUpdate.bind(this));
         ipcMain.handle('quit', this.quitApplication.bind(this));
+        ipcMain.handle('checkPermission', this.checkPermission.bind(this));
     }
 
     async saveProject(event: IpcMainInvokeEvent, project: ObjectLike, targetPath: string) {
@@ -171,6 +172,13 @@ class IpcMainHelper {
 
     quitApplication() {
         app.quit();
+    }
+
+    async checkPermission(event: IpcMainInvokeEvent, type: 'microphone' | 'camera' | 'screen') {
+        const accessStatus = systemPreferences.getMediaAccessStatus(type);
+        if (accessStatus !== 'granted') {
+            await systemPreferences.askForMediaAccess('microphone');
+        }
     }
 
     async checkUpdate(event: IpcMainInvokeEvent) {

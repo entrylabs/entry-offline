@@ -346,6 +346,7 @@ declare class Entry {
 
     static variableContainer: any;
     static expansion: any;
+    static aiUtilize: any;
     static soundQueue: any;
     static stateManager: IEntry.StateManager;
 }
