@@ -1,5 +1,4 @@
 import Modal from '../../resources/modal/app.js';
-import root from 'window-or-global';
 import RendererUtils from '../rendererUtils';
 import IpcRendererHelper from '../ipcRendererHelper';
 import { Popup } from '@entrylabs/tool';
@@ -179,13 +178,13 @@ class EntryModalHelper {
                 });
             },
             uploadFail: (data: any) => {
-                root.entrylms.alert(RendererUtils.getLang(`${data.messageParent}.${data.message}`));
+                entrylms.alert(RendererUtils.getLang(`${data.messageParent}.${data.message}`));
             },
             fail: () => {
-                root.entrylms.alert(RendererUtils.getLang('Msgs.error_occured'));
+                entrylms.alert(RendererUtils.getLang('Msgs.error_occured'));
             },
             error: () => {
-                root.entrylms.alert(RendererUtils.getLang('Msgs.error_occured'));
+                entrylms.alert(RendererUtils.getLang('Msgs.error_occured'));
             },
         });
     }
@@ -294,13 +293,13 @@ class EntryModalHelper {
                 });
             },
             uploadFail: (data: any) => {
-                root.entrylms.alert(RendererUtils.getLang(`${data.messageParent}.${data.message}`));
+                entrylms.alert(RendererUtils.getLang(`${data.messageParent}.${data.message}`));
             },
             fail: () => {
-                root.entrylms.alert(RendererUtils.getLang('Msgs.error_occured'));
+                entrylms.alert(RendererUtils.getLang('Msgs.error_occured'));
             },
             error: () => {
-                root.entrylms.alert(RendererUtils.getLang('Msgs.error_occured'));
+                entrylms.alert(RendererUtils.getLang('Msgs.error_occured'));
             },
         });
     }
@@ -340,7 +339,7 @@ class EntryModalHelper {
                     labeledItem.id = Entry.generateHash();
                     Entry.playground.addSound(labeledItem, true);
                 });
-                root.createjs.Sound.stop();
+                createjs.Sound.stop();
             },
             select: (data: any) => {
                 console.log(data);
@@ -392,13 +391,13 @@ class EntryModalHelper {
                 createjs.Sound.stop();
             },
             uploadFail: (data: any) => {
-                root.entrylms.alert(RendererUtils.getLang(`${data.messageParent}.${data.message}`));
+                entrylms.alert(RendererUtils.getLang(`${data.messageParent}.${data.message}`));
             },
             fail: (data: any) => {
-                root.entrylms.alert(RendererUtils.getLang('Msgs.error_occured'));
+                entrylms.alert(RendererUtils.getLang('Msgs.error_occured'));
             },
             error: (data: any) => {
-                root.entrylms.alert(RendererUtils.getLang('Msgs.error_occured'));
+                entrylms.alert(RendererUtils.getLang('Msgs.error_occured'));
             },
         });
     }
@@ -568,13 +567,13 @@ class EntryModalHelper {
                 });
             },
             uploadFail: (data: any) => {
-                root.entrylms.alert(RendererUtils.getLang(`${data.messageParent}.${data.message}`));
+                entrylms.alert(RendererUtils.getLang(`${data.messageParent}.${data.message}`));
             },
             fail: () => {
-                root.entrylms.alert(RendererUtils.getLang('Msgs.error_occured'));
+                entrylms.alert(RendererUtils.getLang('Msgs.error_occured'));
             },
             error: () => {
-                root.entrylms.alert(RendererUtils.getLang('Msgs.error_occured'));
+                entrylms.alert(RendererUtils.getLang('Msgs.error_occured'));
             },
         });
     }
@@ -649,7 +648,7 @@ class EntryModalHelper {
                     case 'save':
                         //아무것도 입력하지 않은 경우, 빈칸 하나만 있는 것으로 처리된다.
                         if (data.length === 1 && data[0] === '') {
-                            root.entrylms.alert(RendererUtils.getLang('Menus.nothing_to_import'));
+                            entrylms.alert(RendererUtils.getLang('Menus.nothing_to_import'));
                         } else {
                             const list = Entry.variableContainer.selected;
                             list.array_ = data.map((element) => {
@@ -671,7 +670,7 @@ class EntryModalHelper {
             .on('click', function(e: string, data: any[]) {
                 switch (e) {
                     case 'copied':
-                        root.entrylms.alert(RendererUtils.getLang('Menus.content_copied'));
+                        entrylms.alert(RendererUtils.getLang('Menus.content_copied'));
                         break;
                     case 'excel':
                         //TODO 추출중입니다 이런 ModalProgress 문구가 있으면 더 좋을것 같음.

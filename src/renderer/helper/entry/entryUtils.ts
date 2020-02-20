@@ -2,7 +2,6 @@ import IpcRendererHelper from '../ipcRendererHelper';
 import StorageManager from '../storageManager';
 import RendererUtils from '../rendererUtils';
 import Constants from '../constants';
-import root from 'window-or-global';
 
 /**
  * 엔트리 코드로직과 관련된 유틸.
@@ -19,7 +18,7 @@ export default class {
     static confirmProjectWillDismiss() {
         let confirmProjectDismiss = true;
         if (!Entry.stateManager.isSaved()) {
-            confirmProjectDismiss = confirm(RendererUtils.getLang('Menus.save_dismiss'));
+            confirmProjectDismiss = window.confirm(RendererUtils.getLang('Menus.save_dismiss'));
         }
 
         if (confirmProjectDismiss) {
@@ -60,7 +59,7 @@ export default class {
             let confirm = false;
             try {
                 confirm =
-                    await root.entrylms.confirm(
+                    await entrylms.confirm(
                         RendererUtils.getLang('Workspace.confirm_load_temporary'),
                     );
 
@@ -91,7 +90,7 @@ export default class {
             Entry.soundQueue.loadFile({
                 id: sound._id,
                 src: path,
-                type: root.createjs.LoadQueue.SOUND,
+                type: createjs.LoadQueue.SOUND,
             });
         });
     }

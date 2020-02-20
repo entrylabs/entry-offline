@@ -1,4 +1,3 @@
-import root from 'window-or-global';
 import Constants from '../constants';
 import RendererUtils from '../rendererUtils';
 import IpcRendererHelper from '../ipcRendererHelper';
@@ -9,7 +8,7 @@ import EntryUtils from './entryUtils';
  * 개별 파일 다운로드 및 엔트리 하드웨어 코드가 있다.
  */
 export default function() {
-    if (!root.Entry) {
+    if (!Entry) {
         return;
     }
 
@@ -108,7 +107,7 @@ export default function() {
     Entry.HW.prototype.openHardwareProgram = openHardwarePage;
 
     Entry.HW.prototype.downloadGuide = function() {
-        if (root.EntryStatic.isPracticalCourse) {
+        if (EntryStatic.isPracticalCourse) {
             RendererUtils.downloadRobotGuide();
         } else {
             RendererUtils.downloadHardwareGuide();

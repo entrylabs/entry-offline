@@ -16,6 +16,7 @@
   },
   "globals": {
     "Entry": true,
+    "EntryStatic": true,
     "Lang": true,
     "entrylms": true,
   },

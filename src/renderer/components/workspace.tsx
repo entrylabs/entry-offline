@@ -9,7 +9,6 @@ import { CommonActionCreators, ICommonState } from '../store/modules/common';
 import _includes from 'lodash/includes';
 import _debounce from 'lodash/debounce';
 import entryPatch from '../helper/entry/entryPatcher';
-import root from 'window-or-global';
 import { ModalProgress } from '@entrylabs/tool/component';
 import ModalHelper from '../helper/entry/entryModalHelper';
 import RendererUtils from '../helper/rendererUtils';
@@ -39,7 +38,7 @@ class Workspace extends Component<IProps> {
         libDir: '../node_modules',
         defaultDir: 'renderer/resources',
         baseUrl: 'https://playentry.org',
-        fonts: root.EntryStatic.fonts,
+        fonts: EntryStatic.fonts,
         textCodingEnable: true,
         dataTableEnable: false,
         paintMode: 'entry-paint',
@@ -55,7 +54,7 @@ class Workspace extends Component<IProps> {
     get initOption() {
         return Object.assign({},
             this.defaultInitOption,
-            root.EntryStatic.initOptions,
+            EntryStatic.initOptions,
         );
     }
 
@@ -130,7 +129,7 @@ class Workspace extends Component<IProps> {
         const addEventListener = Entry.addEventListener.bind(Entry);
 
         addEventListener('openBackPack', () => {
-            root.entrylms.alert(RendererUtils.getLang('[다국어미적용]\n온라인에서 사용가능'));
+            entrylms.alert(RendererUtils.getLang('[다국어미적용]\n온라인에서 사용가능'));
         });
         // 교과형에서 하드웨어가 바뀔때 마다 카테고리 변화
         addEventListener('hwChanged', this.handleHardwareChange);
@@ -195,7 +194,7 @@ class Workspace extends Component<IProps> {
 
     async handleCanvasImageSave(data: any) {
         if (this.isSavingCanvasData) {
-            root.entrylms.alert(RendererUtils.getLang('Msgs.save_canvas_alert'));
+            entrylms.alert(RendererUtils.getLang('Msgs.save_canvas_alert'));
         } else {
             this.showModalProgress('progress', RendererUtils.getLang('Msgs.save_canvas_alert'));
             this.isSavingCanvasData = true;
@@ -274,18 +273,18 @@ class Workspace extends Component<IProps> {
 
     handleHardwareChange = () => {
         const hw = Entry.hw;
-        const hwCategoryList = root.EntryStatic.hwCategoryList;
+        const hwCategoryList = EntryStatic.hwCategoryList;
 
         if (
             (hw.programConnected && hw.hwModule && this.lastHwName === hw.hwModule.name) ||
-            !root.EntryStatic.isPracticalCourse
+            !EntryStatic.isPracticalCourse
         ) {
             return;
         }
         const blockMenu = Entry.playground.blockMenu;
         if (hw.programConnected && hw.hwModule) {
             const hwName = hw.hwModule.name;
-            if (_includes(root.EntryStatic.hwMiniSupportList, hwName)) {
+            if (_includes(EntryStatic.hwMiniSupportList, hwName)) {
                 hwCategoryList.forEach(function(categoryName: string) {
                     blockMenu.unbanCategory(categoryName);
                 });
@@ -546,7 +545,7 @@ class Workspace extends Component<IProps> {
                         if (filePath.endsWith('.ent')) {
                             await this._loadProjectFromFile(filePath);
                         } else {
-                            root.entrylms.alert(RendererUtils.getLang('Workspace.upload_not_supported_file_msg'));
+                            entrylms.alert(RendererUtils.getLang('Workspace.upload_not_supported_file_msg'));
                         }
                     }}
                 />
