@@ -175,9 +175,11 @@ class IpcMainHelper {
     }
 
     async checkPermission(event: IpcMainInvokeEvent, type: 'microphone' | 'camera' | 'screen') {
-        const accessStatus = systemPreferences.getMediaAccessStatus(type);
-        if (accessStatus !== 'granted') {
-            await systemPreferences.askForMediaAccess('microphone');
+        if (process.platform === 'darwin') {
+            const accessStatus = systemPreferences.getMediaAccessStatus(type);
+            if (accessStatus !== 'granted') {
+                await systemPreferences.askForMediaAccess('microphone');
+            }
         }
     }
 
