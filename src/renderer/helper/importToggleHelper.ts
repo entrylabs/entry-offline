@@ -1,4 +1,3 @@
-import root from 'window-or-global';
 import RendererUtils from './rendererUtils';
 import nativeMenu from '../nativeMenu';
 
@@ -12,7 +11,7 @@ export default class {
     static async changeEntryStatic(mode?: string) {
         let defaultEntryStatic;
         if (mode === 'practical_course') {
-            if (root.Lang && RendererUtils.getLangType() !== 'ko') {
+            if (window.Lang && RendererUtils.getLangType() !== 'ko') {
                 (async() => await this.changeLang('ko'))();
             }
             defaultEntryStatic = await import('../resources/static_mini.js');
@@ -20,7 +19,7 @@ export default class {
             defaultEntryStatic = await import('../resources/static.js');
         }
         defaultEntryStatic = defaultEntryStatic.default;
-        root.EntryStatic = defaultEntryStatic || root.EntryStatic;
+        window.EntryStatic = defaultEntryStatic || window.EntryStatic;
     }
 
     /**
@@ -30,7 +29,7 @@ export default class {
      * @return {Promise<void>}
      */
     static async changeLang(lang: string) {
-        root.Lang = await import(`../resources/lang/${lang}.json`);
+        window.Lang = await import(`../resources/lang/${lang}.json`);
         nativeMenu.init();
     }
 }

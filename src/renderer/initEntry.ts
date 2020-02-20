@@ -1,4 +1,3 @@
-import root from 'window-or-global';
 import _lodash from 'lodash';
 import jquery from 'jquery';
 import { BigNumber } from 'bignumber.js';
@@ -17,19 +16,22 @@ const lastWSMode = StorageManager.getPersistWorkspaceMode();
 })();
 
 // lodash
-root._ = _lodash;
+window._ = _lodash;
 
 // jquery
-// eslint-disable-next-line id-length
-root.$ = jquery;
-root.jQuery = jquery;
+// @ts-ignore
+window.$ = jquery;
+
+// @ts-ignore
+window.jQuery = jquery;
 
 // bigNumber
-root.BigNumber = BigNumber;
+// @ts-ignore
+window.BigNumber = BigNumber;
 
 // entry-lms
 const entrylms = new Entrylms();
-root.entrylms = {
+window.entrylms = {
     alert: entrylms.alert,
     confirm: entrylms.confirm,
 };

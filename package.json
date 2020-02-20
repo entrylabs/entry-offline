@@ -44,7 +44,6 @@
         "socket.io-client": "^2.2.0",
         "tar": "^4.4.10",
         "uid": "^0.0.2",
-        "window-or-global": "^1.0.1",
         "xml2js": "^0.4.19"
     },
     "devDependencies": {
@@ -67,7 +66,6 @@
         "@types/socket.io-client": "^1.4.32",
         "@types/styled-components": "^4.4.1",
         "@types/tar": "^4.0.0",
-        "@types/window-or-global": "^1.0.0",
         "@typescript-eslint/eslint-plugin": "^2.12.0",
         "@typescript-eslint/parser": "^1.10.2",
         "babel-eslint": "^10.0.3",
