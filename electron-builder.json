@@ -42,7 +42,15 @@
         "!src/renderer_build/hot",
         "!node_modules/entry-hw/app/server",
         "!src/**/*.map",
-        "!src/**/*.scss"
+        "!src/**/*.scss",
+        {
+            "from": "node_modules/entry-js",
+            "to": "node_modules/entry-js"
+        },
+        {
+            "from": "node_modules/entry-tool",
+            "to": "node_modules/entry-tool"
+        }
     ],
     "extraResources": [
         "config/**/*"
