@@ -1,6 +1,5 @@
 import React, { Component, ReactElement } from 'react';
 import './header.scss';
-import root from 'window-or-global';
 import _get from 'lodash/get';
 import RendererUtils from '../helper/rendererUtils';
 import EntryUtils from '../helper/entry/entryUtils';
@@ -125,7 +124,7 @@ class Header extends Component<IProps, IState> {
 
     getLangValue() {
         const lang = this.props.persist.lang;
-        return _get(root.Lang, lang);
+        return _get(Lang, lang);
     }
 
     makeDropdown(type: string, items: DropDownItemPair[]) {

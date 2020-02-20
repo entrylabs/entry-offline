@@ -34,4 +34,4 @@ root.entrylms = {
     confirm: entrylms.confirm,
 };
 
-root.isOsx = process.platform === 'darwin';
+window.isOsx = process.platform === 'darwin';

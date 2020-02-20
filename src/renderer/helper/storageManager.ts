@@ -1,61 +1,72 @@
-import root from 'window-or-global';
-
 export default class {
     static get PERSIST() {
         return 'persist:storage';
     }
+
     static get DONT_SHOW_VERSION() {
         return 'dontShowVersion';
     }
+
     static get LAST_CHECKED_VERSION() {
         return 'lastCheckVersion';
     }
+
     static get LOCAL_STORAGE_KEY() {
         return 'localStorageProject';
     }
+
     static get LOCAL_STORAGE_KEY_RELOAD() {
         return 'localStorageProjectReload';
     }
+
     static get LOCAL_STORAGE_LANG() {
         return 'lang';
     }
+
     static get LOCAL_STORAGE_WS_MODE() {
         return 'mode';
     }
+
     static get WORKSPACE_INTERFACE() {
         return 'workspace-interface';
     }
 
-    static saveProject(project: IEntry.Project) {
+    static saveProject(project: IEntry.Project | string) {
         if (!project) {
             this.clearSavedProject();
             return;
         }
         const projectJson = typeof project === 'string' ? project : JSON.stringify(project);
-        root.localStorage.setItem(this.LOCAL_STORAGE_KEY, projectJson);
+        localStorage.setItem(this.LOCAL_STORAGE_KEY, projectJson);
     }
 
     static loadProject() {
-        return JSON.parse(root.localStorage.getItem(this.LOCAL_STORAGE_KEY));
+        const savedProjectString = localStorage.getItem(this.LOCAL_STORAGE_KEY);
+        if (savedProjectString) {
+            return JSON.parse(savedProjectString);
+        }
     }
 
     static clearSavedProject() {
-        return root.localStorage.removeItem(this.LOCAL_STORAGE_KEY);
+        return localStorage.removeItem(this.LOCAL_STORAGE_KEY);
     }
 
-    static saveTempProject(project: IEntry.Project) {
+    static saveTempProject(project: IEntry.Project | string) {
         const projectJson = typeof project === 'string' ? project : JSON.stringify(project);
-        root.localStorage.setItem(this.LOCAL_STORAGE_KEY_RELOAD, projectJson);
+        localStorage.setItem(this.LOCAL_STORAGE_KEY_RELOAD, projectJson);
     }
 
-    static loadTempProject(): IEntry.Project {
-        const tempProject = JSON.parse(root.localStorage.getItem(this.LOCAL_STORAGE_KEY_RELOAD));
-        root.localStorage.removeItem(this.LOCAL_STORAGE_KEY_RELOAD);
-        return tempProject;
+    static loadTempProject(): IEntry.Project | undefined {
+        const savedProjectString = localStorage.getItem(this.LOCAL_STORAGE_KEY_RELOAD);
+        if (savedProjectString) {
+            const tempProject = JSON.parse(savedProjectString);
+            localStorage.removeItem(this.LOCAL_STORAGE_KEY_RELOAD);
+            return tempProject;
+        }
     }
 
     static getPersistLangType(): string | undefined {
-        const rawPersist = root.localStorage.getItem(this.PERSIST);
+        const rawPersist = localStorage.getItem(this.PERSIST);
         if (!rawPersist) {
             return;
         }
@@ -65,7 +76,7 @@ export default class {
     }
 
     static getPersistWorkspaceMode(): WorkspaceMode | undefined {
-        const rawPersist = root.localStorage.getItem(this.PERSIST);
+        const rawPersist = localStorage.getItem(this.PERSIST);
         if (!rawPersist) {
             return;
         }
@@ -75,22 +86,22 @@ export default class {
     }
 
     static setWorkspaceInterface(interfaceState: IEntry.WorkspaceInterface) {
-        (root.localStorage as Storage).setItem(this.WORKSPACE_INTERFACE, JSON.stringify(interfaceState));
+        (localStorage as Storage).setItem(this.WORKSPACE_INTERFACE, JSON.stringify(interfaceState));
     }
 
     static getLastDontShowVersion() {
-        return root.localStorage.getItem(this.DONT_SHOW_VERSION);
+        return localStorage.getItem(this.DONT_SHOW_VERSION);
     }
 
     static setLastDontShowVersion(latestVersion: string) {
-        root.localStorage.setItem(this.DONT_SHOW_VERSION, latestVersion);
+        localStorage.setItem(this.DONT_SHOW_VERSION, latestVersion);
     }
 
     static getLastCheckedVersion() {
-        return root.localStorage.getItem(this.LAST_CHECKED_VERSION);
+        return localStorage.getItem(this.LAST_CHECKED_VERSION);
     }
 
     static setLastCheckedVersion(lastCheckedVersion: string) {
-        root.localStorage.setItem(this.LAST_CHECKED_VERSION, lastCheckedVersion);
+        localStorage.setItem(this.LAST_CHECKED_VERSION, lastCheckedVersion);
     }
 }

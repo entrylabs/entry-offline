@@ -1,5 +1,4 @@
 import { app, ipcMain, shell, systemPreferences,  IpcMainInvokeEvent } from 'electron';
-import root from 'window-or-global';
 import path from 'path';
 import MainUtils from './mainUtils';
 import Constants from './constants';
@@ -185,7 +184,7 @@ class IpcMainHelper {
 
     async checkUpdate(event: IpcMainInvokeEvent) {
         const data = await checkUpdateRequest();
-        return [root.sharedObject.version, data];
+        return [global.sharedObject.version, data];
     }
 
     openUrl(event: IpcMainInvokeEvent, url: string) {

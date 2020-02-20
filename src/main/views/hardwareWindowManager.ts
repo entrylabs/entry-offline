@@ -2,7 +2,6 @@ import { BrowserWindow, app } from 'electron';
 import path from 'path';
 import HardwareMainRouter from 'entry-hw/app/src/main/mainRouter.build';
 import HardwareEntryServer from '../utils/serverProcessManager';
-import root from 'window-or-global';
 
 export default class HardwareWindowManager {
     private hardwareWindow?: BrowserWindow;
@@ -49,7 +48,7 @@ export default class HardwareWindowManager {
             this.createHardwareWindow();
         }
 
-        const offlineRoomIds = root.sharedObject.roomIds;
+        const offlineRoomIds = global.sharedObject.roomIds;
         if (offlineRoomIds && offlineRoomIds[0]) {
             this.hardwareRouter.addRoomId(offlineRoomIds[0]);
         }

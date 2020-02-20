@@ -1,5 +1,4 @@
 import get from 'lodash/get';
-import root from 'window-or-global';
 import { remote } from 'electron';
 import IpcRendererHelper from './ipcRendererHelper';
 import StorageManager from './storageManager';
@@ -35,12 +34,12 @@ export default class {
     }
 
     /**
-     * root.Lang 에서 해당 프로퍼티를 가져온다.
+     * Lang 에서 해당 프로퍼티를 가져온다.
      * @param key{string} property chain
      * @return {string} 해당하는 값 || key
      */
     static getLang(key = ''): string {
-        const lang = root.Lang || {};
+        const lang = Lang || {};
         return get(lang, key) || key;
     }
 
@@ -52,7 +51,7 @@ export default class {
      * @return {string}
      */
     static getLangType(): string {
-        return root.Lang.type || root.Lang.fallbackType;
+        return Lang.type || Lang.fallbackType;
     }
 
     /**
@@ -61,7 +60,7 @@ export default class {
      * @return {string}
      */
     static getFallbackLangType(): string {
-        return root.Lang.fallbackType || root.Lang.type;
+        return Lang.fallbackType || Lang.type;
     }
 
     /**
@@ -111,7 +110,7 @@ export default class {
     }
 
     static downloadHardwareGuide() {
-        const osType = root.isOsx ? {
+        const osType = window.isOsx ? {
             saveName: '(맥)',
             filePath: ['guide', 'hardware-osx.pdf'],
         } : {

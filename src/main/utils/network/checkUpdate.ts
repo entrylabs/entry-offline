@@ -1,8 +1,7 @@
-import { app, net } from 'electron';
-import root from 'window-or-global';
+import { net } from 'electron';
 
 export default () => new Promise((resolve, reject) => {
-    const { baseUrl, version } = root.sharedObject;
+    const { baseUrl, version } = global.sharedObject;
 
     const request = net.request({
         method: 'POST',
@@ -30,10 +29,7 @@ export default () => new Promise((resolve, reject) => {
     });
     request.setHeader('content-type', 'application/json; charset=utf-8');
     request.write(
-        JSON.stringify({
-            category: 'offline',
-            version: version,
-        }),
+        JSON.stringify({ category: 'offline', version }),
     );
     request.end();
 });

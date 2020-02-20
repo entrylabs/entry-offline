@@ -22,6 +22,7 @@ declare interface Window {
     createjs: any;
     EntryStatic: any;
     Lang: any;
+    isOsx: boolean;
 }
 
 declare var entrylms: any;

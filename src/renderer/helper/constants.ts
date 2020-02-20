@@ -1,8 +1,7 @@
-import root from 'window-or-global';
 
 export default class {
     static get sep() {
-        return root.isOsx ? '/' : '\\';
+        return window.isOsx ? '/' : '\\';
     }
 
     static get resourcePath() {

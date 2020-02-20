@@ -1,5 +1,4 @@
 import { app, BrowserWindow, dialog, FileFilter, SaveDialogOptions } from 'electron';
-import root from 'window-or-global';
 import path from 'path';
 
 type CrashMessage = {
@@ -32,7 +31,7 @@ export default class {
 
     constructor(option: CommandLineOptions) {
         const language = app.getLocale();
-        let title = root.sharedObject.version;
+        let title = global.sharedObject.version;
         const crashedMsg: CrashMessage = {
             title: '',
             content: '',
