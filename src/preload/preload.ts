@@ -56,3 +56,13 @@ window.ipcInvoke = (channel: string, ...args: any[]) => {
 window.openEntryWebPage = () => {
     shell.openExternal('https://playentry.org/#!/offlineEditor');
 };
+
+/**
+ * external file => loadProjectFromMain event => loadProject => callback(project)
+ */
+window.onLoadProjectFromMain = (callback: (project: Promise<IEntry.Project>) => void) => {
+    ipcRenderer.on('loadProjectFromMain', async (e, filePath: string) => {
+        const project = await ipcRenderer.invoke('loadProject', filePath);
+        callback(project);
+    });
+};

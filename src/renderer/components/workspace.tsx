@@ -108,7 +108,7 @@ class Workspace extends Component<IProps> {
     }
 
     addMainProcessEvents() {
-        IpcRendererHelper.loadProjectFromMain(async (readProjectFunction) => {
+        window.onLoadProjectFromMain(async (readProjectFunction) => {
             try {
                 this.showModalProgress(
                     'progress',

@@ -16,6 +16,7 @@ declare interface Preload {
     getLang(key: string): string;
     ipcInvoke<T = any>(channel: string, ...args: any[]): Promise<T>
     openEntryWebPage(): void;
+    onLoadProjectFromMain(callback: (project: Promise<IEntry.Project>) => void): void;
 }
 
 declare var entrylms: any;
