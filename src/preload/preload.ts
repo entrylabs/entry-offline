@@ -1,4 +1,4 @@
-import { ipcRenderer } from 'electron';
+import { ipcRenderer, dialog, remote } from 'electron';
 
 ipcRenderer.on('console', (event: Electron.IpcRendererEvent, ...args: any[]) => {
     console.log(...args);
@@ -34,3 +34,9 @@ window.onPageLoaded = (callback) => {
         callback();
     });
 };
+
+window.getSharedObject = () => {
+    console.log(global);
+    return remote.getGlobal('sharedObject');
+};
+window.dialog = dialog;

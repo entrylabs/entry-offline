@@ -1,9 +1,8 @@
 import get from 'lodash/get';
-import { remote } from 'electron';
 import IpcRendererHelper from './ipcRendererHelper';
 import StorageManager from './storageManager';
 
-const { dialog } = remote;
+const { dialog } = window;
 
 /**
  * Renderer Process 전역에서 사용할 수 있는 클래스.
@@ -14,8 +13,8 @@ export default class {
      * electron main process 와 연결된 오브젝트를 가져온다.
      * @return {sharedObject}
      */
-    static getSharedObject() {
-        return remote.getGlobal('sharedObject');
+    static getSharedObject(): GlobalConfigurations {
+        return window.getSharedObject();
     }
 
     /**

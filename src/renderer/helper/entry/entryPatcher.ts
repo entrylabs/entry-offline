@@ -98,7 +98,11 @@ export default function() {
     };
 
     const openHardwarePage = function() {
-        RendererUtils.getSharedObject().roomIds = [localStorage.getItem('entryhwRoomId')];
+        const roomId = localStorage.getItem('entryhwRoomId');
+        if (roomId) {
+            RendererUtils.getSharedObject().roomIds = [roomId];
+        }
+
         IpcRendererHelper.openHardwarePage();
         Entry.hw._initSocket();
     };

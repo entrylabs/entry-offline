@@ -1,3 +1,5 @@
+/// <reference types="Electron" />
+
 declare interface Window {
     Entry: Entry;
     createjs: any;
@@ -6,6 +8,8 @@ declare interface Window {
 
     isOsx: boolean;
     onPageLoaded: (callback: () => void) => void;
+    getSharedObject: () => GlobalConfigurations;
+    dialog: Electron.Dialog;
 }
 
 declare var entrylms: any;
