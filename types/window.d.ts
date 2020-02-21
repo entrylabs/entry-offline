@@ -14,6 +14,8 @@ declare interface Preload {
     getSharedObject(): GlobalConfigurations;
     initNativeMenu(): void;
     getLang(key: string): string;
+    ipcInvoke<T = any>(channel: string, ...args: any[]): Promise<T>
+    openEntryWebPage(): void;
 }
 
 declare var entrylms: any;

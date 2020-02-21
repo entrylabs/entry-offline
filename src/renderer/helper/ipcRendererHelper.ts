@@ -3,14 +3,16 @@ import RendererUtils from './rendererUtils';
 import StorageManager from './storageManager';
 import EntryModalHelper from './entry/entryModalHelper';
 
+const { ipcInvoke } = window;
+
 /**
  * electron main process 로 통신하기 위해 사용하는 클래스.
  * nodejs lib 사용 혹은 main 에 통신이 한번이상 필요한 경우 이쪽에 둔다.
  */
 
 export default class {
-    static loadProject(filePath: string): Promise<IEntry.Project> {
-        return ipcRenderer.invoke('loadProject', filePath);
+    static loadProject(filePath: string) {
+        return ipcInvoke<IEntry.Project>('loadProject', filePath);
     }
 
     /**
@@ -27,12 +29,12 @@ export default class {
         });
     }
 
-    static saveProject(project: IEntry.Project, targetPath: string): Promise<void> {
-        return ipcRenderer.invoke('saveProject', project, targetPath);
+    static saveProject(project: IEntry.Project, targetPath: string) {
+        return ipcInvoke<void>('saveProject', project, targetPath);
     }
 
-    static resetDirectory(): Promise<void> {
-        return ipcRenderer.invoke('resetDirectory');
+    static resetDirectory() {
+        return ipcInvoke<void>('resetDirectory');
     }
 
     static async downloadExcel(filename: string, array: any[]) {
@@ -44,23 +46,23 @@ export default class {
                 { name: 'All Files (*.*)', extensions: ['*'] },
             ],
         });
-        await ipcRenderer.invoke('saveExcel', filePath, array);
+        await ipcInvoke('saveExcel', filePath, array);
     }
 
     static staticDownload(unresolvedPath: string[], targetFilePath: string) {
-        ipcRenderer.invoke('staticDownload', unresolvedPath, targetFilePath);
+        ipcInvoke('staticDownload', unresolvedPath, targetFilePath);
     }
 
     static tempResourceDownload(entryObject: IEntry.Object, type: string, targetFilePath: string) {
-        ipcRenderer.invoke('tempResourceDownload', entryObject, type, targetFilePath);
+        ipcInvoke('tempResourceDownload', entryObject, type, targetFilePath);
     }
 
     static writeFile(data: any, filePath: string) {
-        ipcRenderer.invoke('writeFile', data, filePath);
+        ipcInvoke('writeFile', data, filePath);
     }
 
-    static importPictureFromCanvas(data: any): Promise<IEntry.Picture> {
-        return ipcRenderer.invoke('importPictureFromCanvas', data);
+    static importPictureFromCanvas(data: any) {
+        return ipcInvoke<IEntry.Picture>('importPictureFromCanvas', data);
     }
 
     /**
@@ -72,16 +74,16 @@ export default class {
      * @param filePath 저장할 파일 전체경로
      * @param objectVariable
      */
-    static exportObject(filePath: string, objectVariable: any): Promise<void> {
-        return ipcRenderer.invoke('exportObject', filePath, objectVariable);
+    static exportObject(filePath: string, objectVariable: any) {
+        return ipcInvoke<void>('exportObject', filePath, objectVariable);
     }
 
-    static importObjects(filePaths: string[]): Promise<IEntry.Object[]> {
-        return ipcRenderer.invoke('importObjects', filePaths);
+    static importObjects(filePaths: string[]) {
+        return ipcInvoke<IEntry.Object[]>('importObjects', filePaths);
     }
 
-    static importObjectsFromResource(objects: any): Promise<IEntry.Object[]> {
-        return ipcRenderer.invoke('importObjectsFromResource', objects);
+    static importObjectsFromResource(objects: any) {
+        return ipcInvoke<IEntry.Object[]>('importObjectsFromResource', objects);
     }
 
     /**
@@ -89,8 +91,8 @@ export default class {
      * @param {Array!}filePaths 이미지 파일 경로
      * @return {Promise<Object>} 신규생성된 오브젝트 메타데이터
      */
-    static importPictures(filePaths: string[]): Promise<IEntry.Picture[]> {
-        return ipcRenderer.invoke('importPictures', filePaths);
+    static importPictures(filePaths: string[]) {
+        return ipcInvoke<IEntry.Picture[]>('importPictures', filePaths);
     }
 
     /**
@@ -98,24 +100,16 @@ export default class {
      * @param {Array}pictures DB 에서 가져온 이미지 정보 오브젝트
      * @return {Promise<Object>} 파일명이 변경된 이미지 정보 오브젝트
      */
-    static importPicturesFromResource(pictures: string[]): Promise<IEntry.Picture[]> {
-        return ipcRenderer.invoke('importPicturesFromResource', pictures);
+    static importPicturesFromResource(pictures: string[]) {
+        return ipcInvoke<IEntry.Picture[]>('importPicturesFromResource', pictures);
     }
 
-    static importSounds(filePath: string[]): Promise<IEntry.Sound[]> {
-        return ipcRenderer.invoke('importSounds', filePath);
+    static importSounds(filePath: string[]) {
+        return ipcInvoke<IEntry.Sound[]>('importSounds', filePath);
     }
 
-    static importSoundsFromResource(sounds: any[]): Promise<IEntry.Sound[]> {
-        return ipcRenderer.invoke('importSoundsFromResource', sounds);
-    }
-
-    static quitApplication() {
-        ipcRenderer.invoke('quit');
-    }
-
-    static openAboutPage() {
-        ipcRenderer.send('openAboutWindow');
+    static importSoundsFromResource(sounds: any[]) {
+        return ipcInvoke<IEntry.Sound[]>('importSoundsFromResource', sounds);
     }
 
     static openHardwarePage() {
@@ -126,8 +120,7 @@ export default class {
         const [
             currentVersion,
             { hasNewVersion, version: latestVersion },
-        ]: [string, { hasNewVersion: string, version: string }] = await ipcRenderer.invoke('checkUpdate');
-
+        ] = await ipcInvoke<[string, { hasNewVersion: string, version: string }]>('checkUpdate');
         /**
          latestVersion properties
          @property hasNewVersion{boolean} 요청을 보냈을때의 버전과 비교하여 업데이트가 필요한지 여부
@@ -151,8 +144,8 @@ export default class {
         }
     }
 
-    static openExternalUrl(url: string) {
-        ipcRenderer.invoke('openUrl', url);
+    static openEntryWebPage() {
+        window.openEntryWebPage();
     }
 
     static checkAudioPermission() {

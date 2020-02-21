@@ -1,4 +1,4 @@
-import { ipcRenderer, dialog, remote } from 'electron';
+import { ipcRenderer, dialog, remote, shell } from 'electron';
 import nativeMenu from './nativeMenu';
 import get from 'lodash/get';
 
@@ -47,4 +47,12 @@ window.initNativeMenu = () => {
 window.getLang = (key: string) => {
     const lang = Lang || {};
     return get(lang, key) || key;
+};
+
+window.ipcInvoke = (channel: string, ...args: any[]) => {
+    return ipcRenderer.invoke(channel, args);
+};
+
+window.openEntryWebPage = () => {
+    shell.openExternal('https://playentry.org/#!/offlineEditor');
 };

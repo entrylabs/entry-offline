@@ -709,7 +709,7 @@ class EntryModalHelper {
             )
             .one('click', (event: string, { dontShowChecked }: { dontShowChecked: boolean }) => {
                 if (event === 'ok') {
-                    IpcRendererHelper.openExternalUrl('https://playentry.org/#!/offlineEditor');
+                    IpcRendererHelper.openEntryWebPage();
                 }
                 if (dontShowChecked) {
                     /*
