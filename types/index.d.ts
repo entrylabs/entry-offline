@@ -18,18 +18,6 @@ declare namespace NodeJS {
     }
 }
 
-declare interface Window {
-    createjs: any;
-    EntryStatic: any;
-    Lang: any;
-    isOsx: boolean;
-}
-
-declare var entrylms: any;
-declare var Lang: any;
-declare var createjs: any;
-declare var EntryStatic: any;
-
 // configuration from config file
 declare type CommonConfigurations = {
     baseUrl: string;
@@ -294,10 +282,6 @@ declare type EntryAddOptions = {
 /// <reference path="./entry.d.ts" />
 /// <reference path="./hardware.d.ts" />
 /// <reference path="../index.d.ts" />
-
-declare interface Window {
-    Entry: Entry;
-}
 
 declare class Entry {
     // 엔트리 네임스페이스에 할당되어있는 클래스들

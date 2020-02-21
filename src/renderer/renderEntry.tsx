@@ -7,11 +7,9 @@ import { PersistGate } from 'redux-persist/integration/react';
 import configureStore from './store';
 import Index from './components/Index';
 
-import IpcRendererHelper from './helper/ipcRendererHelper';
-
 const { store, persistor } = configureStore();
 
-IpcRendererHelper.onPageLoaded(() => {
+window.onPageLoaded(() => {
     ReactDom.render(
         <Provider store={store}>
             <PersistGate persistor={persistor}>

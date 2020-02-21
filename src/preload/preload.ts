@@ -29,3 +29,9 @@ ipcRenderer.on('convertPng',
         };
         imageElement.src = `data:${mimeType};base64,${base64String}`;
     });
+
+window.onPageLoaded = (callback) => {
+    ipcRenderer.on('showWindow', () => {
+        callback();
+    });
+};
