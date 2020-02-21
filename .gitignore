@@ -11,13 +11,10 @@ temp/
 .cache
 .idea
 .vscode
-yarn-error.log
 
 # related to webpack or bower
-src/renderer/bower_components
-src/renderer_build
-src/main_build
+src/*_build
 
 # specifics
 build/*.exe
-yarn-error.log
+*.log

@@ -1,6 +1,7 @@
 const path = require('path');
 const merge = require('webpack-merge');
 const common = require('./webpack.common.config');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const setting = {
     target: 'electron-preload',
@@ -13,6 +14,9 @@ const setting = {
     module: {
         rules: [],
     },
+    plugins: [
+        new CleanWebpackPlugin(),
+    ],
 };
 
 module.exports = merge(common, setting);

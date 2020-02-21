@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const common = require('./webpack.common.config');
 
 const setting = {
@@ -51,6 +52,7 @@ const setting = {
         ],
     },
     plugins: [
+        new CleanWebpackPlugin(),
         new ExtractTextPlugin('bundle.css'),
         new webpack.HotModuleReplacementPlugin(),
     ],
