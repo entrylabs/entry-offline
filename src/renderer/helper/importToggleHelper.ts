@@ -1,5 +1,4 @@
 import RendererUtils from './rendererUtils';
-import nativeMenu from '../nativeMenu';
 
 export default class {
     /**
@@ -30,6 +29,6 @@ export default class {
      */
     static async changeLang(lang: string) {
         window.Lang = await import(`../resources/lang/${lang}.json`);
-        nativeMenu.init();
+        window.initNativeMenu();
     }
 }

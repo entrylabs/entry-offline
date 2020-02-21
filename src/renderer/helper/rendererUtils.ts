@@ -1,4 +1,3 @@
-import get from 'lodash/get';
 import IpcRendererHelper from './ipcRendererHelper';
 import StorageManager from './storageManager';
 
@@ -38,8 +37,7 @@ export default class {
      * @return {string} 해당하는 값 || key
      */
     static getLang(key = ''): string {
-        const lang = Lang || {};
-        return get(lang, key) || key;
+        return window.getLang(key);
     }
 
     /**

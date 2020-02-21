@@ -1,4 +1,6 @@
 import { ipcRenderer, dialog, remote } from 'electron';
+import nativeMenu from './nativeMenu';
+import get from 'lodash/get';
 
 ipcRenderer.on('console', (event: Electron.IpcRendererEvent, ...args: any[]) => {
     console.log(...args);
@@ -35,8 +37,14 @@ window.onPageLoaded = (callback) => {
     });
 };
 
-window.getSharedObject = () => {
-    console.log(global);
-    return remote.getGlobal('sharedObject');
-};
+window.getSharedObject = () => remote.getGlobal('sharedObject');
 window.dialog = dialog;
+
+window.initNativeMenu = () => {
+    nativeMenu.init();
+};
+
+window.getLang = (key: string) => {
+    const lang = Lang || {};
+    return get(lang, key) || key;
+};

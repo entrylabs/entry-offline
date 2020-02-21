@@ -1,22 +1,22 @@
-import { remote, MenuItemConstructorOptions } from 'electron';
-import RendererUtils from './helper/rendererUtils';
-import IpcRendererHelper from './helper/ipcRendererHelper';
+import { ipcRenderer, MenuItemConstructorOptions, remote } from 'electron';
+
 const { Menu } = remote;
 
 const getTemplate = function() {
+    const { getLang } = window;
     const template: MenuItemConstructorOptions[] = [
         {
-            label: RendererUtils.getLang('Menus.offline_file'),
+            label: getLang('Menus.offline_file'),
             submenu: [
                 {
-                    label: RendererUtils.getLang('Workspace.file_new'),
+                    label: getLang('Workspace.file_new'),
                     accelerator: 'CmdOrCtrl+n',
                     click() {
                         Entry && Entry.dispatchEvent('newWorkspace');
                     },
                 },
                 {
-                    label: RendererUtils.getLang('Workspace.file_upload'),
+                    label: getLang('Workspace.file_upload'),
                     accelerator: 'CmdOrCtrl+o',
                     click() {
                         Entry && Entry.dispatchEvent('loadWorkspace');
@@ -26,14 +26,14 @@ const getTemplate = function() {
                     type: 'separator',
                 },
                 {
-                    label: RendererUtils.getLang('Workspace.file_save'),
+                    label: getLang('Workspace.file_save'),
                     accelerator: 'CmdOrCtrl+s',
                     click() {
                         Entry && Entry.dispatchEvent('saveWorkspace');
                     },
                 },
                 {
-                    label: RendererUtils.getLang('Workspace.file_save_as'),
+                    label: getLang('Workspace.file_save_as'),
                     accelerator: 'Shift+CmdOrCtrl+S',
                     click() {
                         Entry && Entry.dispatchEvent('saveAsWorkspace');
@@ -42,17 +42,17 @@ const getTemplate = function() {
             ],
         },
         {
-            label: RendererUtils.getLang('Menus.offline_edit'),
+            label: getLang('Menus.offline_edit'),
             submenu: [
                 {
-                    label: RendererUtils.getLang('Menus.offline_undo'),
+                    label: getLang('Menus.offline_undo'),
                     accelerator: 'CmdOrCtrl+z',
                     click() {
                         Entry && Entry.dispatchEvent('undo');
                     },
                 },
                 {
-                    label: RendererUtils.getLang('Menus.offline_redo'),
+                    label: getLang('Menus.offline_redo'),
                     accelerator: (function() {
                         if (process.platform === 'darwin') {
                             return 'Shift+Cmd+z';
@@ -70,39 +70,39 @@ const getTemplate = function() {
 
     if (process.platform === 'darwin') {
         template.unshift({
-            label: RendererUtils.getLang('Menus.Entry'),
+            label: getLang('Menus.Entry'),
             submenu: [
                 {
-                    label: RendererUtils.getLang('Menus.help'),
+                    label: getLang('Menus.help'),
                     click() {
-                        IpcRendererHelper.openAboutPage();
+                        ipcRenderer.send('openAboutWindow');
                     },
                 },
                 {
                     type: 'separator',
                 },
                 {
-                    label: RendererUtils.getLang('Menus.hide_entry'),
+                    label: getLang('Menus.hide_entry'),
                     accelerator: 'Command+H',
                     role: 'hide',
                 },
                 {
-                    label: RendererUtils.getLang('Menus.hide_others'),
+                    label: getLang('Menus.hide_others'),
                     accelerator: 'Command+Alt+H',
                     role: 'hideOthers',
                 },
                 {
-                    label: RendererUtils.getLang('Menus.show_all'),
+                    label: getLang('Menus.show_all'),
                     role: 'unhide',
                 },
                 {
                     type: 'separator',
                 },
                 {
-                    label: RendererUtils.getLang('Menus.offline_quit'),
+                    label: getLang('Menus.offline_quit'),
                     accelerator: 'Command+Q',
                     click() {
-                        IpcRendererHelper.quitApplication();
+                        ipcRenderer.invoke('quit');
                     },
                 },
             ],
@@ -114,7 +114,7 @@ const getTemplate = function() {
             {
                 label: 'Bring All to Front',
                 role: 'front',
-            }
+            },
         );
     } else {
         (template[0].submenu as MenuItemConstructorOptions[]).push(
@@ -122,22 +122,22 @@ const getTemplate = function() {
                 type: 'separator',
             },
             {
-                label: RendererUtils.getLang('Menus.offline_quit'),
+                label: getLang('Menus.offline_quit'),
                 accelerator: 'Alt+F4',
                 click() {
                     window.close();
                 },
-            }
+            },
         );
 
         template.push({
-            label: RendererUtils.getLang('Menus.help'),
+            label: getLang('Menus.help'),
             submenu: [
                 {
-                    label: RendererUtils.getLang('Menus.entry_info'),
+                    label: getLang('Menus.entry_info'),
                     accelerator: 'F1',
                     click() {
-                        IpcRendererHelper.openAboutPage();
+                        ipcRenderer.send('openAboutWindow');
                     },
                 },
             ],
