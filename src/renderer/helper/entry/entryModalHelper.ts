@@ -417,7 +417,7 @@ class EntryModalHelper {
                 if (!isActive) {
                     callback && callback();
                 } else {
-                    entrylms.alert(Lang.Workspace.deselect_expansion_block_warning);
+                    entrylms.alert(RendererUtils.getLang('Workspace.deselect_expansion_block_warning'));
                 }
             },
             itemon: ({ callback }: { callback?: () => void }) => {
@@ -438,7 +438,7 @@ class EntryModalHelper {
                 if (!isActive) {
                     callback && callback();
                 } else {
-                    entrylms.alert(Lang.Workspace.deselect_ai_utilize_block_warning);
+                    entrylms.alert(RendererUtils.getLang('Workspace.deselect_ai_utilize_block_warning'));
                 }
             },
             itemon: ({ callback }: { callback?: () => void }) => {
@@ -456,7 +456,7 @@ class EntryModalHelper {
         return _.sortBy(expansionBlocks, (item) => {
             let result = '';
             if (item.title) {
-                item.nameByLang = item.title[Lang.type];
+                item.nameByLang = item.title[RendererUtils.getLangType()];
                 result = item.title.ko.toLowerCase();
             }
             return result;
@@ -472,7 +472,7 @@ class EntryModalHelper {
         return _.sortBy(aiUtilizeBlocks, (item) => {
             let result = '';
             if (item.title) {
-                item.nameByLang = item.title[Lang.type];
+                item.nameByLang = item.title[RendererUtils.getLangType()];
                 result = item.title.ko.toLowerCase();
             }
             return result;
