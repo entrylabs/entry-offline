@@ -26,6 +26,7 @@ ipcRenderer.on('convertPng',
 
             const pngImage = canvas.toDataURL('image/png');
             event.sender.send('convertPng', pngImage);
+            canvas.remove();
         };
         imageElement.src = `data:${mimeType};base64,${base64String}`;
     });

@@ -9,12 +9,6 @@ import EntryModalHelper from './entry/entryModalHelper';
  */
 
 export default class {
-    static onPageLoaded(callback: () => void) {
-        ipcRenderer.on('showWindow', () => {
-            callback();
-        });
-    }
-
     static loadProject(filePath: string): Promise<IEntry.Project> {
         return ipcRenderer.invoke('loadProject', filePath);
     }
