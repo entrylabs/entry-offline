@@ -56,13 +56,4 @@ const setting = {
     ],
 };
 
-const NODE_ENV = process.env.NODE_ENV;
-
-if (NODE_ENV === 'production') {
-    setting.mode = 'production';
-} else if (NODE_ENV === 'development') {
-    setting.mode = 'development';
-    setting.devtool = 'eval-inline-source-map';
-}
-
 module.exports = merge(common, setting);

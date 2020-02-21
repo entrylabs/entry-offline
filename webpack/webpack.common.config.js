@@ -1,4 +1,6 @@
 module.exports = {
+    mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
+    devtool: process.env.NODE_ENV === 'development' ? 'cheap-module-eval-source-map' : 'source-map',
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.json'],
     },
