@@ -7,32 +7,6 @@ import EntryModalHelper from './entry/entryModalHelper';
  * electron main process 로 통신하기 위해 사용하는 클래스.
  * nodejs lib 사용 혹은 main 에 통신이 한번이상 필요한 경우 이쪽에 둔다.
  */
-ipcRenderer.on('console', (event: Electron.IpcRendererEvent, ...args: any[]) => {
-    console.log(...args);
-});
-
-type OptionalDimension = { x?: number; y?: number; width?: number; height?: number };
-ipcRenderer.on('convertPng', (event: Electron.IpcRendererEvent, base64String: string, mimeType: string, dimension?: OptionalDimension) => {
-    const canvas = document.createElement('canvas');
-    const { x, y, width, height } = dimension || {};
-    const imageElement = (width && height) ? new Image(width, height) : new Image();
-
-    imageElement.onload = function() {
-        canvas.width = imageElement.width;
-        canvas.height = imageElement.height;
-
-        x && (canvas.width += x);
-        y && (canvas.height += y);
-
-        canvas.getContext('2d')!.drawImage(imageElement, x || 0, y || 0, canvas.width, canvas.height);
-
-        console.log(canvas.width, canvas.height, imageElement.width, imageElement.height);
-
-        const pngImage = canvas.toDataURL('image/png');
-        event.sender.send('convertPng', pngImage);
-    };
-    imageElement.src = `data:${mimeType};base64,${base64String}`;
-});
 
 export default class {
     static onPageLoaded(callback: () => void) {
