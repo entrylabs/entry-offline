@@ -12,7 +12,6 @@ ipcRenderer.on('convertPng',
         const { x, y, width, height } = dimension || {};
         const imageElement = (width && height) ? new Image(width, height) : new Image();
 
-        console.log('hello convertPng');
         imageElement.onload = function() {
             canvas.width = imageElement.width;
             canvas.height = imageElement.height;
@@ -22,9 +21,8 @@ ipcRenderer.on('convertPng',
 
             canvas.getContext('2d')!.drawImage(imageElement, x || 0, y || 0, canvas.width, canvas.height);
 
-            console.log(canvas.width, canvas.height, imageElement.width, imageElement.height);
-
             const pngImage = canvas.toDataURL('image/png');
+            console.log('image to png processed');
             event.sender.send('convertPng', pngImage);
             canvas.remove();
         };
