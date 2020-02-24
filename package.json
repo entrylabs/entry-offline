@@ -26,7 +26,6 @@
     "author": "entrylabs",
     "license": "MIT",
     "dependencies": {
-        "bignumber.js": "^8.0.1",
         "entry-hw": "git+https://github.com/entrylabs/entry-hw.git#dist/v1.9.3-alpha1",
         "entry-hw-server": "git+https://github.com/entrylabs/entry-hw-server.git#master",
         "entry-js": "git+https://github.com/entrylabs/entryjs.git#dist/offline_v2.0.18",

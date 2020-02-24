@@ -57,7 +57,7 @@ export default class {
             backgroundColor: '#e5e5e5',
             webPreferences: {
                 backgroundThrottling: false,
-                nodeIntegration: true,
+                nodeIntegration: false,
                 preload: path.resolve(app.getAppPath(), 'src', 'preload_build', 'preload.bundle.js'),
             },
             icon: path.resolve(app.getAppPath(), 'src', 'main', 'static', 'icon.png'),

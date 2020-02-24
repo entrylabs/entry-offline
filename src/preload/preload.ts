@@ -74,3 +74,5 @@ window.onLoadProjectFromMain = (callback: (project: Promise<IEntry.Project>) => 
 window.checkPermission = async (type: 'microphone' | 'camera') => {
     await ipcRenderer.invoke('checkPermission', type);
 };
+
+window.isOsx = process.platform === 'darwin';
