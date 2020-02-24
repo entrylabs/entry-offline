@@ -162,6 +162,8 @@ declare module IEntry {
         name: string;
         filename: string;
         fileurl?: string;
+        imageType?: 'png' | 'svg';
+        dimension?: { width: number, height: number, scaleX: number; scaleY: number; }
     };
     export type Sound = any;
     export type WorkspaceInterface = {
