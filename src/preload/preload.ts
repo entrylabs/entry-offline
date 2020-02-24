@@ -50,7 +50,7 @@ window.getLang = (key: string) => {
 };
 
 window.ipcInvoke = (channel: string, ...args: any[]) => {
-    return ipcRenderer.invoke(channel, args);
+    return ipcRenderer.invoke(channel, ...args);
 };
 
 window.openEntryWebPage = () => {
