@@ -57,6 +57,10 @@ window.openEntryWebPage = () => {
     shell.openExternal('https://playentry.org/#!/offlineEditor');
 };
 
+window.openHardwarePage = () => {
+    ipcRenderer.send('openHardwareWindow');
+};
+
 /**
  * external file => loadProjectFromMain event => loadProject => callback(project)
  */
@@ -65,4 +69,8 @@ window.onLoadProjectFromMain = (callback: (project: Promise<IEntry.Project>) => 
         const project = await ipcRenderer.invoke('loadProject', filePath);
         callback(project);
     });
+};
+
+window.checkPermission = async (type: 'microphone' | 'camera') => {
+    await ipcRenderer.invoke('checkPermission', type);
 };

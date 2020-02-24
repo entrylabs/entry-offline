@@ -17,6 +17,8 @@ declare interface Preload {
     ipcInvoke<T = any>(channel: string, ...args: any[]): Promise<T>
     openEntryWebPage(): void;
     onLoadProjectFromMain(callback: (project: Promise<IEntry.Project>) => void): void;
+    openHardwarePage(): void;
+    checkPermission(type: 'microphone' | 'camera'): Promise<void>;
 }
 
 declare var entrylms: any;

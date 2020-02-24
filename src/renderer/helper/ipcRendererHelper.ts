@@ -1,4 +1,3 @@
-import { ipcRenderer } from 'electron';
 import RendererUtils from './rendererUtils';
 import StorageManager from './storageManager';
 import EntryModalHelper from './entry/entryModalHelper';
@@ -99,7 +98,7 @@ export default class {
     }
 
     static openHardwarePage() {
-        ipcRenderer.send('openHardwareWindow');
+        window.openHardwarePage();
     }
 
     static async checkUpdate() {
@@ -135,6 +134,6 @@ export default class {
     }
 
     static checkAudioPermission() {
-        return ipcRenderer.invoke('checkPermission', 'microphone');
+        return window.checkPermission('microphone');
     }
 }
