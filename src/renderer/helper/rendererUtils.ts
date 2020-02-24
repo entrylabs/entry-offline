@@ -159,8 +159,9 @@ export default class {
      * @param filePath 저장할 위치
      */
     static saveBlockImage(data: string, filePath: string) {
-        const buffer = Buffer.from(
-            data.replace(/^data:image\/(png|gif|jpeg);base64,/, ''), 'base64',
+        const buffer = Uint8Array.from(
+            atob(data.replace(/^data:image\/(png|gif|jpeg);base64,/, '')),
+            (chr) => chr.charCodeAt(0),
         );
 
         IpcRendererHelper.writeFile(buffer, filePath);

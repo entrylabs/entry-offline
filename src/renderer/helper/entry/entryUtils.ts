@@ -176,8 +176,9 @@ export default class {
 
         try {
             const croppedImageData = await RendererUtils.cropImageFromCanvas(image);
-            const imageBuffer = Buffer.from(
-                croppedImageData.replace(/^data:image\/(png|gif|jpeg);base64,/, ''), 'base64',
+            const imageBuffer = Uint8Array.from(
+                atob(croppedImageData.replace(/^data:image\/(png|gif|jpeg);base64,/, '')),
+                (chr) => chr.charCodeAt(0),
             );
 
             // 만약 이전 파일명이 존재하는 경우 삭제처리를 위함

@@ -16,6 +16,12 @@ export default class {
                     result = path.join(this.appPath, result)
                         .replace(/\\/gi, '/');
                 }
+
+                if (fileUrl.endsWith('.svg')) {
+                    // svg 파일의 경우 png 파일로 교체한다.
+                    result = result.replace('.svg', '.png');
+                }
+
                 result = result.replace(/.*\/\//, ''); // 외부 접속 프로토콜 스키마 보안 대응
                 return result;
             },
