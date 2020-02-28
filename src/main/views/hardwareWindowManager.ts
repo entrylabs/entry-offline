@@ -1,4 +1,4 @@
-import { BrowserWindow, app } from 'electron';
+import { app, BrowserWindow } from 'electron';
 import path from 'path';
 import HardwareMainRouter from 'entry-hw/app/src/main/mainRouter.build';
 import HardwareEntryServer from '../utils/serverProcessManager';
@@ -33,7 +33,11 @@ export default class HardwareWindowManager {
                 ),
             },
         });
-        this.hardwareRouter = new HardwareMainRouter(this.hardwareWindow, new HardwareEntryServer());
+        this.hardwareRouter = new HardwareMainRouter(this.hardwareWindow, new HardwareEntryServer(), {
+            moduleDownloadHandler: (moduleName: string) => {
+                console.log('hello offline download', moduleName);
+            },
+        });
         this.hardwareWindow.setMenu(null);
         this.hardwareWindow.setMenuBarVisibility(false);
         this.hardwareWindow.loadURL(`file:///${path.resolve(
