@@ -166,6 +166,9 @@ class Workspace extends Component<IProps> {
         addEventListener('openSoundManager', () => {
             ModalHelper.showSoundPopup();
         });
+        addEventListener('openTableManager', () => {
+            ModalHelper.showTablePopup();
+        });
         addEventListener('openExpansionBlockManager', () => {
             ModalHelper.showExpansionPopup();
         });

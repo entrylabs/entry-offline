@@ -65,7 +65,7 @@ type WebSocketMessage = {
 };
 
 declare module IEntry {
-    type PlaygroundViewMode = 'default' | 'variable' | 'picture' | 'sound' | 'text' | 'code' | string;
+    type PlaygroundViewMode = 'default' | 'variable' | 'picture' | 'sound' | 'text' | 'code' | 'table' | string;
 
     export var HWMonitor: HardwareMonitor;
     export var moduleManager: any; //TODO
@@ -212,6 +212,7 @@ declare module IEntry {
         removeExpansionBlocks: (expansionInfoList: any[]) => void;
         removeAIUtilizeBlocks: (aiBlockInfoList: any[]) => void;
         painter: Painter;
+        dataTable: any;
         setMenu?: (...args: any[]) => any;
         board: any;
         blockMenu: BlockMenu;

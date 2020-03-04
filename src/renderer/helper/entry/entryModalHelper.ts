@@ -402,6 +402,46 @@ class EntryModalHelper {
         });
     }
 
+    static async showTablePopup() {
+        await this._switchPopup('table', {
+            fetch: () => {
+                EntryModalHelper.popup.setData({ data: { data: [] } });
+            },
+            search: ({ searchQuery }: {searchQuery: string}) => {
+                console.log('search', searchQuery);
+            },
+            submit: (data: any) => {
+                console.log('submit', data);
+            },
+            dummyUploads: (formData: any) => {
+                console.log('dummyUploads', formData);
+            },
+            uploads: (data: any) => {
+                console.log('uploads', data);
+            },
+            uploadFail: (data: any) => {
+                console.log('uploadFail',data);
+            },
+            draw: () => {
+                const name = Lang.Workspace.data_table;
+                const fields = [Lang.Workspace.tab_attribute];
+                Entry.playground.dataTable.addSource({
+                    name,
+                    fields,
+                    data: [['']],
+                    tab: 'table',
+                });
+                Entry.playground.changeViewMode('table');
+            },
+            fail: () => {
+                console.log('fail');
+            },
+            error: () => {
+                console.log('error');
+            },
+        });
+    }
+
     /**
      * 확장블록 리스트를 가져와, 확장블록 추가 팝업을 노출한다.
      */
