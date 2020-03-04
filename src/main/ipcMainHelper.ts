@@ -191,5 +191,4 @@ new class {
     openUrl(event: IpcMainInvokeEvent, url: string) {
         shell.openExternal(url);
     }
-
 }();
