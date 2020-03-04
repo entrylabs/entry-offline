@@ -1,4 +1,4 @@
-import { app, ipcMain, shell, systemPreferences,  IpcMainInvokeEvent } from 'electron';
+import { app, ipcMain, IpcMainInvokeEvent, shell, systemPreferences } from 'electron';
 import path from 'path';
 import MainUtils from './mainUtils';
 import Constants from './constants';
@@ -14,7 +14,7 @@ import checkUpdateRequest from './utils/network/checkUpdate';
  * main.js 에서 선언되어있다.
  * 이 클래스의 ipc event 들은 mainWindow, workspace 와 관련이 있다.
  */
-class IpcMainHelper {
+new class {
     constructor() {
         ipcMain.handle('saveProject', this.saveProject.bind(this));
         ipcMain.handle('loadProject', this.loadProject.bind(this));
@@ -35,6 +35,7 @@ class IpcMainHelper {
         ipcMain.handle('checkUpdate', this.checkUpdate.bind(this));
         ipcMain.handle('quit', this.quitApplication.bind(this));
         ipcMain.handle('checkPermission', this.checkPermission.bind(this));
+        ipcMain.handle('getOpenSourceText', () => ''); // 별다른 표기 필요없음
     }
 
     async saveProject(event: IpcMainInvokeEvent, project: ObjectLike, targetPath: string) {
@@ -182,7 +183,7 @@ class IpcMainHelper {
         }
     }
 
-    async checkUpdate(event: IpcMainInvokeEvent) {
+    async checkUpdate() {
         const data = await checkUpdateRequest();
         return [global.sharedObject.version, data];
     }
@@ -190,7 +191,5 @@ class IpcMainHelper {
     openUrl(event: IpcMainInvokeEvent, url: string) {
         shell.openExternal(url);
     }
-}
 
-const helper = new IpcMainHelper();
-export default helper;
+}();
