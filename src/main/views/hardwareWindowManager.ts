@@ -34,11 +34,7 @@ export default class HardwareWindowManager {
                 ),
             },
         });
-        this.hardwareRouter = new HardwareMainRouter(this.hardwareWindow, new HardwareEntryServer(), {
-            moduleDownloadHandler: (moduleName: string) => {
-                console.log('hello offline download', moduleName);
-            },
-        });
+        this.hardwareRouter = new HardwareMainRouter(this.hardwareWindow, new HardwareEntryServer());
         this.hardwareWindow.setMenu(null);
         this.hardwareWindow.setMenuBarVisibility(false);
         this.hardwareWindow.loadURL(`file:///${path.resolve(
