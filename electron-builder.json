@@ -41,9 +41,12 @@
         "src/preload_build",
         "!src/main_build/hot",
         "!src/renderer_build/hot",
-        "!node_modules/entry-hw/app/server",
         "!src/**/*.map",
         "!src/**/*.scss",
+        "!node_modules/entry-hw/app/server",
+        "!node_modules/entry-hw/app/modules",
+        "!node_modules/entry-hw/app/firmwares",
+        "!node_modules/entry-hw/app/drivers",
         {
             "from": "node_modules/entry-js",
             "to": "node_modules/entry-js"
@@ -54,7 +57,12 @@
         }
     ],
     "extraResources": [
-        "config/**/*"
+        "config/**/*",
+        {
+            "from": "node_modules/entry-hw/app",
+            "to": "",
+            "filter": ["modules/**/*", "firmwares/**/*", "drivers/**/*"]
+        }
     ],
     "electronCompile": false,
     "asar": true,
