@@ -404,10 +404,12 @@ class EntryModalHelper {
 
     static async showTablePopup() {
         await this._switchPopup('table', {
-            fetch: () => {
-                EntryModalHelper.popup.setData({ data: { data: [] } });
+            fetch: async (data) => {
+                EntryModalHelper.popup.setData({
+                    data: { data: await DatabaseManager.findAll(data) || [] },
+                });
             },
-            search: ({ searchQuery }: {searchQuery: string}) => {
+            search: ({ searchQuery }: { searchQuery: string }) => {
                 console.log('search', searchQuery);
             },
             submit: (data: any) => {
@@ -420,7 +422,7 @@ class EntryModalHelper {
                 console.log('uploads', data);
             },
             uploadFail: (data: any) => {
-                console.log('uploadFail',data);
+                console.log('uploadFail', data);
             },
             draw: () => {
                 const name = Lang.Workspace.data_table;
