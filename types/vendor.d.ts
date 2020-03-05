@@ -52,3 +52,10 @@ declare module 'xml2js' {
     const value: any;
     export = value;
 }
+
+declare module 'async-csv' {
+    const value: {
+        parse(csvString: string): Promise<string[][]>
+    };
+    export = value;
+}

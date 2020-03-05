@@ -2,7 +2,7 @@ import Modal from '../../resources/modal/app.js';
 import RendererUtils from '../rendererUtils';
 import IpcRendererHelper from '../ipcRendererHelper';
 import { Popup } from '@entrylabs/tool';
-import DatabaseManager from '../../helper/databaseManager';
+import DatabaseManager, { DBTableObject } from '../../helper/databaseManager';
 import StorageManager from '../storageManager';
 import _ from 'lodash';
 import EntryUtils from './entryUtils';
@@ -412,11 +412,34 @@ class EntryModalHelper {
             search: ({ searchQuery }: { searchQuery: string }) => {
                 console.log('search', searchQuery);
             },
-            submit: (data: any) => {
-                console.log('submit', data);
+            submit: ({ selected }: { selected: DBTableObject[] }) => {
+                console.log('submit', selected);
             },
-            dummyUploads: (formData: any) => {
+            dummyUploads: async ({ formData }: { formData: any }) => {
                 console.log('dummyUploads', formData);
+                const files = formData ? formData.values() : [];
+                try {
+                    const uploadFilePaths = [];
+                    for (const value of files) {
+                        if (value instanceof File) {
+                            uploadFilePaths.push(value.path);
+                        }
+                    }
+
+                    const results = await IpcRendererHelper.importTables(uploadFilePaths);
+                    EntryModalHelper.popup.setData({
+                        data: {
+                            uploads: results,
+                            data: [],
+                        },
+                    });
+                    /**
+                     * 최종적으로 해야할건 popup.setData({ data: { uploads: result, data: [] }}
+                     * result = { id: string; name: string }
+                     */
+                } catch (e) {
+                    console.error(e);
+                }
             },
             uploads: (data: any) => {
                 console.log('uploads', data);

@@ -19,14 +19,6 @@ type ConvertResult = { filePath: string; svgPath?: string | undefined }
  * ipcMain 을 import 하여 사용하지 않는다. renderer Process 간 이벤트 관리는 ipcMainHelper 가 한다.
  */
 export default class MainUtils {
-    /**
-     * 16진수의 랜덤값을 설정한다. 이 값은 겹치지 않은 신규 파일명을 생성하는데 쓴다.
-     * @return {string}
-     */
-    static createFileId() {
-        return uid(8) + puid.generate();
-    }
-
     static backupTempProject() {
         const baseAppPath = Constants.appPath;
         const tempDirectoryPath = path.join(baseAppPath, 'temp');
@@ -166,7 +158,7 @@ export default class MainUtils {
         return new Promise(async (resolve, reject) => {
             const { objects } = object;
 
-            const objectId = MainUtils.createFileId();
+            const objectId = CommonUtils.createFileId();
             const objectName = objects[0].name;
             // renderer/bower_components 를 ./bower_components 로 치환
             MainUtils.changeObjectsPath(objects, Constants.replaceStrategy.toExternalDeleteUrl);
@@ -237,7 +229,7 @@ export default class MainUtils {
         const fileId = sound.filename;
         const ext = CommonUtils.sanitizeExtension(sound.ext, '.mp3');
         const fileName = `${fileId}${ext}`;
-        const newFileId = MainUtils.createFileId();
+        const newFileId = CommonUtils.createFileId();
         const newFileName = `${newFileId}${ext}`;
 
         const tempSoundPath = path.resolve(Constants.tempSoundPath(fileId), fileName);
@@ -264,7 +256,7 @@ export default class MainUtils {
         const fileId = picture.filename;
         const ext = CommonUtils.sanitizeExtension(picture.ext, '.png');
         const pngFileName = `${fileId}${ext}`;
-        const newFileId = MainUtils.createFileId();
+        const newFileId = CommonUtils.createFileId();
         const newFileName = `${newFileId}${ext}`;
 
         const tempImagePath = path.join(Constants.tempImagePath(fileId), pngFileName);
@@ -297,7 +289,7 @@ export default class MainUtils {
 
     static importObject(objectPath: string) {
         return new Promise(async (resolve, reject) => {
-            const newObjectId = MainUtils.createFileId();
+            const newObjectId = CommonUtils.createFileId();
             const unpackDirectoryPath = Constants.tempPathForExport(newObjectId);
             const unpackedDirectoryPath = path.join(unpackDirectoryPath, 'object');
 
@@ -456,7 +448,7 @@ export default class MainUtils {
     static async importPictureToTemp(filePath: string, extraPath?: { thumbnailPath?: string | undefined; svgPath?: string | undefined; }) {
         const originalFileExt = path.extname(filePath);
         const originalFileName = path.basename(filePath, originalFileExt);
-        const newFileId = MainUtils.createFileId();
+        const newFileId = CommonUtils.createFileId();
         let imageType = 'png';
 
         const newPicturePath = path.join(Constants.tempImagePath(newFileId), `${newFileId}${originalFileExt}`);
@@ -535,7 +527,7 @@ export default class MainUtils {
         return new Promise(async (resolve, reject) => {
             const { file, image } = data;
             const { prevFilename, mode, svg, ext = 'png' } = file;
-            const pictureId = MainUtils.createFileId();
+            const pictureId = CommonUtils.createFileId();
 
             try {
                 const imagePath = path.join(Constants.tempImagePath(pictureId), `${pictureId}.png`);
@@ -604,7 +596,7 @@ export default class MainUtils {
     static async importSoundToTemp(filePath: string): Promise<any> {
         const originalFileExt = path.extname(filePath);
         const originalFileName = path.basename(filePath, originalFileExt);
-        const newFileId = MainUtils.createFileId();
+        const newFileId = CommonUtils.createFileId();
         const newFileName = newFileId + originalFileExt;
         const newSoundPath = path.join(Constants.tempSoundPath(newFileId), newFileName);
 

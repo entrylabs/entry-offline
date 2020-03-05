@@ -1,6 +1,7 @@
 import { app, ipcMain, IpcMainInvokeEvent, shell, systemPreferences } from 'electron';
 import path from 'path';
 import MainUtils from './mainUtils';
+import DataTableManager from './dataTable/dataTableManager';
 import Constants from './constants';
 import CommonUtils from './commonUtils';
 import checkUpdateRequest from './utils/network/checkUpdate';
@@ -27,6 +28,7 @@ new class {
         ipcMain.handle('importPictureFromCanvas', this.importPictureFromCanvas.bind(this));
         ipcMain.handle('importSounds', this.importSounds.bind(this));
         ipcMain.handle('importSoundsFromResource', this.importSoundsFromResource.bind(this));
+        ipcMain.handle('importTables', this.createTables.bind(this));
         ipcMain.handle('staticDownload', this.staticDownload.bind(this));
         ipcMain.handle('tempResourceDownload', this.tempResourceDownload.bind(this));
         ipcMain.handle('saveExcel', this.saveExcel.bind(this));
@@ -104,6 +106,11 @@ new class {
 
     async importSoundsFromResource(event: IpcMainInvokeEvent, sounds: ObjectLike[]) {
         await MainUtils.importSoundsFromResource(sounds);
+    }
+
+    async createTables(event: IpcMainInvokeEvent, filePaths: string[]) {
+        console.log(filePaths);
+        return await Promise.all(filePaths.map(DataTableManager.makeTableInfo.bind(DataTableManager)));
     }
 
     /**
