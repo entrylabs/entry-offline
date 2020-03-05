@@ -28,7 +28,8 @@ new class {
         ipcMain.handle('importPictureFromCanvas', this.importPictureFromCanvas.bind(this));
         ipcMain.handle('importSounds', this.importSounds.bind(this));
         ipcMain.handle('importSoundsFromResource', this.importSoundsFromResource.bind(this));
-        ipcMain.handle('importTables', this.createTables.bind(this));
+        ipcMain.handle('createTableInfo', this.createTables.bind(this));
+        ipcMain.handle('getTable', this.getTable.bind(this));
         ipcMain.handle('staticDownload', this.staticDownload.bind(this));
         ipcMain.handle('tempResourceDownload', this.tempResourceDownload.bind(this));
         ipcMain.handle('saveExcel', this.saveExcel.bind(this));
@@ -111,6 +112,10 @@ new class {
     async createTables(event: IpcMainInvokeEvent, filePaths: string[]) {
         console.log(filePaths);
         return await Promise.all(filePaths.map(DataTableManager.makeTableInfo.bind(DataTableManager)));
+    }
+
+    async getTable(event: IpcMainInvokeEvent, hashId: string) {
+        return DataTableManager.getTable(hashId);
     }
 
     /**

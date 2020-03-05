@@ -426,7 +426,7 @@ class EntryModalHelper {
                         }
                     }
 
-                    const results = await IpcRendererHelper.importTables(uploadFilePaths);
+                    const results = await IpcRendererHelper.createTableInfo(uploadFilePaths);
                     EntryModalHelper.popup.setData({
                         data: {
                             uploads: results,
@@ -441,8 +441,15 @@ class EntryModalHelper {
                     console.error(e);
                 }
             },
-            uploads: (data: any) => {
-                console.log('uploads', data);
+            uploads: ({ uploads }: { uploads: any[] }) => {
+                /**
+                 * _addTables({projectTable: id})
+                 * _addTables 는 submit 과 동일함
+                 */
+                uploads.forEach(async ({ id }: { id: string; name: string }) => {
+                    const table = await IpcRendererHelper.getTable(id);
+                    Entry.playground.dataTable.addSource({ ...table });
+                });
             },
             uploadFail: (data: any) => {
                 console.log('uploadFail', data);
