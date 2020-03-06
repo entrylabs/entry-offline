@@ -340,6 +340,7 @@ class Workspace extends Component<IProps> {
                 // project.parent = parent;
 
                 await IpcRendererHelper.saveProject(project, filePath);
+                await RendererUtils.clearTempProject({ saveTemp: true });
                 this.projectSavedPath = filePath;
 
                 // 모달 해제 후 엔트리 토스트로 저장처리
