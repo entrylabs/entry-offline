@@ -405,8 +405,16 @@ class EntryModalHelper {
     static async showTablePopup() {
         await this._switchPopup('table', {
             fetch: async (data) => {
+                const allFetchedData = await DatabaseManager.findAll(data) as DBTableObject[];
+                let langType = RendererUtils.getLangType();
+                if (langType === 'jp') {
+                    langType = 'ja';
+                }
+
+                const langFilteredData = allFetchedData.filter((element) => element.lang === langType);
+
                 EntryModalHelper.popup.setData({
-                    data: { data: await DatabaseManager.findAll(data) || [] },
+                    data: { data: langFilteredData },
                 });
             },
             search: ({ searchQuery }: { searchQuery: string }) => {
@@ -414,6 +422,12 @@ class EntryModalHelper {
             },
             submit: ({ selected }: { selected: DBTableObject[] }) => {
                 console.log('submit', selected);
+                const selectedTables = DatabaseManager.selectDataTables(
+                    selected.map((tableInfo) => tableInfo.projectTable),
+                );
+                selectedTables.forEach((table) => {
+                    Entry.playground.dataTable.addSource(table);
+                });
             },
             dummyUploads: async ({ formData }: { formData: any }) => {
                 console.log('dummyUploads', formData);

@@ -1,7 +1,8 @@
 import Sprites from '../resources/db/sprites.json';
 import Pictures from '../resources/db/pictures.json';
 import Sounds from '../resources/db/sounds.json';
-import Tables from '../resources/db/table.json';
+import TableInfos from '../resources/db/projectTableInfos.json';
+import TableDatum from '../resources/db/projectTables.json';
 import RendererUtils from './rendererUtils';
 
 interface BaseObject {
@@ -111,6 +112,12 @@ export default class {
         });
     }
 
+    static selectDataTables(projectTableId: string[]): any[] {
+        return projectTableId.map((id) => {
+            return TableDatum.find((tableData: any) => tableData._id === id);
+        });
+    }
+
     static _selectTable(type ?: string): TableObjectsArray | any[] {
         switch (type) {
             case 'picture':
@@ -120,7 +127,7 @@ export default class {
             case 'sound':
                 return Sounds as DBSoundObject[];
             case 'table':
-                return Tables as DBTableObject[];
+                return TableInfos as DBTableObject[];
             default:
                 return [];
         }
