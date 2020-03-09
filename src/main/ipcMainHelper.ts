@@ -106,7 +106,7 @@ new class {
     }
 
     async importSoundsFromResource(event: IpcMainInvokeEvent, sounds: ObjectLike[]) {
-        await MainUtils.importSoundsFromResource(sounds);
+        return await MainUtils.importSoundsFromResource(sounds);
     }
 
     async createTables(event: IpcMainInvokeEvent, filePaths: string[]) {
