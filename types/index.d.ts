@@ -43,7 +43,7 @@ declare type CommandLineOptions = CommandLineFlags & CommandLinePairs;
 // runtimeProperties
 declare type RuntimeGlobalProperties = {
     roomIds: string[]; // cloud pc 용. 사용처 불분명. entry-hw 와 사용처 비교 필요
-    workingPath: string; // 프로젝트의 savePath 담당
+    file?: string; // 프로젝트의 savePath 담당
     appName: 'entry'; // 아직 렌더러 프로세스에서 실행하는 하드웨어 업데이트 로직 실행방지용
 }
 

@@ -12,7 +12,7 @@ const commandLineOptions: Readonly<CommandLineOptions> = parseCommandLine(proces
 const configurations: Readonly<FileConfigurations> = configInitialize(commandLineOptions.config);
 const runtimeProperties: RuntimeGlobalProperties = {
     roomIds: [],
-    workingPath: commandLineOptions.file || '',
+    file: commandLineOptions.file || '',
     appName: 'entry',
 };
 
@@ -31,10 +31,7 @@ if (!app.requestSingleInstanceLock()) {
 
     app.on('open-file', function(event, pathToOpen) {
         if (process.platform === 'darwin') {
-            global.sharedObject.workingPath = pathToOpen;
-            if (mainWindow) {
-                mainWindow.loadProjectFromPath(pathToOpen);
-            }
+            global.sharedObject.file = pathToOpen;
         }
     });
 
