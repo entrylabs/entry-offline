@@ -28,6 +28,7 @@ interface IProps extends IReduxDispatch, IReduxState {
 class Workspace extends Component<IProps> {
     private lastHwName?: string;
     private projectSavedPath?: string;
+    private projectParent?: string;
     private container = React.createRef<HTMLDivElement>();
     private isFirstRender = true;
     private isSavingCanvasData = false;
@@ -337,7 +338,7 @@ class Workspace extends Component<IProps> {
                 const project = Entry.exportProject();
                 project.isPracticalCourse = mode === 'practical_course';
                 project.name = projectName;
-                // project.parent = parent;
+                project.parent = this.projectParent;
 
                 await IpcRendererHelper.saveProject(project, filePath);
                 await RendererUtils.clearTempProject({ saveTemp: true });
@@ -434,10 +435,12 @@ class Workspace extends Component<IProps> {
 
         if (project) {
             this.projectSavedPath = project.savedPath || '';
+            this.projectParent = project.parent;
             projectWorkspaceMode = project.isPracticalCourse ? 'practical_course' : 'workspace';
             CommonActions.changeProjectName(project.name || RendererUtils.getDefaultProjectName());
         } else {
             delete this.projectSavedPath;
+            delete this.projectParent;
             CommonActions.changeProjectName(RendererUtils.getDefaultProjectName());
         }
 
