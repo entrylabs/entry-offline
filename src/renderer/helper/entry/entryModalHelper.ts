@@ -737,7 +737,7 @@ class EntryModalHelper {
                             entrylms.alert(RendererUtils.getLang('Menus.nothing_to_import'));
                         } else {
                             const list = Entry.variableContainer.selected;
-                            list.array_ = data.map((element) => {
+                            list.array_ = _.take(data, 5000).map((element) => {
                                 return { data: element };
                             });
                             Entry.do('listChangeLength', list.id_, list.array_.length);
