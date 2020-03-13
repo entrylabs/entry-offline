@@ -4,10 +4,12 @@ import MainWindowManager from './views/mainWindowManager';
 import AboutWindowManager from './views/aboutWindowManager';
 import parseCommandLine from './utils/functions/parseCommandLine';
 import configInitialize from './utils/functions/configInitialize';
+import createLogger from './utils/functions/createLogger';
 
 import('./ipcMainHelper');
 import('./utils/functions/globalShortCutRegister');
 
+const logger = createLogger('main/main.ts');
 const commandLineOptions: Readonly<CommandLineOptions> = parseCommandLine(process.argv.slice(1));
 const configurations: Readonly<FileConfigurations> = configInitialize(commandLineOptions.config);
 const runtimeProperties: RuntimeGlobalProperties = {
@@ -19,6 +21,7 @@ const runtimeProperties: RuntimeGlobalProperties = {
 global.sharedObject = Object.assign({}, runtimeProperties, configurations, commandLineOptions);
 
 if (!app.requestSingleInstanceLock()) {
+    logger.verbose('App is already running');
     app.quit();
 } else {
     let mainWindow: MainWindowManager;
@@ -31,6 +34,7 @@ if (!app.requestSingleInstanceLock()) {
 
     app.on('open-file', function(event, pathToOpen) {
         if (process.platform === 'darwin') {
+            logger.info(`[MacOS] open file event fired with ${pathToOpen}`);
             global.sharedObject.file = pathToOpen;
         }
     });

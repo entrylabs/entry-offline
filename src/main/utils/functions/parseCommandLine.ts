@@ -1,6 +1,9 @@
-import { merge } from 'lodash';
+import { merge, reduce, toPairs } from 'lodash';
 import packageJson from '../../../../package.json';
 import path from 'path';
+import createLogger from './createLogger';
+
+const logger = createLogger('ParseCommandLine');
 
 // 입력받을 수 있는 값들
 const properties: {
@@ -42,7 +45,6 @@ function parsePair(key: string, value: string): boolean | void {
     for (let i = 0; i < properties.pair.length; i++) {
         const [fullName, alias] = properties.pair[i];
         if (`--${fullName}` === key || `-${alias}` === key) {
-
             if (
                 (fullName === 'file' || alias === 'app') &&
                 !_isValidProjectFilePath(value as string)
@@ -71,5 +73,10 @@ export default (argv: string[]): Readonly<CommandLineOptions> => {
         }
     }
 
-    return merge(flags, pairs);
+    const result = merge(flags, pairs);
+
+    logger.info(reduce(toPairs(result), (str, [key, value]) =>
+        `${str}\n${key}: ${value}`, 'commandLine configurations applied'));
+
+    return result;
 };

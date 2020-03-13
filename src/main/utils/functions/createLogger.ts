@@ -22,15 +22,15 @@ const logger = createLogger({
 if (process.env.NODE_ENV !== 'production') {
     logger.add(new DailyRotateFile({
         level: 'info',
-        filename: 'entry-hw-%DATE%.log',
+        filename: 'entry-offline-%DATE%.log',
         dirname: _logPath,
         datePattern: 'YYYY-MM-DD',
         zippedArchive: true,
         maxSize: '10m',
         maxFiles: '14d',
         json: false, //Setting JSON as false
-        formatter: (options: any) =>
-            `${options.timestamp()}-${process.env.NODE_ENV}-message:${options.message ? options.message : ''}`,
+        formatter: ({ level, message, label, timestamp }: any) =>
+            `[${label}][${level}][${timestamp}]: ${message}`,
     }));
 }
 
