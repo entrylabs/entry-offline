@@ -671,7 +671,7 @@ class EntryModalHelper {
         type: string,
         events: PopupEventListeners = {},
         data: any = [],
-        imageBaseUrl: string = '../node_modules/entry-js/images/hardware/') {
+        imageBaseUrl: string = '../../../node_modules/entry-js/images/hardware/') {
         this.loadPopup(data);
         const popup = EntryModalHelper.popup;
         if (this.lastOpenedType === type && data.length === 0) {
@@ -697,7 +697,7 @@ class EntryModalHelper {
             popup.on(eventName, func);
         });
 
-        popup.show({ type, imageBaseUrl, baseUrl: './renderer/resources' });
+        popup.show({ type, imageBaseUrl, baseUrl: '../../renderer/resources' });
         return popup;
     }
 
