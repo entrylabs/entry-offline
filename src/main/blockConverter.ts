@@ -8,7 +8,10 @@
 import xml2js from 'xml2js';
 import _ from 'lodash';
 import entry from './entryBlocks';
+import createLogger from './utils/functions/createLogger';
+
 const parseString = xml2js.parseString;
+const logger = createLogger('main/xmlBlockConverter');
 
 function processCode(xml: any) {
     let code = [];
@@ -205,10 +208,14 @@ function processBlock(block: any, thread: any) {
 
 export default {
     convert(project: any, cb: any) {
+        logger.warn('legacy xml project request convert');
+        logger.warn('project data is..');
+        logger.warn(JSON.stringify(project));
+
         const objects = project.objects;
         const functions = project.functions;
 
-        var done = _.after(functions.length, function() {
+        let done = _.after(functions.length, function() {
             done = _.after(objects.length, function() {
                 cb(project);
             });
@@ -218,7 +225,7 @@ export default {
             }
 
             for (let i = 0; i < objects.length; i++) {
-                var object = objects[i];
+                const object = objects[i];
                 parseString(object.script, function(err: any, xml: any) {
                     object.script = JSON.stringify(processCode(xml));
                     done();
@@ -231,7 +238,7 @@ export default {
         }
 
         for (let i = 0; i < functions.length; i++) {
-            var func = functions[i];
+            const func = functions[i];
             parseString(func.content, function(err: any, xml: any) {
                 func.content = JSON.stringify(processCode(xml));
                 done();

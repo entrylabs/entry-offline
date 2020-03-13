@@ -2,13 +2,16 @@ import path from 'path';
 import fs, { PathLike } from 'fs';
 import fse from 'fs-extra';
 import rimraf from 'rimraf';
-// @ts-ignore
 import tar, { CreateOptions, FileOptions } from 'tar';
 import { nativeImage } from 'electron';
+import createLogger from './utils/functions/createLogger';
 
 type tarCreateOption = FileOptions & CreateOptions;
 type readFileOption = { encoding?: string | null; flag?: string; } | string | undefined | null;
 type Dimension = { width: number, height: number };
+
+const logger = createLogger('main/fileUtils.ts');
+
 export const ImageResizeSize: { [key: string]: Dimension } = {
     thumbnail: { width: 96, height: 96 },
     picture: { width: 960, height: 540 },
@@ -44,6 +47,7 @@ export default class {
                         reject(err);
                     }
                 } else {
+                    logger.info(`directory ${target} created`);
                     resolve('exist');
                 }
             });
@@ -75,10 +79,11 @@ export default class {
     static removeDirectoryRecursive(dirPath: string) {
         return new Promise((resolve, reject) => {
             rimraf(dirPath, (err) => {
-                if (!err) {
-                    resolve();
-                } else {
+                if (err) {
                     reject(err);
+                } else {
+                    logger.info(`directory ${dirPath} removed`);
+                    resolve();
                 }
             });
         });
@@ -97,6 +102,7 @@ export default class {
                 reject();
             });
 
+            logger.info(`try to unpack ${sourcePath} to ${targetPath}`);
             tar.x({
                 file: sourcePath,
                 cwd: targetPath,
@@ -107,8 +113,14 @@ export default class {
                     return (type !== 'SymbolicLink' && (!filterFunction || filterFunction(path)));
                 },
             })
-                .then(resolve)
-                .catch(reject);
+                .then(() => {
+                    logger.verbose(`try to unpack ${sourcePath} is done`);
+                    resolve();
+                })
+                .catch((err) => {
+                    logger.error(`try to unpack ${sourcePath} failed. ${err.message}`);
+                    reject(err);
+                });
         });
     }
 
@@ -144,10 +156,13 @@ export default class {
             },
             portable: true,
         };
+
+        logger.info(`try to pack ${sourcePath}`);
         await tar.c(
             Object.assign(defaultOption, options),
             fileList,
         );
+        logger.info('try to pack is done');
     }
 
     /**
@@ -183,10 +198,13 @@ export default class {
     }) {
         return new Promise((resolve, reject) => {
             this.ensureDirectoryExistence(filePath);
+            logger.info(`writeFile to ${filePath}..`);
             fs.writeFile(filePath, contents, option, (err) => {
                 if (err) {
+                    logger.error(`writeFile error ${err.message}`);
                     return reject(err);
                 }
+                logger.verbose('writeFile done');
                 resolve();
             });
         });
@@ -199,9 +217,11 @@ export default class {
      * @param filePath
      */
     static deleteFile(filePath: string) {
+        logger.info(`deleteFile ${filePath}`);
         return new Promise((resolve) => {
             fs.unlink(filePath, (err) => {
                 if (err) {
+                    logger.info('deleteFile failed');
                     resolve();
                 } else {
                     resolve();
@@ -232,6 +252,7 @@ export default class {
      * @return {Promise<any>}
      */
     static copyFile(src: string, dest: string) {
+        logger.info(`copyFile ${src} to ${dest}..`);
         return new Promise((resolve, reject) => {
             this.ensureDirectoryExistence(dest);
             const readStream = fs.createReadStream(src);
@@ -244,6 +265,7 @@ export default class {
             })
                 .then(resolve)
                 .catch((err) => {
+                    logger.info(`copyFile failed ${err.message}`);
                     readStream.destroy();
                     writeStream.end();
                     reject(err);
@@ -252,6 +274,7 @@ export default class {
     }
 
     static move(src: string, dest: string) {
+        logger.info(`moveFile to ${src} to ${dest}`);
         fse.moveSync(src, dest, { overwrite: true });
     }
 }
