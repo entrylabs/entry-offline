@@ -51,6 +51,7 @@ if (!app.requestSingleInstanceLock()) {
                 mainWindow.activateWindow();
                 mainWindow.loadProjectFromPath(option.file);
             }
+            logger.info(`'second instance' event fired`);
         });
 
         ipcMain.on('forceClose', () => {
@@ -69,16 +70,15 @@ if (!app.requestSingleInstanceLock()) {
             event.sender.reload();
         });
 
-        ipcMain.on('openHardwareWindow', function(event: Electron.IpcMainEvent, arg: any) {
+        ipcMain.on('openHardwareWindow', function() {
             hardwareWindow.openHardwareWindow();
         });
 
-        ipcMain.on('openAboutWindow', function(event: Electron.IpcMainEvent, arg: any) {
+        ipcMain.on('openAboutWindow', function() {
             aboutWindow.openAboutWindow();
         });
 
-        ipcMain.on('closeAboutWindow', function(event: Electron.IpcMainEvent, arg: any) {
-            console.log('close About Window');
+        ipcMain.on('closeAboutWindow', function() {
             aboutWindow.closeAboutWindow();
         });
     });
@@ -92,7 +92,7 @@ process.on('uncaughtException', (error) => {
         detail: error.toString(),
         buttons: ['ignore', 'exit'],
     });
-    console.error(error.message, error.stack);
+    logger.error(`uncaughtException, ${error.message} ${error.stack}`);
     if (whichButtonClicked === 1) {
         process.exit(-1);
     }

@@ -1,5 +1,8 @@
 import { app, BrowserWindow } from 'electron';
 import path from 'path';
+import createLogger from '../utils/functions/createLogger';
+
+const logger = createLogger('main/aboutWindowManager.ts');
 
 export default class {
     parentWindow?: BrowserWindow;
@@ -34,6 +37,8 @@ export default class {
         this.aboutWindow.loadURL(`file:///${path.resolve(
             app.getAppPath(), 'src', 'main', 'views', 'about.html',
         )}`);
+
+        logger.verbose('about window created');
     }
 
     openAboutWindow() {

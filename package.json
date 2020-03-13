@@ -15,7 +15,7 @@
         "dist:win64": "cross-env NODE_ENV=production webpack && electron-builder -c --win --x64",
         "dist:win": "cross-env NODE_ENV=production webpack && electron-builder -c --win --x64 && electron-builder -c --win --ia32",
         "dist:mac:notarize": "cross-env NODE_ENV=production webpack && cross-env NOTARIZE=true electron-builder -c --mac",
-        "dist:mac": "cross-env NODE_ENV=development webpack && cross-env NOTARIZE=false electron-builder -c --mac",
+        "dist:mac": "cross-env NODE_ENV=production webpack && cross-env NOTARIZE=false electron-builder -c --mac",
         "rebuild": "electron-rebuild -f",
         "postinstall": "npm run rebuild && npm run webpack:dev"
     },
@@ -46,7 +46,9 @@
         "socket.io-client": "^2.2.0",
         "tar": "^4.4.10",
         "uid": "^0.0.2",
-        "xml2js": "^0.4.19"
+        "xml2js": "^0.4.19",
+        "winston": "^3.2.1",
+        "winston-daily-rotate-file": "^4.4.2"
     },
     "devDependencies": {
         "@types/archiver": "^3.0.0",
@@ -109,8 +111,6 @@
         "url-loader": "^1.1.2",
         "webpack": "^4.41.3",
         "webpack-cli": "^3.3.10",
-        "webpack-merge": "^4.2.2",
-        "winston": "^3.2.1",
-        "winston-daily-rotate-file": "^4.4.2"
+        "webpack-merge": "^4.2.2"
     }
 }

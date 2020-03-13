@@ -2,6 +2,9 @@ import { app, BrowserWindow, ipcMain } from 'electron';
 import path from 'path';
 import HardwareMainRouter from 'entry-hw/app/src/main/mainRouter.build';
 import HardwareEntryServer from '../utils/serverProcessManager';
+import createLogger from '../utils/functions/createLogger';
+
+const logger = createLogger('main/hardwareWindowManager.ts');
 
 export default class HardwareWindowManager {
     private hardwareWindow?: BrowserWindow;
@@ -13,7 +16,26 @@ export default class HardwareWindowManager {
         this.hardwareWindow = undefined;
     }
 
-    createHardwareWindow() {
+    openHardwareWindow() {
+        if (!this.hardwareWindow) {
+            this.createHardwareWindow();
+        }
+
+        const offlineRoomIds = global.sharedObject.roomIds;
+        if (offlineRoomIds && offlineRoomIds[0]) {
+            logger.info(`hardware offline RoomId is ${offlineRoomIds[0]}`);
+            this.hardwareRouter.addRoomId(offlineRoomIds[0]);
+        }
+
+        const hardwareWindow = this.hardwareWindow as BrowserWindow;
+        hardwareWindow.show();
+        if (hardwareWindow.isMinimized()) {
+            hardwareWindow.restore();
+        }
+        hardwareWindow.focus();
+    }
+
+    private createHardwareWindow() {
         let title;
         if (app.getLocale() === 'ko') {
             title = '엔트리 하드웨어';
@@ -51,24 +73,8 @@ export default class HardwareWindowManager {
         this._bindHardwareCloseEvent();
 
         this.windowId = this.hardwareWindow.webContents.id;
-    }
 
-    openHardwareWindow() {
-        if (!this.hardwareWindow) {
-            this.createHardwareWindow();
-        }
-
-        const offlineRoomIds = global.sharedObject.roomIds;
-        if (offlineRoomIds && offlineRoomIds[0]) {
-            this.hardwareRouter.addRoomId(offlineRoomIds[0]);
-        }
-
-        const hardwareWindow = this.hardwareWindow as BrowserWindow;
-        hardwareWindow.show();
-        if (hardwareWindow.isMinimized()) {
-            hardwareWindow.restore();
-        }
-        hardwareWindow.focus();
+        logger.info('hardware window created');
     }
 
     closeHardwareWindow() {

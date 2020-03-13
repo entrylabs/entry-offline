@@ -1,4 +1,7 @@
 import { net } from 'electron';
+import createLogger from '../functions/createLogger';
+
+const logger = createLogger('CheckUpdate');
 
 export default () => new Promise((resolve, reject) => {
     const { baseUrl, version } = global.sharedObject;
@@ -7,6 +10,10 @@ export default () => new Promise((resolve, reject) => {
         method: 'POST',
         url: `${baseUrl}/api/checkVersion`,
     });
+
+    const param = JSON.stringify({ category: 'offline', version });
+
+    logger.info(`request url: ${baseUrl}/api/checkVersion param: ${param}`);
 
     request.on('response', (res) => {
         let body = '';
@@ -17,7 +24,9 @@ export default () => new Promise((resolve, reject) => {
             let data = {};
             try {
                 data = JSON.parse(body);
+                logger.info(`response : ${JSON.stringify(data)}`);
             } catch (e) {
+                logger.error(`response json parse error, ${e.message}`);
                 console.log(e);
                 reject(e);
             }
@@ -25,11 +34,9 @@ export default () => new Promise((resolve, reject) => {
         });
     });
     request.on('error', (err) => {
-        console.log(err);
+        logger.error(`request error, ${err.name} ${err.message}`);
     });
     request.setHeader('content-type', 'application/json; charset=utf-8');
-    request.write(
-        JSON.stringify({ category: 'offline', version }),
-    );
+    request.write(param);
     request.end();
 });
