@@ -40,10 +40,10 @@
     ],
     "files": [
         "src/main/static",
+        "src/main/views/WebAudioPluginTest.fail",
         "src/**/*.html",
         "src/renderer/bower_components",
         "src/renderer/resources",
-        "WebAudioPluginTest.fail",
         "src/main_build",
         "src/renderer_build",
         "src/preload_build",
