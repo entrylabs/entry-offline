@@ -94,7 +94,7 @@ export default class {
         });
 
         mainWindow.setMenu(null);
-        mainWindow.loadURL(`file://${path.resolve(app.getAppPath(), 'src', 'main.html')}`);
+        mainWindow.loadURL(`file://${path.resolve(app.getAppPath(), 'src', 'main', 'views', 'main.html')}`);
 
         mainWindow.on('page-title-updated', function(e) {
             e.preventDefault();

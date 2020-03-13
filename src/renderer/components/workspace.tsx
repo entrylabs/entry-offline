@@ -36,8 +36,8 @@ class Workspace extends Component<IProps> {
     private defaultInitOption = {
         type: 'workspace',
         backpackDisable: true,
-        libDir: '../node_modules',
-        defaultDir: 'renderer/resources',
+        libDir: '../../../node_modules',
+        defaultDir: '../../renderer/resources',
         baseUrl: 'https://playentry.org',
         fonts: EntryStatic.fonts,
         textCodingEnable: true,

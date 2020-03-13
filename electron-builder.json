@@ -43,7 +43,7 @@
         "src/**/*.html",
         "src/renderer/bower_components",
         "src/renderer/resources",
-        "src/WebAudioPluginTest.fail",
+        "WebAudioPluginTest.fail",
         "src/main_build",
         "src/renderer_build",
         "src/preload_build",
