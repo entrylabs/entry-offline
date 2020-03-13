@@ -1,12 +1,12 @@
 import { app, dialog, ipcMain, Menu } from 'electron';
-import HardwareWindowManager from './main/views/hardwareWindowManager';
-import MainWindowManager from './main/views/mainWindowManager';
-import AboutWindowManager from './main/views/aboutWindowManager';
-import parseCommandLine from './main/utils/functions/parseCommandLine';
-import configInitialize from './main/utils/functions/configInitialize';
+import HardwareWindowManager from './views/hardwareWindowManager';
+import MainWindowManager from './views/mainWindowManager';
+import AboutWindowManager from './views/aboutWindowManager';
+import parseCommandLine from './utils/functions/parseCommandLine';
+import configInitialize from './utils/functions/configInitialize';
 
-import('./main/ipcMainHelper');
-import('./main/utils/functions/globalShortCutRegister');
+import('./ipcMainHelper');
+import('./utils/functions/globalShortCutRegister');
 
 const commandLineOptions: Readonly<CommandLineOptions> = parseCommandLine(process.argv.slice(1));
 const configurations: Readonly<FileConfigurations> = configInitialize(commandLineOptions.config);

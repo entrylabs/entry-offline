@@ -8,6 +8,11 @@ declare module 'entry-hw/*' {
     export = value;
 }
 
+declare module 'winston-daily-rotate-file' {
+    const value: any;
+    export default value;
+}
+
 declare module '@entrylabs/tool' {
     export const Popup: any;
 }
