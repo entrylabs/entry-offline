@@ -4,15 +4,15 @@ import path from 'path';
 import xl from 'excel4node';
 import { imageSize } from 'image-size';
 import * as musicMetadata from 'music-metadata';
-import Puid from 'puid';
-import uid from 'uid';
 import mime from 'mime-types';
 import FileUtils, { ImageResizeSize } from './fileUtils';
 import Constants, { ReplaceStrategy } from './constants';
 import CommonUtils from './commonUtils';
 import BlockConverter from './blockConverter';
+import createLogger from './utils/functions/createLogger';
 
-const puid = new Puid();
+const logger = createLogger('main/mainUtils.ts');
+
 type ConvertResult = { filePath: string; svgPath?: string | undefined }
 /**
  * Main Process 에서 발생하는 로직들을 담당한다.
@@ -20,6 +20,7 @@ type ConvertResult = { filePath: string; svgPath?: string | undefined }
  */
 export default class MainUtils {
     static backupTempProject() {
+        logger.info('tempProject backup');
         const baseAppPath = Constants.appPath;
         const tempDirectoryPath = path.join(baseAppPath, 'temp');
         const rollbackDirectoryPath = path.join(baseAppPath, 'rollback');
@@ -30,6 +31,7 @@ export default class MainUtils {
     }
 
     static async rollbackTempProject() {
+        logger.info('tempProject rollback');
         const baseAppPath = Constants.appPath;
         const tempDirectoryPath = path.join(baseAppPath, 'temp');
         const rollbackDirectoryPath = path.join(baseAppPath, 'rollback');
@@ -37,7 +39,7 @@ export default class MainUtils {
             await MainUtils.resetSaveDirectory();
             FileUtils.move(rollbackDirectoryPath, tempDirectoryPath);
         } else {
-            console.warn('Rollback executed but backup dir is not exist');
+            logger.warn('tempProject rollback executed but backup dir is not exist');
         }
     }
 
