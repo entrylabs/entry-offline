@@ -17,7 +17,7 @@ export default class {
     }
 
     static resourceSoundPath(filename: string) {
-        return `${this.resourcePath}${this.resourceSubDirectoryPath(filename)}`;
+        return `..${this.sep}..${this.sep}${this.resourcePath}${this.resourceSubDirectoryPath(filename)}`;
     }
 
     static resourceSubDirectoryPath(filename: string) {
