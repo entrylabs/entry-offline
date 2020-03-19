@@ -94,7 +94,7 @@ export default function() {
             }
             return fileurl;
         }
-        return Constants.resourceImagePath(filename) + `${filename}.${imageType}`;
+        return `${Constants.resourceImagePath(filename)  }${filename}.${imageType}`;
     };
 
     const openHardwarePage = function() {
@@ -131,5 +131,6 @@ export default function() {
         });
     };
 
-    // Entry.EXPANSION_BLOCK.tts.api = window.EntryStatic.baseUrl + Entry.EXPANSION_BLOCK.tts.api;
+    // @ts-ignore
+    Entry.AI_UTILIZE_BLOCK.tts.api = `https://playentry.org${Entry.AI_UTILIZE_BLOCK.tts.api}`;
 }
