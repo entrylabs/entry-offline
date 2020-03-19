@@ -530,7 +530,7 @@ class EntryModalHelper {
             itemon: ({ callback }: { callback?: () => void }) => {
                 callback && callback();
             },
-        }, aiBlocks as any, '../node_modules/entry-js/images/aiUtilize/');
+        }, aiBlocks as any, '../../../node_modules/entry-js/images/aiUtilize/');
     }
 
     static _getActiveExpansionBlocks() {
