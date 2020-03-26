@@ -30,20 +30,31 @@
     "win": {
         "target": "dir"
     },
+    "fileAssociations": [
+        {
+            "ext": "ent",
+            "role": "Editor",
+            "name": "Entry File",
+            "icon": "icon.icns"
+        }
+    ],
     "files": [
         "src/main/static",
+        "src/main/views/WebAudioPluginTest.fail",
         "src/**/*.html",
         "src/renderer/bower_components",
         "src/renderer/resources",
-        "src/WebAudioPluginTest.fail",
         "src/main_build",
         "src/renderer_build",
         "src/preload_build",
         "!src/main_build/hot",
         "!src/renderer_build/hot",
-        "!node_modules/entry-hw/app/server",
         "!src/**/*.map",
         "!src/**/*.scss",
+        "!node_modules/entry-hw/app/server",
+        "!node_modules/entry-hw/app/modules",
+        "!node_modules/entry-hw/app/firmwares",
+        "!node_modules/entry-hw/app/drivers",
         {
             "from": "node_modules/entry-js",
             "to": "node_modules/entry-js"
@@ -54,7 +65,12 @@
         }
     ],
     "extraResources": [
-        "config/**/*"
+        "config/**/*",
+        {
+            "from": "node_modules/entry-hw/app",
+            "to": "",
+            "filter": ["modules/**/*", "firmwares/**/*", "drivers/**/*"]
+        }
     ],
     "electronCompile": false,
     "asar": true,

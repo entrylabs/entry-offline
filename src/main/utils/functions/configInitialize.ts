@@ -1,8 +1,10 @@
 import { app } from 'electron';
+import { reduce, toPairs, merge } from 'lodash';
+import path from 'path';
+import fs from 'fs';
+import createLogger from './createLogger';
 
-const { forEach, merge } = require('lodash');
-const path = require('path');
-const fs = require('fs');
+const logger = createLogger('ConfigInitialize');
 
 /**
  * 외부 config 파일이 존재하지 않는 경우의 기본값.
@@ -22,19 +24,17 @@ function getExtraResourcePath() {
 export default (configName: string = 'ko'): Readonly<FileConfigurations> => {
     const configFilePath = path.join(getExtraResourcePath(), 'config', `config.${configName}.json`);
 
-    console.log(`load ${configFilePath}...`);
+    logger.info(`load ${configFilePath}...`);
 
     if (!fs.existsSync(configFilePath)) {
         return defaultConfigSchema;
     }
 
-    const fileData = fs.readFileSync(configFilePath);
+    const fileData = fs.readFileSync(configFilePath) as any;
     const mergedConfig: FileConfigurations = merge(defaultConfigSchema, JSON.parse(fileData));
 
-    console.log('applied configuration');
-    forEach(mergedConfig, (value: any, key: string) => {
-        console.log(`${key}: ${value}`);
-    });
+    logger.info(reduce(toPairs(mergedConfig), (result, [key, value]) =>
+        `${result}\n${key}: ${value}`, 'config file configurations applied'));
 
     return mergedConfig;
 };

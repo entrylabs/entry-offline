@@ -2,7 +2,7 @@ import Modal from '../../resources/modal/app.js';
 import RendererUtils from '../rendererUtils';
 import IpcRendererHelper from '../ipcRendererHelper';
 import { Popup } from '@entrylabs/tool';
-import DatabaseManager from '../../helper/databaseManager';
+import DatabaseManager, { DBTableObject } from '../../helper/databaseManager';
 import StorageManager from '../storageManager';
 import _ from 'lodash';
 import EntryUtils from './entryUtils';
@@ -402,6 +402,92 @@ class EntryModalHelper {
         });
     }
 
+    static async showTablePopup() {
+        await this._switchPopup('table', {
+            fetch: async (data) => {
+                const allFetchedData = await DatabaseManager.findAll(data) as DBTableObject[];
+                let langType = RendererUtils.getLangType();
+                if (langType === 'jp') {
+                    langType = 'ja';
+                }
+
+                const langFilteredData = allFetchedData.filter((element) => element.lang === langType);
+
+                EntryModalHelper.popup.setData({
+                    data: { data: langFilteredData },
+                });
+            },
+            search: ({ searchQuery }: { searchQuery: string }) => {
+                console.log('search', searchQuery);
+            },
+            submit: ({ selected }: { selected: DBTableObject[] }) => {
+                console.log('submit', selected);
+                const selectedTables = DatabaseManager.selectDataTables(
+                    selected.map((tableInfo) => tableInfo.projectTable),
+                );
+                selectedTables.forEach((table) => {
+                    Entry.playground.dataTable.addSource(table);
+                });
+            },
+            dummyUploads: async ({ formData }: { formData: any }) => {
+                console.log('dummyUploads', formData);
+                const files = formData ? formData.values() : [];
+                try {
+                    const uploadFilePaths = [];
+                    for (const value of files) {
+                        if (value instanceof File) {
+                            uploadFilePaths.push(value.path);
+                        }
+                    }
+
+                    const results = await IpcRendererHelper.createTableInfo(uploadFilePaths);
+                    EntryModalHelper.popup.setData({
+                        data: {
+                            uploads: results,
+                            data: [],
+                        },
+                    });
+                    /**
+                     * 최종적으로 해야할건 popup.setData({ data: { uploads: result, data: [] }}
+                     * result = { id: string; name: string }
+                     */
+                } catch (e) {
+                    console.error(e);
+                }
+            },
+            uploads: ({ uploads }: { uploads: any[] }) => {
+                /**
+                 * _addTables({projectTable: id})
+                 * _addTables 는 submit 과 동일함
+                 */
+                uploads.forEach(async ({ id }: { id: string; name: string }) => {
+                    const table = await IpcRendererHelper.getTable(id);
+                    Entry.playground.dataTable.addSource({ ...table });
+                });
+            },
+            uploadFail: (data: any) => {
+                console.log('uploadFail', data);
+            },
+            draw: () => {
+                const name = Lang.Workspace.data_table;
+                const fields = [Lang.Workspace.tab_attribute];
+                Entry.playground.dataTable.addSource({
+                    name,
+                    fields,
+                    data: [['']],
+                    tab: 'table',
+                });
+                Entry.playground.changeViewMode('table');
+            },
+            fail: () => {
+                console.log('fail');
+            },
+            error: () => {
+                console.log('error');
+            },
+        });
+    }
+
     /**
      * 확장블록 리스트를 가져와, 확장블록 추가 팝업을 노출한다.
      */
@@ -444,7 +530,7 @@ class EntryModalHelper {
             itemon: ({ callback }: { callback?: () => void }) => {
                 callback && callback();
             },
-        }, aiBlocks as any, '../node_modules/entry-js/images/aiUtilize/');
+        }, aiBlocks as any, '../../../node_modules/entry-js/images/aiUtilize/');
     }
 
     static _getActiveExpansionBlocks() {
@@ -585,7 +671,7 @@ class EntryModalHelper {
         type: string,
         events: PopupEventListeners = {},
         data: any = [],
-        imageBaseUrl: string = '../node_modules/entry-js/images/hardware/') {
+        imageBaseUrl: string = '../../../node_modules/entry-js/images/hardware/') {
         this.loadPopup(data);
         const popup = EntryModalHelper.popup;
         if (this.lastOpenedType === type && data.length === 0) {
@@ -611,7 +697,7 @@ class EntryModalHelper {
             popup.on(eventName, func);
         });
 
-        popup.show({ type, imageBaseUrl, baseUrl: './renderer/resources' });
+        popup.show({ type, imageBaseUrl, baseUrl: '../../renderer/resources' });
         return popup;
     }
 
@@ -651,7 +737,7 @@ class EntryModalHelper {
                             entrylms.alert(RendererUtils.getLang('Menus.nothing_to_import'));
                         } else {
                             const list = Entry.variableContainer.selected;
-                            list.array_ = data.map((element) => {
+                            list.array_ = _.take(data, 5000).map((element) => {
                                 return { data: element };
                             });
                             Entry.do('listChangeLength', list.id_, list.array_.length);

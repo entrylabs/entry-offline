@@ -5,7 +5,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const setting = {
     target: 'electron-main',
-    entry: './src/main.ts',
+    entry: './src/main/main.ts',
     output: {
         path: path.resolve(__dirname, '..', 'src', 'main_build'),
         filename: '[name].bundle.js',

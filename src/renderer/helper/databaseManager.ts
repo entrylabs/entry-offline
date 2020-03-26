@@ -1,6 +1,8 @@
 import Sprites from '../resources/db/sprites.json';
 import Pictures from '../resources/db/pictures.json';
 import Sounds from '../resources/db/sounds.json';
+import TableInfos from '../resources/db/projectTableInfos.json';
+import TableDatum from '../resources/db/projectTables.json';
 import RendererUtils from './rendererUtils';
 
 interface BaseObject {
@@ -29,6 +31,20 @@ export interface DBSpriteObject extends BaseObject {
     sounds: Pick<DBSoundObject, 'label' | 'duration' | 'ext' | 'filename' | 'name'>[];
 }
 
+export interface DBTableObject {
+    lang: string;
+    fields: string[];
+    name: string;
+    url: string;
+    provider: string;
+    summary: string;
+    description: string;
+    rows: number;
+    projectTable: string; // projectTable hashID
+}
+
+type TableObjectsArray = DBPictureObject[] | DBSpriteObject[] | DBSoundObject[] | DBTableObject[]
+
 /**
  * sprite, pictures, sounds 등의 데이터베이스 추출본을 가지고 CRUD 를 흉내내는 클래스.
  *
@@ -46,8 +62,9 @@ export default class {
     static findAll({ sidebar, subMenu, type }: { sidebar: string, subMenu: string, type: string }) {
         const table = this._selectTable(type);
         return new Promise((resolve) => {
+            // 타입이 table 인 경우는 필터링을 거치지 않는다. 카테고리 정렬이 없기때문
             const findList =
-                table.filter((object) => {
+                type === 'table' ? table : table.filter((object) => {
                     if (!object.category) {
                         return false;
                     }
@@ -95,7 +112,13 @@ export default class {
         });
     }
 
-    static _selectTable(type ?: string): DBPictureObject[] | DBSpriteObject[] | DBSoundObject[] | any[] {
+    static selectDataTables(projectTableId: string[]): any[] {
+        return projectTableId.map((id) => {
+            return TableDatum.find((tableData: any) => tableData._id === id);
+        });
+    }
+
+    static _selectTable(type ?: string): TableObjectsArray | any[] {
         switch (type) {
             case 'picture':
                 return Pictures as DBPictureObject[];
@@ -103,6 +126,8 @@ export default class {
                 return Sprites as DBSpriteObject[];
             case 'sound':
                 return Sounds as DBSoundObject[];
+            case 'table':
+                return TableInfos as DBTableObject[];
             default:
                 return [];
         }

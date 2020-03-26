@@ -1,5 +1,8 @@
 import { app, BrowserWindow, dialog, FileFilter, SaveDialogOptions } from 'electron';
 import path from 'path';
+import createLogger from '../utils/functions/createLogger';
+
+const logger = createLogger('main/mainWindowManager');
 
 type CrashMessage = {
     title: string;
@@ -77,6 +80,7 @@ export default class {
             event: Electron.Event,
             downloadItem: Electron.DownloadItem,
         ) => {
+            logger.info(`will-download event fired. ${downloadItem.getFilename()}`);
             const filename = downloadItem.getFilename();
             const option: SaveDialogOptions = {
                 defaultPath: filename,
@@ -94,7 +98,7 @@ export default class {
         });
 
         mainWindow.setMenu(null);
-        mainWindow.loadURL(`file://${path.resolve(app.getAppPath(), 'src', 'main.html')}`);
+        mainWindow.loadURL(`file://${path.resolve(app.getAppPath(), 'src', 'main', 'views', 'main.html')}`);
 
         mainWindow.on('page-title-updated', function(e) {
             e.preventDefault();
@@ -111,6 +115,8 @@ export default class {
             app.quit();
             process.exit(0);
         });
+
+        logger.verbose('mainWindow created');
     }
 
     close({ isForceClose = false }) {
@@ -136,6 +142,7 @@ export default class {
     }
 
     loadProjectFromPath(projectPath?: string) {
+        logger.info(`loadProjectFromPath : ${projectPath}`);
         if (this.mainWindow && !this.mainWindow.isDestroyed() && projectPath) {
             this.mainWindow.webContents.send('loadProjectFromMain', projectPath);
         }

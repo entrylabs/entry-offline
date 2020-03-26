@@ -1,24 +1,27 @@
 import { app, dialog, ipcMain, Menu } from 'electron';
-import HardwareWindowManager from './main/views/hardwareWindowManager';
-import MainWindowManager from './main/views/mainWindowManager';
-import AboutWindowManager from './main/views/aboutWindowManager';
-import parseCommandLine from './main/utils/functions/parseCommandLine';
-import configInitialize from './main/utils/functions/configInitialize';
+import HardwareWindowManager from './views/hardwareWindowManager';
+import MainWindowManager from './views/mainWindowManager';
+import AboutWindowManager from './views/aboutWindowManager';
+import parseCommandLine from './utils/functions/parseCommandLine';
+import configInitialize from './utils/functions/configInitialize';
+import createLogger from './utils/functions/createLogger';
 
-import('./main/ipcMainHelper');
-import('./main/utils/functions/globalShortCutRegister');
+import('./ipcMainHelper');
+import('./utils/functions/globalShortCutRegister');
 
+const logger = createLogger('main/main.ts');
 const commandLineOptions: Readonly<CommandLineOptions> = parseCommandLine(process.argv.slice(1));
 const configurations: Readonly<FileConfigurations> = configInitialize(commandLineOptions.config);
 const runtimeProperties: RuntimeGlobalProperties = {
     roomIds: [],
-    workingPath: commandLineOptions.file || '',
+    file: commandLineOptions.file || '',
     appName: 'entry',
 };
 
 global.sharedObject = Object.assign({}, runtimeProperties, configurations, commandLineOptions);
 
 if (!app.requestSingleInstanceLock()) {
+    logger.verbose('App is already running');
     app.quit();
 } else {
     let mainWindow: MainWindowManager;
@@ -31,10 +34,8 @@ if (!app.requestSingleInstanceLock()) {
 
     app.on('open-file', function(event, pathToOpen) {
         if (process.platform === 'darwin') {
-            global.sharedObject.workingPath = pathToOpen;
-            if (mainWindow) {
-                mainWindow.loadProjectFromPath(pathToOpen);
-            }
+            logger.info(`[MacOS] open file event fired with ${pathToOpen}`);
+            global.sharedObject.file = pathToOpen;
         }
     });
 
@@ -50,6 +51,7 @@ if (!app.requestSingleInstanceLock()) {
                 mainWindow.activateWindow();
                 mainWindow.loadProjectFromPath(option.file);
             }
+            logger.info(`'second instance' event fired`);
         });
 
         ipcMain.on('forceClose', () => {
@@ -68,16 +70,15 @@ if (!app.requestSingleInstanceLock()) {
             event.sender.reload();
         });
 
-        ipcMain.on('openHardwareWindow', function(event: Electron.IpcMainEvent, arg: any) {
+        ipcMain.on('openHardwareWindow', function() {
             hardwareWindow.openHardwareWindow();
         });
 
-        ipcMain.on('openAboutWindow', function(event: Electron.IpcMainEvent, arg: any) {
+        ipcMain.on('openAboutWindow', function() {
             aboutWindow.openAboutWindow();
         });
 
-        ipcMain.on('closeAboutWindow', function(event: Electron.IpcMainEvent, arg: any) {
-            console.log('close About Window');
+        ipcMain.on('closeAboutWindow', function() {
             aboutWindow.closeAboutWindow();
         });
     });
@@ -91,7 +92,7 @@ process.on('uncaughtException', (error) => {
         detail: error.toString(),
         buttons: ['ignore', 'exit'],
     });
-    console.error(error.message, error.stack);
+    logger.error(`uncaughtException, ${error.message} ${error.stack}`);
     if (whichButtonClicked === 1) {
         process.exit(-1);
     }

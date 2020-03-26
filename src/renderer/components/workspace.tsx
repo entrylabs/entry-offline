@@ -28,6 +28,7 @@ interface IProps extends IReduxDispatch, IReduxState {
 class Workspace extends Component<IProps> {
     private lastHwName?: string;
     private projectSavedPath?: string;
+    private projectParent?: string;
     private container = React.createRef<HTMLDivElement>();
     private isFirstRender = true;
     private isSavingCanvasData = false;
@@ -35,8 +36,8 @@ class Workspace extends Component<IProps> {
     private defaultInitOption = {
         type: 'workspace',
         backpackDisable: true,
-        libDir: '../node_modules',
-        defaultDir: 'renderer/resources',
+        libDir: '../../../node_modules',
+        defaultDir: '../../renderer/resources',
         baseUrl: 'https://playentry.org',
         fonts: EntryStatic.fonts,
         textCodingEnable: true,
@@ -165,6 +166,9 @@ class Workspace extends Component<IProps> {
         });
         addEventListener('openSoundManager', () => {
             ModalHelper.showSoundPopup();
+        });
+        addEventListener('openTableManager', () => {
+            ModalHelper.showTablePopup();
         });
         addEventListener('openExpansionBlockManager', () => {
             ModalHelper.showExpansionPopup();
@@ -334,9 +338,10 @@ class Workspace extends Component<IProps> {
                 const project = Entry.exportProject();
                 project.isPracticalCourse = mode === 'practical_course';
                 project.name = projectName;
-                // project.parent = parent;
+                project.parent = this.projectParent;
 
                 await IpcRendererHelper.saveProject(project, filePath);
+                await RendererUtils.clearTempProject({ saveTemp: true });
                 this.projectSavedPath = filePath;
 
                 // 모달 해제 후 엔트리 토스트로 저장처리
@@ -430,10 +435,12 @@ class Workspace extends Component<IProps> {
 
         if (project) {
             this.projectSavedPath = project.savedPath || '';
+            this.projectParent = project.parent;
             projectWorkspaceMode = project.isPracticalCourse ? 'practical_course' : 'workspace';
             CommonActions.changeProjectName(project.name || RendererUtils.getDefaultProjectName());
         } else {
             delete this.projectSavedPath;
+            delete this.projectParent;
             CommonActions.changeProjectName(RendererUtils.getDefaultProjectName());
         }
 

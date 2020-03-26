@@ -1,10 +1,13 @@
-import { app, ipcMain, shell, systemPreferences,  IpcMainInvokeEvent } from 'electron';
+import { app, ipcMain, IpcMainInvokeEvent, shell, systemPreferences } from 'electron';
 import path from 'path';
 import MainUtils from './mainUtils';
+import DataTableManager from './dataTable/dataTableManager';
 import Constants from './constants';
 import CommonUtils from './commonUtils';
 import checkUpdateRequest from './utils/network/checkUpdate';
+import createLogger from './utils/functions/createLogger';
 
+const logger = createLogger('main/ipcMainHelper.ts');
 /**
  * ipc process 의 이벤트를 등록한다.
  * 실제 로직은 mainUtils 에서 동작한다.
@@ -14,7 +17,7 @@ import checkUpdateRequest from './utils/network/checkUpdate';
  * main.js 에서 선언되어있다.
  * 이 클래스의 ipc event 들은 mainWindow, workspace 와 관련이 있다.
  */
-class IpcMainHelper {
+new class {
     constructor() {
         ipcMain.handle('saveProject', this.saveProject.bind(this));
         ipcMain.handle('loadProject', this.loadProject.bind(this));
@@ -27,6 +30,8 @@ class IpcMainHelper {
         ipcMain.handle('importPictureFromCanvas', this.importPictureFromCanvas.bind(this));
         ipcMain.handle('importSounds', this.importSounds.bind(this));
         ipcMain.handle('importSoundsFromResource', this.importSoundsFromResource.bind(this));
+        ipcMain.handle('createTableInfo', this.createTables.bind(this));
+        ipcMain.handle('getTable', this.getTable.bind(this));
         ipcMain.handle('staticDownload', this.staticDownload.bind(this));
         ipcMain.handle('tempResourceDownload', this.tempResourceDownload.bind(this));
         ipcMain.handle('saveExcel', this.saveExcel.bind(this));
@@ -35,32 +40,38 @@ class IpcMainHelper {
         ipcMain.handle('checkUpdate', this.checkUpdate.bind(this));
         ipcMain.handle('quit', this.quitApplication.bind(this));
         ipcMain.handle('checkPermission', this.checkPermission.bind(this));
+        ipcMain.handle('getOpenSourceText', () => ''); // 별다른 표기 필요없음
     }
 
     async saveProject(event: IpcMainInvokeEvent, project: ObjectLike, targetPath: string) {
+        logger.verbose(`saveProject called, ${targetPath}`);
         return await MainUtils.saveProject(project, targetPath);
     }
 
     async loadProject(event: IpcMainInvokeEvent, filePath: string) {
+        logger.verbose(`loadProject called, ${filePath}`);
         try {
             MainUtils.backupTempProject();
             return await MainUtils.loadProject(filePath);
         } catch (e) {
-            console.error(e);
+            logger.error(`loadProject failed, ${e.message}`);
             MainUtils.rollbackTempProject(); // no await
             throw e;
         }
     }
 
     async resetSaveDirectory() {
+        logger.verbose('resetSaveDirectory called');
         await MainUtils.resetSaveDirectory();
     }
 
     async exportObject(event: IpcMainInvokeEvent, filePath: string, object: any) {
+        logger.verbose(`exportObject called, ${filePath}`);
         await MainUtils.exportObject(filePath, object);
     }
 
     async importObjects(event: IpcMainInvokeEvent, filePaths: string[]) {
+        logger.verbose(`importObjects called, ${filePaths}`);
         if (!filePaths || filePaths.length === 0) {
             return [];
         }
@@ -70,6 +81,7 @@ class IpcMainHelper {
 
     async importObjectsFromResource(event: IpcMainInvokeEvent, objects: ObjectLike[]) {
         if (!objects || objects.length === 0) {
+            logger.warn('importObjectsFromResource event called with no objects argument');
             return [];
         }
 
@@ -78,6 +90,7 @@ class IpcMainHelper {
 
     // 외부 이미지 업로드시.
     async importPictures(event: IpcMainInvokeEvent, filePaths: string[]) {
+        logger.verbose(`importPictures called ${filePaths}`);
         if (!filePaths || filePaths.length === 0) {
             return [];
         }
@@ -90,10 +103,12 @@ class IpcMainHelper {
     }
 
     async importPictureFromCanvas(event: IpcMainInvokeEvent, data: ObjectLike[]) {
+        logger.verbose('importPictureFromCanvas called');
         return await MainUtils.importPictureFromCanvas(data);
     }
 
     async importSounds(event: IpcMainInvokeEvent, filePaths: string[]) {
+        logger.verbose(`importSounds called ${filePaths}`);
         if (!filePaths || filePaths.length === 0) {
             return [];
         }
@@ -102,7 +117,15 @@ class IpcMainHelper {
     }
 
     async importSoundsFromResource(event: IpcMainInvokeEvent, sounds: ObjectLike[]) {
-        await MainUtils.importSoundsFromResource(sounds);
+        return await MainUtils.importSoundsFromResource(sounds);
+    }
+
+    async createTables(event: IpcMainInvokeEvent, filePaths: string[]) {
+        return await Promise.all(filePaths.map(DataTableManager.makeTableInfo.bind(DataTableManager)));
+    }
+
+    async getTable(event: IpcMainInvokeEvent, hashId: string) {
+        return DataTableManager.getTable(hashId);
     }
 
     /**
@@ -175,6 +198,7 @@ class IpcMainHelper {
 
     async checkPermission(event: IpcMainInvokeEvent, type: 'microphone' | 'camera') {
         if (process.platform === 'darwin') {
+            logger.info(`[MacOS] input Media ${type} permission requested,`);
             const accessStatus = systemPreferences.getMediaAccessStatus(type);
             if (accessStatus !== 'granted') {
                 await systemPreferences.askForMediaAccess('microphone');
@@ -182,15 +206,13 @@ class IpcMainHelper {
         }
     }
 
-    async checkUpdate(event: IpcMainInvokeEvent) {
+    async checkUpdate() {
         const data = await checkUpdateRequest();
         return [global.sharedObject.version, data];
     }
 
     openUrl(event: IpcMainInvokeEvent, url: string) {
+        logger.info(`openUrl called : ${url}`);
         shell.openExternal(url);
     }
-}
-
-const helper = new IpcMainHelper();
-export default helper;
+}();

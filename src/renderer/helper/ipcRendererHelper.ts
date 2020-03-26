@@ -97,6 +97,14 @@ export default class {
         return ipcInvoke<IEntry.Sound[]>('importSoundsFromResource', sounds);
     }
 
+    static createTableInfo(filePaths: string[]) {
+        return ipcInvoke('createTableInfo', filePaths);
+    }
+
+    static getTable(hashId: string) {
+        return ipcInvoke('getTable', hashId);
+    }
+
     static openHardwarePage() {
         window.openHardwarePage();
     }

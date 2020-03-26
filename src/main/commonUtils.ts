@@ -1,3 +1,8 @@
+import Puid from 'puid';
+import uid from 'uid';
+
+const puid = new Puid();
+
 /**
  * main, renderer process 에서 공용으로 사용하는 Utils.
  * 그러므로 이 클래스는 모듈 연결상 EndPoint 가 되어야 한다.
@@ -16,6 +21,14 @@ class CommonUtils {
         return Math.random()
             .toString(36)
             .substr(2, 4);
+    }
+
+    /**
+     * 16진수의 랜덤값을 설정한다. 이 값은 겹치지 않은 신규 파일명을 생성하는데 쓴다.
+     * @return {string}
+     */
+    static createFileId(): string {
+        return uid(8) + puid.generate();
     }
 
     /**

@@ -8,6 +8,11 @@ declare module 'entry-hw/*' {
     export = value;
 }
 
+declare module 'winston-daily-rotate-file' {
+    const value: any;
+    export default value;
+}
+
 declare module '@entrylabs/tool' {
     export const Popup: any;
 }
@@ -50,5 +55,12 @@ declare module 'excel4node' {
 
 declare module 'xml2js' {
     const value: any;
+    export = value;
+}
+
+declare module 'async-csv' {
+    const value: {
+        parse(csvString: string): Promise<string[][]>
+    };
     export = value;
 }

@@ -64,6 +64,9 @@ const getTemplate = function() {
                         Entry && Entry.dispatchEvent('redo');
                     },
                 },
+                { label: getLang('Menus.offline_cut'), accelerator: 'CmdOrCtrl+X', role: 'cut' },
+                { label: getLang('Menus.offline_copy'), accelerator: 'CmdOrCtrl+C', role: 'copy' },
+                { label: getLang('Menus.offline_paste'), accelerator: 'CmdOrCtrl+V', role: 'paste' },
             ],
         },
     ];
