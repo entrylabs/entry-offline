@@ -2649,9 +2649,9 @@ enhanced-resolve@^4.0.0, enhanced-resolve@^4.1.0:
     winston "^3.2.1"
     winston-daily-rotate-file "^4.4.2"
 
-"entry-js@git+https://github.com/entrylabs/entryjs.git#dist/offline_v2.0.19":
+"entry-js@git+https://github.com/entrylabs/entryjs.git#dist/offline_v2.0.20":
   version "0.0.0"
-  resolved "git+https://github.com/entrylabs/entryjs.git#503f4e63fb5f4b8eb8aaeba94890a6c623941531"
+  resolved "git+https://github.com/entrylabs/entryjs.git#82961b9fa48dd4f332c3dc6445d960a231ea3131"
 
 "entry-tool@git+https://github.com/entrylabs/entry-tool.git#v1.20200226.207":
   version "0.0.0"

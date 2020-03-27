@@ -41,7 +41,7 @@ class Workspace extends Component<IProps> {
         baseUrl: 'https://playentry.org',
         fonts: EntryStatic.fonts,
         textCodingEnable: true,
-        dataTableEnable: false,
+        dataTableEnable: true,
         paintMode: 'entry-paint',
     };
     state = {
