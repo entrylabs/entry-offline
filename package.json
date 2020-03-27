@@ -27,7 +27,7 @@
     "license": "MIT",
     "dependencies": {
         "async-csv": "^2.1.3",
-        "entry-hw": "git+https://github.com/entrylabs/entry-hw.git#dist/v1.9.4",
+        "entry-hw": "git+https://github.com/entrylabs/entry-hw.git#dist/v1.9.5",
         "entry-hw-server": "git+https://github.com/entrylabs/entry-hw-server.git#master",
         "entry-js": "git+https://github.com/entrylabs/entryjs.git#dist/offline_v2.0.19",
         "entry-tool": "git+https://github.com/entrylabs/entry-tool.git#v1.20200226.207",

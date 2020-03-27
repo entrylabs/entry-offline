@@ -2632,9 +2632,9 @@ enhanced-resolve@^4.0.0, enhanced-resolve@^4.1.0:
   version "2.0.0"
   resolved "git+https://github.com/entrylabs/entry-hw-server.git#68c36db097b2e92ac8ae8348e32e3e4cd86b0b9e"
 
-"entry-hw@git+https://github.com/entrylabs/entry-hw.git#dist/v1.9.4":
-  version "1.9.4"
-  resolved "git+https://github.com/entrylabs/entry-hw.git#2fc563ea4df196627ec0b07ffdcd61c79f9fcb23"
+"entry-hw@git+https://github.com/entrylabs/entry-hw.git#dist/v1.9.5":
+  version "1.9.5"
+  resolved "git+https://github.com/entrylabs/entry-hw.git#3feffbae952f408f634989520723f60b720f9c86"
   dependencies:
     cross-spawn "^7.0.0"
     fs-extra "^8.1.0"
@@ -2646,6 +2646,8 @@ enhanced-resolve@^4.0.0, enhanced-resolve@^4.1.0:
     socket.io "^2.2.0"
     socket.io-client "^2.2.0"
     tar "^6.0.1"
+    winston "^3.2.1"
+    winston-daily-rotate-file "^4.4.2"
 
 "entry-js@git+https://github.com/entrylabs/entryjs.git#dist/offline_v2.0.19":
   version "0.0.0"
