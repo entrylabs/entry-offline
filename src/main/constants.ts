@@ -9,7 +9,7 @@ export default class {
                 let result = fileUrl.replace(/%5C/gi, '\\'); // 1.6.x 버전 대응
                 if (result.startsWith('./bower_components')) { // 웹 기본 오브젝트 대응
                     result = result
-                        .replace('./bower_components', '../node_modules')
+                        .replace('./bower_components', '../../../node_modules')
                         .replace('entryjs', 'entry-js'); // 과거 웹 WS 대응
                 } else if (result.indexOf('temp') > -1) { // 일반 오브젝트 대응
                     result = result.substring(result.indexOf('temp'));
@@ -37,7 +37,7 @@ export default class {
                 if (result.startsWith('../node_modules')) {
                     result = result.replace('../node_modules','./bower_components');
                 }
-                
+
                 return result.substring(result.indexOf('temp'))
                     .replace(/\\/gi, '/')
                     .replace(/.*\/\//, ''); // 외부 접속 프로토콜 스키마 보안 대응
