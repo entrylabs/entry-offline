@@ -130,7 +130,4 @@ export default function() {
             }
         });
     };
-
-    // @ts-ignore
-    Entry.AI_UTILIZE_BLOCK.tts.api = `https://playentry.org${Entry.AI_UTILIZE_BLOCK.tts.api}`;
 }
