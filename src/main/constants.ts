@@ -9,7 +9,7 @@ export default class {
                 let result = fileUrl.replace(/%5C/gi, '\\'); // 1.6.x 버전 대응
                 if (result.startsWith('./bower_components')) { // 웹 기본 오브젝트 대응
                     result = result
-                        .replace('./bower_components', '../node_modules')
+                        .replace('./bower_components', '../../../node_modules')
                         .replace('entryjs', 'entry-js'); // 과거 웹 WS 대응
                 } else if (result.indexOf('temp') > -1) { // 일반 오브젝트 대응
                     result = result.substring(result.indexOf('temp'));
@@ -34,10 +34,10 @@ export default class {
 
                 // 웹 업로드시 bower 에서 받던 구조 그대로 사용할 것이므로, 그 사이에 혼동을 주지 않기 위해
                 // node_modules 로 링크되는 구조를 과거 로직으로 재치환 하여 export 함
-                if (result.startsWith('../node_modules')) {
-                    result = result.replace('../node_modules','./bower_components');
+                if (result.startsWith('../../../node_modules')) {
+                    result = result.replace('../../../node_modules','./bower_components');
                 }
-                
+
                 return result.substring(result.indexOf('temp'))
                     .replace(/\\/gi, '/')
                     .replace(/.*\/\//, ''); // 외부 접속 프로토콜 스키마 보안 대응
@@ -47,8 +47,8 @@ export default class {
                 result = result.replace(/.*\/\//, ''); // 외부 접속 프로토콜 스키마 보안 대응
                 if (result.startsWith('renderer')) {
                     result = result.replace('renderer', '.');
-                } else if (result.startsWith('../node_modules')) {
-                    result = result.replace('../node_modules','./bower_components');
+                } else if (result.startsWith('../../../node_modules')) {
+                    result = result.replace('../../../node_modules','./bower_components');
                 } else {
                     result = undefined;
                 }
