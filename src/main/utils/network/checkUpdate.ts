@@ -3,7 +3,9 @@ import createLogger from '../functions/createLogger';
 
 const logger = createLogger('CheckUpdate');
 
-export default () => new Promise((resolve, reject) => {
+type Response = { hasNewVersion: boolean, version: string };
+
+export default (): Promise<Response> => new Promise((resolve) => {
     const { baseUrl, version } = global.sharedObject;
 
     const request = net.request({
@@ -21,20 +23,27 @@ export default () => new Promise((resolve, reject) => {
             body += chunk.toString();
         });
         res.on('end', () => {
-            let data = {};
+            let data: Response = {
+                hasNewVersion: false,
+                version: '0.0.0',
+            };
             try {
-                data = JSON.parse(body);
+                data = JSON.parse(body) as Response;
                 logger.info(`response : ${JSON.stringify(data)}`);
             } catch (e) {
                 logger.error(`response json parse error, ${e.message}`);
                 console.log(e);
-                reject(e);
+            } finally {
+                resolve(data);
             }
-            resolve(data);
         });
     });
     request.on('error', (err) => {
         logger.error(`request error, ${err.name} ${err.message}`);
+        resolve({
+            hasNewVersion: false,
+            version: '0.0.0',
+        });
     });
     request.setHeader('content-type', 'application/json; charset=utf-8');
     request.write(param);
