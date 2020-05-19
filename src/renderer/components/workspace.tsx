@@ -38,7 +38,7 @@ class Workspace extends Component<IProps> {
         backpackDisable: true,
         libDir: '../../../node_modules',
         defaultDir: '../../renderer/resources',
-        baseUrl: 'https://playentry.org',
+        baseUrl: 'http://127.0.0.1:23518',
         fonts: EntryStatic.fonts,
         textCodingEnable: true,
         dataTableEnable: true,
@@ -460,6 +460,7 @@ class Workspace extends Component<IProps> {
         this.isFirstRender = false;
         Entry.init(this.container.current as HTMLDivElement, this.initOption);
         entryPatch();
+        await Entry.loadExternalModules(project);
         this.addEntryEvents();
         Entry.loadProject(project);
 

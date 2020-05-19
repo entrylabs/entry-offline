@@ -326,6 +326,7 @@ declare class Entry {
     static loadProject: (project: IEntry.Project) => void;
     static disposeContainer: () => void;
     static init: (container: HTMLDivElement, option: IEntry.EntryOptions) => void;
+    static loadExternalModules: (moduleNames: string[]) => void;
 
     // 엔트리 네임스페이스에 할당되어있는 특정 변수들
     static type: WorkspaceMode;
