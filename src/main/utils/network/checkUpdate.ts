@@ -4,16 +4,16 @@ import createLogger from '../functions/createLogger';
 const logger = createLogger('CheckUpdate');
 
 export default () => new Promise((resolve, reject) => {
-    const { baseUrl, version } = global.sharedObject;
+    const { updateCheckUrl, version } = global.sharedObject;
 
     const request = net.request({
         method: 'POST',
-        url: `${baseUrl}/api/checkVersion`,
+        url: updateCheckUrl,
     });
 
     const param = JSON.stringify({ category: 'offline', version });
 
-    logger.info(`request url: ${baseUrl}/api/checkVersion param: ${param}`);
+    logger.info(`request url: ${updateCheckUrl} param: ${param}`);
 
     request.on('response', (res) => {
         let body = '';

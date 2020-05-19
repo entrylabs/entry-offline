@@ -20,11 +20,11 @@ declare namespace NodeJS {
 
 // configuration from config file
 declare type CommonConfigurations = {
-    baseUrl: string;
+    updateCheckUrl: string;
 }
 
 declare type FileConfigurations = CommonConfigurations & {
-    baseUrl: string,
+    updateCheckUrl: string,
 }
 
 // CommandLine Options

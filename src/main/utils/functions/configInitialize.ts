@@ -10,7 +10,7 @@ const logger = createLogger('ConfigInitialize');
  * 외부 config 파일이 존재하지 않는 경우의 기본값.
  */
 const defaultConfigSchema: FileConfigurations = {
-    'baseUrl': 'https://playentry.org',
+    'updateCheckUrl': 'https://playentry.org',
 };
 
 function getExtraResourcePath() {
