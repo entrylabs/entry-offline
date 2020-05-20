@@ -16,7 +16,6 @@ const properties: {
     pair: [
         ['version', 'v'],
         ['file', 'f'],
-        ['baseUrl', 'h'],
         ['config', 'c'],
     ],
 };
