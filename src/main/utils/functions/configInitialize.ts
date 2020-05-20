@@ -13,16 +13,8 @@ const defaultConfigSchema: FileConfigurations = {
     'baseUrl': 'https://playentry.org',
 };
 
-function getExtraResourcePath() {
-    const appPath = app.getAppPath();
-    if (appPath.indexOf('app.asar') > -1) {
-        return path.join(appPath, '..');
-    }
-    return appPath;
-}
-
 export default (configName: string = 'ko'): Readonly<FileConfigurations> => {
-    const configFilePath = path.join(getExtraResourcePath(), 'config', `config.${configName}.json`);
+    const configFilePath = path.join(app.getAppPath(), 'config', `config.${configName}.json`);
 
     logger.info(`load ${configFilePath}...`);
 
