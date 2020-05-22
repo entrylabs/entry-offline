@@ -1,5 +1,5 @@
 import { app } from 'electron';
-import { reduce, toPairs, merge } from 'lodash';
+import { merge, reduce, toPairs } from 'lodash';
 import path from 'path';
 import fs from 'fs';
 import createLogger from './createLogger';
@@ -10,7 +10,9 @@ const logger = createLogger('ConfigInitialize');
  * 외부 config 파일이 존재하지 않는 경우의 기본값.
  */
 const defaultConfigSchema: FileConfigurations = {
-    'updateCheckUrl': 'https://playentry.org',
+    updateCheckUrl: 'https://playentry.org',
+    moduleResourceUrl: 'http://localhost:23518/modules',
+    remoteModuleResourceUrl: 'http://playentry.org/modules',
 };
 
 export default (configName: string = 'ko'): Readonly<FileConfigurations> => {

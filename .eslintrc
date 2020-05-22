@@ -12,13 +12,16 @@
     }
   },
   "env": {
-    "browser": true
+    "browser": true,
+    "commonjs": true,
+    "node": true,
+    "mocha": true
   },
   "globals": {
     "Entry": true,
     "EntryStatic": true,
     "Lang": true,
-    "entrylms": true,
+    "entrylms": true
   },
   "rules": {
     "no-console": "off",
