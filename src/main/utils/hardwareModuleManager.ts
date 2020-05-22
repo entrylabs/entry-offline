@@ -47,7 +47,7 @@ class HardwareModuleManager {
         return this._moduleList;
     }
 
-    constructor({ initialRefresh = true, localModulePath, remoteModuleUrl }:InitialOptions) {
+    constructor({ initialRefresh = true, localModulePath, remoteModuleUrl }: InitialOptions) {
         this.remoteModuleUrl = remoteModuleUrl;
         this.localModulePath = localModulePath;
         this._moduleList = [];
@@ -68,6 +68,7 @@ class HardwareModuleManager {
         if (!isEqual(this._moduleList, result)) {
             this._moduleList = result;
             //TODO newList 의 값들은 전부 서버에서 다시 다운 받아야함
+            await Promise.all(newList.map(this.refreshLocalModuleFile.bind(this)));
         }
     }
 
@@ -91,8 +92,19 @@ class HardwareModuleManager {
         return { result, newList };
     }
 
-    private refreshLocalModuleFile(moduleName: string) {
+    private async refreshLocalModuleFile(hardwareMetadata: IHardwareModule) {
         // 파일이 있는지 확인
+        // const imageTargetPath = path.join(this.localModulePath, path.normalize(hardwareMetadata.files.image));
+        // const blockTargetPath = path.join(this.localModulePath, path.normalize(hardwareMetadata.files.block));
+        // const moduleTargetPath = path.join(this.localModulePath, path.normalize(hardwareMetadata.files.module));
+
+        await Promise.all(Object.entries(hardwareMetadata.files).map(async ([key, value]) => {
+            const requestUrl = `${this.remoteModuleUrl}/${hardwareMetadata.moduleName}/${hardwareMetadata.version}/${key}`;
+            const response = await fetch(requestUrl);
+            const responseBody = await response.arrayBuffer();
+            await fs.ensureDir(path.join(this.localModulePath, hardwareMetadata.moduleName));
+            await fs.writeFile(path.join(this.localModulePath, hardwareMetadata.moduleName, key), responseBody);
+        }));
         // 파일이 없으면, request 를 보내서 채워넣음
         // 파일이 있으면 그대로 넘어감
     }
