@@ -460,7 +460,9 @@ class Workspace extends Component<IProps> {
         this.isFirstRender = false;
         Entry.init(this.container.current as HTMLDivElement, this.initOption);
         entryPatch();
-        await Entry.loadExternalModules(project);
+        if (project) {
+            await Entry.loadExternalModules(project);
+        }
         this.addEntryEvents();
         Entry.loadProject(project);
 

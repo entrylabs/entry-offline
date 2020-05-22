@@ -19,12 +19,10 @@ declare namespace NodeJS {
 }
 
 // configuration from config file
-declare type CommonConfigurations = {
-    updateCheckUrl: string;
-}
-
-declare type FileConfigurations = CommonConfigurations & {
-    updateCheckUrl: string,
+declare type FileConfigurations = {
+    updateCheckUrl: string; // for offline version check
+    remoteModuleResourceUrl: string; // for offline's synchronize module list
+    moduleResourceUrl: string; // for hardware's remote module request
 }
 
 // CommandLine Options
@@ -32,7 +30,7 @@ declare type CommandLineFlags = {
     debug?: boolean;
 }
 
-declare type CommandLinePairs = Partial<CommonConfigurations> & {
+declare type CommandLinePairs = Partial<FileConfigurations> & {
     version?: string;
     file?: string;
     config?: string;
