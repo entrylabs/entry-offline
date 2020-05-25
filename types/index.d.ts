@@ -312,6 +312,7 @@ declare class Entry {
     static Func: any;
     static expansionBlocks: any[];
     static aiUtilizeBlocks: any[];
+    static aiLearning: any;
 
     // 엔트리 네임스페이스에 할당되어있는 특정 함수들
     static generateHash: () => string;
