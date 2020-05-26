@@ -2,7 +2,7 @@ import path from 'path';
 import fs from 'fs-extra';
 import unionWith from 'lodash/unionWith';
 import isEqual from 'lodash/isEqual';
-import fetch from 'isomorphic-unfetch';
+import axios from 'axios';
 import createDebug from 'debug';
 
 const debug = createDebug('HardwareModuleManager');
@@ -80,7 +80,7 @@ class HardwareModuleManager {
         debug('localModuleList\n%O', localModuleList);
         debug('remoteModuleList\n%O', remoteModuleList);
 
-        const newList: IHardwareModule[] = [];
+        let newList: IHardwareModule[] = [];
         const result = unionWith(localModuleList, remoteModuleList, (remoteElem, localElem) => {
             const isDuplicated =
                 isEqual(remoteElem.moduleName, localElem.moduleName) &&
@@ -88,6 +88,9 @@ class HardwareModuleManager {
             !isDuplicated && newList.push(remoteElem);
             return isDuplicated;
         });
+        if (localModuleList.length === 0) {
+            newList = remoteModuleList;
+        }
 
         return { result, newList };
     }
@@ -99,11 +102,21 @@ class HardwareModuleManager {
         // const moduleTargetPath = path.join(this.localModulePath, path.normalize(hardwareMetadata.files.module));
 
         await Promise.all(Object.entries(hardwareMetadata.files).map(async ([key, value]) => {
-            const requestUrl = `${this.remoteModuleUrl}/${hardwareMetadata.moduleName}/${hardwareMetadata.version}/${key}`;
-            const response = await fetch(requestUrl);
-            const responseBody = await response.arrayBuffer();
-            await fs.ensureDir(path.join(this.localModulePath, hardwareMetadata.moduleName));
-            await fs.writeFile(path.join(this.localModulePath, hardwareMetadata.moduleName, key), responseBody);
+            try {
+                const requestUrl = `${this.remoteModuleUrl}/${hardwareMetadata.moduleName}/files/${key}`;
+                const response = await axios({
+                    url: requestUrl,
+                    method: 'GET',
+                    responseType: 'arraybuffer'
+                });
+                await fs.ensureDir(path.join(this.localModulePath, hardwareMetadata.moduleName));
+                await fs.writeFile(
+                    path.join(this.localModulePath, hardwareMetadata.moduleName, key),
+                    Buffer.from(response.data, 'binary')
+                );
+            } catch (e) {
+                console.error(e);
+            }
         }));
         // 파일이 없으면, request 를 보내서 채워넣음
         // 파일이 있으면 그대로 넘어감
@@ -121,8 +134,8 @@ class HardwareModuleManager {
 
     private async getRemoteModuleList(): Promise<IHardwareModule[]> {
         try {
-            const response = await fetch(this.remoteModuleUrl);
-            return await response.json();
+            const response = await axios.get(this.remoteModuleUrl);
+            return await response.data;
         } catch (e) {
             debug('getRemoteModuleList failed with error %O', e);
             return [];

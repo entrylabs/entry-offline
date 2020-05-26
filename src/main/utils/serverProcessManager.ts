@@ -1,43 +1,29 @@
 import EntryServer from 'entry-hw-server';
+import HardwareModuleManager from './hardwareModuleManager';
 import path from 'path';
 
 class ServerProcessManager {
     private readonly childProcess: any;
+    private readonly moduleManager: HardwareModuleManager;
     private router: any;
 
     constructor() {
+        console.log(path.resolve(__dirname, '..', '..', '..', 'modules'));
+        this.moduleManager = new HardwareModuleManager({
+            initialRefresh: false,
+            remoteModuleUrl: 'http://dev.playentry.org/modules',
+            localModulePath: path.resolve(__dirname, '..', '..', '..', 'modules'),
+        });
         this.childProcess = new EntryServer({
             http: true,
-            handleModuleListRequest: () => {
-                return [
-                    {
-                        'moduleName': 'microbitBle',
-                        'version': '1.0.0',
-                        'files': {
-                            'image': '\\modules\\microbitBle\\1.0.0\\microbitBle.png',
-                            'block': '\\modules\\microbitBle\\1.0.0\\block_microbit_ble.js',
-                            'module': '\\modules\\microbitBle\\1.0.0\\microbitBle.zip',
-                        },
-                        'properties': {
-                            'platform': [
-                                'win32',
-                                'darwin',
-                            ],
-                            'category': 'board',
-                            'id': 'F00101',
-                        },
-                        'sha1': 'dummy',
-                        'title': {
-                            'en': 'Microbit BLE',
-                            'ko': '마이크로빗 무선',
-                        },
-                        'type': 'hardware',
-                    },
-                ];
+            handleModuleListRequest: async () => {
+                await this.moduleManager.refreshModuleList();
+                return await this.moduleManager.currentModuleList;
             },
-            handleModuleFileRequest: (moduleName: string, version: string, type: string) => {
-                console.log(moduleName, version, type);
-                return path.join(__dirname, '..', '..', 'renderer', 'resources', 'images', 'gnb', 'btn_workspace_undo_textbook_mode.png');
+            handleModuleFileRequest: (moduleName: string, type: string) => {
+                console.log(moduleName, type);
+                // return path.join(__dirname, '..', '..', 'renderer', 'resources', 'images', 'gnb', 'btn_workspace_undo_textbook_mode.png');
+                return this.moduleManager.getModuleFilePath(moduleName, type as any);
             },
         });
     }
