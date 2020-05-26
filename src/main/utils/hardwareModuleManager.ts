@@ -38,10 +38,10 @@ export type IHardwareModule = {
 }
 
 class HardwareModuleManager {
-    private localModulePath: string;
-    private remoteModuleUrl: string;
+    private readonly localModulePath: string;
+    private readonly remoteModuleUrl: string;
 
-    private _moduleList: any[];
+    private _moduleList: IHardwareModule[];
 
     get currentModuleList() {
         return this._moduleList;
@@ -56,8 +56,8 @@ class HardwareModuleManager {
         }
     }
 
-    public getModuleFilePath(moduleName: string, type: 'image' | 'module') {
-
+    public getModuleFilePath(moduleName: string, type: 'image' | 'module' | 'block'): string  {
+        return path.join(this.localModulePath, moduleName, type);
     }
 
     public async refreshModuleList(): Promise<void> {

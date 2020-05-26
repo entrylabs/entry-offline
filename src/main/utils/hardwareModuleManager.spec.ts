@@ -1,7 +1,10 @@
 import path from 'path';
-import { assert } from 'chai';
+import chai, { assert } from 'chai';
+import chaifs from 'chai-fs';
 import fs from 'fs-extra';
 import HardwareModuleManager, { IHardwareModule } from './hardwareModuleManager';
+
+chai.use(chaifs);
 
 describe('HardwareModuleManager 테스트', function() {
     const devRemoteModuleUrl = 'http://dev.playentry.org/modules';
@@ -50,6 +53,22 @@ describe('HardwareModuleManager 테스트', function() {
         assert.isArray(currentModuleList);
         assert.deepInclude<IHardwareModule>(currentModuleList, dummyHardwareList[0]);
         assert.isAbove(currentModuleList.length, 1);
+    });
+
+    it('가져온 디바이스의 파일 확인', async function() {
+        await hardwareModuleManager.refreshModuleList();
+
+        const currentModuleList = hardwareModuleManager.currentModuleList;
+        const firstIndexDevice = currentModuleList.find(({moduleName}) => moduleName === 'microbitBle');
+
+        const {moduleName} = firstIndexDevice || {};
+
+        if (!moduleName) {
+            assert.fail();
+        }
+        assert.isFile(hardwareModuleManager.getModuleFilePath(moduleName, 'block'));
+        assert.isFile(hardwareModuleManager.getModuleFilePath(moduleName, 'image'));
+        assert.isFile(hardwareModuleManager.getModuleFilePath(moduleName, 'module'));
     });
 
     afterEach(function() {
