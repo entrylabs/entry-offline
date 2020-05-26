@@ -15,6 +15,13 @@ EntryStatic.getAllBlocks = () => {
             arduino.blocks.splice(index, 1);
         }
     });
+
+    const aiModelTrainCategory = _.find(allBlocks, ['category', 'ai_utilize']);
+    aiModelTrainCategory.blocks.forEach((block, index) => {
+        if (['aiUtilizeModelTrainButton'].indexOf(block) !== -1) {
+            aiModelTrainCategory.blocks.splice(index, 1);
+        }
+    });
     return allBlocks;
 };
 
