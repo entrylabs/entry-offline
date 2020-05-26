@@ -8,7 +8,6 @@ class ServerProcessManager {
     private router: any;
 
     constructor() {
-        console.log(path.resolve(__dirname, '..', '..', '..', 'modules'));
         this.moduleManager = new HardwareModuleManager({
             initialRefresh: false,
             remoteModuleUrl: 'http://dev.playentry.org/modules',
