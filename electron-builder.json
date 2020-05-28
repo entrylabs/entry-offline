@@ -52,9 +52,6 @@
         "!src/**/*.map",
         "!src/**/*.scss",
         "!node_modules/entry-hw/app/server",
-        "!node_modules/entry-hw/app/modules",
-        "!node_modules/entry-hw/app/firmwares",
-        "!node_modules/entry-hw/app/drivers",
         {
             "from": "node_modules/entry-js",
             "to": "node_modules/entry-js"
@@ -64,16 +61,8 @@
             "to": "node_modules/entry-tool"
         }
     ],
-    "extraResources": [
-        "config/**/*",
-        {
-            "from": "node_modules/entry-hw/app",
-            "to": "",
-            "filter": ["modules/**/*", "firmwares/**/*", "drivers/**/*"]
-        }
-    ],
     "electronCompile": false,
-    "asar": true,
+    "asar": false,
     "appId": "org.playentry.entry",
     "productName": "Entry",
     "afterSign": "scripts/notarize.js",
