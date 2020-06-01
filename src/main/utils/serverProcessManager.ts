@@ -22,7 +22,6 @@ class ServerProcessManager {
             },
             handleModuleFileRequest: (moduleName: string, type: string) => {
                 console.log(moduleName, type);
-                // return path.join(__dirname, '..', '..', 'renderer', 'resources', 'images', 'gnb', 'btn_workspace_undo_textbook_mode.png');
                 return this.moduleManager.getModuleFilePath(moduleName, type as any);
             },
         });

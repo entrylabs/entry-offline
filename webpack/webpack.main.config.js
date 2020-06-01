@@ -3,6 +3,8 @@ const merge = require('webpack-merge');
 const common = require('./webpack.common.config');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
+const webpackIncludeThirdParty = ['entry-hw-server'];
+
 const setting = {
     target: 'electron-main',
     entry: './src/main/main.ts',
@@ -12,7 +14,7 @@ const setting = {
     },
     externals: [
         function(_, request, callback) {
-            if (!/^\..*/.test(request)) {
+            if (!webpackIncludeThirdParty.find((lib) => request.indexOf(lib) > -1) && !/^\..*/.test(request)) {
                 return callback(null, `commonjs ${request}`);
             }
             callback();

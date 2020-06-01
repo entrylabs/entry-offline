@@ -49,7 +49,6 @@
         "src/preload_build",
         "!src/main_build/hot",
         "!src/renderer_build/hot",
-        "!src/**/*.map",
         "!src/**/*.scss",
         "!node_modules/entry-hw/app/server",
         "config",
