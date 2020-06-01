@@ -107,12 +107,12 @@ class HardwareModuleManager {
                 const response = await axios({
                     url: requestUrl,
                     method: 'GET',
-                    responseType: 'arraybuffer'
+                    responseType: 'arraybuffer',
                 });
                 await fs.ensureDir(path.join(this.localModulePath, hardwareMetadata.moduleName));
                 await fs.writeFile(
                     path.join(this.localModulePath, hardwareMetadata.moduleName, key),
-                    Buffer.from(response.data, 'binary')
+                    Buffer.from(response.data, 'binary'),
                 );
             } catch (e) {
                 console.error(e);
@@ -123,6 +123,7 @@ class HardwareModuleManager {
     }
 
     private async getLocalModuleList(): Promise<IHardwareModule[]> {
+        await fs.ensureDir(this.localModulePath);
         const metadataFilePath = path.join(this.localModulePath, 'metadata.json');
         if (fs.existsSync(metadataFilePath)) {
             const metadataFileBuffer = await fs.readFile(metadataFilePath);

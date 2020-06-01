@@ -1,5 +1,5 @@
 {
     "updateCheckUrl":"https://playentry.org/api/checkVersion",
-    "remoteModuleResourceUrl":"https://playentry.org/modules",
+    "remoteModuleResourceUrl":"http://dev.playentry.org/modules",
     "moduleResourceUrl":"http://127.0.0.1:23518/modules"
 }

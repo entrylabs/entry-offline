@@ -24,15 +24,16 @@ describe('HardwareModuleManager 테스트', function() {
         type: 'hardware',
     }];
 
-    const hardwareModuleManager = new HardwareModuleManager({
-        remoteModuleUrl: devRemoteModuleUrl,
-        localModulePath: rootModuleFilePath,
-        initialRefresh: false,
-    });
+    let hardwareModuleManager: HardwareModuleManager;
 
     beforeEach(function() {
         fs.ensureDirSync(rootModuleFilePath);
         fs.writeFileSync(metadataFilePath, JSON.stringify(dummyHardwareList));
+        hardwareModuleManager = new HardwareModuleManager({
+            remoteModuleUrl: devRemoteModuleUrl,
+            localModulePath: rootModuleFilePath,
+            initialRefresh: false,
+        });
     });
 
     it('로컬 목록, 리모트 목록의 병합 정상 확인', async function() {
@@ -59,9 +60,9 @@ describe('HardwareModuleManager 테스트', function() {
         await hardwareModuleManager.refreshModuleList();
 
         const currentModuleList = hardwareModuleManager.currentModuleList;
-        const firstIndexDevice = currentModuleList.find(({moduleName}) => moduleName === 'microbitBle');
+        const firstIndexDevice = currentModuleList.find(({ moduleName }) => moduleName === 'microbitBle');
 
-        const {moduleName} = firstIndexDevice || {};
+        const { moduleName } = firstIndexDevice || {};
 
         if (!moduleName) {
             assert.fail();
