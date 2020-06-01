@@ -52,6 +52,7 @@
         "!src/**/*.map",
         "!src/**/*.scss",
         "!node_modules/entry-hw/app/server",
+        "config",
         {
             "from": "node_modules/entry-js",
             "to": "node_modules/entry-js"

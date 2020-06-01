@@ -1,4 +1,5 @@
 import EntryServer from 'entry-hw-server';
+import { app } from 'electron';
 import HardwareModuleManager from './hardwareModuleManager';
 import path from 'path';
 
@@ -10,8 +11,8 @@ class ServerProcessManager {
     constructor() {
         this.moduleManager = new HardwareModuleManager({
             initialRefresh: false,
-            remoteModuleUrl: 'http://dev.playentry.org/modules',
-            localModulePath: path.resolve(__dirname, '..', '..', '..', 'modules'),
+            remoteModuleUrl: global.sharedObject.remoteModuleResourceUrl,
+            localModulePath: path.resolve(app.getAppPath(), 'modules'),
         });
         this.childProcess = new EntryServer({
             http: true,
