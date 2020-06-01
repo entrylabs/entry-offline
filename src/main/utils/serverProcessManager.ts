@@ -1,11 +1,30 @@
 import EntryServer from 'entry-hw-server';
+import HardwareModuleManager from './hardwareModuleManager';
+import path from 'path';
 
 class ServerProcessManager {
     private readonly childProcess: any;
+    private readonly moduleManager: HardwareModuleManager;
     private router: any;
 
     constructor() {
-        this.childProcess = new EntryServer({http: true});
+        this.moduleManager = new HardwareModuleManager({
+            initialRefresh: false,
+            remoteModuleUrl: 'http://dev.playentry.org/modules',
+            localModulePath: path.resolve(__dirname, '..', '..', '..', 'modules'),
+        });
+        this.childProcess = new EntryServer({
+            http: true,
+            handleModuleListRequest: async () => {
+                await this.moduleManager.refreshModuleList();
+                return await this.moduleManager.currentModuleList;
+            },
+            handleModuleFileRequest: (moduleName: string, type: string) => {
+                console.log(moduleName, type);
+                // return path.join(__dirname, '..', '..', 'renderer', 'resources', 'images', 'gnb', 'btn_workspace_undo_textbook_mode.png');
+                return this.moduleManager.getModuleFilePath(moduleName, type as any);
+            },
+        });
     }
 
     setRouter(router: any) {

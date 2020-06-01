@@ -1,7 +1,5 @@
 {
-    "baseUrl": "https://playentry.org",
-    "baseResource": "/public/hardware",
-    "versionCheckApi": "/api/checkVersion",
-    "moduleCheckApi": "/api/hardware",
-    "moduleResourceUrl": "http://localhost:5200/modules"
+    "updateCheckUrl":"https://playentry.org/api/checkVersion",
+    "remoteModuleResourceUrl":"http://dev.playentry.org/modules",
+    "moduleResourceUrl":"http://127.0.0.1:23518/modules"
 }

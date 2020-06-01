@@ -56,15 +56,7 @@ export default class HardwareWindowManager {
                 ),
             },
         });
-        this.hardwareRouter = new HardwareMainRouter(this.hardwareWindow, new HardwareEntryServer(), {
-            moduleDownloadHandler: (moduleName: string) => {
-                console.log('moduleDownloadHandler', moduleName);
-            },
-            moduleListRequestHandler: () => {
-                console.log('moduleListReuqestHandler');
-                return [];
-            },
-        });
+        this.hardwareRouter = new HardwareMainRouter(this.hardwareWindow, new HardwareEntryServer());
         this.hardwareWindow.setMenu(null);
         this.hardwareWindow.setMenuBarVisibility(false);
         this.hardwareWindow.loadURL(`file:///${path.resolve(

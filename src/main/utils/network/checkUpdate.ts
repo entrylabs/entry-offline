@@ -5,17 +5,17 @@ const logger = createLogger('CheckUpdate');
 
 type Response = { hasNewVersion: boolean, version: string };
 
-export default (): Promise<Response> => new Promise((resolve) => {
-    const { baseUrl, version } = global.sharedObject;
+export default (): Promise<Response> => new Promise((resolve, reject) => {
+    const { updateCheckUrl, version } = global.sharedObject;
 
     const request = net.request({
         method: 'POST',
-        url: `${baseUrl}/api/checkVersion`,
+        url: updateCheckUrl,
     });
 
     const param = JSON.stringify({ category: 'offline', version });
 
-    logger.info(`request url: ${baseUrl}/api/checkVersion param: ${param}`);
+    logger.info(`request url: ${updateCheckUrl} param: ${param}`);
 
     request.on('response', (res) => {
         let body = '';
