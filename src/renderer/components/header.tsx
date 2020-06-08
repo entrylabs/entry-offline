@@ -215,7 +215,7 @@ class Header extends Component<IProps, IState> {
     }
 
     async handleChangeWsMode(item: DropDownItemPair) {
-        if (EntryUtils.confirmProjectWillDismiss()) {
+        if (await EntryUtils.confirmProjectWillDismiss()) {
             const { PersistActions, onLoadProject } = this.props;
             const key = item[1];
             await ImportToggleHelper.changeEntryStatic(key);

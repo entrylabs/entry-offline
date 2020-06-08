@@ -378,7 +378,7 @@ class Workspace extends Component<IProps> {
 
     handleFileAction = async (type: string) => {
         if (type === 'new') {
-            if (EntryUtils.confirmProjectWillDismiss()) {
+            if (await EntryUtils.confirmProjectWillDismiss()) {
                 await RendererUtils.clearTempProject();
                 await this.loadProject();
             }

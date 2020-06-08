@@ -15,10 +15,10 @@ export default class {
      *
      * @return {boolean} 저장확인여부
      */
-    static confirmProjectWillDismiss() {
+    static async confirmProjectWillDismiss() {
         let confirmProjectDismiss = true;
         if (!Entry.stateManager.isSaved()) {
-            confirmProjectDismiss = window.confirm(RendererUtils.getLang('Menus.save_dismiss'));
+            confirmProjectDismiss = await entrylms.confirm(RendererUtils.getLang('Menus.save_dismiss'));
         }
 
         if (confirmProjectDismiss) {
