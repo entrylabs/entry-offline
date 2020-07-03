@@ -12,6 +12,7 @@ import BlockConverter from './blockConverter';
 import createLogger from './utils/functions/createLogger';
 
 const logger = createLogger('main/mainUtils.ts');
+const fsp = fs.promises;
 
 type ConvertResult = { filePath: string; svgPath?: string | undefined }
 /**
@@ -59,41 +60,30 @@ export default class MainUtils {
      */
     static async loadProject(filePath: string) {
         const baseAppPath = Constants.appPath;
-        const tempDirectoryPath = path.join(baseAppPath, 'temp');
-        await MainUtils.resetSaveDirectory();
+        const workingDirectoryPath = path.join(baseAppPath, 'temp');
+        const tempDirectoryPath = path.join(baseAppPath, 'uploads', CommonUtils.createFileId());
         await FileUtils.mkdirRecursive(tempDirectoryPath);
-        await FileUtils.unpack(filePath, baseAppPath, (path) => path.startsWith('temp/'));
+        await FileUtils.unpack(filePath, tempDirectoryPath, (path) => path.startsWith('temp/'));
 
-        return await new Promise((resolve, reject) => {
-            fs.readFile(
-                path.resolve(tempDirectoryPath, 'project.json'),
-                'utf8',
-                (err, data) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        const project = JSON.parse(data);
-                        if (project.objects[0] && project.objects[0].script.substr(0, 4) === '<xml') {
-                            BlockConverter.convert(project, (convertedProject: any) => {
-                                MainUtils.changeObjectsPath(
-                                    convertedProject.objects,
-                                    Constants.replaceStrategy.fromExternal,
-                                );
-                                convertedProject.savedPath = filePath; // real .ent file's path
-                                resolve(convertedProject);
-                            });
-                        } else {
-                            MainUtils.changeObjectsPath(
-                                project.objects,
-                                Constants.replaceStrategy.fromExternal,
-                            );
-                            project.savedPath = filePath; // real .ent file's path
-                            resolve(project);
-                        }
-                    }
-                },
-            );
-        });
+        const projectBuffer = await fsp.readFile(path.resolve(tempDirectoryPath, 'temp', 'project.json'));
+        let project = JSON.parse(projectBuffer.toString('utf8'));
+
+        if (project.objects[0] && project.objects[0].script.substr(0, 4) === '<xml') {
+            project = await BlockConverter.convert(project);
+        }
+
+        MainUtils.changeObjectsPath(
+            project.objects,
+            Constants.replaceStrategy.fromExternal,
+        );
+
+        project.savedPath = filePath; // real .ent file's path
+
+        // TODO temp 삭제
+        await MainUtils.resetSaveDirectory();
+        await FileUtils.move(path.join(tempDirectoryPath, 'temp'), workingDirectoryPath);
+
+        return project;
     }
 
     /**

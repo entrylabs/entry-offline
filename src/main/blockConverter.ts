@@ -207,7 +207,7 @@ function processBlock(block: any, thread: any) {
 }
 
 export default {
-    convert(project: any, cb: any) {
+    async convert(project: any) {
         logger.warn('legacy xml project request convert');
         logger.warn('project data is..');
         logger.warn(JSON.stringify(project));
@@ -217,7 +217,7 @@ export default {
 
         let done = _.after(functions.length, function() {
             done = _.after(objects.length, function() {
-                cb(project);
+                return project;
             });
 
             if (!objects.length) {
