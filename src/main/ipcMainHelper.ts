@@ -51,11 +51,9 @@ new class {
     async loadProject(event: IpcMainInvokeEvent, filePath: string) {
         logger.verbose(`loadProject called, ${filePath}`);
         try {
-            MainUtils.backupTempProject();
             return await MainUtils.loadProject(filePath);
         } catch (e) {
             logger.error(`loadProject failed, ${e.message}`);
-            MainUtils.rollbackTempProject(); // no await
             throw e;
         }
     }
