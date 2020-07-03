@@ -20,36 +20,6 @@ type ConvertResult = { filePath: string; svgPath?: string | undefined }
  * ipcMain 을 import 하여 사용하지 않는다. renderer Process 간 이벤트 관리는 ipcMainHelper 가 한다.
  */
 export default class MainUtils {
-    static backupTempProject() {
-        logger.info('tempProject backup');
-        const baseAppPath = Constants.appPath;
-        const tempDirectoryPath = path.join(baseAppPath, 'temp');
-        const rollbackDirectoryPath = path.join(baseAppPath, 'rollback');
-
-        if (FileUtils.isDirectoryExistSync(tempDirectoryPath)) {
-            FileUtils.move(tempDirectoryPath, rollbackDirectoryPath);
-        }
-    }
-
-    static async rollbackTempProject() {
-        logger.info('tempProject rollback');
-        const baseAppPath = Constants.appPath;
-        const tempDirectoryPath = path.join(baseAppPath, 'temp');
-        const rollbackDirectoryPath = path.join(baseAppPath, 'rollback');
-        if (FileUtils.isDirectoryExistSync(rollbackDirectoryPath)) {
-            await MainUtils.resetSaveDirectory();
-            FileUtils.move(rollbackDirectoryPath, tempDirectoryPath);
-        } else {
-            logger.warn('tempProject rollback executed but backup dir is not exist');
-        }
-    }
-
-    static async clearRollbackTempProject() {
-        const baseAppPath = Constants.appPath;
-        const rollbackDirectoryPath = path.join(baseAppPath, 'rollback');
-        await FileUtils.deleteFile(rollbackDirectoryPath);
-    }
-
     /**
      * ent 파일에서 프로젝트를 로드한다.
      * electron directory 에 압축해제 한 후,
@@ -79,7 +49,6 @@ export default class MainUtils {
 
         project.savedPath = filePath; // real .ent file's path
 
-        // TODO temp 삭제
         await MainUtils.resetSaveDirectory();
         await FileUtils.move(path.join(tempDirectoryPath, 'temp'), workingDirectoryPath);
 
