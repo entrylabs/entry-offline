@@ -48,13 +48,6 @@ new class {
         return await MainUtils.saveProject(project, targetPath);
     }
 
-    /**
-     * 로드 프로젝트 로직 개선 방법 (노트)
-     * 1. 프로젝트 위치를 랜덤으로 선정 (uploads/randomID) ...
-     * 2. 언팩
-     * 3. 언팩 완료 후 project.json 로드
-     * 4. 완료 후 프로젝트를 temp 로 이전 (이전은 temp 삭제 /
-     */
     async loadProject(event: IpcMainInvokeEvent, filePath: string) {
         logger.verbose(`loadProject called, ${filePath}`);
         try {
