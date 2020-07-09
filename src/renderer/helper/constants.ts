@@ -9,7 +9,7 @@ export default class {
     }
 
     static resourceImagePath(filename: string) {
-        return `${this.resourcePath}${this.resourceSubDirectoryPath(filename)}image${this.sep}`;
+        return `..${this.sep}..${this.sep}${this.resourcePath}${this.resourceSubDirectoryPath(filename)}image${this.sep}`;
     }
 
     static resourceThumbnailPath(filename: string) {
