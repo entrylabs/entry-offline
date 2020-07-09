@@ -38,7 +38,7 @@ class Workspace extends Component<IProps> {
         backpackDisable: true,
         libDir: '../../../node_modules',
         defaultDir: '../../renderer/resources',
-        baseUrl: 'http://127.0.0.1:23518',
+        baseUrl: 'https://playentry.org',
         fonts: EntryStatic.fonts,
         textCodingEnable: true,
         dataTableEnable: true,
