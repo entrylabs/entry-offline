@@ -75,4 +75,6 @@ window.checkPermission = async (type: 'microphone' | 'camera') => {
     await ipcRenderer.invoke('checkPermission', type);
 };
 
+window.ipcListen = ipcRenderer.on.bind(ipcRenderer);
+
 window.isOsx = process.platform === 'darwin';

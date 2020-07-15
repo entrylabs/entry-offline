@@ -5,12 +5,10 @@ import RendererUtils from '../helper/rendererUtils';
 import EntryUtils from '../helper/entry/entryUtils';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { CommonActionCreators } from '../store/modules/common';
-import { PersistActionCreators } from '../store/modules/persist';
+import { CommonActionCreators, ICommonState } from '../store/modules/common';
+import { IPersistState, PersistActionCreators } from '../store/modules/persist';
 import { Dropdown } from '@entrylabs/tool/component';
 import ImportToggleHelper from '../helper/importToggleHelper';
-import { IPersistState } from '../store/modules/persist';
-import { ICommonState } from '../store/modules/common';
 import { IStoreState } from '../store/modules';
 import { IMapDispatchToProps, IMapStateToProps } from '../store';
 
@@ -33,7 +31,6 @@ interface IProps extends IReduxDispatch, IReduxState {
 
 type DropDownItemPair = [string | ReactElement, string];
 
-/* global Entry */
 class Header extends Component<IProps, IState> {
     dropdownList: any;
 
@@ -240,12 +237,11 @@ class Header extends Component<IProps, IState> {
             }, common, programLanguageMode, executionStatus = { canRedo: false, canUndo: false },
         } = this.props;
         const { canRedo = false, canUndo = false } = executionStatus;
-        const { projectName = RendererUtils.getDefaultProjectName() } = common;
+        const { projectName = RendererUtils.getDefaultProjectName(), isValidProduct } = common;
         const { lang, mode } = persist;
         const { dropdownType } = this.state;
 
         return (
-            /* eslint-disable jsx-a11y/heading-has-content, jsx-a11y/anchor-is-valid */
             <header className={'common_gnb'}>
                 <h1 className={`${'logo'} ${'logo_gnb'}`}/>
                 <div className={'srch_box'}>
@@ -263,6 +259,13 @@ class Header extends Component<IProps, IState> {
                         />
                     </div>
                 </div>
+                {
+                    !isValidProduct &&
+                    <div className='invalidate_check_box'>
+                        <span>이 프로그램은 엔트리 공식 빌드가 아닙니다.</span>
+                    </div>
+                }
+
                 <div className={'group_box'}>
                     <div className={'group_inner'}>
                         {mode === 'workspace' &&
@@ -332,7 +335,7 @@ class Header extends Component<IProps, IState> {
                                     title={RendererUtils.getLang('Workspace.help')}
                                     className={`btn_work_space btn_workspace_help ${
                                         dropdownType === 'help' ? 'on' : ''
-                                    }`}
+                                        }`}
                                     ref={(dom) => (this.dropdownList.help = dom)}
                                     onClick={() => {
                                         this.handleDropdownClick('help');
