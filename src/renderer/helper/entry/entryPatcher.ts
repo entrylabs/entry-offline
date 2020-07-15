@@ -130,6 +130,4 @@ export default function() {
             }
         });
     };
-
-    Entry.aiLearning.openInputPopup = () => {};
 }
