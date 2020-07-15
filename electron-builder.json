@@ -44,7 +44,8 @@
         }
     ],
     "electronCompile": false,
-    "asar": false,
+    "asar": true,
+    "asarUnpack": ["node_modules/entry-hw/**/*"],
     "appId": "org.playentry.entry",
     "productName": "Entry",
     "afterSign": "scripts/notarize_app.js",
