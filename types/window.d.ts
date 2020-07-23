@@ -10,6 +10,8 @@ declare interface Window extends Preload {
 
 declare interface Preload {
     dialog: Electron.Dialog;
+    ipcListen:
+        (channel: string, listener: (event: Electron.IpcRendererEvent, ...args: any[]) => void) => Electron.IpcRenderer;
     onPageLoaded(callback: () => void): void;
     getSharedObject(): GlobalConfigurations;
     initNativeMenu(): void;

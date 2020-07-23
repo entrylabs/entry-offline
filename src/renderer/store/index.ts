@@ -1,7 +1,8 @@
-import { createStore, Dispatch } from 'redux';
+import { createStore, Dispatch, Store } from 'redux';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import reducers, { IStoreState } from './modules';
+import ipcRendererListen from './ipcRendererListener';
 
 // persist store configure
 const persistConfig = {
@@ -13,8 +14,9 @@ const persistConfig = {
 const persistCombinedReducer = persistReducer(persistConfig, reducers);
 
 function configureStore() {
-    const store = createStore(persistCombinedReducer);
+    const store: Store = createStore(persistCombinedReducer);
     const persistor = persistStore(store);
+    ipcRendererListen(store);
     return { store, persistor };
 }
 
