@@ -101,13 +101,13 @@ Section $(TEXT_ENTRY_TITLE) SectionEntry
 
   ; Put file there
   SetOutPath "$INSTDIR\locales"
-  File "..\out\Entry-win32-x64\win-unpacked\locales\*.*"
+  File "..\dist\Entry-win32-x64\win-unpacked\locales\*.*"
 
   SetOutPath "$INSTDIR\resources"
-  File /r "..\out\Entry-win32-x64\win-unpacked\resources\*.*"
+  File /r "..\dist\Entry-win32-x64\win-unpacked\resources\*.*"
 
   SetOutPath "$INSTDIR"
-  File "..\out\Entry-win32-x64\win-unpacked\*.*"
+  File "..\dist\Entry-win32-x64\win-unpacked\*.*"
   File "icon.ico"
 
   WriteRegStr HKCR ".ent" "" "${PRODUCT_NAME}"

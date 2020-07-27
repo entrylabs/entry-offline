@@ -16,7 +16,13 @@
         ]
     },
     "win": {
-        "target": "dir"
+        "target": "dir",
+        "extraResources": [
+            {
+                "from": "validator/win/validator.exe",
+                "to": ""
+            }
+        ]
     },
     "fileAssociations": [
         {
