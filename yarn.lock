@@ -2836,14 +2836,14 @@ enquirer@^2.3.5:
   version "2.0.0"
   resolved "git+https://github.com/entrylabs/entry-hw-server.git#83826252cf79ce0f39650ac76627ab474bb3a363"
 
-"entry-hw@git+https://github.com/entrylabs/entry-hw.git#dist/v1.9.8":
-  version "1.9.8"
-  resolved "git+https://github.com/entrylabs/entry-hw.git#689f72039336c0c9f23af855a90e6147000b1fcc"
+"entry-hw@git+https://github.com/entrylabs/entry-hw.git#dist/v1.9.9":
+  version "1.9.9"
+  resolved "git+https://github.com/entrylabs/entry-hw.git#23355bff9da94197ac3d8545e0543620084ce66a"
   dependencies:
     cross-spawn "^7.0.0"
     fs-extra "^8.1.0"
-    lodash "^4.17.13"
-    node-hid "^1.1.0"
+    lodash "^4.17.19"
+    node-hid "^1.3.0"
     rimraf "^3.0.2"
     semver "^7.1.1"
     serialport "^8.0.5"
@@ -2853,9 +2853,9 @@ enquirer@^2.3.5:
     winston "^3.2.1"
     winston-daily-rotate-file "^4.4.2"
 
-"entry-js@git+https://github.com/entrylabs/entryjs.git#dist/offline_v2.0.23":
+"entry-js@git+https://github.com/entrylabs/entryjs.git#dist/offline_v2.0.24":
   version "0.0.0"
-  resolved "git+https://github.com/entrylabs/entryjs.git#5d84b206c06e198cfd89fbbb84f2d8acb4487544"
+  resolved "git+https://github.com/entrylabs/entryjs.git#737465b30c431d7b14bcbfcab1ab0c69571dc1d5"
 
 "entry-tool@git+https://github.com/entrylabs/entry-tool.git#v1.20200226.207":
   version "0.0.0"
@@ -4882,7 +4882,7 @@ lodash.uniqueid@4.0.1:
   resolved "https://registry.yarnpkg.com/lodash.uniqueid/-/lodash.uniqueid-4.0.1.tgz#3268f26a7c88e4f4b1758d679271814e31fa5b26"
   integrity sha1-MmjyanyI5PSxdY1nknGBTjH6WyY=
 
-lodash@^4.0.0, lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.19, lodash@~4.17.10:
+lodash@^4.0.0, lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.19, lodash@~4.17.10:
   version "4.17.19"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.19.tgz#e48ddedbe30b3321783c5b4301fbd353bc1e4a4b"
   integrity sha512-JNvd8XER9GQX0v2qJgsaN/mzFCNA5BRe/j8JN9d+tWyGLSodKQHKFicdwNYzWwI3wjRnaKPsGj1XkBjx/F96DQ==
@@ -5417,7 +5417,7 @@ node-gyp@^6.0.1:
     tar "^4.4.12"
     which "^1.3.1"
 
-node-hid@^1.1.0:
+node-hid@^1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/node-hid/-/node-hid-1.3.0.tgz#346a468505cee13d69ccd760052cbaf749f66a41"
   integrity sha512-BA6G4V84kiNd1uAChub/Z/5s/xS3EHBCxotQ0nyYrUG65mXewUDHE1tWOSqA2dp3N+mV0Ffq9wo2AW9t4p/G7g==
