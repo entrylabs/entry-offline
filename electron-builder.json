@@ -53,6 +53,19 @@
         {
             "from": "node_modules/entry-tool",
             "to": "node_modules/entry-tool"
+        },
+        {
+            "from": "node_modules/entry-hw/app/modules",
+            "to": "modules"
+        },
+        {
+            "from": "node_modules/entry-hw/app/firmwares",
+            "to": "firmwares",
+            "filter": ["!examples/"]
+        },
+        {
+            "from": "node_modules/entry-hw/app/drivers",
+            "to": "drivers"
         }
     ],
     "electronCompile": false,
