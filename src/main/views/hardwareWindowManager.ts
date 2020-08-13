@@ -16,7 +16,7 @@ export default class HardwareWindowManager {
         this.hardwareWindow = undefined;
     }
 
-    openHardwareWindow() {
+    async openHardwareWindow() {
         if (!this.hardwareWindow) {
             this.createHardwareWindow();
         }
@@ -35,7 +35,7 @@ export default class HardwareWindowManager {
         hardwareWindow.focus();
     }
 
-    private createHardwareWindow() {
+    private async createHardwareWindow() {
         let title;
         if (app.getLocale() === 'ko') {
             title = '엔트리 하드웨어';
@@ -57,6 +57,7 @@ export default class HardwareWindowManager {
             },
         });
         this.hardwareRouter = new HardwareMainRouter(this.hardwareWindow, new HardwareEntryServer());
+        await this.hardwareRouter.initializeModuleFiles();
         this.hardwareWindow.setMenu(null);
         this.hardwareWindow.setMenuBarVisibility(false);
         this.hardwareWindow.loadURL(`file:///${path.resolve(

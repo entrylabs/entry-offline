@@ -43,7 +43,7 @@ new class {
         ipcMain.handle('getOpenSourceText', () => ''); // 별다른 표기 필요없음
     }
 
-    async saveProject(event: IpcMainInvokeEvent, project: ObjectLike, targetPath: string) {
+    async saveProject(event: IpcMainInvokeEvent, project: any, targetPath: string) {
         logger.verbose(`saveProject called, ${targetPath}`);
         return await MainUtils.saveProject(project, targetPath);
     }
@@ -77,7 +77,7 @@ new class {
         return await MainUtils.importObjects(filePaths);
     }
 
-    async importObjectsFromResource(event: IpcMainInvokeEvent, objects: ObjectLike[]) {
+    async importObjectsFromResource(event: IpcMainInvokeEvent, objects: any[]) {
         if (!objects || objects.length === 0) {
             logger.warn('importObjectsFromResource event called with no objects argument');
             return [];
@@ -96,11 +96,11 @@ new class {
         return await MainUtils.importPicturesToTemp(filePaths, event.sender);
     }
 
-    async importPicturesFromResource(event: IpcMainInvokeEvent, pictures: ObjectLike[]) {
+    async importPicturesFromResource(event: IpcMainInvokeEvent, pictures: any[]) {
         return await MainUtils.importPicturesFromResource(pictures);
     }
 
-    async importPictureFromCanvas(event: IpcMainInvokeEvent, data: ObjectLike[]) {
+    async importPictureFromCanvas(event: IpcMainInvokeEvent, data: any[]) {
         logger.verbose('importPictureFromCanvas called');
         return await MainUtils.importPictureFromCanvas(data);
     }
@@ -114,7 +114,7 @@ new class {
         return await MainUtils.importSoundsToTemp(filePaths);
     }
 
-    async importSoundsFromResource(event: IpcMainInvokeEvent, sounds: ObjectLike[]) {
+    async importSoundsFromResource(event: IpcMainInvokeEvent, sounds: any[]) {
         return await MainUtils.importSoundsFromResource(sounds);
     }
 

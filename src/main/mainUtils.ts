@@ -69,7 +69,7 @@ export default class MainUtils {
      * @param {string}destinationPath 저장위치 (파일명까지 포함)
      * @return {Promise} 성공시 resolve(), 실패시 reject(err)
      */
-    static async saveProject(project: ObjectLike, destinationPath: string) {
+    static async saveProject(project: any, destinationPath: string) {
         const sourcePath = app.getPath('userData');
         if (destinationPath.indexOf('.ent') === -1) {
             throw new Error('.ent only accepted');
@@ -116,7 +116,7 @@ export default class MainUtils {
     }
 
     static exportObject(filePath: string, object: any) {
-        return new Promise(async (resolve, reject) => {
+        return async () => {
             const { objects } = object;
 
             const objectId = CommonUtils.createFileId();
@@ -129,19 +129,14 @@ export default class MainUtils {
             const exportFileName = `${objectName}.eo`;
             const exportFile = path.resolve(exportDirectoryPath, '..', exportFileName);
 
-            try {
-                FileUtils.ensureDirectoryExistence(objectJsonPath);
-                await MainUtils.exportObjectTempFileTo(object, exportDirectoryPath);
+            FileUtils.ensureDirectoryExistence(objectJsonPath);
+            await MainUtils.exportObjectTempFileTo(object, exportDirectoryPath);
 
-                const objectData = typeof object === 'string' ? object : JSON.stringify(object);
-                await FileUtils.writeFile(objectData, objectJsonPath);
-                await FileUtils.pack(exportFile, filePath);
-                await FileUtils.removeDirectoryRecursive(path.join(exportDirectoryPath, '..'));
-                resolve();
-            } catch (e) {
-                reject(e);
-            }
-        });
+            const objectData = typeof object === 'string' ? object : JSON.stringify(object);
+            await FileUtils.writeFile(objectData, objectJsonPath);
+            await FileUtils.pack(exportFile, filePath);
+            await FileUtils.removeDirectoryRecursive(path.join(exportDirectoryPath, '..'));
+        };
     }
 
     /**
@@ -150,12 +145,12 @@ export default class MainUtils {
      * @param targetDir 저장할 위치
      * @return {Promise<any>}
      */
-    static exportObjectTempFileTo(object: ObjectLike, targetDir: string) {
+    static exportObjectTempFileTo(object: any, targetDir: string) {
         return new Promise((resolve, reject) => {
             try {
                 const copyObjectPromise: Promise<any>[] = [];
 
-                object.objects.forEach((object: ObjectLike) => {
+                object.objects.forEach((object: any) => {
                     object.sprite.sounds.forEach((sound: any) => {
                         copyObjectPromise.push(MainUtils.exportSoundTempFileTo(sound, targetDir));
                     });
@@ -183,7 +178,7 @@ export default class MainUtils {
      * @param targetDir 복사할 경로. 해당 경로 아래 /ab/cd/sound 가 생성된다.
      * @return {Promise<Object>} filename 이 변환된 sound object
      */
-    static async exportSoundTempFileTo(sound: ObjectLike, targetDir: string) {
+    static async exportSoundTempFileTo(sound: any, targetDir: string) {
         if (Constants.defaultSoundPath.includes(sound.fileurl)) {
             return sound;
         }
@@ -210,7 +205,7 @@ export default class MainUtils {
      * @param targetDir 복사할 경로. 해당 경로 아래 /ab/cd/images 와 thumb 가 생성된다.
      * @return {Promise<Object>} filename 이 변환된 picture object
      */
-    static async exportPictureTempFileTo(picture: ObjectLike, targetDir: string) {
+    static async exportPictureTempFileTo(picture: any, targetDir: string) {
         if (Constants.defaultPicturePath.includes(picture.fileurl)) {
             return picture;
         }
@@ -249,136 +244,128 @@ export default class MainUtils {
     }
 
     static importObject(objectPath: string) {
-        return new Promise(async (resolve, reject) => {
+        return async () => {
             const newObjectId = CommonUtils.createFileId();
             const unpackDirectoryPath = Constants.tempPathForExport(newObjectId);
             const unpackedDirectoryPath = path.join(unpackDirectoryPath, 'object');
 
-            try {
-                await FileUtils.mkdirRecursive(unpackDirectoryPath); // import 용 디렉토리 생성
-                await FileUtils.unpack(objectPath, unpackDirectoryPath); // 압축 해제
-                // object.json 읽어오기
-                const objectResult = JSON.parse(
-                    await FileUtils.readFile(path.join(unpackedDirectoryPath, 'object.json'), 'utf8'),
-                );
+            await FileUtils.mkdirRecursive(unpackDirectoryPath); // import 용 디렉토리 생성
+            await FileUtils.unpack(objectPath, unpackDirectoryPath); // 압축 해제
+            // object.json 읽어오기
+            const objectResult = JSON.parse(
+                await FileUtils.readFile(path.join(unpackedDirectoryPath, 'object.json'), 'utf8'),
+            );
 
-                // 파일 복사 로직
-                await Promise.all(objectResult.objects.map(async (object: ObjectLike) => {
-                    const { sprite = {} } = object;
-                    const { pictures = [], sounds = [] } = sprite;
+            // 파일 복사 로직
+            await Promise.all(objectResult.objects.map(async (object: any) => {
+                const { sprite = {} } = object;
+                const { pictures = [], sounds = [] } = sprite;
 
-                    // 이미지 파일 옮김
-                    const newPictures = await Promise.all(
-                        pictures.map(async (picture: ObjectLike) => {
-                            if (Constants.defaultPicturePath.includes(picture.fileurl)) {
-                                // selectedPicture 체크로직
-                                const selectedPictureId = object.selectedPictureId;
-                                if (picture.id === selectedPictureId) {
-                                    object.selectedPicture = picture;
-                                }
-
-                                return picture;
-                            }
-
-                            const ext = CommonUtils.sanitizeExtension(picture.ext, '.png');
-                            let newSvgImageFilePath;
-                            if (picture.imageType === 'svg') {
-                                newSvgImageFilePath = path.join(
-                                    unpackedDirectoryPath,
-                                    Constants.subDirectoryPath(picture.filename),
-                                    'image',
-                                    `${picture.filename}.svg`,
-                                );
-                            }
-
-                            const newImageFilePath = path.join(
-                                unpackedDirectoryPath,
-                                Constants.subDirectoryPath(picture.filename),
-                                'image',
-                                `${picture.filename}${ext}`,
-                            );
-                            const newThumbnailFilePath = path.join(
-                                unpackedDirectoryPath,
-                                Constants.subDirectoryPath(picture.filename),
-                                'thumb',
-                                `${picture.filename}${ext}`,
-                            );
-
-                            const newPicture = await MainUtils.importPictureToTemp(
-                                newImageFilePath, { thumbnailPath: newThumbnailFilePath, svgPath: newSvgImageFilePath },
-                            );
-                            newPicture.name = picture.name;
-                            newPicture.id = picture.id;
-                            //TODO _id 가 없는 경우 entry-tool 에서 난리가 나는 듯 합니다.
-
+                // 이미지 파일 옮김
+                const newPictures = await Promise.all(
+                    pictures.map(async (picture: any) => {
+                        if (Constants.defaultPicturePath.includes(picture.fileurl)) {
                             // selectedPicture 체크로직
                             const selectedPictureId = object.selectedPictureId;
                             if (picture.id === selectedPictureId) {
-                                object.selectedPicture = newPicture;
-                                object.selectedPictureId = newPicture.id;
+                                object.selectedPicture = picture;
                             }
 
-                            return newPicture;
-                        }));
+                            return picture;
+                        }
 
-                    // 사운드 파일 옮김
-                    const newSounds = await Promise.all(
-                        sounds.map(async (sound: ObjectLike) => {
-                            if (Constants.defaultSoundPath.includes(sound.fileurl)) {
-                                return sound;
-                            }
-
-                            const ext = CommonUtils.sanitizeExtension(sound.ext, '.mp3');
-
-                            const newSound = await MainUtils.importSoundToTemp(path.join(
+                        const ext = CommonUtils.sanitizeExtension(picture.ext, '.png');
+                        let newSvgImageFilePath;
+                        if (picture.imageType === 'svg') {
+                            newSvgImageFilePath = path.join(
                                 unpackedDirectoryPath,
-                                Constants.subDirectoryPath(sound.filename),
-                                'sound',
-                                `${sound.filename}${ext}`,
-                            ));
-                            newSound.name = sound.name;
-                            newSound.id = sound.id;
+                                Constants.subDirectoryPath(picture.filename),
+                                'image',
+                                `${picture.filename}.svg`,
+                            );
+                        }
 
-                            return newSound;
-                        }),
-                    );
+                        const newImageFilePath = path.join(
+                            unpackedDirectoryPath,
+                            Constants.subDirectoryPath(picture.filename),
+                            'image',
+                            `${picture.filename}${ext}`,
+                        );
+                        const newThumbnailFilePath = path.join(
+                            unpackedDirectoryPath,
+                            Constants.subDirectoryPath(picture.filename),
+                            'thumb',
+                            `${picture.filename}${ext}`,
+                        );
 
-                    // 경로 동기화
-                    object.sprite.pictures = newPictures;
-                    object.sprite.sounds = newSounds;
-                    MainUtils.changeObjectsPath([object], Constants.replaceStrategy.fromExternal);
-                    return object;
-                }));
+                        const newPicture = await MainUtils.importPictureToTemp(
+                            newImageFilePath, { thumbnailPath: newThumbnailFilePath, svgPath: newSvgImageFilePath },
+                        );
+                        newPicture.name = picture.name;
+                        newPicture.id = picture.id;
+                        //TODO _id 가 없는 경우 entry-tool 에서 난리가 나는 듯 합니다.
 
-                await FileUtils.removeDirectoryRecursive(path.join(unpackDirectoryPath));
-                resolve(objectResult);
-            } catch (err) {
-                reject(err);
-            }
-        });
+                        // selectedPicture 체크로직
+                        const selectedPictureId = object.selectedPictureId;
+                        if (picture.id === selectedPictureId) {
+                            object.selectedPicture = newPicture;
+                            object.selectedPictureId = newPicture.id;
+                        }
+
+                        return newPicture;
+                    }));
+
+                // 사운드 파일 옮김
+                const newSounds = await Promise.all(
+                    sounds.map(async (sound: any) => {
+                        if (Constants.defaultSoundPath.includes(sound.fileurl)) {
+                            return sound;
+                        }
+
+                        const ext = CommonUtils.sanitizeExtension(sound.ext, '.mp3');
+
+                        const newSound = await MainUtils.importSoundToTemp(path.join(
+                            unpackedDirectoryPath,
+                            Constants.subDirectoryPath(sound.filename),
+                            'sound',
+                            `${sound.filename}${ext}`,
+                        ));
+                        newSound.name = sound.name;
+                        newSound.id = sound.id;
+
+                        return newSound;
+                    }),
+                );
+
+                // 경로 동기화
+                object.sprite.pictures = newPictures;
+                object.sprite.sounds = newSounds;
+                MainUtils.changeObjectsPath([object], Constants.replaceStrategy.fromExternal);
+                return object;
+            }));
+
+            await FileUtils.removeDirectoryRecursive(path.join(unpackDirectoryPath));
+            return objectResult;
+        };
     }
 
-    static importObjectsFromResource(objects: ObjectLike[]) {
+    static importObjectsFromResource(objects: any[]) {
         return Promise.all(objects.map((object) => {
             return MainUtils.importObjectFromResource(object);
         }));
     }
 
-    static importObjectFromResource(object: ObjectLike) {
-        return new Promise(async (resolve, reject) => {
+    static importObjectFromResource(object: any) {
+        return async () => {
             const { pictures = [], sounds = [] } = object;
-            try {
-                const newPictures = await MainUtils.importPicturesFromResource(pictures);
-                const newSounds = await MainUtils.importSoundsFromResource(sounds);
+            const newPictures = await MainUtils.importPicturesFromResource(pictures);
+            const newSounds = await MainUtils.importSoundsFromResource(sounds);
 
-                object.pictures = newPictures;
-                object.sounds = newSounds;
+            object.pictures = newPictures;
+            object.sounds = newSounds;
 
-                resolve(object);
-            } catch (e) {
-                reject(e);
-            }
-        });
+            return object;
+        };
     }
 
     /**
@@ -461,7 +448,7 @@ export default class MainUtils {
      * @param {Array<Object>}pictures
      * @return {Promise<Array>}
      */
-    static importPicturesFromResource(pictures: ObjectLike[]) {
+    static importPicturesFromResource(pictures: any[]) {
         return Promise.all(pictures.map(async (picture) => {
             const pngFileName = picture.filename + (picture.ext || '.png');
             const imageResourcePath = path.join(Constants.resourceImagePath(picture.filename), pngFileName);
@@ -484,63 +471,59 @@ export default class MainUtils {
         }));
     }
 
-    static importPictureFromCanvas(data: ObjectLike) {
-        return new Promise(async (resolve, reject) => {
+    static importPictureFromCanvas(data: any) {
+        return async () => {
             const { file, image } = data;
             const { prevFilename, mode, svg, ext = 'png' } = file;
             const pictureId = CommonUtils.createFileId();
 
-            try {
-                const imagePath = path.join(Constants.tempImagePath(pictureId), `${pictureId}.png`);
-                const thumbnailPath = path.join(Constants.tempThumbnailPath(pictureId), `${pictureId}.png`);
-                let svgWritePromise;
+            const imagePath = path.join(Constants.tempImagePath(pictureId), `${pictureId}.png`);
+            const thumbnailPath = path.join(Constants.tempThumbnailPath(pictureId), `${pictureId}.png`);
+            let svgWritePromise;
+
+            if (svg) {
+                const svgImagePath = path.join(Constants.tempImagePath(pictureId), `${pictureId}.svg`);
+                svgWritePromise = FileUtils.writeFile(svg, svgImagePath);
+            }
+
+            // 편집된 이미지를 저장한다
+            await Promise.all([
+                FileUtils.writeFile(image, imagePath),
+                FileUtils.writeFile(
+                    FileUtils.createResizedImageBuffer(image, ImageResizeSize.thumbnail),
+                    thumbnailPath),
+                svgWritePromise,
+            ]);
+
+            // 편집모드이며 리소스 기본이미지가이 아닌, temp 내 원본 이미지가 있는 경우 이전 이미지를 삭제한다.
+            if (prevFilename && mode === 'edit') {
+                const prevImageFilePath = path.join(Constants.tempImagePath(prevFilename), `${prevFilename}.${ext}`);
+                const prevThumbnailPath = path.join(Constants.tempThumbnailPath(prevFilename), `${prevFilename}.png`);
+                let secondImageFilePath;
 
                 if (svg) {
-                    const svgImagePath = path.join(Constants.tempImagePath(pictureId), `${pictureId}.svg`);
-                    svgWritePromise = FileUtils.writeFile(svg, svgImagePath);
+                    // svg 타입이면 prevImageFileName 은 svg 확장자일 것이므로, secondary 는 png 이다.
+                    // svg 타입이 아니라면 prevImageFileName 의 확장자는 객체 프로퍼티에 맡긴다.
+                    secondImageFilePath = path.join(Constants.tempImagePath(prevFilename), `${prevFilename}.png`);
                 }
 
-                // 편집된 이미지를 저장한다
                 await Promise.all([
-                    FileUtils.writeFile(image, imagePath),
-                    FileUtils.writeFile(
-                        FileUtils.createResizedImageBuffer(image, ImageResizeSize.thumbnail),
-                        thumbnailPath),
-                    svgWritePromise,
+                    prevImageFilePath && FileUtils.deleteFile(prevImageFilePath),
+                    prevThumbnailPath && FileUtils.deleteFile(prevThumbnailPath),
+                    secondImageFilePath && FileUtils.deleteFile(secondImageFilePath),
                 ]);
-
-                // 편집모드이며 리소스 기본이미지가이 아닌, temp 내 원본 이미지가 있는 경우 이전 이미지를 삭제한다.
-                if (prevFilename && mode === 'edit') {
-                    const prevImageFilePath = path.join(Constants.tempImagePath(prevFilename), `${prevFilename}.${ext}`);
-                    const prevThumbnailPath = path.join(Constants.tempThumbnailPath(prevFilename), `${prevFilename}.png`);
-                    let secondImageFilePath;
-
-                    if (svg) {
-                        // svg 타입이면 prevImageFileName 은 svg 확장자일 것이므로, secondary 는 png 이다.
-                        // svg 타입이 아니라면 prevImageFileName 의 확장자는 객체 프로퍼티에 맡긴다.
-                        secondImageFilePath = path.join(Constants.tempImagePath(prevFilename), `${prevFilename}.png`);
-                    }
-
-                    await Promise.all([
-                        prevImageFilePath && FileUtils.deleteFile(prevImageFilePath),
-                        prevThumbnailPath && FileUtils.deleteFile(prevThumbnailPath),
-                        secondImageFilePath && FileUtils.deleteFile(secondImageFilePath),
-                    ]);
-                }
-
-                //TODO 빈 폴더인지 검사한 후, 삭제하기 (앞 4자리가 같은 다른 파일이 있을 수 있음)
-                resolve({
-                    type: 'user',
-                    name: pictureId,
-                    filename: pictureId,
-                    fileurl: imagePath.replace(/\\/gi, '/'),
-                    dimension: imageSize(imagePath),
-                    imageType: ext,
-                });
-            } catch (e) {
-                reject(e);
             }
-        });
+
+            //TODO 빈 폴더인지 검사한 후, 삭제하기 (앞 4자리가 같은 다른 파일이 있을 수 있음)
+            return {
+                type: 'user',
+                name: pictureId,
+                filename: pictureId,
+                fileurl: imagePath.replace(/\\/gi, '/'),
+                dimension: imageSize(imagePath),
+                imageType: ext,
+            };
+        };
     }
 
     static importSoundsToTemp(filePaths: string[]) {
@@ -577,7 +560,7 @@ export default class MainUtils {
         };
     }
 
-    static importSoundsFromResource(sounds: ObjectLike[]) {
+    static importSoundsFromResource(sounds: any[]) {
         return Promise.all(sounds.map(async (sound) => {
             const fileName = sound.filename + (sound.ext || '.mp3');
             const soundResourcePath = path.join(Constants.resourceSoundPath(sound.filename), fileName);
@@ -632,31 +615,32 @@ export default class MainUtils {
      * @param sender
      */
     static convertPng(filePath: string, sender: Electron.webContents): Promise<ConvertResult> {
-        return new Promise(async (resolve) => {
+        return new Promise((resolve) => {
             try {
                 const newFileName = path.basename(filePath).replace(/\..*$/, '');
-                const fileData = await FileUtils.readFile(filePath, 'base64');
-                const newFilePath = path.join(Constants.tempPathForExport('convert'), `${newFileName}.png`);
-                const mimeType = mime.lookup(filePath);
+                FileUtils.readFile(filePath, 'base64').then((fileData) => {
+                    const newFilePath = path.join(Constants.tempPathForExport('convert'), `${newFileName}.png`);
+                    const mimeType = mime.lookup(filePath);
 
-                // svg 의 경우 viewBox 에서 뽑아서 전달하지 않으면 코딱지만한 크기로 잡혀버린다.
-                const dimension = (mimeType && mimeType.includes('svg')) &&
-                    MainUtils.getDimensionFromSvg(Buffer.from(fileData, 'base64').toString('utf8'));
+                    // svg 의 경우 viewBox 에서 뽑아서 전달하지 않으면 코딱지만한 크기로 잡혀버린다.
+                    const dimension = (mimeType && mimeType.includes('svg')) &&
+                        MainUtils.getDimensionFromSvg(Buffer.from(fileData, 'base64').toString('utf8'));
 
-                sender.send('convertPng', fileData, mimeType, dimension);
-                ipcMain.once('convertPng', (_: Electron.IpcMainEvent, buffer: any) => {
-                    FileUtils.writeFile(
-                        buffer.split(';base64,').pop(),
-                        newFilePath,
-                        'base64',
-                    ).then(() => {
-                        const result: ConvertResult = { filePath: newFilePath };
+                    sender.send('convertPng', fileData, mimeType, dimension);
+                    ipcMain.once('convertPng', (_: Electron.IpcMainEvent, buffer: any) => {
+                        FileUtils.writeFile(
+                            buffer.split(';base64,').pop(),
+                            newFilePath,
+                            'base64',
+                        ).then(() => {
+                            const result: ConvertResult = { filePath: newFilePath };
 
-                        // svg 의 경우 svg 파일과 png 파일 둘다 제공되어야 한다. 그림판이 쓰기 때
-                        if (mimeType && mimeType.includes('svg')) {
-                            result.svgPath = filePath;
-                        }
-                        resolve(result);
+                            // svg 의 경우 svg 파일과 png 파일 둘다 제공되어야 한다. 그림판이 쓰기 때
+                            if (mimeType && mimeType.includes('svg')) {
+                                result.svgPath = filePath;
+                            }
+                            resolve(result);
+                        });
                     });
                 });
             } catch (e) {

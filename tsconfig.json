@@ -76,6 +76,7 @@
     },
     "exclude": [
         "./src/renderer/resources/vendor/**/*",
-        "./**/*.js"
+        "./**/*.js",
+        "./dist/**/*"
     ]
 }

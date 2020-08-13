@@ -12,7 +12,7 @@ class ServerProcessManager {
         this.moduleManager = new HardwareModuleManager({
             initialRefresh: false,
             remoteModuleUrl: global.sharedObject.remoteModuleResourceUrl,
-            localModulePath: path.resolve(app.getAppPath(), 'modules'),
+            localModulePath: path.resolve(app.getPath('userData'), 'modules'),
         });
         this.childProcess = new EntryServer({
             http: true,
