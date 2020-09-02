@@ -56,7 +56,12 @@ export default class HardwareWindowManager {
                 ),
             },
         });
-        this.hardwareRouter = new HardwareMainRouter(this.hardwareWindow, new HardwareEntryServer());
+
+        this.hardwareRouter = new HardwareMainRouter(this.hardwareWindow, new HardwareEntryServer(), {
+            rootAppPath: process.env.NODE_ENV === 'production'
+                ? path.join(app.getAppPath(), '..')
+                : path.join(app.getAppPath(), 'node_modules', 'entry-hw', 'app'),
+        });
         this.hardwareWindow.setMenu(null);
         this.hardwareWindow.setMenuBarVisibility(false);
         this.hardwareWindow.loadURL(`file:///${path.resolve(

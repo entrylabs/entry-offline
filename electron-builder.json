@@ -53,7 +53,9 @@
         {
             "from": "node_modules/entry-tool",
             "to": "node_modules/entry-tool"
-        },
+        }
+    ],
+    "extraResources": [
         {
             "from": "node_modules/entry-hw/app/modules",
             "to": "modules"
