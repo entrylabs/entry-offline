@@ -12,7 +12,7 @@ class ServerProcessManager {
         this.moduleManager = new HardwareModuleManager({
             initialRefresh: false,
             remoteModuleUrl: global.sharedObject.remoteModuleResourceUrl,
-            localModulePath: path.resolve(app.getAppPath(), 'modules'),
+            localModulePath: path.join(app.getPath('appData'), 'entry-hw-modules', 'block_module'),
         });
         this.childProcess = new EntryServer({
             http: true,
@@ -62,9 +62,7 @@ class ServerProcessManager {
         this.childProcess.on('data', (message: any) => {
             this.router.handleServerData(message);
         });
-        this.childProcess.on('close', () => {
-
-        });
+        this.childProcess.on('close', () => {});
     }
 }
 
