@@ -11,8 +11,7 @@ const logger = createLogger('ConfigInitialize');
  */
 const defaultConfigSchema: FileConfigurations = {
     updateCheckUrl: 'https://playentry.org',
-    moduleResourceUrl: 'http://localhost:23518/modules',
-    remoteModuleResourceUrl: 'http://playentry.org/modules',
+    moduleResourceUrl: 'http://playentry.org/modules',
 };
 
 export default (configName: string = 'ko'): Readonly<FileConfigurations> => {
@@ -27,8 +26,13 @@ export default (configName: string = 'ko'): Readonly<FileConfigurations> => {
     const fileData = fs.readFileSync(configFilePath) as any;
     const mergedConfig: FileConfigurations = merge(defaultConfigSchema, JSON.parse(fileData));
 
-    logger.info(reduce(toPairs(mergedConfig), (result, [key, value]) =>
-        `${result}\n${key}: ${value}`, 'config file configurations applied'));
+    logger.info(
+        reduce(
+            toPairs(mergedConfig),
+            (result, [key, value]) => `${result}\n${key}: ${value}`,
+            'config file configurations applied'
+        )
+    );
 
     return mergedConfig;
 };

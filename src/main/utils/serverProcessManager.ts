@@ -10,7 +10,7 @@ class ServerProcessManager {
 
     constructor() {
         this.moduleManager = new HardwareModuleManager({
-            remoteModuleUrl: global.sharedObject.remoteModuleResourceUrl,
+            remoteModuleUrl: global.sharedObject.moduleResourceUrl,
             localModulePath: path.join(app.getPath('appData'), 'entry-hw-modules', 'block_module'),
         });
         this.childProcess = new EntryServer({

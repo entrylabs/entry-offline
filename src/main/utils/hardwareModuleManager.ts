@@ -11,14 +11,14 @@ type InitialOptions = {
     remoteModuleUrl: string;
     localModulePath: string;
     initialRefresh?: boolean;
-}
+};
 
 type IModuleType = 'hardware' | 'block';
 
 interface LanguageTemplateObject {
-    ko?: string,
-    en?: string,
-    jp?: string,
+    ko?: string;
+    en?: string;
+    jp?: string;
 }
 
 export type IHardwareModule = {
@@ -29,13 +29,13 @@ export type IHardwareModule = {
         image: string;
         block: string;
         [key: string]: string;
-    }
+    };
     properties?: {
         [key: string]: any;
-    }
+    };
     sha1?: string;
     type: IModuleType;
-}
+};
 
 class HardwareModuleManager {
     private readonly localModulePath: string;
@@ -56,7 +56,7 @@ class HardwareModuleManager {
         }
     }
 
-    public getModuleFilePath(moduleName: string, type: 'image' | 'module' | 'block'): string  {
+    public getModuleFilePath(moduleName: string, type: 'image' | 'module' | 'block'): string {
         return path.join(this.localModulePath, moduleName, type);
     }
 
@@ -72,7 +72,10 @@ class HardwareModuleManager {
         }
     }
 
-    public async getRefreshedLocalModuleList(): Promise<{ result: IHardwareModule[], newList: IHardwareModule[] }> {
+    public async getRefreshedLocalModuleList(): Promise<{
+        result: IHardwareModule[];
+        newList: IHardwareModule[];
+    }> {
         const localModuleList = await this.getLocalModuleList();
         const remoteModuleList = await this.getRemoteModuleList();
 
@@ -101,23 +104,27 @@ class HardwareModuleManager {
         // const blockTargetPath = path.join(this.localModulePath, path.normalize(hardwareMetadata.files.block));
         // const moduleTargetPath = path.join(this.localModulePath, path.normalize(hardwareMetadata.files.module));
 
-        await Promise.all(Object.entries(hardwareMetadata.files).map(async ([key, value]) => {
-            try {
-                const requestUrl = `${this.remoteModuleUrl}/${hardwareMetadata.moduleName}/files/${key}`;
-                const response = await axios({
-                    url: requestUrl,
-                    method: 'GET',
-                    responseType: 'arraybuffer',
-                });
-                await fs.ensureDir(path.join(this.localModulePath, hardwareMetadata.moduleName));
-                await fs.writeFile(
-                    path.join(this.localModulePath, hardwareMetadata.moduleName, key),
-                    Buffer.from(response.data, 'binary'),
-                );
-            } catch (e) {
-                console.error(e);
-            }
-        }));
+        await Promise.all(
+            Object.entries(hardwareMetadata.files).map(async ([key, value]) => {
+                try {
+                    const requestUrl = `${this.remoteModuleUrl}/${hardwareMetadata.moduleName}/files/${key}`;
+                    const response = await axios({
+                        url: requestUrl,
+                        method: 'GET',
+                        responseType: 'arraybuffer',
+                    });
+                    await fs.ensureDir(
+                        path.join(this.localModulePath, hardwareMetadata.moduleName)
+                    );
+                    await fs.writeFile(
+                        path.join(this.localModulePath, hardwareMetadata.moduleName, key),
+                        Buffer.from(response.data, 'binary')
+                    );
+                } catch (e) {
+                    console.error(e);
+                }
+            })
+        );
         // 파일이 없으면, request 를 보내서 채워넣음
         // 파일이 있으면 그대로 넘어감
     }
