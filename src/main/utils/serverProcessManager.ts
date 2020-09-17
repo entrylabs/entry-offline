@@ -10,7 +10,6 @@ class ServerProcessManager {
 
     constructor() {
         this.moduleManager = new HardwareModuleManager({
-            initialRefresh: false,
             remoteModuleUrl: global.sharedObject.remoteModuleResourceUrl,
             localModulePath: path.join(app.getPath('appData'), 'entry-hw-modules', 'block_module'),
         });
