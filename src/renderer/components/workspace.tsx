@@ -21,9 +21,7 @@ import { IModalState, ModalActionCreators } from '../store/modules/modal';
 import { IMapDispatchToProps, IMapStateToProps } from '../store';
 import DragAndDropContainer from './DragAndDropContainer';
 
-interface IProps extends IReduxDispatch, IReduxState {
-
-}
+interface IProps extends IReduxDispatch, IReduxState {}
 
 class Workspace extends Component<IProps> {
     private lastHwName?: string;
@@ -39,6 +37,7 @@ class Workspace extends Component<IProps> {
         libDir: '../../../node_modules',
         defaultDir: '../../renderer/resources',
         baseUrl: 'https://playentry.org',
+        offlineModulePath: IpcRendererHelper.getModulePath(),
         fonts: EntryStatic.fonts,
         textCodingEnable: true,
         dataTableEnable: true,
@@ -54,10 +53,7 @@ class Workspace extends Component<IProps> {
     };
 
     get initOption() {
-        return Object.assign({},
-            this.defaultInitOption,
-            EntryStatic.initOptions,
-        );
+        return Object.assign({}, this.defaultInitOption, EntryStatic.initOptions);
     }
 
     constructor(props: Readonly<IProps>) {
@@ -93,7 +89,7 @@ class Workspace extends Component<IProps> {
                 this.showModalProgress(
                     'error',
                     RendererUtils.getLang('Workspace.loading_fail_msg'),
-                    RendererUtils.getLang('Workspace.fail_contact_msg'),
+                    RendererUtils.getLang('Workspace.fail_contact_msg')
                 );
                 await RendererUtils.clearTempProject();
 
@@ -104,7 +100,10 @@ class Workspace extends Component<IProps> {
     }
 
     componentDidUpdate(prevProps: Readonly<IProps>): void {
-        if (prevProps.common.projectName && prevProps.common.projectName !== this.props.common.projectName) {
+        if (
+            prevProps.common.projectName &&
+            prevProps.common.projectName !== this.props.common.projectName
+        ) {
             this.handleStorageProjectSave();
         }
     }
@@ -115,7 +114,7 @@ class Workspace extends Component<IProps> {
                 this.showModalProgress(
                     'progress',
                     RendererUtils.getLang('Workspace.uploading_msg'),
-                    RendererUtils.getLang('Workspace.fail_contact_msg'),
+                    RendererUtils.getLang('Workspace.fail_contact_msg')
                 );
                 const project = await readProjectFunction;
                 await this.loadProject(project);
@@ -190,10 +189,7 @@ class Workspace extends Component<IProps> {
 
         const workspace = Entry.getMainWS();
         if (workspace) {
-            workspace.changeEvent.attach(
-                this,
-                this.handleChangeWorkspaceMode,
-            );
+            workspace.changeEvent.attach(this, this.handleChangeWorkspaceMode);
         }
     }
 
@@ -326,7 +322,7 @@ class Workspace extends Component<IProps> {
             this.showModalProgress(
                 'progress',
                 RendererUtils.getLang('Workspace.saving_msg'),
-                RendererUtils.getLang('Workspace.fail_contact_msg'),
+                RendererUtils.getLang('Workspace.fail_contact_msg')
             );
 
             try {
@@ -350,14 +346,14 @@ class Workspace extends Component<IProps> {
                 Entry.stateManager.addStamp();
                 Entry.toast.success(
                     RendererUtils.getLang('Workspace.saved'),
-                    `${projectName} ${RendererUtils.getLang('Workspace.saved_msg')}`,
+                    `${projectName} ${RendererUtils.getLang('Workspace.saved_msg')}`
                 );
             } catch (err) {
                 console.error(err);
                 this.showModalProgress(
                     'error',
                     RendererUtils.getLang('Workspace.saving_fail_msg'),
-                    RendererUtils.getLang('Workspace.fail_contact_msg'),
+                    RendererUtils.getLang('Workspace.fail_contact_msg')
                 );
             } finally {
                 this.isSaveProject = false;
@@ -369,10 +365,13 @@ class Workspace extends Component<IProps> {
             await saveFunction(this.projectSavedPath);
         } else {
             const targetPath = this.projectSavedPath || '*';
-            RendererUtils.showSaveDialog({
-                defaultPath: `${targetPath}/${projectName}`,
-                filters: [{ name: 'Entry File', extensions: ['ent'] }],
-            }, saveFunction);
+            RendererUtils.showSaveDialog(
+                {
+                    defaultPath: `${targetPath}/${projectName}`,
+                    filters: [{ name: 'Entry File', extensions: ['ent'] }],
+                },
+                saveFunction
+            );
         }
         LocalStorageManager.clearSavedProject();
     };
@@ -384,15 +383,18 @@ class Workspace extends Component<IProps> {
                 await this.loadProject();
             }
         } else if (type === 'open_offline') {
-            this._loadProjectFromFile(() => new Promise<string>((resolve, reject) => {
-                RendererUtils.showOpenDialog({
-                    /*defaultPath: storage.getItem('defaultPath') || '',*/
-                    properties: ['openFile'],
-                    filters: [{ name: 'Entry File', extensions: ['ent'] }],
-                }).then(({ filePaths }) => {
-                    resolve(filePaths[0]);
-                });
-            }));
+            this._loadProjectFromFile(
+                () =>
+                    new Promise<string>((resolve, reject) => {
+                        RendererUtils.showOpenDialog({
+                            /*defaultPath: storage.getItem('defaultPath') || '',*/
+                            properties: ['openFile'],
+                            filters: [{ name: 'Entry File', extensions: ['ent'] }],
+                        }).then(({ filePaths }) => {
+                            resolve(filePaths[0]);
+                        });
+                    })
+            );
         }
     };
 
@@ -404,11 +406,12 @@ class Workspace extends Component<IProps> {
         this.showModalProgress(
             'progress',
             RendererUtils.getLang('Workspace.uploading_msg'),
-            RendererUtils.getLang('Workspace.fail_contact_msg'),
+            RendererUtils.getLang('Workspace.fail_contact_msg')
         );
 
         try {
-            const filePath = typeof filePathGetter === 'function' ? (await filePathGetter()) : filePathGetter;
+            const filePath =
+                typeof filePathGetter === 'function' ? await filePathGetter() : filePathGetter;
             if (!filePath) {
                 this.hideModalProgress();
                 return;
@@ -420,7 +423,7 @@ class Workspace extends Component<IProps> {
             this.showModalProgress(
                 'error',
                 RendererUtils.getLang('Workspace.loading_fail_msg'),
-                RendererUtils.getLang('Workspace.fail_contact_msg'),
+                RendererUtils.getLang('Workspace.fail_contact_msg')
             );
         }
     }
@@ -561,7 +564,9 @@ class Workspace extends Component<IProps> {
                         if (filePath.endsWith('.ent')) {
                             await this._loadProjectFromFile(filePath);
                         } else {
-                            entrylms.alert(RendererUtils.getLang('Workspace.upload_not_supported_file_msg'));
+                            entrylms.alert(
+                                RendererUtils.getLang('Workspace.upload_not_supported_file_msg')
+                            );
                         }
                     }}
                 />
@@ -575,7 +580,7 @@ class Workspace extends Component<IProps> {
                         programLanguageMode={programLanguageMode}
                         executionStatus={executionStatus}
                     />
-                    <div ref={this.container} className="workspace"/>
+                    <div ref={this.container} className="workspace" />
                     {isShow && (
                         <ModalProgress
                             title={title}
@@ -591,9 +596,9 @@ class Workspace extends Component<IProps> {
 }
 
 interface IReduxState {
-    modal: IModalState,
-    persist: IPersistState,
-    common: ICommonState,
+    modal: IModalState;
+    persist: IPersistState;
+    common: ICommonState;
 }
 
 const mapStateToProps: IMapStateToProps<IReduxState> = (state) => ({
@@ -614,7 +619,4 @@ const mapDispatchToProps: IMapDispatchToProps<IReduxDispatch> = (dispatch) => ({
     ModalActions: bindActionCreators(ModalActionCreators, dispatch),
 });
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps,
-)(Workspace);
+export default connect(mapStateToProps, mapDispatchToProps)(Workspace);

@@ -1,8 +1,9 @@
 import RendererUtils from './rendererUtils';
 import StorageManager from './storageManager';
 import EntryModalHelper from './entry/entryModalHelper';
+import path from 'path';
 
-const { ipcInvoke } = window;
+const { ipcInvoke, modulePath } = window;
 
 /**
  * electron main process 로 통신하기 위해 사용하는 클래스.
@@ -110,10 +111,9 @@ export default class {
     }
 
     static async checkUpdate() {
-        const [
-            currentVersion,
-            { hasNewVersion, version: latestVersion },
-        ] = await ipcInvoke<[string, { hasNewVersion: string, version: string }]>('checkUpdate');
+        const [currentVersion, { hasNewVersion, version: latestVersion }] = await ipcInvoke<
+            [string, { hasNewVersion: string; version: string }]
+        >('checkUpdate');
         /**
          latestVersion properties
          @property hasNewVersion{boolean} 요청을 보냈을때의 버전과 비교하여 업데이트가 필요한지 여부
@@ -122,15 +122,13 @@ export default class {
          @property _id{string} ex) 저장된 mongoDB 오브젝트 ID
          */
         console.log(
-            `currentVersion : ${currentVersion
-            }\nrecentVersion: ${latestVersion
-            }\nneedUpdate: ${hasNewVersion
-            }`);
+            `currentVersion : ${currentVersion}\nrecentVersion: ${latestVersion}\nneedUpdate: ${hasNewVersion}`
+        );
         const lastDontShowCheckedVersion = StorageManager.getLastDontShowVersion();
         // 다시보지않음을 클릭하지 않았거나, 클릭했지만 당시보다 더 높은 버전이 나온 경우 출력
         if (
             latestVersion > currentVersion &&
-            (!lastDontShowCheckedVersion || (latestVersion > lastDontShowCheckedVersion))
+            (!lastDontShowCheckedVersion || latestVersion > lastDontShowCheckedVersion)
         ) {
             EntryModalHelper.showUpdateCheckModal(latestVersion);
             StorageManager.setLastCheckedVersion(latestVersion);
@@ -143,5 +141,8 @@ export default class {
 
     static checkAudioPermission() {
         return window.checkPermission('microphone');
+    }
+    static getModulePath() {
+        return modulePath;
     }
 }
