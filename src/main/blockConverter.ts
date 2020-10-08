@@ -206,7 +206,7 @@ function processBlock(block: any, thread: any) {
 }
 
 export default {
-    async convert(project: any) {
+    convert(project: any) {
         logger.warn('legacy xml project request convert');
         logger.warn('project data is..');
         logger.warn(JSON.stringify(project));
