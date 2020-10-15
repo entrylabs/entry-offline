@@ -6,6 +6,7 @@ declare interface Window extends Preload {
     EntryStatic: any;
     Lang: any;
     isOsx: boolean;
+    modulePath: string;
 }
 
 declare interface Preload {
@@ -19,7 +20,6 @@ declare interface Preload {
     initNativeMenu(): void;
     getLang(key: string): string;
     ipcInvoke<T = any>(channel: string, ...args: any[]): Promise<T>;
-    modulePath: string;
     openEntryWebPage(): void;
     onLoadProjectFromMain(callback: (project: Promise<IEntry.Project>) => void): void;
     openHardwarePage(): void;

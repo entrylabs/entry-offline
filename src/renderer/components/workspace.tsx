@@ -37,12 +37,12 @@ class Workspace extends Component<IProps> {
         libDir: '../../../node_modules',
         defaultDir: '../../renderer/resources',
         baseUrl: 'https://playentry.org',
-        offlineModulePath: IpcRendererHelper.getModulePath(),
         fonts: EntryStatic.fonts,
         textCodingEnable: true,
         dataTableEnable: true,
         aiLearningEnable: false,
         paintMode: 'entry-paint',
+        offlineModulePath: window.modulePath,
     };
     state = {
         programLanguageMode: 'block',

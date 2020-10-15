@@ -1,7 +1,6 @@
 import { ipcRenderer, remote, shell } from 'electron';
 import nativeMenu from './nativeMenu';
 import get from 'lodash/get';
-import path from 'path';
 
 ipcRenderer.on('console', (event: Electron.IpcRendererEvent, ...args: any[]) => {
     console.log(...args);
@@ -62,7 +61,6 @@ window.getLang = (key: string) => {
 window.ipcInvoke = (channel: string, ...args: any[]) => {
     return ipcRenderer.invoke(channel, ...args);
 };
-window.modulePath = path.join(remote.app.getPath('appData'), 'entry-hw-modules', 'block_module');
 
 window.openEntryWebPage = () => {
     shell.openExternal('https://playentry.org/#!/offlineEditor');
@@ -89,3 +87,5 @@ window.checkPermission = async (type: 'microphone' | 'camera') => {
 window.ipcListen = ipcRenderer.on.bind(ipcRenderer);
 
 window.isOsx = process.platform === 'darwin';
+
+window.modulePath = `${remote.app.getPath('appData')}/entry-hw-modules/block_module`;
