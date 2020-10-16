@@ -6,6 +6,7 @@ import parseCommandLine from './utils/functions/parseCommandLine';
 import configInitialize from './utils/functions/configInitialize';
 import createLogger from './utils/functions/createLogger';
 import isValidAsarFile from './utils/functions/isValidAsarFile';
+import cryptojs from 'crypto-js';
 
 import('./ipcMainHelper');
 import('./utils/functions/globalShortCutRegister');
@@ -83,6 +84,13 @@ if (!app.requestSingleInstanceLock()) {
             aboutWindow.closeAboutWindow();
         });
 
+        ipcMain.on('decryptBlock', (event: any, scriptStr: string) => {
+            logger.info(`'decryptBlock' event fired`);
+            event.returnValue = cryptojs.AES.decrypt(scriptStr, process.env.OFFLINE_KEY).toString(
+                cryptojs.enc.Utf8
+            );
+        });
+
         setTimeout(async () => {
             try {
                 const result = await isValidAsarFile();
@@ -111,4 +119,3 @@ process.on('uncaughtException', (error) => {
         process.exit(-1);
     }
 });
-

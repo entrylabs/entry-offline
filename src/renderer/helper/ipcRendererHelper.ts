@@ -3,7 +3,7 @@ import StorageManager from './storageManager';
 import EntryModalHelper from './entry/entryModalHelper';
 import path from 'path';
 
-const { ipcInvoke, modulePath } = window;
+const { sendSync, ipcInvoke, modulePath } = window;
 
 /**
  * electron main process 로 통신하기 위해 사용하는 클래스.

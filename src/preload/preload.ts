@@ -62,6 +62,10 @@ window.ipcInvoke = (channel: string, ...args: any[]) => {
     return ipcRenderer.invoke(channel, ...args);
 };
 
+window.sendSync = (channel: string, ...args: any[]) => {
+    return ipcRenderer.sendSync(channel, ...args);
+};
+
 window.openEntryWebPage = () => {
     shell.openExternal('https://playentry.org/#!/offlineEditor');
 };
