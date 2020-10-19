@@ -41,7 +41,7 @@ export default class MainUtils {
         let project = JSON.parse(projectBuffer.toString('utf8'));
 
         if (project.objects[0] && project.objects[0].script.substr(0, 4) === '<xml') {
-            project = BlockConverter.convert(project);
+            project = await BlockConverter.convert(project);
         }
 
         MainUtils.changeObjectsPath(project.objects, Constants.replaceStrategy.fromExternal);
