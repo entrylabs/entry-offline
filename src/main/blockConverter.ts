@@ -10,7 +10,7 @@ import _ from 'lodash';
 import entry from './entryBlocks';
 import createLogger from './utils/functions/createLogger';
 
-const parseString = xml2js.parseString;
+const parseStringPromise = xml2js.parseStringPromise;
 const logger = createLogger('main/xmlBlockConverter');
 
 function processCode(xml: any) {
@@ -206,30 +206,39 @@ function processBlock(block: any, thread: any) {
 }
 
 export default {
-    convert(project: any) {
-        logger.warn('legacy xml project request convert');
-        logger.warn('project data is..');
-        logger.warn(JSON.stringify(project));
-
+    async convert(project: any) {
         const objects = project.objects;
         const functions = project.functions;
-
+        let queue = [];
         if (functions.length) {
             for (let i = 0; i < functions.length; i++) {
                 const func = functions[i];
-                parseString(func.content, function(err: any, xml: any) {
-                    func.content = JSON.stringify(processCode(xml));
-                });
+                queue.push(
+                    parseStringPromise(func.content)
+                        .then((xml: any) => {
+                            func.content = JSON.stringify(processCode(xml));
+                        })
+                        .catch((err: Error) => {
+                            logger.warn(`failed to parse ${func.content}`);
+                        })
+                );
             }
         }
         if (objects.length) {
             for (let i = 0; i < objects.length; i++) {
                 const object = objects[i];
-                parseString(object.script, function(err: any, xml: any) {
-                    object.script = JSON.stringify(processCode(xml));
-                });
+                queue.push(
+                    parseStringPromise(object.script)
+                        .then((xml: any) => {
+                            object.script = JSON.stringify(processCode(xml));
+                        })
+                        .catch((err: Error) => {
+                            logger.warn(`failed to parse ${object.script}`);
+                        })
+                );
             }
         }
+        await Promise.all(queue);
         project.objects = objects;
         project.functions = functions;
         return project;
