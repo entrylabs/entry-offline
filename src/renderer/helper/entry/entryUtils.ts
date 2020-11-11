@@ -18,7 +18,9 @@ export default class {
     static async confirmProjectWillDismiss() {
         let confirmProjectDismiss = true;
         if (!Entry.stateManager.isSaved()) {
-            confirmProjectDismiss = await entrylms.confirm(RendererUtils.getLang('Menus.save_dismiss'));
+            confirmProjectDismiss = await entrylms.confirm(
+                RendererUtils.getLang('Menus.save_dismiss')
+            );
         }
 
         if (confirmProjectDismiss) {
@@ -58,10 +60,14 @@ export default class {
         } else if (project) {
             let confirm = false;
             try {
-                confirm =
-                    await entrylms.confirm(
-                        RendererUtils.getLang('Workspace.confirm_load_temporary'),
-                    );
+                confirm = await entrylms.confirm(
+                    RendererUtils.getLang('Workspace.confirm_load_temporary'),
+                    RendererUtils.getLang('Workspace.confirm_load_header'),
+                    {
+                        positiveButtonText: RendererUtils.getLang('Buttons.yes'),
+                        negativeButtonText: RendererUtils.getLang('Buttons.button_no'),
+                    }
+                );
 
                 if (confirm) {
                     return project;
@@ -86,7 +92,9 @@ export default class {
      */
     static loadSound(sounds: any[] = []) {
         sounds.forEach((sound) => {
-            const path = sound.path || `${Constants.resourceSoundPath(sound.filename)}${sound.filename}${sound.ext}`;
+            const path =
+                sound.path ||
+                `${Constants.resourceSoundPath(sound.filename)}${sound.filename}${sound.ext}`;
             Entry.soundQueue.loadFile({
                 id: sound._id,
                 src: path,
@@ -113,17 +121,19 @@ export default class {
         const objectVariable = getObjectData(script);
         objectVariable.objects = [object.toJSON()];
 
-        RendererUtils.showSaveDialog({
-            defaultPath: name,
-            filters: [{ name: 'Entry object file(.eo)', extensions: ['eo'] }],
-        }, (filePath) => {
-            if (filePath) {
-                IpcRendererHelper.exportObject(filePath, objectVariable)
-                    .then(() => {
+        RendererUtils.showSaveDialog(
+            {
+                defaultPath: name,
+                filters: [{ name: 'Entry object file(.eo)', extensions: ['eo'] }],
+            },
+            (filePath) => {
+                if (filePath) {
+                    IpcRendererHelper.exportObject(filePath, objectVariable).then(() => {
                         console.log('object exported successfully');
                     });
+                }
             }
-        });
+        );
     }
 
     /**
@@ -178,16 +188,16 @@ export default class {
             const croppedImageData = await RendererUtils.cropImageFromCanvas(image);
             const imageBuffer = Uint8Array.from(
                 atob(croppedImageData.replace(/^data:image\/(png|gif|jpeg);base64,/, '')),
-                (chr) => chr.charCodeAt(0),
+                (chr) => chr.charCodeAt(0)
             );
 
             // 만약 이전 파일명이 존재하는 경우 삭제처리를 위함
-            file.prevFilename = Entry.container
-                .getObject(objectId)
-                .getPicture(id)
-                .filename;
+            file.prevFilename = Entry.container.getObject(objectId).getPicture(id).filename;
 
-            const newPicture = await IpcRendererHelper.importPictureFromCanvas({ file, image: imageBuffer });
+            const newPicture = await IpcRendererHelper.importPictureFromCanvas({
+                file,
+                image: imageBuffer,
+            });
             // 엔트리에 이미지 추가
 
             if (mode === 'new') {
@@ -228,12 +238,11 @@ export default class {
         const filename = entryObject.name || 'nonamed';
         const extension = RendererUtils.sanitizeExtension(
             entryObject.ext || entryObject.extension,
-            defaultExtension,
+            defaultExtension
         );
 
         return `${filename}${extension}`;
     }
-
 
     /**
      * 엔트리 현재 오브젝트, 블록메뉴의 width 를 저장한다.
@@ -242,9 +251,7 @@ export default class {
     static saveCurrentWorkspaceInterface() {
         if (Entry.type === 'workspace') {
             if (localStorage && Entry.interfaceState) {
-                StorageManager.setWorkspaceInterface(
-                    Entry.captureInterfaceState(),
-                );
+                StorageManager.setWorkspaceInterface(Entry.captureInterfaceState());
             }
         }
     }
