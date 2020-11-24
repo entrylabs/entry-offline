@@ -2851,9 +2851,9 @@ enquirer@^2.3.5:
   version "2.0.0"
   resolved "git+https://github.com/entrylabs/entry-hw-server.git#83826252cf79ce0f39650ac76627ab474bb3a363"
 
-"entry-hw@git+https://github.com/entrylabs/entry-hw.git#dist/v1.9.11":
-  version "1.9.10"
-  resolved "git+https://github.com/entrylabs/entry-hw.git#b1b4c1a47d3d5b0ad0e83bbb3cdf6501a48ef4b1"
+"entry-hw@git+https://github.com/entrylabs/entry-hw.git#dist/v1.9.12":
+  version "1.9.12"
+  resolved "git+https://github.com/entrylabs/entry-hw.git#a62ed089457b4514c20f1422ae4b2706f696a9dc"
   dependencies:
     cross-spawn "^7.0.0"
     fs-extra "^8.1.0"
@@ -2870,7 +2870,7 @@ enquirer@^2.3.5:
 
 "entry-js@git+https://github.com/entrylabs/entryjs.git#dist/offline_v2.0.30":
   version "0.0.0"
-  resolved "git+https://github.com/entrylabs/entryjs.git#a8f0f575865ab1da141aff7d2678bd1f5507f5bc"
+  resolved "git+https://github.com/entrylabs/entryjs.git#c935213ebf67ebb94f97f371188b5aab099ace37"
 
 "entry-tool@git+https://github.com/entrylabs/entry-tool.git#v1.20200226.207":
   version "0.0.0"
