@@ -9,7 +9,7 @@ import EntryUtils from './entryUtils';
 
 type PopupEventListeners = {
     [eventName: string]: (...args: any) => any;
-}
+};
 
 /**
  * 이 클래스는 Entry 프로젝트에서 entry-lms, entry-tool 을 사용하여 팝업 및 모달을 출력해야 하는 경우 사용한다.
@@ -30,18 +30,15 @@ class EntryModalHelper {
     static async showSpritePopup() {
         await this._switchPopup('sprite', {
             fetch: (data: any) => {
-                DatabaseManager
-                    .findAll(data)
-                    .then(EntryModalHelper.fetchPopup);
+                DatabaseManager.findAll(data).then(EntryModalHelper.fetchPopup);
             },
             search: (data: any) => {
                 if (data.searchQuery === '') {
                     return;
                 }
-                DatabaseManager.search(data, 'sprite')
-                    .then((result) => {
-                        EntryModalHelper.fetchPopup(result);
-                    });
+                DatabaseManager.search(data, 'sprite').then((result) => {
+                    EntryModalHelper.fetchPopup(result);
+                });
             },
             submit: async (data: any) => {
                 const newObjects = await IpcRendererHelper.importObjectsFromResource(data.selected);
@@ -68,8 +65,9 @@ class EntryModalHelper {
                     id: Entry.generateHash(),
                     objectType: 'sprite',
                     sprite: {
-                        name: `${RendererUtils.getLang('Workspace.new_object')
-                        }${Entry.container.getAllObjects().length + 1}`,
+                        name: `${RendererUtils.getLang(
+                            'Workspace.new_object'
+                        )}${Entry.container.getAllObjects().length + 1}`,
                         pictures: [
                             {
                                 dimension: {
@@ -116,7 +114,7 @@ class EntryModalHelper {
                 };
                 Entry.container.addObject(object, 0);
             },
-            dummyUploads: async ({ formData, objectData }: { formData: any, objectData: any }) => {
+            dummyUploads: async ({ formData, objectData }: { formData: any; objectData: any }) => {
                 const pictures = formData ? formData.values() : [];
                 const objects = objectData ? objectData.values() : [];
 
@@ -156,13 +154,14 @@ class EntryModalHelper {
                                         objectType: firstObject.objectType,
                                         options: firstObject.entity || {},
                                         _id: Entry.generateHash(),
-                                        fileurl: '../../renderer/resources/images/workspace/text_icon_ko.svg',
+                                        fileurl:
+                                            '../../renderer/resources/images/workspace/text_icon_ko.svg',
                                     };
                                 }
 
                                 selected.sprite = objectModel;
                                 return selected;
-                            }),
+                            })
                         ),
                     },
                 });
@@ -196,20 +195,16 @@ class EntryModalHelper {
     static async showPicturePopup() {
         await this._switchPopup('picture', {
             fetch: (data: any) => {
-                DatabaseManager
-                    .findAll({
-                        ...data,
-                        type: 'picture',
-                    })
-                    .then(EntryModalHelper.fetchPopup);
+                DatabaseManager.findAll({
+                    ...data,
+                    type: 'picture',
+                }).then(EntryModalHelper.fetchPopup);
             },
             search: (data: any) => {
                 if (data.searchQuery === '') {
                     return;
                 }
-                DatabaseManager
-                    .search(data, 'picture')
-                    .then(EntryModalHelper.fetchPopup);
+                DatabaseManager.search(data, 'picture').then(EntryModalHelper.fetchPopup);
             },
             submit: async (data: any) => {
                 const pictures = await IpcRendererHelper.importPicturesFromResource(data.selected);
@@ -311,26 +306,23 @@ class EntryModalHelper {
     static async showSoundPopup() {
         await this._switchPopup('sound', {
             fetch: (data: any) => {
-                DatabaseManager
-                    .findAll(data)
-                    .then((result) => {
-                        EntryModalHelper.popup.setData({
-                            data: { data: result },
-                        });
-                        EntryUtils.loadSound(result as any[]);
+                DatabaseManager.findAll(data).then((result) => {
+                    EntryModalHelper.popup.setData({
+                        data: { data: result },
                     });
+                    EntryUtils.loadSound(result as any[]);
+                });
             },
             search: (data: any) => {
                 if (data.searchQuery === '') {
                     return;
                 }
-                DatabaseManager.search(data, 'sound')
-                    .then((result) => {
-                        EntryModalHelper.popup.setData({
-                            data: { data: result },
-                        });
-                        EntryUtils.loadSound(result as any[]);
+                DatabaseManager.search(data, 'sound').then((result) => {
+                    EntryModalHelper.popup.setData({
+                        data: { data: result },
                     });
+                    EntryUtils.loadSound(result as any[]);
+                });
             },
             submit: async (data: any) => {
                 const sounds = await IpcRendererHelper.importSoundsFromResource(data.selected);
@@ -405,13 +397,20 @@ class EntryModalHelper {
     static async showTablePopup() {
         await this._switchPopup('table', {
             fetch: async (data) => {
-                const allFetchedData = await DatabaseManager.findAll(data) as DBTableObject[];
+                console.log('fetch', data);
+                const allFetchedData = (await DatabaseManager.findAll({
+                    ...data,
+                    type: 'table',
+                })) as DBTableObject[];
+                EntryModalHelper.fetchPopup(allFetchedData);
                 let langType = RendererUtils.getLangType();
                 if (langType === 'jp') {
                     langType = 'ja';
                 }
 
-                const langFilteredData = allFetchedData.filter((element) => element.lang === langType);
+                const langFilteredData = allFetchedData.filter(
+                    (element) => element.lang === langType
+                );
 
                 EntryModalHelper.popup.setData({
                     data: { data: langFilteredData },
@@ -420,13 +419,24 @@ class EntryModalHelper {
             search: ({ searchQuery }: { searchQuery: string }) => {
                 console.log('search', searchQuery);
             },
-            submit: ({ selected }: { selected: DBTableObject[] }) => {
+            submit: async ({ selected }: { selected: DBTableObject[] }) => {
                 console.log('submit', selected);
-                const selectedTables = DatabaseManager.selectDataTables(
-                    selected.map((tableInfo) => tableInfo.projectTable),
+                const tableInfos = await Promise.all(
+                    selected.map((params: any) => {
+                        const { projectTable, ...infos } = params;
+                        const [data] = DatabaseManager.selectDataTables([projectTable]);
+                        const { type, ...tableInfo } = data;
+                        let { data: origin, fields } = data;
+                        const max = _.max([fields.length, ..._.map(origin, (row) => row.length)]);
+                        fields = _.concat(fields, new Array(max - fields.length).fill(''));
+                        origin = _.map(origin, (row) =>
+                            _.concat(row, new Array(max - row.length).fill(''))
+                        );
+                        return { ...tableInfo, ...infos, fields, data: origin };
+                    })
                 );
-                selectedTables.forEach((table) => {
-                    Entry.playground.dataTable.addSource(table);
+                tableInfos.map((item) => {
+                    Entry.playground.dataTable.addSource(item);
                 });
             },
             dummyUploads: async ({ formData }: { formData: any }) => {
@@ -460,6 +470,7 @@ class EntryModalHelper {
                  * _addTables({projectTable: id})
                  * _addTables 는 submit 과 동일함
                  */
+                console.log('uploads', uploads);
                 uploads.forEach(async ({ id }: { id: string; name: string }) => {
                     const table = await IpcRendererHelper.getTable(id);
                     Entry.playground.dataTable.addSource({ ...table });
@@ -468,15 +479,18 @@ class EntryModalHelper {
             uploadFail: (data: any) => {
                 console.log('uploadFail', data);
             },
-            draw: () => {
+            draw: ({ source }) => {
+                console.log('draw');
                 const name = Lang.Workspace.data_table;
                 const fields = [Lang.Workspace.tab_attribute];
-                Entry.playground.dataTable.addSource({
-                    name,
-                    fields,
-                    data: [['']],
-                    tab: 'table',
-                });
+                Entry.playground.dataTable.addSource(
+                    source || {
+                        name,
+                        fields,
+                        data: [['']],
+                        tab: 'table',
+                    }
+                );
                 Entry.playground.changeViewMode('table');
             },
             fail: () => {
@@ -494,43 +508,56 @@ class EntryModalHelper {
     static async showExpansionPopup() {
         const expansionBlocks = this._getActiveExpansionBlocks();
 
-        await this._switchPopup('expansion', {
-            submit: (data: any) => {
-                this._addExpansionBlocks(data.selected);
-            },
-            itemoff: ({ data, callback }: { data: any; callback?: () => void }) => {
-                const isActive = Entry.expansion.isActive(data.name);
-                if (!isActive) {
+        await this._switchPopup(
+            'expansion',
+            {
+                submit: (data: any) => {
+                    this._addExpansionBlocks(data.selected);
+                },
+                itemoff: ({ data, callback }: { data: any; callback?: () => void }) => {
+                    const isActive = Entry.expansion.isActive(data.name);
+                    if (!isActive) {
+                        callback && callback();
+                    } else {
+                        entrylms.alert(
+                            RendererUtils.getLang('Workspace.deselect_expansion_block_warning')
+                        );
+                    }
+                },
+                itemon: ({ callback }: { callback?: () => void }) => {
                     callback && callback();
-                } else {
-                    entrylms.alert(RendererUtils.getLang('Workspace.deselect_expansion_block_warning'));
-                }
+                },
             },
-            itemon: ({ callback }: { callback?: () => void }) => {
-                callback && callback();
-            },
-        }, expansionBlocks as any);
+            expansionBlocks as any
+        );
     }
 
     static async showAIUtilizePopup() {
         const aiBlocks = this._getActiveAIUtilizeBlocks();
 
-        await this._switchPopup('aiUtilize', {
-            submit: async (data: any) => {
-                await this._addAIUtilizeBlocks(data.selected);
-            },
-            itemoff: ({ data, callback }: { data: any; callback?: () => void }) => {
-                const isActive = Entry.aiUtilize.isActive(data.name);
-                if (!isActive) {
+        await this._switchPopup(
+            'aiUtilize',
+            {
+                submit: async (data: any) => {
+                    await this._addAIUtilizeBlocks(data.selected);
+                },
+                itemoff: ({ data, callback }: { data: any; callback?: () => void }) => {
+                    const isActive = Entry.aiUtilize.isActive(data.name);
+                    if (!isActive) {
+                        callback && callback();
+                    } else {
+                        entrylms.alert(
+                            RendererUtils.getLang('Workspace.deselect_ai_utilize_block_warning')
+                        );
+                    }
+                },
+                itemon: ({ callback }: { callback?: () => void }) => {
                     callback && callback();
-                } else {
-                    entrylms.alert(RendererUtils.getLang('Workspace.deselect_ai_utilize_block_warning'));
-                }
+                },
             },
-            itemon: ({ callback }: { callback?: () => void }) => {
-                callback && callback();
-            },
-        }, aiBlocks as any, '../../../node_modules/entry-js/images/aiUtilize/');
+            aiBlocks as any,
+            '../../../node_modules/entry-js/images/aiUtilize/'
+        );
     }
 
     static _getActiveExpansionBlocks() {
@@ -566,7 +593,9 @@ class EntryModalHelper {
     }
 
     static async _addAIUtilizeBlocks(blocks: any) {
-        const addBlocks = blocks.filter(({ name }: { name: string }) => !Entry.aiUtilizeBlocks.includes(name));
+        const addBlocks = blocks.filter(
+            ({ name }: { name: string }) => !Entry.aiUtilizeBlocks.includes(name)
+        );
         const removeBlocks = this._getActiveAIUtilizeBlocks()
             .filter((item) => item.active)
             .filter((item) => !blocks.includes(item));
@@ -580,7 +609,9 @@ class EntryModalHelper {
     }
 
     static _addExpansionBlocks(blocks: any) {
-        const addBlocks = blocks.filter(({ name }: { name: string }) => !Entry.expansionBlocks.includes(name));
+        const addBlocks = blocks.filter(
+            ({ name }: { name: string }) => !Entry.expansionBlocks.includes(name)
+        );
         const removeBlocks = this._getActiveExpansionBlocks()
             .filter((item) => item.active)
             .filter((item) => !blocks.includes(item));
@@ -595,12 +626,10 @@ class EntryModalHelper {
     static async showPaintPopup() {
         await this._switchPopup('paint', {
             fetch: (data: any) => {
-                DatabaseManager
-                    .findAll({
-                        ...data,
-                        type: 'picture',
-                    })
-                    .then(EntryModalHelper.fetchPopup);
+                DatabaseManager.findAll({
+                    ...data,
+                    type: 'picture',
+                }).then(EntryModalHelper.fetchPopup);
             },
             submit: (data: any) => {
                 const item = data.selected[0];
@@ -671,18 +700,23 @@ class EntryModalHelper {
         type: string,
         events: PopupEventListeners = {},
         data: any = [],
-        imageBaseUrl: string = '../../../node_modules/entry-js/images/hardware/') {
+        imageBaseUrl: string = '../../../node_modules/entry-js/images/hardware/'
+    ) {
         this.loadPopup(data);
         const popup = EntryModalHelper.popup;
-        if (this.lastOpenedType === type && data.length === 0) {
-            const initialData = await DatabaseManager.findAll({
-                sidebar: type === 'sound' ? '사람' : 'entrybot_friends',
-                subMenu: 'all',
-                type,
-            });
-            popup.setData({
-                data: { data: initialData },
-            });
+        if (this.lastOpenedType === type) {
+            if (data.length === 0) {
+                const initialData = await DatabaseManager.findAll({
+                    sidebar: type === 'sound' ? '사람' : 'entrybot_friends',
+                    subMenu: 'all',
+                    type,
+                });
+                popup.setData({
+                    data: { data: initialData },
+                });
+            } else {
+                return popup.show({ type, imageBaseUrl, baseUrl: '../../renderer/resources' });
+            }
         }
         this.lastOpenedType = type;
 
@@ -778,9 +812,10 @@ class EntryModalHelper {
     static showUpdateCheckModal(latestVersion: string) {
         new Modal()
             .alert(
-                `${RendererUtils.getLang('Msgs.version_update_msg1')
-                    .replace(/%1/gi, latestVersion)
-                }\n\n${RendererUtils.getLang('Msgs.version_update_msg3')}`,
+                `${RendererUtils.getLang('Msgs.version_update_msg1').replace(
+                    /%1/gi,
+                    latestVersion
+                )}\n\n${RendererUtils.getLang('Msgs.version_update_msg3')}`,
                 RendererUtils.getLang('General.update_title'),
                 {
                     positiveButtonText: RendererUtils.getLang('General.recent_download'),
@@ -791,7 +826,7 @@ class EntryModalHelper {
                     },
                     parentClassName: 'versionAlert',
                     withDontShowAgain: true,
-                },
+                }
             )
             .one('click', (event: string, { dontShowChecked }: { dontShowChecked: boolean }) => {
                 if (event === 'ok') {
