@@ -479,19 +479,17 @@ class EntryModalHelper {
             uploadFail: (data: any) => {
                 console.log('uploadFail', data);
             },
-            draw: ({ source }) => {
+            draw: async () => {
                 console.log('draw');
                 const name = Lang.Workspace.data_table;
-                const fields = [Lang.Workspace.tab_attribute];
-                Entry.playground.dataTable.addSource(
-                    source || {
+                const fields = await new Array(10).fill('');
+                Entry.playground.dataTable.addSources([
+                    {
                         name,
                         fields,
-                        data: [['']],
-                        tab: 'table',
-                    }
-                );
-                Entry.playground.changeViewMode('table');
+                        data: await new Array(29).fill(new Array(10).fill('')),
+                    },
+                ]);
             },
             fail: () => {
                 console.log('fail');
