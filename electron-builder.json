@@ -16,13 +16,16 @@
         ]
     },
     "win": {
-        "target": "dir",
+        "target": "squirrel",
         "extraResources": [
             {
                 "from": "validator/win/validator.exe",
                 "to": ""
             }
         ]
+    },
+    "squirrelWindows": {
+        "iconUrl": "https://playentry.org/img/icons/favicon.ico"
     },
     "fileAssociations": [
         {
