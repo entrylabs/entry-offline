@@ -40,7 +40,7 @@ class Workspace extends Component<IProps> {
         fonts: EntryStatic.fonts,
         textCodingEnable: true,
         dataTableEnable: true,
-        aiLearningEnable: false,
+        aiLearningEnable: true,
         paintMode: 'entry-paint',
     };
     state = {
