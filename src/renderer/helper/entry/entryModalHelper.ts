@@ -23,7 +23,6 @@ class EntryModalHelper {
     static popup: any;
     static lastOpenedType?: string;
     static fetchPopup = (data: any) => EntryModalHelper.popup.setData({ data: { data } });
-
     /**
      * 오브젝트 추가 팝업을 노출한다
      */
@@ -742,6 +741,7 @@ class EntryModalHelper {
     static loadPopup = (data: any) => {
         if (!EntryModalHelper.popup) {
             const targetDiv = document.createElement('div');
+            targetDiv.className = 'modal';
             document.body.appendChild(targetDiv);
             EntryModalHelper.popup = new Popup({
                 container: targetDiv,
@@ -752,6 +752,7 @@ class EntryModalHelper {
                     },
                 },
                 type: 'popup',
+                theme: 'entry',
             });
         } else {
             EntryModalHelper.popup.setData({ data: { data } });
