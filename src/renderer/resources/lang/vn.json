@@ -4886,6 +4886,7 @@
         "character_gen": "Make an avarta",
         "check_runtime_error": "vui lòng kiểm tra khối được đánh dấu màu đỏ",
         "check_browser_error": "This block is not compatible to IE/Safari/iOS",
+        "offline_not_compatible_error": "This block is not compatible to Offline Editor.",
         "check_browser_error_video": "This block is not compatible to IE / iOS.",
         "check_microphone_error": "There is no microphone connected to the computer",
         "check_webcam_error": "There is no camera connected to the computer",

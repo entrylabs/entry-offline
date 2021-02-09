@@ -4886,6 +4886,7 @@
         "character_gen": "캐릭터 만들기",
         "check_runtime_error": "빨간색으로 표시된 블록을 확인해 주세요.",
         "check_browser_error": "현재 브라우저(IE / Safari) 또는 운영체제(iOS)에서 지원하지 않는 블록입니다.",
+        "offline_not_compatible_error": "오프라인에서 사용 불가능한 블럭입니다.",
         "check_browser_error_video": "현재 브라우저(IE) 또는 운영체제(iOS)에서 지원하지 않는 블록입니다.",
         "check_microphone_error": "컴퓨터에 마이크가 연결되어있지 않습니다",
         "check_webcam_error": "컴퓨터에 카메라가 연결되어있지 않습니다",

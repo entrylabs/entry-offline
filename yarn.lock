@@ -2851,9 +2851,9 @@ enquirer@^2.3.5:
   version "2.0.0"
   resolved "git+https://github.com/entrylabs/entry-hw-server.git#83826252cf79ce0f39650ac76627ab474bb3a363"
 
-"entry-hw@git+https://github.com/entrylabs/entry-hw.git#dist/v1.9.13":
-  version "1.9.13"
-  resolved "git+https://github.com/entrylabs/entry-hw.git#f130d89d5053179e796b1649bec2404b6617b88d"
+"entry-hw@git+https://github.com/entrylabs/entry-hw.git#dist/v1.9.14":
+  version "1.9.14"
+  resolved "git+https://github.com/entrylabs/entry-hw.git#2f4aad1497b1eae0bb1529c41c160332837ca582"
   dependencies:
     cross-spawn "^7.0.0"
     fs-extra "^8.1.0"
