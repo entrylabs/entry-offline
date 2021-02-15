@@ -4886,7 +4886,7 @@
         "character_gen": "キャラクターを作成する",
         "check_runtime_error": "赤色で表示されたブロックを確認してください。",
         "check_browser_error": "IE/Safari/iOSではサポートしていないブロックです。",
-        "offline_not_compatible_error": "This block is not compatible to Offline Editor.",
+        "offline_not_compatible_error": "オフラインエディターでは使えないブロックです。",
         "check_browser_error_video": "IEブラウザとiOSでは対応していないブロックです。",
         "check_microphone_error": "コンピューターにマイクが接続されていません",
         "check_webcam_error": "コンピューターにカメラが接続されていません",
