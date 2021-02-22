@@ -139,9 +139,13 @@ class Workspace extends Component<IProps> {
         addEventListener('hwChanged', this.handleHardwareChange);
         // 하드웨어 다운로드 탭에서 다운로드 처리
         addEventListener('newWorkspace', async () => {
+            ModalHelper.popup.hide();
+            Entry.playground.dataTable.hide();
             await this.handleFileAction('new');
         });
         addEventListener('loadWorkspace', () => {
+            ModalHelper.popup.hide();
+            Entry.playground.dataTable.hide();
             this.handleFileAction('open_offline');
         });
         // 저장처리
