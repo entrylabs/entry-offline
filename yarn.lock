@@ -2870,7 +2870,7 @@ enquirer@^2.3.5:
 
 "entry-js@git+https://github.com/entrylabs/entryjs.git#dist/offline_v2.0.33":
   version "0.0.0"
-  resolved "git+https://github.com/entrylabs/entryjs.git#919bdd69f24d9125e0088be9a12940ce8191f3a5"
+  resolved "git+https://github.com/entrylabs/entryjs.git#7d3dc95a4f6c555e0d81eb26ea6323ee18fa6b0d"
 
 "entry-tool@git+https://github.com/entrylabs/entry-tool.git#v1.20210318110641.4":
   version "0.0.0"
