@@ -6,6 +6,7 @@ import Constants from './constants';
 import CommonUtils from './commonUtils';
 import checkUpdateRequest from './utils/network/checkUpdate';
 import createLogger from './utils/functions/createLogger';
+require('@electron/remote/main').initialize();
 
 const logger = createLogger('main/ipcMainHelper.ts');
 /**
@@ -17,7 +18,7 @@ const logger = createLogger('main/ipcMainHelper.ts');
  * main.js 에서 선언되어있다.
  * 이 클래스의 ipc event 들은 mainWindow, workspace 와 관련이 있다.
  */
-new class {
+new (class {
     constructor() {
         ipcMain.handle('saveProject', this.saveProject.bind(this));
         ipcMain.handle('loadProject', this.loadProject.bind(this));
@@ -119,7 +120,9 @@ new class {
     }
 
     async createTables(event: IpcMainInvokeEvent, filePaths: string[]) {
-        return await Promise.all(filePaths.map(DataTableManager.makeTableInfo.bind(DataTableManager)));
+        return await Promise.all(
+            filePaths.map(DataTableManager.makeTableInfo.bind(DataTableManager))
+        );
     }
 
     async getTable(event: IpcMainInvokeEvent, hashId: string) {
@@ -132,13 +135,22 @@ new class {
      * @param {Array<string>}unresolvedFilePathArray separator 가 없는 경로 목록
      * @param targetFilePath
      */
-    async staticDownload(event: IpcMainInvokeEvent, unresolvedFilePathArray: string[], targetFilePath: string) {
+    async staticDownload(
+        event: IpcMainInvokeEvent,
+        unresolvedFilePathArray: string[],
+        targetFilePath: string
+    ) {
         const resolvedFilePath = path.join(...unresolvedFilePathArray);
-        const staticFilePath = path.resolve(app.getAppPath(), 'src', 'main', 'static', resolvedFilePath);
-        await MainUtils.downloadFile(staticFilePath, targetFilePath)
-            .catch((err) => {
-                console.error(err);
-            });
+        const staticFilePath = path.resolve(
+            app.getAppPath(),
+            'src',
+            'main',
+            'static',
+            resolvedFilePath
+        );
+        await MainUtils.downloadFile(staticFilePath, targetFilePath).catch((err) => {
+            console.error(err);
+        });
     }
 
     /**
@@ -150,7 +162,12 @@ new class {
      * @param {string=}type 경로를 결정할 타입. image, sound 중 하나
      * @param {string}targetFilePath
      */
-    async tempResourceDownload(event: IpcMainInvokeEvent, entryObject: any, type: string, targetFilePath: string) {
+    async tempResourceDownload(
+        event: IpcMainInvokeEvent,
+        entryObject: any,
+        type: string,
+        targetFilePath: string
+    ) {
         let typedPath = '';
         if (entryObject.fileurl) {
             typedPath = entryObject.fileurl;
@@ -163,13 +180,13 @@ new class {
                 case 'image':
                     typedPath = path.join(
                         Constants.tempImagePath(entryObject.filename),
-                        CommonUtils.getFileNameWithExtension(entryObject, 'png'),
+                        CommonUtils.getFileNameWithExtension(entryObject, 'png')
                     );
                     break;
                 case 'sound':
                     typedPath = path.join(
                         Constants.tempSoundPath(entryObject.filename),
-                        CommonUtils.getFileNameWithExtension(entryObject, 'mp3'),
+                        CommonUtils.getFileNameWithExtension(entryObject, 'mp3')
                     );
                     break;
             }
@@ -213,4 +230,4 @@ new class {
         logger.info(`openUrl called : ${url}`);
         shell.openExternal(url);
     }
-}();
+})();

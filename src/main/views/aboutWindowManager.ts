@@ -27,6 +27,7 @@ export default class {
             show: false,
             webPreferences: {
                 nodeIntegration: true,
+                enableRemoteModule: true,
             },
         });
 
@@ -34,9 +35,9 @@ export default class {
             this.aboutWindow = undefined;
         });
 
-        this.aboutWindow.loadURL(`file:///${path.resolve(
-            app.getAppPath(), 'src', 'main', 'views', 'about.html',
-        )}`);
+        this.aboutWindow.loadURL(
+            `file:///${path.resolve(app.getAppPath(), 'src', 'main', 'views', 'about.html')}`
+        );
 
         logger.verbose('about window created');
     }
