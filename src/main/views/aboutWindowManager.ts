@@ -28,6 +28,7 @@ export default class {
             webPreferences: {
                 nodeIntegration: true,
                 enableRemoteModule: true,
+                contextIsolation: false,
             },
         });
 

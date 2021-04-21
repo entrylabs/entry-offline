@@ -1,6 +1,7 @@
-import { ipcRenderer, remote, shell } from 'electron';
+import { ipcRenderer, shell, dialog } from 'electron';
 import nativeMenu from './nativeMenu';
 import get from 'lodash/get';
+const remote = require('electron').remote;
 
 ipcRenderer.on('console', (event: Electron.IpcRendererEvent, ...args: any[]) => {
     console.log(...args);
@@ -8,11 +9,17 @@ ipcRenderer.on('console', (event: Electron.IpcRendererEvent, ...args: any[]) => 
 
 type OptionalDimension = { x?: number; y?: number; width?: number; height?: number };
 
-ipcRenderer.on('convertPng',
-    (event: Electron.IpcRendererEvent, base64String: string, mimeType: string, dimension?: OptionalDimension) => {
+ipcRenderer.on(
+    'convertPng',
+    (
+        event: Electron.IpcRendererEvent,
+        base64String: string,
+        mimeType: string,
+        dimension?: OptionalDimension
+    ) => {
         const canvas = document.createElement('canvas');
         const { x, y, width, height } = dimension || {};
-        const imageElement = (width && height) ? new Image(width, height) : new Image();
+        const imageElement = width && height ? new Image(width, height) : new Image();
 
         imageElement.onload = function() {
             canvas.width = imageElement.width;
@@ -21,7 +28,9 @@ ipcRenderer.on('convertPng',
             x && (canvas.width += x);
             y && (canvas.height += y);
 
-            canvas.getContext('2d')!.drawImage(imageElement, x || 0, y || 0, canvas.width, canvas.height);
+            canvas
+                .getContext('2d')!
+                .drawImage(imageElement, x || 0, y || 0, canvas.width, canvas.height);
 
             const pngImage = canvas.toDataURL('image/png');
             console.log('image to png processed');
@@ -29,7 +38,8 @@ ipcRenderer.on('convertPng',
             canvas.remove();
         };
         imageElement.src = `data:${mimeType};base64,${base64String}`;
-    });
+    }
+);
 
 window.onPageLoaded = (callback) => {
     ipcRenderer.on('showWindow', () => {
@@ -38,7 +48,7 @@ window.onPageLoaded = (callback) => {
 };
 
 window.getSharedObject = () => remote.getGlobal('sharedObject');
-window.dialog = remote.dialog;
+window.dialog = dialog;
 
 window.initNativeMenu = () => {
     nativeMenu.init();

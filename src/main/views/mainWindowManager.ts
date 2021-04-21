@@ -68,6 +68,7 @@ export default class {
                     'preload.bundle.js'
                 ),
                 enableRemoteModule: true,
+                contextIsolation: false,
             },
             icon: path.resolve(app.getAppPath(), 'src', 'main', 'static', 'icon.png'),
         });
@@ -95,7 +96,7 @@ export default class {
                     option.filters = filters;
                 }
                 const fileName = dialog.showSaveDialogSync(option);
-                if (typeof fileName == 'undefined') {
+                if (typeof fileName === 'undefined') {
                     downloadItem.cancel();
                 } else {
                     downloadItem.setSavePath(fileName);

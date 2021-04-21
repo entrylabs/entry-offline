@@ -61,6 +61,7 @@ export default class HardwareWindowManager {
                     'preload.bundle.js'
                 ),
                 enableRemoteModule: true,
+                contextIsolation: false,
             },
         });
 
