@@ -2,7 +2,7 @@ import { ITableModel } from './index';
 import xlsx from 'node-xlsx';
 
 class ExcelModel implements ITableModel {
-    private sheets?: {name: string, data: [][]}[] = undefined;
+    private sheets?: {name: string, data: any[][]}[] = undefined;
 
     static getExtensions(): string[] {
         return ['xlsx', 'xls'];
