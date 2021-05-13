@@ -10,17 +10,21 @@ declare interface Window extends Preload {
 
 declare interface Preload {
     dialog: Electron.Dialog;
-    ipcListen:
-        (channel: string, listener: (event: Electron.IpcRendererEvent, ...args: any[]) => void) => Electron.IpcRenderer;
+    ipcListen: (
+        channel: string,
+        listener: (event: Electron.IpcRendererEvent, ...args: any[]) => void
+    ) => Electron.IpcRenderer;
     onPageLoaded(callback: () => void): void;
     getSharedObject(): GlobalConfigurations;
     initNativeMenu(): void;
     getLang(key: string): string;
-    ipcInvoke<T = any>(channel: string, ...args: any[]): Promise<T>
+    ipcInvoke<T = any>(channel: string, ...args: any[]): Promise<T>;
+    sendSync<T = any>(channel: string, ...args: any[]): any;
     openEntryWebPage(): void;
     onLoadProjectFromMain(callback: (project: Promise<IEntry.Project>) => void): void;
     openHardwarePage(): void;
     checkPermission(type: 'microphone' | 'camera'): Promise<void>;
+    weightsPath: () => string;
 }
 
 declare var entrylms: any;

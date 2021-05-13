@@ -8,6 +8,7 @@
     "scripts": {
         "start": "cross-env NODE_ENV=development electron . --debug",
         "debug": "cross-env NODE_ENV=development electron --inspect .",
+        "prod:debug": "cross-env NODE_ENV=production electron --inspect . --debug",
         "test": "mocha --require ts-node/register */**/*.spec.ts",
         "webpack:dev": "cross-env NODE_ENV=development webpack",
         "webpack:prod": "cross-env NODE_ENV=production webpack",
@@ -31,7 +32,7 @@
         "axios": "^0.19.2",
         "cross-spawn": "^7.0.3",
         "entry-hw": "git+https://github.com/entrylabs/entry-hw.git#dist/v1.9.16",
-        "entry-js": "git+https://github.com/entrylabs/entryjs.git#dist/offline_v2.0.34",
+        "entry-js": "git+https://github.com/entrylabs/entryjs.git#dist/offline_v2.0.34.1",
         "entry-tool": "git+https://github.com/entrylabs/entry-tool.git#v1.20210318110641.4",
         "excel4node": "^1.7.0",
         "fs-extra": "^8.1.0",

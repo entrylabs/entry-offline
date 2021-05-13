@@ -3019,9 +3019,9 @@ enquirer@^2.3.5:
     winston "^3.2.1"
     winston-daily-rotate-file "^4.4.2"
 
-"entry-js@git+https://github.com/entrylabs/entryjs.git#dist/offline_v2.0.34":
+"entry-js@git+https://github.com/entrylabs/entryjs.git#dist/offline_v2.0.34.1":
   version "0.0.0"
-  resolved "git+https://github.com/entrylabs/entryjs.git#069b05e62b11199381bafab1793debaa6447cadd"
+  resolved "git+https://github.com/entrylabs/entryjs.git#bb0cb5e234244c4fa970cb693ae8144fe6627698"
 
 "entry-tool@git+https://github.com/entrylabs/entry-tool.git#v1.20210318110641.4":
   version "0.0.0"

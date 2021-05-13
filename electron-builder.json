@@ -68,6 +68,10 @@
         {
             "from": "node_modules/entry-hw/app/drivers",
             "to": "drivers"
+        },
+        {
+            "from": "node_modules/entry-js/weights",
+            "to": "weights"
         }
     ],
     "electronCompile": false,
