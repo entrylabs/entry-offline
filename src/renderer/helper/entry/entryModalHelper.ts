@@ -600,6 +600,9 @@ class EntryModalHelper {
         if (addBlocks.some((block: any) => block.name === 'audio')) {
             await IpcRendererHelper.checkAudioPermission();
         }
+        if (addBlocks.some((block: any) => block.name === 'video')) {
+            await IpcRendererHelper.checkVideoPermission();
+        }
 
         Entry.playground.addAIUtilizeBlocks(addBlocks);
         Entry.playground.removeAIUtilizeBlocks(removeBlocks);

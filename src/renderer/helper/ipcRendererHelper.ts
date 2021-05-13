@@ -144,4 +144,7 @@ export default class {
     static checkAudioPermission() {
         return window.checkPermission('microphone');
     }
+    static checkVideoPermission() {
+        return window.checkPermission('camera');
+    }
 }
