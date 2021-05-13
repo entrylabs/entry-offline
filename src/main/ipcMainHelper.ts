@@ -215,7 +215,8 @@ new (class {
             logger.info(`[MacOS] input Media ${type} permission requested,`);
             const accessStatus = systemPreferences.getMediaAccessStatus(type);
             if (accessStatus !== 'granted') {
-                await systemPreferences.askForMediaAccess(type);
+                await systemPreferences.askForMediaAccess('microphone');
+                await systemPreferences.askForMediaAccess('camera');
             }
         }
     }
