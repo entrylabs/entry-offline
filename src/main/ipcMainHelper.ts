@@ -6,6 +6,7 @@ import Constants from './constants';
 import CommonUtils from './commonUtils';
 import checkUpdateRequest from './utils/network/checkUpdate';
 import createLogger from './utils/functions/createLogger';
+require('@electron/remote/main').initialize();
 
 const logger = createLogger('main/ipcMainHelper.ts');
 /**

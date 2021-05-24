@@ -1,7 +1,8 @@
-import { ipcRenderer, remote, shell } from 'electron';
+import { ipcRenderer, shell } from 'electron';
 import nativeMenu from './nativeMenu';
 import get from 'lodash/get';
 import path from 'path';
+const remote = require('electron').remote;
 
 ipcRenderer.on('console', (event: Electron.IpcRendererEvent, ...args: any[]) => {
     console.log(...args);
