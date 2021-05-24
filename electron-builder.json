@@ -45,6 +45,9 @@
         "!src/renderer_build/hot",
         "!src/**/*.scss",
         "!node_modules/entry-hw/app/server",
+        "!node_modules/entry-hw/app/firmwares",
+        "!node_modules/entry-hw/app/modules",
+        "!node_modules/entry-hw/app/drivers",
         "config",
         {
             "from": "node_modules/entry-js",
