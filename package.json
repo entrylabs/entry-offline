@@ -2,7 +2,7 @@
     "private": true,
     "productName": "Entry",
     "name": "entry",
-    "version": "2.0.35",
+    "version": "2.0.36",
     "description": "Entry for offline",
     "main": "src/main_build/main.bundle.js",
     "scripts": {
@@ -33,7 +33,7 @@
         "axios": "^0.19.2",
         "cross-spawn": "^7.0.3",
         "entry-hw": "git+https://github.com/entrylabs/entry-hw.git#dist/v1.9.17",
-        "entry-js": "git+https://github.com/entrylabs/entryjs.git#dist/offline_v2.0.35",
+        "entry-js": "git+https://github.com/entrylabs/entryjs.git#dist/offline_v2.0.36",
         "entry-tool": "git+https://github.com/entrylabs/entry-tool.git#v1.20210512005741.5",
         "excel4node": "^1.7.0",
         "fs-extra": "^8.1.0",

@@ -3115,7 +3115,7 @@ enquirer@^2.3.5:
     winston "^3.2.1"
     winston-daily-rotate-file "^4.4.2"
 
-"entry-js@git+https://github.com/entrylabs/entryjs.git#dist/offline_v2.0.35":
+"entry-js@git+https://github.com/entrylabs/entryjs.git#dist/offline_v2.0.36":
   version "0.0.0"
   resolved "git+https://github.com/entrylabs/entryjs.git#35feb3993b449e724a9e47b4d6ef78770baff49d"
 
