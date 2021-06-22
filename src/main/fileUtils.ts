@@ -7,8 +7,8 @@ import { nativeImage } from 'electron';
 import createLogger from './utils/functions/createLogger';
 
 type tarCreateOption = FileOptions & CreateOptions;
-type readFileOption = { encoding?: string | null; flag?: string; } | string | undefined | null;
-type Dimension = { width: number, height: number };
+type readFileOption = { encoding?: string | null; flag?: string } | string | undefined | null;
+type Dimension = { width: number; height: number };
 
 const logger = createLogger('main/fileUtils.ts');
 
@@ -96,7 +96,11 @@ export default class {
      * @param filterFunction 해당 함수가 존재하면, 해당 함수 내 true 를 반환하는 파일만 필터된다.
      * @return {Promise<>}
      */
-    static unpack(sourcePath: string, targetPath: string, filterFunction?: (path: string) => boolean) {
+    static unpack(
+        sourcePath: string,
+        targetPath: string,
+        filterFunction?: (path: string) => boolean
+    ) {
         return new Promise((resolve, reject) => {
             process.once('uncaughtException', function(e) {
                 reject();
@@ -110,7 +114,7 @@ export default class {
                 filter: (path, entry) => {
                     const { type } = entry;
                     // @ts-ignore
-                    return (type !== 'SymbolicLink' && (!filterFunction || filterFunction(path)));
+                    return type !== 'SymbolicLink' && (!filterFunction || filterFunction(path));
                 },
             })
                 .then(() => {
@@ -136,7 +140,7 @@ export default class {
         sourcePath: string,
         targetPath: string,
         options: tarCreateOption = {},
-        fileList = ['.'],
+        fileList = ['.']
     ) {
         const srcDirectoryPath = path.parse(sourcePath).dir;
         const defaultOption: tarCreateOption = {
@@ -158,10 +162,7 @@ export default class {
         };
 
         logger.info(`try to pack ${sourcePath}`);
-        await tar.c(
-            Object.assign(defaultOption, options),
-            fileList,
-        );
+        await tar.c(Object.assign(defaultOption, options), fileList);
         logger.info('try to pack is done');
     }
 
@@ -171,8 +172,8 @@ export default class {
      */
     static createResizedImageBuffer(imageData: string | Buffer, dimension: Dimension) {
         let imageResizeNativeImage: nativeImage;
-        if (imageData instanceof Buffer) {
-            imageResizeNativeImage = nativeImage.createFromBuffer(imageData);
+        if (imageData instanceof Buffer || Uint8Array) {
+            imageResizeNativeImage = nativeImage.createFromBuffer(imageData as Buffer);
         } else {
             imageResizeNativeImage = nativeImage.createFromPath(imageData);
         }
@@ -192,10 +193,14 @@ export default class {
      * @param {fs.WriteFileOptions}option 파일 옵션
      * @return {Promise<>}
      */
-    static writeFile(contents: any, filePath: string, option: fs.WriteFileOptions = {
-        encoding: 'utf8',
-        mode: '0777',
-    }) {
+    static writeFile(
+        contents: any,
+        filePath: string,
+        option: fs.WriteFileOptions = {
+            encoding: 'utf8',
+            mode: '0777',
+        }
+    ) {
         return new Promise((resolve, reject) => {
             this.ensureDirectoryExistence(filePath);
             logger.info(`writeFile to ${filePath}..`);

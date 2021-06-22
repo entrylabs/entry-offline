@@ -1,6 +1,8 @@
-import { ipcRenderer, remote, shell } from 'electron';
+import { ipcRenderer, shell } from 'electron';
 import nativeMenu from './nativeMenu';
 import get from 'lodash/get';
+import path from 'path';
+const remote = require('electron').remote;
 
 ipcRenderer.on('console', (event: Electron.IpcRendererEvent, ...args: any[]) => {
     console.log(...args);
@@ -72,6 +74,13 @@ window.openEntryWebPage = () => {
 
 window.openHardwarePage = () => {
     ipcRenderer.send('openHardwareWindow');
+};
+
+window.weightsPath = () => {
+    console.log(process.env.NODE_ENV);
+    return process.env.NODE_ENV === 'production'
+        ? path.resolve(process.resourcesPath, 'weights')
+        : path.resolve(remote.app.getAppPath(), 'node_modules', 'entry-js', 'weights');
 };
 
 /**

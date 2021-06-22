@@ -145,4 +145,7 @@ export default class {
     static getModulePath() {
         return modulePath;
     }
+    static checkVideoPermission() {
+        return window.checkPermission('camera');
+    }
 }

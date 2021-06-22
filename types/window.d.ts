@@ -20,11 +20,12 @@ declare interface Preload {
     initNativeMenu(): void;
     getLang(key: string): string;
     ipcInvoke<T = any>(channel: string, ...args: any[]): Promise<T>;
-    sendSync(channel: string, ...args: any[]): string | undefined;
+    sendSync<T = any>(channel: string, ...args: any[]): any;
     openEntryWebPage(): void;
     onLoadProjectFromMain(callback: (project: Promise<IEntry.Project>) => void): void;
     openHardwarePage(): void;
     checkPermission(type: 'microphone' | 'camera'): Promise<void>;
+    weightsPath: () => string;
 }
 
 declare var entrylms: any;

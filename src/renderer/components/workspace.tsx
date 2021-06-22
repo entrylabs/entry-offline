@@ -40,7 +40,7 @@ class Workspace extends Component<IProps> {
         fonts: EntryStatic.fonts,
         textCodingEnable: true,
         dataTableEnable: true,
-        aiLearningEnable: false,
+        aiLearningEnable: true,
         paintMode: 'entry-paint',
         offlineModulePath: window.modulePath,
     };
@@ -50,6 +50,7 @@ class Workspace extends Component<IProps> {
             canRedo: false,
             canUndo: false,
         },
+        modalStyle: {},
     };
 
     get initOption() {
@@ -59,6 +60,7 @@ class Workspace extends Component<IProps> {
     constructor(props: Readonly<IProps>) {
         super(props);
         this.addMainProcessEvents();
+        ModalHelper.loadPopup([]);
     }
 
     _waitFontLoad() {
@@ -89,7 +91,8 @@ class Workspace extends Component<IProps> {
                 this.showModalProgress(
                     'error',
                     RendererUtils.getLang('Workspace.loading_fail_msg'),
-                    RendererUtils.getLang('Workspace.fail_contact_msg')
+                    RendererUtils.getLang('Workspace.fail_contact_msg'),
+                    { height: 190, width: 365, padding: 30 }
                 );
                 await RendererUtils.clearTempProject();
 
@@ -114,7 +117,8 @@ class Workspace extends Component<IProps> {
                 this.showModalProgress(
                     'progress',
                     RendererUtils.getLang('Workspace.uploading_msg'),
-                    RendererUtils.getLang('Workspace.fail_contact_msg')
+                    RendererUtils.getLang('Workspace.fail_contact_msg'),
+                    { width: 220 }
                 );
                 const project = await readProjectFunction;
                 await this.loadProject(project);
@@ -136,9 +140,13 @@ class Workspace extends Component<IProps> {
         addEventListener('hwChanged', this.handleHardwareChange);
         // 하드웨어 다운로드 탭에서 다운로드 처리
         addEventListener('newWorkspace', async () => {
+            ModalHelper.popup.hide();
+            Entry.playground.dataTable.hide();
             await this.handleFileAction('new');
         });
         addEventListener('loadWorkspace', () => {
+            ModalHelper.popup.hide();
+            Entry.playground.dataTable.hide();
             this.handleFileAction('open_offline');
         });
         // 저장처리
@@ -197,7 +205,14 @@ class Workspace extends Component<IProps> {
         if (this.isSavingCanvasData) {
             entrylms.alert(RendererUtils.getLang('Msgs.save_canvas_alert'));
         } else {
-            this.showModalProgress('progress', RendererUtils.getLang('Msgs.save_canvas_alert'));
+            this.showModalProgress(
+                'progress',
+                RendererUtils.getLang('Msgs.save_canvas_alert'),
+                '',
+                {
+                    width: 220,
+                }
+            );
             this.isSavingCanvasData = true;
             try {
                 await EntryUtils.saveCanvasImage(data);
@@ -322,7 +337,8 @@ class Workspace extends Component<IProps> {
             this.showModalProgress(
                 'progress',
                 RendererUtils.getLang('Workspace.saving_msg'),
-                RendererUtils.getLang('Workspace.fail_contact_msg')
+                RendererUtils.getLang('Workspace.fail_contact_msg'),
+                { width: 220 }
             );
 
             try {
@@ -353,7 +369,8 @@ class Workspace extends Component<IProps> {
                 this.showModalProgress(
                     'error',
                     RendererUtils.getLang('Workspace.saving_fail_msg'),
-                    RendererUtils.getLang('Workspace.fail_contact_msg')
+                    RendererUtils.getLang('Workspace.fail_contact_msg'),
+                    { height: 190, width: 365, padding: 30 }
                 );
             } finally {
                 this.isSaveProject = false;
@@ -406,7 +423,8 @@ class Workspace extends Component<IProps> {
         this.showModalProgress(
             'progress',
             RendererUtils.getLang('Workspace.uploading_msg'),
-            RendererUtils.getLang('Workspace.fail_contact_msg')
+            RendererUtils.getLang('Workspace.fail_contact_msg'),
+            { width: 220 }
         );
 
         try {
@@ -423,7 +441,8 @@ class Workspace extends Component<IProps> {
             this.showModalProgress(
                 'error',
                 RendererUtils.getLang('Workspace.loading_fail_msg'),
-                RendererUtils.getLang('Workspace.fail_contact_msg')
+                RendererUtils.getLang('Workspace.fail_contact_msg'),
+                { height: 190, width: 365, padding: 30 }
             );
         }
     }
@@ -531,8 +550,9 @@ class Workspace extends Component<IProps> {
         }
     };
 
-    showModalProgress(type: string, title: string, description = '') {
+    showModalProgress(type: string, title: string, description = '', modalStyle?: Object) {
         const { ModalActions } = this.props;
+        this.setState({ ...this.state, modalStyle: modalStyle || {} });
         ModalActions.showModalProgress({
             isShow: true,
             data: {
@@ -587,6 +607,7 @@ class Workspace extends Component<IProps> {
                             type={type}
                             description={description}
                             onClose={this.hideModalProgress}
+                            textBoxStyle={this.state.modalStyle}
                         />
                     )}
                 </div>

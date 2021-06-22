@@ -1,4 +1,4 @@
-import { app, dialog, ipcMain, Menu } from 'electron';
+import { app, dialog, ipcMain, Menu, systemPreferences } from 'electron';
 import HardwareWindowManager from './views/hardwareWindowManager';
 import MainWindowManager from './views/mainWindowManager';
 import AboutWindowManager from './views/aboutWindowManager';

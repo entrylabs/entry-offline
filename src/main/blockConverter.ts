@@ -10,7 +10,7 @@ import _ from 'lodash';
 import entry from './entryBlocks';
 import createLogger from './utils/functions/createLogger';
 
-const parseString = xml2js.parseString;
+const parseStringPromise = xml2js.parseStringPromise;
 const logger = createLogger('main/xmlBlockConverter');
 
 function processCode(xml: any) {
@@ -19,7 +19,6 @@ function processCode(xml: any) {
     if (topBlocks) {
         code = topBlocks.map(processThread);
     }
-
 
     const locationsX: any[] = [];
     const locationsY: any[] = [];
@@ -50,12 +49,12 @@ function processThread(block: any) {
 function processFunctionGeneral(block: any, thread: any) {
     const parsedBlock = block.$;
 
-    parsedBlock.x ? parsedBlock.x = Number(parsedBlock.x) : 0;
-    parsedBlock.y ? parsedBlock.y = Number(parsedBlock.y) : 0;
+    parsedBlock.x ? (parsedBlock.x = Number(parsedBlock.x)) : 0;
+    parsedBlock.y ? (parsedBlock.y = Number(parsedBlock.y)) : 0;
 
     const mutation = block.mutation[0];
 
-    parsedBlock.type = `func_${  mutation.$.hashid}`;
+    parsedBlock.type = `func_${mutation.$.hashid}`;
 
     parsedBlock.params = [];
     const values = block.value;
@@ -77,8 +76,8 @@ function processFunctionGeneral(block: any, thread: any) {
 function processFunctionCreate(block: any, thread: any) {
     const parsedBlock = block.$;
 
-    parsedBlock.x ? parsedBlock.x = Number(parsedBlock.x) : 0;
-    parsedBlock.y ? parsedBlock.y = Number(parsedBlock.y) : 0;
+    parsedBlock.x ? (parsedBlock.x = Number(parsedBlock.x)) : 0;
+    parsedBlock.y ? (parsedBlock.y = Number(parsedBlock.y)) : 0;
 
     thread.push(parsedBlock);
     if (block.next) {
@@ -89,19 +88,19 @@ function processFunctionCreate(block: any, thread: any) {
 function processMutationField(block: any, thread: any) {
     const parsedBlock = block.$;
 
-    parsedBlock.x ? parsedBlock.x = Number(parsedBlock.x) : 0;
-    parsedBlock.y ? parsedBlock.y = Number(parsedBlock.y) : 0;
+    parsedBlock.x ? (parsedBlock.x = Number(parsedBlock.x)) : 0;
+    parsedBlock.y ? (parsedBlock.y = Number(parsedBlock.y)) : 0;
 
     switch (parsedBlock.type.substr(15, 25)) {
-        case "label":
+        case 'label':
             parsedBlock.params = [block.field[0]._];
             break;
-        case "string":
+        case 'string':
             var paramBlock = block.value.shift().block[0];
             parsedBlock.params = [];
             processMutationParam(paramBlock, parsedBlock.params);
             break;
-        case "boolean":
+        case 'boolean':
             var paramBlock = block.value.shift().block[0];
             parsedBlock.params = [];
             processMutationParam(paramBlock, parsedBlock.params);
@@ -117,15 +116,15 @@ function processMutationField(block: any, thread: any) {
 function processMutationParam(block: any, thread: any) {
     const parsedBlock = block.$;
 
-    parsedBlock.x ? parsedBlock.x = Number(parsedBlock.x) : 0;
-    parsedBlock.y ? parsedBlock.y = Number(parsedBlock.y) : 0;
+    parsedBlock.x ? (parsedBlock.x = Number(parsedBlock.x)) : 0;
+    parsedBlock.y ? (parsedBlock.y = Number(parsedBlock.y)) : 0;
 
     switch (parsedBlock.type.substr(15, 25)) {
-        case "string":
-            parsedBlock.type = `stringParam_${  block.mutation[0].$.hashid}`;
+        case 'string':
+            parsedBlock.type = `stringParam_${block.mutation[0].$.hashid}`;
             break;
-        case "boolean":
-            parsedBlock.type = `booleanParam_${  block.mutation[0].$.hashid}`;
+        case 'boolean':
+            parsedBlock.type = `booleanParam_${block.mutation[0].$.hashid}`;
             break;
     }
 
@@ -138,16 +137,16 @@ function processBlock(block: any, thread: any) {
     }
     const parsedBlock = block.$;
 
-    if (parsedBlock.type === "function_general") {
+    if (parsedBlock.type === 'function_general') {
         return processFunctionGeneral(block, thread);
-    } else if (parsedBlock.type.indexOf("function_field") == 0) {
+    } else if (parsedBlock.type.indexOf('function_field') == 0) {
         return processMutationField(block, thread);
-    } else if (parsedBlock.type.indexOf("function_param") == 0) {
+    } else if (parsedBlock.type.indexOf('function_param') == 0) {
         return processMutationParam(block, thread);
     }
 
-    parsedBlock.x ? parsedBlock.x = Number(parsedBlock.x) : 0;
-    parsedBlock.y ? parsedBlock.y = Number(parsedBlock.y) : 0;
+    parsedBlock.x ? (parsedBlock.x = Number(parsedBlock.x)) : 0;
+    parsedBlock.y ? (parsedBlock.y = Number(parsedBlock.y)) : 0;
 
     if (parsedBlock.type == 'hamster_set_wheels_to') {
         parsedBlock.type = 'hamster_set_wheel_to';
@@ -160,7 +159,7 @@ function processBlock(block: any, thread: any) {
         fields = fields.map(function(f: any) {
             let val = f._;
             const pType = parsedBlock.type;
-            if ((pType === "number" || pType === 'text') && val === undefined) {
+            if ((pType === 'number' || pType === 'text') && val === undefined) {
                 val = '';
             }
             blockValues[keyMap[f.$.name]] = val;
@@ -174,7 +173,7 @@ function processBlock(block: any, thread: any) {
             const fieldThread: any[] = [];
             processBlock(fieldBlock, fieldThread);
             let index = keyMap[v.$.name];
-            if (blockValues.type === "rotate_by_angle_time") {
+            if (blockValues.type === 'rotate_by_angle_time') {
                 index = 0;
             }
             blockValues[index] = fieldThread[0];
@@ -208,41 +207,40 @@ function processBlock(block: any, thread: any) {
 
 export default {
     async convert(project: any) {
-        logger.warn('legacy xml project request convert');
-        logger.warn('project data is..');
-        logger.warn(JSON.stringify(project));
-
         const objects = project.objects;
         const functions = project.functions;
-
-        let done = _.after(functions.length, function() {
-            done = _.after(objects.length, function() {
-                return project;
-            });
-
-            if (!objects.length) {
-                done();
+        let queue = [];
+        if (functions.length) {
+            for (let i = 0; i < functions.length; i++) {
+                const func = functions[i];
+                queue.push(
+                    parseStringPromise(func.content)
+                        .then((xml: any) => {
+                            func.content = JSON.stringify(processCode(xml));
+                        })
+                        .catch((err: Error) => {
+                            logger.warn(`failed to parse ${func.content}`);
+                        })
+                );
             }
-
+        }
+        if (objects.length) {
             for (let i = 0; i < objects.length; i++) {
                 const object = objects[i];
-                parseString(object.script, function(err: any, xml: any) {
-                    object.script = JSON.stringify(processCode(xml));
-                    done();
-                });
+                queue.push(
+                    parseStringPromise(object.script)
+                        .then((xml: any) => {
+                            object.script = JSON.stringify(processCode(xml));
+                        })
+                        .catch((err: Error) => {
+                            logger.warn(`failed to parse ${object.script}`);
+                        })
+                );
             }
-        });
-
-        if (!functions.length) {
-            done();
         }
-
-        for (let i = 0; i < functions.length; i++) {
-            const func = functions[i];
-            parseString(func.content, function(err: any, xml: any) {
-                func.content = JSON.stringify(processCode(xml));
-                done();
-            });
-        }
+        await Promise.all(queue);
+        project.objects = objects;
+        project.functions = functions;
+        return project;
     },
 };
