@@ -86,9 +86,10 @@ if (!app.requestSingleInstanceLock()) {
 
         ipcMain.on('decryptBlock', (event: any, scriptStr: string) => {
             logger.info(`'decryptBlock' event fired`);
-            event.returnValue = cryptojs.AES.decrypt(scriptStr, process.env.OFFLINE_KEY).toString(
-                cryptojs.enc.Utf8
-            );
+            event.returnValue = cryptojs.AES.decrypt(
+                scriptStr,
+                process.env.OFFLINE_KEY || ''
+            ).toString(cryptojs.enc.Utf8);
         });
 
         setTimeout(async () => {
