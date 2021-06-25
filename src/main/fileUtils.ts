@@ -172,10 +172,10 @@ export default class {
      */
     static createResizedImageBuffer(imageData: string | Buffer, dimension: Dimension) {
         let imageResizeNativeImage: nativeImage;
-        if (imageData instanceof Buffer || Uint8Array) {
-            imageResizeNativeImage = nativeImage.createFromBuffer(imageData as Buffer);
+        if (imageData instanceof Buffer || typeof imageData !== 'string') {
+            imageResizeNativeImage = nativeImage.createFromBuffer(imageData as any);
         } else {
-            imageResizeNativeImage = nativeImage.createFromPath(imageData);
+            imageResizeNativeImage = nativeImage.createFromPath(imageData as string);
         }
 
         return imageResizeNativeImage
