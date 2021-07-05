@@ -3098,9 +3098,9 @@ enquirer@^2.3.5:
   dependencies:
     crypto-js "^4.0.0"
 
-"entry-hw@git+https://github.com/entrylabs/entry-hw.git#dist/v1.9.17":
-  version "1.9.17"
-  resolved "git+https://github.com/entrylabs/entry-hw.git#ac8f356249fa2590d1bfcbcdf7b457862a220d4a"
+"entry-hw@git+https://github.com/entrylabs/entry-hw.git#dist/v1.9.18_2":
+  version "1.9.19"
+  resolved "git+https://github.com/entrylabs/entry-hw.git#36cf83ab656e701cec6a4706aa91b32893d806c2"
   dependencies:
     cross-spawn "^7.0.0"
     fs-extra "^8.1.0"
