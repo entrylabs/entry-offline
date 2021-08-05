@@ -1249,6 +1249,7 @@
         "default_hint_title": "어떻게 만들까?"
     },
     "Menus": {
+        "corporateConfirm":"확인",
         "block_coding": "블록코딩",
         "python_coding": "엔트리파이선",
         "show_all": "모두 보기",
