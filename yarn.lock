@@ -3098,7 +3098,7 @@ enquirer@^2.3.5:
   dependencies:
     crypto-js "^4.0.0"
 
-"entry-hw@git+https://github.com/entrylabs/entry-hw.git#dist/v1.9.18_2":
+"entry-hw@git+https://github.com/entrylabs/entry-hw.git#dist/v1.9.19":
   version "1.9.19"
   resolved "git+https://github.com/entrylabs/entry-hw.git#36cf83ab656e701cec6a4706aa91b32893d806c2"
   dependencies:
