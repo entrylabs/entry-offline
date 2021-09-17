@@ -148,6 +148,7 @@ class EntryModalHelper {
                                 if (firstObject.objectType === 'textBox') {
                                     // selected = firstObject;
                                     selected = {
+                                        sprite: objectModel,
                                         name: firstObject.name,
                                         text: firstObject.text,
                                         objectType: firstObject.objectType,
@@ -158,7 +159,6 @@ class EntryModalHelper {
                                     };
                                 }
 
-                                selected.sprite = objectModel;
                                 return selected;
                             })
                         ),
