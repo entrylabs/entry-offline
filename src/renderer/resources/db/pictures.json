@@ -4141,8 +4141,6 @@
 ,
 {"_id":"54ab3428a30591ac50784971","filename":"39866e0a1f2a5bd8860659e6f46ee8b7","name":"화분_1","user":"534cd3c32d3ee756348975f8","created":"2015-01-06T01:02:32.709Z","specials":[],"type":"_system_","dimension":{"height":232,"width":246},"category":{"sub":"stuff_others","main":"stuff"},"label":{"ko":"화분_1","en":"Flower Pot_1","vn":"Flower Pot_1"},"__v":0}
 ,
-{"_id":"54944299da978760158e7c06","filename":"ee31d8f9d31fcb55e1c6b4a9e04a2283","name":"보드판","user":"53281c3ca9a5cf70288bc90c","created":"2014-12-19T15:22:01.534Z","specials":[],"type":"_system_","dimension":{"height":400,"width":800},"category":{"sub":"","main":"EBS25회"},"label":{"ko":"보드판","en":"Board Board","vn":"Board Board"},"__v":0}
-,
 {"_id":"53f335a67414ccbd1641f8c1","filename":"b796ebd1f4e8b9ed6532e102784bcadb","user":"5347daf048aa869a375894e9","name":"새 로봇_2","created":"2014-08-19T11:31:50.530Z","type":"_system_","dimension":{"height":301,"width":232},"category":{"sub":"","main":"fantasy"},"__v":1,"specials":[],"label":{"ko":"새 로봇_2","en":"Bird Robot_2","vn":"Bird Robot_2"}}
 ,
 {"_id":"53f3358d7414ccbd1641f81b","filename":"f0a1e3bfdec52f8f2588e9a37f3759c7","user":"53281c3ca9a5cf70288bc90c","name":"해적룰렛_1","created":"2014-08-19T11:31:25.463Z","type":"_system_","dimension":{"height":202,"width":278},"category":{"sub":"","main":"fantasy"},"__v":1,"specials":[],"label":{"ko":"해적룰렛_1","en":"Pirates’ Roulette_1","vn":"Pirates’ Roulette_1"}}
