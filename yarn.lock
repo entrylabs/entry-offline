@@ -3098,9 +3098,9 @@ enquirer@^2.3.5:
   dependencies:
     crypto-js "^4.0.0"
 
-"entry-hw@git+https://github.com/entrylabs/entry-hw.git#dist/v1.9.20":
-  version "1.9.20"
-  resolved "git+https://github.com/entrylabs/entry-hw.git#6f7b4939d01295d7e97dca5118ad4bd796d46e32"
+"entry-hw@git+https://github.com/entrylabs/entry-hw.git#dist/v1.9.22":
+  version "1.9.22"
+  resolved "git+https://github.com/entrylabs/entry-hw.git#2d4e831adc4db46f1dabebae8793ee529e49d011"
   dependencies:
     cross-spawn "^7.0.0"
     fs-extra "^8.1.0"
@@ -3115,9 +3115,9 @@ enquirer@^2.3.5:
     winston "^3.2.1"
     winston-daily-rotate-file "^4.4.2"
 
-"entry-js@git+https://github.com/entrylabs/entryjs.git#dist/offline_v2.0.39":
+"entry-js@git+https://github.com/entrylabs/entryjs.git#dist/offline_v2.0.40":
   version "0.0.0"
-  resolved "git+https://github.com/entrylabs/entryjs.git#383b0b77d9a1d82c8b7260dc0442ba210074fa89"
+  resolved "git+https://github.com/entrylabs/entryjs.git#daed173bf433383c0c6193e027287a748bf1a407"
 
 "entry-tool@git+https://github.com/entrylabs/entry-tool.git#dist/develop":
   version "0.0.0"
