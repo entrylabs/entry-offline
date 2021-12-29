@@ -1309,6 +1309,7 @@
         "all": "전체",
         "list": "목록",
         "save_as_image_all": "모든 코드 이미지로 저장하기",
+        "save_dismiss": "바꾼 내용을 저장하지 않았습니다.\n 계속 하시겠습니까?",
         "console": "콘솔",
         "upload": "올리기",
         "search_lang": "검색",
