@@ -3098,6 +3098,27 @@ enquirer@^2.3.5:
   dependencies:
     crypto-js "^4.0.0"
 
+"entry-hw@git+https://github.com/entrylabs/entry-hw.git#dist/v1.9.27":
+  version "1.9.27"
+  resolved "git+https://github.com/entrylabs/entry-hw.git#e32521b5c7e14648046e628bb372a5338a2d1689"
+  dependencies:
+    cross-spawn "^7.0.0"
+    fs-extra "^8.1.0"
+    lodash "^4.17.19"
+    node-hid "2.1.1"
+    rimraf "^3.0.2"
+    semver "^7.1.1"
+    serialport "9.0.7"
+    socket.io "^2.2.0"
+    socket.io-client "^2.2.0"
+    tar "^6.0.1"
+    winston "^3.2.1"
+    winston-daily-rotate-file "^4.4.2"
+
+"entry-js@git+https://github.com/entrylabs/entryjs.git#dist/offline_v2.0.44":
+  version "0.0.0"
+  resolved "git+https://github.com/entrylabs/entryjs.git#8f90e5cd105bc7f91674810a5c3ba28e8f4dfcd8"
+
 "entry-tool@git+https://github.com/entrylabs/entry-tool.git#dist/develop":
   version "0.0.0"
   resolved "git+https://github.com/entrylabs/entry-tool.git#302c3d6649fd56c5665e1fbe3a30b1ec309fece0"
