@@ -65,7 +65,7 @@ window.ipcInvoke = (channel: string, ...args: any[]) => {
 };
 
 window.openEntryWebPage = () => {
-    shell.openExternal('https://playentry.org/#!/offlineEditor');
+    shell.openExternal('https://playentry.org/download/offline');
 };
 
 window.openHardwarePage = () => {
