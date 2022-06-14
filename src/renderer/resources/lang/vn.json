@@ -8504,6 +8504,7 @@
         "boolean_and": "%1 %2 %3",
         "boolean_or": "%1 %2 %3",
         "boolean_not": "%1 %2 %3",
+        "is_boost_mode": "%1",
         "true_or_false": "%1",
         "True": "%1",
         "False": "%1",
