@@ -70,7 +70,7 @@ export default function() {
                         (function(i) {
                             topBlock.view.getDataUrl()
                                 .then(function(data: any) {
-                                    const savePath = `${dirPath[0]}${Constants.sep}${i}${'.png'}`;
+                                    const savePath = `${dirPath}${Constants.sep}${i}${'.png'}`;
                                     RendererUtils.saveBlockImage(data.src, savePath);
                                 });
                         })(++index);
