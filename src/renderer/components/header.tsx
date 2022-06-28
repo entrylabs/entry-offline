@@ -92,12 +92,13 @@ class Header extends Component<IProps, IState> {
         ];
     }
 
+    // noti : 가지고 있는 다국어 종류는 4종류이지만, 운영빌드에서는 관리중인 2종류만 제공
     get languageList(): DropDownItemPair[] {
         return [
             [RendererUtils.getLang('ko'), 'ko'],
             [RendererUtils.getLang('en'), 'en'],
-            [RendererUtils.getLang('jp'), 'jp'],
-            [RendererUtils.getLang('vn'), 'vn'],
+            // [RendererUtils.getLang('jp'), 'jp'],
+            // [RendererUtils.getLang('vn'), 'vn'],
         ];
     }
 
