@@ -1,4 +1,4 @@
-import { app, ipcMain } from 'electron';
+import { app, ipcMain, WebContents } from 'electron';
 import fs from 'fs';
 import path from 'path';
 import xl from 'excel4node';
@@ -713,7 +713,7 @@ export default class MainUtils {
      * @param filePath
      * @param sender
      */
-    static convertPng(filePath: string, sender: Electron.webContents): Promise<ConvertResult> {
+    static convertPng(filePath: string, sender: WebContents): Promise<ConvertResult> {
         return new Promise(async (resolve) => {
             try {
                 const newFileName = path.basename(filePath).replace(/\..*$/, '');

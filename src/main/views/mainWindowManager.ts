@@ -52,6 +52,7 @@ export default class {
                 'This program has been shut down unexpectedly. Save the file you were working on.';
         }
 
+        const remoteMain = require('@electron/remote/main');
         const mainWindow = new BrowserWindow({
             width: 1080,
             height: 824,
@@ -67,11 +68,11 @@ export default class {
                     'preload_build',
                     'preload.bundle.js'
                 ),
-                enableRemoteModule: true,
                 contextIsolation: false,
             },
             icon: path.resolve(app.getAppPath(), 'src', 'main', 'static', 'icon.png'),
         });
+        remoteMain.enable(mainWindow.webContents);
         this.mainWindow = mainWindow;
         this.webContentsId = mainWindow.webContents.id;
 
