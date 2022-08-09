@@ -18,7 +18,7 @@ export default class {
     static async confirmProjectWillDismiss() {
         let confirmProjectDismiss = true;
         if (!Entry.stateManager.isSaved()) {
-            confirmProjectDismiss = await entrylms.confirm(
+            confirmProjectDismiss = await window.EntryModal.confirm(
                 RendererUtils.getLang('Menus.save_dismiss')
             );
         }
@@ -60,13 +60,9 @@ export default class {
         } else if (project) {
             let confirm = false;
             try {
-                confirm = await entrylms.confirm(
+                confirm = await window.EntryModal.confirm(
                     RendererUtils.getLang('Workspace.confirm_load_temporary'),
-                    RendererUtils.getLang('Workspace.confirm_load_header'),
-                    {
-                        positiveButtonText: RendererUtils.getLang('Buttons.yes'),
-                        negativeButtonText: RendererUtils.getLang('Buttons.button_no'),
-                    }
+                    RendererUtils.getLang('Workspace.confirm_load_header')
                 );
 
                 if (confirm) {

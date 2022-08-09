@@ -28,6 +28,7 @@ declare interface Preload {
 }
 
 declare var entrylms: any;
+declare var EntryModal: any;
 declare var Lang: any;
 declare var createjs: any;
 declare var EntryStatic: any;

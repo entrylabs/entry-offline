@@ -198,6 +198,14 @@
   resolved "https://registry.yarnpkg.com/@emotion/unitless/-/unitless-0.7.5.tgz#77211291c1900a700b8a78cfafda3160d76949ed"
   integrity sha512-OWORNpfjMsSSUBVrRBVGECkhWcULOAJz9ZW8uK9qgxD+87M7jHRcvh/A96XXNhXTLmKcoYSQtBEX7lHMO7YRwg==
 
+"@entrylabs/modal@^1.2.7":
+  version "1.2.9"
+  resolved "https://registry.yarnpkg.com/@entrylabs/modal/-/modal-1.2.9.tgz#b639b46c04988b6195f3c01567dfdec1a1a1cefb"
+  integrity sha512-nT9sPk4YQaSga1mu4u8maRXfaQsfhaTjDoTCJ6bB7VTrvuCMe8Glw7ORXRgSEKiIIzWV+bjx3SNwAmxxMyheWA==
+  dependencies:
+    lodash-es "^4.17.21"
+    rimraf "^3.0.2"
+
 "@eslint/eslintrc@^0.4.0":
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/@eslint/eslintrc/-/eslintrc-0.4.0.tgz#99cc0a0584d72f1df38b900fb062ba995f395547"
@@ -5235,6 +5243,11 @@ locate-path@^3.0.0:
   dependencies:
     p-locate "^3.0.0"
     path-exists "^3.0.0"
+
+lodash-es@^4.17.21:
+  version "4.17.21"
+  resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.21.tgz#43e626c46e6591b7750beb2b50117390c609e3ee"
+  integrity sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==
 
 lodash.clonedeep@^4.5.0:
   version "4.5.0"
