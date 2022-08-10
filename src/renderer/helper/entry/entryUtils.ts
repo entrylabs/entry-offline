@@ -2,6 +2,7 @@ import IpcRendererHelper from '../ipcRendererHelper';
 import StorageManager from '../storageManager';
 import RendererUtils from '../rendererUtils';
 import Constants from '../constants';
+import EntryModalHelper from './entryModalHelper';
 
 /**
  * 엔트리 코드로직과 관련된 유틸.
@@ -18,7 +19,7 @@ export default class {
     static async confirmProjectWillDismiss() {
         let confirmProjectDismiss = true;
         if (!Entry.stateManager.isSaved()) {
-            confirmProjectDismiss = await window.EntryModal.confirm(
+            confirmProjectDismiss = await EntryModalHelper.getConfirmModal(
                 RendererUtils.getLang('Menus.save_dismiss')
             );
         }
@@ -60,7 +61,7 @@ export default class {
         } else if (project) {
             let confirm = false;
             try {
-                confirm = await window.EntryModal.confirm(
+                confirm = await EntryModalHelper.getConfirmModal(
                     RendererUtils.getLang('Workspace.confirm_load_temporary'),
                     RendererUtils.getLang('Workspace.confirm_load_header')
                 );

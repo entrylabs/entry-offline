@@ -865,6 +865,19 @@ class EntryModalHelper {
         }
         return result;
     }
+
+    // 공용으로 사용할 EntryModal 래핑 메소드
+    static async getConfirmModal(title?: String, content?: String) {
+        const result = await window.EntryModal.confirm(title, content);
+
+        return result;
+    }
+
+    static async getAlertModal(title?: String, content?: String) {
+        const result = await window.EntryModal.alert(title, content);
+        
+        return result;
+    }
 }
 
 export default EntryModalHelper;

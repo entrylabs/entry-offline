@@ -133,7 +133,7 @@ class Workspace extends Component<IProps> {
         const addEventListener = Entry.addEventListener.bind(Entry);
 
         addEventListener('openBackPack', () => {
-            entrylms.alert(RendererUtils.getLang('[다국어미적용]\n온라인에서 사용가능'));
+            ModalHelper.getAlertModal(RendererUtils.getLang('[다국어미적용]\n온라인에서 사용가능'));
         });
         // 교과형에서 하드웨어가 바뀔때 마다 카테고리 변화
         addEventListener('hwChanged', this.handleHardwareChange);
