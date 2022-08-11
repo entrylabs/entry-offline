@@ -20,6 +20,7 @@ import { bindActionCreators } from 'redux';
 import { IModalState, ModalActionCreators } from '../store/modules/modal';
 import { IMapDispatchToProps, IMapStateToProps } from '../store';
 import DragAndDropContainer from './DragAndDropContainer';
+import EntryModalHelper from '../helper/entry/entryModalHelper';
 
 interface IProps extends IReduxDispatch, IReduxState {}
 
@@ -202,7 +203,7 @@ class Workspace extends Component<IProps> {
 
     async handleCanvasImageSave(data: any) {
         if (this.isSavingCanvasData) {
-            entrylms.alert(RendererUtils.getLang('Msgs.save_canvas_alert'));
+            EntryModalHelper.getAlertModal(RendererUtils.getLang('Msgs.save_canvas_alert'));
         } else {
             this.showModalProgress(
                 'progress',
@@ -583,7 +584,7 @@ class Workspace extends Component<IProps> {
                         if (filePath.endsWith('.ent')) {
                             await this._loadProjectFromFile(filePath);
                         } else {
-                            entrylms.alert(
+                            EntryModalHelper.getAlertModal(
                                 RendererUtils.getLang('Workspace.upload_not_supported_file_msg')
                             );
                         }
