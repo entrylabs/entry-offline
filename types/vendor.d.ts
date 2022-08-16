@@ -22,6 +22,12 @@ declare module '@entrylabs/tool/component' {
     export const ModalProgress: any;
 }
 
+declare module '@entrylabs/modal/dist/entry-modal.js' {
+    export const Confirm: any;
+    export const Alert: any;
+    export const Prompt: any;
+}
+
 declare module 'puid' {
     const value: any;
     export = value;
@@ -60,7 +66,7 @@ declare module 'xml2js' {
 
 declare module 'async-csv' {
     const value: {
-        parse(csvString: string): Promise<string[][]>
+        parse(csvString: string): Promise<string[][]>;
     };
     export = value;
 }
