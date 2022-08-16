@@ -416,6 +416,8 @@ class Workspace extends Component<IProps> {
     };
 
     async _loadProjectFromFile(filePathGetter: string | (() => Promise<string>)) {
+        Entry.engine.popup && Entry.engine.popup.remove();
+
         if (!filePathGetter) {
             return;
         }
