@@ -522,11 +522,3 @@ $scene-text-skeleton: linear-gradient(#e2e2e2 $scene-btn-height, transparent 0);
         background-image: url('/img/assets/popup/workspace/btn_close.png');
     }
 }
-
-//@entry-modal 
-.entry-modal-confirm .entry-modal-contentView .entry-modal-content {
-    white-space: pre-line;
-    font-weight: 700;
-    line-height: 24px;
-    margin: 40px 20px 0;
-}
