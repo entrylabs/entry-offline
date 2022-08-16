@@ -757,6 +757,12 @@ class EntryModalHelper {
                 type: 'popup',
                 theme: 'entry',
             });
+            
+            // entryTool의 modal의 css가 덮어씌워져서, 다시 동적으로 css link를 추가
+            const modalStyleLink = document.createElement('link');
+            modalStyleLink.setAttribute('href', '../../../node_modules/@entrylabs/modal/dist/entry/entry-modal.css');
+            modalStyleLink.setAttribute('rel', 'stylesheet');
+            document.head.appendChild(modalStyleLink);
         } else {
             EntryModalHelper.popup.setData({ data: { data } });
         }
