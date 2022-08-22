@@ -416,8 +416,6 @@ class Workspace extends Component<IProps> {
     };
 
     async _loadProjectFromFile(filePathGetter: string | (() => Promise<string>)) {
-        Entry.engine.popup && Entry.engine.popup.remove();
-
         if (!filePathGetter) {
             return;
         }
@@ -476,6 +474,8 @@ class Workspace extends Component<IProps> {
         }
 
         if (!this.isFirstRender) {
+            // 확대보기 상태일시 팝업 닫기
+            Entry?.engine?.popup && Entry.engine.popup.remove();
             Entry.clearProject();
             Entry.disposeContainer();
             // zoom 스케일이 변경된 상태에서 new project 한 경우 블록메뉴에 스케일정보가 남아서 초기화
