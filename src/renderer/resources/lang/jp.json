@@ -6847,7 +6847,9 @@
         "play_my_project": "作った作品を実行してみましょう。",
         "goal_project": "目標作品をよく見る",
         "look_target_project": "作品を実行して何を作るのかよく見てみましょう。",
-        "ai_learning_login_required": "ログアウト状態ではモデル学習機能を\n使用することはできません。"
+        "ai_learning_login_required": "ログアウト状態ではモデル学習機能を\n使用することはできません。",
+        "bring_forward": "上に移す",
+        "send_backward": "下に移す"
     },
     "code": "コードを見る",
     "EntryStatic": {
