@@ -174,6 +174,9 @@ new (class {
             // 기본 이미지 및 사운드인 경우 상대경로이므로 기준 위치 수정
             if (typedPath.startsWith('renderer')) {
                 typedPath = path.resolve(app.getAppPath(), 'src', typedPath);
+            }else if(typedPath.startsWith('../../..')){
+                typedPath = typedPath.replace('../../../', '');
+                typedPath = path.resolve(app.getAppPath(), typedPath);
             }
         } else {
             switch (type) {
