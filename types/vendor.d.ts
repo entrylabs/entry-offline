@@ -15,6 +15,7 @@ declare module 'winston-daily-rotate-file' {
 
 declare module '@entrylabs/tool' {
     export const Popup: any;
+    export const ListTool: any;
 }
 
 declare module '@entrylabs/tool/component' {
