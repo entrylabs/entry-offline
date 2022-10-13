@@ -178,7 +178,9 @@ class EntryModalHelper {
                 });
             },
             uploadFail: (data: any) => {
-                EntryModalHelper.getAlertModal(RendererUtils.getLang(`${data.messageParent}.${data.message}`));
+                EntryModalHelper.getAlertModal(
+                    RendererUtils.getLang(`${data.messageParent}.${data.message}`)
+                );
             },
             fail: () => {
                 EntryModalHelper.getAlertModal(RendererUtils.getLang('Msgs.error_occured'));
@@ -289,7 +291,9 @@ class EntryModalHelper {
                 });
             },
             uploadFail: (data: any) => {
-                EntryModalHelper.getAlertModal(RendererUtils.getLang(`${data.messageParent}.${data.message}`));
+                EntryModalHelper.getAlertModal(
+                    RendererUtils.getLang(`${data.messageParent}.${data.message}`)
+                );
             },
             fail: () => {
                 EntryModalHelper.getAlertModal(RendererUtils.getLang('Msgs.error_occured'));
@@ -384,7 +388,9 @@ class EntryModalHelper {
                 createjs.Sound.stop();
             },
             uploadFail: (data: any) => {
-                EntryModalHelper.getAlertModal(RendererUtils.getLang(`${data.messageParent}.${data.message}`));
+                EntryModalHelper.getAlertModal(
+                    RendererUtils.getLang(`${data.messageParent}.${data.message}`)
+                );
             },
             fail: (data: any) => {
                 EntryModalHelper.getAlertModal(RendererUtils.getLang('Msgs.error_occured'));
@@ -684,7 +690,9 @@ class EntryModalHelper {
                 });
             },
             uploadFail: (data: any) => {
-                EntryModalHelper.getAlertModal(RendererUtils.getLang(`${data.messageParent}.${data.message}`));
+                EntryModalHelper.getAlertModal(
+                    RendererUtils.getLang(`${data.messageParent}.${data.message}`)
+                );
             },
             fail: () => {
                 EntryModalHelper.getAlertModal(RendererUtils.getLang('Msgs.error_occured'));
@@ -759,10 +767,13 @@ class EntryModalHelper {
                 type: 'popup',
                 theme: 'entry',
             });
-            
+
             // entryTool의 modal의 css가 덮어씌워져서, 다시 동적으로 css link를 추가
             const modalStyleLink = document.createElement('link');
-            modalStyleLink.setAttribute('href', '../../../node_modules/@entrylabs/modal/dist/entry/entry-modal.css');
+            modalStyleLink.setAttribute(
+                'href',
+                '../../../node_modules/@entrylabs/modal/dist/entry/entry-modal.css'
+            );
             modalStyleLink.setAttribute('rel', 'stylesheet');
             document.head.appendChild(modalStyleLink);
         } else {
@@ -771,11 +782,11 @@ class EntryModalHelper {
     };
 
     static async openImportListModal(data: any, name: any) {
-        if(!EntryModalHelper.listTool){
+        if (!EntryModalHelper.listTool) {
             await EntryModalHelper.listToolInit();
         }
 
-        const listTool = EntryModalHelper.listTool.show({ type: 'import' }, {data});
+        const listTool = EntryModalHelper.listTool.show({ type: 'import' }, { data });
 
         listTool.on('hide', () => {
             listTool.removeAllListeners();
@@ -805,10 +816,12 @@ class EntryModalHelper {
             EntryModalHelper.getAlertModal(RendererUtils.getLang('Menus.content_copied'));
         });
         listTool.on('download', async (list: any) => {
-            console.log("list: ", list);
-            IpcRendererHelper.downloadExcel(name, list).then(() => {
+            console.log('list: ', list);
+            IpcRendererHelper.downloadExcel(name, list)
+                .then(() => {
                     console.log('excel download completed');
-                }).catch((err) => {
+                })
+                .catch((err) => {
                     console.error(err);
                 });
         });
@@ -817,14 +830,14 @@ class EntryModalHelper {
     static listToolInit = async () => {
         const { ListTool } = await import('@entrylabs/tool');
         console.log('listTool : ', ListTool);
-        if(EntryModalHelper.listTool){
+        if (EntryModalHelper.listTool) {
             return;
         }
-        if(!ListTool.instance){
+        if (!ListTool.instance) {
             EntryModalHelper.listContainer = EntryModalHelper.createListContainer();
         }
-        EntryModalHelper.listTool = 
-            ListTool.instance || 
+        EntryModalHelper.listTool =
+            ListTool.instance ||
             new ListTool({
                 container: EntryModalHelper.listContainer,
                 isShow: false,
@@ -832,13 +845,13 @@ class EntryModalHelper {
                 data: {},
             });
         return EntryModalHelper.listTool;
-    }
+    };
 
     static createListContainer() {
         const node = document.getElementById('EntryListContainer');
-        if(node){
+        if (node) {
             return node;
-        }else{
+        } else {
             const node = document.createElement('div');
             node.id = 'EntryListContainer';
             node.className = 'modal';
@@ -911,7 +924,7 @@ class EntryModalHelper {
 
     static async getAlertModal(title?: String, content?: String) {
         const result = await window.EntryModal.alert(title, content);
-        
+
         return result;
     }
 }
