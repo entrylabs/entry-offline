@@ -3129,7 +3129,7 @@ enquirer@^2.3.5:
 
 "entry-tool@git+https://github.com/entrylabs/entry-tool.git#dist/develop":
   version "0.0.0"
-  resolved "git+https://github.com/entrylabs/entry-tool.git#5827bc83e559a1eb04559e538bd55f53295a75ed"
+  resolved "git+https://github.com/entrylabs/entry-tool.git#5086b53470911b46a6b6a3eb5ef6c7c2396c5653"
 
 env-paths@^2.2.0:
   version "2.2.1"
