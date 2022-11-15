@@ -6774,7 +6774,7 @@
         "upload_not_supported_file_msg": "このファイル形式には対応していません。",
         "file_converting_msg": "ファイル変換中です。",
         "file_converting_fail_msg": "ファイル変換に失敗しました。",
-        "fail_contact_msg": "続けて問題が発生する場合は</br>entry@connect.or.krにお問い合わせください。",
+        "fail_contact_msg": "続けて問題が発生する場合は</br>help@playentry.orgにお問い合わせください。",
         "saving_msg": "保存中です。",
         "saving_fail_msg": "保存に失敗しました。</br>もう一度やり直してください。",
         "loading_msg": "読み込み中です。",
