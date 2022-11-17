@@ -2520,6 +2520,7 @@
         "locate_object_time": "%1 초 동안 %2 위치로 이동하기 %3",
         "rotate_relative": "방향을 %1 만큼 회전하기 %2",
         "angle": "%1",
+        "color": "%1",
         "direction_relative": "이동 방향을 %1 만큼 회전하기 %2",
         "rotate_by_time": "%1 초 동안 방향을 %2 만큼 회전하기 %3",
         "direction_relative_duration": "%1 초 동안 이동 방향 %2 만큼 회전하기 %3",
