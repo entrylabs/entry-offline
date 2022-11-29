@@ -3035,7 +3035,7 @@ enabled@2.0.x:
 encodeurl@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/encodeurl/-/encodeurl-1.0.2.tgz#ad3ff4c86ec2d029322f5a02c3a9a606c95b3f59"
-  integrity sha1-rT/0yG7C0CkyL1oCw6mmBslbP1k=
+  integrity sha512-TPJXq8JqFaVYm2CWmPvnP2Iyo4ZSM7/QKcSmuMLDObfpH5fi7RUGmd/rTDf+rut/saiDiQEeVTNgAmJEdAOx0w==
 
 end-of-stream@^1.0.0, end-of-stream@^1.1.0, end-of-stream@^1.4.1:
   version "1.4.4"
@@ -3127,9 +3127,9 @@ enquirer@^2.3.5:
   version "0.0.0"
   resolved "git+https://github.com/entrylabs/entryjs.git#bdf5df0f83ae007acf4d801a4a6f57b0143dfe31"
 
-"entry-tool@git+https://github.com/entrylabs/entry-tool.git#dist/develop":
+"entry-tool@git+https://github.com/entrylabs/entry-tool.git#dist/20221024":
   version "0.0.0"
-  resolved "git+https://github.com/entrylabs/entry-tool.git#cfe1b2a0c5d050861cf67b6c105e3c8d25b58795"
+  resolved "git+https://github.com/entrylabs/entry-tool.git#ef7562657be5941036c4e3acd824883be3688745"
 
 env-paths@^2.2.0:
   version "2.2.1"
