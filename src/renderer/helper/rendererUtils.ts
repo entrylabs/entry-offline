@@ -1,7 +1,10 @@
 import IpcRendererHelper from './ipcRendererHelper';
 import StorageManager from './storageManager';
+import _get from 'lodash/get';
+// import sharp from 'sharp';
 
 const { dialog } = window;
+const sharp = require('sharp');
 
 /**
  * Renderer Process 전역에서 사용할 수 있는 클래스.
@@ -158,13 +161,52 @@ export default class {
      * @param data buffer 화 되지 않은 엘리먼트의 src
      * @param filePath 저장할 위치
      */
-    static saveBlockImage(data: string, filePath: string) {
-        const buffer = Uint8Array.from(
-            atob(data.replace(/^data:image\/(png|gif|jpeg);base64,/, '')),
-            (chr) => chr.charCodeAt(0),
-        );
+    // static saveBlockImage(data: string, filePath: string) {
+    //     const buffer = Uint8Array.from(
+    //         atob(data.replace(/^data:image\/(png|gif|jpeg);base64,/, '')),
+    //         (chr) => chr.charCodeAt(0),
+    //     );
 
-        IpcRendererHelper.writeFile(buffer, filePath);
+    //     IpcRendererHelper.writeFile(buffer, filePath);
+    // }
+
+    /**
+     * 이미지를 지정한 디렉토리에 저장하는 함수.
+     * @param imageData svg형태의 단건 이미지 데이터
+     * @param filePath 저장할 디렉토리 path(파일명 포함); 
+     */
+    static async saveBlockImage(imageData: any, filePath: string) {
+        console.log(`imageData(${typeof imageData}) : ${imageData}`);
+        console.log(`filePath(${typeof filePath}) : ${filePath}`);
+
+        // 이미지 파일로부터 추출하여 변수 정의
+        const data = _get(imageData, 'data', {});
+        const width = _get(imageData, 'width', 0);
+        const height = _get(imageData, 'height', 0);
+        const imageBuffer = Buffer.from(data);
+        // const sanitizeImage = await getSafeSvg(imageBuffer);
+        // const sanitizeBuffer = Buffer.from(sanitizeImage);
+        
+        // svg 포맷 확인
+        const parseSvg = sharp(imageBuffer);
+        const metadata = await parseSvg.metadata();
+        if (metadata.format !== 'svg') {
+            throw 'not svg';
+        }
+
+        // svg알 경우 png로 변환
+        // if (type === 'direct') {
+            await parseSvg.png().toFile(filePath);
+        // } else {
+        //     const imageData = await convert(imageBuffer, {
+        //         viewport: {
+        //             width,
+        //             height,
+        //         },
+        //     });
+        //     await fsp.writeFile(imagePath, imageData.buffer);
+        // }
+        return filePath;
     }
 
     /**
@@ -177,7 +219,7 @@ export default class {
             const image = new Image();
 
             image.src = imageData;
-            image.onload = function() {
+            image.onload = function () {
                 const canvas = document.createElement('canvas');
                 canvas.width = image.width;
                 canvas.height = image.height;
@@ -206,10 +248,10 @@ export default class {
                         }
                     }
                 }
-                pix.x.sort(function(a, b) {
+                pix.x.sort(function (a, b) {
                     return a - b;
                 });
-                pix.y.sort(function(a, b) {
+                pix.y.sort(function (a, b) {
                     return a - b;
                 });
                 const n = pix.x.length - 1;

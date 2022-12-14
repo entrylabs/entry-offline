@@ -10,6 +10,7 @@ import _includes from 'lodash/includes';
 import _debounce from 'lodash/debounce';
 import entryPatch from '../helper/entry/entryPatcher';
 import { ModalProgress } from '@entrylabs/tool/component';
+import Constants from '../helper/constants';
 import ModalHelper from '../helper/entry/entryModalHelper';
 import RendererUtils from '../helper/rendererUtils';
 import IpcRendererHelper from '../helper/ipcRendererHelper';
@@ -22,7 +23,7 @@ import { IMapDispatchToProps, IMapStateToProps } from '../store';
 import DragAndDropContainer from './DragAndDropContainer';
 import EntryModalHelper from '../helper/entry/entryModalHelper';
 
-interface IProps extends IReduxDispatch, IReduxState {}
+interface IProps extends IReduxDispatch, IReduxState { }
 
 class Workspace extends Component<IProps> {
     private lastHwName?: string;
@@ -159,6 +160,9 @@ class Workspace extends Component<IProps> {
         addEventListener('saveCanvasImage', (data: any) => {
             this.handleCanvasImageSave(data);
         });
+        addEventListener('saveBlockImages', (data: any) => {
+            this.handleBlockImageSave(data);
+        });
         // exportObject
         addEventListener('exportObject', EntryUtils.exportObject);
         // 리스트 Import
@@ -222,6 +226,39 @@ class Workspace extends Component<IProps> {
                 this.hideModalProgress();
                 this.isSavingCanvasData = false;
             }
+        }
+    }
+
+    async handleBlockImageSave(data: any) {
+        const images = data.images;
+        try {
+            RendererUtils.showOpenDialog({
+                properties: ['openDirectory'],
+                filters: [{ name: 'Image', extensions: ['png'] }],
+            }).then(async ({ filePaths }) => {
+                const dirPath = filePaths[0];
+                if (!dirPath) {
+                    throw 'invalid filePaths';
+                }
+
+                images.forEach(async (image: any, index: number) => {
+                    // notice: Constants.sep 은 필요한가?
+                    console.log(Constants.sep);
+                    const savePath = `${dirPath}${Constants.sep}${index}${'.png'}`;
+                    await RendererUtils.saveBlockImage(image, savePath);
+                })
+
+                // const result = await Promise.all(promises);
+                // if (result.length > 1) {
+                //     filePath = path.join(STATIC_PATH.TEMP_DIR, `${fileId}_blocks.zip`);
+                //     await Utils.zipDir(tempDir, filePath);
+                //     res.download(filePath, encodeURI(`${fileId}_blocks`));
+                // } else {
+                //     res.download(result[0], encodeURI(`${fileId}_block`));
+                // }
+            })
+        } catch (err) {
+            console.error(err);
         }
     }
 
@@ -301,13 +338,13 @@ class Workspace extends Component<IProps> {
         if (hw.programConnected && hw.hwModule) {
             const hwName = hw.hwModule.name;
             if (_includes(EntryStatic.hwMiniSupportList, hwName)) {
-                hwCategoryList.forEach(function(categoryName: string) {
+                hwCategoryList.forEach(function (categoryName: string) {
                     blockMenu.unbanCategory(categoryName);
                 });
                 blockMenu.banCategory('arduino');
                 blockMenu.banCategory('hw_robot');
             } else {
-                hwCategoryList.forEach(function(categoryName: string) {
+                hwCategoryList.forEach(function (categoryName: string) {
                     blockMenu.banCategory(categoryName);
                 });
                 blockMenu.banCategory('hw_robot');
@@ -315,7 +352,7 @@ class Workspace extends Component<IProps> {
             }
             this.lastHwName = hwName;
         } else {
-            hwCategoryList.forEach(function(categoryName: string) {
+            hwCategoryList.forEach(function (categoryName: string) {
                 blockMenu.banCategory(categoryName);
             });
             blockMenu.banCategory('arduino');

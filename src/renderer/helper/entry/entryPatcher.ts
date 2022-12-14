@@ -52,33 +52,33 @@ export default function() {
         });
     };
 
-    Entry.playground.board._contextOptions[3].option.callback = function() {
-        RendererUtils.showOpenDialog({
-            properties: ['openDirectory'],
-            filters: [{ name: 'Image', extensions: ['png'] }],
-        }).then(({ filePaths }) => {
-            const dirPath = filePaths[0];
-            if (dirPath) {
-                Entry.playground.board.code.getThreads()
-                    .forEach(function(thread: any, index: number) {
-                        const topBlock = thread.getFirstBlock();
-                        if (!topBlock) {
-                            return;
-                        }
+    // Entry.playground.board._contextOptions[3].option.callback = function() {
+    //     RendererUtils.showOpenDialog({
+    //         properties: ['openDirectory'],
+    //         filters: [{ name: 'Image', extensions: ['png'] }],
+    //     }).then(({ filePaths }) => {
+    //         const dirPath = filePaths[0];
+    //         if (dirPath) {
+    //             Entry.playground.board.code.getThreads()
+    //                 .forEach(function(thread: any, index: number) {
+    //                     const topBlock = thread.getFirstBlock();
+    //                     if (!topBlock) {
+    //                         return;
+    //                     }
 
-                        /* eslint-disable */
-                        (function(i) {
-                            topBlock.view.getDataUrl()
-                                .then(function(data: any) {
-                                    const savePath = `${dirPath}${Constants.sep}${i}${'.png'}`;
-                                    RendererUtils.saveBlockImage(data.src, savePath);
-                                });
-                        })(++index);
-                        /* eslint-enable */
-                    });
-            }
-        });
-    };
+    //                     /* eslint-disable */
+    //                     (function(i) {
+    //                         topBlock.view.getDataUrl()
+    //                             .then(function(data: any) {
+    //                                 const savePath = `${dirPath}${Constants.sep}${i}${'.png'}`;
+    //                                 RendererUtils.saveBlockImage(data.src, savePath);
+    //                             });
+    //                     })(++index);
+    //                     /* eslint-enable */
+    //                 });
+    //         }
+    //     });
+    // };
 
     /*
     오프라인은 fileurl 을 사용한다.
