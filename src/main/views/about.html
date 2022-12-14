@@ -35,7 +35,8 @@
 
 <script>
     window.$ = window.jQuery = require('jquery');
-    const { shell, remote } = require('electron');
+    const { shell } = require('electron');
+	const remote = require('@electron/remote');
 
 	(function () {
 		const { app } = remote;

@@ -15,6 +15,8 @@ export default class {
     }
 
     createAboutWindow() {
+        const remoteMain = require('@electron/remote/main');
+
         this.aboutWindow = new BrowserWindow({
             parent: this.parentWindow,
             width: 380,
@@ -27,10 +29,10 @@ export default class {
             show: false,
             webPreferences: {
                 nodeIntegration: true,
-                enableRemoteModule: true,
                 contextIsolation: false,
             },
         });
+        remoteMain.enable(this.aboutWindow.webContents);
 
         this.aboutWindow.on('closed', () => {
             this.aboutWindow = undefined;

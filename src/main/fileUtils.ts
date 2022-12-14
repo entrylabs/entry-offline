@@ -3,7 +3,7 @@ import fs, { PathLike } from 'fs';
 import fse from 'fs-extra';
 import rimraf from 'rimraf';
 import tar, { CreateOptions, FileOptions } from 'tar';
-import { nativeImage } from 'electron';
+import { nativeImage, NativeImage } from 'electron';
 import createLogger from './utils/functions/createLogger';
 
 type tarCreateOption = FileOptions & CreateOptions;
@@ -171,7 +171,7 @@ export default class {
      * 섬네일은 width 96px 기준으로, png 파일 확장자를 가진다.
      */
     static createResizedImageBuffer(imageData: string | Buffer, dimension: Dimension) {
-        let imageResizeNativeImage: nativeImage;
+        let imageResizeNativeImage: NativeImage;
         if (imageData instanceof Buffer || typeof imageData !== 'string') {
             imageResizeNativeImage = nativeImage.createFromBuffer(imageData as any);
         } else {
