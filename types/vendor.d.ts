@@ -15,11 +15,18 @@ declare module 'winston-daily-rotate-file' {
 
 declare module '@entrylabs/tool' {
     export const Popup: any;
+    export const ListTool: any;
 }
 
 declare module '@entrylabs/tool/component' {
     export const Dropdown: any;
     export const ModalProgress: any;
+}
+
+declare module '@entrylabs/modal/dist/entry-modal.js' {
+    export const Confirm: any;
+    export const Alert: any;
+    export const Prompt: any;
 }
 
 declare module 'puid' {
@@ -60,7 +67,7 @@ declare module 'xml2js' {
 
 declare module 'async-csv' {
     const value: {
-        parse(csvString: string): Promise<string[][]>
+        parse(csvString: string): Promise<string[][]>;
     };
     export = value;
 }

@@ -39,7 +39,8 @@ export default class {
     }
 
     static tempResourceDownload(entryObject: IEntry.Object, type: string, targetFilePath: string) {
-        ipcInvoke('tempResourceDownload', entryObject, type, targetFilePath);
+        const convertObject = { fileurl: entryObject.fileurl, filename: entryObject.name };
+        ipcInvoke('tempResourceDownload', convertObject, type, targetFilePath);
     }
 
     static writeFile(data: any, filePath: string) {

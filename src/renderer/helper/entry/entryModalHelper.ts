@@ -21,6 +21,8 @@ type PopupEventListeners = {
 //TODO object fetch result sort 필요?
 class EntryModalHelper {
     static popup: any;
+    static listTool: any;
+    static listContainer: any;
     static lastOpenedType?: string;
     static fetchPopup = (data: any) => EntryModalHelper.popup.setData({ data: { data } });
     /**
@@ -176,13 +178,15 @@ class EntryModalHelper {
                 });
             },
             uploadFail: (data: any) => {
-                entrylms.alert(RendererUtils.getLang(`${data.messageParent}.${data.message}`));
+                EntryModalHelper.getAlertModal(
+                    RendererUtils.getLang(`${data.messageParent}.${data.message}`)
+                );
             },
             fail: () => {
-                entrylms.alert(RendererUtils.getLang('Msgs.error_occured'));
+                EntryModalHelper.getAlertModal(RendererUtils.getLang('Msgs.error_occured'));
             },
             error: () => {
-                entrylms.alert(RendererUtils.getLang('Msgs.error_occured'));
+                EntryModalHelper.getAlertModal(RendererUtils.getLang('Msgs.error_occured'));
             },
         });
     }
@@ -287,13 +291,15 @@ class EntryModalHelper {
                 });
             },
             uploadFail: (data: any) => {
-                entrylms.alert(RendererUtils.getLang(`${data.messageParent}.${data.message}`));
+                EntryModalHelper.getAlertModal(
+                    RendererUtils.getLang(`${data.messageParent}.${data.message}`)
+                );
             },
             fail: () => {
-                entrylms.alert(RendererUtils.getLang('Msgs.error_occured'));
+                EntryModalHelper.getAlertModal(RendererUtils.getLang('Msgs.error_occured'));
             },
             error: () => {
-                entrylms.alert(RendererUtils.getLang('Msgs.error_occured'));
+                EntryModalHelper.getAlertModal(RendererUtils.getLang('Msgs.error_occured'));
             },
         });
     }
@@ -382,13 +388,15 @@ class EntryModalHelper {
                 createjs.Sound.stop();
             },
             uploadFail: (data: any) => {
-                entrylms.alert(RendererUtils.getLang(`${data.messageParent}.${data.message}`));
+                EntryModalHelper.getAlertModal(
+                    RendererUtils.getLang(`${data.messageParent}.${data.message}`)
+                );
             },
             fail: (data: any) => {
-                entrylms.alert(RendererUtils.getLang('Msgs.error_occured'));
+                EntryModalHelper.getAlertModal(RendererUtils.getLang('Msgs.error_occured'));
             },
             error: (data: any) => {
-                entrylms.alert(RendererUtils.getLang('Msgs.error_occured'));
+                EntryModalHelper.getAlertModal(RendererUtils.getLang('Msgs.error_occured'));
             },
         });
     }
@@ -516,7 +524,7 @@ class EntryModalHelper {
                     if (!isActive) {
                         callback && callback();
                     } else {
-                        entrylms.alert(
+                        EntryModalHelper.getAlertModal(
                             RendererUtils.getLang('Workspace.deselect_expansion_block_warning')
                         );
                     }
@@ -543,7 +551,7 @@ class EntryModalHelper {
                     if (!isActive) {
                         callback && callback();
                     } else {
-                        entrylms.alert(
+                        EntryModalHelper.getAlertModal(
                             RendererUtils.getLang('Workspace.deselect_ai_utilize_block_warning')
                         );
                     }
@@ -682,13 +690,15 @@ class EntryModalHelper {
                 });
             },
             uploadFail: (data: any) => {
-                entrylms.alert(RendererUtils.getLang(`${data.messageParent}.${data.message}`));
+                EntryModalHelper.getAlertModal(
+                    RendererUtils.getLang(`${data.messageParent}.${data.message}`)
+                );
             },
             fail: () => {
-                entrylms.alert(RendererUtils.getLang('Msgs.error_occured'));
+                EntryModalHelper.getAlertModal(RendererUtils.getLang('Msgs.error_occured'));
             },
             error: () => {
-                entrylms.alert(RendererUtils.getLang('Msgs.error_occured'));
+                EntryModalHelper.getAlertModal(RendererUtils.getLang('Msgs.error_occured'));
             },
         });
     }
@@ -757,58 +767,97 @@ class EntryModalHelper {
                 type: 'popup',
                 theme: 'entry',
             });
+
+            // entryTool의 modal의 css가 덮어씌워져서, 다시 동적으로 css link를 추가
+            const modalStyleLink = document.createElement('link');
+            modalStyleLink.setAttribute(
+                'href',
+                '../../../node_modules/@entrylabs/modal/dist/entry/entry-modal.css'
+            );
+            modalStyleLink.setAttribute('rel', 'stylesheet');
+            document.head.appendChild(modalStyleLink);
         } else {
             EntryModalHelper.popup.setData({ data: { data } });
         }
     };
 
-    static openImportListModal() {
-        new Modal()
-            .createModal([{ type: 'LIST_IMPORT', theme: 'BLUE' }])
-            .on('click', (e: string, data: any[]) => {
-                switch (e) {
-                    case 'save':
-                        //아무것도 입력하지 않은 경우, 빈칸 하나만 있는 것으로 처리된다.
-                        if (data.length === 1 && data[0] === '') {
-                            entrylms.alert(RendererUtils.getLang('Menus.nothing_to_import'));
-                        } else {
-                            const list = Entry.variableContainer.selected;
-                            list.array_ = _.take(data, 5000).map((element) => {
-                                return { data: element };
-                            });
-                            Entry.do('listChangeLength', list.id_, list.array_.length);
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            })
-            .show();
+    static async openImportListModal(data: any, name: any) {
+        if (!EntryModalHelper.listTool) {
+            await EntryModalHelper.listToolInit();
+        }
+
+        const listTool = EntryModalHelper.listTool.show({ type: 'import' }, { data });
+
+        listTool.on('hide', () => {
+            listTool.removeAllListeners();
+        });
+        listTool.on('save', async (data: any) => {
+            if (data.length === 1 && data[0] === '') {
+                EntryModalHelper.getAlertModal(RendererUtils.getLang('Menus.nothing_to_import'));
+            } else {
+                const list = Entry.variableContainer.selected;
+                list.array_ = data.map((element: any) => ({ data: element }));
+                Entry.do('listChangeLength', list.id_, list.array_.length);
+            }
+        });
     }
 
-    static openExportListModal(array: any[], name: string) {
-        new Modal()
-            .createModal([{ type: 'LIST_EXPORT', theme: 'BLUE', content: array }])
-            .on('click', function(e: string, data: any[]) {
-                switch (e) {
-                    case 'copied':
-                        entrylms.alert(RendererUtils.getLang('Menus.content_copied'));
-                        break;
-                    case 'excel':
-                        //TODO 추출중입니다 이런 ModalProgress 문구가 있으면 더 좋을것 같음.
-                        IpcRendererHelper.downloadExcel(name, data)
-                            .then(() => {
-                                console.log('excel download completed');
-                            })
-                            .catch((err) => {
-                                console.error(err);
-                            });
-                        break;
-                    default:
-                        break;
-                }
-            })
-            .show();
+    static async openExportListModal(data: any[], name: string) {
+        if (!EntryModalHelper.listTool) {
+            await EntryModalHelper.listToolInit();
+        }
+
+        const listTool = EntryModalHelper.listTool.show({ type: 'export' }, { data });
+
+        listTool.on('hide', () => {
+            listTool.removeAllListeners();
+        });
+        listTool.on('copy', () => {
+            EntryModalHelper.getAlertModal(RendererUtils.getLang('Menus.content_copied'));
+        });
+        listTool.on('download', async (list: any) => {
+            console.log('list: ', list);
+            IpcRendererHelper.downloadExcel(name, list)
+                .then(() => {
+                    console.log('excel download completed');
+                })
+                .catch((err) => {
+                    console.error(err);
+                });
+        });
+    }
+
+    static listToolInit = async () => {
+        const { ListTool } = await import('@entrylabs/tool');
+        console.log('listTool : ', ListTool);
+        if (EntryModalHelper.listTool) {
+            return;
+        }
+        if (!ListTool.instance) {
+            EntryModalHelper.listContainer = EntryModalHelper.createListContainer();
+        }
+        EntryModalHelper.listTool =
+            ListTool.instance ||
+            new ListTool({
+                container: EntryModalHelper.listContainer,
+                isShow: false,
+                theme: 'entry',
+                data: {},
+            });
+        return EntryModalHelper.listTool;
+    };
+
+    static createListContainer() {
+        const node = document.getElementById('EntryListContainer');
+        if (node) {
+            return node;
+        } else {
+            const node = document.createElement('div');
+            node.id = 'EntryListContainer';
+            node.className = 'modal';
+            document.body.appendChild(node);
+            return node;
+        }
     }
 
     static showUpdateCheckModal(latestVersion: string) {
@@ -863,6 +912,19 @@ class EntryModalHelper {
                 result.label[RendererUtils.getFallbackLangType()] ||
                 result.name;
         }
+        return result;
+    }
+
+    // 공용으로 사용할 EntryModal 래핑 메소드
+    static async getConfirmModal(title?: String, content?: String) {
+        const result = await window.EntryModal.confirm(title, content);
+
+        return result;
+    }
+
+    static async getAlertModal(title?: String, content?: String) {
+        const result = await window.EntryModal.alert(title, content);
+
         return result;
     }
 }

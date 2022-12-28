@@ -20,6 +20,7 @@ import { bindActionCreators } from 'redux';
 import { IModalState, ModalActionCreators } from '../store/modules/modal';
 import { IMapDispatchToProps, IMapStateToProps } from '../store';
 import DragAndDropContainer from './DragAndDropContainer';
+import EntryModalHelper from '../helper/entry/entryModalHelper';
 
 interface IProps extends IReduxDispatch, IReduxState {}
 
@@ -133,7 +134,7 @@ class Workspace extends Component<IProps> {
         const addEventListener = Entry.addEventListener.bind(Entry);
 
         addEventListener('openBackPack', () => {
-            entrylms.alert(RendererUtils.getLang('[다국어미적용]\n온라인에서 사용가능'));
+            ModalHelper.getAlertModal(RendererUtils.getLang('[다국어미적용]\n온라인에서 사용가능'));
         });
         // 교과형에서 하드웨어가 바뀔때 마다 카테고리 변화
         addEventListener('hwChanged', this.handleHardwareChange);
@@ -202,7 +203,7 @@ class Workspace extends Component<IProps> {
 
     async handleCanvasImageSave(data: any) {
         if (this.isSavingCanvasData) {
-            entrylms.alert(RendererUtils.getLang('Msgs.save_canvas_alert'));
+            EntryModalHelper.getAlertModal(RendererUtils.getLang('Msgs.save_canvas_alert'));
         } else {
             this.showModalProgress(
                 'progress',
@@ -473,6 +474,8 @@ class Workspace extends Component<IProps> {
         }
 
         if (!this.isFirstRender) {
+            // 확대보기 상태일시 팝업 닫기
+            Entry?.engine?.popup && Entry.engine.popup.remove();
             Entry.clearProject();
             Entry.disposeContainer();
             // zoom 스케일이 변경된 상태에서 new project 한 경우 블록메뉴에 스케일정보가 남아서 초기화
@@ -583,7 +586,7 @@ class Workspace extends Component<IProps> {
                         if (filePath.endsWith('.ent')) {
                             await this._loadProjectFromFile(filePath);
                         } else {
-                            entrylms.alert(
+                            EntryModalHelper.getAlertModal(
                                 RendererUtils.getLang('Workspace.upload_not_supported_file_msg')
                             );
                         }

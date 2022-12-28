@@ -911,6 +911,7 @@
         "SOUND_sound_volume_set_1": "音の大きさを",
         "SOUND_sound_volume_set_2": "%にする",
         "speak": "言う",
+        "think": "考える",
         "START": "はじめ",
         "START_add_message": "信号を追加する",
         "START_delete_message": "信号を削除する",
@@ -5384,7 +5385,6 @@
         "privacy": "プライバシーポリシー",
         "entry_addr": "京畿道 城南市 盆唐區 佛亭路 6 NAVER グリーンファクトリー16階",
         "entry_addr_additional_phone": "02-6202-9783",
-        "entry_addr_additional_email": "entry@connect.or.kr",
         "entry_addr_additional_opensource": "Open Source License",
         "phone": "電話番号",
         "alert_agree_term": "利用規約に同意してください。",
@@ -6774,7 +6774,7 @@
         "upload_not_supported_file_msg": "このファイル形式には対応していません。",
         "file_converting_msg": "ファイル変換中です。",
         "file_converting_fail_msg": "ファイル変換に失敗しました。",
-        "fail_contact_msg": "続けて問題が発生する場合は</br>entry@connect.or.krにお問い合わせください。",
+        "fail_contact_msg": "続けて問題が発生する場合は</br>help@playentry.orgにお問い合わせください。",
         "saving_msg": "保存中です。",
         "saving_fail_msg": "保存に失敗しました。</br>もう一度やり直してください。",
         "loading_msg": "読み込み中です。",
@@ -6847,7 +6847,9 @@
         "play_my_project": "作った作品を実行してみましょう。",
         "goal_project": "目標作品をよく見る",
         "look_target_project": "作品を実行して何を作るのかよく見てみましょう。",
-        "ai_learning_login_required": "ログアウト状態ではモデル学習機能を\n使用することはできません。"
+        "ai_learning_login_required": "ログアウト状態ではモデル学習機能を\n使用することはできません。",
+        "bring_forward": "上に移す",
+        "send_backward": "下に移す"
     },
     "code": "コードを見る",
     "EntryStatic": {
@@ -8221,6 +8223,7 @@
         "set_brush_tranparency": "筆の透明度を%1 %にする %2",
         "number": "%1",
         "angle": "%1",
+        "color": "%1",
         "get_x_coordinate": "%1",
         "get_y_coordinate": "%1",
         "get_angle": "%1",

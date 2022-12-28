@@ -910,6 +910,7 @@
         "SOUND_sound_volume_set_1": "thiết lập âm lượng bằng",
         "SOUND_sound_volume_set_2": "%",
         "speak": "nói",
+        "think": "suy nghĩ",
         "START": "bắt đầu",
         "START_add_message": "Add a message",
         "START_delete_message": "Remove a message",
@@ -5383,7 +5384,6 @@
         "privacy": "Privacy policy",
         "entry_addr": "16F, 6, Buljeong-ro, Bundang-gu, Seongnam-si, Gyeonggi-do",
         "entry_addr_additional_phone": "1522-9182",
-        "entry_addr_additional_email": "entry@connect.or.kr",
         "entry_addr_additional_opensource": "Open Source License",
         "phone": "phone",
         "alert_agree_term": "Please agree to ENTRY’s Terms of Use",
@@ -6765,7 +6765,7 @@
         "upload_not_supported_file_msg": "Not supported file type.",
         "file_converting_msg": "​File converting in process",
         "file_converting_fail_msg": "​File conversion has failed",
-        "fail_contact_msg": "If the problem persists,</br>contact entry@connect.or.kr",
+        "fail_contact_msg": "If the problem persists,</br>contact help@playentry.org",
         "saving_msg": "Saving",
         "saving_fail_msg": "Save failed. Please try again.",
         "loading_msg": "Loading",
@@ -6838,7 +6838,9 @@
         "play_my_project": "Let's play what you've created.",
         "goal_project": "Explore Goal Project",
         "look_target_project": "Let's take a look at what you're going to do with the project.",
-        "ai_learning_login_required": "Training model is not available \nwhen logged out."
+        "ai_learning_login_required": "Training model is not available \nwhen logged out.",
+        "bring_forward": "Bring Forward",
+        "send_backward": "Send Backward"
     },
     "code": "view code",
     "EntryStatic": {
@@ -8212,6 +8214,7 @@
         "set_brush_tranparency": "thiết lập độ trong suốt của cọ bằng %1 % %2",
         "number": "%1",
         "angle": "%1",
+        "color": "%1",
         "get_x_coordinate": "%1",
         "get_y_coordinate": "%1",
         "get_angle": "%1",
