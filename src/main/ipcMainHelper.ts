@@ -53,7 +53,7 @@ new (class {
         logger.verbose(`loadProject called, ${filePath}`);
         try {
             return await MainUtils.loadProject(filePath);
-        } catch (e) {
+        } catch (e: any) {
             logger.error(`loadProject failed, ${e.message}`);
             throw e;
         }

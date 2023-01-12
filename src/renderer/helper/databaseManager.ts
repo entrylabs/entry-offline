@@ -123,9 +123,9 @@ export default class {
             case 'picture':
                 return Pictures as DBPictureObject[];
             case 'sprite':
-                return Sprites as DBSpriteObject[];
+                return Sprites as unknown as DBSpriteObject[];
             case 'sound':
-                return Sounds as DBSoundObject[];
+                return Sounds as unknown as DBSoundObject[];
             case 'table':
                 return TableInfos as DBTableObject[];
             default:

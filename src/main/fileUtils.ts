@@ -83,7 +83,7 @@ export default class {
                     reject(err);
                 } else {
                     logger.info(`directory ${dirPath} removed`);
-                    resolve();
+                    resolve(dirPath);
                 }
             });
         });
@@ -119,7 +119,7 @@ export default class {
             })
                 .then(() => {
                     logger.verbose(`try to unpack ${sourcePath} is done`);
-                    resolve();
+                    resolve(sourcePath);
                 })
                 .catch((err) => {
                     logger.error(`try to unpack ${sourcePath} failed. ${err.message}`);
@@ -210,7 +210,7 @@ export default class {
                     return reject(err);
                 }
                 logger.verbose('writeFile done');
-                resolve();
+                resolve(filePath);
             });
         });
     }
@@ -227,9 +227,9 @@ export default class {
             fs.unlink(filePath, (err) => {
                 if (err) {
                     logger.info('deleteFile failed');
-                    resolve();
+                    resolve(err);
                 } else {
-                    resolve();
+                    resolve(filePath);
                 }
             });
         });
