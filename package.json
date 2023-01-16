@@ -48,7 +48,7 @@
         "lodash": "^4.17.15",
         "mime-types": "^2.1.26",
         "music-metadata": "^6.3.0",
-        "node-abi": "^3.0.0",
+        "node-abi": "^3.28.0",
         "node-xlsx": "^0.15.0",
         "puid": "^1.0.7",
         "rimraf": "^2.6.3",
