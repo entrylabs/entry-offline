@@ -1,6 +1,5 @@
-import { ipcRenderer, MenuItemConstructorOptions, remote } from 'electron';
-
-const { Menu } = remote;
+import { ipcRenderer, MenuItemConstructorOptions } from 'electron';
+import { Menu } from '@electron/remote';
 
 const getTemplate = function() {
     const { getLang } = window;
@@ -152,6 +151,7 @@ const getTemplate = function() {
 
 export default {
     init: () => {
+        // require('@electron/remote/main').initialize();
         const template = getTemplate();
         const menu = Menu.buildFromTemplate(template);
         Menu.setApplicationMenu(menu);

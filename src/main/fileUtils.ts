@@ -3,7 +3,7 @@ import fs, { PathLike } from 'fs';
 import fse from 'fs-extra';
 import rimraf from 'rimraf';
 import tar, { CreateOptions, FileOptions } from 'tar';
-import { nativeImage } from 'electron';
+import { nativeImage, NativeImage } from 'electron';
 import createLogger from './utils/functions/createLogger';
 
 type tarCreateOption = FileOptions & CreateOptions;
@@ -83,7 +83,7 @@ export default class {
                     reject(err);
                 } else {
                     logger.info(`directory ${dirPath} removed`);
-                    resolve();
+                    resolve(dirPath);
                 }
             });
         });
@@ -119,7 +119,7 @@ export default class {
             })
                 .then(() => {
                     logger.verbose(`try to unpack ${sourcePath} is done`);
-                    resolve();
+                    resolve(sourcePath);
                 })
                 .catch((err) => {
                     logger.error(`try to unpack ${sourcePath} failed. ${err.message}`);
@@ -171,7 +171,7 @@ export default class {
      * 섬네일은 width 96px 기준으로, png 파일 확장자를 가진다.
      */
     static createResizedImageBuffer(imageData: string | Buffer, dimension: Dimension) {
-        let imageResizeNativeImage: nativeImage;
+        let imageResizeNativeImage: NativeImage;
         if (imageData instanceof Buffer || typeof imageData !== 'string') {
             imageResizeNativeImage = nativeImage.createFromBuffer(imageData as any);
         } else {
@@ -210,7 +210,7 @@ export default class {
                     return reject(err);
                 }
                 logger.verbose('writeFile done');
-                resolve();
+                resolve(filePath);
             });
         });
     }
@@ -227,9 +227,9 @@ export default class {
             fs.unlink(filePath, (err) => {
                 if (err) {
                     logger.info('deleteFile failed');
-                    resolve();
+                    resolve(err);
                 } else {
-                    resolve();
+                    resolve(filePath);
                 }
             });
         });

@@ -28,7 +28,7 @@ export default class {
      * @return {Promise<void>}
      */
     static async changeLang(lang: string) {
-        window.Lang = await import(`../resources/lang/${lang}.json`);
+        window.Lang = require(`../resources/lang/${lang}.json`);
         window.initNativeMenu();
     }
 }

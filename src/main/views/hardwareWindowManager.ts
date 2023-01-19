@@ -43,6 +43,7 @@ export default class HardwareWindowManager {
             title = 'Entry HardWare';
         }
 
+        const remoteMain = require('@electron/remote/main');
         this.hardwareWindow = new BrowserWindow({
             width: 800,
             height: 650,
@@ -60,10 +61,10 @@ export default class HardwareWindowManager {
                     'preload',
                     'preload.bundle.js'
                 ),
-                enableRemoteModule: true,
                 contextIsolation: false,
             },
         });
+        remoteMain.enable(this.hardwareWindow.webContents);
 
         this.hardwareRouter = new HardwareMainRouter(
             this.hardwareWindow,

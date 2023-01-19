@@ -1,4 +1,4 @@
-import { app, ipcMain } from 'electron';
+import { app, ipcMain, WebContents } from 'electron';
 import fs from 'fs';
 import path from 'path';
 import xl from 'excel4node';
@@ -141,7 +141,7 @@ export default class MainUtils {
                 await FileUtils.writeFile(objectData, objectJsonPath);
                 await FileUtils.pack(exportFile, filePath);
                 await FileUtils.removeDirectoryRecursive(path.join(exportDirectoryPath, '..'));
-                resolve();
+                resolve(filePath);
             } catch (e) {
                 reject(e);
             }
@@ -172,7 +172,7 @@ export default class MainUtils {
 
                 Promise.all(copyObjectPromise)
                     .then(function() {
-                        resolve();
+                        resolve('success');
                     })
                     .catch(function(err) {
                         reject(err);
@@ -701,7 +701,7 @@ export default class MainUtils {
                     reject(err);
                 } else {
                     console.log('excel file saved.', stats);
-                    resolve();
+                    resolve(stats);
                 }
             });
         });
@@ -713,7 +713,7 @@ export default class MainUtils {
      * @param filePath
      * @param sender
      */
-    static convertPng(filePath: string, sender: Electron.webContents): Promise<ConvertResult> {
+    static convertPng(filePath: string, sender: WebContents): Promise<ConvertResult> {
         return new Promise(async (resolve) => {
             try {
                 const newFileName = path.basename(filePath).replace(/\..*$/, '');
