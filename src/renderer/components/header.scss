@@ -362,3 +362,7 @@
     background-image: url(../renderer/resources/images/workspace/text_icon_ko.svg) !important;
     background-size: cover;
 }
+
+[role='button'] {
+    cursor: pointer;
+}
