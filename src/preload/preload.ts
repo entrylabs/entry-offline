@@ -8,6 +8,10 @@ ipcRenderer.on('console', (event: Electron.IpcRendererEvent, ...args: any[]) => 
     console.log(...args);
 });
 
+ipcRenderer.on('getValidatorPath', (event, args) => {
+    console.log("getValidatorPath : ", args);
+})
+
 type OptionalDimension = { x?: number; y?: number; width?: number; height?: number };
 
 ipcRenderer.on(

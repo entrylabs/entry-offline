@@ -1,9 +1,10 @@
 import fs from 'fs';
 import os from 'os';
-import { app } from 'electron';
+import { app, ipcMain } from 'electron';
 import path from 'path';
 import spawn from 'cross-spawn';
 import createLogger from './createLogger';
+import mainWindowManager from '../../views/mainWindowManager';
 
 const logger = createLogger('Validator');
 
@@ -26,9 +27,10 @@ export enum ResultCode {
 export type ValidationResult = { result: ResultCode; reason?: string };
 
 // development: /Users/user/entry_projects/entry-offline
-// production: /Users/user/entry_projects/entry-offline/dist/Entry-darwin-x64/mac/Entry.app/Contents/Resources/app.asar
+// production: /Users/user/Desktop/GitHub/entry-offline/dist/Entry-darwin-x64/mac/Entry.app/Contents/Resources/app.asar
+// validator: /Users/user/Desktop/GitHub/entry-offline/validator/mac/validator.txt
 
-function getValidatorPath(): string | undefined {
+export function getValidatorPath(): string | undefined {
     const appPath = app.getAppPath();
     const isMacOS = os.type().includes('Darwin');
     const validatorFileName = isMacOS ? 'validator.txt' : 'validator.exe';
@@ -41,11 +43,18 @@ function getValidatorPath(): string | undefined {
 
 function isValidAsarFile(): Promise<boolean> {
     const validatorPath = getValidatorPath();
+    // fs.writeFile('/Users/user/Desktop/GitHub/entry-offline/log.txt', validatorPath, err => {
+    //     if(err){
+    //         console.log(err);
+    //         return;
+    //     }
+    //     console.log("success");
+    // })
     // production asar build 환경에서만 정상동작한다.
-    if (process.env.NODE_ENV === 'development') {
-        return Promise.resolve(true);
-    }
-
+    // if (process.env.NODE_ENV === 'development') {
+    //     return Promise.resolve(true);
+    // }
+    
     if (!validatorPath) {
         console.log('not asar packed environment. pass validation');
         return Promise.resolve(true);
@@ -71,6 +80,9 @@ function isValidAsarFile(): Promise<boolean> {
         childProcess.on('message', ((message: ValidationResult) => {
             clearTimeout(timeout);
             const { result, reason } = message;
+            console.log("==== result", result);
+            console.log("==== message", message);
+            debugger;
             if (result === ResultCode.INVALID || result === ResultCode.FILE_NOT_FOUND) {
                 logger.warn(`validation fail reason: ${reason}`);
                 resolve(false);
