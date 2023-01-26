@@ -1,10 +1,9 @@
 import fs from 'fs';
 import os from 'os';
-import { app, ipcMain } from 'electron';
+import { app } from 'electron';
 import path from 'path';
 import spawn from 'cross-spawn';
 import createLogger from './createLogger';
-import mainWindowManager from '../../views/mainWindowManager';
 
 const logger = createLogger('Validator');
 
@@ -41,20 +40,19 @@ export function getValidatorPath(): string | undefined {
     }
 }
 
+export function existSync(): boolean{
+    const validatorPath = getValidatorPath();
+
+    return !fs.existsSync(validatorPath ? validatorPath : 'oo');
+}
+
 function isValidAsarFile(): Promise<boolean> {
     const validatorPath = getValidatorPath();
-    // fs.writeFile('/Users/user/Desktop/GitHub/entry-offline/log.txt', validatorPath, err => {
-    //     if(err){
-    //         console.log(err);
-    //         return;
-    //     }
-    //     console.log("success");
-    // })
     // production asar build 환경에서만 정상동작한다.
     // if (process.env.NODE_ENV === 'development') {
     //     return Promise.resolve(true);
     // }
-    
+    debugger;
     if (!validatorPath) {
         console.log('not asar packed environment. pass validation');
         return Promise.resolve(true);

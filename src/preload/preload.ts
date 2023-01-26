@@ -12,6 +12,10 @@ ipcRenderer.on('getValidatorPath', (event, args) => {
     console.log("getValidatorPath : ", args);
 })
 
+ipcRenderer.on('existSync', (event, args) => {
+    console.log("existSync : ", args);
+})
+
 type OptionalDimension = { x?: number; y?: number; width?: number; height?: number };
 
 ipcRenderer.on(
