@@ -30,7 +30,7 @@ export default (): Promise<Response> => new Promise((resolve, reject) => {
             try {
                 data = JSON.parse(body) as Response;
                 logger.info(`response : ${JSON.stringify(data)}`);
-            } catch (e) {
+            } catch (e: any) {
                 logger.error(`response json parse error, ${e.message}`);
                 console.log(e);
             } finally {

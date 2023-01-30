@@ -141,7 +141,7 @@ export default class MainUtils {
                 await FileUtils.writeFile(objectData, objectJsonPath);
                 await FileUtils.pack(exportFile, filePath);
                 await FileUtils.removeDirectoryRecursive(path.join(exportDirectoryPath, '..'));
-                resolve();
+                resolve(filePath);
             } catch (e) {
                 reject(e);
             }
@@ -172,7 +172,7 @@ export default class MainUtils {
 
                 Promise.all(copyObjectPromise)
                     .then(function() {
-                        resolve();
+                        resolve('success');
                     })
                     .catch(function(err) {
                         reject(err);
@@ -701,7 +701,7 @@ export default class MainUtils {
                     reject(err);
                 } else {
                     console.log('excel file saved.', stats);
-                    resolve();
+                    resolve(stats);
                 }
             });
         });

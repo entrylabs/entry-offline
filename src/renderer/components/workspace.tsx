@@ -69,11 +69,11 @@ class Workspace extends Component<IProps> {
             fontFaceOnload('NanumGothic', {
                 success() {
                     console.log('NanumGothic load successed');
-                    resolve();
+                    resolve('success');
                 },
                 error() {
                     console.log('font load failed');
-                    resolve();
+                    resolve('error');
                 },
                 timeout: 5000,
             });
