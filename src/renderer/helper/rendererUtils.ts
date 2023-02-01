@@ -1,10 +1,8 @@
 import IpcRendererHelper from './ipcRendererHelper';
 import StorageManager from './storageManager';
 import _get from 'lodash/get';
-// import sharp from 'sharp';
-
+import Compressor from 'compressorjs';
 const { dialog } = window;
-const sharp = require('sharp');
 
 /**
  * Renderer Process 전역에서 사용할 수 있는 클래스.
@@ -183,29 +181,20 @@ export default class {
         const data = _get(imageData, 'data', {});
         const width = _get(imageData, 'width', 0);
         const height = _get(imageData, 'height', 0);
-        const imageBuffer = Buffer.from(data);
-        // const sanitizeImage = await getSafeSvg(imageBuffer);
-        // const sanitizeBuffer = Buffer.from(sanitizeImage);
-        
-        // svg 포맷 확인
-        const parseSvg = sharp(imageBuffer);
-        const metadata = await parseSvg.metadata();
-        if (metadata.format !== 'svg') {
-            throw 'not svg';
-        }
 
-        // svg알 경우 png로 변환
-        // if (type === 'direct') {
-            await parseSvg.png().toFile(filePath);
-        // } else {
-        //     const imageData = await convert(imageBuffer, {
-        //         viewport: {
-        //             width,
-        //             height,
-        //         },
-        //     });
-        //     await fsp.writeFile(imagePath, imageData.buffer);
-        // }
+        const imageBlob = new Blob([data], { type: 'image/svg+xml' });
+
+        // svg 포맷 확인
+        const options = {
+            maxWidth: width,
+            maxHeigth: height,
+            success: async (result: Blob) => {
+                // NOTICE: 객체는 ipc통신 파라미터로 사용할 수 없으므로 buffer로 변환
+                const imageBuffer = new Uint8Array(await result.arrayBuffer());
+                IpcRendererHelper.writeFile(imageBuffer, filePath);
+            }
+        }
+        const compressor = new Compressor(imageBlob, options);
         return filePath;
     }
 
