@@ -13,10 +13,9 @@ function ipcRendererListen(store: Store) {
     const { dispatch } = store;
     const actions = bindActionCreators(CommonActionCreators, dispatch);
 
-    listen('invalidAsarFile', () => {
-        actions.changeProductIsValid(false);
-        console.log('this file is foo bar baz');
-    });
+    window.ipcInvoke('validAsarFile').then((result: boolean) => {
+        actions.changeProductIsValid(result);
+    })
 }
 
 export default ipcRendererListen;

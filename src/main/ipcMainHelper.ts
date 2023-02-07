@@ -6,6 +6,7 @@ import Constants from './constants';
 import CommonUtils from './commonUtils';
 import checkUpdateRequest from './utils/network/checkUpdate';
 import createLogger from './utils/functions/createLogger';
+import isValidAsarFile from './utils/functions/isValidAsarFile';
 require('@electron/remote/main').initialize();
 
 const logger = createLogger('main/ipcMainHelper.ts');
@@ -42,6 +43,7 @@ new (class {
         ipcMain.handle('quit', this.quitApplication.bind(this));
         ipcMain.handle('checkPermission', this.checkPermission.bind(this));
         ipcMain.handle('getOpenSourceText', () => ''); // 별다른 표기 필요없음
+        ipcMain.handle('validAsarFile', this.checkIsValidAsarFile.bind(this));
     }
 
     async saveProject(event: IpcMainInvokeEvent, project: ObjectLike, targetPath: string) {
@@ -174,7 +176,7 @@ new (class {
             // 기본 이미지 및 사운드인 경우 상대경로이므로 기준 위치 수정
             if (typedPath.startsWith('renderer')) {
                 typedPath = path.resolve(app.getAppPath(), 'src', typedPath);
-            }else if(typedPath.startsWith('../../..')){
+            } else if (typedPath.startsWith('../../..')) {
                 typedPath = typedPath.replace('../../../', '');
                 typedPath = path.resolve(app.getAppPath(), typedPath);
             }
@@ -222,6 +224,17 @@ new (class {
                 await systemPreferences.askForMediaAccess('microphone');
                 await systemPreferences.askForMediaAccess('camera');
             }
+        }
+    }
+
+    async checkIsValidAsarFile(event: IpcMainInvokeEvent) {
+        try {
+            const result = await isValidAsarFile();
+            console.log('isValidAsarFile', result);
+            return result;
+        } catch (e) {
+            console.log(e);
+            return false;
         }
     }
 
