@@ -13,7 +13,7 @@ function ipcRendererListen(store: Store) {
     const { dispatch } = store;
     const actions = bindActionCreators(CommonActionCreators, dispatch);
 
-    window.ipcInvoke('validAsarFile').then((result: boolean) => {
+    window.ipcInvoke('isValidAsarFile').then((result: boolean) => {
         actions.changeProductIsValid(result);
     })
 }

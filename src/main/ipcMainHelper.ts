@@ -43,7 +43,7 @@ new (class {
         ipcMain.handle('quit', this.quitApplication.bind(this));
         ipcMain.handle('checkPermission', this.checkPermission.bind(this));
         ipcMain.handle('getOpenSourceText', () => ''); // 별다른 표기 필요없음
-        ipcMain.handle('validAsarFile', this.checkIsValidAsarFile.bind(this));
+        ipcMain.handle('isValidAsarFile', this.checkIsValidAsarFile.bind(this));
     }
 
     async saveProject(event: IpcMainInvokeEvent, project: ObjectLike, targetPath: string) {
