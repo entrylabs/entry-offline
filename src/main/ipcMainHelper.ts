@@ -29,6 +29,7 @@ new (class {
         ipcMain.handle('importPictures', this.importPictures.bind(this));
         ipcMain.handle('importPicturesFromResource', this.importPicturesFromResource.bind(this));
         ipcMain.handle('importPictureFromCanvas', this.importPictureFromCanvas.bind(this));
+        ipcMain.handle('captureBlockImage', this.captureBlockImage.bind(this));
         ipcMain.handle('importSounds', this.importSounds.bind(this));
         ipcMain.handle('importSoundsFromResource', this.importSoundsFromResource.bind(this));
         ipcMain.handle('createTableInfo', this.createTables.bind(this));
@@ -106,6 +107,10 @@ new (class {
         return await MainUtils.importPictureFromCanvas(data);
     }
 
+    async captureBlockImage(event: IpcMainInvokeEvent, image: any, filePath: string) {
+        return await MainUtils.captureBlockImage(image, filePath);
+    }
+
     async importSounds(event: IpcMainInvokeEvent, filePaths: string[]) {
         logger.verbose(`importSounds called ${filePaths}`);
         if (!filePaths || filePaths.length === 0) {
@@ -174,7 +179,7 @@ new (class {
             // 기본 이미지 및 사운드인 경우 상대경로이므로 기준 위치 수정
             if (typedPath.startsWith('renderer')) {
                 typedPath = path.resolve(app.getAppPath(), 'src', typedPath);
-            }else if(typedPath.startsWith('../../..')){
+            } else if (typedPath.startsWith('../../..')) {
                 typedPath = typedPath.replace('../../../', '');
                 typedPath = path.resolve(app.getAppPath(), typedPath);
             }

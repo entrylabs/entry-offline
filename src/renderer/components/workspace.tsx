@@ -22,6 +22,7 @@ import { IModalState, ModalActionCreators } from '../store/modules/modal';
 import { IMapDispatchToProps, IMapStateToProps } from '../store';
 import DragAndDropContainer from './DragAndDropContainer';
 import EntryModalHelper from '../helper/entry/entryModalHelper';
+import ipcRendererHelper from '../helper/ipcRendererHelper';
 
 interface IProps extends IReduxDispatch, IReduxState { }
 
@@ -242,10 +243,10 @@ class Workspace extends Component<IProps> {
                 }
 
                 images.forEach(async (image: any, index: number) => {
-                    // notice: Constants.sep 은 필요한가?
                     console.log(Constants.sep);
                     const savePath = `${dirPath}${Constants.sep}${index}${'.png'}`;
-                    await RendererUtils.saveBlockImage(image, savePath);
+                    // await RendererUtils.saveBlockImage(image, savePath);
+                    await ipcRendererHelper.captureBlockImage(image, savePath);
                 })
 
                 // const result = await Promise.all(promises);
