@@ -12,9 +12,11 @@
     </div>
 
     <script>
+        const remote = require('@electron/remote');
+        const windowId = remote.getCurrentWindow().id;
         const { ipcInvoke, ipcSend } = window;
 
-        ipcInvoke('getImageString').then((result) => {
+        ipcInvoke(`getImageString_${windowId}`).then((result) => {
             let svgString = result.data;
             const width = result.width;
             const height = result.height;
@@ -28,7 +30,7 @@
             blockImageDoc.setAttribute('height', height);
             containerDivDom.append(blockImageDoc);
             
-            ipcSend('captureAndSave');
+            ipcSend(`captureAndSave_${windowId}`);
         });
     </script>
 </body>

@@ -107,8 +107,8 @@ new (class {
         return await MainUtils.importPictureFromCanvas(data);
     }
 
-    async captureBlockImage(event: IpcMainInvokeEvent, image: any, filePath: string) {
-        return await MainUtils.captureBlockImage(image, filePath);
+    async captureBlockImage(event: IpcMainInvokeEvent, images: any, filePath: string) {
+        return await MainUtils.captureBlockImage(images, filePath);
     }
 
     async importSounds(event: IpcMainInvokeEvent, filePaths: string[]) {

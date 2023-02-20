@@ -241,21 +241,9 @@ class Workspace extends Component<IProps> {
                 if (!dirPath) {
                     throw 'invalid filePaths';
                 }
-
-                images.forEach(async (image: any, index: number) => {
-                    console.log(Constants.sep);
-                    const savePath = `${dirPath}${Constants.sep}${index}${'.png'}`;
-                    await ipcRendererHelper.captureBlockImage(image, savePath);
-                })
-
-                // const result = await Promise.all(promises);
-                // if (result.length > 1) {
-                //     filePath = path.join(STATIC_PATH.TEMP_DIR, `${fileId}_blocks.zip`);
-                //     await Utils.zipDir(tempDir, filePath);
-                //     res.download(filePath, encodeURI(`${fileId}_blocks`));
-                // } else {
-                //     res.download(result[0], encodeURI(`${fileId}_block`));
-                // }
+                console.log(Constants.sep);
+                const savePath = `${dirPath}${Constants.sep}`;
+                await ipcRendererHelper.captureBlockImage(images, savePath);
             })
         } catch (err) {
             console.error(err);

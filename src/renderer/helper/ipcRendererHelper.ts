@@ -51,8 +51,8 @@ export default class {
         return ipcInvoke<IEntry.Picture>('importPictureFromCanvas', data);
     }
 
-    static captureBlockImage(image: any, savePath: string) {
-        return ipcInvoke<string>('captureBlockImage', image, savePath);
+    static captureBlockImage(images: any, savePath: string) {
+        return ipcInvoke<string>('captureBlockImage', images, savePath);
     }
 
     /**
