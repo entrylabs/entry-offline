@@ -1,7 +1,6 @@
 import IpcRendererHelper from './ipcRendererHelper';
 import StorageManager from './storageManager';
 import _get from 'lodash/get';
-import Compressor from 'compressorjs';
 const { dialog } = window;
 
 /**
