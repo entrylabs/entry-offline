@@ -155,50 +155,6 @@ export default class {
     }
 
     /**
-     * 이미지를 저장한다. 블록 스레드 이미지를 저장하는데 사용된다.
-     * @param data buffer 화 되지 않은 엘리먼트의 src
-     * @param filePath 저장할 위치
-     */
-    // static saveBlockImage(data: string, filePath: string) {
-    //     const buffer = Uint8Array.from(
-    //         atob(data.replace(/^data:image\/(png|gif|jpeg);base64,/, '')),
-    //         (chr) => chr.charCodeAt(0),
-    //     );
-
-    //     IpcRendererHelper.writeFile(buffer, filePath);
-    // }
-
-    /**
-     * 이미지를 지정한 디렉토리에 저장하는 함수.
-     * @param imageData svg형태의 단건 이미지 데이터
-     * @param filePath 저장할 디렉토리 path(파일명 포함); 
-     */
-    static async saveBlockImage(imageData: any, filePath: string) {
-        console.log(`imageData(${typeof imageData}) : ${imageData}`);
-        console.log(`filePath(${typeof filePath}) : ${filePath}`);
-
-        // 이미지 파일로부터 추출하여 변수 정의
-        const data = _get(imageData, 'data', {});
-        const width = _get(imageData, 'width', 0);
-        const height = _get(imageData, 'height', 0);
-
-        const imageBlob = new Blob([data], { type: 'image/svg+xml' });
-
-        // svg 포맷 확인
-        const options = {
-            maxWidth: width,
-            maxHeigth: height,
-            success: async (result: Blob) => {
-                // NOTICE: 객체는 ipc통신 파라미터로 사용할 수 없으므로 buffer로 변환
-                const imageBuffer = new Uint8Array(await result.arrayBuffer());
-                IpcRendererHelper.writeFile(imageBuffer, filePath);
-            }
-        }
-        const compressor = new Compressor(imageBlob, options);
-        return filePath;
-    }
-
-    /**
      * 캔버스에서 사용되지 않은 부분을 잘라낸다.
      * @param imageData
      * @return {*|jQuery|{}} jQuery deferred.

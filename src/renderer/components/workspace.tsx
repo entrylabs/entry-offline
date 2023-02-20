@@ -245,7 +245,6 @@ class Workspace extends Component<IProps> {
                 images.forEach(async (image: any, index: number) => {
                     console.log(Constants.sep);
                     const savePath = `${dirPath}${Constants.sep}${index}${'.png'}`;
-                    // await RendererUtils.saveBlockImage(image, savePath);
                     await ipcRendererHelper.captureBlockImage(image, savePath);
                 })
 
