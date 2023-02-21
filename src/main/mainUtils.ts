@@ -1,4 +1,4 @@
-import { app, ipcMain, WebContents } from 'electron';
+import { app, ipcMain, WebContents, BrowserWindow } from 'electron';
 import fs from 'fs';
 import path from 'path';
 import xl from 'excel4node';
@@ -171,10 +171,10 @@ export default class MainUtils {
                 });
 
                 Promise.all(copyObjectPromise)
-                    .then(function() {
+                    .then(function () {
                         resolve('success');
                     })
-                    .catch(function(err) {
+                    .catch(function (err) {
                         reject(err);
                     });
             } catch (e) {
@@ -543,6 +543,66 @@ export default class MainUtils {
                 return picture;
             })
         );
+    }
+
+    /**
+     * 코드블럭을 이미지로 저장한다. svg파일을 그리기위한 임시 브라우저윈도우를 띄우고 캡쳐해서 저장한다.
+     * @param image 이미지의 가로세로크기(width, height)와 svg데이터(data)를 string값으로 가지고 있다.
+     * @param filePath 캡쳐한 이미지를 저장할 경로
+     */
+    static async captureBlockImage(images: any, filePath: string) {
+        const FREE_SPACE = 25;
+        const WAITING_TIME = 50;
+
+        try {
+            images.forEach((image: any, index: number) => {
+                const { width, height, data } = image;
+
+                // 캡쳐용 임시 브라우저 captureWindow 생성
+                // 임시 브라우저이므로 별도 클래스로 관리하지 않음
+                const remoteMain = require('@electron/remote/main');
+                const captureWindow = new BrowserWindow({
+                    width: Math.ceil(width) + FREE_SPACE,
+                    height: Math.ceil(height) + FREE_SPACE,
+                    useContentSize: true,
+                    center: true,
+                    webPreferences: {
+                        nodeIntegration: true,
+                        contextIsolation: false,
+                        preload: path.resolve(
+                            app.getAppPath(),
+                            'src',
+                            'preload_build',
+                            'preload.bundle.js'
+                        )
+                    },
+                })
+                const windowId = captureWindow.id;
+                remoteMain.enable(captureWindow.webContents);
+                captureWindow.loadURL(
+                    `file:///${path.resolve(app.getAppPath(), 'src', 'main', 'views', 'capture.html')}`
+                )
+
+                // captureWindow의 송수신 및 라이프사이클 관련 함수
+                ipcMain.handle(`getImageString_${windowId}`, () => {
+                    return image;
+                })
+                ipcMain.on(`captureAndSave_${windowId}`, async () => {
+                    // 렌더러에서 svg를 그리는데 다소 시간이 걸리므로 대기 후 실행
+                    await setTimeout(async () => {
+                        const capturedImage = await captureWindow.webContents.capturePage({ x: 0, y: 0, width, height });
+                        await FileUtils.writeFile(capturedImage.toPNG(), `${filePath}${index}${'.png'}`);
+                        captureWindow.close();
+                    }, WAITING_TIME);
+                })
+                captureWindow.addListener('closed', () => {
+                    ipcMain.removeAllListeners(`captureAndSave_${windowId}`);
+                    ipcMain.removeHandler(`getImageString_${windowId}`);
+                })
+            })
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     static importPictureFromCanvas(data: ObjectLike) {

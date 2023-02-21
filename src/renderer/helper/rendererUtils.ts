@@ -1,6 +1,6 @@
 import IpcRendererHelper from './ipcRendererHelper';
 import StorageManager from './storageManager';
-
+import _get from 'lodash/get';
 const { dialog } = window;
 
 /**
@@ -154,20 +154,6 @@ export default class {
     }
 
     /**
-     * 이미지를 저장한다. 블록 스레드 이미지를 저장하는데 사용된다.
-     * @param data buffer 화 되지 않은 엘리먼트의 src
-     * @param filePath 저장할 위치
-     */
-    static saveBlockImage(data: string, filePath: string) {
-        const buffer = Uint8Array.from(
-            atob(data.replace(/^data:image\/(png|gif|jpeg);base64,/, '')),
-            (chr) => chr.charCodeAt(0),
-        );
-
-        IpcRendererHelper.writeFile(buffer, filePath);
-    }
-
-    /**
      * 캔버스에서 사용되지 않은 부분을 잘라낸다.
      * @param imageData
      * @return {*|jQuery|{}} jQuery deferred.
@@ -177,7 +163,7 @@ export default class {
             const image = new Image();
 
             image.src = imageData;
-            image.onload = function() {
+            image.onload = function () {
                 const canvas = document.createElement('canvas');
                 canvas.width = image.width;
                 canvas.height = image.height;
@@ -206,10 +192,10 @@ export default class {
                         }
                     }
                 }
-                pix.x.sort(function(a, b) {
+                pix.x.sort(function (a, b) {
                     return a - b;
                 });
-                pix.y.sort(function(a, b) {
+                pix.y.sort(function (a, b) {
                     return a - b;
                 });
                 const n = pix.x.length - 1;
