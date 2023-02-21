@@ -1085,7 +1085,9 @@
         "CONTEXT_COPY_option": "코드 복사",
         "Delete_Blocks": "코드 삭제",
         "add_my_storage": "나의 보관함에 추가하기",
-        "export_object": "오브젝트 내보내기"
+        "export_object": "오브젝트 내보내기",
+        "this_project": "모든",
+        "this_object": "자신"
     },
     "video_body_coord_params": {
         "left_eye": "왼쪽 눈",
@@ -1506,6 +1508,8 @@
         "use_block_objects1": "사용된 오브젝트 (블록 {0}개)",
         "use_block_objects2": "사용된 오브젝트",
         "use_block_function": "함수에 조립되어 있어요.",
+        "use_block_project": "블록 {0} 개",
+        "use_blocks_project": "블록 {0} 개",
         "SelectShape": "이동",
         "SelectCut": "자르기",
         "Pencil": "펜",
@@ -2753,7 +2757,8 @@
         "boolean_or": "%1 %2 %3",
         "function_field_label": "%1%2",
         "function_field_string": "%1%2",
-        "function_field_boolean": "%1%2"
+        "function_field_boolean": "%1%2",
+        "get_block_count": "%1 의 블록 수"
     },
     "TextCoding": {
         "block_name": "블록명",
