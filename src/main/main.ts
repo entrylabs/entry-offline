@@ -5,7 +5,6 @@ import AboutWindowManager from './views/aboutWindowManager';
 import parseCommandLine from './utils/functions/parseCommandLine';
 import configInitialize from './utils/functions/configInitialize';
 import createLogger from './utils/functions/createLogger';
-import isValidAsarFile from './utils/functions/isValidAsarFile';
 
 import('./ipcMainHelper');
 import('./utils/functions/globalShortCutRegister');
@@ -82,19 +81,6 @@ if (!app.requestSingleInstanceLock()) {
         ipcMain.on('closeAboutWindow', function() {
             aboutWindow.closeAboutWindow();
         });
-
-        setTimeout(async () => {
-            try {
-                const result = await isValidAsarFile();
-                console.log('isValidAsarFile', result);
-                if (!result) {
-                    mainWindow?.window?.webContents.send('invalidAsarFile');
-                }
-            } catch (e) {
-                console.log(e);
-                mainWindow?.window?.webContents.send('invalidAsarFile');
-            }
-        }, 2000);
     });
 }
 
