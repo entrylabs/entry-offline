@@ -51,6 +51,10 @@ export default class {
         return ipcInvoke<IEntry.Picture>('importPictureFromCanvas', data);
     }
 
+    static captureBlockImage(images: any, savePath: string) {
+        return ipcInvoke<string>('captureBlockImage', images, savePath);
+    }
+
     /**
      * 오브젝트를 eo 파일로 만들어서 외부로 저장한다.
      * 이 이벤트는 일반적으로 entryUtils 를 거쳐서 발생된다.

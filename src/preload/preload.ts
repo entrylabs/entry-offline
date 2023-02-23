@@ -22,7 +22,7 @@ ipcRenderer.on(
         const { x, y, width, height } = dimension || {};
         const imageElement = width && height ? new Image(width, height) : new Image();
 
-        imageElement.onload = function() {
+        imageElement.onload = function () {
             canvas.width = imageElement.width;
             canvas.height = imageElement.height;
 
@@ -64,6 +64,10 @@ window.ipcInvoke = (channel: string, ...args: any[]) => {
     return ipcRenderer.invoke(channel, ...args);
 };
 
+window.ipcSend = (channel: string, ...args: any[]) => {
+    ipcRenderer.send(channel, ...args);
+}
+
 window.openEntryWebPage = () => {
     shell.openExternal('https://playentry.org/download/offline');
 };
@@ -78,6 +82,11 @@ window.weightsPath = () => {
         ? path.resolve(process.resourcesPath, 'weights')
         : path.resolve(remote.app.getAppPath(), 'node_modules', 'entry-js', 'weights');
 };
+
+window.getAppPathWithParams = (...params: string[]) => {
+    console.log(process.env.NODE_ENV);
+    return path.resolve(remote.app.getAppPath(), ...params);
+}
 
 /**
  * external file => loadProjectFromMain event => loadProject => callback(project)

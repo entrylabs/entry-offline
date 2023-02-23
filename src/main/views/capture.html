@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Capture</title>
+</head>
+
+<body>
+    <div class="container">
+
+    </div>
+
+    <script>
+        const remote = require('@electron/remote');
+        const windowId = remote.getCurrentWindow().id;
+        const { ipcInvoke, ipcSend } = window;
+
+        ipcInvoke(`getImageString_${windowId}`).then((result) => {
+            let svgString = result.data;
+            const width = result.width;
+            const height = result.height;
+
+            // image 태그 href 주소 수정
+            svgString = svgString.replaceAll("file://../../..", window.getAppPathWithParams());
+
+            const containerDivDom = document.querySelector('.container');
+            const blockImageDoc = new DOMParser().parseFromString(svgString, 'image/svg+xml').querySelector('svg');
+            blockImageDoc.setAttribute('width', width);
+            blockImageDoc.setAttribute('height', height);
+            containerDivDom.append(blockImageDoc);
+            
+            ipcSend(`captureAndSave_${windowId}`);
+        });
+    </script>
+</body>
+
+</html>
