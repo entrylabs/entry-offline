@@ -36,7 +36,7 @@
         "async-csv": "^2.1.3",
         "axios": "^0.19.2",
         "cross-spawn": "^7.0.3",
-        "entry-hw": "git+https://github.com/entrylabs/entry-hw.git#dist/v1.9.39",
+        "entry-hw": "git+https://github.com/entrylabs/entry-hw.git#dist/v1.9.39_3",
         "entry-js": "git+https://github.com/entrylabs/entryjs.git#dist/offline_v2.1.2",
         "entry-tool": "git+https://github.com/entrylabs/entry-tool.git#dist/20221024",
         "excel4node": "^1.7.0",
