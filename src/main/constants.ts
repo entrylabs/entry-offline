@@ -11,16 +11,19 @@ export default class {
                     result = result
                         .replace('./bower_components', '../../../node_modules')
                         .replace('entryjs', 'entry-js'); // 과거 웹 WS 대응
+                } else if (result.startsWith('/lib')) { // 신규 웹 기본 오브젝트 대응
+                    result = result.replace('/lib', '../../../node_modules');
                 } else if (result.indexOf('temp') > -1) { // 일반 오브젝트 대응
                     result = result.substring(result.indexOf('temp'));
                     result = path.join(this.appPath, result)
                         .replace(/\\/gi, '/');
                 }
 
-                if (fileUrl.endsWith('.svg')) {
-                    // svg 파일의 경우 png 파일로 교체한다.
-                    result = result.replace('.svg', '.png');
-                }
+                // TODO: 히스토리 파악 후 완전 제거
+                // if (fileUrl.endsWith('.svg')) {
+                //     // svg 파일의 경우 png 파일로 교체한다.
+                //     result = result.replace('.svg', '.png');
+                // }
 
                 result = result.replace(/.*\/\//, ''); // 외부 접속 프로토콜 스키마 보안 대응
                 return result;
@@ -72,6 +75,27 @@ export default class {
             './bower_components/entryjs/images/media/entrybot2.png',
             './bower_components/entry-js/images/_1x1.png',
             './bower_components/entryjs/images/_1x1.png',
+
+            './bower_components/entry-js/images/media/entrybot1.svg',
+            './bower_components/entryjs/images/media/entrybot1.svg',
+            './bower_components/entry-js/images/media/entrybot2.svg',
+            './bower_components/entryjs/images/media/entrybot2.svg',
+            './bower_components/entry-js/images/_1x1.svg',
+            './bower_components/entryjs/images/_1x1.svg',
+
+            './lib/entry-js/images/media/entrybot1.png',
+            './lib/entryjs/images/media/entrybot1.png',
+            './lib/entry-js/images/media/entrybot2.png',
+            './lib/entryjs/images/media/entrybot2.png',
+            './lib/entry-js/images/_1x1.png',
+            './lib/entryjs/images/_1x1.png',
+
+            './lib/entry-js/images/media/entrybot1.svg',
+            './lib/entryjs/images/media/entrybot1.svg',
+            './lib/entry-js/images/media/entrybot2.svg',
+            './lib/entryjs/images/media/entrybot2.svg',
+            './lib/entry-js/images/_1x1.svg',
+            './lib/entryjs/images/_1x1.svg',
         ];
     }
 
