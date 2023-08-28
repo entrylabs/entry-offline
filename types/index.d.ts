@@ -140,15 +140,15 @@ declare module IEntry {
         id: string;
         name?: string;
         script?: any;
+        scene?: string;
         objectType: string;
+        rotateMethod?: string;
         entity?: EntityObject;
         fileurl?: string;
-        // sprite: {
-        //     name: string;
-        //     pictures: Picture[];
-        //     sounds: Sound[];
-        //     category: any;
-        // }
+        selectedPicture?: any;
+        selectedPictureId?: string;
+        lock?: boolean;
+        sprite?: any[];
         toJSON: () => JSON;
         getPicture: (pictureId: string) => IEntry.Picture | null;
         getSound: (soundId: string) => IEntry.Sound;
@@ -270,6 +270,8 @@ declare module IEntry {
 }
 
 declare type EntryAddOptions = {
+    name?: any;
+    id?: any;
     objectType: string;
     text: string;
     options: any;
@@ -312,6 +314,7 @@ declare class Entry {
     static expansionBlocks: any[];
     static aiUtilizeBlocks: any[];
     static aiLearning: any;
+    static TextCodingUtil: any;
 
     // 엔트리 네임스페이스에 할당되어있는 특정 함수들
     static generateHash: () => string;
