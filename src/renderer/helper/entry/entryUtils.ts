@@ -20,7 +20,7 @@ export default class {
         let confirmProjectDismiss = true;
         if (!Entry.stateManager.isSaved()) {
             confirmProjectDismiss = await EntryModalHelper.getConfirmModal(
-                RendererUtils.getLang('Menus.save_dismiss')
+                RendererUtils.getLang('Menus.save_dismiss'),
             );
         }
 
@@ -63,7 +63,7 @@ export default class {
             try {
                 confirm = await EntryModalHelper.getConfirmModal(
                     RendererUtils.getLang('Workspace.confirm_load_temporary'),
-                    RendererUtils.getLang('Workspace.confirm_load_header')
+                    RendererUtils.getLang('Workspace.confirm_load_header'),
                 );
 
                 if (confirm) {
@@ -129,25 +129,115 @@ export default class {
                         console.log('object exported successfully');
                     });
                 }
-            }
+            },
         );
     }
 
     /**
      * 오브젝트를 엔트리에 추가한다.
      *
-     * @param {Object}model 엔트리 외부 import 용 오브젝트
+     * @param {Object}item 엔트리 외부 import 용 오브젝트
      * @property {Object}objects 오브젝트 목록
      * @property {Object}functions 오브젝트에서 사용된 함수목록
      * @property {Object}messages 오브젝트에서 사용된 메세지목록
      * @property {Object}variables 오브젝트에서 사용된 변수목록
      */
-    static addObjectToEntry(model: EntryAddOptions) {
-        if (!model.sprite) {
+    static addObjectToEntry(item: EntryAddOptions) {
+        if (!item.sprite) {
             console.error('object structure is not valid');
             return;
         }
-        Entry.Utils.addNewObject(model.sprite);
+
+        const { sprite } = item;
+            if (sprite) {
+                const objects = sprite.objects;
+                const functions = sprite.functions;
+                const messages = sprite.messages;
+                const variables = sprite.variables;
+
+                if (
+                    Entry.getMainWS().mode === Entry.Workspace.MODE_VIMBOARD &&
+                    (!Entry.TextCodingUtil.canUsePythonVariables(variables) ||
+                        !Entry.TextCodingUtil.canUsePythonFunctions(functions))
+                ) {
+                    return window.EntryModal.alert(Lang.Menus.object_import_syntax_error);
+                }
+
+                const objectIdMap = {} as any;
+                variables.forEach((variable: any) => {
+                    const { object } = variable;
+                    if (object) {
+                        const id = variable.id;
+                        const idMap = objectIdMap[object];
+                        variable.id = Entry.generateHash();
+                        if (!idMap) {
+                            variable.object = Entry.generateHash();
+                            objectIdMap[object] = {
+                                objectId: variable.object,
+                                variableOriginId: [id],
+                                variableId: [variable.id],
+                            };
+                        } else {
+                            variable.object = idMap.objectId;
+                            idMap.variableOriginId.push(id);
+                            idMap.variableId.push(variable.id);
+                        }
+                    }
+                });
+                Entry.variableContainer.appendMessages(messages);
+                Entry.variableContainer.appendVariables(variables);
+                Entry.variableContainer.appendFunctions(functions);
+
+                objects.forEach((object: any) => {
+                    const idMap = objectIdMap[object.id];
+                    if (idMap) {
+                        let script = object.script;
+                        idMap.variableOriginId.forEach((id: string, idx: number) => {
+                            const regex = new RegExp(id, 'gi');
+                            script = script.replace(regex, idMap.variableId[idx]);
+                        });
+                        object.script = script;
+                        object.id = idMap.objectId;
+                    } else if (Entry.container.getObject(object.id)) {
+                        object.id = Entry.generateHash();
+                    }
+                    if (item.objectType === 'textBox') {
+                        const text = item.text ? item.text : Lang.Blocks.TEXT;
+                        const options = item.options;
+                        object.objectType = 'textBox';
+                        Object.assign(object, {
+                            text,
+                            options,
+                            name: Lang.Workspace.textbox,
+                        });
+                    } else {
+                        object.objectType = 'sprite';
+                    }
+                    // TODO: 첫번째 이미지에 sprite가 추가되는 원인 코드 찾아서 제거
+                    if (object.sprite.pictures.length > 0) {
+                        object.sprite.pictures.forEach((picture: any) => {
+                            delete picture.sprite;
+                        });
+                    }
+                    Entry.container.addObject(object, 0);
+                });
+            } else {
+                if (!item.id) {
+                    item.id = Entry.generateHash();
+                }
+
+                const object = {
+                    id: Entry.generateHash(),
+                    objectType: 'sprite',
+                    sprite: {
+                        name: item.name,
+                        pictures: [item],
+                        sounds: [],
+                        category: {},
+                    },
+                };
+                Entry.container.addObject(object, 0);
+            }
     }
 
     static addPictureObjectToEntry(picture: IEntry.Picture) {
@@ -185,7 +275,7 @@ export default class {
             const croppedImageData = await RendererUtils.cropImageFromCanvas(image);
             const imageBuffer = Uint8Array.from(
                 atob(croppedImageData.replace(/^data:image\/(png|gif|jpeg);base64,/, '')),
-                (chr) => chr.charCodeAt(0)
+                (chr) => chr.charCodeAt(0),
             );
 
             // 만약 이전 파일명이 존재하는 경우 삭제처리를 위함
@@ -235,7 +325,7 @@ export default class {
         const filename = entryObject.name || 'nonamed';
         const extension = RendererUtils.sanitizeExtension(
             entryObject.ext || entryObject.extension,
-            defaultExtension
+            defaultExtension,
         );
 
         return `${filename}${extension}`;
