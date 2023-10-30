@@ -3414,9 +3414,9 @@ enquirer@^2.3.5:
   version "0.0.0"
   resolved "git+https://github.com/entrylabs/entryjs.git#e376ef4b3bc41a8518163bed4f3d9e70ceb490df"
 
-"entry-tool@git+https://github.com/entrylabs/entry-tool.git#dist/20221024":
+"entry-tool@git+https://github.com/entrylabs/entry-tool.git#dist/20231026":
   version "0.0.0"
-  resolved "git+https://github.com/entrylabs/entry-tool.git#ef7562657be5941036c4e3acd824883be3688745"
+  resolved "git+https://github.com/entrylabs/entry-tool.git#9a90d89b87671115a75472d7b1c0865c8bcc6351"
 
 env-paths@^2.2.0:
   version "2.2.1"
