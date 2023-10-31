@@ -26,6 +26,7 @@ declare interface Preload {
     openHardwarePage(): void;
     checkPermission(type: 'microphone' | 'camera'): Promise<void>;
     weightsPath: () => string;
+    getEntryjsPath: () => string;
     getAppPathWithParams: (...params: string[]) => string;
 }
 
