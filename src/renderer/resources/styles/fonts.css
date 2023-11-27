@@ -160,3 +160,63 @@
   src: local('잘난체 Regular');
   src: url("../fonts/fonts/JalnanOTF00.woff") format('woff');
 }
+
+@font-face {
+  font-family: 'D2 Coding';
+  font-style: normal;
+  font-weight: 400;
+  src: local('D2 Coding Regular');
+  src: url("../fonts/d2coding-subset.woff") format('woff');
+}
+@font-face {
+  font-family: 'D2 Coding';
+  font-style: normal;
+  font-weight: 600;
+  src: local('D2 Coding Bold');
+  src: url("../fonts/d2coding-bold-subset.woff") format('woff');
+}
+
+@font-face {
+  font-family: 'Nanum Barun Pen';
+  font-style: normal;
+  font-weight: 400;
+  src: local('나눔 바른 펜 Regular');
+  src: url("../fonts/nanumbarunpenR.woff") format('woff');
+}
+@font-face {
+  font-family: 'Nanum Barun Pen';
+  font-style: normal;
+  font-weight: 600;
+  src: local('나눔 바른 펜 Bold');
+  src: url("../fonts/nanumbarunpenB.woff") format('woff');
+}
+
+@font-face {
+  font-family: 'MaruBuri';
+  font-style: normal;
+  font-weight: 400;
+  src: local('마루부리 Regular');
+  src: url("../fonts/MaruBuri-Regular.woff") format('woff');
+}
+@font-face {
+  font-family: 'MaruBuri';
+  font-style: normal;
+  font-weight: 600;
+  src: local('마루부리 Bold');
+  src: url("../fonts/MaruBuri-Bold.woff") format('woff');
+}
+
+@font-face {
+  font-family: 'NotoSans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('NotoSans Regular');
+  src: url("../fonts/NotoSans-Regular.woff") format('woff');
+}
+@font-face {
+  font-family: 'NotoSans';
+  font-style: normal;
+  font-weight: 600;
+  src: local('NotoSans Bold');
+  src: url("../fonts/NotoSans-Bold.woff") format('woff');
+}

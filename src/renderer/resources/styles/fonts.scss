@@ -241,3 +241,64 @@
   font-weight: 400;
   src: url("../renderer/resources/fonts/SDChildfundkorea.woff") format('woff');
 }
+
+// D2Coding
+@font-face {
+  font-family: 'D2 Coding';
+  font-style: normal;
+  font-weight: 400;
+  src: local('D2 Coding Regular');
+  src: url("../renderer/resources/fonts/d2coding-subset.woff") format('woff');
+}
+@font-face {
+  font-family: 'D2 Coding';
+  font-style: normal;
+  font-weight: 600;
+  src: local('D2 Coding Bold');
+  src: url("../renderer/resources/fonts/d2coding-bold-subset.woff") format('woff');
+}
+// 나눔바른펜
+@font-face {
+  font-family: 'Nanum Barun Pen';
+  font-style: normal;
+  font-weight: 400;
+  src: local('나눔 바른 펜 Regular');
+  src: url("../renderer/resources/fonts/nanumbarunpenR.woff") format('woff');
+}
+@font-face {
+  font-family: 'Nanum Barun Pen';
+  font-style: normal;
+  font-weight: 600;
+  src: local('나눔 바른 펜 Bold');
+  src: url("../renderer/resources/fonts/nanumbarunpenB.woff") format('woff');
+}
+// 마루 부리
+@font-face {
+  font-family: 'MaruBuri';
+  font-style: normal;
+  font-weight: 400;
+  src: local('마루부리 Regular');
+  src: url("../renderer/resources/fonts/MaruBuri-Regular.woff") format('woff');
+}
+@font-face {
+  font-family: 'MaruBuri';
+  font-style: normal;
+  font-weight: 600;
+  src: local('마루부리 Bold');
+  src: url("../renderer/resources/fonts/MaruBuri-Bold.woff") format('woff');
+}
+// 본고딕
+@font-face {
+  font-family: 'NotoSans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('NotoSans Regular');
+  src: url("../renderer/resources/fonts/NotoSans-Regular.woff") format('woff');
+}
+@font-face {
+  font-family: 'NotoSans';
+  font-style: normal;
+  font-weight: 600;
+  src: local('NotoSans Bold');
+  src: url("../renderer/resources/fonts/NotoSans-Bold.woff") format('woff');
+}
