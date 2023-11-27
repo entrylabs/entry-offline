@@ -2600,10 +2600,10 @@
         "jeju_hallasan": "한라산체",
         "gothic_coding": "코딩고딕체",
         "batang": "바탕체",
-        "gothic": "나눔고딕체",
+        "gothic": "나눔고딕",
         "myeongjo": "나눔명조",
         "pen_script": "나눔손글씨",
-        "square_round": "나눔스퀘어라운드체",
+        "square_round": "나눔스퀘어라운드",
         "jalnan": "잘난체",
         "designhouse": "디자인하우스체",
         "malssami815": "말싸미815체",
@@ -2619,7 +2619,11 @@
         "sd_mapssi": "산돌 맵씨",
         "sd_shabang": "산돌 별이샤방샤방",
         "sd_woodcarving": "산돌 목각",
-        "sd_yongbi": "산돌 용비어천가"
+        "sd_yongbi": "산돌 용비어천가",
+        "maruburi": "마루 부리",
+        "nanumbarunpen": "나눔바른펜",
+        "notosans": "본고딕",
+        "d2coding": "D2 Coding"
     },
     "Hw": {
         "note": "음표",
