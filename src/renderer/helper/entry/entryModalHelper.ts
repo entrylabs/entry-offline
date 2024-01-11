@@ -67,7 +67,7 @@ class EntryModalHelper {
                     objectType: 'sprite',
                     sprite: {
                         name: `${RendererUtils.getLang(
-                            'Workspace.new_object',
+                            'Workspace.new_object'
                         )}${Entry.container.getAllObjects().length + 1}`,
                         pictures: [
                             {
@@ -123,7 +123,7 @@ class EntryModalHelper {
 
                 result.forEach((uploads) => {
                     const _uploads = uploads || [];
-                    EntryModalHelper.popup.setData({ data: { uploads: _uploads, data:[] } });
+                    EntryModalHelper.popup.setData({ data: { uploads: _uploads, data: [] } });
                 });
             },
             uploads: (data: any) => {
@@ -138,7 +138,7 @@ class EntryModalHelper {
             },
             uploadFail: (data: any) => {
                 EntryModalHelper.getAlertModal(
-                    RendererUtils.getLang(`${data.messageParent}.${data.message}`),
+                    RendererUtils.getLang(`${data.messageParent}.${data.message}`)
                 );
             },
             fail: () => {
@@ -150,13 +150,13 @@ class EntryModalHelper {
         });
     }
 
-    static async uploadItem (kind: any, formData: any) {
+    static async uploadItem(kind: any, formData: any) {
         if (!kind || !formData) {
             return null;
         }
         const datas = formData ? formData.values() : [];
         const uploadPaths = [];
-        
+
         for (const value of datas) {
             if (value.path) {
                 uploadPaths.push(value.path);
@@ -165,23 +165,26 @@ class EntryModalHelper {
 
         if (kind === 'object') {
             const results = await IpcRendererHelper.importObjects(uploadPaths);
-            
+
             return (
-                results.flatMap((item: any) => item.objects.map((object: any) => {
-                    object.id = Entry.generateHash();
-                    if (object.objectType === 'textBox') {
-                        object.selectedPicture = {
-                            name: object.name,
-                            text: object.text,
-                            objectType: object.objectType,
-                            options: object.entity || {},
-                            _id: Entry.generateHash(),
-                            fileurl: '../../renderer/resources/images/workspace/text_icon_ko.svg',
-                        };
-                    }
-                    object.selectedPicture.sprite = item;
-                    return object.selectedPicture;
-                })) || []
+                results.flatMap((item: any) =>
+                    item.objects.map((object: any) => {
+                        object.id = Entry.generateHash();
+                        if (object.objectType === 'textBox') {
+                            object.selectedPicture = {
+                                name: object.name,
+                                text: object.text,
+                                objectType: object.objectType,
+                                options: object.entity || {},
+                                _id: Entry.generateHash(),
+                                fileurl:
+                                    '../../renderer/resources/images/workspace/text_icon_ko.svg',
+                            };
+                        }
+                        object.selectedPicture.sprite = item;
+                        return object.selectedPicture;
+                    })
+                ) || []
             );
         } else if (kind === 'picture') {
             const results = await IpcRendererHelper.importPictures(uploadPaths);
@@ -290,7 +293,7 @@ class EntryModalHelper {
             },
             uploadFail: (data: any) => {
                 EntryModalHelper.getAlertModal(
-                    RendererUtils.getLang(`${data.messageParent}.${data.message}`),
+                    RendererUtils.getLang(`${data.messageParent}.${data.message}`)
                 );
             },
             fail: () => {
@@ -387,7 +390,7 @@ class EntryModalHelper {
             },
             uploadFail: (data: any) => {
                 EntryModalHelper.getAlertModal(
-                    RendererUtils.getLang(`${data.messageParent}.${data.message}`),
+                    RendererUtils.getLang(`${data.messageParent}.${data.message}`)
                 );
             },
             fail: (data: any) => {
@@ -414,7 +417,7 @@ class EntryModalHelper {
                 }
 
                 const langFilteredData = allFetchedData.filter(
-                    (element) => element.lang === langType,
+                    (element) => element.lang === langType
                 );
 
                 EntryModalHelper.popup.setData({
@@ -435,10 +438,10 @@ class EntryModalHelper {
                         const max = _.max([fields.length, ..._.map(origin, (row) => row.length)]);
                         fields = _.concat(fields, new Array(max - fields.length).fill(''));
                         origin = _.map(origin, (row) =>
-                            _.concat(row, new Array(max - row.length).fill('')),
+                            _.concat(row, new Array(max - row.length).fill(''))
                         );
                         return { ...tableInfo, ...infos, fields, data: origin };
-                    }),
+                    })
                 );
                 tableInfos.map((item) => {
                     Entry.playground.dataTable.addSource(item);
@@ -523,7 +526,7 @@ class EntryModalHelper {
                         callback && callback();
                     } else {
                         EntryModalHelper.getAlertModal(
-                            RendererUtils.getLang('Workspace.deselect_expansion_block_warning'),
+                            RendererUtils.getLang('Workspace.deselect_expansion_block_warning')
                         );
                     }
                 },
@@ -531,7 +534,7 @@ class EntryModalHelper {
                     callback && callback();
                 },
             },
-            expansionBlocks as any,
+            expansionBlocks as any
         );
     }
 
@@ -550,7 +553,7 @@ class EntryModalHelper {
                         callback && callback();
                     } else {
                         EntryModalHelper.getAlertModal(
-                            RendererUtils.getLang('Workspace.deselect_ai_utilize_block_warning'),
+                            RendererUtils.getLang('Workspace.deselect_ai_utilize_block_warning')
                         );
                     }
                 },
@@ -559,7 +562,7 @@ class EntryModalHelper {
                 },
             },
             aiBlocks as any,
-            '../../../node_modules/entry-js/images/aiUtilize/',
+            '../../../node_modules/entry-js/images/aiUtilize/'
         );
     }
 
@@ -597,7 +600,7 @@ class EntryModalHelper {
 
     static async _addAIUtilizeBlocks(blocks: any) {
         const addBlocks = blocks.filter(
-            ({ name }: { name: string }) => !Entry.aiUtilizeBlocks.includes(name),
+            ({ name }: { name: string }) => !Entry.aiUtilizeBlocks.includes(name)
         );
         const removeBlocks = this._getActiveAIUtilizeBlocks()
             .filter((item) => item.active)
@@ -616,7 +619,7 @@ class EntryModalHelper {
 
     static _addExpansionBlocks(blocks: any) {
         const addBlocks = blocks.filter(
-            ({ name }: { name: string }) => !Entry.expansionBlocks.includes(name),
+            ({ name }: { name: string }) => !Entry.expansionBlocks.includes(name)
         );
         const removeBlocks = this._getActiveExpansionBlocks()
             .filter((item) => item.active)
@@ -689,7 +692,7 @@ class EntryModalHelper {
             },
             uploadFail: (data: any) => {
                 EntryModalHelper.getAlertModal(
-                    RendererUtils.getLang(`${data.messageParent}.${data.message}`),
+                    RendererUtils.getLang(`${data.messageParent}.${data.message}`)
                 );
             },
             fail: () => {
@@ -708,7 +711,7 @@ class EntryModalHelper {
         type: string,
         events: PopupEventListeners = {},
         data: any = [],
-        imageBaseUrl: string = '../../../node_modules/entry-js/images/hardware/',
+        imageBaseUrl: string = '../../../node_modules/entry-js/images/hardware/'
     ) {
         this.loadPopup(data);
         const popup = EntryModalHelper.popup;
@@ -770,7 +773,7 @@ class EntryModalHelper {
             const modalStyleLink = document.createElement('link');
             modalStyleLink.setAttribute(
                 'href',
-                '../../../node_modules/@entrylabs/modal/dist/entry/entry-modal.css',
+                '../../../node_modules/@entrylabs/modal/dist/entry/entry-modal.css'
             );
             modalStyleLink.setAttribute('rel', 'stylesheet');
             document.head.appendChild(modalStyleLink);
@@ -863,7 +866,7 @@ class EntryModalHelper {
             .alert(
                 `${RendererUtils.getLang('Msgs.version_update_msg1').replace(
                     /%1/gi,
-                    latestVersion,
+                    latestVersion
                 )}\n\n${RendererUtils.getLang('Msgs.version_update_msg3')}`,
                 RendererUtils.getLang('General.update_title'),
                 {
@@ -875,7 +878,7 @@ class EntryModalHelper {
                     },
                     parentClassName: 'versionAlert',
                     withDontShowAgain: true,
-                },
+                }
             )
             .one('click', (event: string, { dontShowChecked }: { dontShowChecked: boolean }) => {
                 if (event === 'ok') {
