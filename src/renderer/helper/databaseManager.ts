@@ -44,6 +44,7 @@ export interface DBTableObject {
     hasOtherTypes?: Boolean;
     otherTypes?: Array<any>;
     fieldInfos?: Array<any>;
+    selected?: DBTableObject;
 }
 
 type TableObjectsArray = DBPictureObject[] | DBSpriteObject[] | DBSoundObject[] | DBTableObject[];

@@ -431,8 +431,13 @@ class EntryModalHelper {
                 console.log('submit', selected);
                 const tableInfos = await Promise.all(
                     selected.map((params: any) => {
-                        const { projectTable, ...infos } = params;
-                        const [data] = DatabaseManager.selectDataTables([projectTable]);
+                        const { projectTable, selected, ...infos } = params;
+                        let data;
+                        if (selected) {
+                            data = selected;
+                        } else {
+                            [data] = DatabaseManager.selectDataTables([projectTable]);
+                        }
                         const { type, ...tableInfo } = data;
                         let { data: origin, fields } = data;
                         const max = _.max([fields.length, ..._.map(origin, (row) => row.length)]);
