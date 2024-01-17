@@ -407,9 +407,14 @@ class Workspace extends Component<IProps> {
             await saveFunction(this.projectSavedPath);
         } else {
             const targetPath = this.projectSavedPath || '*';
+            let defaultPath = this.projectSavedPath ? targetPath : projectName;
+            if (key !== 'save') {
+                defaultPath = defaultPath.replace('.ent', '');
+                defaultPath += '의 리메이크';
+            }
             RendererUtils.showSaveDialog(
                 {
-                    defaultPath: `${targetPath}/${projectName}`,
+                    defaultPath,
                     filters: [{ name: 'Entry File', extensions: ['ent'] }],
                 },
                 saveFunction,
