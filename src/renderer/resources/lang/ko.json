@@ -3853,7 +3853,11 @@
         "quantity": "개수",
         "in_order": "순서",
         "not_distinguished": "구분하지 않음",
-        "select_table": "먼저 테이블을 추가해 주세요."
+        "select_table": "먼저 테이블을 추가해 주세요.",
+        "select_table_title": "테이블을 추가하는 방법",
+        "select_table_des1": "1. 테이블 추가하기의 '테이블 선택' 탭에서 엔트리가 제공하는 기본 테이블을 선택해 추가합니다.",
+        "select_table_des2": "2. 테이블 추가하기의 '파일 올리기' 탭에서 CSV, XLS(X) 파일을 직접 업로드해 추가합니다.",
+        "select_table_des3": "3. 테이블 추가하기의 '새로 만들기' 탭에서 빈 테이블을 추가하고 데이터를 직접 입력합니다."
     },
     "AiLearning": {
         "equation": "회귀식",
