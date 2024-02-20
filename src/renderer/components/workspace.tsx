@@ -24,7 +24,7 @@ import DragAndDropContainer from './DragAndDropContainer';
 import EntryModalHelper from '../helper/entry/entryModalHelper';
 import ipcRendererHelper from '../helper/ipcRendererHelper';
 
-interface IProps extends IReduxDispatch, IReduxState { }
+interface IProps extends IReduxDispatch, IReduxState {}
 
 class Workspace extends Component<IProps> {
     private lastHwName?: string;
@@ -94,7 +94,7 @@ class Workspace extends Component<IProps> {
                     'error',
                     RendererUtils.getLang('Workspace.loading_fail_msg'),
                     RendererUtils.getLang('Workspace.fail_contact_msg'),
-                    { height: 190, width: 365, padding: 30 },
+                    { height: 190, width: 365, padding: 30 }
                 );
                 await RendererUtils.clearTempProject();
 
@@ -120,7 +120,7 @@ class Workspace extends Component<IProps> {
                     'progress',
                     RendererUtils.getLang('Workspace.uploading_msg'),
                     RendererUtils.getLang('Workspace.fail_contact_msg'),
-                    { width: 220 },
+                    { width: 220 }
                 );
                 const project = await readProjectFunction;
                 await this.loadProject(project);
@@ -216,7 +216,7 @@ class Workspace extends Component<IProps> {
                 '',
                 {
                     width: 220,
-                },
+                }
             );
             this.isSavingCanvasData = true;
             try {
@@ -326,13 +326,13 @@ class Workspace extends Component<IProps> {
         if (hw.programConnected && hw.hwModule) {
             const hwName = hw.hwModule.name;
             if (_includes(EntryStatic.hwMiniSupportList, hwName)) {
-                hwCategoryList.forEach(function (categoryName: string) {
+                hwCategoryList.forEach(function(categoryName: string) {
                     blockMenu.unbanCategory(categoryName);
                 });
                 blockMenu.banCategory('arduino');
                 blockMenu.banCategory('hw_robot');
             } else {
-                hwCategoryList.forEach(function (categoryName: string) {
+                hwCategoryList.forEach(function(categoryName: string) {
                     blockMenu.banCategory(categoryName);
                 });
                 blockMenu.banCategory('hw_robot');
@@ -340,7 +340,7 @@ class Workspace extends Component<IProps> {
             }
             this.lastHwName = hwName;
         } else {
-            hwCategoryList.forEach(function (categoryName: string) {
+            hwCategoryList.forEach(function(categoryName: string) {
                 blockMenu.banCategory(categoryName);
             });
             blockMenu.banCategory('arduino');
@@ -363,7 +363,7 @@ class Workspace extends Component<IProps> {
                 'progress',
                 RendererUtils.getLang('Workspace.saving_msg'),
                 RendererUtils.getLang('Workspace.fail_contact_msg'),
-                { width: 220 },
+                { width: 220 }
             );
 
             try {
@@ -387,7 +387,7 @@ class Workspace extends Component<IProps> {
                 Entry.stateManager.addStamp();
                 Entry.toast.success(
                     RendererUtils.getLang('Workspace.saved'),
-                    `${projectName} ${RendererUtils.getLang('Workspace.saved_msg')}`,
+                    `${projectName} ${RendererUtils.getLang('Workspace.saved_msg')}`
                 );
             } catch (err) {
                 console.error(err);
@@ -395,7 +395,7 @@ class Workspace extends Component<IProps> {
                     'error',
                     RendererUtils.getLang('Workspace.saving_fail_msg'),
                     RendererUtils.getLang('Workspace.fail_contact_msg'),
-                    { height: 190, width: 365, padding: 30 },
+                    { height: 190, width: 365, padding: 30 }
                 );
             } finally {
                 this.isSaveProject = false;
@@ -417,7 +417,7 @@ class Workspace extends Component<IProps> {
                     defaultPath,
                     filters: [{ name: 'Entry File', extensions: ['ent'] }],
                 },
-                saveFunction,
+                saveFunction
             );
         }
         LocalStorageManager.clearSavedProject();
@@ -440,7 +440,7 @@ class Workspace extends Component<IProps> {
                         }).then(({ filePaths }) => {
                             resolve(filePaths[0]);
                         });
-                    }),
+                    })
             );
         }
     };
@@ -454,7 +454,7 @@ class Workspace extends Component<IProps> {
             'progress',
             RendererUtils.getLang('Workspace.uploading_msg'),
             RendererUtils.getLang('Workspace.fail_contact_msg'),
-            { width: 220 },
+            { width: 220 }
         );
 
         try {
@@ -472,7 +472,7 @@ class Workspace extends Component<IProps> {
                 'error',
                 RendererUtils.getLang('Workspace.loading_fail_msg'),
                 RendererUtils.getLang('Workspace.fail_contact_msg'),
-                { height: 190, width: 365, padding: 30 },
+                { height: 190, width: 365, padding: 30 }
             );
         }
     }
@@ -617,7 +617,7 @@ class Workspace extends Component<IProps> {
                             await this._loadProjectFromFile(filePath);
                         } else {
                             EntryModalHelper.getAlertModal(
-                                RendererUtils.getLang('Workspace.upload_not_supported_file_msg'),
+                                RendererUtils.getLang('Workspace.upload_not_supported_file_msg')
                             );
                         }
                     }}
