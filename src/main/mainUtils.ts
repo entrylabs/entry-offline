@@ -171,10 +171,10 @@ export default class MainUtils {
                 });
 
                 Promise.all(copyObjectPromise)
-                    .then(function () {
+                    .then(function() {
                         resolve('success');
                     })
-                    .catch(function (err) {
+                    .catch(function(err) {
                         reject(err);
                     });
             } catch (e) {
@@ -574,32 +574,46 @@ export default class MainUtils {
                             'src',
                             'preload_build',
                             'preload.bundle.js'
-                        )
+                        ),
                     },
-                })
+                });
                 const windowId = captureWindow.id;
                 remoteMain.enable(captureWindow.webContents);
                 captureWindow.loadURL(
-                    `file:///${path.resolve(app.getAppPath(), 'src', 'main', 'views', 'capture.html')}`
-                )
+                    `file:///${path.resolve(
+                        app.getAppPath(),
+                        'src',
+                        'main',
+                        'views',
+                        'capture.html'
+                    )}`
+                );
 
                 // captureWindow의 송수신 및 라이프사이클 관련 함수
                 ipcMain.handle(`getImageString_${windowId}`, () => {
                     return image;
-                })
+                });
                 ipcMain.on(`captureAndSave_${windowId}`, async () => {
                     // 렌더러에서 svg를 그리는데 다소 시간이 걸리므로 대기 후 실행
                     await setTimeout(async () => {
-                        const capturedImage = await captureWindow.webContents.capturePage({ x: 0, y: 0, width, height });
-                        await FileUtils.writeFile(capturedImage.toPNG(), `${filePath}${index}${'.png'}`);
+                        const capturedImage = await captureWindow.webContents.capturePage({
+                            x: 0,
+                            y: 0,
+                            width,
+                            height,
+                        });
+                        await FileUtils.writeFile(
+                            capturedImage.toPNG(),
+                            `${filePath}${index}${'.png'}`
+                        );
                         captureWindow.close();
                     }, WAITING_TIME);
-                })
+                });
                 captureWindow.addListener('closed', () => {
                     ipcMain.removeAllListeners(`captureAndSave_${windowId}`);
                     ipcMain.removeHandler(`getImageString_${windowId}`);
-                })
-            })
+                });
+            });
         } catch (error) {
             console.error(error);
         }
