@@ -5,6 +5,9 @@ import rimraf from 'rimraf';
 import tar, { CreateOptions, FileOptions } from 'tar';
 import { nativeImage, NativeImage } from 'electron';
 import createLogger from './utils/functions/createLogger';
+import probe from 'node-ffprobe';
+import ffmpeg from 'fluent-ffmpeg';
+import get from 'lodash/get';
 
 type tarCreateOption = FileOptions & CreateOptions;
 type readFileOption = { encoding?: string | null; flag?: string } | string | undefined | null;
@@ -282,4 +285,44 @@ export default class {
         logger.info(`moveFile to ${src} to ${dest}`);
         fse.moveSync(src, dest, { overwrite: true });
     }
+
+    static getSoundInfo = (filePath: string, isExtCheck = true): Promise<ProbeData> =>
+        new Promise((resolve, reject) => {
+            probe(filePath).then((probeData: any, err: any) => {
+                if (err) {
+                    return reject(err);
+                }
+                const { format = {} } = probeData;
+                const { format_name: formatName } = format;
+                if (isExtCheck && formatName !== 'mp3') {
+                    return reject(new Error('업로드 파일이 MP3 파일이 아닙니다.'));
+                }
+                resolve(probeData);
+            });
+        });
+
+    static getDuration = (soundInfo: any) => {
+        const duration = get(soundInfo, ['format', 'duration'], 0);
+        return Number(duration).toFixed(1);
+    };
+
+    static convertStreamToMp3AndSave = (filePath: string, targetPath: string): Promise<string> => {
+        return new Promise((resolve, reject) => {
+            // INFO : targetPath경로에 해당하는 디렉토리를 미리 만들어 줘야함
+            this.ensureDirectoryExistence(targetPath);
+            ffmpeg(filePath)
+                .audioCodec('libmp3lame')
+                .toFormat('mp3')
+                .output(targetPath)
+                .on('end', () => resolve(targetPath))
+                .on('error', (err: any) => {
+                    if (err && err.message) {
+                        console.error(`Error: ${err.message}`);
+                        logger.error(`Error: ${err.message}`);
+                    }
+                    reject(err);
+                })
+                .run();
+        });
+    };
 }

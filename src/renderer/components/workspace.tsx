@@ -194,6 +194,21 @@ class Workspace extends Component<IProps> {
             ModalHelper.showPaintPopup();
         });
 
+        // INFO: 사운드에디터 관련 이벤트
+        addEventListener('startLoading', (msg) => {
+            this.showModalProgress('loading', msg);
+        });
+        addEventListener('endLoading', () => {
+            this.hideModalProgress();
+        });
+        // addEventListener('beforeSaveSoundBuffer', this.#handleBeforeSaveSoundBuffer);
+        addEventListener(
+            'saveSoundBuffer',
+            (buffer: any, file: any, isSelect: boolean, callback: Function) => {
+                this.handleSaveSoundBuffer(buffer, file, isSelect, callback);
+            }
+        );
+
         if (!Entry.creationChangedEvent) {
             Entry.creationChangedEvent = new Entry.Event(window);
         }
@@ -203,6 +218,73 @@ class Workspace extends Component<IProps> {
         const workspace = Entry.getMainWS();
         if (workspace) {
             workspace.changeEvent.attach(this, this.handleChangeWorkspaceMode);
+        }
+    }
+
+    async handleSaveSoundBuffer(
+        buffer: ArrayBuffer,
+        file: any,
+        isSelect: boolean,
+        callback: Function
+    ) {
+        try {
+            this.showModalProgress('progress', RendererUtils.getLang('saving_msg'), '', {
+                width: 220,
+            });
+            // INFO: 용량제한 렌더링 파트에서 선작업
+            if (buffer.byteLength > 30 * 1024 * 1024) {
+                throw new Error('413: too large buffer size');
+            }
+
+            const fileString = file.toString();
+            const { duration, filename, filePath } = await ipcRendererHelper.saveSoundBuffer(
+                buffer
+            );
+
+            const { playground } = Entry;
+            const sound = {
+                id: file.id,
+                name: file.name,
+                objectId: file.objectId,
+                ext: file.ext,
+                label: file.label,
+                type: file.type,
+                specials: file.specials,
+                path: filePath,
+                duration,
+                filename,
+            };
+
+            // eslint-disable-next-line prefer-const
+            let delegate: any;
+            const soundPlay = () => {
+                callback();
+                const entrySound = playground.setSound(sound);
+                Entry.soundQueue.off('fileload', delegate);
+                if (isSelect) {
+                    playground.selectSound(entrySound);
+                }
+                this.hideModalProgress();
+                entrySound.objectId = file.objectId;
+                Entry.dispatchEvent('saveCompleteSound', entrySound);
+            };
+            delegate = Entry.soundQueue.on('fileload', soundPlay);
+            Entry.soundQueue.loadFile({
+                id: sound.id,
+                src: sound.path,
+                type: createjs.LoadQueue.SOUND,
+            });
+        } catch (error) {
+            let message: string;
+            if (error instanceof Error && error.message === '413: too large buffer size') {
+                message = RendererUtils.getLang('Msgs.msg_err_sound_too_large');
+            } else {
+                message = RendererUtils.getLang('Msgs.error_occured');
+            }
+            console.log(error);
+            EntryModalHelper.getAlertModal(message);
+        } finally {
+            this.hideModalProgress();
         }
     }
 

@@ -149,4 +149,8 @@ export default class {
     static checkVideoPermission() {
         return window.checkPermission('camera');
     }
+
+    static saveSoundBuffer(buffer: ArrayBuffer) {
+        return ipcInvoke('saveSoundBuffer', buffer);
+    }
 }

@@ -841,4 +841,55 @@ export default class MainUtils {
             };
         }
     }
+
+    static saveSoundBuffer(arrayBuffer: ArrayBuffer) {
+        return new Promise(async (resolve, reject) => {
+            let tempBufferPath;
+            try {
+                // 1. buffer상태로 임시 저장
+                const tempBufferId = CommonUtils.createFileId();
+                tempBufferPath = path.join(
+                    Constants.tempSoundPath(tempBufferId),
+                    `${tempBufferId}`
+                );
+                const buffer = Buffer.from(arrayBuffer);
+                await FileUtils.writeFile(buffer, tempBufferPath);
+
+                // 2. 최종저장 경로 생성
+                const filename = CommonUtils.createFileId();
+                const filePath = path.join(Constants.tempSoundPath(filename), `${filename}.mp3`);
+
+                // 3. 유효성 검사
+                const soundInfo = await FileUtils.getSoundInfo(tempBufferPath, false);
+                if (soundInfo?.format?.format_name !== 'wav') {
+                    throw new Error('sound not supported');
+                }
+
+                // 5. buffer파일 mp3로 변환 후 저장
+                const saveFilePath = await FileUtils.convertStreamToMp3AndSave(
+                    tempBufferPath,
+                    filePath
+                );
+
+                // 6. response 작성
+                const sound = {
+                    duration: FileUtils.getDuration(soundInfo),
+                    filename,
+                    filePath: saveFilePath,
+                };
+                resolve(sound);
+            } catch (err) {
+                console.error(err);
+                reject(err);
+            } finally {
+                try {
+                    // TODO: 기존 파일 제거
+                    tempBufferPath && (await FileUtils.deleteFile(tempBufferPath));
+                } catch (e) {
+                    console.error('sound file unlink fail', e);
+                    reject(e);
+                }
+            }
+        });
+    }
 }

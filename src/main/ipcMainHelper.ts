@@ -45,6 +45,7 @@ new (class {
         ipcMain.handle('checkPermission', this.checkPermission.bind(this));
         ipcMain.handle('getOpenSourceText', () => ''); // 별다른 표기 필요없음
         ipcMain.handle('isValidAsarFile', this.checkIsValidAsarFile.bind(this));
+        ipcMain.handle('saveSoundBuffer', this.saveSoundBuffer.bind(this));
     }
 
     async saveProject(event: IpcMainInvokeEvent, project: ObjectLike, targetPath: string) {
@@ -56,8 +57,8 @@ new (class {
         logger.verbose(`loadProject called, ${filePath}`);
         try {
             return await MainUtils.loadProject(filePath);
-        } catch (e: any) {
-            logger.error(`loadProject failed, ${e.message}`);
+        } catch (e) {
+            logger.error('loadProject failed, ${e.message}');
             throw e;
         }
     }
@@ -246,6 +247,10 @@ new (class {
     async checkUpdate() {
         const data = await checkUpdateRequest();
         return [global.sharedObject.version, data];
+    }
+
+    async saveSoundBuffer(event: IpcMainInvokeEvent, buffer: ArrayBuffer) {
+        return MainUtils.saveSoundBuffer(buffer);
     }
 
     openUrl(event: IpcMainInvokeEvent, url: string) {
