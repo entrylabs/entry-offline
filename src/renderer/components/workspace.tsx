@@ -201,7 +201,9 @@ class Workspace extends Component<IProps> {
         addEventListener('endLoading', () => {
             this.hideModalProgress();
         });
-        // addEventListener('beforeSaveSoundBuffer', this.#handleBeforeSaveSoundBuffer);
+        addEventListener('beforeSaveSoundBuffer', () => {
+            this.showModalProgress('progress', RendererUtils.getLang('saving_msg'));
+        });
         addEventListener(
             'saveSoundBuffer',
             (buffer: any, file: any, isSelect: boolean, callback: Function) => {
