@@ -243,6 +243,7 @@ class Workspace extends Component<IProps> {
 
             const { playground } = Entry;
             const sound = {
+                fileurl: Constants.tempSoundPath(filename),
                 id: file.id,
                 name: file.name,
                 objectId: file.objectId,
