@@ -249,8 +249,8 @@ new (class {
         return [global.sharedObject.version, data];
     }
 
-    async saveSoundBuffer(event: IpcMainInvokeEvent, buffer: ArrayBuffer) {
-        return MainUtils.saveSoundBuffer(buffer);
+    async saveSoundBuffer(event: IpcMainInvokeEvent, buffer: ArrayBuffer, prevFileUrl: string) {
+        return MainUtils.saveSoundBuffer(buffer, prevFileUrl);
     }
 
     openUrl(event: IpcMainInvokeEvent, url: string) {

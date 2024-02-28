@@ -236,9 +236,9 @@ class Workspace extends Component<IProps> {
                 throw new Error('413: too large buffer size');
             }
 
-            const fileString = file.toString();
             const { duration, filename, filePath } = await ipcRendererHelper.saveSoundBuffer(
-                buffer
+                buffer,
+                file.fileurl
             );
 
             const { playground } = Entry;

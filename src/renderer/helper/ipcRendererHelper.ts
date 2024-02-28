@@ -150,7 +150,7 @@ export default class {
         return window.checkPermission('camera');
     }
 
-    static saveSoundBuffer(buffer: ArrayBuffer) {
-        return ipcInvoke('saveSoundBuffer', buffer);
+    static saveSoundBuffer(buffer: ArrayBuffer, prevFileUrl: string) {
+        return ipcInvoke('saveSoundBuffer', buffer, prevFileUrl);
     }
 }

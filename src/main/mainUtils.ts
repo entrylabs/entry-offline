@@ -842,9 +842,10 @@ export default class MainUtils {
         }
     }
 
-    static saveSoundBuffer(arrayBuffer: ArrayBuffer) {
+    static saveSoundBuffer(arrayBuffer: ArrayBuffer, prevFileUrl: string) {
         return new Promise(async (resolve, reject) => {
             let tempBufferPath;
+            let saveFilePath;
             try {
                 // 1. buffer상태로 임시 저장
                 const tempBufferId = CommonUtils.createFileId();
@@ -866,10 +867,7 @@ export default class MainUtils {
                 }
 
                 // 5. buffer파일 mp3로 변환 후 저장
-                const saveFilePath = await FileUtils.convertStreamToMp3AndSave(
-                    tempBufferPath,
-                    filePath
-                );
+                saveFilePath = await FileUtils.convertStreamToMp3AndSave(tempBufferPath, filePath);
 
                 // 6. response 작성
                 const sound = {
@@ -883,7 +881,9 @@ export default class MainUtils {
                 reject(err);
             } finally {
                 try {
-                    // TODO: 기존 파일 제거
+                    // INFO: 기존파일과 임시버퍼 제거, fileurl이 temp로 시작하는 경우에만 제거됨
+                    const prevTempPath = path.join(Constants.appPath, prevFileUrl);
+                    saveFilePath && (await FileUtils.deleteFile(prevTempPath));
                     tempBufferPath && (await FileUtils.deleteFile(tempBufferPath));
                 } catch (e) {
                     console.error('sound file unlink fail', e);
