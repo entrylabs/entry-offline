@@ -6,6 +6,7 @@ declare interface Window extends Preload {
     EntryStatic: any;
     Lang: any;
     isOsx: boolean;
+    EntrySoundEditor: any;
 }
 
 declare interface Preload {

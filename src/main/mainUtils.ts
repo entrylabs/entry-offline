@@ -171,10 +171,10 @@ export default class MainUtils {
                 });
 
                 Promise.all(copyObjectPromise)
-                    .then(function () {
+                    .then(function() {
                         resolve('success');
                     })
-                    .catch(function (err) {
+                    .catch(function(err) {
                         reject(err);
                     });
             } catch (e) {
@@ -574,32 +574,46 @@ export default class MainUtils {
                             'src',
                             'preload_build',
                             'preload.bundle.js'
-                        )
+                        ),
                     },
-                })
+                });
                 const windowId = captureWindow.id;
                 remoteMain.enable(captureWindow.webContents);
                 captureWindow.loadURL(
-                    `file:///${path.resolve(app.getAppPath(), 'src', 'main', 'views', 'capture.html')}`
-                )
+                    `file:///${path.resolve(
+                        app.getAppPath(),
+                        'src',
+                        'main',
+                        'views',
+                        'capture.html'
+                    )}`
+                );
 
                 // captureWindow의 송수신 및 라이프사이클 관련 함수
                 ipcMain.handle(`getImageString_${windowId}`, () => {
                     return image;
-                })
+                });
                 ipcMain.on(`captureAndSave_${windowId}`, async () => {
                     // 렌더러에서 svg를 그리는데 다소 시간이 걸리므로 대기 후 실행
                     await setTimeout(async () => {
-                        const capturedImage = await captureWindow.webContents.capturePage({ x: 0, y: 0, width, height });
-                        await FileUtils.writeFile(capturedImage.toPNG(), `${filePath}${index}${'.png'}`);
+                        const capturedImage = await captureWindow.webContents.capturePage({
+                            x: 0,
+                            y: 0,
+                            width,
+                            height,
+                        });
+                        await FileUtils.writeFile(
+                            capturedImage.toPNG(),
+                            `${filePath}${index}${'.png'}`
+                        );
                         captureWindow.close();
                     }, WAITING_TIME);
-                })
+                });
                 captureWindow.addListener('closed', () => {
                     ipcMain.removeAllListeners(`captureAndSave_${windowId}`);
                     ipcMain.removeHandler(`getImageString_${windowId}`);
-                })
-            })
+                });
+            });
         } catch (error) {
             console.error(error);
         }
@@ -826,5 +840,56 @@ export default class MainUtils {
                 height: Number(result[4]),
             };
         }
+    }
+
+    static saveSoundBuffer(arrayBuffer: ArrayBuffer, prevFileUrl: string) {
+        return new Promise(async (resolve, reject) => {
+            let tempBufferPath;
+            let saveFilePath;
+            try {
+                // 1. buffer상태로 임시 저장
+                const tempBufferId = CommonUtils.createFileId();
+                tempBufferPath = path.join(
+                    Constants.tempSoundPath(tempBufferId),
+                    `${tempBufferId}`
+                );
+                const buffer = Buffer.from(arrayBuffer);
+                await FileUtils.writeFile(buffer, tempBufferPath);
+
+                // 2. 최종저장 경로 생성
+                const filename = CommonUtils.createFileId();
+                const filePath = path.join(Constants.tempSoundPath(filename), `${filename}.mp3`);
+
+                // 3. 유효성 검사
+                const soundInfo = await FileUtils.getSoundInfo(tempBufferPath, false);
+                if (soundInfo?.format?.format_name !== 'wav') {
+                    throw new Error('sound not supported');
+                }
+
+                // 5. buffer파일 mp3로 변환 후 저장
+                saveFilePath = await FileUtils.convertStreamToMp3AndSave(tempBufferPath, filePath);
+
+                // 6. response 작성
+                const sound = {
+                    duration: FileUtils.getDuration(soundInfo),
+                    filename,
+                    filePath: saveFilePath,
+                };
+                resolve(sound);
+            } catch (err) {
+                console.error(err);
+                reject(err);
+            } finally {
+                try {
+                    // INFO: 기존파일과 임시버퍼 제거, fileurl이 temp로 시작하는 경우에만 제거됨
+                    const prevTempPath = path.join(Constants.appPath, prevFileUrl);
+                    saveFilePath && (await FileUtils.deleteFile(prevTempPath));
+                    tempBufferPath && (await FileUtils.deleteFile(tempBufferPath));
+                } catch (e) {
+                    console.error('sound file unlink fail', e);
+                    reject(e);
+                }
+            }
+        });
     }
 }

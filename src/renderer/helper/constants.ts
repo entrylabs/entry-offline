@@ -1,4 +1,3 @@
-
 export default class {
     static get sep() {
         return window.isOsx ? '/' : '\\';
@@ -9,7 +8,9 @@ export default class {
     }
 
     static resourceImagePath(filename: string) {
-        return `..${this.sep}..${this.sep}${this.resourcePath}${this.resourceSubDirectoryPath(filename)}image${this.sep}`;
+        return `..${this.sep}..${this.sep}${this.resourcePath}${this.resourceSubDirectoryPath(
+            filename
+        )}image${this.sep}`;
     }
 
     static resourceThumbnailPath(filename: string) {
@@ -17,10 +18,22 @@ export default class {
     }
 
     static resourceSoundPath(filename: string) {
-        return `..${this.sep}..${this.sep}${this.resourcePath}${this.resourceSubDirectoryPath(filename)}`;
+        return `..${this.sep}..${this.sep}${this.resourcePath}${this.resourceSubDirectoryPath(
+            filename
+        )}`;
+    }
+
+    static tempSoundPath(filename: string) {
+        return `temp${this.sep}${this.tempSubDirectoryPath(filename)}sound${
+            this.sep
+        }${filename}.mp3`;
     }
 
     static resourceSubDirectoryPath(filename: string) {
+        return `${filename.substr(0, 2)}${this.sep}${filename.substr(2, 2)}${this.sep}`;
+    }
+
+    static tempSubDirectoryPath(filename: string) {
         return `${filename.substr(0, 2)}${this.sep}${filename.substr(2, 2)}${this.sep}`;
     }
 }

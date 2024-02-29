@@ -24,7 +24,7 @@ import DragAndDropContainer from './DragAndDropContainer';
 import EntryModalHelper from '../helper/entry/entryModalHelper';
 import ipcRendererHelper from '../helper/ipcRendererHelper';
 
-interface IProps extends IReduxDispatch, IReduxState { }
+interface IProps extends IReduxDispatch, IReduxState {}
 
 class Workspace extends Component<IProps> {
     private lastHwName?: string;
@@ -94,7 +94,7 @@ class Workspace extends Component<IProps> {
                     'error',
                     RendererUtils.getLang('Workspace.loading_fail_msg'),
                     RendererUtils.getLang('Workspace.fail_contact_msg'),
-                    { height: 190, width: 365, padding: 30 },
+                    { height: 190, width: 365, padding: 30 }
                 );
                 await RendererUtils.clearTempProject();
 
@@ -120,7 +120,7 @@ class Workspace extends Component<IProps> {
                     'progress',
                     RendererUtils.getLang('Workspace.uploading_msg'),
                     RendererUtils.getLang('Workspace.fail_contact_msg'),
-                    { width: 220 },
+                    { width: 220 }
                 );
                 const project = await readProjectFunction;
                 await this.loadProject(project);
@@ -194,6 +194,23 @@ class Workspace extends Component<IProps> {
             ModalHelper.showPaintPopup();
         });
 
+        // INFO: 사운드에디터 관련 이벤트
+        addEventListener('startLoading', (msg) => {
+            this.showModalProgress('loading', msg);
+        });
+        addEventListener('endLoading', () => {
+            this.hideModalProgress();
+        });
+        addEventListener('beforeSaveSoundBuffer', () => {
+            this.showModalProgress('progress', RendererUtils.getLang('Workspace.saving_msg'));
+        });
+        addEventListener(
+            'saveSoundBuffer',
+            (buffer: any, file: any, isSelect: boolean, callback: Function) => {
+                this.handleSaveSoundBuffer(buffer, file, isSelect, callback);
+            }
+        );
+
         if (!Entry.creationChangedEvent) {
             Entry.creationChangedEvent = new Entry.Event(window);
         }
@@ -203,6 +220,74 @@ class Workspace extends Component<IProps> {
         const workspace = Entry.getMainWS();
         if (workspace) {
             workspace.changeEvent.attach(this, this.handleChangeWorkspaceMode);
+        }
+    }
+
+    async handleSaveSoundBuffer(
+        buffer: ArrayBuffer,
+        file: any,
+        isSelect: boolean,
+        callback: Function
+    ) {
+        try {
+            this.showModalProgress('progress', RendererUtils.getLang('Workspace.saving_msg'), '', {
+                width: 220,
+            });
+            // INFO: 용량제한 렌더링 파트에서 선작업
+            if (buffer.byteLength > 30 * 1024 * 1024) {
+                throw new Error('413: too large buffer size');
+            }
+
+            const { duration, filename, filePath } = await ipcRendererHelper.saveSoundBuffer(
+                buffer,
+                file.fileurl
+            );
+
+            const { playground } = Entry;
+            const sound = {
+                fileurl: Constants.tempSoundPath(filename),
+                id: file.id,
+                name: file.name,
+                objectId: file.objectId,
+                ext: file.ext,
+                label: file.label,
+                type: file.type,
+                specials: file.specials,
+                path: filePath,
+                duration,
+                filename,
+            };
+
+            // eslint-disable-next-line prefer-const
+            let delegate: any;
+            const soundPlay = () => {
+                callback();
+                const entrySound = playground.setSound(sound);
+                Entry.soundQueue.off('fileload', delegate);
+                if (isSelect) {
+                    playground.selectSound(entrySound);
+                }
+                this.hideModalProgress();
+                entrySound.objectId = file.objectId;
+                Entry.dispatchEvent('saveCompleteSound', entrySound);
+            };
+            delegate = Entry.soundQueue.on('fileload', soundPlay);
+            Entry.soundQueue.loadFile({
+                id: sound.id,
+                src: sound.path,
+                type: createjs.LoadQueue.SOUND,
+            });
+        } catch (error) {
+            let message: string;
+            if (error instanceof Error && error.message === '413: too large buffer size') {
+                message = RendererUtils.getLang('Msgs.msg_err_sound_too_large');
+            } else {
+                message = RendererUtils.getLang('Msgs.error_occured');
+            }
+            console.log(error);
+            EntryModalHelper.getAlertModal(message);
+        } finally {
+            this.hideModalProgress();
         }
     }
 
@@ -216,7 +301,7 @@ class Workspace extends Component<IProps> {
                 '',
                 {
                     width: 220,
-                },
+                }
             );
             this.isSavingCanvasData = true;
             try {
@@ -326,13 +411,13 @@ class Workspace extends Component<IProps> {
         if (hw.programConnected && hw.hwModule) {
             const hwName = hw.hwModule.name;
             if (_includes(EntryStatic.hwMiniSupportList, hwName)) {
-                hwCategoryList.forEach(function (categoryName: string) {
+                hwCategoryList.forEach(function(categoryName: string) {
                     blockMenu.unbanCategory(categoryName);
                 });
                 blockMenu.banCategory('arduino');
                 blockMenu.banCategory('hw_robot');
             } else {
-                hwCategoryList.forEach(function (categoryName: string) {
+                hwCategoryList.forEach(function(categoryName: string) {
                     blockMenu.banCategory(categoryName);
                 });
                 blockMenu.banCategory('hw_robot');
@@ -340,7 +425,7 @@ class Workspace extends Component<IProps> {
             }
             this.lastHwName = hwName;
         } else {
-            hwCategoryList.forEach(function (categoryName: string) {
+            hwCategoryList.forEach(function(categoryName: string) {
                 blockMenu.banCategory(categoryName);
             });
             blockMenu.banCategory('arduino');
@@ -363,7 +448,7 @@ class Workspace extends Component<IProps> {
                 'progress',
                 RendererUtils.getLang('Workspace.saving_msg'),
                 RendererUtils.getLang('Workspace.fail_contact_msg'),
-                { width: 220 },
+                { width: 220 }
             );
 
             try {
@@ -387,7 +472,7 @@ class Workspace extends Component<IProps> {
                 Entry.stateManager.addStamp();
                 Entry.toast.success(
                     RendererUtils.getLang('Workspace.saved'),
-                    `${projectName} ${RendererUtils.getLang('Workspace.saved_msg')}`,
+                    `${projectName} ${RendererUtils.getLang('Workspace.saved_msg')}`
                 );
             } catch (err) {
                 console.error(err);
@@ -395,7 +480,7 @@ class Workspace extends Component<IProps> {
                     'error',
                     RendererUtils.getLang('Workspace.saving_fail_msg'),
                     RendererUtils.getLang('Workspace.fail_contact_msg'),
-                    { height: 190, width: 365, padding: 30 },
+                    { height: 190, width: 365, padding: 30 }
                 );
             } finally {
                 this.isSaveProject = false;
@@ -417,7 +502,7 @@ class Workspace extends Component<IProps> {
                     defaultPath,
                     filters: [{ name: 'Entry File', extensions: ['ent'] }],
                 },
-                saveFunction,
+                saveFunction
             );
         }
         LocalStorageManager.clearSavedProject();
@@ -440,7 +525,7 @@ class Workspace extends Component<IProps> {
                         }).then(({ filePaths }) => {
                             resolve(filePaths[0]);
                         });
-                    }),
+                    })
             );
         }
     };
@@ -454,7 +539,7 @@ class Workspace extends Component<IProps> {
             'progress',
             RendererUtils.getLang('Workspace.uploading_msg'),
             RendererUtils.getLang('Workspace.fail_contact_msg'),
-            { width: 220 },
+            { width: 220 }
         );
 
         try {
@@ -472,7 +557,7 @@ class Workspace extends Component<IProps> {
                 'error',
                 RendererUtils.getLang('Workspace.loading_fail_msg'),
                 RendererUtils.getLang('Workspace.fail_contact_msg'),
-                { height: 190, width: 365, padding: 30 },
+                { height: 190, width: 365, padding: 30 }
             );
         }
     }
@@ -510,6 +595,8 @@ class Workspace extends Component<IProps> {
             Entry.disposeContainer();
             // zoom 스케일이 변경된 상태에서 new project 한 경우 블록메뉴에 스케일정보가 남아서 초기화
             Entry.getMainWS().setScale(1);
+            // INFO: 사운드에디터 인스턴스 초기화, 3월 정기배포에 변동가능성 있음
+            window?.EntrySoundEditor.destroy();
         }
         Entry.reloadBlock();
         this.isFirstRender = false;
@@ -617,7 +704,7 @@ class Workspace extends Component<IProps> {
                             await this._loadProjectFromFile(filePath);
                         } else {
                             EntryModalHelper.getAlertModal(
-                                RendererUtils.getLang('Workspace.upload_not_supported_file_msg'),
+                                RendererUtils.getLang('Workspace.upload_not_supported_file_msg')
                             );
                         }
                     }}
