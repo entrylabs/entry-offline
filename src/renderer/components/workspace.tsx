@@ -202,7 +202,7 @@ class Workspace extends Component<IProps> {
             this.hideModalProgress();
         });
         addEventListener('beforeSaveSoundBuffer', () => {
-            this.showModalProgress('progress', RendererUtils.getLang('saving_msg'));
+            this.showModalProgress('progress', RendererUtils.getLang('Workspace.saving_msg'));
         });
         addEventListener(
             'saveSoundBuffer',
@@ -230,7 +230,7 @@ class Workspace extends Component<IProps> {
         callback: Function
     ) {
         try {
-            this.showModalProgress('progress', RendererUtils.getLang('saving_msg'), '', {
+            this.showModalProgress('progress', RendererUtils.getLang('Workspace.saving_msg'), '', {
                 width: 220,
             });
             // INFO: 용량제한 렌더링 파트에서 선작업
