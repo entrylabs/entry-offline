@@ -40,7 +40,6 @@ EntryStatic.categoryProjectOption = [
     },
 ];
 
-
 EntryStatic.getCategoryByBlock = function(blockName) {
     if (!blockName) {
         return false;
@@ -144,6 +143,13 @@ EntryStatic.getAllBlocks = () => {
     arduino.blocks.forEach((block, index) => {
         if (['arduino_download_connector'].indexOf(block) !== -1) {
             arduino.blocks.splice(index, 1);
+        }
+    });
+
+    const aiModelTrainCategory = _.find(allBlocks, ['category', 'ai_utilize']);
+    aiModelTrainCategory.blocks.forEach((block, index) => {
+        if (['aiUtilizeModelTrainButton'].indexOf(block) !== -1) {
+            aiModelTrainCategory.blocks.splice(index, 1);
         }
     });
     return allBlocks;
