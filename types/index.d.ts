@@ -362,11 +362,3 @@ declare class Entry {
     static soundQueue: any;
     static stateManager: IEntry.StateManager;
 }
-
-declare module 'node-ffprobe' {
-    export default function probe(filePath: string): any;
-}
-
-declare module 'fluent-ffmpeg' {
-    export default function ffmpeg(filePath: string): any;
-}

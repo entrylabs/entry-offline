@@ -5,8 +5,9 @@ import rimraf from 'rimraf';
 import tar, { CreateOptions, FileOptions } from 'tar';
 import { nativeImage, NativeImage } from 'electron';
 import createLogger from './utils/functions/createLogger';
-import probe from 'node-ffprobe';
 import ffmpeg from 'fluent-ffmpeg';
+import ffmpegInstaller from '@ffmpeg-installer/ffmpeg'
+import ffprobeInstaller from '@ffprobe-installer/ffprobe'
 import get from 'lodash/get';
 
 type tarCreateOption = FileOptions & CreateOptions;
@@ -14,6 +15,16 @@ type readFileOption = { encoding?: string | null; flag?: string } | string | und
 type Dimension = { width: number; height: number };
 
 const logger = createLogger('main/fileUtils.ts');
+const ffmpegPath = ffmpegInstaller.path.replace(
+	'app.asar',
+	'app.asar.unpacked'
+);
+const ffprobePath = ffprobeInstaller.path.replace(
+	'app.asar',
+	'app.asar.unpacked'
+);
+ffmpeg.setFfmpegPath(ffmpegPath);
+ffmpeg.setFfprobePath(ffprobePath);
 
 export const ImageResizeSize: { [key: string]: Dimension } = {
     thumbnail: { width: 96, height: 96 },
@@ -288,7 +299,7 @@ export default class {
 
     static getSoundInfo = (filePath: string, isExtCheck = true): Promise<ProbeData> =>
         new Promise((resolve, reject) => {
-            probe(filePath).then((probeData: any, err: any) => {
+            ffmpeg.ffprobe(filePath, (err: any, probeData: any) => {
                 if (err) {
                     return reject(err);
                 }
