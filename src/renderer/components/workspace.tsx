@@ -595,8 +595,6 @@ class Workspace extends Component<IProps> {
             Entry.disposeContainer();
             // zoom 스케일이 변경된 상태에서 new project 한 경우 블록메뉴에 스케일정보가 남아서 초기화
             Entry.getMainWS().setScale(1);
-            // INFO: 사운드에디터 인스턴스 초기화, 3월 정기배포에 변동가능성 있음
-            window?.EntrySoundEditor.destroy();
         }
         Entry.reloadBlock();
         this.isFirstRender = false;
