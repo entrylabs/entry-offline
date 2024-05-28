@@ -411,17 +411,9 @@ class EntryModalHelper {
                     type: 'table',
                 })) as DBTableObject[];
                 EntryModalHelper.fetchPopup(allFetchedData);
-                let langType = RendererUtils.getLangType();
-                if (langType === 'jp') {
-                    langType = 'ja';
-                }
-
-                const langFilteredData = allFetchedData.filter(
-                    (element) => element.lang === langType
-                );
 
                 EntryModalHelper.popup.setData({
-                    data: { data: langFilteredData },
+                    data: { data: allFetchedData },
                 });
             },
             search: ({ searchQuery }: { searchQuery: string }) => {
