@@ -6355,7 +6355,7 @@
         "advisory_sub_title": "This is an advisory group including teachers and students who make Entry together.",
         "data_table_column": "column",
         "data_table_row": "row",
-        "data_table_provider": "provider",
+        "data_table_provider": "Source",
         "data_table_modifidate": "modify",
         "draw_new_table_ques_1": "You can enter data and save to table.",
         "draw_new_table_ques_2": "Do you want to move to enter data?"
@@ -12036,7 +12036,14 @@
         "histogram": "Histogram",
         "in_order": "In order",
         "not_distinguished": "Not distinguished",
-        "select_table": "Please select a table."
+        "select_table": "Please select a table.",
+        "statistic": "Representative value",
+        "provider": "Source",
+        "description": "Description",
+        "field_info": "Field Info",
+        "show_all_points": "Show All Points",
+        "coefficient": "Coefficient",
+        "scatter_matrix": "Scatter Matrix"
     },
     "AiLearning": {
         "equation": "equation",
