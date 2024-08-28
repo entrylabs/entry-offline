@@ -5148,6 +5148,7 @@
         "file_required": "File is required.",
         "file_name_error": "please insert correct file name",
         "file_upload_max_count": "You can only upload 10 files at a time.",
+        "file_upload_max_size_image": "You can only upload less than 5MB in file size.",
         "image_file_only": "You can only upload jpg, png, bmp files.",
         "file_upload_max_size": "You can only upload less than 10MB in file size.",
         "curriculum_modal_lectures": "My Lessons",
