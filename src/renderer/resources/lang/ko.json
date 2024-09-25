@@ -1464,7 +1464,7 @@
         "no_marked_project": "북마크한 작품이 없습니다.",
         "make_project": "작품 만들기",
         "Load": "불러오기",
-        "sprite_upload_warn": "10MB 이하의 jpg, png, bmp, svg 이미지 또는 eo 형식의 오브젝트를 추가할 수 있습니다.",
+        "sprite_upload_warn": "5MB 이하의 jpg, png, bmp, svg 이미지 또는 eo 형식의 오브젝트를 추가할 수 있습니다.",
         "nature": "자연",
         "things": "사물",
         "instrument": "악기",

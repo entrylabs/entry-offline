@@ -4090,7 +4090,7 @@
         "sprite_upload_warn_old": "10MB以下のjpg,png,bmp形式の画像やeo形式のオブジェクトファイルのみアップロードできます。",
         "picture_upload_warn_1": "10MB以下のjpg,png,bmp,svg形式の画像ファイルのみアップロードできます。\njpg,png,bmp形式はビットマップモードで,svg形式はベクターモードで編集されます。",
         "table_upload_warn_1": "10MB以下のCSV、XLS(X)ファイルを追加できます。 Excelファイルの場合、関数文章がそのまま出力されます。",
-        "sprite_upload_warn": "10MB以下のjpg,png,bmp,svg形式の画像やeo形式のオブジェクトファイルのみアップロードできます。",
+        "sprite_upload_warn": "5MB以下のjpg,png,bmp,svg形式の画像やeo形式のオブジェクトファイルのみアップロードできます。",
         "sound_upload_warn_1": "10MB以下のmp3形式のファイルを追加できます。",
         "sound_edit_warn": "お待ちください。<br>ただいま、新しい音の編集機能を研究中です。",
         "table_drag_upload_title": "ファイルをアップロード",
