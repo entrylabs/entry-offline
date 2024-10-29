@@ -5212,9 +5212,9 @@ entities@^2.0.0:
   dependencies:
     crypto-js "^4.0.0"
 
-"entry-hw@git+https://github.com/entrylabs/entry-hw.git#dist/v1.9.57_2":
-  version "1.9.57"
-  resolved "git+https://github.com/entrylabs/entry-hw.git#d70e282a47ce30f3b779082ec00ac5793e928027"
+"entry-hw@git+https://github.com/entrylabs/entry-hw.git#dist/v1.9.58_2":
+  version "1.9.58"
+  resolved "git+https://github.com/entrylabs/entry-hw.git#f4c93bdb41ef097df7e501acd30ca8ac98fee3e2"
   dependencies:
     cross-spawn "^7.0.0"
     fs-extra "^8.1.0"
@@ -5229,9 +5229,9 @@ entities@^2.0.0:
     winston "^3.2.1"
     winston-daily-rotate-file "^4.4.2"
 
-"entry-js@git+https://github.com/entrylabs/entryjs.git#dist/offline_v2.1.19":
-  version "4.0.11"
-  resolved "git+https://github.com/entrylabs/entryjs.git#c8e145020b6b6d447ade26ac837f74bb33ec1aba"
+"entry-js@git+https://github.com/entrylabs/entryjs.git#dist/offline_v2.1.20":
+  version "4.0.12"
+  resolved "git+https://github.com/entrylabs/entryjs.git#187cb575facd3c59ecaa9e9f8f867fcd57f061f0"
   dependencies:
     uid "^0.0.2"
     "@entrylabs/event" "^1.0.3"
@@ -5264,7 +5264,7 @@ entities@^2.0.0:
     simplebar "^3.1.1"
     skmeans "^0.11.3"
     socket.io-client "^2.3.0"
-    ua-parser-js "^1.0.35"
+    ua-parser-js "^1.0.38"
     webpack "^5.85.0"
     worker-loader "^3.0.8"
     xss-filters "^1.2.7"
@@ -12510,10 +12510,10 @@ typescript@^5.4.5:
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.5.4.tgz#d9852d6c82bad2d2eda4fd74a5762a8f5909e9ba"
   integrity sha512-Mtq29sKDAEYP7aljRgtPOpTvOfbwRWlS6dPRzwjdE+C0R4brX/GUyhHSecbHMFLNBLcJIPt9nl9yG5TZ1weH+Q==
 
-ua-parser-js@^1.0.35:
-  version "1.0.38"
-  resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-1.0.38.tgz#66bb0c4c0e322fe48edfe6d446df6042e62f25e2"
-  integrity sha512-Aq5ppTOfvrCMgAPneW1HfWj66Xi7XL+/mIy996R1/CLS/rcyJQm6QZdsKrUeivDFQ+Oc9Wyuwor8Ze8peEoUoQ==
+ua-parser-js@^1.0.38:
+  version "1.0.39"
+  resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-1.0.39.tgz#bfc07f361549bf249bd8f4589a4cccec18fd2018"
+  integrity sha512-k24RCVWlEcjkdOxYmVJgeD/0a1TiSpqLg+ZalVGV9lsnr4yqu0w7tX/x2xX6G4zpkgQnRf89lxuZ1wsbjXM8lw==
 
 uid@^0.0.2:
   version "0.0.2"
