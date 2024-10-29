@@ -19,8 +19,12 @@ export default class {
                     // 일반 오브젝트 대응
                     result = result.substring(result.indexOf('temp'));
                     result = path.join(this.appPath, result).replace(/\\/gi, '/');
+                } else if (result.match('/node_modules/@entrylabs/entry') !== null) {
+                    result = result.replace(
+                        '/node_modules/@entrylabs/entry',
+                        '../../../node_modules/entry-js'
+                    );
                 }
-
                 // TODO: 히스토리 파악 후 완전 제거
                 // if (fileUrl.endsWith('.svg')) {
                 //     // svg 파일의 경우 png 파일로 교체한다.
@@ -35,12 +39,12 @@ export default class {
 
                 if (result.startsWith('renderer')) {
                     result = result.replace('renderer', '.');
-                }
-
-                // 웹 업로드시 bower 에서 받던 구조 그대로 사용할 것이므로, 그 사이에 혼동을 주지 않기 위해
-                // node_modules 로 링크되는 구조를 과거 로직으로 재치환 하여 export 함
-                if (result.startsWith('../../../node_modules')) {
+                } else if (result.startsWith('../../../node_modules')) {
+                    // 웹 업로드시 bower 에서 받던 구조 그대로 사용할 것이므로, 그 사이에 혼동을 주지 않기 위해
+                    // node_modules 로 링크되는 구조를 과거 로직으로 재치환 하여 export 함
                     result = result.replace('../../../node_modules', './bower_components');
+                } else if (result.match('/node_modules/@entrylabs/entry') !== null) {
+                    result = result.replace('/node_modules/@entrylabs/entry', './bower_components');
                 }
 
                 return result
