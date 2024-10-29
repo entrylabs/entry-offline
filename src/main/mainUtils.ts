@@ -33,7 +33,7 @@ export default class MainUtils {
         const workingDirectoryPath = path.join(baseAppPath, 'temp');
         const tempDirectoryPath = path.join(baseAppPath, 'uploads', CommonUtils.createFileId());
         await FileUtils.mkdirRecursive(tempDirectoryPath);
-        await FileUtils.unpack(filePath, tempDirectoryPath, (path) => path.startsWith('temp/'));
+        await FileUtils.unpack(filePath, tempDirectoryPath);
 
         const projectBuffer = await fsp.readFile(
             path.resolve(tempDirectoryPath, 'temp', 'project.json')
