@@ -3,7 +3,7 @@
         "target": "pkg",
         "category": "public.app-category.education",
         "extendInfo": "build/build.plist",
-        "identity": "Connect Foundation (DLFUSDA3L5)",
+        "identity": "Naver Connect Foundation (DLFUSDA3L5)",
         "hardenedRuntime": true,
         "gatekeeperAssess": false,
         "entitlements": "build/entitlements.mac.plist",
