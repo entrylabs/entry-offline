@@ -17,8 +17,8 @@
         "webpack:watch:prod": "cross-env NODE_ENV=production NODE_OPTIONS=--openssl-legacy-provider webpack -w",
         "dist:win32": "cross-env NODE_ENV=production NODE_OPTIONS=--openssl-legacy-provider webpack && electron-builder -c --win --ia32",
         "dist:win64": "cross-env NODE_ENV=production NODE_OPTIONS=--openssl-legacy-provider webpack && electron-builder -c --win --x64",
-        "dist:win": "cross-env NODE_ENV=production NODE_OPTIONS=--openssl-legacy-provider webpack && electron-builder -c --win --x64 && electron-builder -c --win --ia32",
-        "dist:mac:notarize": "cross-env NODE_ENV=production NODE_OPTIONS=--openssl-legacy-provider webpack && cross-env NOTARIZE=true electron-builder -c --mac",
+        "dist:win": "cross-env NODE_ENV=production HW_LOG_ENDPOINT='/api/hwActionLog' NODE_OPTIONS=--openssl-legacy-provider webpack && electron-builder -c --win --x64 && electron-builder -c --win --ia32",
+        "dist:mac:notarize": "cross-env NODE_ENV=production HW_LOG_ENDPOINT='/api/hwActionLog' NODE_OPTIONS=--openssl-legacy-provider webpack && cross-env NOTARIZE=true electron-builder -c --mac",
         "dist:mac": "cross-env SERVER_DOMAIN_DEV='http://local2.playentry.org' HW_LOG_ENDPOINT='/api/hwActionLog' NODE_ENV=production NODE_OPTIONS=--openssl-legacy-provider webpack && cross-env NOTARIZE=false electron-builder -c --mac",
         "rebuild": "electron-rebuild -f",
         "postinstall": "yarn run rebuild && yarn run webpack:dev"
