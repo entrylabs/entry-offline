@@ -5208,13 +5208,15 @@ entities@^2.0.0:
 
 "entry-hw-server@git+https://github.com/entrylabs/entry-hw-server.git#master":
   version "2.0.0"
-  resolved "git+https://github.com/entrylabs/entry-hw-server.git#d8cf9abafdd2beee9f480fc1dfa7953233273cba"
+  resolved "git+https://github.com/entrylabs/entry-hw-server.git#c4718d51ac06b3f7e767561b335e946410378cf2"
   dependencies:
     crypto-js "^4.0.0"
+    node-fetch "^2.7.0"
+    systeminformation "^5.22.11"
 
-"entry-hw@git+https://github.com/entrylabs/entry-hw.git#dist/v1.9.61_2":
-  version "1.9.61"
-  resolved "git+https://github.com/entrylabs/entry-hw.git#882fcea120ed448d3200d6058c4e5a94b75d18a7"
+"entry-hw@git+https://github.com/entrylabs/entry-hw.git#dist/v1.9.62":
+  version "1.9.62"
+  resolved "git+https://github.com/entrylabs/entry-hw.git#4dd433374df09e5fcb839581fcd712402b503105"
   dependencies:
     cross-spawn "^7.0.0"
     fs-extra "^8.1.0"
@@ -9251,6 +9253,13 @@ node-fetch@^1.0.1:
     encoding "^0.1.11"
     is-stream "^1.0.1"
 
+node-fetch@^2.7.0:
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.7.0.tgz#d0f0fa6e3e2dc1d27efcd8ad99d550bda94d187d"
+  integrity sha512-c4FRfUm/dbcWZ7U+1Wq0AwCyFL+3nt2bEw05wfxSz+DWpWsitgmSgYmy2dQdWyKC1694ELPqMs/YzUSNozLt8A==
+  dependencies:
+    whatwg-url "^5.0.0"
+
 node-fetch@~2.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.1.2.tgz#ab884e8e7e57e38a944753cec706f788d1768bb5"
@@ -12007,6 +12016,11 @@ symbol-tree@^3.2.2:
   version "3.2.4"
   resolved "https://registry.yarnpkg.com/symbol-tree/-/symbol-tree-3.2.4.tgz#430637d248ba77e078883951fb9aa0eed7c63fa2"
   integrity sha512-9QNk5KwDF+Bvz+PyObkmSYjI5ksVUYtjW7AU22r2NKcfLJcXp96hkDWU3+XndOsUb+AQ9QhfzfCT2O+CNWT5Tw==
+
+systeminformation@^5.22.11:
+  version "5.25.11"
+  resolved "https://registry.yarnpkg.com/systeminformation/-/systeminformation-5.25.11.tgz#7d47a14dafbc9cf6c21bc02d19a2121a8c770d88"
+  integrity sha512-jI01fn/t47rrLTQB0FTlMCC+5dYx8o0RRF+R4BPiUNsvg5OdY0s9DKMFmJGrx5SwMZQ4cag0Gl6v8oycso9b/g==
 
 table@^6.0.9:
   version "6.8.1"

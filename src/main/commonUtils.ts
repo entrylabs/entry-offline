@@ -62,10 +62,18 @@ class CommonUtils {
         const filename = entryObject.filename;
         const extension = CommonUtils.sanitizeExtension(
             entryObject.ext || entryObject.extension,
-            defaultExtension,
+            defaultExtension
         );
 
         return `${filename}${extension}`;
+    }
+
+    static getEntryDomain() {
+        if (process.env.NODE_ENV === 'production') {
+            return 'https://playentry.org';
+        } else {
+            return process.env.SERVER_DOMAIN_DEV ? process.env.SERVER_DOMAIN_DEV : undefined;
+        }
     }
 
     static lpad(str: string, len: number) {
@@ -79,20 +87,15 @@ class CommonUtils {
         return String(paddedString);
     }
 
-    static getPaddedVersion(version: string | number) {
+    static getPaddedVersion = (version: string | undefined) => {
         if (!version) {
-            return '';
+            return;
         }
-        const versionString = String(version);
-
-        const padded: string[] = [];
-        const splitVersion = versionString.split('.');
-        splitVersion.forEach((item) => {
-            padded.push(this.lpad(item, 4));
-        });
-
-        return padded.join('.');
-    }
+        return version
+            .split('.')
+            .map((number) => number.padStart(4, '0'))
+            .join('.');
+    };
 }
 
 export default CommonUtils;

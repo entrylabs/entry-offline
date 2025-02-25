@@ -1,5 +1,6 @@
 import EntryServer from 'entry-hw-server';
 import { app } from 'electron';
+import CommonUtils from '../commonUtils';
 import HardwareModuleManager from './hardwareModuleManager';
 import path from 'path';
 
@@ -33,7 +34,9 @@ class ServerProcessManager {
 
     open() {
         this._receiveFromChildEventRegister();
-        this.childProcess.open();
+        const offlineVersion = CommonUtils.getPaddedVersion(global.sharedObject.version);
+        const getEntryDomain = CommonUtils.getEntryDomain();
+        this.childProcess.open(offlineVersion, getEntryDomain);
     }
 
     close() {
@@ -52,6 +55,14 @@ class ServerProcessManager {
         this.childProcess.sendToClient(data);
     }
 
+    connectHardwareSuccess(hardwareId: string) {
+        this.childProcess.connectHardwareSuccess(hardwareId);
+    }
+
+    connectHardwareFailed() {
+        this.childProcess.connectHardwareFailed();
+    }
+
     _receiveFromChildEventRegister() {
         this.childProcess.on('cloudModeChanged', (mode: string) => {
             this.router.notifyCloudModeChanged(mode);
@@ -62,9 +73,7 @@ class ServerProcessManager {
         this.childProcess.on('data', (message: any) => {
             this.router.handleServerData(message);
         });
-        this.childProcess.on('close', () => {
-
-        });
+        this.childProcess.on('close', () => {});
     }
 }
 
