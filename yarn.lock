@@ -5231,9 +5231,9 @@ entities@^2.0.0:
     winston "^3.2.1"
     winston-daily-rotate-file "^4.4.2"
 
-"entry-js@git+https://github.com/entrylabs/entryjs.git#dist/offline_v2.1.25":
+"entry-js@git+https://github.com/entrylabs/entryjs.git#dist/offline_v2.1.25_2":
   version "4.0.17"
-  resolved "git+https://github.com/entrylabs/entryjs.git#69a7d589177d948bb3de02847030b54de4008448"
+  resolved "git+https://github.com/entrylabs/entryjs.git#32960f57bb2402f81ba234537e3eeeb613ad9cae"
   dependencies:
     uid "^0.0.2"
     "@entrylabs/event" "^1.0.3"
