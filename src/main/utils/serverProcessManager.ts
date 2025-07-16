@@ -36,6 +36,7 @@ class ServerProcessManager {
         this._receiveFromChildEventRegister();
         const offlineVersion = CommonUtils.getPaddedVersion(global.sharedObject.version);
         const getEntryDomain = CommonUtils.getEntryDomain();
+        console.log('============== ServerProcessManager open', offlineVersion, getEntryDomain);
         this.childProcess.open(offlineVersion, getEntryDomain);
     }
 

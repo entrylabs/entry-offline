@@ -69,6 +69,7 @@ class CommonUtils {
     }
 
     static getEntryDomain() {
+        console.log('============== getEntryDomain process.env.NODE_ENV', process.env.NODE_ENV);
         if (process.env.NODE_ENV === 'production') {
             return 'https://playentry.org';
         } else {
