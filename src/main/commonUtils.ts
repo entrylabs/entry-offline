@@ -71,9 +71,11 @@ class CommonUtils {
     static getEntryDomain() {
         console.log('============== getEntryDomain process.env.NODE_ENV', process.env.NODE_ENV);
         if (process.env.NODE_ENV === 'production') {
-            return 'https://playentry.org';
+            return `https://playentry.org${process.env.HW_LOG_ENDPOINT}`;
         } else {
-            return process.env.SERVER_DOMAIN_DEV ? process.env.SERVER_DOMAIN_DEV : undefined;
+            return process.env.SERVER_DOMAIN_DEV
+                ? `${process.env.SERVER_DOMAIN_DEV}${process.env.HW_LOG_ENDPOINT}`
+                : undefined;
         }
     }
 
