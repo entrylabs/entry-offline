@@ -69,13 +69,10 @@ class CommonUtils {
     }
 
     static getEntryDomain() {
-        console.log('============== getEntryDomain process.env.NODE_ENV', process.env.NODE_ENV);
         if (process.env.NODE_ENV === 'production') {
-            return `https://playentry.org${process.env.HW_LOG_ENDPOINT}`;
+            return `https://playentry.org/api/hwActionLog`;
         } else {
-            return process.env.SERVER_DOMAIN_DEV
-                ? `${process.env.SERVER_DOMAIN_DEV}${process.env.HW_LOG_ENDPOINT}`
-                : undefined;
+            return process.env.SERVER_DOMAIN_DEV;
         }
     }
 
