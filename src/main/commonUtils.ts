@@ -70,9 +70,9 @@ class CommonUtils {
 
     static getEntryDomain() {
         if (process.env.NODE_ENV === 'production') {
-            return 'https://playentry.org';
+            return `https://playentry.org/api/hwActionLog`;
         } else {
-            return process.env.SERVER_DOMAIN_DEV ? process.env.SERVER_DOMAIN_DEV : undefined;
+            return process.env.SERVER_DOMAIN_DEV;
         }
     }
 

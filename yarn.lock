@@ -5208,7 +5208,7 @@ entities@^2.0.0:
 
 "entry-hw-server@git+https://github.com/entrylabs/entry-hw-server.git#master":
   version "2.0.0"
-  resolved "git+https://github.com/entrylabs/entry-hw-server.git#c4718d51ac06b3f7e767561b335e946410378cf2"
+  resolved "git+https://github.com/entrylabs/entry-hw-server.git#a373f5ca6aafeee6d101eda6e95cbaae2f2d37a3"
   dependencies:
     crypto-js "^4.0.0"
     node-fetch "^2.7.0"
