@@ -736,10 +736,17 @@ export default class MainUtils {
         return Promise.all(
             sounds.map(async (sound) => {
                 const fileName = sound.filename + (sound.ext || '.mp3');
-                const soundResourcePath = path.join(
+                let soundResourcePath = path.join(
                     Constants.resourceSoundPath(sound.filename),
                     fileName
                 );
+                if (!fs.existsSync(soundResourcePath)) {
+                    soundResourcePath = path.join(
+                        Constants.resourceSoundPath(sound.filename),
+                        'sound/',
+                        fileName
+                    );
+                }
                 const newObject = await MainUtils.importSoundToTemp(soundResourcePath);
 
                 sound.filename = newObject.filename;

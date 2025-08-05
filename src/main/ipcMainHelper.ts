@@ -7,6 +7,7 @@ import CommonUtils from './commonUtils';
 import checkUpdateRequest from './utils/network/checkUpdate';
 import createLogger from './utils/functions/createLogger';
 import isValidAsarFile from './utils/functions/isValidAsarFile';
+import fileUtils from './fileUtils';
 require('@electron/remote/main').initialize();
 
 const logger = createLogger('main/ipcMainHelper.ts');
@@ -46,6 +47,7 @@ new (class {
         ipcMain.handle('getOpenSourceText', () => ''); // 별다른 표기 필요없음
         ipcMain.handle('isValidAsarFile', this.checkIsValidAsarFile.bind(this));
         ipcMain.handle('saveSoundBuffer', this.saveSoundBuffer.bind(this));
+        ipcMain.handle('getExistSoundFilePath', this.getExistSoundFilePath.bind(this));
     }
 
     async saveProject(event: IpcMainInvokeEvent, project: ObjectLike, targetPath: string) {
@@ -251,6 +253,10 @@ new (class {
 
     async saveSoundBuffer(event: IpcMainInvokeEvent, buffer: ArrayBuffer, prevFileUrl: string) {
         return MainUtils.saveSoundBuffer(buffer, prevFileUrl);
+    }
+
+    async getExistSoundFilePath(event: IpcMainInvokeEvent, sound: any) {
+        return fileUtils.getExistSoundFilePath(sound);
     }
 
     openUrl(event: IpcMainInvokeEvent, url: string) {

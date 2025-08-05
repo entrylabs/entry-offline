@@ -87,11 +87,9 @@ export default class {
      * 사운드 오브젝트 (from resources/db) 를 Entry.soundQueue 에 로드한다.
      * @param {Array<Object>} sounds
      */
-    static loadSound(sounds: any[] = []) {
-        sounds.forEach((sound) => {
-            const path =
-                sound.path ||
-                `${Constants.resourceSoundPath(sound.filename)}${sound.filename}${sound.ext}`;
+    static async loadSound(sounds: any[] = []) {
+        await sounds.forEach(async (sound) => {
+            const path = await IpcRendererHelper.getExistSoundFilePath(sound);
             Entry.soundQueue.loadFile({
                 id: sound._id,
                 src: path,

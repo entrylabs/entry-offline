@@ -311,23 +311,23 @@ class EntryModalHelper {
      */
     static async showSoundPopup() {
         await this._switchPopup('sound', {
-            fetch: (data: any) => {
-                DatabaseManager.findAll(data).then((result) => {
+            fetch: async (data: any) => {
+                await DatabaseManager.findAll(data).then(async (result) => {
                     EntryModalHelper.popup.setData({
                         data: { data: result },
                     });
-                    EntryUtils.loadSound(result as any[]);
+                    await EntryUtils.loadSound(result as any[]);
                 });
             },
-            search: (data: any) => {
+            search: async (data: any) => {
                 if (data.searchQuery === '') {
                     return;
                 }
-                DatabaseManager.search(data, 'sound').then((result) => {
+                await DatabaseManager.search(data, 'sound').then(async (result) => {
                     EntryModalHelper.popup.setData({
                         data: { data: result },
                     });
-                    EntryUtils.loadSound(result as any[]);
+                    await EntryUtils.loadSound(result as any[]);
                 });
             },
             submit: async (data: any) => {
@@ -369,7 +369,7 @@ class EntryModalHelper {
                     const results = await IpcRendererHelper.importSounds(uploadFilePaths);
                     createjs.Sound.stop();
 
-                    EntryUtils.loadSound(results);
+                    await EntryUtils.loadSound(results);
                     EntryModalHelper.popup.setData({
                         data: {
                             data: [], // 없으면 에러남. entry-tool 의 수정필요
