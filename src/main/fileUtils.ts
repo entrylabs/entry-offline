@@ -8,6 +8,7 @@ import createLogger from './utils/functions/createLogger';
 import ffmpeg from 'fluent-ffmpeg';
 import ffmpegInstaller from '@ffmpeg-installer/ffmpeg';
 import ffprobeInstaller from '@ffprobe-installer/ffprobe';
+import Constants from './constants';
 import get from 'lodash/get';
 
 type tarCreateOption = FileOptions & CreateOptions;
@@ -305,6 +306,23 @@ export default class {
                 resolve(probeData);
             });
         });
+
+    static getExistSoundFilePath(sound: { filename: string; ext?: string }) {
+        const basePath = Constants.resourceSoundPath(sound.filename);
+        const defaultPath = `${basePath}${sound.filename}${sound.ext || '.mp3'}`;
+        const alternativePath = `${basePath}sound/${sound.filename}${sound.ext || '.mp3'}`;
+
+        try {
+            if (fs.existsSync(defaultPath)) {
+                return defaultPath;
+            } else {
+                return alternativePath;
+            }
+        } catch (error) {
+            console.warn('Sound file not found:', basePath, error);
+            return alternativePath;
+        }
+    }
 
     static getDuration = (soundInfo: any) => {
         const duration = get(soundInfo, ['format', 'duration'], 0);

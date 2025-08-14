@@ -153,4 +153,8 @@ export default class {
     static saveSoundBuffer(buffer: ArrayBuffer, prevFileUrl: string) {
         return ipcInvoke('saveSoundBuffer', buffer, prevFileUrl);
     }
+
+    static getExistSoundFilePath(sound: { filename: string; ext?: string }) {
+        return ipcInvoke('getExistSoundFilePath', sound);
+    }
 }

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 960 540">
+  <defs>
+    <clipPath id="clippath">
+      <rect width="960" height="540" style="fill: none;"/>
+    </clipPath>
+  </defs>
+  <!-- Generator: Adobe Illustrator 28.7.1, SVG Export Plug-In . SVG Version: 1.2.0 Build 142)  -->
+  <g>
+    <g id="_레이어_1" data-name="레이어_1">
+      <g style="clip-path: url(#clippath);">
+        <g>
+          <g>
+            <rect x="-75.7" y="-11" width="1103.4" height="355.1" style="fill: #a07e5e;"/>
+            <path d="M1028.3,344.7H-76.3V-11.6h1104.6v356.3ZM-75,343.5h1102.1V-10.4H-75v353.9Z"/>
+          </g>
+          <g>
+            <rect x="-73.3" y="344.1" width="1098.6" height="195" style="fill: #cda783;"/>
+            <path d="M1025.9,539.7H-73.9v-196.2h1099.8v196.2ZM-72.6,538.4h1097.3v-193.7H-72.6v193.7Z"/>
+          </g>
+          <g style="opacity: .5;">
+            <rect x="-75.7" y="-4.5" width="1103.3" height="559.5" style="fill: #1d140b;"/>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
