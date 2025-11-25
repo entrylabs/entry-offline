@@ -5238,7 +5238,7 @@ entities@^2.0.0:
 
 "entry-js@git+https://github.com/entrylabs/entryjs.git#dist/offline_v2.1.31":
   version "4.0.22"
-  resolved "git+https://github.com/entrylabs/entryjs.git#a7200f57d749b08d15f3ae628210c85e231c9d77"
+  resolved "git+https://github.com/entrylabs/entryjs.git#6e078bef7d783521a00480d56e89b66991c7a2c9"
   dependencies:
     uid "^0.0.2"
     "@entrylabs/event" "^1.0.3"
