@@ -108,6 +108,13 @@ window.checkPermission = async (type: 'microphone' | 'camera') => {
     await ipcRenderer.invoke('checkPermission', type);
 };
 
+window.getPapagoHeaderInfo = async () => {
+    const result = await ipcRenderer.invoke('getPapagoHeaderInfo');
+    return result;
+};
+
+window.isOffline = true;
+
 window.ipcListen = ipcRenderer.on.bind(ipcRenderer);
 
 window.isOsx = process.platform === 'darwin';
