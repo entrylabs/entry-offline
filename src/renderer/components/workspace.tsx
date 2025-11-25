@@ -40,7 +40,10 @@ class Workspace extends Component<IProps> {
         libDir: '../../../node_modules',
         defaultDir: '../../renderer/resources',
         entryDir: '/entry-js',
-        baseUrl: 'https://playentry.org',
+        baseUrl:
+            process.env.NODE_ENV === 'development'
+                ? 'https://entry2-dev.playentry.org'
+                : 'https://playentry.org',
         fonts: EntryStatic.fonts,
         textCodingEnable: true,
         dataTableEnable: true,

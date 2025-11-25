@@ -26,9 +26,11 @@ declare interface Preload {
     onLoadProjectFromMain(callback: (project: Promise<IEntry.Project>) => void): void;
     openHardwarePage(): void;
     checkPermission(type: 'microphone' | 'camera'): Promise<void>;
+    getPapagoHeaderInfo(): Promise<object>;
     weightsPath: () => string;
     getEntryjsPath: () => string;
     getAppPathWithParams: (...params: string[]) => string;
+    isOffline: boolean;
 }
 
 declare var entrylms: any;

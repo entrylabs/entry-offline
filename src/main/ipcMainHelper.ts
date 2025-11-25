@@ -6,7 +6,7 @@ import Constants from './constants';
 import CommonUtils from './commonUtils';
 import checkUpdateRequest from './utils/network/checkUpdate';
 import createLogger from './utils/functions/createLogger';
-import isValidAsarFile from './utils/functions/isValidAsarFile';
+import isValidAsarFile, { getPapagoHeaderInfoByValidator } from './utils/functions/isValidAsarFile';
 import fileUtils from './fileUtils';
 require('@electron/remote/main').initialize();
 
@@ -48,6 +48,7 @@ new (class {
         ipcMain.handle('isValidAsarFile', this.checkIsValidAsarFile.bind(this));
         ipcMain.handle('saveSoundBuffer', this.saveSoundBuffer.bind(this));
         ipcMain.handle('getExistSoundFilePath', this.getExistSoundFilePath.bind(this));
+        ipcMain.handle('getPapagoHeaderInfo', this.getPapagoHeaderInfo.bind(this));
     }
 
     async saveProject(event: IpcMainInvokeEvent, project: ObjectLike, targetPath: string) {
@@ -257,6 +258,10 @@ new (class {
 
     async getExistSoundFilePath(event: IpcMainInvokeEvent, sound: any) {
         return fileUtils.getExistSoundFilePath(sound);
+    }
+
+    async getPapagoHeaderInfo(event: IpcMainInvokeEvent) {
+        return await getPapagoHeaderInfoByValidator();
     }
 
     openUrl(event: IpcMainInvokeEvent, url: string) {
