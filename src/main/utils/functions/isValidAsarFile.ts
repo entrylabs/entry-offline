@@ -24,6 +24,7 @@ export enum ResultCode {
 }
 
 export type ValidationResult = { result: ResultCode; reason?: string };
+export type ApiKeyResult = { result: ResultCode; value?: object };
 
 // development: /Users/user/entry_projects/entry-offline
 // production: /Users/user/entry_projects/entry-offline/dist/Entry-darwin-x64/mac/Entry.app/Contents/Resources/app.asar
@@ -36,6 +37,8 @@ function getValidatorPath(): string | undefined {
     if (appPath.indexOf('app.asar') > -1) {
         // if asar packed (production)
         return path.join(appPath, '..', validatorFileName);
+    } else if (process.env.NODE_ENV === 'development') {
+        return path.join(appPath, '/validator', isMacOS ? 'mac' : 'win', validatorFileName);
     }
 }
 
@@ -68,7 +71,7 @@ function isValidAsarFile(): Promise<boolean> {
             resolve(false);
         }, 3000);
 
-        childProcess.on('message', ((message: ValidationResult) => {
+        childProcess.on('message', (message: ValidationResult) => {
             clearTimeout(timeout);
             const { result, reason } = message;
             if (result === ResultCode.INVALID || result === ResultCode.FILE_NOT_FOUND) {
@@ -78,7 +81,42 @@ function isValidAsarFile(): Promise<boolean> {
                 resolve(true);
             }
             !childProcess.killed && childProcess.kill();
-        }));
+        });
+    });
+}
+
+export function getPapagoHeaderInfoByValidator(): Promise<object | undefined | null> {
+    const validatorPath = getValidatorPath();
+
+    if (!validatorPath || !fs.existsSync(validatorPath)) {
+        console.log('cannot find validator binary');
+        return Promise.resolve(null);
+    }
+
+    return new Promise((resolve) => {
+        const childProcess = spawn(validatorPath, ['--type=offline', '--method=apiKey'], {
+            stdio: ['ignore', 'inherit', 'inherit', 'ipc'],
+            detached: true,
+        });
+
+        const timeout = setTimeout(() => {
+            logger.warn('validator spawn timeout. check validator logic');
+            childProcess.kill();
+            resolve(null);
+        }, 3000);
+
+        childProcess.on('message', (message: ApiKeyResult) => {
+            clearTimeout(timeout);
+            const { result, value } = message;
+            if (result === ResultCode.LOGIC_ERROR || result === ResultCode.FILE_NOT_FOUND) {
+                logger.warn(`apiKey fail value: ${result}`);
+                resolve(null);
+            } else {
+                const valueWithVersion = { ...value, 'X-Offline-Version': app.getVersion() };
+                resolve(valueWithVersion);
+            }
+            !childProcess.killed && childProcess.kill();
+        });
     });
 }
 
