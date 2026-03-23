@@ -11,6 +11,17 @@ import { Dropdown } from '@entrylabs/tool/component';
 import ImportToggleHelper from '../helper/importToggleHelper';
 import { IStoreState } from '../store/modules';
 import { IMapDispatchToProps, IMapStateToProps } from '../store';
+import styled from 'styled-components';
+
+const FoundationLabel = styled.span`
+    float: left;
+    margin-left: 6px;
+    margin-top: 2px;
+    font-size: 12px;
+    color: #fff;
+    display: inline-block;
+    user-select: none;
+`;
 
 interface IState {
     dropdownType?: string;
@@ -26,7 +37,7 @@ interface IProps extends IReduxDispatch, IReduxState {
     executionStatus: {
         canRedo: boolean;
         canUndo: boolean;
-    }
+    };
 }
 
 type DropDownItemPair = [string | ReactElement, string];
@@ -69,10 +80,9 @@ class Header extends Component<IProps, IState> {
 
         return [
             [RendererUtils.getLang('Workspace.block_helper'), 'help_block'],
-            (mode === 'workspace' ?
-                    [RendererUtils.getLang('Workspace.hardware_guide'), 'help_hardware'] :
-                    [RendererUtils.getLang('Workspace.robot_guide'), 'help_robot']
-            ),
+            mode === 'workspace'
+                ? [RendererUtils.getLang('Workspace.hardware_guide'), 'help_hardware']
+                : [RendererUtils.getLang('Workspace.robot_guide'), 'help_robot'],
             [RendererUtils.getLang('Workspace.python_guide'), 'help_python'],
         ];
     }
@@ -232,10 +242,14 @@ class Header extends Component<IProps, IState> {
 
     render() {
         const {
-            CommonActions, persist = {
+            CommonActions,
+            persist = {
                 lang: '',
                 mode: '',
-            }, common, programLanguageMode, executionStatus = { canRedo: false, canUndo: false },
+            },
+            common,
+            programLanguageMode,
+            executionStatus = { canRedo: false, canUndo: false },
         } = this.props;
         const { canRedo = false, canUndo = false } = executionStatus;
         const { projectName = RendererUtils.getDefaultProjectName(), isValidProduct } = common;
@@ -244,7 +258,8 @@ class Header extends Component<IProps, IState> {
 
         return (
             <header className={'common_gnb'}>
-                <h1 className={`${'logo'} ${'logo_gnb'}`}/>
+                <h1 className={`${'logo'} ${'logo_gnb'}`} />
+                <FoundationLabel>by NAVER CONNECT</FoundationLabel>
                 <div className={'srch_box'}>
                     {/* 작품명 */}
                     <div key={projectName}>
@@ -260,35 +275,34 @@ class Header extends Component<IProps, IState> {
                         />
                     </div>
                 </div>
-                {
-                    !isValidProduct &&
-                    <div className='invalidate_check_box'>
+                {!isValidProduct && (
+                    <div className="invalidate_check_box">
                         <span>이 프로그램은 엔트리 공식 빌드가 아닙니다.</span>
                     </div>
-                }
+                )}
 
                 <div className={'group_box'}>
                     <div className={'group_inner'}>
-                        {mode === 'workspace' &&
-                        // 블록코딩, 엔트리파이선 모드 변경
-                        <div className={'work_space'}>
-                            <a
-                                title={RendererUtils.getLang('Workspace.language')}
-                                className={`btn_work_space btn_workspace_lang ${
-                                    dropdownType === 'programLanguage' ? 'on' : ''
+                        {mode === 'workspace' && (
+                            // 블록코딩, 엔트리파이선 모드 변경
+                            <div className={'work_space'}>
+                                <a
+                                    title={RendererUtils.getLang('Workspace.language')}
+                                    className={`btn_work_space btn_workspace_lang ${
+                                        dropdownType === 'programLanguage' ? 'on' : ''
                                     } ${programLanguageMode}`}
-                                ref={(dom) => (this.dropdownList.programLanguage = dom)}
-                                onClick={() => {
-                                    this.handleDropdownClick('programLanguage');
-                                }}
-                            >
+                                    ref={(dom) => (this.dropdownList.programLanguage = dom)}
+                                    onClick={() => {
+                                        this.handleDropdownClick('programLanguage');
+                                    }}
+                                >
                                     <span className={'blind'}>
                                         {RendererUtils.getLang('Workspace.language')}
                                     </span>
-                            </a>
-                            {this.makeDropdown('programLanguage', this.programLanguageList)}
-                        </div>
-                        }
+                                </a>
+                                {this.makeDropdown('programLanguage', this.programLanguageList)}
+                            </div>
+                        )}
                         {
                             // 새로만들기, 불러오기
                             <div className={'work_space'}>
@@ -296,7 +310,7 @@ class Header extends Component<IProps, IState> {
                                     title={RendererUtils.getLang('Workspace.file')}
                                     className={`${'btn_work_space'} ${'btn_workspace_file'} ${
                                         dropdownType === 'file' ? 'on' : ''
-                                        }`}
+                                    }`}
                                     ref={(dom) => (this.dropdownList.file = dom)}
                                     onClick={() => {
                                         this.handleDropdownClick('file');
@@ -316,7 +330,7 @@ class Header extends Component<IProps, IState> {
                                     title={RendererUtils.getLang('Workspace.save')}
                                     className={`${'btn_work_space'} ${'btn_workspace_save'}  ${
                                         dropdownType === 'save' ? 'on' : ''
-                                        }`}
+                                    }`}
                                     ref={(dom) => (this.dropdownList.save = dom)}
                                     onClick={() => {
                                         this.handleDropdownClick('save');
@@ -336,7 +350,7 @@ class Header extends Component<IProps, IState> {
                                     title={RendererUtils.getLang('Workspace.help')}
                                     className={`btn_work_space btn_workspace_help ${
                                         dropdownType === 'help' ? 'on' : ''
-                                        }`}
+                                    }`}
                                     ref={(dom) => (this.dropdownList.help = dom)}
                                     onClick={() => {
                                         this.handleDropdownClick('help');
@@ -361,7 +375,9 @@ class Header extends Component<IProps, IState> {
                                     Entry.dispatchEvent('undo');
                                 }}
                             >
-                                <span className={'blind'}>{RendererUtils.getLang('Workspace.undo')}</span>
+                                <span className={'blind'}>
+                                    {RendererUtils.getLang('Workspace.undo')}
+                                </span>
                             </a>
                             <a
                                 title={RendererUtils.getLang('Workspace.redo')}
@@ -370,7 +386,9 @@ class Header extends Component<IProps, IState> {
                                     Entry.dispatchEvent('redo');
                                 }}
                             >
-                                <span className={'blind'}>{RendererUtils.getLang('Workspace.redo')}</span>
+                                <span className={'blind'}>
+                                    {RendererUtils.getLang('Workspace.redo')}
+                                </span>
                             </a>
                         </div>
                     </div>
@@ -382,7 +400,7 @@ class Header extends Component<IProps, IState> {
                                 <a
                                     className={`link_workspace_text text_work_space  ${
                                         dropdownType === 'mode' ? 'on' : ''
-                                        }`}
+                                    }`}
                                     ref={(dom) => (this.dropdownList.mode = dom)}
                                     onClick={() => {
                                         this.handleDropdownClick('mode');
@@ -395,14 +413,13 @@ class Header extends Component<IProps, IState> {
                         </div>
                     )}
 
-                    {
-                        /* 언어 변경 */
-                        mode === 'workspace' &&
-                        (<div className={'lang_select_box'}>
+                    {/* 언어 변경 */
+                    mode === 'workspace' && (
+                        <div className={'lang_select_box'}>
                             <a
                                 className={`${'select_link'} ${'ico_white_select_arr'} ${
                                     dropdownType === 'language' ? 'on' : ''
-                                    }`}
+                                }`}
                                 ref={(dom) => (this.dropdownList.language = dom)}
                                 onClick={() => {
                                     this.handleDropdownClick('language');
@@ -413,8 +430,8 @@ class Header extends Component<IProps, IState> {
                             <div className={'tooltip_box'}>
                                 {this.makeDropdown('language', this.languageList)}
                             </div>
-                        </div>)
-                    }
+                        </div>
+                    )}
                 </div>
             </header>
         );
@@ -422,8 +439,8 @@ class Header extends Component<IProps, IState> {
 }
 
 interface IReduxState {
-    persist: IPersistState,
-    common: ICommonState,
+    persist: IPersistState;
+    common: ICommonState;
 }
 
 const mapStateToProps: IMapStateToProps<IReduxState> = (state: IStoreState) => ({
@@ -432,7 +449,7 @@ const mapStateToProps: IMapStateToProps<IReduxState> = (state: IStoreState) => (
 });
 
 interface IReduxDispatch {
-    PersistActions: any,
+    PersistActions: any;
     CommonActions: any;
 }
 
@@ -441,7 +458,4 @@ const mapDispatchToProps: IMapDispatchToProps<IReduxDispatch> = (dispatch) => ({
     CommonActions: bindActionCreators(CommonActionCreators, dispatch),
 });
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps,
-)(Header);
+export default connect(mapStateToProps, mapDispatchToProps)(Header);
