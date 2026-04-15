@@ -1,232 +1,140 @@
 /**
  * 팝업 사이드바 카테고리 정의
  *
- * entry-tool의 DEFAULT_OPTIONS.POPUP_TYPE에 정의된 기본 sidebar를 오버라이드하기 위해
- * entry-offline에서 직접 관리하는 카테고리 구조.
+ * categories.json을 기반으로 사이드바 구조를 자동 생성한다.
+ * entry-tool의 DEFAULT_OPTIONS.POPUP_TYPE에 정의된 기본 sidebar를 오버라이드한다.
  *
- * sidebar 객체의 key는 DB JSON(sprites.json, pictures.json, sounds.json)의
- * category.main 값과 일치해야 하며, sub 객체의 key는 category.sub 값과 일치해야 한다.
- *
- * name 값은 window.Lang에서 조회되는 i18n 키이다. (예: 'Category.people' → Lang.Category.people)
+ * categories.json 구조:
+ *   - depth 1: 대분류 (main). value가 에셋의 category.main과 일치
+ *   - depth 2: 소분류 (sub). value가 에셋의 category.sub과 일치. parent로 대분류 참조
+ *   - categoryType: 'sprite' | 'picture' | 'sound'
  */
 
-/** sprite / picture / paint 팝업에서 공유하는 사이드바 */
-export const SPRITE_SIDEBAR: Record<
-    string,
-    { name: string; sub: Record<string, { name: string }> }
-> = {
-    entrybot_friends: {
-        name: 'Category.entrybot_friends',
-        sub: {
-            all: { name: 'Menus.all' },
-            sub_PoQFQceEVP: { name: 'Category.sub_PoQFQceEVP' },
-            sub_clSVysPeQN: { name: 'Category.sub_clSVysPeQN' },
-            sub_fzGUMTBmzL: { name: 'Category.sub_fzGUMTBmzL' },
-        },
-    },
-    main_IYYpuwnMXN: {
-        name: 'Category.main_IYYpuwnMXN',
-        sub: {
-            all: { name: 'Menus.all' },
-            sub_etZywbAiLM: { name: 'Category.sub_etZywbAiLM' },
-            sub_rcOFSAdOTw: { name: 'Category.sub_rcOFSAdOTw' },
-            sub_GyyQIXIyPq: { name: 'Category.sub_GyyQIXIyPq' },
-            sub_iovaINIAZi: { name: 'Category.sub_iovaINIAZi' },
-        },
-    },
-    people: {
-        name: 'Category.people',
-        sub: {
-            all: { name: 'Menus.all' },
-            // background_outdoor: { name: 'Category.background_outdoor' },
-        },
-    },
-    animal: {
-        name: 'Category.animal',
-        sub: {
-            all: { name: 'Menus.all' },
-            animal_land: { name: 'Category.animal_land' },
-            animal_flying: { name: 'Category.animal_flying' },
-            sub_xTBlDOMvCE: { name: 'Category.sub_xTBlDOMvCE' },
-            animal_water: { name: 'Category.animal_water' },
-            sub_vNptLxmKxM: { name: 'Category.sub_vNptLxmKxM' },
-            animal_others: { name: 'Category.animal_others' },
-        },
-    },
-    plant: {
-        name: 'Category.plant',
-        sub: {
-            all: { name: 'Menus.all' },
-            plant_flower: { name: 'Category.plant_flower' },
-            plant_grass: { name: 'Category.plant_grass' },
-            plant_tree: { name: 'Category.plant_tree' },
-            plant_others: { name: 'Category.plant_others' },
-        },
-    },
-    vehicles: {
-        name: 'Category.vehicles',
-        sub: {
-            all: { name: 'Menus.all' },
-            vehicles_flying: { name: 'Category.vehicles_flying' },
-            vehicles_land: { name: 'Category.vehicles_land' },
-            vehicles_water: { name: 'Category.vehicles_water' },
-        },
-    },
-    architect: {
-        name: 'Category.architect',
-        sub: {
-            all: { name: 'Menus.all' },
-            architect_building: { name: 'Category.architect_building' },
-            architect_monument: { name: 'Category.architect_monument' },
-            architect_others: { name: 'Category.architect_others' },
-        },
-    },
-    food: {
-        name: 'Category.food',
-        sub: {
-            all: { name: 'Menus.all' },
-            food_vegetables: { name: 'Category.food_vegetables' },
-            food_meat: { name: 'Category.food_meat' },
-            food_drink: { name: 'Category.food_drink' },
-            food_others: { name: 'Category.food_others' },
-        },
-    },
-    environment: {
-        name: 'Category.environment',
-        sub: {
-            all: { name: 'Menus.all' },
-            environment_nature: { name: 'Category.environment_nature' },
-            environment_space: { name: 'Category.environment_space' },
-            environment_others: { name: 'Category.environment_others' },
-        },
-    },
-    stuff: {
-        name: 'Category.stuff',
-        sub: {
-            all: { name: 'Menus.all' },
-            stuff_living: { name: 'Category.stuff_living' },
-            stuff_hobby: { name: 'Category.stuff_hobby' },
-            stuff_others: { name: 'Category.stuff_others' },
-        },
-    },
-    fantasy: {
-        name: 'Category.fantasy',
-        sub: {
-            all: { name: 'Menus.all' },
-            sub_eKpEudNuUV: { name: 'Category.sub_eKpEudNuUV' },
-            sub_FGBSNslZaJ: { name: 'Category.sub_FGBSNslZaJ' },
-        },
-    },
-    interface: {
-        name: 'Category.interface',
-        sub: {
-            all: { name: 'Menus.all' },
-            interface_website: { name: 'Category.interface_website' },
-            interface_game: { name: 'Category.interface_game' },
-            interface_others: { name: 'Category.interface_others' },
-        },
-    },
-    background: {
-        name: 'Category.background',
-        sub: {
-            all: { name: 'Menus.all' },
-            background_outdoor: { name: 'Category.background_outdoor' },
-            background_indoor: { name: 'Category.background_indoor' },
-            background_nature: { name: 'Category.background_nature' },
-            background_others: { name: 'Category.background_others' },
-        },
-    },
-    // EBS15회: {
-    //     name: 'Category.EBS15회',
-    //     sub: {
-    //         all: { name: 'Menus.all' },
-    //     },
-    // },
-    // EBS20회: {
-    //     name: 'Category.EBS20회',
-    //     sub: {
-    //         all: { name: 'Menus.all' },
-    //     },
-    // },
-    // EBS21회: {
-    //     name: 'Category.EBS21회',
-    //     sub: {
-    //         all: { name: 'Menus.all' },
-    //     },
-    // },
-    // EBS24회: {
-    //     name: 'Category.EBS24회',
-    //     sub: {
-    //         all: { name: 'Menus.all' },
-    //     },
-    // },
-    // EBS25회: {
-    //     name: 'Category.EBS25회',
-    //     sub: {
-    //         all: { name: 'Menus.all' },
-    //     },
-    // },
-};
+import Categories from '../../resources/db/categories.json';
+
+type SidebarItem = { name: string; sub: Record<string, { name: string }> };
+type Sidebar = Record<string, SidebarItem>;
+
+interface CategoryDoc {
+    _id: any;
+    name: string;
+    value: string;
+    label?: { ko?: string; en?: string; ja?: string };
+    categoryType: string;
+    depth: any;
+    categoryOrder?: number;
+    children?: any[];
+    parent?: any;
+    removed?: any;
+}
+
+/** _id 필드에서 oid 문자열을 추출한다 */
+function getOid(ref: any): string {
+    if (!ref) {
+        return '';
+    }
+    if (typeof ref === 'string') {
+        return ref;
+    }
+    return ref.$oid || '';
+}
+
+/** depth 필드를 숫자로 반환한다 */
+function getDepth(cat: CategoryDoc): number {
+    const d = cat.depth;
+    if (typeof d === 'number') {
+        return d;
+    }
+    if (d && typeof d === 'object' && d.$numberDouble) {
+        return parseInt(d.$numberDouble, 10);
+    }
+    return 0;
+}
+
+/**
+ * categories.json에서 특정 categoryType에 해당하는 sidebar 구조를 생성한다.
+ *
+ * @param categoryType 'sprite' | 'picture' | 'sound'
+ * @returns sidebar 객체 (entry-tool Popup의 sidebar prop 형식)
+ */
+function buildSidebar(categoryType: string): Sidebar {
+    // removed 항목은 제외
+    const cats = (Categories as unknown as CategoryDoc[]).filter((c) => !c.removed);
+
+    // _id → category document 매핑
+    const catById: Record<string, CategoryDoc> = {};
+    for (const cat of cats) {
+        const oid = getOid(cat._id);
+        if (oid) {
+            catById[oid] = cat;
+        }
+    }
+
+    // 해당 categoryType의 depth 1 (main) 카테고리를 순서대로 수집
+    const mainCats = cats
+        .filter((c) => c.categoryType === categoryType && getDepth(c) === 1)
+        .sort((a, b) => (a.categoryOrder || 0) - (b.categoryOrder || 0));
+
+    // 해당 categoryType의 depth 2 (sub) 카테고리를 parent별로 그룹화
+    const subsByParent: Record<string, CategoryDoc[]> = {};
+    for (const cat of cats) {
+        if (cat.categoryType === categoryType && getDepth(cat) === 2) {
+            const parentOid = getOid(cat.parent);
+            if (parentOid) {
+                if (!subsByParent[parentOid]) {
+                    subsByParent[parentOid] = [];
+                }
+                subsByParent[parentOid].push(cat);
+            }
+        }
+    }
+
+    const sidebar: Sidebar = {};
+
+    for (const main of mainCats) {
+        const mainOid = getOid(main._id);
+        const mainValue = main.value || '';
+
+        const sidebarItem: SidebarItem = {
+            name: `Category.${mainValue}`,
+            sub: {
+                all: { name: 'Menus.all' },
+            },
+        };
+
+        // children 배열의 순서를 사용하되, 없으면 categoryOrder로 정렬
+        const childOids = (main.children || []).map(getOid).filter(Boolean);
+        let subCats: CategoryDoc[];
+
+        if (childOids.length > 0) {
+            subCats = childOids
+                .map((oid) => catById[oid])
+                .filter(Boolean) as CategoryDoc[];
+        } else {
+            subCats = (subsByParent[mainOid] || []).sort(
+                (a, b) => (a.categoryOrder || 0) - (b.categoryOrder || 0)
+            );
+        }
+
+        for (const sub of subCats) {
+            const subValue = sub.value || '';
+            sidebarItem.sub[subValue] = { name: `Category.${subValue}` };
+        }
+
+        sidebar[mainValue] = sidebarItem;
+    }
+
+    return sidebar;
+}
+
+/** sprite 팝업 사이드바 */
+export const SPRITE_SIDEBAR = buildSidebar('sprite');
+
+/** picture / paint 팝업 사이드바 */
+export const PICTURE_SIDEBAR = buildSidebar('picture');
 
 /** sound 팝업 전용 사이드바 */
-export const SOUND_SIDEBAR: Record<
-    string,
-    { name: string; sub: Record<string, { name: string }> }
-> = {
-    사람: {
-        name: 'Menus.people',
-        sub: {
-            all: { name: 'Menus.all' },
-            일상생활: { name: 'Menus.daily_life' },
-        },
-    },
-    자연: {
-        name: 'Menus.nature',
-        sub: {
-            all: { name: 'Menus.all' },
-            동물: { name: 'Menus.animal_insect' },
-            자연환경: { name: 'Menus.environment' },
-        },
-    },
-    사물: {
-        name: 'Menus.things',
-        sub: {
-            all: { name: 'Menus.all' },
-            이동수단: { name: 'Menus.vehicles' },
-            기타: { name: 'Menus.others' },
-        },
-    },
-    판타지: {
-        name: 'Menus.fantasy',
-        sub: {
-            all: { name: 'Menus.all' },
-        },
-    },
-    악기: {
-        name: 'Menus.instrument',
-        sub: {
-            all: { name: 'Menus.all' },
-            피아노: { name: 'Menus.piano' },
-            마림바: { name: 'Menus.marimba' },
-            드럼: { name: 'Menus.drum' },
-            장구: { name: 'Menus.janggu' },
-            효과음: { name: 'Menus.sound_effect' },
-            기타타악기: { name: 'Menus.others_instrument' },
-        },
-    },
-    // EBS15회: {
-    //     name: 'Category.EBS15회',
-    //     sub: {
-    //         all: { name: 'Menus.all' },
-    //     },
-    // },
-    // EBS18회: {
-    //     name: 'Category.EBS18회',
-    //     sub: {
-    //         all: { name: 'Menus.all' },
-    //     },
-    // },
-};
+export const SOUND_SIDEBAR = buildSidebar('sound');
 
 /**
  * 팝업 type에 따라 적절한 sidebar를 반환한다.
@@ -234,9 +142,10 @@ export const SOUND_SIDEBAR: Record<
 export function getSidebarByType(type: string) {
     switch (type) {
         case 'sprite':
+            return SPRITE_SIDEBAR;
         case 'picture':
         case 'paint':
-            return SPRITE_SIDEBAR;
+            return PICTURE_SIDEBAR;
         case 'sound':
             return SOUND_SIDEBAR;
         default:
