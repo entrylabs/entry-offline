@@ -1,6 +1,7 @@
 import Sprites from '../resources/db/sprites.json';
 import Pictures from '../resources/db/pictures.json';
 import Sounds from '../resources/db/sounds.json';
+import Categories from '../resources/db/categories.json';
 import TableInfos from '../resources/db/projectTableInfos.json';
 import TableDatum from '../resources/db/projectTables.json';
 import RendererUtils from './rendererUtils';
@@ -8,6 +9,7 @@ import RendererUtils from './rendererUtils';
 interface BaseObject {
     label: { ko: string; en: string; jp?: string; vn?: string };
     category: { main: string; sub: string };
+    categoryId?: string;
     name: string;
     specials: [];
     created: string;
@@ -49,11 +51,113 @@ export interface DBTableObject {
 
 type TableObjectsArray = DBPictureObject[] | DBSpriteObject[] | DBSoundObject[] | DBTableObject[];
 
+/** categories.json 항목의 _id에서 oid 문자열을 추출한다 */
+function getOid(ref: any): string {
+    if (!ref) {
+        return '';
+    }
+    if (typeof ref === 'string') {
+        return ref;
+    }
+    return ref.$oid || '';
+}
+
+/** categories.json 항목의 depth 값을 숫자로 반환한다 */
+function getDepth(cat: any): number {
+    const d = cat.depth;
+    if (typeof d === 'number') {
+        return d;
+    }
+    if (d && typeof d === 'object' && d.$numberDouble) {
+        return parseInt(d.$numberDouble, 10);
+    }
+    return 0;
+}
+
 /**
  * sprite, pictures, sounds 등의 데이터베이스 추출본을 가지고 CRUD 를 흉내내는 클래스.
  *
  */
 export default class {
+    /** categoryId → { main, sub } 매핑 캐시 */
+    private static _categoryIdMap: Record<string, { main: string; sub: string }> | null = null;
+
+    /**
+     * categories.json에서 categoryId → { main, sub } 매핑을 구축한다.
+     *
+     * depth 1 카테고리: _id가 곧 main 카테고리의 categoryId.
+     *   → 해당 _id를 categoryId로 가진 에셋은 main=value, sub=''
+     * depth 2 카테고리: _id가 sub 카테고리의 categoryId.
+     *   → parent의 value가 main, 자신의 value가 sub
+     */
+    private static _buildCategoryIdMap(): Record<string, { main: string; sub: string }> {
+        if (this._categoryIdMap) {
+            return this._categoryIdMap;
+        }
+
+        // categories.json에서 _id → category document 맵 구축 (removed 항목 제외)
+        const activeCats = (Categories as any[]).filter((c) => !c.removed);
+        const catById: Record<string, any> = {};
+        for (const cat of activeCats) {
+            const oid = getOid(cat._id);
+            if (oid) {
+                catById[oid] = cat;
+            }
+        }
+
+        const map: Record<string, { main: string; sub: string }> = {};
+
+        for (const cat of activeCats) {
+            const oid = getOid(cat._id);
+            if (!oid) {
+                continue;
+            }
+
+            const depth = getDepth(cat);
+            const value = cat.value || '';
+
+            if (depth === 1) {
+                // depth 1: main 카테고리 자체의 _id를 categoryId로 가진 에셋
+                map[oid] = { main: value, sub: '' };
+            } else if (depth === 2) {
+                // depth 2: sub 카테고리. parent를 통해 main을 결정
+                const parentOid = getOid(cat.parent);
+                const parentCat = parentOid ? catById[parentOid] : null;
+                const mainValue = parentCat ? (parentCat.value || '') : '';
+                map[oid] = { main: mainValue, sub: value };
+            }
+        }
+
+        this._categoryIdMap = map;
+        return map;
+    }
+
+    /**
+     * 오브젝트의 category 정보를 반환한다.
+     * category.main이 유효하면 그대로 사용하고, 없으면 categoryId를 통해 categories.json에서 조회한다.
+     */
+    private static _getCategory(object: any): { main: string; sub: string } {
+        const cat = object.category;
+        if (cat) {
+            const main = cat.main || '';
+            if (main && main.trim() && !main.includes('?') && !main.includes('undefined')) {
+                return { main, sub: cat.sub || '' };
+            }
+        }
+
+        // category.main이 없거나 유효하지 않은 경우 categoryId로 폴백
+        const cid = object.categoryId;
+        if (cid) {
+            const map = this._buildCategoryIdMap();
+            const mapped = map[cid];
+            if (mapped) {
+                return mapped;
+            }
+        }
+
+        return { main: '', sub: '' };
+    }
+
     /**
      * 카테고리에 해당하는 모든 결과를 반환한다.
      * 대분류와 타입은 필수이다. 소분류는 없거나, all 인 경우 전체검색이다.
@@ -72,11 +176,10 @@ export default class {
                     ? table
                     : table
                           .filter((object) => {
-                              if (!object.category) {
+                              const { main, sub } = this._getCategory(object);
+                              if (!main) {
                                   return false;
                               }
-
-                              const { main = '', sub = '' } = object.category;
                               return main === sidebar && (subMenu === 'all' || subMenu === sub);
                           })
                           .sort((prev, next) => {
