@@ -6,6 +6,7 @@ import DatabaseManager, { DBTableObject } from '../../helper/databaseManager';
 import StorageManager from '../storageManager';
 import _ from 'lodash';
 import EntryUtils from './entryUtils';
+import { getSidebarByType } from './popupSidebar';
 
 type PopupEventListeners = {
     [eventName: string]: (...args: any) => any;
@@ -712,6 +713,11 @@ class EntryModalHelper {
     ) {
         this.loadPopup(data);
         const popup = EntryModalHelper.popup;
+        const sidebar = getSidebarByType(type);
+        const showProps: any = { type, imageBaseUrl, baseUrl: '../../renderer/resources' };
+        if (sidebar) {
+            showProps.sidebar = sidebar;
+        }
         if (this.lastOpenedType === type) {
             if (data.length === 0) {
                 const initialData = await DatabaseManager.findAll({
@@ -723,7 +729,7 @@ class EntryModalHelper {
                     data: { data: initialData },
                 });
             } else {
-                return popup.show({ type, imageBaseUrl, baseUrl: '../../renderer/resources' });
+                return popup.show(showProps);
             }
         }
         this.lastOpenedType = type;
@@ -739,7 +745,7 @@ class EntryModalHelper {
             popup.on(eventName, func);
         });
 
-        popup.show({ type, imageBaseUrl, baseUrl: '../../renderer/resources' });
+        popup.show(showProps);
         return popup;
     }
 
