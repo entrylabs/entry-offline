@@ -69,7 +69,7 @@ function isValidAsarFile(): Promise<boolean> {
             logger.warn('validator spawn timeout. check validator logic');
             childProcess.kill();
             resolve(false);
-        }, 3000);
+        }, 8000);
 
         childProcess.on('message', (message: ValidationResult) => {
             clearTimeout(timeout);
@@ -103,7 +103,7 @@ export function getPapagoHeaderInfoByValidator(): Promise<object | undefined | n
             logger.warn('validator spawn timeout. check validator logic');
             childProcess.kill();
             resolve(null);
-        }, 3000);
+        }, 5000);
 
         childProcess.on('message', (message: ApiKeyResult) => {
             clearTimeout(timeout);
