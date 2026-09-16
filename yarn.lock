@@ -5219,9 +5219,9 @@ entities@^2.0.0:
     node-fetch "^2.7.0"
     systeminformation "^5.22.11"
 
-"entry-hw@git+https://github.com/entrylabs/entry-hw.git#dist/v1.9.76":
-  version "1.9.76"
-  resolved "git+https://github.com/entrylabs/entry-hw.git#7c40fbe74ba7992c35c9f79ac13239c11e10587e"
+"entry-hw@git+https://github.com/entrylabs/entry-hw.git#dist/v1.9.77":
+  version "1.9.77"
+  resolved "git+https://github.com/entrylabs/entry-hw.git#956691d9d712ad7df8cc7614144594b85d9859da"
   dependencies:
     cross-spawn "^7.0.0"
     fs-extra "^8.1.0"
@@ -5236,9 +5236,9 @@ entities@^2.0.0:
     winston "^3.2.1"
     winston-daily-rotate-file "^4.4.2"
 
-"entry-js@git+https://github.com/entrylabs/entryjs.git#dist/offline_v2.1.35":
+"entry-js@git+https://github.com/entrylabs/entryjs.git#dist/offline_v2.1.36":
   version "4.0.22"
-  resolved "git+https://github.com/entrylabs/entryjs.git#92f57b3a9797a4919a410f3d6c99fa074d1388eb"
+  resolved "git+https://github.com/entrylabs/entryjs.git#d77af12afdf893d88c25f1b5248d3423522dbd8d"
   dependencies:
     uid "^0.0.2"
     "@entrylabs/event" "^1.0.3"
@@ -5263,7 +5263,7 @@ entities@^2.0.0:
     jest "^24.9.0"
     khaiii "^0.0.2"
     libsvm-js "^0.2.1"
-    lodash "^4.17.15"
+    lodash "^4.17.21"
     mathjs "^7.1.0"
     ml-cart "^2.1.1"
     pixi.js "5.3.12"
