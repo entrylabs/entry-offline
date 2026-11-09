@@ -1,5 +1,15 @@
 # Windows에서 작업 이어가기
 
+## beomeo.5 변경 및 재시험
+
+- Windows에서는 기존 `SerialPort.list()` 결과의 각 COM 항목에 들어 있는 `serialNumber`(또는 해당 항목의 완전한 USB 인스턴스 ID)로 표시 이름만 `microbit (축약 시리얼번호)`로 바꾼다. 실제 연결 경로는 원래 COM 경로 그대로다.
+- 앱의 Windows 연결 과정에서 PowerShell/PnpDevice 및 부모 관계 조회를 호출하지 않는다. 별도의 시리얼번호-COM 대응 추정을 하지 않는다.
+- 시리얼번호가 제공되지 않은 항목도 `COMxx`로 표시하여 기존 연결/핸드셰이크 절차로 연결할 수 있다.
+- 상세 로그: `%APPDATA%\entry-hw\logs\entry-hw-YYYY-MM-DD.log`. `microbit COM discovery`를 검색한다. COM 목록의 원본 속성과 조회 소요 시간, 실패 시 오류 코드와 스택을 기록한다.
+- 설치 후 축약 시리얼 표시, 시리얼 미제공 항목의 COM 표시, COM 직접 연결, USB 분리 후 사라진 COM 연결 방지를 확인한다.
+
+이하 내용은 이전 beomeo.4 인계 기록이다.
+
 세 저장소의 `codex/microbit-serial-windows` 브랜치를 같은 상위 폴더에 클론한다.
 
 ```powershell

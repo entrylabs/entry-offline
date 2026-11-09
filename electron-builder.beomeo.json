@@ -6,7 +6,7 @@
     "npmRebuild": false,
     "beforePack": "scripts/check-windows-native.js",
     "extraMetadata": {
-        "version": "2.1.36-beomeo.4",
+        "version": "2.1.36-beomeo.5",
         "productName": "Entry Beomeo"
     },
     "win": {
