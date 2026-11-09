@@ -48,6 +48,7 @@ export default class HardwareWindowManager {
             width: 800,
             height: 650,
             title,
+            icon: path.resolve(app.getAppPath(), 'src', 'main', 'static', 'icon-beomeo.png'),
             show: false,
             webPreferences: {
                 backgroundThrottling: false,

@@ -70,7 +70,7 @@ export default class {
                 ),
                 contextIsolation: false,
             },
-            icon: path.resolve(app.getAppPath(), 'src', 'main', 'static', 'icon.png'),
+            icon: path.resolve(app.getAppPath(), 'src', 'main', 'static', 'icon-beomeo.png'),
         });
         remoteMain.enable(mainWindow.webContents);
         this.mainWindow = mainWindow;

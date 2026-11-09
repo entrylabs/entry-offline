@@ -24,7 +24,7 @@ Build EntryJS using its configured Node/pnpm versions:
 
 ```sh
 cd ../entry-hw
-NODE_OPTIONS=--openssl-legacy-provider node node_modules/webpack-cli/bin/cli.js --config webpack/webpack.beomeo-main.config.js
+NODE_OPTIONS=--openssl-legacy-provider node node_modules/webpack-cli/bin/cli.js --config webpack/webpack.beomeo.config.js
 cd ../entryjs
 pnpm run dist
 cd ../entry-offline
@@ -83,7 +83,29 @@ x64 PE files. The build wrapper restores the original development binaries after
 packaging, including when the packager fails. No Windows native rebuild is run
 on macOS.
 
-Output: `dist/beomeo-windows/Entry-Beomeo-2.1.36-beomeo.1-x64-Setup.exe`.
+Output: `dist/beomeo-windows/Entry-Beomeo-2.1.36-beomeo.4-x64-Setup.exe`.
+
+The Beomeo build uses `build/icon-beomeo.ico` for the Windows executable,
+installer and uninstaller. Window icons use `src/main/static/icon-beomeo.png`.
+Executable resource editing is enabled so desktop shortcuts use the pink icon.
+The original green icon assets remain available for upstream builds.
 This build is unsigned. The official integrity validator remains included, so
 the custom archive can be reported as modified. Check that behavior and the
 school's application policy during the Windows pilot.
+
+
+## Serial selection build (beomeo.4)
+
+Build and sync the hardware main router, preload, and React selection UI together.
+`dist:beomeo:win64` now uses `webpack.beomeo.config.js` for all three assets;
+`beomeo:check` verifies that the installed offline copies match the source build.
+The hardware bundle retains the legacy transpile-only build configuration.
+The offline production webpack build completed with type checking enabled.
+
+Windows micro:bit selection displays `microbit (8-character serial)` for present
+USB and TS_USB devices. Unknown or redirected COM mappings remain blocked.
+Test from Entry Offline's hardware connection window, not Entry_HW standalone.
+The 26-device inventory is reference data, not a static list of connected devices.
+For Windows testing, install beomeo.4, open hardware connection, select micro:bit,
+and verify two devices, unplug/replug updates, and blocked redirected mappings.
+This installer is unsigned; Windows execution and MultiPoint testing remain pending.

@@ -10,7 +10,7 @@ function run(script, args = [], env = {}) {
     if (result.status !== 0) throw new Error(`Build failed: ${script} (${result.status})`);
 }
 const hardwareBuild = spawnSync(process.execPath, [
-    'node_modules/webpack-cli/bin/cli.js', '--config', 'webpack/webpack.beomeo-main.config.js',
+    'node_modules/webpack-cli/bin/cli.js', '--config', 'webpack/webpack.beomeo.config.js',
 ], {
     cwd: path.join(root, '../entry-hw'), stdio: 'inherit',
     env: { ...process.env, NODE_ENV: 'production', NODE_OPTIONS: '--openssl-legacy-provider' },

@@ -24,5 +24,8 @@ fs.copyFileSync(path.join(hardware, 'modules/microbit2.js'), path.join(targetHw,
 fs.copyFileSync(path.join(hardware, 'modules/microbit2.json'), path.join(targetHw, 'modules/microbit2.json'));
 const hardwareRouter = path.join(hardware, 'src/main/mainRouter.build.js');
 fs.copyFileSync(hardwareRouter, path.join(targetHw, 'src/main/mainRouter.build.js'));
+fs.cpSync(path.join(hardware, 'src/renderer/react/dist'), path.join(targetHw, 'src/renderer/react/dist'), { recursive: true });
+fs.copyFileSync(path.join(hardware, 'src/preload/preload.bundle.js'), path.join(targetHw, 'src/preload/preload.bundle.js'));
+
 fs.copyFileSync(path.join(hardware, 'firmwares/mircobit-beomeo.hex'), path.join(targetHw, 'firmwares/mircobit-beomeo.hex'));
 console.log('Custom EntryJS, microbit2 transport and Beomeo firmware synced.');

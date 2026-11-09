@@ -3,6 +3,11 @@ const path = require('path');
 const fs = require('fs');
 const root = path.resolve(__dirname, '..');
 const config = require(path.join(root, 'node_modules/entry-hw/app/modules/microbit2.json'));
+for (const asset of ['src/main/mainRouter.build.js', 'src/preload/preload.bundle.js', 'src/renderer/react/dist/main.build.js']) {
+    assert(fs.readFileSync(path.join(root, 'node_modules/entry-hw/app', asset))
+        .equals(fs.readFileSync(path.join(root, '../entry-hw/app', asset))), `Hardware asset not synced: ${asset}`);
+}
+
 const customFirmware = config.firmware.find(item => item.translate === 'Microbit V2 범어중');
 assert(customFirmware);
 assert.equal(customFirmware.type, 'copy');

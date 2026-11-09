@@ -6,14 +6,17 @@
     "npmRebuild": false,
     "beforePack": "scripts/check-windows-native.js",
     "extraMetadata": {
-        "version": "2.1.36-beomeo.1",
+        "version": "2.1.36-beomeo.4",
         "productName": "Entry Beomeo"
     },
     "win": {
+        "icon": "build/icon-beomeo.ico",
         "target": [{ "target": "nsis", "arch": ["x64"] }],
-        "signAndEditExecutable": false
+        "signAndEditExecutable": true
     },
     "nsis": {
+        "installerIcon": "build/icon-beomeo.ico",
+        "uninstallerIcon": "build/icon-beomeo.ico",
         "oneClick": false,
         "perMachine": false,
         "allowToChangeInstallationDirectory": true,
