@@ -83,7 +83,7 @@ x64 PE files. The build wrapper restores the original development binaries after
 packaging, including when the packager fails. No Windows native rebuild is run
 on macOS.
 
-Output: `dist/beomeo-windows/Entry-Beomeo-2.1.36-beomeo.4-x64-Setup.exe`.
+Output: `dist/beomeo-windows/Entry-Beomeo-2.1.36-beomeo.9-x64-Setup.exe`.
 
 The Beomeo build uses `build/icon-beomeo.ico` for the Windows executable,
 installer and uninstaller. Window icons use `src/main/static/icon-beomeo.png`.
@@ -94,18 +94,59 @@ the custom archive can be reported as modified. Check that behavior and the
 school's application policy during the Windows pilot.
 
 
-## Serial selection build (beomeo.4)
+## Serial selection build (beomeo.9)
+
+Windows keeps the COM paths from SerialPort.list(). The bundled read-only
+MicrobitIdentity.exe uses SetupAPI and Configuration Manager to trace the exact
+COM devnode to USB/TS_USB serials through real parent links and the COM or actual micro:bit composite parent ContainerID.
+No PowerShell or PnpDevice command runs. Conflicting identities and shared hub
+containers are never used to guess a board. Missing identities keep COM labels.
+Only 48-hex serials starting with 990636020005282 are accepted; characters 25-32
+form the short label, without checking an inventory of registered boards.
+
+The Windows build compiles the x64 helper using the .NET Framework 4 compiler.
+Sync/check also copy and verify the helper and its .config. The entire entry-hw
+package, including the helper, is unpacked from ASAR for execution.
+Run node ../entry-hw/cli/microbitDevicesTest.js and
+node ../entry-hw/cli/windowsMicrobitIdentityTest.js for regression checks.
+Student SESSION IDs are tested with simulated device relationships; actual
+MultiPoint parent/container visibility still requires a student-PC test.
 
 Build and sync the hardware main router, preload, and React selection UI together.
-`dist:beomeo:win64` now uses `webpack.beomeo.config.js` for all three assets;
-`beomeo:check` verifies that the installed offline copies match the source build.
-The hardware bundle retains the legacy transpile-only build configuration.
-The offline production webpack build completed with type checking enabled.
+`dist:beomeo:win64` uses `webpack.beomeo.config.js` for all three assets;
+`beomeo:check` verifies the installed offline copies match the source build.
+Logs: `%APPDATA%/entry-hw/logs/entry-hw-YYYY-MM-DD.log`; search for
+`microbit COM discovery` for raw port metadata, elapsed time and error details.
 
-Windows micro:bit selection displays `microbit (8-character serial)` for present
-USB and TS_USB devices. Unknown or redirected COM mappings remain blocked.
-Test from Entry Offline's hardware connection window, not Entry_HW standalone.
-The 26-device inventory is reference data, not a static list of connected devices.
-For Windows testing, install beomeo.4, open hardware connection, select micro:bit,
-and verify two devices, unplug/replug updates, and blocked redirected mappings.
-This installer is unsigned; Windows execution and MultiPoint testing remain pending.
+After installation, verify serial labels, COM labels without serials, direct COM
+connection, and removal of unplugged COM ports with physical boards.
+
+The raw Windows identity nodes, per-property errors and final resolved COM labels
+are included in COM discovery logs. Native failures include executable, code, stderr
+and stack under `microbit COM identity failed`.
+
+## beomeo.7 correction
+
+The captured session-15 diagnostic showed that a redirected COM interface has a
+new ContainerID, while its actual micro:bit composite parent retains the TS_USB
+board ContainerID. The resolver now considers that specific composite ancestor,
+including VID_0D28/PID_0204 with an optional REV field. It never uses a hub's or
+session enumerator's container. The actual COM74 -> E5DC3934 relationship is a
+regression fixture, not a mapping table in the app. Renumbering COMs and reversing
+enumeration order preserve the identity results. Cloud/server routing and the
+unresolved B5E79A42 execution failure are outside this correction.
+
+## beomeo.9 additions
+
+Student session 4 proved that the original serial-bearing TS_USB devnode can be
+absent from current enumeration even while its active virtual composite ContainerID
+is available. The helper now reads serial identity metadata from the fixed USB and
+TS_USB registry roots, restricted to validated serial key names whose ContainerID
+matches a currently enumerated COM or actual micro:bit composite node. Registry
+metadata does not establish presence or create COM entries. Conflicting identities
+are rejected and USB/TS_USB copies of the same serial are deduplicated. The exact
+student capture and user-confirmed registry values are covered by regression tests.
+
+The main title is `범어중엔트리 v0.9`; the hardware title adds ` - 하드웨어`.
+The dedicated pink desktop/start-menu icon and Korean product name from beomeo.8
+are retained. B5E79A42 execution and cloud/server routing are not changed here.

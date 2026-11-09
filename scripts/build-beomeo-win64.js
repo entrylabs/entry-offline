@@ -9,6 +9,7 @@ function run(script, args = [], env = {}) {
     if (result.error) throw result.error;
     if (result.status !== 0) throw new Error(`Build failed: ${script} (${result.status})`);
 }
+run('../entry-hw/cli/buildMicrobitIdentity.js');
 const hardwareBuild = spawnSync(process.execPath, [
     'node_modules/webpack-cli/bin/cli.js', '--config', 'webpack/webpack.beomeo.config.js',
 ], {
@@ -24,9 +25,10 @@ run('node_modules/webpack-cli/bin/cli.js', [], {
 });
 const restore = apply();
 try {
-    run('node_modules/electron-builder/cli.js', [
+    run('scripts/electron-builder-beomeo.js', [
         '--config', 'electron-builder.beomeo.json', '--win', '--x64', '--publish', 'never',
     ]);
 } finally {
     restore();
 }
+run('scripts/check-beomeo-package.js');

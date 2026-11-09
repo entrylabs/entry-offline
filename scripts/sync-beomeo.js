@@ -26,6 +26,12 @@ const hardwareRouter = path.join(hardware, 'src/main/mainRouter.build.js');
 fs.copyFileSync(hardwareRouter, path.join(targetHw, 'src/main/mainRouter.build.js'));
 fs.cpSync(path.join(hardware, 'src/renderer/react/dist'), path.join(targetHw, 'src/renderer/react/dist'), { recursive: true });
 fs.copyFileSync(path.join(hardware, 'src/preload/preload.bundle.js'), path.join(targetHw, 'src/preload/preload.bundle.js'));
+for (const file of ['MicrobitIdentity.exe', 'MicrobitIdentity.exe.config']) {
+    const source = path.join(hardware, 'native', file);
+    if (!fs.existsSync(source)) throw new Error('Build the Windows helper first: node ../entry-hw/cli/buildMicrobitIdentity.js');
+    fs.mkdirSync(path.join(targetHw, 'native'), { recursive: true });
+    fs.copyFileSync(source, path.join(targetHw, 'native', file));
+}
 
 fs.copyFileSync(path.join(hardware, 'firmwares/mircobit-beomeo.hex'), path.join(targetHw, 'firmwares/mircobit-beomeo.hex'));
 console.log('Custom EntryJS, microbit2 transport and Beomeo firmware synced.');

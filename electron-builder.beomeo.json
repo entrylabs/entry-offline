@@ -1,15 +1,16 @@
 {
     "extends": "./electron-builder.json",
     "appId": "org.playentry.entry.beomeo",
-    "productName": "Entry Beomeo",
+    "productName": "범어중엔트리",
     "artifactName": "Entry-Beomeo-${version}-${arch}-Setup.${ext}",
     "npmRebuild": false,
     "beforePack": "scripts/check-windows-native.js",
     "extraMetadata": {
-        "version": "2.1.36-beomeo.5",
+        "version": "2.1.36-beomeo.9",
         "productName": "Entry Beomeo"
     },
     "win": {
+        "executableName": "Entry Beomeo",
         "icon": "build/icon-beomeo.ico",
         "target": [{ "target": "nsis", "arch": ["x64"] }],
         "signAndEditExecutable": true
@@ -20,10 +21,18 @@
         "oneClick": false,
         "perMachine": false,
         "allowToChangeInstallationDirectory": true,
-        "createDesktopShortcut": true,
+        "createDesktopShortcut": "always",
         "createStartMenuShortcut": true,
-        "shortcutName": "범어중 엔트리"
+        "shortcutName": "범어중엔트리",
+        "include": "build/installer-beomeo.nsh"
     },
+    "extraResources": [
+        { "from": "node_modules/entry-hw/app/modules", "to": "modules" },
+        { "from": "node_modules/entry-hw/app/firmwares", "to": "firmwares", "filter": ["!examples/"] },
+        { "from": "node_modules/entry-hw/app/drivers", "to": "drivers" },
+        { "from": "node_modules/entry-js/weights", "to": "weights" },
+        { "from": "build/icon-beomeo.ico", "to": "beomeo-hot-pink.ico" }
+    ],
     "directories": {
         "output": "dist/beomeo-windows"
     }

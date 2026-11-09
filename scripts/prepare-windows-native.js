@@ -17,7 +17,7 @@ function seed(officialAsar) {
     if (meta.version !== '2.1.36') throw new Error('Expected official Entry 2.1.36');
     for (const [name, binary] of modules) {
         const pkgPath = `node_modules/${name}/package.json`;
-        const bytes = asar.extractFile(officialAsar, pkgPath);
+        const bytes = asar.extractFile(officialAsar, path.normalize(pkgPath));
         const pkg = JSON.parse(bytes);
         const localPath = path.join(root, pkgPath);
         if (fs.existsSync(localPath) && JSON.parse(fs.readFileSync(localPath)).version !== pkg.version) {
@@ -26,7 +26,8 @@ function seed(officialAsar) {
         const target = path.join(cache, name);
         fs.mkdirSync(path.dirname(path.join(target, binary)), { recursive: true });
         fs.writeFileSync(path.join(target, 'package.json'), bytes);
-        fs.writeFileSync(path.join(target, binary), asar.extractFile(officialAsar, `node_modules/${name}/${binary}`));
+        fs.writeFileSync(path.join(target, binary), asar.extractFile(officialAsar,
+            path.normalize(`node_modules/${name}/${binary}`)));
     }
     fs.writeFileSync(path.join(cache, 'source.json'), JSON.stringify({
         url: 'https://playentry.org/uploads/data/installers/Entry_2.1.36_Setup.exe',

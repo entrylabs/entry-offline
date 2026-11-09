@@ -8,6 +8,7 @@ module.exports = async ({ packager }) => {
         'node_modules/node-hid/build/Release/HID.node',
         'node_modules/@ffmpeg-installer/win32-x64/ffmpeg.exe',
         'node_modules/@ffprobe-installer/win32-x64/ffprobe.exe',
+        'node_modules/entry-hw/app/native/MicrobitIdentity.exe',
     ];
     for (const file of files) {
         const bytes = fs.readFileSync(path.join(appDir, file));
