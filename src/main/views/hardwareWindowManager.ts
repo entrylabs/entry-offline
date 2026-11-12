@@ -36,18 +36,14 @@ export default class HardwareWindowManager {
     }
 
     private createHardwareWindow() {
-        let title;
-        if (app.getLocale() === 'ko') {
-            title = '엔트리 하드웨어';
-        } else {
-            title = 'Entry HardWare';
-        }
+        const title = '범어중엔트리 v0.9 - 하드웨어';
 
         const remoteMain = require('@electron/remote/main');
         this.hardwareWindow = new BrowserWindow({
             width: 800,
             height: 650,
             title,
+            icon: path.resolve(app.getAppPath(), 'src', 'main', 'static', 'icon-beomeo.png'),
             show: false,
             webPreferences: {
                 backgroundThrottling: false,
@@ -65,6 +61,7 @@ export default class HardwareWindowManager {
             },
         });
         remoteMain.enable(this.hardwareWindow.webContents);
+        this.hardwareWindow.on('page-title-updated', event => event.preventDefault());
 
         this.hardwareRouter = new HardwareMainRouter(
             this.hardwareWindow,

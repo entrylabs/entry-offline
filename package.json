@@ -6,6 +6,9 @@
     "description": "Entry for offline",
     "main": "src/main_build/main.bundle.js",
     "scripts": {
+        "beomeo:sync": "node scripts/sync-beomeo.js",
+        "beomeo:check": "node scripts/check-beomeo.js",
+        "dist:beomeo:win64": "node scripts/build-beomeo-win64.js",
         "start": "cross-env NODE_ENV=development SERVER_DOMAIN_DEV='http://local2.playentry.org/api/hwActionLog' electron . --debug",
         "debug": "cross-env NODE_ENV=development electron --inspect .",
         "prod:debug": "cross-env NODE_ENV=production electron --inspect . --debug",
