@@ -20,6 +20,10 @@ const runtimeProperties: RuntimeGlobalProperties = {
 
 global.sharedObject = Object.assign({}, runtimeProperties, configurations, commandLineOptions);
 
+if (process.platform === 'win32') {
+    app.setAppUserModelId('org.playentry.entry.beomeo');
+}
+
 if (!app.requestSingleInstanceLock()) {
     logger.verbose('App is already running');
     app.quit();

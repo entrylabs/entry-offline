@@ -10,6 +10,11 @@ const persistConfig = {
     storage,
     // stateReconciler: hardSet, // https://github.com/rt2zz/redux-persist#state-reconciler
     whitelist: ['persist'], // only 'persist' named reducer will be persisted
+    // Always start in basic mode, including installations that saved course mode.
+    migrate: (state: any) => Promise.resolve(state ? {
+        ...state,
+        persist: { ...state.persist, mode: 'workspace' },
+    } : state),
 };
 const persistCombinedReducer = persistReducer(persistConfig, reducers);
 

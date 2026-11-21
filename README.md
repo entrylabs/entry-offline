@@ -76,3 +76,22 @@ Licensed under the Apache License, Version 2.0 (the "License"); you may not use 
     http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+## 범어중 Windows 빌드 작업 기록 (2026-11-09)
+
+현재 사용자 지정 설치 파일 버전은 `2.1.36-beomeo.5`입니다.
+
+- Windows 하드웨어 선택은 COM 목록의 같은 항목에 있는 시리얼번호를 `microbit (축약번호)`로 표시합니다. 실제 연결은 원래 COM 포트를 사용하며, 번호가 없으면 COM 이름을 그대로 표시합니다.
+- 앱의 Windows 연결 과정에서 PowerShell/PnpDevice 및 부모 관계 조회를 제거했습니다. 상세 장치 데이터와 오류는 `%APPDATA%\entry-hw\logs`의 `microbit COM discovery` 로그에서 확인합니다.
+- 자세한 변경 사항과 테스트 항목은 [WINDOWS-HANDOFF.ko.md](WINDOWS-HANDOFF.ko.md), 바이너리 준비와 패키징 절차는 [BEOMEO.md](BEOMEO.md)를 참조하세요.
+
+의존성, EntryJS dist, Windows 네이티브 바이너리 캐시를 준비한 뒤 PowerShell에서 실행합니다.
+
+```powershell
+cd C:\Users\user\Desktop\code\entry\entry-offline
+node scripts/build-beomeo-win64.js
+```
+
+예상 결과: `dist/beomeo-windows/Entry-Beomeo-2.1.36-beomeo.5-x64-Setup.exe`.
+
+현재 빌드 준비 상태: 하드웨어 자동 테스트와 하드웨어 번들 빌드는 통과했으나 최종 변경 이후 전체 설치 파일 빌드는 아직 완료하지 못했습니다. `entry-offline/node_modules`가 없어 최초 실행은 `Cannot find module 'asar'`로 실패했습니다. 의존성 설치 과정에서는 GitHub SSH 인증, 네트워크 인증서 및 기존 Yarn Git 캐시의 detached HEAD 오류가 발생했습니다. Windows 시스템 인증서 사용(`NODE_USE_SYSTEM_CA=1`), 명령 범위의 Git HTTPS 전환, 별도 Yarn 캐시로 설치를 재시도했습니다. EntryJS의 PostCSS Loader 8 설정 오류는 `postcssOptions.plugins` 형식으로 수정했으며, 재빌드 결과 확인이 필요합니다. 공식 설치 파일에서 호환 USB/미디어 바이너리를 추출하여 캐시를 준비하는 절차도 미완료입니다. 설치 파일이 생성되고 USB 통신이 확인되기 전에는 빌드/연결 성공으로 간주하지 않습니다.

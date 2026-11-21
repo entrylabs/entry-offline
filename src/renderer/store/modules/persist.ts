@@ -22,7 +22,7 @@ export interface IPersistState {
 
 const defaultState: IPersistState = {
     lang: 'ko',
-    mode: undefined,
+    mode: 'workspace',
 };
 
 // reducer
